@@ -140,3 +140,45 @@ def test_initial():
     ]
     assert _.initial(food, { 'type': 'vegetable' }) == [{ 'name': 'banana', 'type': 'fruit' }]
 
+def test_intersection():
+    assert _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]) == [1, 2]
+
+def test_last():
+    assert _.last([1, 2, 3]) == 3
+    assert _.last([1, 2, 3], 2) == [2, 3]
+    assert _.last([1, 2, 3], lambda num, *args: num > 1) == [2, 3]
+
+    # test pluck style callback
+    food = [
+        { 'name': 'beet',   'organic': False },
+        { 'name': 'carrot', 'organic': True }
+    ]
+
+    assert _.last(food, 'organic') == [{ 'name': 'carrot', 'organic': True }]
+
+    # test where style callback
+    food = [
+        { 'name': 'banana', 'type': 'fruit' },
+        { 'name': 'beet',   'type': 'vegetable' },
+        { 'name': 'carrot', 'type': 'vegetable' }
+    ]
+
+    assert _.last(food, { 'type': 'vegetable' }) == [{ 'name': 'beet', 'type': 'vegetable' }, { 'name': 'carrot', 'type': 'vegetable' }]
+
+def test_last_index_of():
+    assert _.last_index_of([1, 2, 3, 1, 2, 3], 2) == 4
+    assert _.last_index_of([1, 2, 3, 1, 2, 3], 2, 3) == 1
+
+def test_zip_object():
+    assert _.zip_object(['moe', 'larry'], [30, 40]) == { 'moe': 30, 'larry': 40 }
+    assert _.zip_object([['moe', 30], ['larry', 40]]) == { 'moe': 30, 'larry': 40 }
+
+    # verify alias
+    _.obj is _.zip_object
+
+def test_zipup():
+    assert _.zipup(['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]) == [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]]
+
+def test_unzip():
+    assert _.unzip([['moe', 30, True], ['larry', 40, False], ['curly', 35, True]]) == [['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]]
+

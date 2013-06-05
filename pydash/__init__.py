@@ -1,4 +1,9 @@
+
 import collections
+
+#
+# Arrays
+#
 
 def compact(array):
     '''
@@ -97,6 +102,29 @@ def first(array, callback=None):
 
 head = first
 
+def last(array, callback=None):
+    '''
+    .. py:method:: last(array[, callback|n|pluck|where=None])
+
+    Gets the last element of the array.
+    If a number n is passed, the last n elements of the array are returned.
+    If a callback function is passed, elements at the beginning of the array are returned as long as the callback returns truthy.
+    The callback is invoked with three arguments; (value, index, array).
+    If a property name is passed for callback, the created "_.pluck" style callback will return the property value of the given element.
+    If an object is passed for callback, the created "_.where" style callback will return true for elements that have the properties of the given object, else false.
+
+    :param list array: list to select from
+    :param mixed callback: callback to filter array
+    :rtype: mixed
+    '''
+
+    # reverse array, call first(), and reverse again
+    lst = first(array[::-1], callback)
+    if isinstance(lst, list):
+        lst = lst[::-1]
+
+    return lst
+
 def flatten(array, callback=None, _depth=0):
     '''
     .. py:method:: flatten(array[, callback|pluck|where=None])
@@ -142,6 +170,20 @@ def index_of(array, value, from_index=0):
     except ValueError:
         return False
 
+def last_index_of(array, value, from_index=0):
+    '''
+    .. py:method:: index_of(array, value[, from_index=0])
+
+    Gets the index at which the first occurrence of value is found
+
+    :param list array: list to search
+    :param mixed value: value to search for
+    :param integer from_index: the index to search from
+    :rtype: integer
+    '''
+    # reverse array, call index_of(), and subtract from max index
+    return len(array)-1 - index_of(array[::-1], value, from_index)
+
 def initial(array, callback=1):
     '''
     .. py:method:: initial(array[, callback|n|pluck|where=None)
@@ -165,6 +207,67 @@ def initial(array, callback=1):
     ret = array[:n]
 
     return ret
+
+def intersection(*arrays):
+    '''
+    .. py:method:: intersection([array1, array2, ...])
+
+    Computes the intersection of all the passed-in arrays using strict equality for comparisons, i.e. ===.
+
+    :param list *arrays: arrays to process
+    :rtype: list
+    '''
+
+    return list(set(arrays[0]).intersection(*arrays))
+
+def zip_object(keys, values=None):
+    '''
+    .. py:method:: zip_object(keys[, values])
+
+    Creates a dict composed from lists of keys and values.
+    Pass either a single two dimensional list, i.e. [[key1, value1], [key2, value2]], or two lists, one of keys and one of corresponding values.
+
+    :param list keys: either a list of keys or a list of [key, value] pairs
+    :param list values: list of values
+    :rtype: dict
+    '''
+
+    if values is None:
+        zipped = keys
+    else:
+        zipped = zip(keys, values)
+
+    return dict(zipped)
+
+obj = zip_object
+
+def zipup(*arrays):
+    '''
+    .. py:method:: zipper([array1, array2, ...])
+
+    Groups the elements of each array at their corresponding indexes.
+    Useful for separate data sources that are coordinated through matching array indexes.
+
+    :param list *arrays: lists to process
+    :rtype: list
+    '''
+    # zip returns as a list of tuples so convert to list of lists
+    return map(list, zip(*arrays))
+
+def unzip(array):
+    '''
+    .. py:method:: unzip(array)
+
+    The inverse of :py:method:`zipper`, this method splits groups of elements into arrays composed of elements from each group at their corresponding indexes.
+
+    :param list *arrays: list to process
+    :rtype: list
+    '''
+    return zipup(*array)
+
+#
+# Collections
+#
 
 def where(collection, properties):
     '''
