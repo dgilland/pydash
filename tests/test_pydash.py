@@ -62,6 +62,9 @@ def test_rest():
     ]
     assert _.rest(food, {'type': 'fruit'}) == [{'name': 'beet', 'type': 'vegetable' }, { 'name': 'peach', 'type': 'fruit' }]
 
+    # verify alias
+    assert _.tail is _.rest
+
 def test_find_index():
     food = ['apple', 'banana', 'beet']
     fn = lambda item, *args: item.startswith('b')
@@ -99,6 +102,7 @@ def test_first():
 
     # verify alias
     _.head is _.first
+    _.take is _.first
 
 def test_flatten():
     array = [1, ['2222'], [3, [[4]]]]
@@ -181,4 +185,113 @@ def test_zipup():
 
 def test_unzip():
     assert _.unzip([['moe', 30, True], ['larry', 40, False], ['curly', 35, True]]) == [['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]]
+
+def test_ranged():
+    assert _.ranged is range
+
+    assert _.ranged(10) == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    assert _.ranged(1, 11) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    assert _.ranged(0, 30, 5) == [0, 5, 10, 15, 20, 25]
+    assert _.ranged(0, -10, -1) == [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]
+    assert _.ranged(0) == []
+
+def test_without():
+    assert _.without([1, 2, 1, 0, 3, 1, 4], 0, 1) == [2, 3, 4]
+
+def test_uniq():
+
+    assert _.uniq([1, 2, 1, 3, 1]) == [1, 2, 3]
+    assert _.uniq([dict(a=1), dict(a=2), dict(a=1)]) == [dict(a=1), dict(a=2)]
+
+    # using function callback
+    import math
+    assert _.uniq([1, 2, 1.5, 3, 2.5], lambda num, *args: math.floor(num)) == [1, 2, 3]
+
+    # test where style callback
+    food = [
+        { 'name': 'banana', 'type': 'fruit' },
+        { 'name': 'apple', 'type': 'fruit' },
+        { 'name': 'beet',   'type': 'vegetable' },
+        { 'name': 'beet',   'type': 'vegetable' },
+        { 'name': 'carrot', 'type': 'vegetable' },
+        { 'name': 'carrot', 'type': 'vegetable' }
+    ]
+
+    assert _.uniq(food, { 'type': 'vegetable' }) == [
+        { 'name': 'beet', 'type': 'vegetable' },
+        { 'name': 'carrot', 'type': 'vegetable' }
+    ]
+
+    # test pluck style callback
+    pluck = [
+        { 'x': 1, 'y': 1 },
+        { 'x': 2, 'y': 1 },
+        { 'x': 1, 'y': 1 }
+    ]
+
+    assert _.uniq(pluck, 'x') == [{ 'x': 1, 'y': 1 }, { 'x': 2, 'y': 1 }]
+
+    # verify alias
+    assert _.unique is _.uniq
+
+def test_union():
+    assert _.union([1, 2, 3], [101, 2, 1, 10], [2, 1]) == [1, 2, 3, 101, 10]
+
+def test_sorted_index():
+    assert _.sorted_index([20, 30, 50], 40) == 2
+    assert _.sorted_index([20, 30, 50], 10) == 0
+
+    # test pluck style callback
+    assert _.sorted_index([{ 'x': 20 }, { 'x': 30 }, { 'x': 50 }], { 'x': 40 }, 'x' ) == 2
+
+    # test function callback
+    lookup = {
+      'words': { 'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50 }
+    }
+
+    callback = lambda word: lookup['words'][word]
+    assert _.sorted_index(['twenty', 'thirty', 'fifty'], 'fourty', callback) == 2
+
+def test_every():
+    assert _.every([True, 1, None, 'yes'], bool) is False
+    assert _.every([True, 1, None, 'yes']) is False
+
+    stooges = [
+        { 'name': 'moe', 'age': 40 },
+        { 'name': 'larry', 'age': 50 }
+    ]
+
+    # test pluck style callback
+    assert _.every(stooges, 'age') is True
+
+    # test where style callback
+    assert _.every(stooges, { 'age': 50 }) is False
+
+def test_some():
+    assert _.some([None, 0, 'yes', False], bool) is True
+    assert _.some([None, 0, 'yes', False]) is True
+
+    food = [
+        { 'name': 'apple',  'organic': False, 'type': 'fruit' },
+        { 'name': 'carrot', 'organic': True,  'type': 'vegetable' }
+    ]
+
+    # test pluck style callback
+    assert _.some(food, 'organic') is True
+
+    # test where style callback
+    assert _.some(food, { 'type': 'meat' }) is False
+
+def test_collect():
+    assert _.collect([1, 2, 3]) == [1, 2, 3]
+    assert _.collect([1, 2, 3], lambda num, *args: num * 3) == [3, 6, 9]
+
+    assert sorted(_.collect({ 'one': 1, 'two': 2, 'three': 3 }, lambda num, *args: num * 3)) == [3, 6, 9]
+
+    stooges = [
+        { 'name': 'moe', 'age': 40 },
+        { 'name': 'larry', 'age': 50 }
+    ]
+
+    assert _.collect(stooges, 'name') == ['moe', 'larry']
 

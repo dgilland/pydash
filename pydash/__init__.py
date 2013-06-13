@@ -1,5 +1,6 @@
 
 import collections
+from bisect import bisect_left
 
 #
 # Arrays
@@ -53,6 +54,8 @@ def rest(array, callback=None):
 
     return array[n:]
 
+tail = rest
+
 def find_index(array, callback):
     '''
     .. py:method:: find_index(array, callback|where)
@@ -101,6 +104,7 @@ def first(array, callback=None):
     return ret
 
 head = first
+take = first
 
 def last(array, callback=None):
     '''
@@ -139,6 +143,7 @@ def flatten(array, callback=None, _depth=0):
     '''
 
     shallow = False
+
     if callback is True:
         shallow = True
     elif callback:
@@ -265,9 +270,152 @@ def unzip(array):
     '''
     return zipup(*array)
 
+# functions just like builtin range
+ranged = range
+
+def without(array, *values):
+    '''
+    .. py:method:: without(array, *values)
+
+    Creates an array with all occurrences of the passed values removed using strict equality for comparisons, i.e. ===.
+
+    :param list array: list to filter
+    :param mixed *values: values to remove
+    :rtype: list
+    '''
+    return [a for a in array if a not in values]
+
+def uniq(array, callback=None):
+    '''
+    .. py:method:: unique(array[, callback|pluck|where=None])
+
+    Creates a duplicate-value-free version of the array using strict equality for comparisons, i.e. ===.
+    If callback is passed, each element of array is passed through a callback before uniqueness is computed.
+    The callback is invoked with three arguments: (value, index, array).
+    If a property name is passed for callback, the created "_.pluck" style callback will return the property value of the given element.
+    If an object is passed for callback, the created "_.where" style callback will return true for elements that have the properties of the given object, else false.
+
+    :param list array: list to process
+    :param mixed callback: callback to filter array
+    :rtype: list
+    '''
+
+    if isinstance(callback, dict):
+        # where style callback; filter list using where
+        array = where(array, callback)
+        callback = None
+
+    if callback:
+        computed = map(_make_callback(callback), array)
+    else:
+        computed = array
+
+
+    try:
+        # try faster version of uniqifier which requires all array elements to be hashable
+        lst = [array[i] for i,x in _iter_unique_set(computed)]
+    except Exception:
+        # fallback to version which doesn't require hashable elements but is slower
+        lst = [array[i] for i,x in _iter_unique(computed)]
+
+    return lst
+
+unique = uniq
+
+def union(*arrays):
+    '''
+    .. py:method:: union(*arrays)
+
+    Computes the union of the passed-in arrays using strict equality for comparisons, i.e. ===.
+
+    :param list *arrays: lists to unionize
+    :rtype: list
+    '''
+    return uniq(flatten(arrays))
+
+def sorted_index(array, value, callback=None):
+    '''
+    .. py:method:: sorted_index(array, value[, callback|pluck|where=None])
+
+    Determine the smallest index at which the value should be inserted into array in order to maintain the sort order of the sorted array.
+    If callback is passed, it will be executed for value and each element in array to compute their sort ranking.
+    The callback is invoked with one argument: (value).
+    If a property name is passed for callback, the created "_.pluck" style callback will return the property value of the given element.
+    If an object is passed for callback, the created "_.where" style callback will return true for elements that have the properties of the given object, else false.
+
+    :param list array: list to inspect
+    :param mixed value: value to evaluate
+    :param mixed callback: callback to determine sort key
+    :rtype: integer
+    '''
+
+    if callback:
+        # generate array of sorted keys computed using callback
+        callback = _make_callback(callback)
+        array = map(callback, array)
+        array.sort()
+        value = callback(value)
+
+    return bisect_left(array, value)
+
 #
 # Collections
 #
+
+def every(collection, callback=None):
+    '''
+    .. py:method:: every(collection[, callback|pluck|where=None])
+
+    Checks if the callback returns a truthy value for all elements of a collection.
+    The callback is invoked with three arguments; (value, index|key, collection).
+    If a property name is passed for callback, the created "_.pluck" style callback will return the property value of the given element.
+    If an object is passed for callback, the created "_.where" style callback will return true for elements that have the properties of the given object, else false.
+
+    :param iterable collection: the collection to iterate over
+    :param mixed callback: function called per iteration
+    :rtype: boolean
+    '''
+
+    if callback:
+        collection = map(_make_callback(callback), collection)
+
+    return all(collection)
+
+def some(collection, callback=None):
+    '''
+    .. py:method:: some(collection[, callback|pluck|where=None])
+
+    Checks if the callback returns a truthy value for any element of a collection.
+    The callback is invoked with three arguments; (value, index|key, collection).
+    If a property name is passed for callback, the created "_.pluck" style callback will return the property value of the given element.
+    If an object is passed for callback, the created "_.where" style callback will return true for elements that have the properties of the given object, else false.
+
+    :param iterable collection: the collection to iterate over
+    :param mixed callback: function called per iteration
+    :rtype: boolean
+    '''
+
+    if callback:
+        collection = map(_make_callback(callback), collection)
+
+    return any(collection)
+
+def collect(collection, callback=None):
+    '''
+    Creates an array of values by running each element in the collection through the callback.
+    The callback is invoked with three arguments; (value, index|key, collection).
+    If a property name is passed for callback, the created "_.pluck" style callback will return the property value of the given element.
+    If an object is passed for callback, the created "_.where" style callback will return true for elements that have the properties of the given object, else false.
+
+    :param iterable collection: the collection to iterate over
+    :param mixed callback: function called per iteration
+    :rtype: list
+    '''
+
+    if not callback:
+        callback = lambda value, *args: value
+
+    return [result[0] for result in _iter_callback(collection, callback)]
 
 def where(collection, properties):
     '''
@@ -313,7 +461,31 @@ def _make_callback(callback):
 
     return cb
 
-def _iter_callback(array, callback=None):
+def _iter_callback(collection, callback=None):
+    if isinstance(collection, dict):
+        return _iter_dict_callback(collection, callback)
+    else:
+        return _iter_list_callback(collection, callback)
+
+def _iter_list_callback(array, callback=None):
     cb = _make_callback(callback)
     return ( (cb(item, i, array), item, i, array) for i, item in enumerate(array) )
+
+def _iter_dict_callback(collection, callback=None):
+    cb = _make_callback(callback)
+    return ( (cb(value, key, collection),) for key, value in collection.iteritems() )
+
+def _iter_unique_set(array):
+    seen = set()
+    seen_add = seen.add
+    for i,x in enumerate(array):
+        if x not in seen and not seen_add(x):
+            yield (i,x)
+
+def _iter_unique(array):
+    seen = []
+    for i,x in enumerate(array):
+       if x not in seen:
+           seen.append(x)
+           yield (i,x)
 
