@@ -16,4 +16,4 @@ Differences between Lodash
 License
 -------
 
-This software is licensed under the BSD License.
+This software is licensed under the MIT License.
