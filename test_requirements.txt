@@ -1,6 +1,0 @@
-cov-core==1.7
-coverage==3.6
-py==1.4.14
-pytest==2.3.5
-pytest-cov==1.6
-wsgiref==0.1.2
