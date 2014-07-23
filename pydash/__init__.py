@@ -66,7 +66,7 @@ def find_last_index(array, callback):
     array.reverse()
     for is_true, _, i, _ in _iter_callback(array, callback):
         if is_true:
-            n = i
+            n = len(array) - i - 1
             break
 
     return n
