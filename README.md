@@ -1,9 +1,9 @@
 # pydash
 
-[![Package Version](https://pypip.in/version/pydash/badge.png)](https://pypi.python.org/pypi/pydash/)
-[![Build Status](https://travis-ci.org/dgilland/pydash.png?branch=master)](https://travis-ci.org/dgilland/pydash)
-[![Coverage Status](https://coveralls.io/repos/dgilland/pydash/badge.png?branch=master)](https://coveralls.io/r/dgilland/pydash)
-[![License](https://pypip.in/license/pydash/badge.png)](https://pypi.python.org/pypi/pydash/)
+[![Package Version](http://img.shields.io/pypi/v/pydash.svg?style=flat)](https://pypi.python.org/pypi/pydash/)
+[![Build Status](http://img.shields.io/travis/dgilland/pydash/master.svg?style=flat)](https://travis-ci.org/dgilland/pydash)
+[![Coverage Status](http://img.shields.io/coveralls/dgilland/pydash/master.svg?style=flat)](https://coveralls.io/r/dgilland/pydash)
+[![License](http://img.shields.io/pypi/l/pydash.svg?style=flat)](https://pypi.python.org/pypi/pydash/)
 
 
 Python port of the [Lodash](http://lodash.com/) Javascript library.
