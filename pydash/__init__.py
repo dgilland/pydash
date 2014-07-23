@@ -1,3 +1,5 @@
+"""Python port of Lo-Dash
+"""
 
 import collections
 from bisect import bisect_left
@@ -8,20 +10,16 @@ from bisect import bisect_left
 #
 
 def compact(array):
-    """.. py:method:: compact(array)
-
-    Creates a list with all falsey values of array removed.
+    """Creates a list with all falsey values of array removed.
 
     :param list array: list to compact
     :rtype: list
     """
-    return filter(None, array)
+    return [item for item in array if item]
 
 
 def difference(array, *lists):
-    """.. py:method:: difference(array[, *lists])
-
-    Creates a list of list elements not present in the other lists
+    """Creates a list of list elements not present in the other lists
 
     :param list array: the list to process
     :param list lists: lists to check
@@ -33,10 +31,8 @@ def difference(array, *lists):
 
 
 def find_index(array, callback):
-    """.. py:method:: find_index(array, callback|where)
-
-    This method is similar to _.find, except that it returns the index of the
-    element that passes the callback check, instead of the element itself.
+    """This method is similar to _.find, except that it returns the index of
+    the element that passes the callback check, instead of the element itself.
 
     :param list array: list to process
     :param function callback: filter function or where dict
@@ -52,10 +48,8 @@ def find_index(array, callback):
 
 
 def first(array, callback=None):
-    """.. py:method:: first(array[, callback|n|pluck|where=None])
-
-    Gets the first element of the array. If a number n is passed, the first n
-    elements of the array are returned. If a callback function is passed,
+    """Gets the first element of the array. If a number n is passed, the first
+    n elements of the array are returned. If a callback function is passed,
     elements at the beginning of the array are returned as long as the callback
     returns truthy. The callback is invoked with three arguments:
     (value, index, array). If a property name is passed for callback, the
@@ -88,11 +82,10 @@ take = first
 
 
 def flatten(array, callback=None, _depth=0):
-    """.. py:method:: flatten(array[, callback|pluck|where=None])
-
-    Flattens a nested array (the nesting can be to any depth). If callback is
-    True, array will only be flattened a single level. If callback is passed,
-    each element of array is passed through a callback before flattening.
+    """Flattens a nested array (the nesting can be to any depth). If callback
+    is True, array will only be flattened a single level. If callback is
+    passed, each element of array is passed through a callback before
+    flattening.
 
     :param list array: list to flatten
     :param mixed callback: callback to filter array
@@ -104,15 +97,16 @@ def flatten(array, callback=None, _depth=0):
     if callback is True:
         shallow = True
     elif callback:
-        array = map(_make_callback(callback), array)
+        cbk = _make_callback(callback)
+        array = [cbk(item) for item in array]
         callback = None
 
     lst = []
     if all([isinstance(array, collections.Iterable),
             not isinstance(array, basestring),
             not (shallow and _depth > 1)]):
-        for a in array:
-            lst.extend(flatten(a, callback, _depth + 1))
+        for arr in array:
+            lst.extend(flatten(arr, callback, _depth + 1))
     else:
         lst.append(array)
 
@@ -120,9 +114,7 @@ def flatten(array, callback=None, _depth=0):
 
 
 def index_of(array, value, from_index=0):
-    """.. py:method:: index_of(array, value[, from_index=0])
-
-    Gets the index at which the first occurrence of value is found.
+    """Gets the index at which the first occurrence of value is found.
 
     :param list array: list to search
     :param mixed value: value to search for
@@ -136,12 +128,10 @@ def index_of(array, value, from_index=0):
 
 
 def initial(array, callback=1):
-    """.. py:method:: initial(array[, callback|n|pluck|where=None)
-
-    Gets all but the last element of array. If a number n is passed, the last n
-    elements are excluded from the result. If a callback function is passed,
-    elements at the end of the array are excluded from the result as long as
-    the callback returns truthy.
+    """Gets all but the last element of array. If a number n is passed, the
+    last n elements are excluded from the result. If a callback function is
+    passed, elements at the end of the array are excluded from the result as
+    long as the callback returns truthy.
 
     :param list array: list to query
     :param mixed callback: The function called per element or the number of
@@ -162,10 +152,8 @@ def initial(array, callback=1):
 
 
 def intersection(*arrays):
-    """.. py:method:: intersection([array1, array2, ...])
-
-    Computes the intersection of all the passed-in arrays using strict equality
-    for comparisons, i.e. ===.
+    """Computes the intersection of all the passed-in arrays using strict
+    equality for comparisons, i.e. ===.
 
     :param list *arrays: arrays to process
     :rtype: list
@@ -175,9 +163,7 @@ def intersection(*arrays):
 
 
 def last(array, callback=None):
-    """.. py:method:: last(array[, callback|n|pluck|where=None])
-
-    Gets the last element of the array. If a number n is passed, the last n
+    """Gets the last element of the array. If a number n is passed, the last n
     elements of the array are returned. If a callback function is passed,
     elements at the beginning of the array are returned as long as the callback
     returns truthy. The callback is invoked with three arguments:
@@ -201,9 +187,7 @@ def last(array, callback=None):
 
 
 def last_index_of(array, value, from_index=0):
-    """.. py:method:: index_of(array, value[, from_index=0])
-
-    Gets the index at which the first occurrence of value is found
+    """Gets the index at which the first occurrence of value is found
 
     :param list array: list to search
     :param mixed value: value to search for
@@ -214,7 +198,7 @@ def last_index_of(array, value, from_index=0):
     return len(array) - 1 - index_of(array[::-1], value, from_index)
 
 
-def pull():
+def pull(*args, **kargs):
     raise NotImplementedError
 
 
@@ -222,17 +206,18 @@ def pull():
 range_ = range
 
 
-def remove():
+def remove(*args, **kargs):
+    """Removes all elements from a list that the callback returns truthy for
+    and returns an array of removed elements.
+    """
     raise NotImplementedError
 
 
 def rest(array, callback=None):
-    """.. py:method:: rest(array[, callback|n|pluck|where=None])
-
-    Return all but the first value of array. If a number n is passed, the first
-    n values are excluded from the result. If a callback function is passed,
-    elements at the beginning of the array are excluded from the result as long
-    as the callback returns truthy. The callback is invoked with three
+    """Return all but the first value of array. If a number n is passed, the
+    first n values are excluded from the result. If a callback function is
+    passed, elements at the beginning of the array are excluded from the result
+    as long as the callback returns truthy. The callback is invoked with three
     arguments: (value, index, array). If a property name is passed for
     callback, the created "_.pluck" style callback will return the property
     value of the given element. If an object is passed for callback, the
@@ -259,9 +244,7 @@ drop = rest
 
 
 def sorted_index(array, value, callback=None):
-    """.. py:method:: sorted_index(array, value[, callback|pluck|where=None])
-
-    Determine the smallest index at which the value should be inserted into
+    """Determine the smallest index at which the value should be inserted into
     array in order to maintain the sort order of the sorted array. If callback
     is passed, it will be executed for value and each element in array to
     compute their sort ranking. The callback is invoked with one argument:
@@ -279,18 +262,15 @@ def sorted_index(array, value, callback=None):
 
     if callback:
         # generate array of sorted keys computed using callback
-        callback = _make_callback(callback)
-        array = map(callback, array)
-        array.sort()
-        value = callback(value)
+        cbk = _make_callback(callback)
+        array = sorted(cbk(item) for item in array)
+        value = cbk(value)
 
     return bisect_left(array, value)
 
 
 def union(*arrays):
-    """.. py:method:: union(*arrays)
-
-    Computes the union of the passed-in arrays using strict equality for
+    """Computes the union of the passed-in arrays using strict equality for
     comparisons, i.e. ===.
 
     :param list *arrays: lists to unionize
@@ -300,16 +280,14 @@ def union(*arrays):
 
 
 def uniq(array, callback=None):
-    """.. py:method:: unique(array[, callback|pluck|where=None])
-
-    Creates a duplicate-value-free version of the array using strict equality
-    for comparisons, i.e. ===. If callback is passed, each element of array is
-    passed through a callback before uniqueness is computed. The callback is
-    invoked with three arguments: (value, index, array). If a property name is
-    passed for callback, the created "_.pluck" style callback will return the
-    property value of the given element. If an object is passed for callback,
-    the created "_.where" style callback will return true for elements that
-    have the properties of the given object, else false.
+    """Creates a duplicate-value-free version of the array using strict
+    equality for comparisons, i.e. ===. If callback is passed, each element of
+    array is passed through a callback before uniqueness is computed. The
+    callback is invoked with three arguments: (value, index, array). If a
+    property name is passed for callback, the created "_.pluck" style callback
+    will return the property value of the given element. If an object is passed
+    for callback, the created "_.where" style callback will return true for
+    elements that have the properties of the given object, else false.
 
     :param list array: list to process
     :param mixed callback: callback to filter array
@@ -322,18 +300,19 @@ def uniq(array, callback=None):
         callback = None
 
     if callback:
-        computed = map(_make_callback(callback), array)
+        cbk = _make_callback(callback)
+        computed = [cbk(item) for item in array]
     else:
         computed = array
 
     try:
         # Try faster version of uniqifier which requires all array elements to
         # be hashable.
-        lst = [array[i] for i, x in _iter_unique_set(computed)]
-    except Exception:
+        lst = [array[i] for i, _ in _iter_unique_set(computed)]
+    except Exception:  # pylint: disable=broad-except
         # Fallback to version which doesn't require hashable elements but is
         # slower.
-        lst = [array[i] for i, x in _iter_unique(computed)]
+        lst = [array[i] for i, _ in _iter_unique(computed)]
 
     return lst
 
@@ -342,9 +321,7 @@ unique = uniq
 
 
 def without(array, *values):
-    """.. py:method:: without(array, *values)
-
-    Creates an array with all occurrences of the passed values removed using
+    """Creates an array with all occurrences of the passed values removed using
     strict equality for comparisons, i.e. ===.
 
     :param list array: list to filter
@@ -354,14 +331,14 @@ def without(array, *values):
     return [a for a in array if a not in values]
 
 
-def xor():
+def xor(*args, **kargs):
+    """Creates a list that is the symmetric difference of the provided lists.
+    """
     raise NotImplementedError
 
 
 def zip_(*arrays):
-    """.. py:method:: zip_([array1, array2, ...])
-
-    Groups the elements of each array at their corresponding indexes.
+    """Groups the elements of each array at their corresponding indexes.
     Useful for separate data sources that are coordinated through matching
     array indexes.
 
@@ -369,16 +346,14 @@ def zip_(*arrays):
     :rtype: list
     """
     # zip returns as a list of tuples so convert to list of lists
-    return map(list, zip(*arrays))
+    return [list(item) for item in zip(*arrays)]
 
 
-# TODO: Lodash has this as an alias of zip_?
+# TODO: Lo-Dash has this as an alias of zip_?
 def unzip(array):
-    """.. py:method:: unzip(array)
-
-    The inverse of :py:method:`zipper`, this method splits groups of elements
-    into arrays composed of elements from each group at their corresponding
-    indexes.
+    """The inverse of :py:method:`zipper`, this method splits groups of
+    elements into arrays composed of elements from each group at their
+    corresponding indexes.
 
     :param list *arrays: list to process
     :rtype: list
@@ -387,11 +362,9 @@ def unzip(array):
 
 
 def zip_object(keys, values=None):
-    """.. py:method:: zip_object(keys[, values])
-
-    Creates a dict composed from lists of keys and values. Pass either a single
-    two dimensional list, i.e. [[key1, value1], [key2, value2]], or two lists,
-    one of keys and one of corresponding values.
+    """Creates a dict composed from lists of keys and values. Pass either a
+    single two dimensional list, i.e. [[key1, value1], [key2, value2]], or two
+    lists, one of keys and one of corresponding values.
 
     :param list keys: either a list of keys or a list of [key, value] pairs
     :param list values: list of values
@@ -414,9 +387,7 @@ object_ = zip_object
 #
 
 def at(collection, *indexes):
-    """.. py:method:: at(collection, [index])
-
-    Creates an array of elements from the specified indexes, or keys, of the
+    """Creates an array of elements from the specified indexes, or keys, of the
     collection. Indexes may be specified as individual arguments or as arrays
     of indexes.
 
@@ -430,6 +401,10 @@ def at(collection, *indexes):
 
 
 def contains(collection, target, from_index=0):
+    """Checks if a given value is present in a collection using strict equality
+    for comparisons, i.e. ===. If `from_index` is negative, it is used as the
+    offset from the end of the collection.
+    """
     if isinstance(collection, dict):
         collection = collection.values()
     else:
@@ -442,14 +417,15 @@ def contains(collection, target, from_index=0):
 include = contains
 
 
-def count_by(collection, callback):
+def count_by(*args, **kargs):
+    """Creates an object composed of keys generated from the results of running
+    each element of `collection` through the callback.
+    """
     raise NotImplementedError
 
 
 def every(collection, callback=None):
-    """.. py:method:: every(collection[, callback|pluck|where=None])
-
-    Checks if the callback returns a truthy value for all elements of a
+    """Checks if the callback returns a truthy value for all elements of a
     collection. The callback is invoked with three arguments:
     (value, index|key, collection). If a property name is passed for callback,
     the created "_.pluck" style callback will return the property value of the
@@ -463,7 +439,8 @@ def every(collection, callback=None):
     """
 
     if callback:
-        collection = map(_make_callback(callback), collection)
+        cbk = _make_callback(callback)
+        collection = [cbk(item) for item in collection]
 
     return all(collection)
 
@@ -472,6 +449,9 @@ all_ = every
 
 
 def filter_(collection, callback=None):
+    """Iterates over elements of a collection, returning an list of all
+    elements the callback returns truthy for.
+    """
     if callback is None:
         callback = lambda item, *args: item
 
@@ -484,8 +464,11 @@ select = filter_
 
 
 def find(collection, callback=None):
+    """Iterates over elements of a collection, returning the first element that
+    the callback returns truthy for.
+    """
     found = None
-    for is_true, value, key, _ in _iter_callback(collection, callback):
+    for is_true, _, key, _ in _iter_callback(collection, callback):
         if is_true:
             found = collection[key]
             # only return first found item
@@ -498,39 +481,56 @@ detect = find
 find_where = find
 
 
-def find_last():
+def find_last(*args, **kargs):
+    """This method is like :func:`find` except that it iterates over elements
+    of a `collection` from right to left.
+    """
     raise NotImplementedError
 
 
-def for_each():
+def for_each(*args, **kargs):
+    """Iterates over elements of a collection, executing the callback for each
+    element.
+    """
     raise NotImplementedError
 
 
 each = for_each
 
 
-def for_each_right():
+def for_each_right(*args, **kargs):
+    """This method is like :func:`for_each` except that it iterates over
+    elements of a `collection` from right to left.
+    """
     raise NotImplementedError
 
 
 each_right = for_each_right
 
 
-def group_by():
+def group_by(*args, **kargs):
+    """Creates an object composed of keys generated from the results of running
+    each element of a `collection` through the callback.
+    """
     raise NotImplementedError
 
 
-def index_by():
+def index_by(*args, **kargs):
+    """Creates an object composed of keys generated from the results of running
+    each element of the collection through the given callback.
+    """
     raise NotImplementedError
 
 
-def invoke():
+def invoke(*args, **kargs):
+    """Invokes the method named by `method_name` on each element in the
+    `collection` returning a list of the results of each invoked method.
+    """
     raise NotImplementedError
 
 
 def map_(collection, callback=None):
-    """
-    Creates an array of values by running each element in the collection
+    """Creates an array of values by running each element in the collection
     through the callback. The callback is invoked with three arguments:
     (value, index|key, collection). If a property name is passed for callback,
     the created "_.pluck" style callback will return the property value of the
@@ -551,28 +551,34 @@ def map_(collection, callback=None):
 collect = map_
 
 
-def min_():
+def max_(*args, **kargs):
+    """Retrieves the maximum value of a `collection`."""
     raise NotImplementedError
 
 
-def max_():
+def min_(*args, **kargs):
+    """Retrieves the minimum value of a `collection`."""
     raise NotImplementedError
 
 
 def pluck(collection, key):
-    """.. py:method:: pluck(collection, key)
-
-    Retrieves the value of a specified property from all elements in the
+    """Retrieves the value of a specified property from all elements in the
     collection.
 
     :param collection: a list of dicts
     :param key: the key value to pluck
     :rtype: list
     """
-    return map(lambda x: x.get(key), collection)
+    # TODO: Do we want to use get() and return None if missing or error out?
+    return [item.get(key) for item in collection]
 
 
-def reduce_():
+def reduce_(*args, **kargs):
+    """Reduces a collection to a value which is the accumulated result of
+    running each element in the collection through the callback, where each
+    successive callback execution consumes the return value of the previous
+    execution.
+    """
     raise NotImplementedError
 
 
@@ -580,33 +586,46 @@ foldl = reduce_
 inject = reduce_
 
 
-def reduce_right():
+def reduce_right(*args, **kargs):
+    """This method is like :func:`reduce_` except that it iterates over
+    elements of a `collection` from right to left.
+    """
     raise NotImplementedError
 
 
 foldr = reduce_right
 
 
-def reject():
+def reject(*args, **kargs):
+    """The opposite of :func:`filter_` this method returns the elements of a
+    collection that the callback does **not** return truthy for.
+    """
     raise NotImplementedError
 
 
-def sample():
+def sample(*args, **kargs):
+    """Retrieves a random element or `n` random elements from a `collection`.
+    """
     raise NotImplementedError
 
 
-def shuffle():
+def shuffle(*args, **kargs):
+    """Creates a list of shuffled values, using a version of the Fisher-Yates
+    shuffle.
+    """
     raise NotImplementedError
 
 
-def size():
+def size(*args, **kargs):
+    """Gets the size of the `collection` by returning `len(collection)` for
+    lists and list-like objects or the number of own enumerable properties for
+    objects.
+    """
     raise NotImplementedError
 
 
 def some(collection, callback=None):
-    """.. py:method:: some(collection[, callback|pluck|where=None])
-
-    Checks if the callback returns a truthy value for any element of a
+    """Checks if the callback returns a truthy value for any element of a
     collection. The callback is invoked with three arguments:
     (value, index|key, collection). If a property name is passed for callback,
     the created "_.pluck" style callback will return the property value of the
@@ -620,7 +639,8 @@ def some(collection, callback=None):
     """
 
     if callback:
-        collection = map(_make_callback(callback), collection)
+        cbk = _make_callback(callback)
+        collection = [cbk(item) for item in collection]
 
     return any(collection)
 
@@ -628,26 +648,28 @@ def some(collection, callback=None):
 any_ = some
 
 
-def sort_by():
+def sort_by(*args, **kargs):
+    """Creates a list of elements, sorted in ascending order by the results of
+    running each element in a `collection` through the callback.
+    """
     raise NotImplementedError
 
 
-def to_list():
+def to_list(*args, **kargs):
+    """Converts the collection to a list."""
     raise NotImplementedError
 
 
 def where(collection, properties):
-    """.. py:method:: where(collection, properties)
-
-    Examines each element in a collection, returning an array of all elements
-    that have the given properties.
+    """Examines each element in a collection, returning an array of all
+    elements that have the given properties.
 
     :param collection: a list of dicts
     :param properties: the dict of property values to filter by
     :rtype: list
     """
     filter_fn = lambda item: _where(item, properties)
-    return filter(filter_fn, collection)
+    return [item for item in collection if filter_fn(item)]
 
 
 def _where(superset, subset):
@@ -677,17 +699,17 @@ def _where(superset, subset):
 def _make_callback(callback):
     """Create a callback function from a mixed type `callback`"""
     if hasattr(callback, '__call__'):
-        cb = callback
+        cbk = callback
     elif isinstance(callback, basestring):
         key = callback
-        cb = lambda item, *args: pluck([item], key)[0]
+        cbk = lambda item, *args: pluck([item], key)[0]
     elif isinstance(callback, dict):
-        cb = lambda item, *args: where([item], callback)
+        cbk = lambda item, *args: where([item], callback)
     else:
         index = callback if isinstance(callback, int) else 1
-        cb = lambda item, i, *args: i < index
+        cbk = lambda item, i, *args: i < index
 
-    return cb
+    return cbk
 
 
 def _iter_callback(collection, callback=None):
@@ -700,15 +722,15 @@ def _iter_callback(collection, callback=None):
 
 def _iter_list_callback(array, callback=None):
     """Return iterative list callback."""
-    cb = _make_callback(callback)
-    return ((cb(item, i, array), item, i, array)
+    cbk = _make_callback(callback)
+    return ((cbk(item, i, array), item, i, array)
             for i, item in enumerate(array))
 
 
 def _iter_dict_callback(collection, callback=None):
     """Return iterative dict callback."""
-    cb = _make_callback(callback)
-    return ((cb(value, key, collection),)
+    cbk = _make_callback(callback)
+    return ((cbk(value, key, collection),)
             for key, value in collection.iteritems())
 
 
@@ -716,15 +738,15 @@ def _iter_unique_set(array):
     """Return iterator to find unique set."""
     seen = set()
     seen_add = seen.add
-    for i, x in enumerate(array):
-        if x not in seen and not seen_add(x):
-            yield (i, x)
+    for i, item in enumerate(array):
+        if item not in seen and not seen_add(item):
+            yield (i, item)
 
 
 def _iter_unique(array):
     """Return iterator to find unique list."""
     seen = []
-    for i, x in enumerate(array):
-        if x not in seen:
-            seen.append(x)
-            yield (i, x)
+    for i, item in enumerate(array):
+        if item not in seen:
+            seen.append(item)
+            yield (i, item)
