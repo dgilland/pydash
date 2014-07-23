@@ -374,3 +374,60 @@ def test_collect():
     ]
 
     assert pyd.collect(stooges, 'name') == ['moe', 'larry']
+
+
+def test_at():
+    assert pyd.at(['a', 'b', 'c', 'd', 'e'], [0, 2, 4]) == ['a', 'c', 'e']
+    assert pyd.at(['moe', 'larry', 'curly'], 0, 2) == ['moe', 'curly']
+    assert pyd.at({'a': 1, 'b': 2, 'c': 3}, 'a', 'b') == [1, 2]
+
+
+def test_contains():
+    assert pyd.contains([1, 2, 3], 1) is True
+    assert pyd.contains([1, 2, 3], 1, 2) is False
+    assert pyd.contains({'name': 'fred', 'age': 40}, 'fred') is True
+    assert pyd.contains('pebbles', 'eb') is True
+
+
+##def test_count_by():
+##    pass
+
+
+def test_filter_():
+    assert pyd.filter_([0, True, False, None, 1, 2, 3]) == [True, 1, 2, 3]
+
+    is_even = lambda num, *args: num % 2 == 0
+    assert pyd.filter_([1, 2, 3, 4, 5, 6], is_even) == [2, 4, 6]
+
+    characters = [
+        {'name': 'barney', 'age': 36, 'blocked': False},
+        {'name': 'fred',   'age': 40, 'blocked': True}
+    ]
+
+    expected = [{'name': 'fred', 'age': 40, 'blocked': True}]
+    assert pyd.filter_(characters, 'blocked') == expected
+
+    expected = [{'name': 'barney', 'age': 36, 'blocked': False}]
+    assert pyd.filter_(characters, {'age': 36}) == expected
+
+
+def test_find():
+    characters = [
+        {'name': 'barney',  'age': 36, 'blocked': False},
+        {'name': 'fred',    'age': 40, 'blocked': True},
+        {'name': 'pebbles', 'age': 1,  'blocked': False}
+    ]
+
+    callback = lambda c, *args: c['age'] < 40
+
+    expected = {'name': 'barney', 'age': 36, 'blocked': False}
+    assert pyd.find(characters, callback) == expected
+
+    expected = {'name': 'pebbles', 'age': 1, 'blocked': False}
+    assert pyd.find(characters, {'age': 1}) == expected
+
+    expected = {'name': 'fred', 'age': 40, 'blocked': True}
+    assert pyd.find(characters, 'blocked') == expected
+
+    expected = {'name': 'barney',  'age': 36, 'blocked': False}
+    assert pyd.find(characters) == expected
