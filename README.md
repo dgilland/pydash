@@ -10,8 +10,31 @@ Python port of the [Lodash](http://lodash.com/) Javascript library.
 
 Currently, alpha stage.
 
+Current status of initial port: https://github.com/dgilland/pydash/issues/2
 
-## Differences between Lodash
+
+## Requirements
+
+### Compatibility
+
+- (maybe) Python 2.6
+- Python 2.7
+- (planned) Python 3
+
+### Dependencies
+
+None.
+
+
+## Installation
+
+```
+pip install ladder
+```
+
+## Overview
+
+### Differences between Lodash
 
 - Function names use `snake_case` instead of `camelCase`.
 - Any Lodash function which shares its name with a reserved Python keyword will have an `_` appended after it (e.g. `filter` in Lodash would be `filter_` in Pydash.
