@@ -51,6 +51,27 @@ def find_index(array, callback):
     return n
 
 
+def find_last_index(array, callback):
+    """.. py:method:: find_index(array, callback|where)
+
+    This method is similar to _.find_index, except that it iterates over
+    elements from right to left.
+
+    :param list array: list to process
+    :param function callback: filter function or where dict
+    :rtype: list
+    """
+    n = -1
+    array = list(array)
+    array.reverse()
+    for is_true, _, i, _ in _iter_callback(array, callback):
+        if is_true:
+            n = i
+            break
+
+    return n
+
+
 def first(array, callback=None):
     """.. py:method:: first(array[, callback|n|pluck|where=None])
 
