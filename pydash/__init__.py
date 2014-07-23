@@ -235,8 +235,22 @@ def last_index_of(array, value, from_index=0):
     return len(array) - 1 - index_of(array[::-1], value, from_index)
 
 
-def pull():
-    raise NotImplementedError
+def pull(array, *values):
+    """.. py:method:: pull(array, *values)
+
+    Removes all provided values from the given array using strict equality for 
+    comparisons, i.e. ===.
+
+    :param list array: list to modify
+    :param *values: values to remove
+    :rtype: list
+    """
+    lst = []
+    for value in array:
+        if value not in values:
+            lst.append(value)
+
+    return lst
 
 
 # functions just like builtin range
