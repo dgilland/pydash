@@ -229,6 +229,10 @@ def test_last_index_of():
     assert pyd.last_index_of([1, 2, 3, 1, 2, 3], 2, 3) == 1
 
 
+def test_pull():
+    assert pyd.pull([1, 2, 3, 1, 2, 3], 2, 3) == [1, 1]
+
+
 def test_zip_object():
     expected = {'moe': 30, 'larry': 40}
     assert pyd.zip_object(['moe', 'larry'], [30, 40]) == expected

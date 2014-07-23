@@ -245,12 +245,7 @@ def pull(array, *values):
     :param *values: values to remove
     :rtype: list
     """
-    lst = []
-    for value in array:
-        if value not in values:
-            lst.append(value)
-
-    return lst
+    return [value for value in array if value not in values]
 
 
 # functions just like builtin range
