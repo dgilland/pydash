@@ -29,7 +29,7 @@ None.
 ## Installation
 
 ```
-pip install ladder
+pip install pydash
 ```
 
 ## Overview
