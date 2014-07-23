@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 __title__ = 'pydash'
-__summary__ = 'Python port of Lodash'
+__summary__ = 'Python port of Lo-Dash'
 __url__ = 'https://github.com/dgilland/pydash'
 
 __version__ = '0.0.0'
