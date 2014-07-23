@@ -1,6 +1,6 @@
 # pydash
 
-[![Package Version](https://pypip.in/v/pydash/badge.png)](https://pypi.python.org/pypi/pydash/)
+[![Package Version](https://pypip.in/version/pydash/badge.png)](https://pypi.python.org/pypi/pydash/)
 [![Build Status](https://travis-ci.org/dgilland/pydash.png?branch=master)](https://travis-ci.org/dgilland/pydash)
 [![Coverage Status](https://coveralls.io/repos/dgilland/pydash/badge.png?branch=master)](https://coveralls.io/r/dgilland/pydash)
 [![License](https://pypip.in/license/pydash/badge.png)](https://pypi.python.org/pypi/pydash/)
@@ -9,10 +9,6 @@
 Python port of the [Lodash](http://lodash.com/) Javascript library.
 
 Currently, alpha stage.
-
-
-
-
 
 
 ## Differences between Lodash
