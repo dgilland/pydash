@@ -1,0 +1,9 @@
+language: python
+python:
+  - "2.7"
+install:
+  - make travisci-install
+script:
+  - make travisci-test
+after_success:
+  - coveralls
