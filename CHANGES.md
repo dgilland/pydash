@@ -5,6 +5,7 @@
 - Add `find_last_index()`. (Thanks [nathancahill])
 - Add `remove()`.
 - Add `xor()`.
+- Add `sample()`.
 
 
 ## v0.0.0 (2014-07-22)

@@ -455,3 +455,16 @@ def test_find():
 
     expected = {'name': 'barney',  'age': 36, 'blocked': False}
     assert pyd.find(characters) == expected
+
+
+def test_sample():
+    collection = [1, 2, 3, 4, 5, 6]
+
+    sample1 = pyd.sample(collection)
+    assert sample1 in collection
+
+    for n in range(2, 10):
+        samplen = pyd.sample(collection, n)
+
+        assert len(samplen) == min(n, len(collection))
+        assert set(samplen).issubset(collection)

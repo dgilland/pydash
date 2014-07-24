@@ -3,6 +3,7 @@
 
 import collections
 from bisect import bisect_left
+import random
 
 from ._compat import string_types, iteritems, _range
 
@@ -641,10 +642,12 @@ def reject(*args, **kargs):  # pragma: no cover
     raise NotImplementedError
 
 
-def sample(*args, **kargs):  # pragma: no cover
+def sample(collection, n=None):
     """Retrieves a random element or `n` random elements from a `collection`.
     """
-    raise NotImplementedError
+    nn = min(n or 1, len(collection))
+    sampled = random.sample(collection, nn)
+    return sampled[0] if n is None else sampled
 
 
 def shuffle(*args, **kargs):  # pragma: no cover
