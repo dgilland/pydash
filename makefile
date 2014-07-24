@@ -1,4 +1,4 @@
-.PHONY: build clean clean-env clean-files install test test-full test-tox lint pep8 pylint release travisci-install travisci-test
+.PHONY: build clean clean-env clean-files install test test-full test-setuppy lint pep8 pylint release travisci-install travisci-test
 
 ##
 # Variables
@@ -42,12 +42,10 @@ install:
 test:
 	$(ENV_ACT) py.test $(PYTEST_ARGS) $(COVERAGE_ARGS) $(COVERAGE_TARGET) $(PYTEST_TARGET)
 
-test-full: test-tox clean-files
+test-full: pylint-errors test-setuppy clean-files
 
-test-tox:
-	$(ENV_ACT) pylint -E $(COVERAGE_TARGET)
-	rm -rf .tox
-	$(ENV_ACT) tox
+test-setuppy:
+	python setup.py test
 
 
 # linting
@@ -58,6 +56,9 @@ pep8:
 
 pylint:
 	$(ENV_ACT) pylint $(COVERAGE_TARGET)
+
+pylint-errors:
+	$(ENV_ACT) pylint -E $(COVERAGE_TARGET)
 
 
 # code release
