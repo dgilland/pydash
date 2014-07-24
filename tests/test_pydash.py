@@ -1,30 +1,26 @@
 
+import pytest
+
 import pydash as pyd
 
 
-def test_compact():
-    case = [0, 1, 2, 3]
-    expected = [1, 2, 3]
-    actual = pyd.compact(case)
-
-    assert actual == expected
-
-    case = [True, False, None, True, 1, 'foo']
-    expected = [True, True, 1, 'foo']
-    actual = pyd.compact(case)
-
-    assert actual == expected
+# pytest.mark is a generator so create alias for convenience
+parametrize = pytest.mark.parametrize
 
 
-def test_difference():
-    lst = [1, 2, 3, 4]
-    lst1 = [2, 4]
-    lst2 = [3, 5, 6]
+@parametrize('case,expected', [
+    ([0, 1, 2, 3], [1, 2, 3]),
+    ([True, False, None, True, 1, 'foo'], [True, True, 1, 'foo'])
+])
+def test_compact(case, expected):
+    assert pyd.compact(case) == expected
 
-    result = pyd.difference(lst, lst1, lst2)
-    expected = [1]
 
-    assert result == expected
+@parametrize('case,expected', [
+    (([1, 2, 3, 4], [2, 4], [3, 5, 6]), [1])
+])
+def test_difference(case, expected):
+    assert pyd.difference(*case) == expected
 
 
 def test_where():
