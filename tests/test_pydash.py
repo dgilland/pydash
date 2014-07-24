@@ -271,8 +271,6 @@ def test_unzip():
 
 
 def test_range_():
-    assert pyd.range_ is range
-
     assert pyd.range_(10) == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     assert pyd.range_(1, 11) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     assert pyd.range_(0, 30, 5) == [0, 5, 10, 15, 20, 25]
@@ -412,10 +410,6 @@ def test_contains():
     assert pyd.contains([1, 2, 3], 1, 2) is False
     assert pyd.contains({'name': 'fred', 'age': 40}, 'fred') is True
     assert pyd.contains('pebbles', 'eb') is True
-
-
-##def test_count_by():
-##    pass
 
 
 def test_filter_():

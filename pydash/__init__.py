@@ -4,6 +4,8 @@
 import collections
 from bisect import bisect_left
 
+from ._compat import string_types, iteritems, _range
+
 
 #
 # Arrays
@@ -122,7 +124,7 @@ def flatten(array, callback=None, _depth=0):
 
     lst = []
     if all([isinstance(array, collections.Iterable),
-            not isinstance(array, basestring),
+            not isinstance(array, string_types),
             not (shallow and _depth > 1)]):
         for arr in array:
             lst.extend(flatten(arr, callback, _depth + 1))
@@ -228,8 +230,12 @@ def pull(array, *values):
     return [value for value in array if value not in values]
 
 
-# functions just like builtin range
-range_ = range
+def range_(*args, **kargs):
+    """Creates a list of numbers (positive and/or negative) progressing from
+    start up to but not including end. If start is less than stop a zero-length
+    range is created unless a negative step is specified.
+    """
+    return list(_range(*args, **kargs))
 
 
 def remove(array, callback=None):
@@ -731,7 +737,7 @@ def _make_callback(callback):
     """Create a callback function from a mixed type `callback`"""
     if hasattr(callback, '__call__'):
         cbk = callback
-    elif isinstance(callback, basestring):
+    elif isinstance(callback, string_types):
         key = callback
         cbk = lambda item, *args: pluck([item], key)[0]
     elif isinstance(callback, dict):
@@ -762,7 +768,7 @@ def _iter_dict_callback(collection, callback=None):
     """Return iterative dict callback."""
     cbk = _make_callback(callback)
     return ((cbk(value, key, collection),)
-            for key, value in collection.iteritems())
+            for key, value in iteritems(collection))
 
 
 def _iter_unique_set(array):
