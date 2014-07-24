@@ -362,7 +362,7 @@ def without(array, *values):
     return [a for a in array if a not in values]
 
 
-def xor(*args, **kargs):
+def xor(*args, **kargs):  # pragma: no cover
     """Creates a list that is the symmetric difference of the provided lists.
     """
     raise NotImplementedError
@@ -448,7 +448,7 @@ def contains(collection, target, from_index=0):
 include = contains
 
 
-def count_by(*args, **kargs):
+def count_by(*args, **kargs):  # pragma: no cover
     """Creates an object composed of keys generated from the results of running
     each element of `collection` through the callback.
     """
@@ -512,14 +512,14 @@ detect = find
 find_where = find
 
 
-def find_last(*args, **kargs):
+def find_last(*args, **kargs):  # pragma: no cover
     """This method is like :func:`find` except that it iterates over elements
     of a `collection` from right to left.
     """
     raise NotImplementedError
 
 
-def for_each(*args, **kargs):
+def for_each(*args, **kargs):  # pragma: no cover
     """Iterates over elements of a collection, executing the callback for each
     element.
     """
@@ -529,7 +529,7 @@ def for_each(*args, **kargs):
 each = for_each
 
 
-def for_each_right(*args, **kargs):
+def for_each_right(*args, **kargs):  # pragma: no cover
     """This method is like :func:`for_each` except that it iterates over
     elements of a `collection` from right to left.
     """
@@ -539,21 +539,21 @@ def for_each_right(*args, **kargs):
 each_right = for_each_right
 
 
-def group_by(*args, **kargs):
+def group_by(*args, **kargs):  # pragma: no cover
     """Creates an object composed of keys generated from the results of running
     each element of a `collection` through the callback.
     """
     raise NotImplementedError
 
 
-def index_by(*args, **kargs):
+def index_by(*args, **kargs):  # pragma: no cover
     """Creates an object composed of keys generated from the results of running
     each element of the collection through the given callback.
     """
     raise NotImplementedError
 
 
-def invoke(*args, **kargs):
+def invoke(*args, **kargs):  # pragma: no cover
     """Invokes the method named by `method_name` on each element in the
     `collection` returning a list of the results of each invoked method.
     """
@@ -582,12 +582,12 @@ def map_(collection, callback=None):
 collect = map_
 
 
-def max_(*args, **kargs):
+def max_(*args, **kargs):  # pragma: no cover
     """Retrieves the maximum value of a `collection`."""
     raise NotImplementedError
 
 
-def min_(*args, **kargs):
+def min_(*args, **kargs):  # pragma: no cover
     """Retrieves the minimum value of a `collection`."""
     raise NotImplementedError
 
@@ -604,7 +604,7 @@ def pluck(collection, key):
     return [item.get(key) for item in collection]
 
 
-def reduce_(*args, **kargs):
+def reduce_(*args, **kargs):  # pragma: no cover
     """Reduces a collection to a value which is the accumulated result of
     running each element in the collection through the callback, where each
     successive callback execution consumes the return value of the previous
@@ -617,7 +617,7 @@ foldl = reduce_
 inject = reduce_
 
 
-def reduce_right(*args, **kargs):
+def reduce_right(*args, **kargs):  # pragma: no cover
     """This method is like :func:`reduce_` except that it iterates over
     elements of a `collection` from right to left.
     """
@@ -627,27 +627,27 @@ def reduce_right(*args, **kargs):
 foldr = reduce_right
 
 
-def reject(*args, **kargs):
+def reject(*args, **kargs):  # pragma: no cover
     """The opposite of :func:`filter_` this method returns the elements of a
     collection that the callback does **not** return truthy for.
     """
     raise NotImplementedError
 
 
-def sample(*args, **kargs):
+def sample(*args, **kargs):  # pragma: no cover
     """Retrieves a random element or `n` random elements from a `collection`.
     """
     raise NotImplementedError
 
 
-def shuffle(*args, **kargs):
+def shuffle(*args, **kargs):  # pragma: no cover
     """Creates a list of shuffled values, using a version of the Fisher-Yates
     shuffle.
     """
     raise NotImplementedError
 
 
-def size(*args, **kargs):
+def size(*args, **kargs):  # pragma: no cover
     """Gets the size of the `collection` by returning `len(collection)` for
     lists and list-like objects or the number of own enumerable properties for
     objects.
@@ -679,14 +679,14 @@ def some(collection, callback=None):
 any_ = some
 
 
-def sort_by(*args, **kargs):
+def sort_by(*args, **kargs):  # pragma: no cover
     """Creates a list of elements, sorted in ascending order by the results of
     running each element in a `collection` through the callback.
     """
     raise NotImplementedError
 
 
-def to_list(*args, **kargs):
+def to_list(*args, **kargs):  # pragma: no cover
     """Converts the collection to a list."""
     raise NotImplementedError
 
