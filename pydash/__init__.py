@@ -388,13 +388,12 @@ def zip_(*arrays):
     return [list(item) for item in zip(*arrays)]
 
 
-# TODO: Lo-Dash has this as an alias of zip_?
 def unzip(array):
-    """The inverse of :py:method:`zipper`, this method splits groups of
-    elements into arrays composed of elements from each group at their
+    """The inverse of :func:`zipper`, this method splits groups of
+    elements into lists composed of elements from each group at their
     corresponding indexes.
 
-    :param list *arrays: list to process
+    :param list array: list to process
     :rtype: list
     """
     return zip_(*array)
