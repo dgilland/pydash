@@ -232,11 +232,16 @@ def pull(array, *values):
 range_ = range
 
 
-def remove(*args, **kargs):
+def remove(array, callback=None):
     """Removes all elements from a list that the callback returns truthy for
     and returns an array of removed elements.
     """
-    raise NotImplementedError
+    removed = []
+    for is_true, _, i, _ in _iter_callback(array, callback):
+        if is_true:
+            removed.append(array.pop(i))
+
+    return removed
 
 
 def rest(array, callback=None):

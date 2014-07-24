@@ -233,6 +233,14 @@ def test_pull():
     assert pyd.pull([1, 2, 3, 1, 2, 3], 2, 3) == [1, 1]
 
 
+def test_remove():
+    array = [1, 2, 3, 4, 5, 6]
+    evens = pyd.remove(array, lambda x, *args: x % 2 == 0)
+
+    assert array == [1, 3, 5]
+    assert evens == [2, 4, 6]
+
+
 def test_zip_object():
     expected = {'moe': 30, 'larry': 40}
     assert pyd.zip_object(['moe', 'larry'], [30, 40]) == expected
