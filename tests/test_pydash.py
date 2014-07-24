@@ -92,6 +92,19 @@ def test_find_index():
     assert pyd.find_index(food, {'name': 'banana'}) == 1
 
 
+def test_find_last_index():
+    food = ['apple', 'banana', 'beet']
+    fn = lambda item, *args: item.startswith('b')
+    assert pyd.find_last_index(food, fn) == 2
+
+    food = [
+        {'name': 'apple',  'type': 'fruit'},
+        {'name': 'banana', 'type': 'fruit'},
+        {'name': 'beet',   'type': 'vegetable'}
+    ]
+    assert pyd.find_last_index(food, {'type': 'fruit'}) == 1
+
+
 def test_first():
     assert pyd.first([1, 2, 3]) == 1
     assert pyd.first([1, 2, 3], 2) == [1, 2]
@@ -214,6 +227,10 @@ def test_last():
 def test_last_index_of():
     assert pyd.last_index_of([1, 2, 3, 1, 2, 3], 2) == 4
     assert pyd.last_index_of([1, 2, 3, 1, 2, 3], 2, 3) == 1
+
+
+def test_pull():
+    assert pyd.pull([1, 2, 3, 1, 2, 3], 2, 3) == [1, 1]
 
 
 def test_zip_object():
