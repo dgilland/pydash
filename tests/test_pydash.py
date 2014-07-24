@@ -468,3 +468,12 @@ def test_sample():
 
         assert len(samplen) == min(n, len(collection))
         assert set(samplen).issubset(collection)
+
+
+def test_shuffle():
+    collection = [1, 2, 3, 4, 5, 6]
+
+    shuffled = pyd.shuffle(collection)
+
+    assert set(shuffled) == set(collection)
+    assert len(shuffled) == len(collection)

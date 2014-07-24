@@ -6,6 +6,7 @@
 - Add `remove()`.
 - Add `xor()`.
 - Add `sample()`.
+- Add `shuffle()`.
 
 
 ## v0.0.0 (2014-07-22)

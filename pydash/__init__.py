@@ -650,11 +650,17 @@ def sample(collection, n=None):
     return sampled[0] if n is None else sampled
 
 
-def shuffle(*args, **kargs):  # pragma: no cover
+def shuffle(collection):
     """Creates a list of shuffled values, using a version of the Fisher-Yates
     shuffle.
     """
-    raise NotImplementedError
+    # Make copy of collection since random.shuffle works on list in-place.
+    collection = list(collection)
+
+    # NOTE: random.shuffle uses Fisher-Yates.
+    random.shuffle(collection)
+
+    return collection
 
 
 def size(*args, **kargs):  # pragma: no cover
