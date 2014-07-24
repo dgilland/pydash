@@ -477,3 +477,11 @@ def test_shuffle():
 
     assert set(shuffled) == set(collection)
     assert len(shuffled) == len(collection)
+
+
+def test_size():
+    collection = [1, 2, 3, 4, 5]
+    assert pyd.size(collection) == len(collection)
+
+    collection = {'1': 1, '2': 2, '3': 3}
+    assert pyd.size(collection) == len(collection)

@@ -663,12 +663,11 @@ def shuffle(collection):
     return collection
 
 
-def size(*args, **kargs):  # pragma: no cover
+def size(collection):
     """Gets the size of the `collection` by returning `len(collection)` for
-    lists and list-like objects or the number of own enumerable properties for
-    objects.
+    iterable objects.
     """
-    raise NotImplementedError
+    return len(collection)
 
 
 def some(collection, callback=None):

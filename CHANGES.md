@@ -7,6 +7,7 @@
 - Add `xor()`.
 - Add `sample()`.
 - Add `shuffle()`.
+- Add `size()`.
 
 
 ## v0.0.0 (2014-07-22)
