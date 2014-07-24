@@ -47,6 +47,27 @@ def find_index(array, callback):
     return n
 
 
+def find_last_index(array, callback):
+    """.. py:method:: find_index(array, callback|where)
+
+    This method is similar to _.find_index, except that it iterates over
+    elements from right to left.
+
+    :param list array: list to process
+    :param function callback: filter function or where dict
+    :rtype: list
+    """
+    n = -1
+    array = list(array)
+    array.reverse()
+    for is_true, _, i, _ in _iter_callback(array, callback):
+        if is_true:
+            n = len(array) - i - 1
+            break
+
+    return n
+
+
 def first(array, callback=None):
     """Gets the first element of the array. If a number n is passed, the first
     n elements of the array are returned. If a callback function is passed,
@@ -198,8 +219,17 @@ def last_index_of(array, value, from_index=0):
     return len(array) - 1 - index_of(array[::-1], value, from_index)
 
 
-def pull(*args, **kargs):
-    raise NotImplementedError
+def pull(array, *values):
+    """.. py:method:: pull(array, *values)
+
+    Removes all provided values from the given array using strict equality for
+    comparisons, i.e. ===.
+
+    :param list array: list to modify
+    :param *values: values to remove
+    :rtype: list
+    """
+    return [value for value in array if value not in values]
 
 
 # functions just like builtin range
