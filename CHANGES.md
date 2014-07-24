@@ -4,6 +4,7 @@
 - Add `pull()`. (Thanks [nathancahill])
 - Add `find_last_index()`. (Thanks [nathancahill])
 - Add `remove()`.
+- Add `xor()`.
 
 
 ## v0.0.0 (2014-07-22)

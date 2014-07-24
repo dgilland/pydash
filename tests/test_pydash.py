@@ -282,6 +282,11 @@ def test_without():
     assert pyd.without([1, 2, 1, 0, 3, 1, 4], 0, 1) == [2, 3, 4]
 
 
+def test_xor():
+    assert set(pyd.xor([1, 2, 3], [5, 2, 1, 4])) == set([3, 5, 4])
+    assert set(pyd.xor([1, 2, 5], [2, 3, 5], [3, 4, 5])) == set([1, 4, 5])
+
+
 def test_uniq():
     expected = [1, 2, 3]
     assert pyd.uniq([1, 2, 1, 3, 1]) == expected

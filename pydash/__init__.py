@@ -368,10 +368,12 @@ def without(array, *values):
     return [a for a in array if a not in values]
 
 
-def xor(*args, **kargs):  # pragma: no cover
+def xor(array, *lists):
     """Creates a list that is the symmetric difference of the provided lists.
     """
-    raise NotImplementedError
+    return (list(xor(set(array).symmetric_difference(lists[0]),
+                    *lists[1:])) if lists
+            else array)
 
 
 def zip_(*arrays):
