@@ -48,9 +48,7 @@ def find_index(array, callback):
 
 
 def find_last_index(array, callback):
-    """.. py:method:: find_index(array, callback|where)
-
-    This method is similar to _.find_index, except that it iterates over
+    """This method is similar to _.find_index, except that it iterates over
     elements from right to left.
 
     :param list array: list to process
@@ -220,9 +218,7 @@ def last_index_of(array, value, from_index=0):
 
 
 def pull(array, *values):
-    """.. py:method:: pull(array, *values)
-
-    Removes all provided values from the given array using strict equality for
+    """Removes all provided values from the given array using strict equality for
     comparisons, i.e. ===.
 
     :param list array: list to modify
