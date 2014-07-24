@@ -373,7 +373,7 @@ def xor(array, *lists):
     """Creates a list that is the symmetric difference of the provided lists.
     """
     return (list(xor(set(array).symmetric_difference(lists[0]),
-                    *lists[1:])) if lists
+                     *lists[1:])) if lists
             else array)
 
 
