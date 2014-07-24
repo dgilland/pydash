@@ -36,4 +36,7 @@ nosetests.xml
 .pydevproject
 
 # virtualenv
-/env
+/env*
+
+# NodeJS
+node_modules
