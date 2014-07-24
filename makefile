@@ -45,7 +45,7 @@ test:
 test-full: test-tox clean-files
 
 test-tox:
-	pylint -E $(COVERAGE_TARGET)
+	$(ENV_ACT) pylint -E $(COVERAGE_TARGET)
 	rm -rf .tox
 	$(ENV_ACT) tox
 
