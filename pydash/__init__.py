@@ -228,7 +228,14 @@ def pull(array, *values):
     :param *values: values to remove
     :rtype: list
     """
-    return [value for value in array if value not in values]
+    for value in values:
+        while True:
+            try:
+                array.remove(value)
+            except ValueError:
+                break
+
+    return array
 
 
 def range_(*args, **kargs):
