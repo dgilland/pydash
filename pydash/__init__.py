@@ -463,11 +463,20 @@ def contains(collection, target, from_index=0):
 include = contains
 
 
-def count_by(*args, **kargs):  # pragma: no cover
+def count_by(collection, callback):
     """Creates an object composed of keys generated from the results of running
     each element of `collection` through the callback.
     """
-    raise NotImplementedError
+    ret = dict()
+    cb = _make_callback(callback)
+
+    for value in collection:
+        key = cb(value)
+
+        ret.setdefault(key, 0)
+        ret[key] += 1
+
+    return ret
 
 
 def every(collection, callback=None):
@@ -527,11 +536,20 @@ detect = find
 find_where = find
 
 
-def find_last(*args, **kargs):  # pragma: no cover
+def find_last(collection, callback=None):
     """This method is like :func:`find` except that it iterates over elements
     of a `collection` from right to left.
     """
-    raise NotImplementedError
+    found = None
+    collection = list(collection)
+    collection.reverse()
+    for is_true, value, key, _ in _iter_callback(collection, callback):
+        if is_true:
+            found = collection[key]
+            # only return first found item
+            break
+
+    return found
 
 
 def for_each(*args, **kargs):  # pragma: no cover

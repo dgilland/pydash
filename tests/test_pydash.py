@@ -398,6 +398,13 @@ def test_contains(case, expected):
 
 
 @parametrize('case,expected', [
+    (([4.3, 6.1, 6.4], lambda num, *args: int(math.floor(num))), {4: 1, 6: 2}),
+])
+def test_count_by(case, expected):
+    assert pyd.count_by(*case) == expected
+
+
+@parametrize('case,expected', [
     (([0, True, False, None, 1, 2, 3],), [True, 1, 2, 3]),
     (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [2, 4, 6]),
     ((fixtures.data.filter_,
@@ -426,6 +433,13 @@ def test_filter_(case, expected):
 ])
 def test_find(case, expected):
     assert pyd.find(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4], lambda num, *args: num % 2 == 1), 3),
+])
+def test_find_last(case, expected):
+    assert pyd.find_last(*case) == expected
 
 
 @parametrize('case', [
