@@ -466,10 +466,8 @@ def count_by(collection, callback):
     for value in collection:
         key = cb(value)
 
-        if ret.has_key(key):
-            ret[key] += 1
-        else:
-            ret[key] = 1
+        ret.setdefault(key, 0)
+        ret[key] += 1
 
     return ret
 
