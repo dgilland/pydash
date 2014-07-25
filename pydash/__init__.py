@@ -58,13 +58,10 @@ def find_last_index(array, callback):
     :param function callback: filter function or where dict
     :rtype: list
     """
-    n = -1
-    array = list(array)
-    array.reverse()
-    for is_true, _, i, _ in _iter_callback(array, callback):
-        if is_true:
-            n = len(array) - i - 1
-            break
+    n = find_index(reversed(array), callback)
+
+    if n is not -1:
+        n = len(array) - n - 1
 
     return n
 
@@ -537,16 +534,7 @@ def find_last(collection, callback=None):
     """This method is like :func:`find` except that it iterates over elements
     of a `collection` from right to left.
     """
-    found = None
-    collection = list(collection)
-    collection.reverse()
-    for is_true, value, key, _ in _iter_callback(collection, callback):
-        if is_true:
-            found = collection[key]
-            # only return first found item
-            break
-
-    return found
+    return find(list(reversed(collection)), callback)
 
 
 def for_each(*args, **kargs):  # pragma: no cover
