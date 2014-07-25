@@ -3,6 +3,8 @@
 - Add Python 2.6 and Python 3 support.
 - Add `pull()`. (Thanks [nathancahill])
 - Add `find_last_index()`. (Thanks [nathancahill])
+- Add `count_by()`. (Thanks [nathancahill])
+- Add `find_last()`. (Thanks [nathancahill])
 - Add `remove()`.
 - Add `xor()`.
 - Add `sample()`.
