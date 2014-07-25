@@ -8,6 +8,11 @@
 - Add `sample()`.
 - Add `shuffle()`.
 - Add `size()`.
+- Add `reduce_()`.
+- Add `foldl()`.
+- Add `inject()`.
+- Add `reduce_right()`.
+- Add `foldr()`.
 
 
 ## v0.0.0 (2014-07-22)

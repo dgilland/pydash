@@ -619,24 +619,44 @@ def pluck(collection, key):
     return [item.get(key) for item in collection]
 
 
-def reduce_(*args, **kargs):  # pragma: no cover
+def reduce_(collection, callback=None, accumulator=None):
     """Reduces a collection to a value which is the accumulated result of
     running each element in the collection through the callback, where each
     successive callback execution consumes the return value of the previous
     execution.
     """
-    raise NotImplementedError
+    iterable = _iter(collection)
+
+    if accumulator is None:
+        try:
+            _, accumulator = next(iterable)
+            offset = 1
+        except StopIteration:
+            raise TypeError(
+                'reduce_() of empty sequence with no initial value')
+
+    result = accumulator
+
+    if callback is None:
+        callback = lambda item, *args: item
+
+    for index, item in iterable:
+        result = callback(result, item, index)
+
+    return result
 
 
 foldl = reduce_
 inject = reduce_
 
 
-def reduce_right(*args, **kargs):  # pragma: no cover
+def reduce_right(collection, callback=None, accumulator=None):  # pragma: no cover
     """This method is like :func:`reduce_` except that it iterates over
     elements of a `collection` from right to left.
     """
-    raise NotImplementedError
+    if not isinstance(collection, dict):
+        collection = sorted(collection, reverse=True)
+    return reduce_(collection, callback, accumulator)
 
 
 foldr = reduce_right
@@ -785,6 +805,25 @@ def _iter_dict_callback(collection, callback=None):
     cbk = _make_callback(callback)
     for key, value in iteritems(collection):
         yield (cbk(value, key, collection),)
+
+
+def _iter(collection):
+    """Return iterative based on collection type."""
+    if isinstance(collection, dict):
+        return _iter_dict(collection)
+    else:
+        return _iter_list(collection)
+
+
+def _iter_dict(collection):
+    """Return iterative dict."""
+    return iteritems(collection)
+
+
+def _iter_list(array):
+    """Return iterative list."""
+    for i, item in enumerate(array):
+        yield i, item
 
 
 def _iter_unique_set(array):

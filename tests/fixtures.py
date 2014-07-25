@@ -32,3 +32,16 @@ _data = {
 
 
 data = DataFactory(_data)
+
+
+def reduce_callback0(total, num, *args):
+	return total + num
+
+
+def reduce_callback1(result, num, key):
+	result[key] = num * 3
+	return result
+
+
+def reduce_right_callback0(a, b, *args):
+    return a + b

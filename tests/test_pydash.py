@@ -371,11 +371,11 @@ def test_map_(case, expected, sort_results):
     assert actual == expected
 
 
-@parametrize('alias', [
+@parametrize('case', [
     pyd.collect
 ])
-def test_map__aliases(alias):
-    assert pyd.map_ is alias
+def test_map_aliases(case):
+    assert pyd.map_ is case
 
 
 @parametrize('case,expected', [
@@ -465,3 +465,68 @@ def test_shuffle(case):
 ])
 def test_size(case):
     assert pyd.size(case) == len(case)
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], None), 1),
+    (([1, 2, 3], fixtures.reduce_callback0), 6),
+    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
+     {'a': 3, 'b': 6, 'c': 9})
+])
+def test_reduce(case, expected):
+    assert pyd.reduce_(*case) == expected
+
+
+@parametrize('case,exception', [
+    (([],), TypeError)
+])
+def test_reduce_raise(case, exception):
+    raised = False
+
+    try:
+        pyd.reduce_(*case)
+    except exception:
+        raised = True
+
+    assert raised
+
+
+@parametrize('case', [
+    pyd.foldl,
+    pyd.inject
+])
+def test_reduce_aliases(case):
+    assert pyd.reduce_ is case
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], None), 3),
+    (([1, 2, 3], fixtures.reduce_callback0), 6),
+    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_callback0),
+     [4, 5, 2, 3, 0, 1]),
+    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
+     {'a': 3, 'b': 6, 'c': 9})
+])
+def test_reduce(case, expected):
+    assert pyd.reduce_right(*case) == expected
+
+
+@parametrize('case,exception', [
+    (([],), TypeError)
+])
+def test_reduce_right_raise(case, exception):
+    raised = False
+
+    try:
+        pyd.reduce_right(*case)
+    except exception:
+        raised = True
+
+    assert raised
+
+
+@parametrize('case', [
+    pyd.foldr
+])
+def test_reduce_right_aliases(case):
+    assert pyd.reduce_right is case
