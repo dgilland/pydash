@@ -229,11 +229,8 @@ def pull(array, *values):
     :rtype: list
     """
     for value in values:
-        while True:
-            try:
-                array.remove(value)
-            except ValueError:
-                break
+        while array.count(value) > 0:
+            array.remove(value)
 
     return array
 
