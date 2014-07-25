@@ -1,7 +1,10 @@
 
+import math
+
 import pytest
 
 import pydash as pyd
+from . import fixtures
 
 
 # pytest.mark is a generator so create alias for convenience
@@ -23,461 +26,442 @@ def test_difference(case, expected):
     assert pyd.difference(*case) == expected
 
 
-def test_where():
-    stooges = [
-        {'name': 'moe', 'age': 40},
-        {'name': 'larry', 'age': 50}
-    ]
-
-    assert pyd.where(stooges, {'age': 40}) == [{'name': 'moe', 'age': 40}]
-
-
-def test_pluck():
-    stooges = [
-        {'name': 'moe', 'age': 40},
-        {'name': 'larry', 'age': 50}
-    ]
-
-    assert pyd.pluck(stooges, 'name') == ['moe', 'larry']
+@parametrize('case,filter_by,expected,', [
+    ([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
+     {'age': 40},
+     [{'name': 'moe', 'age': 40}])
+])
+def test_where(case, filter_by, expected):
+    assert pyd.where(case, filter_by) == expected
 
 
-def test_rest():
-    lst = [1, 2, 3]
-    assert pyd.rest(lst) == [2, 3]
-    assert pyd.rest(lst, 2) == [3]
-
-    filter_fn = lambda val, index, lst: val < 3
-    assert pyd.rest(lst, filter_fn) == [3]
-
-    food = [
-        {'name': 'banana', 'organic': True},
-        {'name': 'beet',   'organic': False},
-    ]
-
-    expected = [{'name': 'beet', 'organic': False}]
-
-    assert pyd.rest(food, 'organic') == expected
-
-    food = [
-        {'name': 'apple',  'type': 'fruit'},
-        {'name': 'banana', 'type': 'fruit'},
-        {'name': 'beet',   'type': 'vegetable'},
-        {'name': 'peach', 'type': 'fruit'}
-    ]
-    expected = [
-        {'name': 'beet', 'type': 'vegetable'},
-        {'name': 'peach', 'type': 'fruit'}
-    ]
-
-    assert pyd.rest(food, {'type': 'fruit'}) == expected
-
-    # verify alias
-    assert pyd.tail is pyd.rest
+@parametrize('case,filter_by,expected', [
+    ([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
+     'name',
+     ['moe', 'larry'])
+])
+def test_pluck(case, filter_by, expected):
+    assert pyd.pluck(case, filter_by) == expected
 
 
-def test_find_index():
-    food = ['apple', 'banana', 'beet']
-    fn = lambda item, *args: item.startswith('b')
-    assert pyd.find_index(food, fn) == 1
-
-    food = [
-        {'name': 'apple',  'type': 'fruit'},
-        {'name': 'banana', 'type': 'fruit'},
-        {'name': 'beet',   'type': 'vegetable'}
-    ]
-    assert pyd.find_index(food, {'name': 'banana'}) == 1
-
-
-def test_find_last_index():
-    food = ['apple', 'banana', 'beet']
-    fn = lambda item, *args: item.startswith('b')
-    assert pyd.find_last_index(food, fn) == 2
-
-    food = [
-        {'name': 'apple',  'type': 'fruit'},
-        {'name': 'banana', 'type': 'fruit'},
-        {'name': 'beet',   'type': 'vegetable'}
-    ]
-    assert pyd.find_last_index(food, {'type': 'fruit'}) == 1
+@parametrize('case,filter_by,expected', [
+    ([1, 2, 3], None, [2, 3]),
+    ([1, 2, 3], 2, [3]),
+    ([1, 2, 3], lambda val, index, lst: val < 3, [3]),
+    ([{'name': 'banana', 'organic': True},
+      {'name': 'beet',   'organic': False}],
+     'organic',
+     [{'name': 'beet', 'organic': False}]),
+    ([{'name': 'apple',  'type': 'fruit'},
+      {'name': 'banana', 'type': 'fruit'},
+      {'name': 'beet',   'type': 'vegetable'},
+      {'name': 'peach', 'type': 'fruit'}],
+     {'type': 'fruit'},
+     [{'name': 'beet', 'type': 'vegetable'},
+      {'name': 'peach', 'type': 'fruit'}])
+])
+def test_rest(case, filter_by, expected):
+    assert pyd.rest(case, filter_by) == expected
 
 
-def test_first():
-    assert pyd.first([1, 2, 3]) == 1
-    assert pyd.first([1, 2, 3], 2) == [1, 2]
-    assert pyd.first([1, 2, 3], lambda item, *args: item < 3) == [1, 2]
-
-    food = [
-        {'name': 'banana', 'organic': True},
-        {'name': 'beet',   'organic': False},
-    ]
-
-    # using "pyd.pluck" callback shorthand
-    expected = [{'name': 'banana', 'organic': True}]
-    assert pyd.first(food, 'organic') == expected
-
-    food = [
-        {'name': 'apple',  'type': 'fruit'},
-        {'name': 'banana', 'type': 'fruit'},
-        {'name': 'beet',   'type': 'vegetable'},
-        {'name': 'peach', 'type': 'fruit'}
-    ]
-
-    # using "pyd.where" callback shorthand
-    expected = [
-        {'name': 'apple', 'type': 'fruit'},
-        {'name': 'banana', 'type': 'fruit'}
-
-    ]
-    assert pyd.first(food, {'type': 'fruit'}) == expected
-
-    # verify alias
-    pyd.head is pyd.first
-    pyd.take is pyd.first
+@parametrize('alias', [
+    pyd.tail,
+    pyd.drop,
+])
+def test_rest_aliases(alias):
+    assert pyd.rest is alias
 
 
-def test_flatten():
-    array = [1, ['2222'], [3, [[4]]]]
-    assert pyd.flatten(array) == [1, '2222', 3, 4]
-    assert pyd.flatten(array, True) == [1, '2222', 3, [[4]]]
-
-    # test pluck style callback
-    stooges = [
-        {'name': 'curly', 'quotes': ['Oh, a wise guy, eh?', 'Poifect!']},
-        {'name': 'moe', 'quotes': ['Spread out!', 'You knucklehead!']}
-    ]
-
-    expected = [
-        'Oh, a wise guy, eh?', 'Poifect!',
-        'Spread out!',
-        'You knucklehead!'
-    ]
-
-    assert pyd.flatten(stooges, 'quotes') == expected
+@parametrize('case,filter_by,expected', [
+    (['apple', 'banana', 'beet'], lambda item, *args: item.startswith('b'), 1),
+    ([{'name': 'apple',  'type': 'fruit'},
+      {'name': 'banana', 'type': 'fruit'},
+      {'name': 'beet',   'type': 'vegetable'}],
+     {'name': 'banana'},
+     1)
+])
+def test_find_index(case, filter_by, expected):
+    assert pyd.find_index(case, filter_by) == expected
 
 
-def test_index_of():
-    assert pyd.index_of([1, 2, 3, 1, 2, 3], 2) == 1
-    assert pyd.index_of([1, 2, 3, 1, 2, 3], 2, 3) == 4
-    assert pyd.index_of([1, 1, 2, 2, 3, 3], 2, True) == 2
-    assert pyd.index_of([1, 1, 2, 2, 3, 3], 4) is False
-    assert pyd.index_of([1, 1, 2, 2, 3, 3], 2, 10) is False
+@parametrize('case,filter_by,expected', [
+    (['apple', 'banana', 'beet'], lambda item, *args: item.startswith('b'), 2),
+    ([{'name': 'apple',  'type': 'fruit'},
+      {'name': 'banana', 'type': 'fruit'},
+      {'name': 'beet',   'type': 'vegetable'}],
+     {'type': 'fruit'},
+     1)
+])
+def test_find_last_index(case, filter_by, expected):
+    assert pyd.find_last_index(case, filter_by) == expected
 
 
-def test_initial():
-    assert pyd.initial([1, 2, 3]) == [1, 2]
-    assert pyd.initial([1, 2, 3], 2) == [1]
-    assert pyd.initial([1, 2, 3], lambda num, *args: num > 1) == [1]
-
-    # test pluck style callback
-    food = [
-        {'name': 'beet',   'organic': False},
-        {'name': 'carrot', 'organic': True}
-    ]
-
-    expected = [{'name': 'beet',   'organic': False}]
-    assert pyd.initial(food, 'organic') == expected
-
-    # test where style callback
-    food = [
-        {'name': 'banana', 'type': 'fruit'},
-        {'name': 'beet',   'type': 'vegetable'},
-        {'name': 'carrot', 'type': 'vegetable'}
-    ]
-
-    expected = [{'name': 'banana', 'type': 'fruit'}]
-    assert pyd.initial(food, {'type': 'vegetable'}) == expected
+@parametrize('case,filter_by,expected', [
+    ([1, 2, 3], None, 1),
+    ([1, 2, 3], 2, [1, 2]),
+    ([1, 2, 3], lambda item, *args: item < 3, [1, 2]),
+    ([{'name': 'banana', 'organic': True},
+      {'name': 'beet',   'organic': False}],
+     'organic',
+     [{'name': 'banana', 'organic': True}]),
+    ([{'name': 'apple',  'type': 'fruit'},
+      {'name': 'banana', 'type': 'fruit'},
+      {'name': 'beet',   'type': 'vegetable'},
+      {'name': 'peach', 'type': 'fruit'}],
+     {'type': 'fruit'},
+     [{'name': 'apple', 'type': 'fruit'},
+      {'name': 'banana', 'type': 'fruit'}]),
+])
+def test_first(case, filter_by, expected):
+    assert pyd.first(case, filter_by) == expected
 
 
-def test_intersection():
-    assert pyd.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]) == [1, 2]
+@parametrize('case,filter_by,expected', [
+    ([1, ['2222'], [3, [[4]]]], None, [1, '2222', 3, 4]),
+    ([1, ['2222'], [3, [[4]]]], True, [1, '2222', 3, [[4]]]),
+    ([{'name': 'curly', 'quotes': ['Oh, a wise guy, eh?', 'Poifect!']},
+      {'name': 'moe', 'quotes': ['Spread out!', 'You knucklehead!']}],
+     'quotes',
+     ['Oh, a wise guy, eh?', 'Poifect!',
+      'Spread out!',
+      'You knucklehead!'])
+])
+def test_flatten(case, filter_by, expected):
+    assert pyd.flatten(case, filter_by) == expected
 
 
-def test_last():
-    assert pyd.last([1, 2, 3]) == 3
-    assert pyd.last([1, 2, 3], 2) == [2, 3]
-    assert pyd.last([1, 2, 3], lambda num, *args: num > 1) == [2, 3]
-
-    # test pluck style callback
-    food = [
-        {'name': 'beet',   'organic': False},
-        {'name': 'carrot', 'organic': True}
-    ]
-
-    assert pyd.last(food, 'organic') == [{'name': 'carrot', 'organic': True}]
-
-    # test where style callback
-    food = [
-        {'name': 'banana', 'type': 'fruit'},
-        {'name': 'beet',   'type': 'vegetable'},
-        {'name': 'carrot', 'type': 'vegetable'}
-    ]
-
-    expected = [
-        {'name': 'beet', 'type': 'vegetable'},
-        {'name': 'carrot', 'type': 'vegetable'}
-    ]
-
-    assert pyd.last(food, {'type': 'vegetable'}) == expected
+@parametrize('case,value,from_index,expected', [
+    ([1, 2, 3, 1, 2, 3], 2, 0, 1),
+    ([1, 2, 3, 1, 2, 3], 2, 3, 4),
+    ([1, 1, 2, 2, 3, 3], 2, True, 2),
+    ([1, 1, 2, 2, 3, 3], 4, 0, False),
+    ([1, 1, 2, 2, 3, 3], 2, 10, False)
+])
+def test_index_of(case, value, from_index, expected):
+    assert pyd.index_of(case, value, from_index) == expected
 
 
-def test_last_index_of():
-    assert pyd.last_index_of([1, 2, 3, 1, 2, 3], 2) == 4
-    assert pyd.last_index_of([1, 2, 3, 1, 2, 3], 2, 3) == 1
+@parametrize('case,filter_by,expected', [
+    ([1, 2, 3], 1, [1, 2]),
+    ([1, 2, 3], 2, [1]),
+    ([1, 2, 3], lambda num, *args: num > 1, [1]),
+    ([{'name': 'beet',   'organic': False},
+      {'name': 'carrot', 'organic': True}],
+     'organic',
+     [{'name': 'beet',   'organic': False}]),
+    ([{'name': 'banana', 'type': 'fruit'},
+      {'name': 'beet',   'type': 'vegetable'},
+      {'name': 'carrot', 'type': 'vegetable'}],
+      {'type': 'vegetable'},
+      [{'name': 'banana', 'type': 'fruit'}])
+])
+def test_initial(case, filter_by, expected):
+    assert pyd.initial(case, filter_by) == expected
 
 
-def test_pull():
-    assert pyd.pull([1, 2, 3, 1, 2, 3], 2, 3) == [1, 1]
+@parametrize('case,expected', [
+    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2])
+])
+def test_intersection(case, expected):
+    assert pyd.intersection(*case) == expected
 
 
-def test_remove():
-    array = [1, 2, 3, 4, 5, 6]
-    evens = pyd.remove(array, lambda x, *args: x % 2 == 0)
+@parametrize('case,filter_by,expected', [
+    ([1, 2, 3], None, 3),
+    ([1, 2, 3], 2, [2, 3]),
+    ([1, 2, 3], lambda num, *args: num > 1, [2, 3]),
+    ([{'name': 'beet',   'organic': False},
+      {'name': 'carrot', 'organic': True}],
+     'organic',
+     [{'name': 'carrot', 'organic': True}]),
+    ([{'name': 'banana', 'type': 'fruit'},
+      {'name': 'beet',   'type': 'vegetable'},
+      {'name': 'carrot', 'type': 'vegetable'}],
+     {'type': 'vegetable'},
+     [{'name': 'beet', 'type': 'vegetable'},
+      {'name': 'carrot', 'type': 'vegetable'}])
+])
+def test_last(case, filter_by, expected):
+    assert pyd.last(case, filter_by) == expected
 
-    assert array == [1, 3, 5]
-    assert evens == [2, 4, 6]
+
+@parametrize('case,value,from_index,expected', [
+    ([1, 2, 3, 1, 2, 3], 2, 0, 4),
+    ([1, 2, 3, 1, 2, 3], 2, 3, 1)
+])
+def test_last_index_of(case, value, from_index, expected):
+    assert pyd.last_index_of(case, value, from_index) == expected
 
 
-def test_zip_object():
-    expected = {'moe': 30, 'larry': 40}
-    assert pyd.zip_object(['moe', 'larry'], [30, 40]) == expected
-
-    expected = {'moe': 30, 'larry': 40}
-    assert pyd.zip_object([['moe', 30], ['larry', 40]]) == expected
-
-    # verify alias
-    pyd.object_ is pyd.zip_object
+@parametrize('case,values,expected', [
+    ([1, 2, 3, 1, 2, 3], [2, 3], [1, 1])
+])
+def test_pull(case, values, expected):
+    assert pyd.pull(case, *values) == expected
 
 
-def test_zip_():
-    expected = [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]]
-    actual = pyd.zip_(['moe', 'larry', 'curly'],
-                      [30, 40, 35],
-                      [True, False, True])
+@parametrize('case,filter_by,expected', [
+    ([1, 2, 3, 4, 5, 6], lambda x, *args: x % 2 == 0, [2, 4, 6])
+])
+def test_remove(case, filter_by, expected):
+    original = list(case)
+    assert pyd.remove(case, filter_by) == expected
+    assert set(case).intersection(expected) == set([])
+    assert set(original) == set(case + expected)
+
+
+@parametrize('case,expected', [
+    ((['moe', 'larry'], [30, 40]), {'moe': 30, 'larry': 40}),
+    (([['moe', 30], ['larry', 40]],), {'moe': 30, 'larry': 40}),
+])
+def test_zip_object(case, expected):
+    assert pyd.zip_object(*case) == expected
+
+
+@parametrize('alias', [
+    pyd.object_
+])
+def test_zip_object_aliases(alias):
+    pyd.zip_object is alias
+
+
+@parametrize('case,expected', [
+    ((['moe', 'larry', 'curly'],
+      [30, 40, 35],
+      [True, False, True]),
+     [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]])
+])
+def test_zip_(case, expected):
+    assert pyd.zip_(*case) == expected
+
+
+@parametrize('case,expected', [
+    ([['moe', 30, True], ['larry', 40, False], ['curly', 35, True]],
+     [['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]])
+])
+def test_unzip(case, expected):
+    pyd.unzip(case) == expected
+
+
+@parametrize('case,expected', [
+    ((10,), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+    ((1, 11), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+    ((0, 30, 5), [0, 5, 10, 15, 20, 25]),
+    ((0, -10, -1), [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]),
+    ((0,), []),
+])
+def test_range_(case, expected):
+    assert pyd.range_(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 1, 0, 3, 1, 4], 0, 1), [2, 3, 4])
+])
+def test_without(case, expected):
+    assert pyd.without(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], [5, 2, 1, 4]), [3, 5, 4]),
+    (([1, 2, 5], [2, 3, 5], [3, 4, 5]), [1, 4, 5])
+])
+def test_xor(case, expected):
+    assert set(pyd.xor(*case)) == set(expected)
+
+
+@parametrize('case,filter_by,expected', [
+    ([1, 2, 1, 3, 1], None, [1, 2, 3]),
+    ([dict(a=1), dict(a=2), dict(a=1)], None, [dict(a=1), dict(a=2)]),
+    ([1, 2, 1.5, 3, 2.5], lambda num, *args: math.floor(num), [1, 2, 3]),
+    ([{'name': 'banana', 'type': 'fruit'},
+      {'name': 'apple', 'type': 'fruit'},
+      {'name': 'beet',   'type': 'vegetable'},
+      {'name': 'beet',   'type': 'vegetable'},
+      {'name': 'carrot', 'type': 'vegetable'},
+      {'name': 'carrot', 'type': 'vegetable'}],
+     {'type': 'vegetable'},
+     [{'name': 'beet', 'type': 'vegetable'},
+      {'name': 'carrot', 'type': 'vegetable'}]),
+    ([{'x': 1, 'y': 1},
+      {'x': 2, 'y': 1},
+      {'x': 1, 'y': 1}],
+      'x',
+      [{'x': 1, 'y': 1}, {'x': 2, 'y': 1}])
+])
+def test_uniq(case, filter_by, expected):
+    assert pyd.uniq(case, filter_by) == expected
+
+
+@parametrize('alias', [
+    pyd.unique
+])
+def test_uniq_aliases(alias):
+    assert pyd.uniq is alias
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2, 3, 101, 10])
+])
+def test_union(case, expected):
+    assert pyd.union(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([20, 30, 50], 40), 2),
+    (([20, 30, 50], 10), 0),
+    (([{'x': 20}, {'x': 30}, {'x': 50}], {'x': 40}, 'x'), 2),
+    ((['twenty', 'thirty', 'fifty'],
+      'fourty',
+      lambda x: {'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50}[x]),
+      2)
+])
+def test_sorted_index(case, expected):
+    assert pyd.sorted_index(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([True, 1, None, 'yes'], bool), False),
+    (([True, 1, None, 'yes'],), False),
+    (([{'name': 'moe', 'age': 40},
+       {'name': 'larry', 'age': 50}],
+      'age'),
+     True),
+    (([{'name': 'moe', 'age': 40},
+       {'name': 'larry', 'age': 50}],
+      {'age': 50}),
+     False)
+])
+def test_every(case, expected):
+    assert pyd.every(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([None, 0, 'yes', False], bool), True),
+    (([None, 0, 'yes', False],), True),
+    (([{'name': 'apple',  'organic': False, 'type': 'fruit'},
+       {'name': 'carrot', 'organic': True,  'type': 'vegetable'}],
+      'organic'),
+     True),
+    (([{'name': 'apple',  'organic': False, 'type': 'fruit'},
+       {'name': 'carrot', 'organic': True,  'type': 'vegetable'}],
+      {'type': 'meat'}),
+     False)
+])
+def test_some(case, expected):
+    assert pyd.some(*case) == expected
+
+
+@parametrize('case,expected,sort_results', [
+    (([1, 2, 3],), [1, 2, 3], False),
+    (([1, 2, 3], lambda num, *args: num * 3), [3, 6, 9], False),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda num, *args: num * 3),
+     [3, 6, 9],
+     True),
+    (([{'name': 'moe', 'age': 40},
+       {'name': 'larry', 'age': 50}],
+       'name'),
+      ['moe', 'larry'],
+      False)
+])
+def test_map_(case, expected, sort_results):
+    actual = pyd.map_(*case)
+    if sort_results:
+        actual = sorted(actual)
 
     assert actual == expected
 
 
-def test_unzip():
-    expected = [['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]]
-    actual = pyd.unzip([['moe', 30, True],
-                        ['larry', 40, False],
-                        ['curly', 35, True]])
-
-    assert actual == expected
-
-
-def test_range_():
-    assert pyd.range_(10) == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    assert pyd.range_(1, 11) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    assert pyd.range_(0, 30, 5) == [0, 5, 10, 15, 20, 25]
-    assert pyd.range_(0, -10, -1) == [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]
-    assert pyd.range_(0) == []
-
-
-def test_without():
-    assert pyd.without([1, 2, 1, 0, 3, 1, 4], 0, 1) == [2, 3, 4]
-
-
-def test_xor():
-    assert set(pyd.xor([1, 2, 3], [5, 2, 1, 4])) == set([3, 5, 4])
-    assert set(pyd.xor([1, 2, 5], [2, 3, 5], [3, 4, 5])) == set([1, 4, 5])
-
-
-def test_uniq():
-    expected = [1, 2, 3]
-    assert pyd.uniq([1, 2, 1, 3, 1]) == expected
-
-    expected = [dict(a=1), dict(a=2)]
-    assert pyd.uniq([dict(a=1), dict(a=2), dict(a=1)]) == expected
-
-    # using function callback
-    import math
-    expected = [1, 2, 3]
-    actual = pyd.uniq([1, 2, 1.5, 3, 2.5], lambda num, *args: math.floor(num))
-    assert actual == expected
-
-    # test where style callback
-    food = [
-        {'name': 'banana', 'type': 'fruit'},
-        {'name': 'apple', 'type': 'fruit'},
-        {'name': 'beet',   'type': 'vegetable'},
-        {'name': 'beet',   'type': 'vegetable'},
-        {'name': 'carrot', 'type': 'vegetable'},
-        {'name': 'carrot', 'type': 'vegetable'}
-    ]
-
-    assert pyd.uniq(food, {'type': 'vegetable'}) == [
-        {'name': 'beet', 'type': 'vegetable'},
-        {'name': 'carrot', 'type': 'vegetable'}
-    ]
-
-    # test pluck style callback
-    pluck = [
-        {'x': 1, 'y': 1},
-        {'x': 2, 'y': 1},
-        {'x': 1, 'y': 1}
-    ]
-
-    assert pyd.uniq(pluck, 'x') == [{'x': 1, 'y': 1}, {'x': 2, 'y': 1}]
-
-    # verify alias
-    assert pyd.unique is pyd.uniq
-
-
-def test_union():
-    assert pyd.union([1, 2, 3], [101, 2, 1, 10], [2, 1]) == [1, 2, 3, 101, 10]
-
-
-def test_sorted_index():
-    assert pyd.sorted_index([20, 30, 50], 40) == 2
-    assert pyd.sorted_index([20, 30, 50], 10) == 0
-
-    # test pluck style callback
-    actual = pyd.sorted_index([{'x': 20}, {'x': 30}, {'x': 50}],
-                              {'x': 40},
-                              'x')
-    assert actual == 2
-
-    # test function callback
-    lookup = {
-        'words': {'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50}
-    }
-
-    callback = lambda word: lookup['words'][word]
-    actual = pyd.sorted_index(['twenty', 'thirty', 'fifty'],
-                              'fourty',
-                              callback)
-
-    assert actual == 2
-
-
-def test_every():
-    assert pyd.every([True, 1, None, 'yes'], bool) is False
-    assert pyd.every([True, 1, None, 'yes']) is False
-
-    stooges = [
-        {'name': 'moe', 'age': 40},
-        {'name': 'larry', 'age': 50}
-    ]
-
-    # test pluck style callback
-    assert pyd.every(stooges, 'age') is True
-
-    # test where style callback
-    assert pyd.every(stooges, {'age': 50}) is False
-
-
-def test_some():
-    assert pyd.some([None, 0, 'yes', False], bool) is True
-    assert pyd.some([None, 0, 'yes', False]) is True
-
-    food = [
-        {'name': 'apple',  'organic': False, 'type': 'fruit'},
-        {'name': 'carrot', 'organic': True,  'type': 'vegetable'}
-    ]
-
-    # test pluck style callback
-    assert pyd.some(food, 'organic') is True
-
-    # test where style callback
-    assert pyd.some(food, {'type': 'meat'}) is False
-
-
-def test_collect():
-    assert pyd.collect([1, 2, 3]) == [1, 2, 3]
-    assert pyd.collect([1, 2, 3], lambda num, *args: num * 3) == [3, 6, 9]
-
-    actual = pyd.collect({'one': 1, 'two': 2, 'three': 3},
-                         lambda num, *args: num * 3)
-
-    assert sorted(actual) == [3, 6, 9]
-
-    stooges = [
-        {'name': 'moe', 'age': 40},
-        {'name': 'larry', 'age': 50}
-    ]
-
-    assert pyd.collect(stooges, 'name') == ['moe', 'larry']
-
-
-def test_at():
-    assert pyd.at(['a', 'b', 'c', 'd', 'e'], [0, 2, 4]) == ['a', 'c', 'e']
-    assert pyd.at(['moe', 'larry', 'curly'], 0, 2) == ['moe', 'curly']
-    assert pyd.at({'a': 1, 'b': 2, 'c': 3}, 'a', 'b') == [1, 2]
-
-
-def test_contains():
-    assert pyd.contains([1, 2, 3], 1) is True
-    assert pyd.contains([1, 2, 3], 1, 2) is False
-    assert pyd.contains({'name': 'fred', 'age': 40}, 'fred') is True
-    assert pyd.contains('pebbles', 'eb') is True
-
-
-def test_filter_():
-    assert pyd.filter_([0, True, False, None, 1, 2, 3]) == [True, 1, 2, 3]
-
-    is_even = lambda num, *args: num % 2 == 0
-    assert pyd.filter_([1, 2, 3, 4, 5, 6], is_even) == [2, 4, 6]
-
-    characters = [
-        {'name': 'barney', 'age': 36, 'blocked': False},
-        {'name': 'fred',   'age': 40, 'blocked': True}
-    ]
-
-    expected = [{'name': 'fred', 'age': 40, 'blocked': True}]
-    assert pyd.filter_(characters, 'blocked') == expected
-
-    expected = [{'name': 'barney', 'age': 36, 'blocked': False}]
-    assert pyd.filter_(characters, {'age': 36}) == expected
-
-
-def test_find():
-    characters = [
-        {'name': 'barney',  'age': 36, 'blocked': False},
-        {'name': 'fred',    'age': 40, 'blocked': True},
-        {'name': 'pebbles', 'age': 1,  'blocked': False}
-    ]
-
-    callback = lambda c, *args: c['age'] < 40
-
-    expected = {'name': 'barney', 'age': 36, 'blocked': False}
-    assert pyd.find(characters, callback) == expected
-
-    expected = {'name': 'pebbles', 'age': 1, 'blocked': False}
-    assert pyd.find(characters, {'age': 1}) == expected
-
-    expected = {'name': 'fred', 'age': 40, 'blocked': True}
-    assert pyd.find(characters, 'blocked') == expected
-
-    expected = {'name': 'barney',  'age': 36, 'blocked': False}
-    assert pyd.find(characters) == expected
-
-
-def test_sample():
-    collection = [1, 2, 3, 4, 5, 6]
-
-    sample1 = pyd.sample(collection)
-    assert sample1 in collection
-
-    for n in range(2, 10):
-        samplen = pyd.sample(collection, n)
-
-        assert len(samplen) == min(n, len(collection))
-        assert set(samplen).issubset(collection)
-
-
-def test_shuffle():
-    collection = [1, 2, 3, 4, 5, 6]
-
-    shuffled = pyd.shuffle(collection)
-
-    assert set(shuffled) == set(collection)
-    assert len(shuffled) == len(collection)
-
-
-def test_size():
-    collection = [1, 2, 3, 4, 5]
-    assert pyd.size(collection) == len(collection)
-
-    collection = {'1': 1, '2': 2, '3': 3}
-    assert pyd.size(collection) == len(collection)
+@parametrize('alias', [
+    pyd.collect
+])
+def test_map__aliases(alias):
+    assert pyd.map_ is alias
+
+
+@parametrize('case,expected', [
+    ((['a', 'b', 'c', 'd', 'e'], [0, 2, 4]), ['a', 'c', 'e']),
+    ((['moe', 'larry', 'curly'], 0, 2), ['moe', 'curly']),
+    (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), [1, 2])
+])
+def test_at(case, expected):
+    assert pyd.at(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], 1), True),
+    (([1, 2, 3], 1, 2), False),
+    (({'name': 'fred', 'age': 40}, 'fred'), True),
+    (('pebbles', 'eb'), True)
+])
+def test_contains(case, expected):
+    assert pyd.contains(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([0, True, False, None, 1, 2, 3],), [True, 1, 2, 3]),
+    (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [2, 4, 6]),
+    ((fixtures.data.filter_,
+      'blocked'),
+      [{'name': 'fred', 'age': 40, 'blocked': True}]),
+    ((fixtures.data.filter_,
+      {'age': 36}),
+      [{'name': 'barney', 'age': 36, 'blocked': False}]),
+])
+def test_filter_(case, expected):
+    assert pyd.filter_(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((fixtures.data.find,
+      lambda c, *args: c['age'] < 40),
+     {'name': 'barney', 'age': 36, 'blocked': False}),
+    ((fixtures.data.find,
+      {'age': 1}),
+     {'name': 'pebbles', 'age': 1, 'blocked': False}),
+    ((fixtures.data.find,
+      'blocked'),
+     {'name': 'fred', 'age': 40, 'blocked': True}),
+    ((fixtures.data.find,),
+     {'name': 'barney', 'age': 36, 'blocked': False}),
+])
+def test_find(case, expected):
+    assert pyd.find(*case) == expected
+
+
+@parametrize('case', [
+    fixtures.data.sample,
+])
+def test_sample(case):
+    assert pyd.sample(case) in case
+
+
+@parametrize('case', [
+    (fixtures.data.sample, 2),
+    (fixtures.data.sample, 3),
+    (fixtures.data.sample, 4),
+])
+def test_sample_list(case):
+    collection, n = case
+    sample_n = pyd.sample(*case)
+
+    assert isinstance(sample_n, list)
+    assert len(sample_n) == min(n, len(collection))
+    assert set(sample_n).issubset(collection)
+
+
+@parametrize('case', [
+    [1, 2, 3, 4, 5, 6]
+])
+def test_shuffle(case):
+    shuffled = pyd.shuffle(case)
+
+    assert set(shuffled) == set(case)
+    assert len(shuffled) == len(case)
+
+
+@parametrize('case', [
+    [1, 2, 3, 4, 5],
+    {'1': 1, '2': 2, '3': 3}
+])
+def test_size(case):
+    assert pyd.size(case) == len(case)
