@@ -776,15 +776,15 @@ def _iter_callback(collection, callback=None):
 def _iter_list_callback(array, callback=None):
     """Return iterative list callback."""
     cbk = _make_callback(callback)
-    return ((cbk(item, i, array), item, i, array)
-            for i, item in enumerate(array))
+    for i, item in enumerate(array):
+        yield (cbk(item, i, array), item, i, array)
 
 
 def _iter_dict_callback(collection, callback=None):
     """Return iterative dict callback."""
     cbk = _make_callback(callback)
-    return ((cbk(value, key, collection),)
-            for key, value in iteritems(collection))
+    for key, value in iteritems(collection):
+        yield (cbk(value, key, collection),)
 
 
 def _iter_unique_set(array):
