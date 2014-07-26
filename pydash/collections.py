@@ -328,8 +328,7 @@ def where(collection, properties):
     :param properties: the dict of property values to filter by
     :rtype: list
     """
-    filter_fn = lambda item: _where(item, properties)
-    return [item for item in collection if filter_fn(item)]
+    return [item for item in collection if _where(item, properties)]
 
 
 def _where(superset, subset):
