@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 import random
 
+from ._compat import string_types
 from .utils import _make_callback, _iter_callback, _iter
 
 
@@ -198,14 +199,26 @@ def map_(collection, callback=None):
 collect = map_
 
 
-def max_(*args, **kargs):  # pragma: no cover
+def max_(collection, callback=None):
     """Retrieves the maximum value of a `collection`."""
-    raise NotImplementedError
+    if not callback:
+        if isinstance(collection, dict):
+            return max(collection.values())
+        else:
+            return max(collection)
+
+    return max(collection, key=_make_callback(callback))
 
 
-def min_(*args, **kargs):  # pragma: no cover
+def min_(collection, callback=None):
     """Retrieves the minimum value of a `collection`."""
-    raise NotImplementedError
+    if not callback:
+        if isinstance(collection, dict):
+            return min(collection.values())
+        else:
+            return min(collection)
+
+    return min(collection, key=_make_callback(callback))
 
 
 def pluck(collection, key):

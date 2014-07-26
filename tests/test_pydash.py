@@ -379,6 +379,34 @@ def test_map_aliases(case):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3],), 3),
+    (({'a': 3, 'b': 2, 'c': 1},), 3),
+    ((['anaconda', 'bison', 'camel'], lambda x: len(x)), 'anaconda'),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}], 'age',),
+     {'name': 'fred', 'age': 40}),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}],
+      lambda chr: chr['age']),
+     {'name': 'fred', 'age': 40}),
+])
+def test_max_(case, expected):
+    assert pyd.max_(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3],), 1),
+    (({'a': 3, 'b': 2, 'c': 1},), 1),
+    ((['anaconda', 'bison', 'cat'], lambda x: len(x)), 'cat'),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}], 'age',),
+     {'name': 'barney', 'age': 36}),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}],
+      lambda chr: chr['age']),
+     {'name': 'barney', 'age': 36}),
+])
+def test_min_(case, expected):
+    assert pyd.min_(*case) == expected
+
+
+@parametrize('case,expected', [
     ((['a', 'b', 'c', 'd', 'e'], [0, 2, 4]), ['a', 'c', 'e']),
     ((['moe', 'larry', 'curly'], 0, 2), ['moe', 'curly']),
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), [1, 2])
