@@ -138,18 +138,32 @@ def for_each_right(*args, **kargs):  # pragma: no cover
 each_right = for_each_right
 
 
-def group_by(*args, **kargs):  # pragma: no cover
+def group_by(collection, callback):
     """Creates an object composed of keys generated from the results of running
     each element of a `collection` through the callback.
     """
-    raise NotImplementedError
+    ret = dict()
+    cb = _make_callback(callback)
+
+    for value in collection:
+        key = cb(value)
+        ret.setdefault(key, [])
+        ret[key].append(value)
+
+    return ret
 
 
-def index_by(*args, **kargs):  # pragma: no cover
+def index_by(collection, callback):
     """Creates an object composed of keys generated from the results of running
     each element of the collection through the given callback.
     """
-    raise NotImplementedError
+    ret = dict()
+    cb = _make_callback(callback)
+
+    for value in collection:
+        ret[cb(value)] = value
+
+    return ret
 
 
 def invoke(*args, **kargs):  # pragma: no cover
