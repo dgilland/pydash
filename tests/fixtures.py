@@ -1,6 +1,7 @@
 
 from copy import deepcopy
 
+
 class DataFactory(object):
     """Simple class that returns a deepcopy from `data` dict. This is needed to
     prevent data consumers from mistakenly modifying global data.
@@ -35,12 +36,12 @@ data = DataFactory(_data)
 
 
 def reduce_callback0(total, num, *args):
-	return total + num
+    return total + num
 
 
 def reduce_callback1(result, num, key):
-	result[key] = num * 3
-	return result
+    result[key] = num * 3
+    return result
 
 
 def reduce_right_callback0(a, b, *args):

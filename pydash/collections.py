@@ -234,7 +234,7 @@ foldl = reduce_
 inject = reduce_
 
 
-def reduce_right(collection, callback=None, accumulator=None):  # pragma: no cover
+def reduce_right(collection, callback=None, accumulator=None):
     """This method is like :func:`reduce_` except that it iterates over
     elements of a `collection` from right to left.
     """

@@ -7,7 +7,12 @@ import collections
 from bisect import bisect_left
 
 from ._compat import string_types, _range
-from .utils import _make_callback, _iter_callback, _iter_unique_set, _iter_unique
+from .utils import (
+    _make_callback,
+    _iter_callback,
+    _iter_unique_set,
+    _iter_unique
+)
 
 
 def compact(array):

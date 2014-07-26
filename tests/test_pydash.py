@@ -152,8 +152,8 @@ def test_index_of(case, value, from_index, expected):
     ([{'name': 'banana', 'type': 'fruit'},
       {'name': 'beet',   'type': 'vegetable'},
       {'name': 'carrot', 'type': 'vegetable'}],
-      {'type': 'vegetable'},
-      [{'name': 'banana', 'type': 'fruit'}])
+     {'type': 'vegetable'},
+     [{'name': 'banana', 'type': 'fruit'}])
 ])
 def test_initial(case, filter_by, expected):
     assert pyd.initial(case, filter_by) == expected
@@ -285,8 +285,8 @@ def test_xor(case, expected):
     ([{'x': 1, 'y': 1},
       {'x': 2, 'y': 1},
       {'x': 1, 'y': 1}],
-      'x',
-      [{'x': 1, 'y': 1}, {'x': 2, 'y': 1}])
+     'x',
+     [{'x': 1, 'y': 1}, {'x': 2, 'y': 1}])
 ])
 def test_uniq(case, filter_by, expected):
     assert pyd.uniq(case, filter_by) == expected
@@ -313,7 +313,7 @@ def test_union(case, expected):
     ((['twenty', 'thirty', 'fifty'],
       'fourty',
       lambda x: {'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50}[x]),
-      2)
+     2)
 ])
 def test_sorted_index(case, expected):
     assert pyd.sorted_index(*case) == expected
@@ -359,9 +359,9 @@ def test_some(case, expected):
      True),
     (([{'name': 'moe', 'age': 40},
        {'name': 'larry', 'age': 50}],
-       'name'),
-      ['moe', 'larry'],
-      False)
+      'name'),
+     ['moe', 'larry'],
+     False)
 ])
 def test_map_(case, expected, sort_results):
     actual = pyd.map_(*case)
@@ -409,10 +409,10 @@ def test_count_by(case, expected):
     (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [2, 4, 6]),
     ((fixtures.data.filter_,
       'blocked'),
-      [{'name': 'fred', 'age': 40, 'blocked': True}]),
+     [{'name': 'fred', 'age': 40, 'blocked': True}]),
     ((fixtures.data.filter_,
       {'age': 36}),
-      [{'name': 'barney', 'age': 36, 'blocked': False}]),
+     [{'name': 'barney', 'age': 36, 'blocked': False}]),
 ])
 def test_filter_(case, expected):
     assert pyd.filter_(*case) == expected
