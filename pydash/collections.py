@@ -340,16 +340,16 @@ def some(collection, callback=None):
 any_ = some
 
 
-def sort_by(*args, **kargs):  # pragma: no cover
+def sort_by(collection, callback):
     """Creates a list of elements, sorted in ascending order by the results of
     running each element in a `collection` through the callback.
     """
-    raise NotImplementedError
+    return sorted(collection, key=_make_callback(callback))
 
 
-def to_list(*args, **kargs):  # pragma: no cover
+def to_list(collection):
     """Converts the collection to a list."""
-    raise NotImplementedError
+    return list(collection)
 
 
 def where(collection, properties):

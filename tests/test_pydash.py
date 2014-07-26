@@ -604,3 +604,28 @@ def test_reduce_right_aliases(case):
 ])
 def test_reject(case, expected):
     assert pyd.reject(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], lambda x: math.sin(x)), [3, 1, 2]),
+    (([
+        {'name': 'barney',  'age': 36},
+        {'name': 'fred',    'age': 40},
+        {'name': 'barney',  'age': 26},
+        {'name': 'fred',    'age': 30},
+    ], 'age'), [
+        {'name': 'barney',  'age': 26},
+        {'name': 'fred',    'age': 30},
+        {'name': 'barney',  'age': 36},
+        {'name': 'fred',    'age': 40},
+    ]),
+])
+def test_sort_by(case, expected):
+    assert pyd.sort_by(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('cat',), ['c', 'a', 't']),
+])
+def test_to_list(case, expected):
+    assert pyd.to_list(*case) == expected
