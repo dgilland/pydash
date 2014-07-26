@@ -41,7 +41,7 @@ from .arrays import (
 # Collections
 #
 
-from .collection import (
+from .collections import (
     at,
     contains,
     count_by,

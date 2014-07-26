@@ -6,7 +6,7 @@ from ._compat import string_types, iteritems
 
 def _make_callback(callback):
     """Create a callback function from a mixed type `callback`"""
-    from .collection import pluck, where
+    from .collections import pluck, where
     if hasattr(callback, '__call__'):
         cbk = callback
     elif isinstance(callback, string_types):

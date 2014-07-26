@@ -1,6 +1,8 @@
 """Arrays
 """
 
+from __future__ import absolute_import
+
 import collections
 from bisect import bisect_left
 
@@ -331,7 +333,7 @@ def uniq(array, callback=None):
 
     if isinstance(callback, dict):
         # where style callback; filter list using where
-        from .collection import where
+        from .collections import where
         array = where(array, callback)
         callback = None
 
