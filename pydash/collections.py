@@ -169,11 +169,19 @@ def index_by(collection, callback):
     return ret
 
 
-def invoke(*args, **kargs):  # pragma: no cover
+def invoke(collection, method_name, *args):
     """Invokes the method named by `method_name` on each element in the
     `collection` returning a list of the results of each invoked method.
     """
-    raise NotImplementedError
+    lst = []
+    for item in collection:
+        result = getattr(item, method_name)(*args)
+        if result == None:
+            lst.append(item)
+        else:
+            lst.append(result)
+
+    return lst
 
 
 def map_(collection, callback=None):
