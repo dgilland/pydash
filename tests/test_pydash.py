@@ -590,3 +590,17 @@ def test_reduce_right_raise(case, exception):
 ])
 def test_reduce_right_aliases(case):
     assert pyd.reduce_right is case
+
+
+@parametrize('case,expected', [
+    (([0, True, False, None, 1, 2, 3],), [0, False, None]),
+    (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [1, 3, 5]),
+    ((fixtures.data.filter_,
+      'blocked'),
+     [{'name': 'barney', 'age': 36, 'blocked': False}]),
+    ((fixtures.data.filter_,
+      {'age': 36}),
+     [{'name': 'fred', 'age': 40, 'blocked': True}]),
+])
+def test_reject(case, expected):
+    assert pyd.reject(*case) == expected
