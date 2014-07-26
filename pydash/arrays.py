@@ -3,7 +3,7 @@
 
 from __future__ import absolute_import
 
-import collections
+from collections import Iterable
 from bisect import bisect_left
 
 from ._compat import string_types, _range
@@ -124,7 +124,7 @@ def flatten(array, callback=None, _depth=0):
         callback = None
 
     lst = []
-    if all([isinstance(array, collections.Iterable),
+    if all([isinstance(array, Iterable),
             not isinstance(array, string_types),
             not (shallow and _depth > 1)]):
         for arr in array:
