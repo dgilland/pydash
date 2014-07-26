@@ -1,4 +1,6 @@
 
+from __future__ import print_function
+
 import math
 
 import pytest
@@ -468,6 +470,15 @@ def test_find(case, expected):
 ])
 def test_find_last(case, expected):
     assert pyd.find_last(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], lambda num: print(num)), [1, 2, 3]),
+    (([1, 2, 3], lambda num: num > 2), [1, 2, 3]),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda num: print(num)), {'one': 1, 'two': 2, 'three': 3}),
+])
+def test_for_each(case, expected):
+    assert pyd.for_each(*case) == expected
 
 
 @parametrize('case,expected', [

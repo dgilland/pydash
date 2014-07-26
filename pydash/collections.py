@@ -121,11 +121,21 @@ def find_last(collection, callback=None):
     return find(list(reversed(collection)), callback)
 
 
-def for_each(*args, **kargs):  # pragma: no cover
+def for_each(collection, callback):
     """Iterates over elements of a collection, executing the callback for each
     element.
     """
-    raise NotImplementedError
+    if isinstance(collection, dict):
+        iterator = collection.values()
+    else:
+        iterator = collection
+
+    for item in iterator:
+        result = callback(item)
+        if result == False:
+            break
+
+    return collection
 
 
 each = for_each
