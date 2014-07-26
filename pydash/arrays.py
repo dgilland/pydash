@@ -337,8 +337,10 @@ def uniq(array, callback=None):
     """
 
     if isinstance(callback, dict):
-        # where style callback; filter list using where
+        # FIXME: Resolve circular imports
         from .collections import where
+
+        # where style callback; filter list using where
         array = where(array, callback)
         callback = None
 

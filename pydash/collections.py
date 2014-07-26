@@ -17,8 +17,9 @@ def at(collection, *indexes):
     :param mixed indexes: the indexes of `collection` to retrieve, specified as
                           individual indexes or arrays of indexes
     """
-
+    # FIXME: Resolve circular imports
     from .arrays import flatten
+
     indexes = flatten(indexes)
     return [collection[i] for i in indexes]
 
