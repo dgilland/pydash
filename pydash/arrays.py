@@ -221,8 +221,8 @@ def last_index_of(array, value, from_index=0):
 
 
 def pull(array, *values):
-    """Removes all provided values from the given array using strict equality for
-    comparisons, i.e. ===.
+    """Removes all provided values from the given array using strict equality
+    for comparisons, i.e. ===.
 
     :param list array: list to modify
     :param *values: values to remove

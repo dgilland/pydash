@@ -8,7 +8,7 @@ import random
 from .utils import _make_callback, _iter_callback, _iter
 
 
-def at(collection, *indexes):
+def at(collection, *indexes):  # pylint: disable=invalid-name
     """Creates an array of elements from the specified indexes, or keys, of the
     collection. Indexes may be specified as individual arguments or as arrays
     of indexes.
@@ -46,10 +46,10 @@ def count_by(collection, callback):
     each element of `collection` through the callback.
     """
     ret = dict()
-    cb = _make_callback(callback)
+    cbk = _make_callback(callback)
 
     for value in collection:
-        key = cb(value)
+        key = cbk(value)
 
         ret.setdefault(key, 0)
         ret[key] += 1
@@ -146,10 +146,10 @@ def group_by(collection, callback):
     each element of a `collection` through the callback.
     """
     ret = dict()
-    cb = _make_callback(callback)
+    cbk = _make_callback(callback)
 
     for value in collection:
-        key = cb(value)
+        key = cbk(value)
         ret.setdefault(key, [])
         ret[key].append(value)
 
@@ -161,10 +161,10 @@ def index_by(collection, callback):
     each element of the collection through the given callback.
     """
     ret = dict()
-    cb = _make_callback(callback)
+    cbk = _make_callback(callback)
 
     for value in collection:
-        ret[cb(value)] = value
+        ret[cbk(value)] = value
 
     return ret
 
