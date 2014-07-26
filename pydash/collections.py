@@ -121,7 +121,7 @@ def find_last(collection, callback=None):
     return find(list(reversed(collection)), callback)
 
 
-def for_each(collection, callback):
+def for_each(collection, callback, reverse=False):
     """Iterates over elements of a collection, executing the callback for each
     element.
     """
@@ -129,6 +129,9 @@ def for_each(collection, callback):
         iterator = collection.values()
     else:
         iterator = collection
+
+    if reversed:
+        iterator = reversed(iterator)
 
     for item in iterator:
         result = callback(item)
@@ -141,11 +144,11 @@ def for_each(collection, callback):
 each = for_each
 
 
-def for_each_right(*args, **kargs):  # pragma: no cover
+def for_each_right(collection, callback):
     """This method is like :func:`for_each` except that it iterates over
     elements of a `collection` from right to left.
     """
-    raise NotImplementedError
+    return for_each(collection, callback, reverse=True)
 
 
 each_right = for_each_right

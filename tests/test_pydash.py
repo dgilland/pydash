@@ -482,6 +482,15 @@ def test_for_each(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3], lambda num: print(num)), [1, 2, 3]),
+    (([1, 2, 3], lambda num: num > 2), [1, 2, 3]),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda num: print(num)), {'one': 1, 'two': 2, 'three': 3}),
+])
+def test_for_each_right(case, expected):
+    assert pyd.for_each_right(*case) == expected
+
+
+@parametrize('case,expected', [
     (([4.2, 6.1, 6.4],
       lambda num, *args: int(math.floor(num))),
      {4: [4.2], 6: [6.1, 6.4]}),
