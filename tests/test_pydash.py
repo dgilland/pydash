@@ -567,7 +567,7 @@ def test_reduce_aliases(case):
     (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
      {'a': 3, 'b': 6, 'c': 9})
 ])
-def test_reduce(case, expected):
+def test_reduce_right(case, expected):
     assert pyd.reduce_right(*case) == expected
 
 
