@@ -442,6 +442,23 @@ def test_find_last(case, expected):
     assert pyd.find_last(*case) == expected
 
 
+@parametrize('case,expected', [
+    (([4.2, 6.1, 6.4],
+      lambda num, *args: int(math.floor(num))),
+     {4: [4.2], 6: [6.1, 6.4]}),
+])
+def test_group_by(case, expected):
+    assert pyd.group_by(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([{'dir': 'left', 'code': 97}, {'dir': 'right', 'code': 100}], 'dir'),
+     {'left': {'dir': 'left', 'code': 97}, 'right': {'dir': 'right', 'code': 100}}),
+])
+def test_index_by(case, expected):
+    assert pyd.index_by(*case) == expected
+
+
 @parametrize('case', [
     fixtures.data.sample,
 ])
