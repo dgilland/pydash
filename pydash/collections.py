@@ -126,7 +126,7 @@ def for_each(collection, callback, reverse=False):
     element.
     """
     if isinstance(collection, dict):
-        iterator = collection.values()
+        iterator = list(collection.values())
     else:
         iterator = collection
 
