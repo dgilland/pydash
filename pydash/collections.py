@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 import random
 
+from ._compat import string_types
 from .utils import _make_callback, _iter_callback, _iter
 
 
@@ -198,14 +199,26 @@ def map_(collection, callback=None):
 collect = map_
 
 
-def max_(*args, **kargs):  # pragma: no cover
+def max_(collection, callback=None):
     """Retrieves the maximum value of a `collection`."""
-    raise NotImplementedError
+    if not callback:
+        if isinstance(collection, dict):
+            return max(collection.values())
+        else:
+            return max(collection)
+
+    return max(collection, key=_make_callback(callback))
 
 
-def min_(*args, **kargs):  # pragma: no cover
+def min_(collection, callback=None):
     """Retrieves the minimum value of a `collection`."""
-    raise NotImplementedError
+    if not callback:
+        if isinstance(collection, dict):
+            return min(collection.values())
+        else:
+            return min(collection)
+
+    return min(collection, key=_make_callback(callback))
 
 
 def pluck(collection, key):
@@ -263,11 +276,16 @@ def reduce_right(collection, callback=None, accumulator=None):
 foldr = reduce_right
 
 
-def reject(*args, **kargs):  # pragma: no cover
+def reject(collection, callback=None):
     """The opposite of :func:`filter_` this method returns the elements of a
     collection that the callback does **not** return truthy for.
     """
-    raise NotImplementedError
+    if callback is None:
+        callback = lambda item, *args: item
+
+    return [value
+            for is_true, value, _, _ in _iter_callback(collection, callback)
+            if not is_true]
 
 
 def sample(collection, n=None):
@@ -322,16 +340,16 @@ def some(collection, callback=None):
 any_ = some
 
 
-def sort_by(*args, **kargs):  # pragma: no cover
+def sort_by(collection, callback):
     """Creates a list of elements, sorted in ascending order by the results of
     running each element in a `collection` through the callback.
     """
-    raise NotImplementedError
+    return sorted(collection, key=_make_callback(callback))
 
 
-def to_list(*args, **kargs):  # pragma: no cover
+def to_list(collection):
     """Converts the collection to a list."""
-    raise NotImplementedError
+    return list(collection)
 
 
 def where(collection, properties):

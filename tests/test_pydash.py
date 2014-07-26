@@ -379,6 +379,34 @@ def test_map_aliases(case):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3],), 3),
+    (({'a': 3, 'b': 2, 'c': 1},), 3),
+    ((['anaconda', 'bison', 'camel'], lambda x: len(x)), 'anaconda'),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}], 'age',),
+     {'name': 'fred', 'age': 40}),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}],
+      lambda chr: chr['age']),
+     {'name': 'fred', 'age': 40}),
+])
+def test_max_(case, expected):
+    assert pyd.max_(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3],), 1),
+    (({'a': 3, 'b': 2, 'c': 1},), 1),
+    ((['anaconda', 'bison', 'cat'], lambda x: len(x)), 'cat'),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}], 'age',),
+     {'name': 'barney', 'age': 36}),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}],
+      lambda chr: chr['age']),
+     {'name': 'barney', 'age': 36}),
+])
+def test_min_(case, expected):
+    assert pyd.min_(*case) == expected
+
+
+@parametrize('case,expected', [
     ((['a', 'b', 'c', 'd', 'e'], [0, 2, 4]), ['a', 'c', 'e']),
     ((['moe', 'larry', 'curly'], 0, 2), ['moe', 'curly']),
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), [1, 2])
@@ -539,7 +567,7 @@ def test_reduce_aliases(case):
     (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
      {'a': 3, 'b': 6, 'c': 9})
 ])
-def test_reduce(case, expected):
+def test_reduce_right(case, expected):
     assert pyd.reduce_right(*case) == expected
 
 
@@ -562,3 +590,42 @@ def test_reduce_right_raise(case, exception):
 ])
 def test_reduce_right_aliases(case):
     assert pyd.reduce_right is case
+
+
+@parametrize('case,expected', [
+    (([0, True, False, None, 1, 2, 3],), [0, False, None]),
+    (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [1, 3, 5]),
+    ((fixtures.data.filter_,
+      'blocked'),
+     [{'name': 'barney', 'age': 36, 'blocked': False}]),
+    ((fixtures.data.filter_,
+      {'age': 36}),
+     [{'name': 'fred', 'age': 40, 'blocked': True}]),
+])
+def test_reject(case, expected):
+    assert pyd.reject(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], lambda x: math.sin(x)), [3, 1, 2]),
+    (([
+        {'name': 'barney',  'age': 36},
+        {'name': 'fred',    'age': 40},
+        {'name': 'barney',  'age': 26},
+        {'name': 'fred',    'age': 30},
+    ], 'age'), [
+        {'name': 'barney',  'age': 26},
+        {'name': 'fred',    'age': 30},
+        {'name': 'barney',  'age': 36},
+        {'name': 'fred',    'age': 40},
+    ]),
+])
+def test_sort_by(case, expected):
+    assert pyd.sort_by(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('cat',), ['c', 'a', 't']),
+])
+def test_to_list(case, expected):
+    assert pyd.to_list(*case) == expected
