@@ -1,6 +1,8 @@
 """Collections
 """
 
+from __future__ import absolute_import
+
 import random
 
 from .utils import _make_callback, _iter_callback, _iter

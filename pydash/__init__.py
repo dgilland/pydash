@@ -1,6 +1,8 @@
 """Python port of Lo-Dash
 """
 
+from __future__ import absolute_import
+
 #
 # Arrays
 #
@@ -36,6 +38,7 @@ from .arrays import (
     zip_object,
     object_,
 )
+
 
 #
 # Collections

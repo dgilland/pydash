@@ -1,6 +1,8 @@
 """Utils
 """
 
+from __future__ import absolute_import
+
 from ._compat import string_types, iteritems
 
 
