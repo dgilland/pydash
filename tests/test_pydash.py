@@ -453,7 +453,8 @@ def test_group_by(case, expected):
 
 @parametrize('case,expected', [
     (([{'dir': 'left', 'code': 97}, {'dir': 'right', 'code': 100}], 'dir'),
-     {'left': {'dir': 'left', 'code': 97}, 'right': {'dir': 'right', 'code': 100}}),
+     {'left': {'dir': 'left', 'code': 97},
+      'right': {'dir': 'right', 'code': 100}}),
 ])
 def test_index_by(case, expected):
     assert pyd.index_by(*case) == expected
