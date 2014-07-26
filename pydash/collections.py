@@ -130,7 +130,7 @@ def for_each(collection, callback, reverse=False):
     else:
         iterator = collection
 
-    if reversed:
+    if reverse:
         iterator = reversed(iterator)
 
     for item in iterator:
