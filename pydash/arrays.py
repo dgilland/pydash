@@ -8,10 +8,10 @@ from bisect import bisect_left
 
 from ._compat import string_types, _range
 from .utils import (
-    _make_callback,
-    _iter_callback,
-    _iter_unique_set,
-    _iter_unique
+    make_callback,
+    iter_callback,
+    iter_unique_set,
+    iter_unique
 )
 
 
@@ -45,7 +45,7 @@ def find_index(array, callback):
     :rtype: list
     """
     n = -1
-    for is_true, _, i, _ in _iter_callback(array, callback):
+    for is_true, _, i, _ in iter_callback(array, callback):
         if is_true:
             n = i
             break
@@ -85,7 +85,7 @@ def first(array, callback=None):
     :rtype: mixed
     """
     n = 0
-    for is_true, _, _, _ in _iter_callback(array, callback):
+    for is_true, _, _, _ in iter_callback(array, callback):
         if is_true:
             n += 1
         else:
@@ -119,7 +119,7 @@ def flatten(array, callback=None, _depth=0):
     if callback is True:
         shallow = True
     elif callback:
-        cbk = _make_callback(callback)
+        cbk = make_callback(callback)
         array = [cbk(item) for item in array]
         callback = None
 
@@ -162,7 +162,7 @@ def initial(array, callback=1):
 
     lst = array[::-1]
     n = len(array)
-    for is_true, _, _, _ in _iter_callback(lst, callback):
+    for is_true, _, _, _ in iter_callback(lst, callback):
         if is_true:
             n -= 1
         else:
@@ -248,7 +248,7 @@ def remove(array, callback=None):
     and returns an array of removed elements.
     """
     removed = []
-    for is_true, _, i, _ in _iter_callback(array, callback):
+    for is_true, _, i, _ in iter_callback(array, callback):
         if is_true:
             removed.append(array.pop(i))
 
@@ -272,7 +272,7 @@ def rest(array, callback=None):
     """
 
     n = 0
-    for is_true, _, _, _ in _iter_callback(array, callback):
+    for is_true, _, _, _ in iter_callback(array, callback):
         if is_true:
             n += 1
         else:
@@ -304,7 +304,7 @@ def sorted_index(array, value, callback=None):
 
     if callback:
         # generate array of sorted keys computed using callback
-        cbk = _make_callback(callback)
+        cbk = make_callback(callback)
         array = sorted(cbk(item) for item in array)
         value = cbk(value)
 
@@ -345,7 +345,7 @@ def uniq(array, callback=None):
         callback = None
 
     if callback:
-        cbk = _make_callback(callback)
+        cbk = make_callback(callback)
         computed = [cbk(item) for item in array]
     else:
         computed = array
@@ -353,11 +353,11 @@ def uniq(array, callback=None):
     try:
         # Try faster version of uniqifier which requires all array elements to
         # be hashable.
-        lst = [array[i] for i, _ in _iter_unique_set(computed)]
+        lst = [array[i] for i, _ in iter_unique_set(computed)]
     except Exception:  # pylint: disable=broad-except
         # Fallback to version which doesn't require hashable elements but is
         # slower.
-        lst = [array[i] for i, _ in _iter_unique(computed)]
+        lst = [array[i] for i, _ in iter_unique(computed)]
 
     return lst
 

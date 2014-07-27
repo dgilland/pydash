@@ -6,7 +6,7 @@ from __future__ import absolute_import
 from ._compat import string_types, iteritems
 
 
-def _make_callback(callback):
+def make_callback(callback):
     """Create a callback function from a mixed type `callback`"""
     # FIXME: Resolve circular imports
     from .collections import pluck, where
@@ -25,48 +25,48 @@ def _make_callback(callback):
     return cbk
 
 
-def _iter_callback(collection, callback=None):
+def iter_callback(collection, callback=None):
     """Return iterative callback based on collection type."""
     if isinstance(collection, dict):
-        return _iter_dict_callback(collection, callback)
+        return iter_dict_callback(collection, callback)
     else:
-        return _iter_list_callback(collection, callback)
+        return iter_list_callback(collection, callback)
 
 
-def _iter_list_callback(array, callback=None):
+def iter_list_callback(array, callback=None):
     """Return iterative list callback."""
-    cbk = _make_callback(callback)
+    cbk = make_callback(callback)
     for i, item in enumerate(array):
         yield (cbk(item, i, array), item, i, array)
 
 
-def _iter_dict_callback(collection, callback=None):
+def iter_dict_callback(collection, callback=None):
     """Return iterative dict callback."""
-    cbk = _make_callback(callback)
+    cbk = make_callback(callback)
     for key, value in iteritems(collection):
         yield (cbk(value, key, collection),)
 
 
-def _iter(collection):
+def iter_(collection):
     """Return iterative based on collection type."""
     if isinstance(collection, dict):
-        return _iter_dict(collection)
+        return iter_dict(collection)
     else:
-        return _iter_list(collection)
+        return iter_list(collection)
 
 
-def _iter_dict(collection):
+def iter_dict(collection):
     """Return iterative dict."""
     return iteritems(collection)
 
 
-def _iter_list(array):
+def iter_list(array):
     """Return iterative list."""
     for i, item in enumerate(array):
         yield i, item
 
 
-def _iter_unique_set(array):
+def iter_unique_set(array):
     """Return iterator to find unique set."""
     seen = set()
     seen_add = seen.add
@@ -75,7 +75,7 @@ def _iter_unique_set(array):
             yield (i, item)
 
 
-def _iter_unique(array):
+def iter_unique(array):
     """Return iterator to find unique list."""
     seen = []
     for i, item in enumerate(array):
