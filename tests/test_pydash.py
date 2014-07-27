@@ -473,18 +473,18 @@ def test_find_last(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], lambda num: print(num)), [1, 2, 3]),
-    (([1, 2, 3], lambda num: num > 2), [1, 2, 3]),
-    (({'one': 1, 'two': 2, 'three': 3}, lambda num: print(num)), {'one': 1, 'two': 2, 'three': 3}),
+    (([1, 2, 3], lambda value, *args: print(value)), [1, 2, 3]),
+    (([1, 2, 3], lambda value, *args: value < 2), [1, 2, 3]),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda value, *args: print(value)), {'one': 1, 'two': 2, 'three': 3}),
 ])
 def test_for_each(case, expected):
     assert pyd.for_each(*case) == expected
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], lambda num: print(num)), [1, 2, 3]),
-    (([1, 2, 3], lambda num: num > 2), [1, 2, 3]),
-    (({'one': 1, 'two': 2, 'three': 3}, lambda num: print(num)), {'one': 1, 'two': 2, 'three': 3}),
+    (([1, 2, 3], lambda value, *args: print(value)), [1, 2, 3]),
+    (([1, 2, 3], lambda value, *args: value < 2), [1, 2, 3]),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda value, *args: print(value)), {'one': 1, 'two': 2, 'three': 3}),
 ])
 def test_for_each_right(case, expected):
     assert pyd.for_each_right(*case) == expected
