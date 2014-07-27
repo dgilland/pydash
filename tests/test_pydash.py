@@ -629,3 +629,29 @@ def test_sort_by(case, expected):
 ])
 def test_to_list(case, expected):
     assert pyd.to_list(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((2, lambda: 3), 3),
+    ((-1, lambda: 3), 3),
+])
+def test_after(case, expected):
+    done = pyd.after(*case)
+
+    # Call done() until n - 1, then check the return value for expected.
+
+    for _ in range(case[0] - 1):
+        ret = done()
+        assert ret is None
+
+    ret = done()
+    assert ret == expected
+
+
+@parametrize('case,args,expected', [
+    ((lambda x: 'Hi {0}'.format(x), lambda x: '!!!' + x + '!!!'),
+     ('Bob',),
+     'Hi !!!Bob!!!')
+])
+def test_compose(case, args, expected):
+    assert pyd.compose(*case)(*args) == expected

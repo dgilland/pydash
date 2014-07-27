@@ -22,6 +22,8 @@
 - Add `inject()`.
 - Add `reduce_right()`.
 - Add `foldr()`.
+- Add `after()`.
+- Add `compose()`.
 
 
 ## v0.0.0 (2014-07-22)

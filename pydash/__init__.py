@@ -84,3 +84,13 @@ from .collections import (
     where,
     _where,
 )
+
+
+#
+# Functions
+#
+
+from .functions import (
+    after,
+    compose
+)
