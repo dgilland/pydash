@@ -192,7 +192,7 @@ def invoke(collection, method_name, *args):
         else:
             result = getattr(item, method_name)(*args)
 
-        if result == None:
+        if result is None:
             lst.append(item)
         else:
             lst.append(result)
