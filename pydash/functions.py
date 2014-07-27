@@ -21,7 +21,7 @@ class Curry(object):  # pylint: disable=too-few-public-methods
         exceeded the function arity.
         """
         args = tuple(list(self.args) + list(args))
-        kargs = dict(self.kargs.items() + kargs.items())
+        kargs.update(self.kargs)
 
         if (len(args) + len(kargs)) >= self.arity:
             curried = self.func(*args, **kargs)
