@@ -29,6 +29,8 @@
 - Add `compose()`.
 - Add `curry()`.
 - Add `once()`.
+- Add `partial()`.
+- Add `partial_right()`.
 
 
 ## v0.0.0 (2014-07-22)

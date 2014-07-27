@@ -94,5 +94,7 @@ from .functions import (
     after,
     compose,
     curry,
-    once
+    once,
+    partial,
+    partial_right
 )

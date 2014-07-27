@@ -54,3 +54,17 @@ def test_curry(case, arglist, expected):
 def test_once(case, arglist, expected):
     for args in arglist:
         pyd.once(case)(*args) == expected
+
+
+@parametrize('case,case_args,args,expected', [
+    (lambda a, b, c: a + b + c, ('a', 'b'), ('c',), 'abc')
+])
+def test_partial(case, case_args, args, expected):
+    assert pyd.partial(case, *case_args)(*args) == expected
+
+
+@parametrize('case,case_args,args,expected', [
+    (lambda a, b, c: a + b + c, ('a', 'b'), ('c',), 'cab')
+])
+def test_partial_right(case, case_args, args, expected):
+    assert pyd.partial_right(case, *case_args)(*args) == expected

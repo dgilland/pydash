@@ -67,6 +67,26 @@ class Once(object):  # pylint: disable=too-few-public-methods
         return self.result
 
 
+class Partial(object):
+    """Wrap a function in a partial context."""
+
+    def __init__(self, func, args, from_right=False):
+        self.func = func
+        self.args = args
+        self.from_right = from_right
+
+    def __call__(self, *args, **kargs):
+        """Return results from `self.func` with `self.args` + `args. Apply args
+        from left or right depending on `self.from_right`.
+        """
+        if self.from_right:
+            args = list(args) + list(self.args)
+        else:
+            args = list(self.args) + list(args)
+
+        return self.func(*args, **kargs)
+
+
 def after(n, func):
     """Creates a function that executes `func`, with the arguments of the
     created function, only after being called `n` times.
@@ -110,3 +130,17 @@ def once(func):
     to the function will return the value of the first call.
     """
     return Once(func)
+
+
+def partial(func, *args):
+    """Creates a function that, when called, invokes `func` with any additional
+    partial arguments prepended to those provided to the new function.
+    """
+    return Partial(func, args)
+
+
+def partial_right(func, *args):
+    """This method is like :func:`partial` except that partial arguments are
+    appended to those provided to the new function.
+    """
+    return Partial(func, args, from_right=True)
