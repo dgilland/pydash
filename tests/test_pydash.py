@@ -513,6 +513,7 @@ def test_index_by(case, expected):
 @parametrize('case,expected', [
     (([[5, 1, 7], [3, 2, 1]], 'sort'), [[1, 5, 7], [1, 2, 3]]),
     ((['anaconda', 'bison', 'cat'], 'count', 'a'), [3, 0, 1]),
+    (([1, 2, 3], lambda item, num: item + num, 1), [2, 3, 4]),
 ])
 def test_invoke(case, expected):
     assert pyd.invoke(*case) == expected
