@@ -44,7 +44,7 @@ def iter_dict_callback(collection, callback=None):
     """Return iterative dict callback."""
     cbk = make_callback(callback)
     for key, value in iteritems(collection):
-        yield (cbk(value, key, collection),)
+        yield (cbk(value, key, collection), value, key, collection)
 
 
 def iter_(collection):
