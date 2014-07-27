@@ -121,21 +121,12 @@ def find_last(collection, callback=None):
     return find(list(reversed(collection)), callback)
 
 
-def for_each(collection, callback, reverse=False):
+def for_each(collection, callback):
     """Iterates over elements of a collection, executing the callback for each
     element.
     """
-    if isinstance(collection, dict):
-        iterator = list(collection.values())
-    else:
-        iterator = collection
-
-    if reverse:
-        iterator = reversed(iterator)
-
-    for item in iterator:
-        result = callback(item)
-        if result == False:
+    for ret, _, _, _ in _iter_callback(collection, callback):
+        if ret is False:
             break
 
     return collection
@@ -148,7 +139,14 @@ def for_each_right(collection, callback):
     """This method is like :func:`for_each` except that it iterates over
     elements of a `collection` from right to left.
     """
-    return for_each(collection, callback, reverse=True)
+    if isinstance(collection, dict):
+        iterator = collection  # Dicts have no order, nothing to be done.
+    else:
+        iterator = reversed(collection)
+
+    for_each(iterator, callback)
+
+    return collection
 
 
 each_right = for_each_right
@@ -187,8 +185,13 @@ def invoke(collection, method_name, *args):
     `collection` returning a list of the results of each invoked method.
     """
     lst = []
+
     for item in collection:
-        result = getattr(item, method_name)(*args)
+        if callable(method_name):
+            result = method_name(item, *args)
+        else:
+            result = getattr(item, method_name)(*args)
+
         if result == None:
             lst.append(item)
         else:
