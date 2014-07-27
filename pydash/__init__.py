@@ -93,5 +93,6 @@ from .collections import (
 from .functions import (
     after,
     compose,
-    curry
+    curry,
+    once
 )

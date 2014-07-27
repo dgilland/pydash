@@ -31,6 +31,22 @@ class Curry(object):  # pylint: disable=too-few-public-methods
         return curried
 
 
+class Once(object):  # pylint: disable=too-few-public-methods
+    """Wrap a function in a once context."""
+
+    def __init__(self, func):
+        self.func = func
+        self.result = None
+        self.called = False
+
+    def __call__(self, *args, **kargs):
+        if not self.called:
+            self.result = self.func(*args, **kargs)
+            self.called = True
+
+        return self.result
+
+
 def after(n, func):
     """Creates a function that executes `func`, with the arguments of the
     created function, only after being called `n` times.
@@ -82,3 +98,10 @@ def curry(func, arity=None):
     more of the remaining `func` arguments, and so on.
     """
     return Curry(func, arity)
+
+
+def once(func):
+    """Creates a function that is restricted to execute func once. Repeat calls
+    to the function will return the value of the first call.
+    """
+    return Once(func)
