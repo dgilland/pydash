@@ -397,7 +397,7 @@ def zip_(*arrays):
 
 
 def unzip(array):
-    """The inverse of :func:`zipper`, this method splits groups of
+    """The inverse of :func:`zip_`, this method splits groups of
     elements into lists composed of elements from each group at their
     corresponding indexes.
 
