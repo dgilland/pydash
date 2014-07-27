@@ -6,6 +6,26 @@ from __future__ import absolute_import
 import inspect
 
 
+class After(object):  # pylint: disable=too-few-public-methods
+    """Wrap a function in an after context."""
+    def __init__(self, n, func):
+        try:
+            n = int(n)
+            assert n >= 0
+        except (ValueError, AssertionError):
+            n = 0
+
+        self.n = n
+        self.func = func
+
+    def __call__(self, *args, **kargs):
+        """Return results of `self.func` after `self.n` calls."""
+        self.n -= 1
+
+        if self.n < 1:
+            return self.func(*args, **kargs)
+
+
 class Curry(object):  # pylint: disable=too-few-public-methods
     """Wrap a function in a curry context."""
 
@@ -51,22 +71,7 @@ def after(n, func):
     """Creates a function that executes `func`, with the arguments of the
     created function, only after being called `n` times.
     """
-    try:
-        n = int(n)
-        assert n >= 0
-    except (ValueError, AssertionError):
-        n = 0
-
-    def wrapper(*args, **kargs):  # pylint: disable=missing-docstring
-        # NOTE: `n` won't be available here unless we attach it to the wrapper.
-        # There may be a cleaner way to do this.
-        wrapper.n -= 1
-
-        if wrapper.n < 1:
-            return func(*args, **kargs)
-    wrapper.n = n
-
-    return wrapper
+    return After(n, func)
 
 
 def compose(*funcs):
