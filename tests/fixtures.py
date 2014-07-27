@@ -51,3 +51,7 @@ def reduce_callback1(result, num, key):
 
 def reduce_right_callback0(a, b, *args):
     return a + b
+
+
+def noop(*args, **kargs):
+    pass
