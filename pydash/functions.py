@@ -3,7 +3,32 @@
 
 from __future__ import absolute_import
 
-from . import utils
+import inspect
+
+
+class Curry(object):  # pylint: disable=too-few-public-methods
+    """Wrap a function in a curry context."""
+
+    def __init__(self, func, arity, args=None, kargs=None):
+        self.func = func
+        self.arity = (len(inspect.getargspec(func).args) if arity is None
+                      else arity)
+        self.args = () if args is None else args
+        self.kargs = {} if kargs is None else kargs
+
+    def __call__(self, *args, **kargs):
+        """Store `args` and `kargs` and call `self.func` if we've reached or
+        exceeded the function arity.
+        """
+        args = tuple(list(self.args) + list(args))
+        kargs = dict(self.kargs.items() + kargs.items())
+
+        if (len(args) + len(kargs)) >= self.arity:
+            curried = self.func(*args, **kargs)
+        else:
+            curried = Curry(self.func, self.arity, args, kargs)
+
+        return curried
 
 
 def after(n, func):
@@ -56,4 +81,4 @@ def curry(func, arity=None):
     arguments have been provided, or returns a function that accepts one or
     more of the remaining `func` arguments, and so on.
     """
-    return utils.Curry(func, arity)
+    return Curry(func, arity)
