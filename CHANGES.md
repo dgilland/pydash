@@ -12,6 +12,9 @@
 - Add `reject()`. Thanks [nathancahill]!
 - Add `sort_by()`. Thanks [nathancahill]!
 - Add `to_list()`. Thanks [nathancahill]!
+- Add `invoke()`. Thanks [nathancahill]!
+- Add `for_each()`. Thanks [nathancahill]!
+- Add `for_each_right()`. Thanks [nathancahill]!
 - Add `remove()`.
 - Add `xor()`.
 - Add `sample()`.
@@ -25,6 +28,7 @@
 - Add `after()`.
 - Add `compose()`.
 - Add `curry()`.
+- Add `once()`.
 
 
 ## v0.0.0 (2014-07-22)
