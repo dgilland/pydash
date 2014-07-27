@@ -1,6 +1,11 @@
 
 from copy import deepcopy
 
+import pytest
+
+# pytest.mark is a generator so create alias for convenience
+parametrize = pytest.mark.parametrize
+
 
 class DataFactory(object):
     """Simple class that returns a deepcopy from `data` dict. This is needed to
