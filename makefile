@@ -82,4 +82,6 @@ travisci-install:
 	pip install -r requirements.txt
 
 travisci-test:
+	pep8 $(PYTEST_TARGET)
+	pylint -E $(COVERAGE_TARGET)
 	py.test $(PYTEST_ARGS) $(COVERAGE_ARGS) $(COVERAGE_TARGET) $(PYTEST_TARGET)
