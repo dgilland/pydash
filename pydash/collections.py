@@ -140,7 +140,8 @@ def for_each_right(collection, callback):
     elements of a `collection` from right to left.
     """
     if isinstance(collection, dict):
-        iterator = collection  # Dicts have no order, nothing to be done.
+        # Dicts have no order, nothing to be done.
+        iterator = collection
     else:
         iterator = reversed(collection)
 
