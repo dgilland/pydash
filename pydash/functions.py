@@ -13,10 +13,10 @@ def after(n, func):
     try:
         n = int(n)
         assert n >= 0
-    except Exception:
+    except (ValueError, AssertionError):
         n = 0
 
-    def wrapper(*args, **kargs):
+    def wrapper(*args, **kargs):  # pylint: disable=missing-docstring
         # NOTE: `n` won't be available here unless we attach it to the wrapper.
         # There may be a cleaner way to do this.
         wrapper.n -= 1
@@ -33,7 +33,7 @@ def compose(*funcs):
     where each function consumes the return value of the function that follows.
     For example, composing the functions f(), g(), and h() produces f(g(h())).
     """
-    def wrapper(*args, **kargs):
+    def wrapper(*args, **kargs):  # pylint: disable=missing-docstring
         # NOTE: Cannot use `funcs` for the variable name of list(funcs) due to
         # the way Python handles closure variables. Basically, `funcs` has to
         # remain unmodified.

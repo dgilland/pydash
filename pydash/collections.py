@@ -5,7 +5,6 @@ from __future__ import absolute_import
 
 import random
 
-from ._compat import string_types
 from .utils import _make_callback, _iter_callback, _iter
 
 
@@ -244,7 +243,6 @@ def reduce_(collection, callback=None, accumulator=None):
     if accumulator is None:
         try:
             _, accumulator = next(iterable)
-            offset = 1
         except StopIteration:
             raise TypeError(
                 'reduce_() of empty sequence with no initial value')
@@ -291,8 +289,8 @@ def reject(collection, callback=None):
 def sample(collection, n=None):
     """Retrieves a random element or `n` random elements from a `collection`.
     """
-    nn = min(n or 1, len(collection))
-    sampled = random.sample(collection, nn)
+    num = min(n or 1, len(collection))
+    sampled = random.sample(collection, num)
     return sampled[0] if n is None else sampled
 
 
