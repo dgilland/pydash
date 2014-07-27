@@ -46,3 +46,11 @@ def test_curry(case, arglist, expected):
             ret = ret(*args)
 
         assert ret == expected
+
+
+@parametrize('case,arglist,expected', [
+    (lambda a: a * a, [(2,), (4,)], 4)
+])
+def test_once(case, arglist, expected):
+    for args in arglist:
+        pyd.once(case)(*args) == expected
