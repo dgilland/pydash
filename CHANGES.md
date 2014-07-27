@@ -24,6 +24,7 @@
 - Add `foldr()`.
 - Add `after()`.
 - Add `compose()`.
+- Add `curry()`.
 
 
 ## v0.0.0 (2014-07-22)

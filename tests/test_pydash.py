@@ -655,3 +655,19 @@ def test_after(case, expected):
 ])
 def test_compose(case, args, expected):
     assert pyd.compose(*case)(*args) == expected
+
+
+@parametrize('case,arglist,expected', [
+    ((lambda a, b, c: a + b + c,), [(1, 1, 1)], 3),
+    ((lambda a, b, c: a + b + c,), [(1,), (1, 1)], 3),
+    ((lambda a, b, c: a + b + c,), [(1,), (1,), (1,)], 3),
+    ((lambda *a: sum(a), 3), [(1, 1, 1)], 3),
+    ((lambda *a: sum(a), 3), [(1,), (1,), (1,)], 3),
+])
+def test_curry(case, arglist, expected):
+    curried = pyd.curry(*case)
+
+    for args in arglist:
+        curried = curried(*args)
+
+    assert curried == expected

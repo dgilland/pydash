@@ -92,5 +92,6 @@ from .collections import (
 
 from .functions import (
     after,
-    compose
+    compose,
+    curry
 )

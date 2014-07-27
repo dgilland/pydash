@@ -3,6 +3,8 @@
 
 from __future__ import absolute_import
 
+from . import utils
+
 
 def after(n, func):
     """Creates a function that executes `func`, with the arguments of the
@@ -46,3 +48,12 @@ def compose(*funcs):
         return ret
 
     return wrapper
+
+
+def curry(func, arity=None):
+    """Creates a function which accepts one or more arguments of `func` that
+    when  invoked either executes `func` returning its result, if all `func`
+    arguments have been provided, or returns a function that accepts one or
+    more of the remaining `func` arguments, and so on.
+    """
+    return utils.Curry(func, arity)
