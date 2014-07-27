@@ -11,24 +11,24 @@ from ._compat import string_types, iteritems
 class Curry(object):  # pylint: disable=too-few-public-methods
     """Wrap a function in a curry context."""
 
-    def __init__(self, func, arity):
+    def __init__(self, func, arity, args=None, kargs=None):
         self.func = func
-        self.argcount = (len(inspect.getargspec(func).args) if arity is None
-                         else arity)
-        self.args = []
-        self.kargs = {}
+        self.arity = (len(inspect.getargspec(func).args) if arity is None
+                      else arity)
+        self.args = () if args is None else args
+        self.kargs = {} if kargs is None else kargs
 
     def __call__(self, *args, **kargs):
         """Store `args` and `kargs` and call `self.func` if we've reached or
         exceeded the function arity.
         """
-        self.args += args
-        self.kargs.update(kargs)
+        args = tuple(list(self.args) + list(args))
+        kargs = dict(self.kargs.items() + kargs.items())
 
-        if (len(self.args) + len(self.kargs)) >= self.argcount:
-            curried = self.func(*self.args, **self.kargs)
+        if (len(args) + len(kargs)) >= self.arity:
+            curried = self.func(*args, **kargs)
         else:
-            curried = self
+            curried = Curry(self.func, self.arity, args, kargs)
 
         return curried
 

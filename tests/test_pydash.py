@@ -667,7 +667,10 @@ def test_compose(case, args, expected):
 def test_curry(case, arglist, expected):
     curried = pyd.curry(*case)
 
-    for args in arglist:
-        curried = curried(*args)
+    # Run test twice to verify curried can be reused
+    for _ in range(2):
+        ret = curried
+        for args in arglist:
+            ret = ret(*args)
 
-    assert curried == expected
+        assert ret == expected
