@@ -77,4 +77,3 @@ def test_partial_right(case, case_args, args, expected):
 ])
 def test_wrap(case, args, expected):
     assert pyd.wrap(*case)(*args) == expected
-
