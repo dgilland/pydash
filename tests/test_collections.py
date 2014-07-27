@@ -169,6 +169,13 @@ def test_for_each(case, expected):
     assert pyd.for_each(*case) == expected
 
 
+@parametrize('case', [
+    pyd.each
+])
+def test_for_each_aliases(case):
+    assert pyd.for_each is case
+
+
 @parametrize('case,expected', [
     (([1, 2, 3], fixtures.noop), [1, 2, 3]),
     (([1, 2, 3], lambda value, *args: value < 2), [1, 2, 3]),
@@ -177,6 +184,13 @@ def test_for_each(case, expected):
 ])
 def test_for_each_right(case, expected):
     assert pyd.for_each_right(*case) == expected
+
+
+@parametrize('case', [
+    pyd.each_right
+])
+def test_for_each_right_aliases(case):
+    assert pyd.for_each_right is case
 
 
 @parametrize('case,expected', [
