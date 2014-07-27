@@ -125,7 +125,7 @@ def for_each(collection, callback):
     """Iterates over elements of a collection, executing the callback for each
     element.
     """
-    for ret, _, _, _ in _iter_callback(collection, callback):
+    for ret, _, _, _ in iter_callback(collection, callback):
         if ret is False:
             break
 
