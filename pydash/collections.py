@@ -121,21 +121,32 @@ def find_last(collection, callback=None):
     return find(list(reversed(collection)), callback)
 
 
-def for_each(*args, **kargs):  # pragma: no cover
+def for_each(collection, callback):
     """Iterates over elements of a collection, executing the callback for each
     element.
     """
-    raise NotImplementedError
+    for ret, _, _, _ in iter_callback(collection, callback):
+        if ret is False:
+            break
+
+    return collection
 
 
 each = for_each
 
 
-def for_each_right(*args, **kargs):  # pragma: no cover
+def for_each_right(collection, callback):
     """This method is like :func:`for_each` except that it iterates over
     elements of a `collection` from right to left.
     """
-    raise NotImplementedError
+    if isinstance(collection, dict):
+        iterator = collection  # Dicts have no order, nothing to be done.
+    else:
+        iterator = reversed(collection)
+
+    for_each(iterator, callback)
+
+    return collection
 
 
 each_right = for_each_right
@@ -169,11 +180,24 @@ def index_by(collection, callback):
     return ret
 
 
-def invoke(*args, **kargs):  # pragma: no cover
+def invoke(collection, method_name, *args):
     """Invokes the method named by `method_name` on each element in the
     `collection` returning a list of the results of each invoked method.
     """
-    raise NotImplementedError
+    lst = []
+
+    for item in collection:
+        if callable(method_name):
+            result = method_name(item, *args)
+        else:
+            result = getattr(item, method_name)(*args)
+
+        if result is None:
+            lst.append(item)
+        else:
+            lst.append(result)
+
+    return lst
 
 
 def map_(collection, callback=None):

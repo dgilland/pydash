@@ -1,4 +1,6 @@
 
+from __future__ import print_function
+
 import math
 
 import pytest
@@ -471,6 +473,26 @@ def test_find_last(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3], lambda value, *args: print(value)), [1, 2, 3]),
+    (([1, 2, 3], lambda value, *args: value < 2), [1, 2, 3]),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda value, *args: print(value)),
+        {'one': 1, 'two': 2, 'three': 3}),
+])
+def test_for_each(case, expected):
+    assert pyd.for_each(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], lambda value, *args: print(value)), [1, 2, 3]),
+    (([1, 2, 3], lambda value, *args: value < 2), [1, 2, 3]),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda value, *args: print(value)),
+        {'one': 1, 'two': 2, 'three': 3}),
+])
+def test_for_each_right(case, expected):
+    assert pyd.for_each_right(*case) == expected
+
+
+@parametrize('case,expected', [
     (([4.2, 6.1, 6.4],
       lambda num, *args: int(math.floor(num))),
      {4: [4.2], 6: [6.1, 6.4]}),
@@ -486,6 +508,15 @@ def test_group_by(case, expected):
 ])
 def test_index_by(case, expected):
     assert pyd.index_by(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([[5, 1, 7], [3, 2, 1]], 'sort'), [[1, 5, 7], [1, 2, 3]]),
+    ((['anaconda', 'bison', 'cat'], 'count', 'a'), [3, 0, 1]),
+    (([1, 2, 3], lambda item, num: item + num, 1), [2, 3, 4]),
+])
+def test_invoke(case, expected):
+    assert pyd.invoke(*case) == expected
 
 
 @parametrize('case', [
