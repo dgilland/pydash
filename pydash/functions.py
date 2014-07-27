@@ -6,7 +6,7 @@ from __future__ import absolute_import
 import inspect
 
 
-class After(object):  # pylint: disable=too-few-public-methods
+class After(object):
     """Wrap a function in an after context."""
     def __init__(self, n, func):
         try:
@@ -26,7 +26,7 @@ class After(object):  # pylint: disable=too-few-public-methods
             return self.func(*args, **kargs)
 
 
-class Curry(object):  # pylint: disable=too-few-public-methods
+class Curry(object):
     """Wrap a function in a curry context."""
 
     def __init__(self, func, arity, args=None, kargs=None):
@@ -51,7 +51,7 @@ class Curry(object):  # pylint: disable=too-few-public-methods
         return curried
 
 
-class Once(object):  # pylint: disable=too-few-public-methods
+class Once(object):
     """Wrap a function in a once context."""
 
     def __init__(self, func):
@@ -60,6 +60,7 @@ class Once(object):  # pylint: disable=too-few-public-methods
         self.called = False
 
     def __call__(self, *args, **kargs):
+        """Return results from the first call of `self.func`."""
         if not self.called:
             self.result = self.func(*args, **kargs)
             self.called = True
