@@ -96,5 +96,6 @@ from .functions import (
     curry,
     once,
     partial,
-    partial_right
+    partial_right,
+    wrap
 )

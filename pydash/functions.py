@@ -145,3 +145,11 @@ def partial_right(func, *args):
     appended to those provided to the new function.
     """
     return Partial(func, args, from_right=True)
+
+
+def wrap(value, wrapper):
+    """Creates a function that provides value to the wrapper function as its
+    first argument. Additional arguments provided to the function are appended
+    to those provided to the wrapper function.
+    """
+    return Partial(wrapper, (value,))

@@ -31,6 +31,7 @@
 - Add `once()`.
 - Add `partial()`.
 - Add `partial_right()`.
+- Add `wrap()`.
 
 
 ## v0.0.0 (2014-07-22)

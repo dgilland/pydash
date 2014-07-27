@@ -68,3 +68,13 @@ def test_partial(case, case_args, args, expected):
 ])
 def test_partial_right(case, case_args, args, expected):
     assert pyd.partial_right(case, *case_args)(*args) == expected
+
+
+@parametrize('case,args,expected', [
+    ((lambda a: a.strip(), lambda func, text: '<p>{0}</p>'.format(func(text))),
+     ('  hello world!  ',),
+     '<p>hello world!</p>')
+])
+def test_wrap(case, args, expected):
+    assert pyd.wrap(*case)(*args) == expected
+
