@@ -8,7 +8,7 @@ from .fixtures import parametrize
 @parametrize('case,expected', [
     (({'name': 'fred'}, {'employer': 'slate'}),
      {'name': 'fred', 'employer': 'slate'}),
-    (({'name': 'fred'}, [{'employer': 'slate'}, {'employer': 'medium'}]),
+    (({'name': 'fred'}, {'employer': 'slate'}, {'employer': 'medium'}),
      {'name': 'fred', 'employer': 'medium'}),
     (({'name': 'fred'}, {'age': 26}, lambda obj, src: src + 1),
      {'name': 'fred', 'age': 27}),
