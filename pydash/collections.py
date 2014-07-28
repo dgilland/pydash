@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 import random
 
+from .utilities import matches
 from .utils import make_callback, iter_callback, iter_
 
 
@@ -383,9 +384,4 @@ def where(collection, properties):
     :param properties: the dict of property values to filter by
     :rtype: list
     """
-    return [item for item in collection if _where(item, properties)]
-
-
-def _where(superset, subset):
-    """Helper function for where()"""
-    return all(item in superset.items() for item in subset.items())
+    return filter_(collection, matches(properties))

@@ -81,8 +81,7 @@ from .collections import (
     any_,
     sort_by,
     to_list,
-    where,
-    _where,
+    where
 )
 
 
