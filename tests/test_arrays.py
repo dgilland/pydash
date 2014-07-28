@@ -150,7 +150,7 @@ def test_zip_object(case, expected):
 
 
 @parametrize('alias', [
-    pyd.object_
+    pyd.object
 ])
 def test_zip_object_aliases(alias):
     pyd.zip_object is alias
@@ -163,7 +163,7 @@ def test_zip_object_aliases(alias):
      [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]])
 ])
 def test_zip_(case, expected):
-    assert pyd.zip_(*case) == expected
+    assert pyd.zip(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -182,7 +182,7 @@ def test_unzip(case, expected):
     ((0,), []),
 ])
 def test_range_(case, expected):
-    assert pyd.range_(*case) == expected
+    assert pyd.range(*case) == expected
 
 
 @parametrize('case,expected', [
