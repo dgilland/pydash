@@ -6,6 +6,18 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
+    (({'name': 'fred'}, {'employer': 'slate'}),
+     {'name': 'fred', 'employer': 'slate'}),
+    (({'name': 'fred'}, [{'employer': 'slate'}, {'employer': 'medium'}]),
+     {'name': 'fred', 'employer': 'medium'}),
+    (({'name': 'fred'}, {'age': 26}, lambda obj, src: src + 1),
+     {'name': 'fred', 'age': 27}),
+])
+def test_assign(case, expected):
+    assert pyd.assign(*case) == expected
+
+
+@parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, ['a', 'b', 'c'])
 ])
 def test_keys(case, expected):
