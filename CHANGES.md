@@ -39,6 +39,12 @@
 - Add `transform()`.
 - Add `values()`.
 - Add `map_values()`.
+- Add `now()`.
+- Add `constant()`.
+- Add `identity()`.
+- Add `property_()` and `prop()`.
+- Add `random()`.
+- Add `noop()`.
 
 
 ## v0.0.0 (2014-07-22)

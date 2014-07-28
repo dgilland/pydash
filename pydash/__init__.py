@@ -114,3 +114,18 @@ from .objects import (
     transform,
     values
 )
+
+
+#
+# Utilities
+#
+
+from .utilities import (
+    now,
+    constant,
+    identity,
+    property_,
+    prop,
+    random,
+    noop
+)
