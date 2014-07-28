@@ -16,7 +16,7 @@ def make_callback(callback):
     elif isinstance(callback, string_types):
         cbk = lambda item, *args: pluck([item], callback)[0]
     elif isinstance(callback, dict):
-        cbk = lambda item, *args: where([item], callback)
+        cbk = lambda item, *args: bool(where([item], callback))
     elif isinstance(callback, (int, float)):
         cbk = lambda item, i, *args: i < callback
     else:
