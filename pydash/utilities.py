@@ -60,7 +60,7 @@ def memoize(func, resolver=None):
     arguments provided to the memoized function are used as the cache key.
     The result cache is exposed as the cache property on the memoized function.
     """
-    def memoized(*args, **kargs):
+    def memoized(*args, **kargs):  # pylint: disable=missing-docstring
         if resolver:
             key = resolver(*args, **kargs)
         else:
