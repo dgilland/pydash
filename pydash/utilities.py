@@ -53,6 +53,28 @@ def matches(source):
                                   for item in source.items())
 
 
+def memoize(func, resolver=None):
+    """Creates a function that memoizes the result of `func`. If `resolver` is
+    provided it will be used to determine the cache key for storing the result
+    based on the arguments provided to the memoized function. By default, all
+    arguments provided to the memoized function are used as the cache key.
+    The result cache is exposed as the cache property on the memoized function.
+    """
+    def memoized(*args, **kargs):
+        if resolver:
+            key = resolver(*args, **kargs)
+        else:
+            key = '{0}{1}'.format(args, kargs)
+
+        if key not in memoized.cache:
+            memoized.cache[key] = func(*args, **kargs)
+
+        return memoized.cache[key]
+    memoized.cache = {}
+
+    return memoized
+
+
 def noop(*args, **kargs):  # pylint: disable=unused-argument
     """A no-operation function."""
     pass

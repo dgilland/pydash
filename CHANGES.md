@@ -49,6 +49,7 @@
 - Add `times()`.
 - Add `callback()`.
 - Add `matches()`.
+- Add `memoize()`.
 
 
 ## v0.0.0 (2014-07-22)

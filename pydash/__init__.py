@@ -125,6 +125,7 @@ from .utilities import (
     callback,
     identity,
     matches,
+    memoize,
     noop,
     property_,
     prop,

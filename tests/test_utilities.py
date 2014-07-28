@@ -61,6 +61,20 @@ def test_matches(case, arg, expected):
     assert pyd.matches(case)(arg) is expected
 
 
+@parametrize('case,args,kargs,key', [
+    ((lambda a, b: a + b,), (1, 2), {}, '(1, 2){}'),
+    ((lambda a, b: a + b,), (1,), {'b': 2}, "(1,){'b': 2}"),
+    ((lambda a, b: a + b, lambda a, b: a * b), (1, 2), {}, 2),
+    ((lambda a, b: a + b, lambda a, b: a * b), (1,), {'b': 2}, 2),
+])
+def test_memoize(case, args, kargs, key):
+    memoized = pyd.memoize(*case)
+    expected = case[0](*args, **kargs)
+    assert memoized(*args, **kargs) == expected
+    assert memoized.cache
+    assert memoized.cache[key] == expected
+
+
 @parametrize('case,expected', [
     ((), None),
     ((1, 2, 3), None)
