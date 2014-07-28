@@ -11,6 +11,7 @@ from .fixtures import parametrize
 def test_keys(case, expected):
     assert set(pyd.keys(case)) == set(expected)
 
+
 @parametrize('case,expected', [
     (({'a': 1, 'b': 2, 'c': 3}, lambda num, *args: num * 3),
      {'a': 3, 'b': 6, 'c': 9}),
