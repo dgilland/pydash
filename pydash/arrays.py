@@ -270,13 +270,14 @@ def rest(array, callback=None):
     :param mixed callback: callback to filter by
     :rtype: list
     """
+    if callback is None:
+        callback = 1
 
     n = 0
     for is_true, _, _, _ in iter_callback(array, callback):
-        if is_true:
-            n += 1
-        else:
+        if not is_true:
             break
+        n += 1
 
     return array[n:]
 
