@@ -27,6 +27,11 @@ def identity(*args):
     return args[0] if args else None
 
 
+def noop(*args, **kargs):
+    """A no-operation function."""
+    pass
+
+
 def property_(key):
     """Creates a :func:`pluck` style function, which returns the key value of a
     given object.
@@ -58,6 +63,17 @@ def random(start=0, stop=1, floating=False):
     return rnd
 
 
-def noop(*args, **kargs):
-    """A no-operation function."""
-    pass
+def result(obj, key):
+    """Return the value of property `key` on `obj`. If `key` value is a
+    function it will be invoked and its result returned, else the property
+    value is returned. If `obj` is falsey then `None` is returned.
+    """
+    if not obj:
+        return None
+
+    ret = obj.get(key)
+
+    if callable(ret):
+        ret = ret()
+
+    return ret

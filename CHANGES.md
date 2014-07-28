@@ -45,6 +45,7 @@
 - Add `property_()` and `prop()`.
 - Add `random()`.
 - Add `noop()`.
+- Add `result()`.
 
 
 ## v0.0.0 (2014-07-22)

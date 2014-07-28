@@ -124,8 +124,9 @@ from .utilities import (
     now,
     constant,
     identity,
+    noop,
     property_,
     prop,
     random,
-    noop
+    result
 )

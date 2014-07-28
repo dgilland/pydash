@@ -27,6 +27,14 @@ def test_identity(case, expected):
     assert pyd.identity(*case) == expected
 
 
+@parametrize('case,expected', [
+    ((), None),
+    ((1, 2, 3), None)
+])
+def test_noop(case, expected):
+    assert pyd.noop(*case) == expected
+
+
 @parametrize('case,arg,expected', [
     ('name',
      [{'name': 'fred',   'age': 40},
@@ -72,8 +80,13 @@ def test_random_float(case, floating, minimum, maximum):
 
 
 @parametrize('case,expected', [
-    ((), None),
-    ((1, 2, 3), None)
+    (({'cheese': 'crumpets', 'stuff': lambda: 'nonsense'}, 'cheese'),
+     'crumpets'),
+    (({'cheese': 'crumpets', 'stuff': lambda: 'nonsense'}, 'stuff'),
+     'nonsense'),
+    (({'cheese': 'crumpets', 'stuff': lambda: 'nonsense'}, 'foo'),
+     None),
+    ((False, 'foo'), None)
 ])
-def test_noop(case, expected):
-    assert pyd.noop(*case) == expected
+def test_result(case, expected):
+    assert pyd.result(*case) == expected
