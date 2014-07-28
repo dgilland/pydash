@@ -14,13 +14,13 @@ def make_callback(callback):
     if callable(callback):
         cbk = callback
     elif isinstance(callback, string_types):
-        key = callback
-        cbk = lambda item, *args: pluck([item], key)[0]
+        cbk = lambda item, *args: pluck([item], callback)[0]
     elif isinstance(callback, dict):
         cbk = lambda item, *args: where([item], callback)
+    elif isinstance(callback, (int, float)):
+        cbk = lambda item, i, *args: i < callback
     else:
-        index = callback if isinstance(callback, int) else 1
-        cbk = lambda item, i, *args: i < index
+        cbk = lambda item, *args: item
 
     return cbk
 
