@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from .utilities import callback as make_callback
-from ._compat import string_types, iteritems
+from ._compat import iteritems
 
 
 def iter_callback(collection, callback=None):
@@ -51,9 +51,8 @@ def iter_list(array):
 def iter_unique_set(array):
     """Return iterator to find unique set."""
     seen = set()
-    seen_add = seen.add
     for i, item in enumerate(array):
-        if item not in seen and not seen_add(item):
+        if item not in seen and not seen.add(item):
             yield (i, item)
 
 

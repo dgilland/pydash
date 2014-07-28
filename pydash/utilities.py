@@ -53,7 +53,7 @@ def matches(source):
                                   for item in source.items())
 
 
-def noop(*args, **kargs):
+def noop(*args, **kargs):  # pylint: disable=unused-argument
     """A no-operation function."""
     pass
 
