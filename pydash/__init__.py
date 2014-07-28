@@ -128,5 +128,6 @@ from .utilities import (
     property_,
     prop,
     random,
-    result
+    result,
+    times
 )

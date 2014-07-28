@@ -6,8 +6,8 @@ from __future__ import absolute_import
 import time
 from random import uniform, randint
 
-
 from .utils import make_callback
+from ._compat import _range
 
 
 def now():
@@ -77,3 +77,10 @@ def result(obj, key):
         ret = ret()
 
     return ret
+
+
+def times(n, callback):
+    """Executes the callback `n` times, returning a list of the results of each
+    callback execution. The callback is invoked with one argument: (index).
+    """
+    return [callback(index) for index in _range(n)]

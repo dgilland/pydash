@@ -90,3 +90,10 @@ def test_random_float(case, floating, minimum, maximum):
 ])
 def test_result(case, expected):
     assert pyd.result(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((5, lambda i: i * i), [0, 1, 4, 9, 16]),
+])
+def test_times(case, expected):
+    assert pyd.times(*case) == expected
