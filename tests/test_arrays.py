@@ -20,24 +20,12 @@ def test_difference(case, expected):
     assert pyd.difference(*case) == expected
 
 
-@parametrize('case,filter_by,expected', [
-    ([1, 2, 3], None, [2, 3]),
-    ([1, 2, 3], 2, [3]),
-    ([1, 2, 3], lambda val, index, lst: val < 3, [3]),
-    ([{'name': 'banana', 'organic': True},
-      {'name': 'beet',   'organic': False}],
-     'organic',
-     [{'name': 'beet', 'organic': False}]),
-    ([{'name': 'apple',  'type': 'fruit'},
-      {'name': 'banana', 'type': 'fruit'},
-      {'name': 'beet',   'type': 'vegetable'},
-      {'name': 'peach', 'type': 'fruit'}],
-     {'type': 'fruit'},
-     [{'name': 'beet', 'type': 'vegetable'},
-      {'name': 'peach', 'type': 'fruit'}])
+@parametrize('case,expected', [
+    ([1, 2, 3], [2, 3]),
+    ([], [])
 ])
-def test_rest(case, filter_by, expected):
-    assert pyd.rest(case, filter_by) == expected
+def test_rest(case, expected):
+    assert pyd.rest(case) == expected
 
 
 @parametrize('alias', [
@@ -72,24 +60,12 @@ def test_find_last_index(case, filter_by, expected):
     assert pyd.find_last_index(case, filter_by) == expected
 
 
-@parametrize('case,filter_by,expected', [
-    ([1, 2, 3], None, 1),
-    ([1, 2, 3], 2, [1, 2]),
-    ([1, 2, 3], lambda item, *args: item < 3, [1, 2]),
-    ([{'name': 'banana', 'organic': True},
-      {'name': 'beet',   'organic': False}],
-     'organic',
-     [{'name': 'banana', 'organic': True}]),
-    ([{'name': 'apple',  'type': 'fruit'},
-      {'name': 'banana', 'type': 'fruit'},
-      {'name': 'beet',   'type': 'vegetable'},
-      {'name': 'peach', 'type': 'fruit'}],
-     {'type': 'fruit'},
-     [{'name': 'apple', 'type': 'fruit'},
-      {'name': 'banana', 'type': 'fruit'}]),
+@parametrize('case,expected', [
+    ([1, 2, 3], 1),
+    ([], None)
 ])
-def test_first(case, filter_by, expected):
-    assert pyd.first(case, filter_by) == expected
+def test_first(case, expected):
+    assert pyd.first(case) == expected
 
 
 @parametrize('case,filter_by,expected', [
@@ -117,22 +93,12 @@ def test_index_of(case, value, from_index, expected):
     assert pyd.index_of(case, value, from_index) == expected
 
 
-@parametrize('case,filter_by,expected', [
-    ([1, 2, 3], 1, [1, 2]),
-    ([1, 2, 3], 2, [1]),
-    ([1, 2, 3], lambda num, *args: num > 1, [1]),
-    ([{'name': 'beet',   'organic': False},
-      {'name': 'carrot', 'organic': True}],
-     'organic',
-     [{'name': 'beet',   'organic': False}]),
-    ([{'name': 'banana', 'type': 'fruit'},
-      {'name': 'beet',   'type': 'vegetable'},
-      {'name': 'carrot', 'type': 'vegetable'}],
-     {'type': 'vegetable'},
-     [{'name': 'banana', 'type': 'fruit'}])
+@parametrize('case,expected', [
+    ([1, 2, 3], [1, 2]),
+    ([1], [])
 ])
-def test_initial(case, filter_by, expected):
-    assert pyd.initial(case, filter_by) == expected
+def test_initial(case, expected):
+    assert pyd.initial(case) == expected
 
 
 @parametrize('case,expected', [
@@ -142,23 +108,12 @@ def test_intersection(case, expected):
     assert pyd.intersection(*case) == expected
 
 
-@parametrize('case,filter_by,expected', [
-    ([1, 2, 3], None, 3),
-    ([1, 2, 3], 2, [2, 3]),
-    ([1, 2, 3], lambda num, *args: num > 1, [2, 3]),
-    ([{'name': 'beet',   'organic': False},
-      {'name': 'carrot', 'organic': True}],
-     'organic',
-     [{'name': 'carrot', 'organic': True}]),
-    ([{'name': 'banana', 'type': 'fruit'},
-      {'name': 'beet',   'type': 'vegetable'},
-      {'name': 'carrot', 'type': 'vegetable'}],
-     {'type': 'vegetable'},
-     [{'name': 'beet', 'type': 'vegetable'},
-      {'name': 'carrot', 'type': 'vegetable'}])
+@parametrize('case,expected', [
+    ([1, 2, 3], 3),
+    ([], None)
 ])
-def test_last(case, filter_by, expected):
-    assert pyd.last(case, filter_by) == expected
+def test_last(case, expected):
+    assert pyd.last(case) == expected
 
 
 @parametrize('case,value,from_index,expected', [

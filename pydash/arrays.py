@@ -69,34 +69,9 @@ def find_last_index(array, callback):
     return n
 
 
-def first(array, callback=None):
-    """Gets the first element of the array. If a number n is passed, the first
-    n elements of the array are returned. If a callback function is passed,
-    elements at the beginning of the array are returned as long as the callback
-    returns truthy. The callback is invoked with three arguments:
-    (value, index, array). If a property name is passed for callback, the
-    created "_.pluck" style callback will return the property value of the
-    given element. If an object is passed for callback, the created "_.where"
-    style callback will return true for elements that have the properties of
-    the given object, else false.
-
-    :param list array: list to select from
-    :param mixed callback: callback to filter array
-    :rtype: mixed
-    """
-    n = 0
-    for is_true, _, _, _ in iter_callback(array, callback):
-        if is_true:
-            n += 1
-        else:
-            break
-
-    ret = array[:n]
-
-    if callback in (None, 1):
-        ret = ret[0]
-
-    return ret
+def first(array):
+    """Return the first element of `array`."""
+    return array[0] if array else None
 
 
 head = first
@@ -149,28 +124,9 @@ def index_of(array, value, from_index=0):
         return False
 
 
-def initial(array, callback=1):
-    """Gets all but the last element of array. If a number n is passed, the
-    last n elements are excluded from the result. If a callback function is
-    passed, elements at the end of the array are excluded from the result as
-    long as the callback returns truthy.
-
-    :param list array: list to query
-    :param mixed callback: The function called per element or the number of
-                           elements to exclude
-    """
-
-    lst = array[::-1]
-    n = len(array)
-    for is_true, _, _, _ in iter_callback(lst, callback):
-        if is_true:
-            n -= 1
-        else:
-            break
-
-    ret = array[:n]
-
-    return ret
+def initial(array):
+    """Return all but the last element of `array`."""
+    return array[:-1]
 
 
 def intersection(*arrays):
@@ -184,28 +140,9 @@ def intersection(*arrays):
     return list(set(arrays[0]).intersection(*arrays))
 
 
-def last(array, callback=None):
-    """Gets the last element of the array. If a number n is passed, the last n
-    elements of the array are returned. If a callback function is passed,
-    elements at the beginning of the array are returned as long as the callback
-    returns truthy. The callback is invoked with three arguments:
-    (value, index, array). If a property name is passed for callback, the
-    created "_.pluck" style callback will return the property value of the
-    given element. If an object is passed for callback, the created "_.where"
-    style callback will return true for elements that have the properties of
-    the given object, else false.
-
-    :param list array: list to select from
-    :param mixed callback: callback to filter array
-    :rtype: mixed
-    """
-
-    # reverse array, call first(), and reverse again
-    lst = first(array[::-1], callback)
-    if isinstance(lst, list):
-        lst = lst[::-1]
-
-    return lst
+def last(array):
+    """Return the last element of `array`."""
+    return array[-1] if array else None
 
 
 def last_index_of(array, value, from_index=0):
@@ -255,31 +192,9 @@ def remove(array, callback=None):
     return removed
 
 
-def rest(array, callback=None):
-    """Return all but the first value of array. If a number n is passed, the
-    first n values are excluded from the result. If a callback function is
-    passed, elements at the beginning of the array are excluded from the result
-    as long as the callback returns truthy. The callback is invoked with three
-    arguments: (value, index, array). If a property name is passed for
-    callback, the created "_.pluck" style callback will return the property
-    value of the given element. If an object is passed for callback, the
-    created "_.where" style callback will return true for elements that have
-    the properties of the given object, else false.
-
-    :param list array: the list to process
-    :param mixed callback: callback to filter by
-    :rtype: list
-    """
-    if callback is None:
-        callback = 1
-
-    n = 0
-    for is_true, _, _, _ in iter_callback(array, callback):
-        if not is_true:
-            break
-        n += 1
-
-    return array[n:]
+def rest(array):
+    """Return all but the first element of `array`."""
+    return array[1:]
 
 
 tail = rest
