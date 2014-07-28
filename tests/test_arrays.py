@@ -211,13 +211,14 @@ def test_xor(case, expected):
       {'name': 'carrot', 'type': 'vegetable'},
       {'name': 'carrot', 'type': 'vegetable'}],
      {'type': 'vegetable'},
-     [{'name': 'beet', 'type': 'vegetable'},
-      {'name': 'carrot', 'type': 'vegetable'}]),
-    ([{'x': 1, 'y': 1},
-      {'x': 2, 'y': 1},
-      {'x': 1, 'y': 1}],
+     [{'name': 'banana', 'type': 'fruit'},
+      {'name': 'beet', 'type': 'vegetable'}]),
+    ([{'x': 1, 'y': 1}, {'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
      'x',
-     [{'x': 1, 'y': 1}, {'x': 2, 'y': 1}])
+     [{'x': 1, 'y': 1}, {'x': 2, 'y': 1}]),
+    (['A', 'b', 'C', 'a', 'B', 'c'],
+     lambda letter: letter.lower(),
+     ['A', 'b', 'C'])
 ])
 def test_uniq(case, filter_by, expected):
     assert pyd.uniq(case, filter_by) == expected

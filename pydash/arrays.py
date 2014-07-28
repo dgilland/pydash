@@ -242,24 +242,16 @@ def uniq(array, callback=None):
     equality for comparisons, i.e. ===. If callback is passed, each element of
     array is passed through a callback before uniqueness is computed. The
     callback is invoked with three arguments: (value, index, array). If a
-    property name is passed for callback, the created "_.pluck" style callback
-    will return the property value of the given element. If an object is passed
-    for callback, the created "_.where" style callback will return true for
-    elements that have the properties of the given object, else false.
+    property name is passed for callback, the created :func:`pluck` style
+    callback will return the property value of the given element. If an object
+    is passed for callback, the created :func:`where` style callback will
+    return `True` for elements that have the properties of the given object,
+    else `False`.
 
     :param list array: list to process
     :param mixed callback: callback to filter array
     :rtype: list
     """
-
-    if isinstance(callback, dict):
-        # FIXME: Resolve circular imports
-        from .collections import where
-
-        # where style callback; filter list using where
-        array = where(array, callback)
-        callback = None
-
     if callback:
         cbk = make_callback(callback)
         computed = [cbk(item) for item in array]
