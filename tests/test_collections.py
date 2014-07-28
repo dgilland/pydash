@@ -116,6 +116,10 @@ def test_contains(case, expected):
 
 @parametrize('case,expected', [
     (([4.3, 6.1, 6.4], lambda num, *args: int(math.floor(num))), {4: 1, 6: 2}),
+    (([{'one': 1}, {'one': 1}, {'two': 2}, {'one': 1}], {'one': 1}),
+     {True: 3, False: 1}),
+    (([{'one': 1}, {'one': 1}, {'two': 2}, {'one': 1}], 'one'),
+     {1: 3, None: 1})
 ])
 def test_count_by(case, expected):
     assert pyd.count_by(*case) == expected
