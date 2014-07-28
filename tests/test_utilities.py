@@ -33,6 +33,11 @@ def test_constant(case):
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      [40, 36]),
+    (None,
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}])
 ])
 def test_callback(case, arg, expected):
     getter = pyd.callback(case)

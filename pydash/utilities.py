@@ -28,14 +28,16 @@ def callback(func):
     the created callback will return `True` for elements that contain the
     equivalent object properties, otherwise it will return `False`.
     """
-    if isinstance(func, string_types):
-        ret = property_(func)
+    if callable(func):
+        cbk = func
+    elif isinstance(func, string_types):
+        cbk = property_(func)
     elif isinstance(func, dict):
-        ret = matches(func)
+        cbk = matches(func)
     else:
-        ret = func
+        cbk = identity
 
-    return ret
+    return cbk
 
 
 def identity(*args):
