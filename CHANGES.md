@@ -50,6 +50,8 @@
 - Add `callback()`.
 - Add `matches()`.
 - Add `memoize()`.
+- Add `chain()`.
+- Add `tap()`.
 
 
 ## v0.0.0 (2014-07-22)

@@ -41,6 +41,17 @@ from .arrays import (
 
 
 #
+# Chaining
+#
+
+from .chaining import (
+    InvalidMethod,
+    chain,
+    tap
+)
+
+
+#
 # Collections
 #
 
