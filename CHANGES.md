@@ -32,6 +32,12 @@
 - Add `partial()`.
 - Add `partial_right()`.
 - Add `wrap()`.
+- Add `keys()`.
+- Add `omit()`.
+- Add `pairs()`.
+- Add `pick()`.
+- Add `transform()`.
+- Add `values()`.
 
 
 ## v0.0.0 (2014-07-22)

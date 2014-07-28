@@ -99,3 +99,17 @@ from .functions import (
     partial_right,
     wrap
 )
+
+
+#
+# Objects
+#
+
+from .objects import (
+    keys,
+    omit,
+    pairs,
+    pick,
+    transform,
+    values
+)

@@ -55,3 +55,10 @@ def reduce_right_callback0(a, b, *args):
 
 def noop(*args, **kargs):
     pass
+
+
+def transform_callback0(result, num, *args):
+    num *= num
+    if num % 2:
+        result.append(num)
+        return len(result) < 3
