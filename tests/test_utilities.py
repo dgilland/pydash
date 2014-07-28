@@ -1,6 +1,8 @@
 
 import time
+
 import pydash as pyd
+from pydash.collections import map_
 
 from . import fixtures
 from .fixtures import parametrize
@@ -18,6 +20,25 @@ def test_constant(case):
     assert pyd.constant(case)() == case
 
 
+@parametrize('case,arg,expected', [
+    ('name',
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     ['fred', 'barney']),
+    ({'name': 'fred'},
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     [True, False]),
+    (lambda obj, *args: obj['age'],
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     [40, 36]),
+])
+def test_callback(case, arg, expected):
+    getter = pyd.callback(case)
+    assert map_(arg, getter) == expected
+
+
 @parametrize('case,expected', [
     ((1,), 1),
     ((1, 2), 1),
@@ -25,6 +46,14 @@ def test_constant(case):
 ])
 def test_identity(case, expected):
     assert pyd.identity(*case) == expected
+
+
+@parametrize('case,arg,expected', [
+    ({'age': 36}, {'name': 'barney', 'age': 36}, True),
+    ({'age': 36}, {'name': 'barney', 'age': 40}, False),
+])
+def test_matches(case, arg, expected):
+    assert pyd.matches(case)(arg) is expected
 
 
 @parametrize('case,expected', [
@@ -37,13 +66,13 @@ def test_noop(case, expected):
 
 @parametrize('case,arg,expected', [
     ('name',
-     [{'name': 'fred',   'age': 40},
+     [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      ['fred', 'barney']),
 ])
 def test_property_(case, arg, expected):
     getter = pyd.property_(case)
-    assert pyd.map_(arg, getter) == expected
+    assert map_(arg, getter) == expected
 
 
 @parametrize('case', [

@@ -123,7 +123,9 @@ from .objects import (
 from .utilities import (
     now,
     constant,
+    callback,
     identity,
+    matches,
     noop,
     property_,
     prop,

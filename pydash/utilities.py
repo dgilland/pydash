@@ -7,7 +7,7 @@ import time
 from random import uniform, randint
 
 from .utils import make_callback
-from ._compat import _range
+from ._compat import _range, string_types
 
 
 def now():
@@ -22,9 +22,34 @@ def constant(value):
     return lambda: value
 
 
+def callback(func):
+    """Return a callback. If `func` is a property name the created callback
+    will return the property value for a given element. If `func` is an object
+    the created callback will return `True` for elements that contain the
+    equivalent object properties, otherwise it will return `False`.
+    """
+    if isinstance(func, string_types):
+        ret = property_(func)
+    elif isinstance(func, dict):
+        ret = matches(func)
+    else:
+        ret = func
+
+    return ret
+
+
 def identity(*args):
     """Return the first argument provided to it."""
     return args[0] if args else None
+
+
+def matches(source):
+    """Creates a :func:`where` style predicate function which performs a deep
+    comparison between a given object and the `source` object, returning `True`
+    if the given object has equivalent property values, else `False`.
+    """
+    return lambda obj, *args: all(item in obj.items()
+                                  for item in source.items())
 
 
 def noop(*args, **kargs):
@@ -36,7 +61,7 @@ def property_(key):
     """Creates a :func:`pluck` style function, which returns the key value of a
     given object.
     """
-    return make_callback(key)
+    return lambda obj, *args: obj.get(key)
 
 
 prop = property_

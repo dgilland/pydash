@@ -47,6 +47,8 @@
 - Add `noop()`.
 - Add `result()`.
 - Add `times()`.
+- Add `callback()`.
+- Add `matches()`.
 
 
 ## v0.0.0 (2014-07-22)
