@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 import random
 
-from .utilities import matches
+from .utilities import matches, property_
 from .utils import make_callback, iter_callback, iter_
 
 
@@ -255,7 +255,7 @@ def pluck(collection, key):
     :rtype: list
     """
     # TODO: Do we want to use get() and return None if missing or error out?
-    return [item.get(key) for item in collection]
+    return map_(collection, property_(key))
 
 
 def reduce_(collection, callback=None, accumulator=None):
