@@ -107,6 +107,7 @@ from .functions import (
 
 from .objects import (
     keys,
+    map_values,
     omit,
     pairs,
     pick,

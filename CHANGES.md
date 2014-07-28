@@ -38,6 +38,7 @@
 - Add `pick()`.
 - Add `transform()`.
 - Add `values()`.
+- Add `map_values()`.
 
 
 ## v0.0.0 (2014-07-22)

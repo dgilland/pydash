@@ -11,6 +11,17 @@ from .fixtures import parametrize
 def test_keys(case, expected):
     assert set(pyd.keys(case)) == set(expected)
 
+@parametrize('case,expected', [
+    (({'a': 1, 'b': 2, 'c': 3}, lambda num, *args: num * 3),
+     {'a': 3, 'b': 6, 'c': 9}),
+    (({'fred': {'name': 'fred', 'age': 40},
+       'pebbles': {'name': 'pebbles', 'age': 1}},
+      'age'),
+     {'fred': 40, 'pebbles': 1})
+])
+def test_map_values(case, expected):
+    assert pyd.map_values(*case) == expected
+
 
 @parametrize('case,expected', [
     (({'a': 1, 'b': 2, 'c': 3}, 'a'), {'b': 2, 'c': 3}),
