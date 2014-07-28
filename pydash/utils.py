@@ -11,6 +11,7 @@ def make_callback(callback):
     # FIXME: Resolve circular imports
     from .collections import pluck, where
 
+    # TODO: Merge this function with utilities.callback
     if callable(callback):
         cbk = callback
     elif isinstance(callback, string_types):
