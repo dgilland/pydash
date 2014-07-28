@@ -3,27 +3,8 @@
 
 from __future__ import absolute_import
 
+from .utilities import callback as make_callback
 from ._compat import string_types, iteritems
-
-
-def make_callback(callback):
-    """Create a callback function from a mixed type `callback`"""
-    # FIXME: Resolve circular imports
-    from .collections import pluck, where
-
-    # TODO: Merge this function with utilities.callback
-    if callable(callback):
-        cbk = callback
-    elif isinstance(callback, string_types):
-        cbk = lambda item, *args: pluck([item], callback)[0]
-    elif isinstance(callback, dict):
-        cbk = lambda item, *args: bool(where([item], callback))
-    elif isinstance(callback, (int, float)):
-        cbk = lambda item, i, *args: i < callback
-    else:
-        cbk = lambda item, *args: item
-
-    return cbk
 
 
 def iter_callback(collection, callback=None):

@@ -7,8 +7,8 @@ from collections import Iterable
 from bisect import bisect_left
 
 from ._compat import string_types, _range
+from .utilities import callback as make_callback
 from .utils import (
-    make_callback,
     iter_callback,
     iter_unique_set,
     iter_unique

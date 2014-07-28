@@ -6,7 +6,6 @@ from __future__ import absolute_import
 import time
 from random import uniform, randint
 
-from .utils import make_callback
 from ._compat import _range, string_types
 
 
@@ -28,7 +27,6 @@ def callback(func):
     the created callback will return `True` for elements that contain the
     equivalent object properties, otherwise it will return `False`.
     """
-    # TODO: Merge this function with utils.make_callback
     if callable(func):
         cbk = func
     elif isinstance(func, string_types):

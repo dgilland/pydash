@@ -5,8 +5,8 @@ from __future__ import absolute_import
 
 import random
 
-from .utilities import matches, property_
-from .utils import make_callback, iter_callback, iter_
+from .utilities import matches, property_, callback as make_callback
+from .utils import iter_callback, iter_
 
 
 def at(collection, *indexes):  # pylint: disable=invalid-name
