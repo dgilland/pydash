@@ -168,10 +168,7 @@ def is_boolean(value):
 def is_empty(value):
     """Checks if `value` is empty.
     """
-    if isinstance(value, (bool, float) + integer_types):
-        return True
-
-    return not bool(value)
+    return any([is_boolean(value), is_number(value), not value])
 
 
 def is_function(value):
