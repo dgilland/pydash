@@ -75,20 +75,17 @@ def test_defaults(case, expected):
     (({'barney':  {'age': 36, 'blocked': False},
        'fred':    {'age': 40, 'blocked': True},
        'pebbles': {'age': 1,  'blocked': False}},
-      lambda obj, *args: obj['age'] < 40), 'pebbles'),
+      lambda obj, *args: obj['age'] < 40), ['pebbles', 'barney']),
 ])
 def test_find_key(case, expected):
-    assert pyd.find_key(*case) == expected
+    assert pyd.find_key(*case) in expected
 
 
-@parametrize('case,expected', [
-    (({'barney':  {'age': 36, 'blocked': False},
-       'fred':    {'age': 40, 'blocked': True},
-       'pebbles': {'age': 1,  'blocked': False}},
-      lambda obj, *args: obj['age'] < 40), 'barney'),
+@parametrize('case', [
+    pyd.find_last_key
 ])
-def test_find_last_key(case, expected):
-    assert pyd.find_last_key(*case) == expected
+def test_find_key_aliases(case):
+    assert pyd.find_key is case
 
 
 @parametrize('case,expected', [

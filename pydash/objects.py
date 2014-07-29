@@ -103,17 +103,7 @@ def find_key(obj, callback):
             return key
 
 
-def find_last_key(obj, callback):
-    """This method is like `_.findKey` except that it iterates over elements of
-    a collection in the opposite order.
-    """
-    found = None
-
-    for result, _, key, _ in iter_callback(obj, callback):
-        if result:
-            found = key
-
-    return found
+find_last_key = find_key
 
 
 def for_in(obj, callback):
