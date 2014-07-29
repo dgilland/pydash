@@ -1,22 +1,26 @@
-## vx.x.x (xxxx-xx-xx)
+Changes
+=======
+
+vx.x.x (xxxx-xx-xx)
+-------------------
 
 - Add Python 2.6 and Python 3 support.
-- Add `pull()`. Thanks [nathancahill]!
-- Add `find_last_index()`. Thanks [nathancahill]!
-- Add `count_by()`. Thanks [nathancahill]!
-- Add `find_last()`. Thanks [nathancahill]!
-- Add `group_by()`. Thanks [nathancahill]!
-- Add `index_by()`. Thanks [nathancahill]!
-- Add `max_()`. Thanks [nathancahill]!
-- Add `min_()`. Thanks [nathancahill]!
-- Add `reject()`. Thanks [nathancahill]!
-- Add `sort_by()`. Thanks [nathancahill]!
-- Add `to_list()`. Thanks [nathancahill]!
-- Add `invoke()`. Thanks [nathancahill]!
-- Add `for_each()`. Thanks [nathancahill]!
-- Add `for_each_right()`. Thanks [nathancahill]!
-- Add `assign()`. Thanks [nathancahill]!
-- Add `extend()`. Thanks [nathancahill]!
+- Add `pull()`. Thanks nathancahill_!
+- Add `find_last_index()`. Thanks nathancahill_!
+- Add `count_by()`. Thanks nathancahill_!
+- Add `find_last()`. Thanks nathancahill_!
+- Add `group_by()`. Thanks nathancahill_!
+- Add `index_by()`. Thanks nathancahill_!
+- Add `max_()`. Thanks nathancahill_!
+- Add `min_()`. Thanks nathancahill_!
+- Add `reject()`. Thanks nathancahill_!
+- Add `sort_by()`. Thanks nathancahill_!
+- Add `to_list()`. Thanks nathancahill_!
+- Add `invoke()`. Thanks nathancahill_!
+- Add `for_each()`. Thanks nathancahill_!
+- Add `for_each_right()`. Thanks nathancahill_!
+- Add `assign()`. Thanks nathancahill_!
+- Add `extend()`. Thanks nathancahill_!
 - Add `remove()`.
 - Add `xor()`.
 - Add `sample()`.
@@ -57,7 +61,8 @@
 - Add `unique_id()`.
 
 
-## v0.0.0 (2014-07-22)
+v0.0.0 (2014-07-22)
+-------------------
 
 - Add `all_()`.
 - Add `any_()`.
@@ -129,4 +134,4 @@
 - Add `zip_object()`.
 
 
-[nathancahill]: https://github.com/nathancahill
+.. _nathancahill: https://github.com/nathancahill
