@@ -64,6 +64,135 @@ def test_invert(case, expected):
 
 
 @parametrize('case,expected', [
+    (({'name': 'barney'}, {'name': 'fred', 'employer': 'slate'}),
+     {'name': 'barney', 'employer': 'slate'}),
+])
+def test_defaults(case, expected):
+    assert pyd.defaults(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({'barney':  {'age': 36, 'blocked': False},
+       'fred':    {'age': 40, 'blocked': True},
+       'pebbles': {'age': 1,  'blocked': False}},
+      lambda obj, *args: obj['age'] < 40), ['pebbles', 'barney']),
+])
+def test_find_key(case, expected):
+    assert pyd.find_key(*case) in expected
+
+
+@parametrize('case', [
+    pyd.find_last_key
+])
+def test_find_key_aliases(case):
+    assert pyd.find_key is case
+
+
+@parametrize('case,expected', [
+    (({'name': 'fred', 'employer': 'slate'}, lambda *args: fixtures.noop),
+     {'name': 'fred', 'employer': 'slate'}),
+    (({'name': 'fred', 'employer': 'slate'}, lambda *args: False),
+     {'name': 'fred', 'employer': 'slate'}),
+])
+def test_for_in(case, expected):
+    assert pyd.for_in(*case) == expected
+
+
+@parametrize('case', [
+    pyd.for_in_right,
+    pyd.for_own,
+    pyd.for_own_right,
+])
+def test_for_in_aliases(case):
+    assert pyd.for_in is case
+
+
+@parametrize('case,expected', [
+    (({'name': 'fred', 'greet': lambda: 'Hello, world!'},), ['greet']),
+])
+def test_functions_(case, expected):
+    assert pyd.functions_(*case) == expected
+
+
+@parametrize('case', [
+    pyd.methods,
+])
+def test_functions_aliases(case):
+    assert pyd.functions_ is case
+
+
+@parametrize('case,expected', [
+    (({'a': 1, 'b': 2, 'c': 3}, 'b'), True),
+])
+def test_has(case, expected):
+    assert pyd.has(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3],), True),
+])
+def test_is_list(case, expected):
+    assert pyd.is_list(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((True,), True),
+    ((False,), True),
+    ((0,), False),
+    (('',), False),
+])
+def test_is_boolean(case, expected):
+    assert pyd.is_boolean(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((True,), True),
+    ((0,), True),
+    ((123.45,), True),
+    (('',), True),
+    (({},), True),
+    (([],), True),
+    (('Hello',), False),
+    ((['Hello', 'World'],), False),
+])
+def test_is_empty(case, expected):
+    assert pyd.is_empty(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((lambda x: x + 1,), True),
+    (('Hello, world!',), False),
+])
+def test_is_function(case, expected):
+    assert pyd.is_function(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((None,), True),
+    ((0,), False),
+])
+def test_is_none(case, expected):
+    assert pyd.is_none(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('',), True),
+    (('Hello, world!',), True),
+])
+def test_is_string(case, expected):
+    assert pyd.is_string(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((0,), True),
+    ((123456789123456789123456789,), True),
+    ((123.45,), True),
+])
+def test_is_number(case, expected):
+    assert pyd.is_number(*case) == expected
+
+
+@parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, ['a', 'b', 'c'])
 ])
 def test_keys(case, expected):

@@ -8,7 +8,13 @@ import copy
 from .arrays import flatten
 from .utilities import identity
 from .utils import iter_, iter_callback
-from ._compat import iteritems, itervalues, iterkeys
+from ._compat import (
+    iteritems,
+    itervalues,
+    iterkeys,
+    integer_types,
+    string_types,
+)
 
 
 def assign(obj, *sources, **kargs):
@@ -77,6 +83,60 @@ def clone_deep(value, callback=None):
     return clone(value, is_deep=True, callback=callback)
 
 
+def defaults(obj, *sources):
+    """Assigns own enumerable properties of source object(s) to the destination
+    object for all destination properties that resolve to undefined.
+    """
+    for source in sources:
+        for key, value in iteritems(source):
+            obj.setdefault(key, value)
+
+    return obj
+
+
+def find_key(obj, callback):
+    """This method is like `_.findIndex` except that it returns the key of the
+    first element that passes the callback check, instead of the element itself
+    """
+    for result, _, key, _ in iter_callback(obj, callback):
+        if result:
+            return key
+
+
+find_last_key = find_key
+
+
+def for_in(obj, callback):
+    """Iterates over own and inherited enumerable properties of `obj`,
+    executing `callback` for each property.
+    """
+    for result, _, _, _ in iter_callback(obj, callback):
+        if result is False:
+            break
+
+    return obj
+
+
+for_in_right = for_in
+for_own = for_in
+for_own_right = for_in
+
+
+def functions_(obj):
+    """Creates a list of keys of an object that are callable.
+    """
+    return [key for key, value in iteritems(obj) if callable(value)]
+
+
+methods = functions_
+
+
+def has(obj, key):
+    """Checks if `key` exists as a key of `obj`.
+    """
+    return key in obj
+
+
 def invert(obj):
     """Creates an object composed of the inverted keys and values of the given
     object.
@@ -91,6 +151,48 @@ def invert(obj):
         Assumes `dict` values are hashable as `dict` keys.
     """
     return dict((value, key) for key, value in iteritems(obj))
+
+
+def is_list(value):
+    """Checks if `value` is a list.
+    """
+    return isinstance(value, list)
+
+
+def is_boolean(value):
+    """Checks if `value` is a boolean value.
+    """
+    return isinstance(value, bool)
+
+
+def is_empty(value):
+    """Checks if `value` is empty.
+    """
+    return any([is_boolean(value), is_number(value), not value])
+
+
+def is_function(value):
+    """Checks if `value` is a function.
+    """
+    return callable(value)
+
+
+def is_none(value):
+    """Checks if `value` is `None`.
+    """
+    return value is None
+
+
+def is_number(value):
+    """Checks if `value` is a number.
+    """
+    return isinstance(value, integer_types + (float,))
+
+
+def is_string(value):
+    """Checks if `value` is a string.
+    """
+    return isinstance(value, string_types)
 
 
 def keys(obj):
