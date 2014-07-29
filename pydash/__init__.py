@@ -138,7 +138,6 @@ from .objects import (
     for_own,
     for_own_right,
     functions_,
-    functions_ as functions,
     has,
     invert,
     is_list,
