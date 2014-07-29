@@ -15,16 +15,13 @@ def assign(obj, *sources, **kargs):
     sources = list(sources)
     callback = kargs.get('callback')
 
-    if callback is None:
-        if callable(sources[-1]):
-            callback = sources.pop(-1)
+    if callback is None and callable(sources[-1]):
+        callback = sources.pop()
 
     for source in sources:
-        for key, value in source.items():
-            if callback is None:
-                obj[key] = value
-            else:
-                obj[key] = callback(obj.get(key, None), value)
+        for key, value in iteritems(source):
+            obj[key] = (value if callback is None
+                        else callback(obj.get(key), value))
 
     return obj
 
