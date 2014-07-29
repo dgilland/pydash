@@ -26,6 +26,9 @@ def assign(obj, *sources, **kargs):
     return obj
 
 
+extend = assign
+
+
 def keys(obj):
     """Creates a list composed of the keys of `obj`."""
     return list(iterkeys(obj))

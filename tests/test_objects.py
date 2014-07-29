@@ -17,6 +17,13 @@ def test_assign(case, expected):
     assert pyd.assign(*case) == expected
 
 
+@parametrize('case', [
+    pyd.extend
+])
+def test_assign_aliases(case):
+    assert pyd.assign is case
+
+
 @parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, ['a', 'b', 'c'])
 ])

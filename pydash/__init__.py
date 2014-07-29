@@ -127,6 +127,7 @@ from .functions import (
 
 from .objects import (
     assign,
+    extend,
     keys,
     map_values,
     omit,
