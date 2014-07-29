@@ -195,14 +195,9 @@ def invoke(collection, method_name, *args):
 
     for item in collection:
         if callable(method_name):
-            result = method_name(item, *args)
+            lst.append(method_name(item, *args))
         else:
-            result = getattr(item, method_name)(*args)
-
-        if result is None:
-            lst.append(item)
-        else:
-            lst.append(result)
+            lst.append(getattr(item, method_name)(*args))
 
     return lst
 

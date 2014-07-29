@@ -216,7 +216,11 @@ def test_index_by(case, expected):
 
 
 @parametrize('case,expected', [
-    (([[5, 1, 7], [3, 2, 1]], 'sort'), [[1, 5, 7], [1, 2, 3]]),
+    (([[5, 1, 7], [3, 2, 1]], 'sort'), [None, None]),
+    (([[5, 1, 7], [3, 2, 1]], lambda lst: sorted(lst)),
+     [[1, 5, 7], [1, 2, 3]]),
+    (([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], 'get', 'a'), [1, 3]),
+    (([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], 'get', 'c'), [None, None]),
     ((['anaconda', 'bison', 'cat'], 'count', 'a'), [3, 0, 1]),
     (([1, 2, 3], lambda item, num: item + num, 1), [2, 3, 4]),
 ])
