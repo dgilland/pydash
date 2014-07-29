@@ -9,7 +9,9 @@ from .fixtures import parametrize
 
 
 def test_now():
-    assert pyd.now() == int(time.time() * 1000)
+    present = int(time.time() * 1000)
+    # Add some leeway when comparing time.
+    assert (present - 1) <= pyd.now() <= (present + 1)
 
 
 @parametrize('case', [
