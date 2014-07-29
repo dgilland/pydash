@@ -59,6 +59,7 @@ vx.x.x (xxxx-xx-xx)
 - Add `chain()`.
 - Add `tap()`.
 - Add `unique_id()`.
+- Add `invert()`.
 
 
 v0.0.0 (2014-07-22)

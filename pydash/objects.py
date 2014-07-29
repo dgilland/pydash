@@ -29,6 +29,22 @@ def assign(obj, *sources, **kargs):
 extend = assign
 
 
+def invert(obj):
+    """Creates an object composed of the inverted keys and values of the given
+    object.
+
+    Args:
+        obj (dict): dict to invert
+
+    Returns:
+        dict: Inverted dict
+
+    Note:
+        Assumes `dict` values are hashable as `dict` keys.
+    """
+    return dict((value, key) for key, value in iteritems(obj))
+
+
 def keys(obj):
     """Creates a list composed of the keys of `obj`."""
     return list(iterkeys(obj))

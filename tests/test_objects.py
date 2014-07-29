@@ -25,6 +25,13 @@ def test_assign_aliases(case):
 
 
 @parametrize('case,expected', [
+    ({'a': 1, 'b': 2, 'c': 3}, {1: 'a', 2: 'b', 3: 'c'})
+])
+def test_invert(case, expected):
+    assert pyd.invert(case) == expected
+
+
+@parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, ['a', 'b', 'c'])
 ])
 def test_keys(case, expected):

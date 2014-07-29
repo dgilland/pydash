@@ -128,6 +128,7 @@ from .functions import (
 from .objects import (
     assign,
     extend,
+    invert,
     keys,
     map_values,
     omit,
