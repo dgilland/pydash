@@ -8,6 +8,27 @@ from .utils import iter_, iter_callback
 from ._compat import iteritems, itervalues, iterkeys
 
 
+def assign(obj, *sources, **kargs):
+    """Assigns own enumerable properties of source object(s) to the destination
+    object.
+    """
+    sources = list(sources)
+    callback = kargs.get('callback')
+
+    if callback is None:
+        if callable(sources[-1]):
+            callback = sources.pop(-1)
+
+    for source in sources:
+        for key, value in source.items():
+            if callback is None:
+                obj[key] = value
+            else:
+                obj[key] = callback(obj.get(key, None), value)
+
+    return obj
+
+
 def keys(obj):
     """Creates a list composed of the keys of `obj`."""
     return list(iterkeys(obj))
