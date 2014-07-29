@@ -127,6 +127,8 @@ from .functions import (
 
 from .objects import (
     assign,
+    clone,
+    clone_deep,
     extend,
     invert,
     keys,

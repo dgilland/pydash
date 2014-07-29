@@ -1,5 +1,6 @@
 
 import pydash as pyd
+from pydash.utils import iter_
 
 from . import fixtures
 from .fixtures import parametrize
@@ -22,6 +23,37 @@ def test_assign(case, expected):
 ])
 def test_assign_aliases(case):
     assert pyd.assign is case
+
+
+@parametrize('case,args', [
+    ({'a': {'d': 1}, 'b': {'c': 2}}, ()),
+    ({'a': {'d': 1}, 'b': {'c': 2}}, (False, lambda v: v)),
+    ([{'a': {'d': 1}, 'b': {'c': 2}}], ())
+])
+def test_clone(case, args):
+    actual = pyd.clone(case, *args)
+
+    assert actual is not case
+
+    for key, value in iter_(actual):
+        assert value is case[key]
+
+
+@parametrize('case,kargs', [
+    ({'a': {'d': 1}, 'b': {'c': 2}}, {}),
+    ({'a': {'d': 1}, 'b': {'c': 2}}, {'callback': lambda v: v}),
+    ([{'a': {'d': 1}, 'b': {'c': 2}}], {})
+])
+def test_clone_deep(case, kargs):
+    kargs['is_deep'] = True
+    actuals = [pyd.clone(case, **kargs),
+               pyd.clone_deep(case, callback=kargs.get('callback'))]
+
+    for actual in actuals:
+        assert actual is not case
+
+        for key, value in iter_(actual):
+            assert value is not case[key]
 
 
 @parametrize('case,expected', [

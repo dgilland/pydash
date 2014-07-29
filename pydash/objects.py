@@ -3,7 +3,10 @@
 
 from __future__ import absolute_import
 
+import copy
+
 from .arrays import flatten
+from .utilities import identity
 from .utils import iter_, iter_callback
 from ._compat import iteritems, itervalues, iterkeys
 
@@ -27,6 +30,51 @@ def assign(obj, *sources, **kargs):
 
 
 extend = assign
+
+
+def clone(value, is_deep=False, callback=None):
+    """Creates a clone of ``value``. If ``is_deep`` is ``True`` nested valueects
+    will also be cloned, otherwise they will be assigned by reference. If a
+    callback is provided it will be executed to produce the cloned values. The
+    callback is invoked with one argument: (value).
+
+    Args:
+        value (mixed): dict or list to clone
+        is_deep (bool, optional): whether to perform deep clone
+        callback (mixed, optional): function that provides cloned values
+
+    Returns:
+        mixed: cloned dict or list
+    """
+    if callback is None:
+        callback = identity
+
+    copier = copy.deepcopy if is_deep else copy.copy
+    value = copier(value)
+
+    obj = [(key, callback(val)) for key, val in iter_(value)]
+
+    if isinstance(value, list):
+        obj = [val for _, val in obj]
+    else:
+        obj = dict(obj)
+
+    return obj
+
+
+def clone_deep(value, callback=None):
+    """Creates a deep clone of ``value``. If a callback is provided it will be
+    executed to produce the cloned values. The callback is invoked with one
+    argument: (value).
+
+    Args:
+        value (mixed): dict or list to clone
+        callback (mixed, optional): function that provides cloned values
+
+    Returns:
+        dict: cloned dict
+    """
+    return clone(value, is_deep=True, callback=callback)
 
 
 def invert(obj):

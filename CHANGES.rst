@@ -9,6 +9,8 @@ vx.x.x (xxxx-xx-xx)
 - Add ``assign()`` and ``extend()``. Thanks nathancahill_!
 - Add ``callback()`` and ``create_callback()``.
 - Add ``chain()``.
+- Add ``clone()``.
+- Add ``clone_deep()``.
 - Add ``compose()``.
 - Add ``constant()``.
 - Add ``count_by()``. Thanks nathancahill_!
