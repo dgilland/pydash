@@ -108,7 +108,9 @@ def test_property_aliases(case):
 ])
 def test_random(case, minimum, maximum):
     for _ in range(50):
-        assert minimum <= pyd.random(*case) <= maximum
+        rnd = pyd.random(*case)
+        assert isinstance(rnd, int)
+        assert minimum <= rnd <= maximum
 
 
 @parametrize('case,floating,minimum,maximum', [
