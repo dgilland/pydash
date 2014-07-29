@@ -144,6 +144,7 @@ def unique_id(prefix=None):
     """Generates a unique ID. If `prefix` is provided the ID will be appended
     to  it.
     """
+    # pylint: disable=global-statement
     global ID_COUNTER
     ID_COUNTER += 1
 
