@@ -162,15 +162,13 @@ def is_list(value):
 def is_boolean(value):
     """Checks if `value` is a boolean value.
     """
-    return type(value) is bool
+    return isinstance(value, bool)
 
 
 def is_empty(value):
     """Checks if `value` is empty.
     """
-    if (type(value) is bool or
-       type(value) in integer_types or
-       type(value) is float):
+    if isinstance(value, (bool, float) + integer_types):
         return True
 
     return not bool(value)
@@ -191,13 +189,13 @@ def is_none(value):
 def is_number(value):
     """Checks if `value` is a number.
     """
-    return type(value) in integer_types or type(value) is float
+    return isinstance(value, integer_types + (float,))
 
 
 def is_string(value):
     """Checks if `value` is a string.
     """
-    return type(value) in string_types
+    return isinstance(value, string_types)
 
 
 def keys(obj):
