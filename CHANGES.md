@@ -15,6 +15,7 @@
 - Add `invoke()`. Thanks [nathancahill]!
 - Add `for_each()`. Thanks [nathancahill]!
 - Add `for_each_right()`. Thanks [nathancahill]!
+- Add `assign()`. Thanks [nathancahill]!
 - Add `remove()`.
 - Add `xor()`.
 - Add `sample()`.
