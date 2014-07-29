@@ -42,6 +42,9 @@ def callback(func):
     return cbk
 
 
+create_callback = callback
+
+
 def identity(*args):
     """Return the first argument provided to it."""
     return args[0] if args else None

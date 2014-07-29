@@ -44,6 +44,13 @@ def test_callback(case, arg, expected):
     assert map_(arg, getter) == expected
 
 
+@parametrize('case', [
+    pyd.create_callback
+])
+def test_callback_aliases(case):
+    assert pyd.callback is case
+
+
 @parametrize('case,expected', [
     ((1,), 1),
     ((1, 2), 1),
