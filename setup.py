@@ -6,6 +6,7 @@ Python port of Lodash.
 
 Project: https://github.com/dgilland/pydash
 """
+
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 import sys
@@ -60,9 +61,12 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Utilities',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
