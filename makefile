@@ -1,4 +1,4 @@
-.PHONY: build clean clean-env clean-files install test pytest test-full test-setuppy lint pep8 pylint release travisci-install travisci-test
+.PHONY: build clean clean-env clean-files install test pytest test-full test-setuppy lint pep8 pylint docs release travisci-install travisci-test
 
 ##
 # Variables
@@ -75,6 +75,10 @@ release:
 	$(ENV_ACT) python setup.py sdist bdist_wheel
 	$(ENV_ACT) twine upload dist/*
 	rm -rf dist *.egg* build
+
+# docs
+docs:
+	cd docs; make html
 
 ##
 # TravisCI
