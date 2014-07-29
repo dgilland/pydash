@@ -156,7 +156,7 @@ def invert(obj):
 def is_list(value):
     """Checks if `value` is a list.
     """
-    return type(value) is list
+    return isinstance(value, list)
 
 
 def is_boolean(value):
