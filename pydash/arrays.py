@@ -18,8 +18,11 @@ from .utils import (
 def compact(array):
     """Creates a list with all falsey values of array removed.
 
-    :param list array: list to compact
-    :rtype: list
+    Args:
+        array (list): list to compact
+
+    Returns:
+        list: Compacted list
     """
     return [item for item in array if item]
 
@@ -27,22 +30,29 @@ def compact(array):
 def difference(array, *lists):
     """Creates a list of list elements not present in the other lists
 
-    :param list array: the list to process
-    :param list lists: lists to check
-    :rtype: list
+    Args:
+        array (list): the list to process
+        lists (list): lists to check
+
+    Returns:
+        list: the difference of the lists
     """
     return (list(difference(set(array).difference(lists[0]),
                             *lists[1:])) if lists
             else array)
 
 
-def find_index(array, callback):
-    """This method is similar to _.find, except that it returns the index of
-    the element that passes the callback check, instead of the element itself.
+def find_index(array, callback=None):
+    """This method is similar to :func:`pydash.collections.find`, except that
+    it returns the index of the element that passes the callback check, instead
+    of the element itself.
 
-    :param list array: list to process
-    :param function callback: filter function or where dict
-    :rtype: list
+    Args:
+        array (list): list to process
+        callback (mixed, optional): callback applied per iteration
+
+    Returns:
+        int: index of found item
     """
     n = -1
     for is_true, _, i, _ in iter_callback(array, callback):
@@ -53,13 +63,16 @@ def find_index(array, callback):
     return n
 
 
-def find_last_index(array, callback):
+def find_last_index(array, callback=None):
     """This method is similar to :func:`find_index`, except that it iterates
     over elements from right to left.
 
-    :param list array: list to process
-    :param function callback: filter function or where dict
-    :rtype: list
+    Args:
+        array (list): list to process
+        callback (mixed, optional): callback applied per iteration
+
+    Returns:
+        int: index of found item
     """
     n = find_index(reversed(array), callback)
 
@@ -84,9 +97,13 @@ def flatten(array, callback=None, _depth=0):
     passed, each element of array is passed through a callback before
     flattening.
 
-    :param list array: list to flatten
-    :param mixed callback: callback to filter array
-    :rtype: list
+    Args:
+        array (list): list to flatten
+        callback (mixed, optional): callback applied per iteration (if `True`
+            then return shallow flatten)
+
+    Returns:
+        list: flattened list
     """
 
     shallow = False
@@ -113,10 +130,13 @@ def flatten(array, callback=None, _depth=0):
 def index_of(array, value, from_index=0):
     """Gets the index at which the first occurrence of value is found.
 
-    :param list array: list to search
-    :param mixed value: value to search for
-    :param integer from_index: the index to search from
-    :rtype: integer
+    Args:
+        array (list): list to search
+        value (mixed): value to search for
+        from_index (int, optional): the index to search from
+
+    Returns:
+        int: index of found item or ``False`` if not found
     """
     try:
         return array.index(value, from_index)
@@ -133,8 +153,11 @@ def intersection(*arrays):
     """Computes the intersection of all the passed-in arrays using strict
     equality for comparisons, i.e. ===.
 
-    :param list arrays: arrays to process
-    :rtype: list
+    Args:
+        arrays (list): arrays to process
+
+    Returns:
+        list: the intersection of provided lists
     """
 
     return list(set(arrays[0]).intersection(*arrays))
@@ -148,10 +171,13 @@ def last(array):
 def last_index_of(array, value, from_index=0):
     """Gets the index at which the first occurrence of value is found
 
-    :param list array: list to search
-    :param mixed value: value to search for
-    :param integer from_index: the index to search from
-    :rtype: integer
+    Args:
+        array (list): list to search
+        value (mixed): value to search for
+        from_index (int, optional): the index to search from
+
+    Returns:
+        int: index of found item or ``False`` if not found
     """
     # reverse array, call index_of(), and subtract from max index
     return len(array) - 1 - index_of(array[::-1], value, from_index)
@@ -161,9 +187,15 @@ def pull(array, *values):
     """Removes all provided values from the given array using strict equality
     for comparisons, i.e. ===.
 
-    :param list array: list to modify
-    :param values: values to remove
-    :rtype: list
+    Args:
+        array (list): list to modify
+        values (mixed): values to remove
+
+    Returns
+        list: modified array
+
+    Warning:
+        Modified array in place
     """
     for value in values:
         while array.count(value) > 0:
@@ -212,10 +244,13 @@ def sorted_index(array, value, callback=None):
     created :func:`pydash.collections.where` style callback will return true
     for elements that have the properties of the given object, else ``False``.
 
-    :param list array: list to inspect
-    :param mixed value: value to evaluate
-    :param mixed callback: callback to determine sort key
-    :rtype: integer
+    Args:
+        array (list): list to inspect
+        value (mixed): value to evaluate
+        callback (mixed, optional): callback to determine sort key
+
+    Returns:
+        int: smallest index
     """
 
     if callback:
@@ -231,8 +266,11 @@ def union(*arrays):
     """Computes the union of the passed-in arrays using strict equality for
     comparisons, i.e. ===.
 
-    :param list arrays: lists to unionize
-    :rtype: list
+    Args:
+        arrays (list): lists to unionize
+
+    Returns:
+        list: unionized list
     """
     return uniq(flatten(arrays))
 
@@ -248,9 +286,12 @@ def uniq(array, callback=None):
     created :func:`where` style callback will return ``True`` for elements that
     have the properties of the given object, else ``False``.
 
-    :param list array: list to process
-    :param mixed callback: callback to filter array
-    :rtype: list
+    Args:
+        array (list): list to process
+        callback (mixed, optional): callback applied per iteration
+
+    Returns:
+        list: uniqued list
     """
     if callback:
         cbk = make_callback(callback)
@@ -277,9 +318,12 @@ def without(array, *values):
     """Creates an array with all occurrences of the passed values removed using
     strict equality for comparisons, i.e. ===.
 
-    :param list array: list to filter
-    :param mixed values: values to remove
-    :rtype: list
+    Args:
+        array (list): list to filter
+        values (mixed): values to remove
+
+    Returns:
+        list: filtered list
     """
     return [a for a in array if a not in values]
 
@@ -297,8 +341,11 @@ def zip_(*arrays):
     Useful for separate data sources that are coordinated through matching
     array indexes.
 
-    :param list arrays: lists to process
-    :rtype: list
+    Args:
+        arrays (list): lists to process
+
+    Returns:
+        list: zipped list
     """
     # zip returns as a list of tuples so convert to list of lists
     return [list(item) for item in zip(*arrays)]
@@ -309,8 +356,11 @@ def unzip(array):
     elements into lists composed of elements from each group at their
     corresponding indexes.
 
-    :param list array: list to process
-    :rtype: list
+    Args:
+        array (list): list to process
+
+    Returns:
+        list: unzipped list
     """
     return zip_(*array)
 
@@ -320,9 +370,12 @@ def zip_object(keys, values=None):
     single two dimensional list, i.e. ``[[key1, value1], [key2, value2]]``, or
     two lists, one of keys and one of corresponding values.
 
-    :param list keys: either a list of keys or a list of ``[key, value]`` pairs
-    :param list values: list of values
-    :rtype: dict
+    Args:
+        keys (list): either a list of keys or a list of ``[key, value]`` pairs
+        values (list, optional): list of values to zip
+
+    Returns:
+        dict: zipped dict
     """
 
     if values is None:

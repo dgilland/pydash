@@ -11,13 +11,17 @@ from .utils import iter_callback, iter_
 
 
 def at(collection, *indexes):  # pylint: disable=invalid-name
-    """Creates an array of elements from the specified indexes, or keys, of the
+    """Creates an list of elements from the specified indexes, or keys, of the
     collection. Indexes may be specified as individual arguments or as arrays
     of indexes.
 
-    :param iterable collection: the collection to iterate over
-    :param mixed indexes: the indexes of `collection` to retrieve, specified as
-                          individual indexes or arrays of indexes
+    Args:
+        collection (iterable): collection to iterate over
+        indexes (mixed): the indexes of `collection` to retrieve, specified as
+            individual indexes or arrays of indexes
+
+    Returns:
+        list: filtered list
     """
     indexes = flatten(indexes)
     return [collection[i] for i in indexes]
@@ -60,14 +64,17 @@ def every(collection, callback=None):
     """Checks if the callback returns a truthy value for all elements of a
     collection. The callback is invoked with three arguments:
     (value, index|key, collection). If a property name is passed for callback,
-    the created "_.pluck" style callback will return the property value of the
-    given element. If an object is passed for callback, the created "_.where"
-    style callback will return true for elements that have the properties of
-    the given object, else false.
+    the created :func:`pluck` style callback will return the property value of
+    the given element. If an object is passed for callback, the created
+    :func:`where` style callback will return true for elements that have the
+    properties of the given object, else ``False``.
 
-    :param iterable collection: the collection to iterate over
-    :param mixed callback: function called per iteration
-    :rtype: boolean
+    Args:
+        collection (iterable): collection to iterate over
+        callback (mixed, optional): callback applied per iteration
+
+    Returns:
+        bool: whether all elements are truthy
     """
 
     if callback:
@@ -204,14 +211,17 @@ def map_(collection, callback=None):
     """Creates an array of values by running each element in the collection
     through the callback. The callback is invoked with three arguments:
     (value, index|key, collection). If a property name is passed for callback,
-    the created "_.pluck" style callback will return the property value of the
-    given element. If an object is passed for callback, the created "_.where"
-    style callback will return true for elements that have the properties of
-    the given object, else false.
+    the created :func:`pluck` style callback will return the property value of
+    the given element. If an object is passed for callback, the created
+    :func:`where` style callback will return true for elements that have the
+    properties of the given object, else false.
 
-    :param iterable collection: the collection to iterate over
-    :param mixed callback: function called per iteration
-    :rtype: list
+    Args:
+        collection (iterable): collection to iterate over
+        callback (mixed, optional): callback applied per iteration
+
+    Returns:
+        list: mapped list
     """
     if not callback:
         callback = lambda value, *args: value
@@ -248,9 +258,12 @@ def pluck(collection, key):
     """Retrieves the value of a specified property from all elements in the
     collection.
 
-    :param collection: a list of dicts
-    :param key: the key value to pluck
-    :rtype: list
+    Args:
+        collection (iterable): list of dicts
+        key (str): collection's key to pluck
+
+    Returns:
+        list: plucked list
     """
     # TODO: Do we want to use get() and return None if missing or error out?
     return map_(collection, property_(key))
@@ -342,14 +355,17 @@ def some(collection, callback=None):
     """Checks if the callback returns a truthy value for any element of a
     collection. The callback is invoked with three arguments:
     (value, index|key, collection). If a property name is passed for callback,
-    the created "_.pluck" style callback will return the property value of the
-    given element. If an object is passed for callback, the created "_.where"
-    style callback will return true for elements that have the properties of
-    the given object, else false.
+    the created :func:`pluck` style callback will return the property value of
+    the given element. If an object is passed for callback, the created
+    :func:`where` style callback will return true for elements that have the
+    properties of the given object, else false.
 
-    :param iterable collection: the collection to iterate over
-    :param mixed callback: function called per iteration
-    :rtype: boolean
+    Args:
+        collection (iterable): collection to iterate over
+        callbacked (mixed, optional): callback applied per iteration
+
+    Returns:
+        bool: whether any of the elements are truthy
     """
 
     if callback:
@@ -378,8 +394,11 @@ def where(collection, properties):
     """Examines each element in a collection, returning an array of all
     elements that have the given properties.
 
-    :param collection: a list of dicts
-    :param properties: the dict of property values to filter by
-    :rtype: list
+    Args:
+        collection (iterable): collection to iterate over
+        properties (dict): property values to filter by
+
+    Returns:
+        list: filtered list
     """
     return filter_(collection, matches(properties))
