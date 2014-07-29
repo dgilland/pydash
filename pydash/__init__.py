@@ -154,5 +154,6 @@ from .utilities import (
     prop,
     random,
     result,
-    times
+    times,
+    unique_id
 )

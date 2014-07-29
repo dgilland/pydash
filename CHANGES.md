@@ -54,6 +54,7 @@
 - Add `memoize()`.
 - Add `chain()`.
 - Add `tap()`.
+- Add `unique_id()`.
 
 
 ## v0.0.0 (2014-07-22)

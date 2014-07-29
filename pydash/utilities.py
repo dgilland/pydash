@@ -6,7 +6,10 @@ from __future__ import absolute_import
 import time
 from random import uniform, randint
 
-from ._compat import _range, string_types
+from ._compat import _range, string_types, text_type
+
+
+ID_COUNTER = 0
 
 
 def now():
@@ -132,3 +135,13 @@ def times(n, callback):
     callback execution. The callback is invoked with one argument: (index).
     """
     return [callback(index) for index in _range(n)]
+
+
+def unique_id(prefix=None):
+    """Generates a unique ID. If `prefix` is provided the ID will be appended
+    to  it.
+    """
+    global ID_COUNTER
+    ID_COUNTER += 1
+
+    return text_type('' if prefix is None else prefix) + text_type(ID_COUNTER)

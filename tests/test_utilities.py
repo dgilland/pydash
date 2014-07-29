@@ -145,3 +145,11 @@ def test_result(case, expected):
 ])
 def test_times(case, expected):
     assert pyd.times(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((), '1'),
+    (('foo',), 'foo2')
+])
+def test_unique_id(case, expected):
+    assert pyd.unique_id(*case) == expected
