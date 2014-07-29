@@ -40,3 +40,6 @@ nosetests.xml
 
 # NodeJS
 node_modules
+
+# Docs
+/docs/_build

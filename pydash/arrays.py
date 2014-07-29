@@ -54,8 +54,8 @@ def find_index(array, callback):
 
 
 def find_last_index(array, callback):
-    """This method is similar to _.find_index, except that it iterates over
-    elements from right to left.
+    """This method is similar to :func:`find_index`, except that it iterates
+    over elements from right to left.
 
     :param list array: list to process
     :param function callback: filter function or where dict
@@ -133,7 +133,7 @@ def intersection(*arrays):
     """Computes the intersection of all the passed-in arrays using strict
     equality for comparisons, i.e. ===.
 
-    :param list *arrays: arrays to process
+    :param list arrays: arrays to process
     :rtype: list
     """
 
@@ -162,7 +162,7 @@ def pull(array, *values):
     for comparisons, i.e. ===.
 
     :param list array: list to modify
-    :param *values: values to remove
+    :param values: values to remove
     :rtype: list
     """
     for value in values:
@@ -206,11 +206,11 @@ def sorted_index(array, value, callback=None):
     array in order to maintain the sort order of the sorted array. If callback
     is passed, it will be executed for value and each element in array to
     compute their sort ranking. The callback is invoked with one argument:
-    (value). If a property name is passed for callback, the created "_.pluck"
-    style callback will return the property value of the given element. If an
-    object is passed for callback, the created "_.where" style callback will
-    return true for elements that have the properties of the given object, else
-    false.
+    (value). If a property name is passed for callback, the created
+    :func:`pydash.collection.pluck` style callback will return the property
+    value of the given element. If an object is passed for callback, the
+    created :func:`pydash.collections.where` style callback will return true
+    for elements that have the properties of the given object, else ``False``.
 
     :param list array: list to inspect
     :param mixed value: value to evaluate
@@ -231,7 +231,7 @@ def union(*arrays):
     """Computes the union of the passed-in arrays using strict equality for
     comparisons, i.e. ===.
 
-    :param list *arrays: lists to unionize
+    :param list arrays: lists to unionize
     :rtype: list
     """
     return uniq(flatten(arrays))
@@ -242,11 +242,11 @@ def uniq(array, callback=None):
     equality for comparisons, i.e. ===. If callback is passed, each element of
     array is passed through a callback before uniqueness is computed. The
     callback is invoked with three arguments: (value, index, array). If a
-    property name is passed for callback, the created :func:`pluck` style
-    callback will return the property value of the given element. If an object
-    is passed for callback, the created :func:`where` style callback will
-    return `True` for elements that have the properties of the given object,
-    else `False`.
+    property name is passed for callback, the created
+    :func:`pydash.collection.pluck` style callback will return the property
+    value of the given element. If an object is passed for callback, the
+    created :func:`where` style callback will return ``True`` for elements that
+    have the properties of the given object, else ``False``.
 
     :param list array: list to process
     :param mixed callback: callback to filter array
@@ -278,7 +278,7 @@ def without(array, *values):
     strict equality for comparisons, i.e. ===.
 
     :param list array: list to filter
-    :param mixed *values: values to remove
+    :param mixed values: values to remove
     :rtype: list
     """
     return [a for a in array if a not in values]
@@ -297,7 +297,7 @@ def zip_(*arrays):
     Useful for separate data sources that are coordinated through matching
     array indexes.
 
-    :param list *arrays: lists to process
+    :param list arrays: lists to process
     :rtype: list
     """
     # zip returns as a list of tuples so convert to list of lists
@@ -317,10 +317,10 @@ def unzip(array):
 
 def zip_object(keys, values=None):
     """Creates a dict composed from lists of keys and values. Pass either a
-    single two dimensional list, i.e. [[key1, value1], [key2, value2]], or two
-    lists, one of keys and one of corresponding values.
+    single two dimensional list, i.e. ``[[key1, value1], [key2, value2]]``, or
+    two lists, one of keys and one of corresponding values.
 
-    :param list keys: either a list of keys or a list of [key, value] pairs
+    :param list keys: either a list of keys or a list of ``[key, value]`` pairs
     :param list values: list of values
     :rtype: dict
     """
