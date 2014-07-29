@@ -15,16 +15,32 @@ vx.x.x (xxxx-xx-xx)
 - Add ``constant()``.
 - Add ``count_by()``. Thanks nathancahill_!
 - Add ``curry()``.
+- Add ``defaults()``. Thanks nathancahill_!
+- Add ``find_key()``. Thanks nathancahill_!
 - Add ``find_last()``. Thanks nathancahill_!
 - Add ``find_last_index()``. Thanks nathancahill_!
+- Add ``find_last_key()``. Thanks nathancahill_!
 - Add ``for_each()``. Thanks nathancahill_!
 - Add ``for_each_right()``. Thanks nathancahill_!
+- Add ``for_in()``. Thanks nathancahill_!
+- Add ``for_in_right()``. Thanks nathancahill_!
+- Add ``for_own()``. Thanks nathancahill_!
+- Add ``for_own_right()``. Thanks nathancahill_!
+- Add ``functions_()`` and ``methods()``. Thanks nathancahill_!
 - Add ``group_by()``. Thanks nathancahill_!
+- Add ``has()``. Thanks nathancahill_!
 - Add ``index_by()``. Thanks nathancahill_!
 - Add ``identity()``.
 - Add ``inject()``.
 - Add ``invert()``.
 - Add ``invoke()``. Thanks nathancahill_!
+- Add ``is_list()``. Thanks nathancahill_!
+- Add ``is_boolean()``. Thanks nathancahill_!
+- Add ``is_empty()``. Thanks nathancahill_!
+- Add ``is_function()``. Thanks nathancahill_!
+- Add ``is_none()``. Thanks nathancahill_!
+- Add ``is_number()``. Thanks nathancahill_!
+- Add ``is_string()``. Thanks nathancahill_!
 - Add ``keys()``.
 - Add ``map_values()``.
 - Add ``matches()``.
