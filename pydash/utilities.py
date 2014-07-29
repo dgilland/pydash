@@ -101,7 +101,7 @@ def random(start=0, stop=1, floating=False):
     """
     floating = any([isinstance(start, float),
                     isinstance(stop, float),
-                    floating])
+                    floating is True])
 
     if stop < start:
         stop, start = start, stop
