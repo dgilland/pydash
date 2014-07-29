@@ -88,9 +88,8 @@ def defaults(obj, *sources):
     object for all destination properties that resolve to undefined.
     """
     for source in sources:
-        for key, value in source.items():
-            if obj.get(key) is None:
-                obj[key] = value
+        for key, value in iteritems(source):
+            obj.setdefault(key, value)
 
     return obj
 
