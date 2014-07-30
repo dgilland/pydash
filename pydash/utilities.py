@@ -133,7 +133,7 @@ def result(obj, key):
     return ret
 
 
-def times(n, callback):
+def times(n, callback):  # pylint: disable=redefined-outer-name
     """Executes the callback `n` times, returning a list of the results of each
     callback execution. The callback is invoked with one argument: (index).
     """
