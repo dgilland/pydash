@@ -7,7 +7,7 @@ import copy
 
 from .arrays import flatten
 from .utilities import identity
-from .utils import iter_, iter_callback
+from .utils import iter_, iter_callback, get_item, set_item
 from ._compat import (
     iteritems,
     itervalues,
@@ -39,7 +39,7 @@ extend = assign
 
 
 def clone(value, is_deep=False, callback=None):
-    """Creates a clone of ``value``. If ``is_deep`` is ``True`` nested valueects
+    """Creates a clone of `value`. If `is_deep` is ``True`` nested valueects
     will also be cloned, otherwise they will be assigned by reference. If a
     callback is provided it will be executed to produce the cloned values. The
     callback is invoked with one argument: (value).
@@ -69,7 +69,7 @@ def clone(value, is_deep=False, callback=None):
 
 
 def clone_deep(value, callback=None):
-    """Creates a deep clone of ``value``. If a callback is provided it will be
+    """Creates a deep clone of `value`. If a callback is provided it will be
     executed to produce the cloned values. The callback is invoked with one
     argument: (value).
 
@@ -216,6 +216,75 @@ def map_values(obj, callback=None):
         ret[key] = result
 
     return ret
+
+
+def merge(obj, *sources, **kargs):
+    """Recursively merges own enumerable properties of the source object(s)
+    that don't resolve to undefined into the destination object. Subsequent
+    sources will overwrite property assignments of previous sources. If a
+    callback is provided it will be executed to produce the merged values of
+    the destination and source properties. If the callback returns undefined
+    merging will be handled by the method instead. The callback is invoked with
+    two arguments: (obj_value, source_value).
+
+    Args:
+        obj (dict): destination object to merge source(s) into
+        *sources (dict): source objects to merge from. subsequent sources
+            overwrite previous ones
+        **callback (function, optional): callback function to handle merging
+            (must be passed in as keyword argument)
+
+    Returns:
+        dict: merged object
+
+    Warning:
+        `obj` is modified in place.
+    """
+    callback = kargs.get('callback')
+
+    for source in sources:
+        update(obj, source, callback)
+
+    return obj
+
+
+def update(obj, source, callback=None):
+    """Update properties of `obj` with `source`. If a callback is provided,
+    it will be executed to product the updated values of the destination and
+    source properties. The callback is invoked with two arguments:
+    (obj_value, source_value).
+
+    Args:
+        obj (dict): destination object to merge source(s) into
+        source (dict): source object to merge from
+        callback (function, optional): callback function to handle merging
+
+    Returns:
+        mixed: merged object
+
+    Warning:
+        `obj` is modified in place.
+    """
+
+    for key, src_value in iter_(source):
+        obj_value = get_item(obj, key, default=None)
+        is_sequences = all([src_value,
+                            isinstance(src_value, list),
+                            isinstance(obj_value, list)])
+        is_mappings = all([src_value,
+                           isinstance(src_value, dict),
+                           isinstance(obj_value, dict)])
+
+        if (is_sequences or is_mappings) and not callback:
+            result = update(obj_value, src_value)
+        elif callback:
+            result = callback(obj_value, src_value)
+        else:
+            result = src_value
+
+        set_item(obj, key, result)
+
+    return obj
 
 
 def omit(obj, callback, *properties):

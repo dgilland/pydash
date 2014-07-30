@@ -27,11 +27,6 @@ if PY3:
 
     _range = range
 
-    def reraise(tp, value, tb=None):
-        if value.__traceback__ is not tb:
-            raise value.with_traceback(tb)
-        raise value
-
     implements_to_string = _identity
 else:
     text_type = unicode
@@ -43,8 +38,6 @@ else:
     iteritems = lambda d: d.iteritems()
 
     _range = xrange
-
-    exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
 
     def implements_to_string(cls):
         cls.__unicode__ = cls.__str__
