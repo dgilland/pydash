@@ -95,8 +95,9 @@ def defaults(obj, *sources):
 
 
 def find_key(obj, callback):
-    """This method is like `_.findIndex` except that it returns the key of the
-    first element that passes the callback check, instead of the element itself
+    """This method is like :func:`pydash.arrays.find_index` except that it
+    returns the key of the first element that passes the callback check,
+    instead of the element itself.
     """
     for result, _, key, _ in iter_callback(obj, callback):
         if result:

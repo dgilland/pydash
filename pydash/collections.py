@@ -11,7 +11,7 @@ from .utils import iter_callback, iter_
 
 
 def at(collection, *indexes):  # pylint: disable=invalid-name
-    """Creates an list of elements from the specified indexes, or keys, of the
+    """Creates a list of elements from the specified indexes, or keys, of the
     collection. Indexes may be specified as individual arguments or as arrays
     of indexes.
 
