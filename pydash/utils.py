@@ -63,3 +63,59 @@ def iter_unique(array):
         if item not in seen:
             seen.append(item)
             yield (i, item)
+
+
+def get_item(obj, key, **kargs):
+    """Safely get an item by `key` from a sequence or mapping object.
+
+    Args:
+        obj (mixed): sequence or mapping to retrieve item from
+        key (mixed): hash key or integer index identifying which item to
+            retrieve
+        **default (mixed, optional): default value to return if `key` not
+            found in `obj`
+
+    Returns:
+        mixed: `obj[key]` or `default`
+    """
+    use_default = 'default' in kargs
+    default = kargs.get('default')
+
+    try:
+        ret = obj[key]
+    except (KeyError, IndexError):
+        if use_default:
+            ret = default
+        else:  # pragma: no cover
+            raise
+
+    return ret
+
+
+def set_item(obj, key, value):
+    """Set an object's `key` to `value`. If `obj` is a ``list`` and the
+    `key` is the next available index position, append to list; otherwise,
+    raise ``IndexError``.
+
+    Args:
+        obj (mixed): object to assign value to
+        key (mixed): dict or list index to assign to
+        value (mixed): value to assign
+
+    Returns:
+        None
+
+    Raises:
+        IndexError: if `obj` is a ``list`` and `key` is greater than length of
+            `obj`
+    """
+    if isinstance(obj, dict):
+        obj[key] = value
+    elif isinstance(obj, list):
+        if key < len(obj):
+            obj[key] = value
+        elif key == len(obj):
+            obj.append(value)
+        else:  # pragma: no cover
+            # Trigger exception by assigning to invalid index.
+            obj[key] = value

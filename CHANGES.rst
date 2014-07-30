@@ -46,6 +46,7 @@ vx.x.x (xxxx-xx-xx)
 - Add ``matches()``.
 - Add ``max_()``. Thanks nathancahill_!
 - Add ``memoize()``.
+- Add ``merge()``.
 - Add ``min_()``. Thanks nathancahill_!
 - Add ``noop()``.
 - Add ``now()``.
@@ -72,6 +73,7 @@ vx.x.x (xxxx-xx-xx)
 - Add ``transform()``.
 - Add ``to_list()``. Thanks nathancahill_!
 - Add ``unique_id()``.
+- Add ``update()``.
 - Add ``values()``.
 - Add ``wrap()``.
 - Add ``xor()``.

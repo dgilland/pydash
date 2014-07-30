@@ -149,11 +149,13 @@ from .objects import (
     is_string,
     keys,
     map_values,
+    merge,
     methods,
     omit,
     pairs,
     pick,
     transform,
+    update,
     values
 )
 

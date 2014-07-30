@@ -211,6 +211,54 @@ def test_map_values(case, expected):
     assert pyd.map_values(*case) == expected
 
 
+@parametrize('case,callback,expected', [
+    (({'characters': [{'name': 'barney'}, {'name': 'fred'}]},
+      {'characters': [{'age': 36}, {'age': 40}]}),
+     None,
+     {'characters': [{'name': 'barney', 'age': 36},
+                     {'name': 'fred', 'age': 40}]}),
+    (({'characters': [{'name': 'barney'}, {'name': 'fred'}, {}]},
+      {'characters': [{'age': 36}, {'age': 40}]}),
+     None,
+     {'characters': [{'name': 'barney', 'age': 36},
+                     {'name': 'fred', 'age': 40},
+                     {}]}),
+    (({'characters': [{'name': 'barney'}, {'name': 'fred'}]},
+      {'characters': [{'age': 36}, {'age': 40}, {}]}),
+     None,
+     {'characters': [{'name': 'barney', 'age': 36},
+                     {'name': 'fred', 'age': 40},
+                     {}]}),
+    (({'characters': [{'name': 'barney'}, {'name': 'fred'}]},
+      {'characters': [{'age': 36}, {'age': 40}]},
+      {'characters': [{'score': 5}, {'score': 7}]}),
+     None,
+     {'characters': [{'name': 'barney', 'age': 36, 'score': 5},
+                     {'name': 'fred', 'age': 40, 'score': 7}]}),
+    (({'characters': {'barney': {'age': 36}, 'fred': {'score': 7}}},
+      {'characters': {'barney': {'score': 5}, 'fred': {'age': 40}}}),
+     None,
+     {'characters': {'barney': {'age': 36, 'score': 5},
+                     'fred': {'age': 40, 'score': 7}}}),
+    (({'characters': {'barney': {'age': 36}, 'fred': {'score': 7}}},
+      {'characters': {'barney': [5], 'fred': 7}}),
+     None,
+     {'characters': {'barney': [5],
+                     'fred': 7}}),
+    (({'characters': {'barney': {'age': 36}, 'fred': {'score': 7}}},
+      {'foo': {'barney': [5], 'fred': 7}}),
+     None,
+     {'characters': {'barney': {'age': 36}, 'fred': {'score': 7}},
+      'foo': {'barney': [5], 'fred': 7}}),
+    (({'fruits': ['apple'], 'vegetables': ['beet']},
+      {'fruits': ['banana'], 'vegetables': ['carrot']}),
+     lambda a, b: a + b if isinstance(a, list) else b,
+     {'fruits': ['apple', 'banana'], 'vegetables': ['beet', 'carrot']})
+])
+def test_merge(case, callback, expected):
+    assert pyd.merge(*case, callback=callback) == expected
+
+
 @parametrize('case,expected', [
     (({'a': 1, 'b': 2, 'c': 3}, 'a'), {'b': 2, 'c': 3}),
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), {'c': 3}),
