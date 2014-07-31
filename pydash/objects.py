@@ -6,12 +6,17 @@ from __future__ import absolute_import
 import copy
 
 from .arrays import flatten
-from .utilities import identity
-from .utils import iterate, iter_callback, get_item, set_item
+from .utilities import (
+    identity,
+    iterate,
+    iter_callback,
+    get_item,
+    set_item
+)
 from ._compat import (
     iteritems,
     integer_types,
-    string_types,
+    string_types
 )
 
 

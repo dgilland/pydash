@@ -7,8 +7,8 @@ from collections import Iterable
 from bisect import bisect_left
 
 from ._compat import string_types, _range
-from .utilities import callback as make_callback
-from .utils import (
+from .utilities import (
+    create_callback,
     iter_callback,
     iter_unique_set,
     iter_unique
@@ -118,7 +118,7 @@ def flatten(array, callback=None, _depth=0):
     if callback is True:
         shallow = True
     elif callback:
-        cbk = make_callback(callback)
+        cbk = create_callback(callback)
         array = [cbk(item) for item in array]
         callback = None
 
@@ -304,7 +304,7 @@ def sorted_index(array, value, callback=None):
 
     if callback:
         # generate array of sorted keys computed using callback
-        cbk = make_callback(callback)
+        cbk = create_callback(callback)
         array = sorted(cbk(item) for item in array)
         value = cbk(value)
 
@@ -343,7 +343,7 @@ def uniq(array, callback=None):
         list: Unique list.
     """
     if callback:
-        cbk = make_callback(callback)
+        cbk = create_callback(callback)
         computed = [cbk(item) for item in array]
     else:
         computed = array

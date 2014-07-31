@@ -6,8 +6,13 @@ from __future__ import absolute_import
 import random
 
 from .arrays import flatten
-from .utilities import matches, property_, callback as make_callback
-from .utils import iter_callback, iterate
+from .utilities import (
+    matches,
+    property_,
+    create_callback,
+    iter_callback,
+    iterate
+)
 
 
 def at(collection, *indexes):  # pylint: disable=invalid-name
@@ -49,7 +54,7 @@ def count_by(collection, callback):
     each element of `collection` through the callback.
     """
     ret = dict()
-    cbk = make_callback(callback)
+    cbk = create_callback(callback)
 
     for value in collection:
         key = cbk(value)
@@ -78,7 +83,7 @@ def every(collection, callback=None):
     """
 
     if callback:
-        cbk = make_callback(callback)
+        cbk = create_callback(callback)
         collection = [cbk(item) for item in collection]
 
     return all(collection)
@@ -164,7 +169,7 @@ def group_by(collection, callback):
     each element of a `collection` through the callback.
     """
     ret = dict()
-    cbk = make_callback(callback)
+    cbk = create_callback(callback)
 
     for value in collection:
         key = cbk(value)
@@ -179,7 +184,7 @@ def index_by(collection, callback):
     each element of the collection through the given callback.
     """
     ret = dict()
-    cbk = make_callback(callback)
+    cbk = create_callback(callback)
 
     for value in collection:
         ret[cbk(value)] = value
@@ -235,7 +240,7 @@ def max_(collection, callback=None):
         else:
             return max(collection)
 
-    return max(collection, key=make_callback(callback))
+    return max(collection, key=create_callback(callback))
 
 
 def min_(collection, callback=None):
@@ -246,7 +251,7 @@ def min_(collection, callback=None):
         else:
             return min(collection)
 
-    return min(collection, key=make_callback(callback))
+    return min(collection, key=create_callback(callback))
 
 
 def pluck(collection, key):
@@ -364,7 +369,7 @@ def some(collection, callback=None):
     """
 
     if callback:
-        cbk = make_callback(callback)
+        cbk = create_callback(callback)
         collection = [cbk(item) for item in collection]
 
     return any(collection)
@@ -377,7 +382,7 @@ def sort_by(collection, callback):
     """Creates a list of elements, sorted in ascending order by the results of
     running each element in a `collection` through the callback.
     """
-    return sorted(collection, key=make_callback(callback))
+    return sorted(collection, key=create_callback(callback))
 
 
 def to_list(collection):

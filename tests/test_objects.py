@@ -1,6 +1,6 @@
 
 import pydash as pyd
-from pydash.utils import iterate
+from pydash.utilities import iterate
 
 from . import fixtures
 from .fixtures import parametrize
