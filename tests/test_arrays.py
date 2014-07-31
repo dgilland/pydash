@@ -42,7 +42,8 @@ def test_rest_aliases(alias):
       {'name': 'banana', 'type': 'fruit'},
       {'name': 'beet',   'type': 'vegetable'}],
      {'name': 'banana'},
-     1)
+     1),
+    (['apple', 'banana', 'beet'], lambda *args: False, -1)
 ])
 def test_find_index(case, filter_by, expected):
     assert pyd.find_index(case, filter_by) == expected
@@ -54,7 +55,8 @@ def test_find_index(case, filter_by, expected):
       {'name': 'banana', 'type': 'fruit'},
       {'name': 'beet',   'type': 'vegetable'}],
      {'type': 'fruit'},
-     1)
+     1),
+    (['apple', 'banana', 'beet'], lambda *args: False, -1)
 ])
 def test_find_last_index(case, filter_by, expected):
     assert pyd.find_last_index(case, filter_by) == expected
