@@ -17,7 +17,6 @@ from .utilities import (
 )
 from ._compat import (
     iteritems,
-    integer_types,
     number_types,
     string_types,
     text_type

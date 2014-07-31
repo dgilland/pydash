@@ -133,10 +133,11 @@ def result(obj, key):
     return ret
 
 
-def times(n, callback):  # pylint: disable=redefined-outer-name
+def times(n, callback):
     """Executes the callback `n` times, returning a list of the results of each
     callback execution. The callback is invoked with one argument: (index).
     """
+    # pylint: disable=redefined-outer-name
     return [callback(index) for index in _range(n)]
 
 
@@ -153,6 +154,7 @@ def unique_id(prefix=None):
 
 def iter_callback(collection, callback=None):
     """Return iterative callback based on collection type."""
+    # pylint: disable=redefined-outer-name
     if isinstance(collection, dict):
         return iter_dict_callback(collection, callback)
     else:
@@ -161,6 +163,7 @@ def iter_callback(collection, callback=None):
 
 def iter_list_callback(array, callback=None):
     """Return iterative list callback."""
+    # pylint: disable=redefined-outer-name
     cbk = create_callback(callback)
     for i, item in enumerate(array):
         yield (cbk(item, i, array), item, i, array)
@@ -168,6 +171,7 @@ def iter_list_callback(array, callback=None):
 
 def iter_dict_callback(collection, callback=None):
     """Return iterative dict callback."""
+    # pylint: disable=redefined-outer-name
     cbk = create_callback(callback)
     for key, value in iteritems(collection):
         yield (cbk(value, key, collection), value, key, collection)
