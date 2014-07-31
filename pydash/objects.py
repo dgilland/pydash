@@ -10,8 +10,6 @@ from .utilities import identity
 from .utils import iterate, iter_callback, get_item, set_item
 from ._compat import (
     iteritems,
-    itervalues,
-    iterkeys,
     integer_types,
     string_types,
 )
@@ -212,7 +210,7 @@ def keys(obj):
     Returns:
         list: List of keys.
     """
-    return [key for key, value in iterate(obj)]
+    return [key for key, _ in iterate(obj)]
 
 
 def map_values(obj, callback=None):
@@ -395,4 +393,4 @@ def values(obj):
     Returns:
         list: List of values.
     """
-    return [value for key, value in iterate(obj)]
+    return [value for _, value in iterate(obj)]
