@@ -357,4 +357,4 @@ def transform(obj, callback=None, accumulator=None):
 
 def values(obj):
     """Creates a list composed of the values of `obj`."""
-    return list(itervalues(obj))
+    return [value for key, value in iterate(obj)]

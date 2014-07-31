@@ -303,7 +303,8 @@ def test_transform(case, expected):
 
 
 @parametrize('case,expected', [
-    ({'a': 1, 'b': 2, 'c': 3}, [1, 2, 3])
+    ({'a': 1, 'b': 2, 'c': 3}, [1, 2, 3]),
+    ([1, 2, 3], [1, 2, 3])
 ])
 def test_values(case, expected):
     assert set(pyd.values(case)) == set(expected)
