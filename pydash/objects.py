@@ -5,7 +5,6 @@ from __future__ import absolute_import
 
 import copy
 import datetime
-from collections import Sequence, Mapping
 
 from .arrays import flatten
 from .utilities import (
@@ -233,18 +232,13 @@ def is_equal(a, b, callback=None):
 
     # Return callback results if anything but None.
     if equal is not None:
-        return equal
-
-    if any([not callable(callback),
-            is_string(a),
-            is_string(b),
-            not isinstance(a, (Mapping, Sequence)),
-            not isinstance(b, (Mapping, Sequence)),
-            type(a) is not type(b)]):
-        # Use basic == comparision.
-        equal = a == b
-    else:
-        # Walk a/b to determine eqaulity using callback.
+        pass
+    elif (callable(callback) and
+          type(a) is type(b) and
+          isinstance(a, (list, dict)) and
+          isinstance(b, (list, dict)) and
+          len(a) == len(b)):
+        # Walk a/b to determine equality using callback.
         for key, value in iterate(a):
             if has(b, key):
                 equal = is_equal(value, b[key], callback)
@@ -253,6 +247,9 @@ def is_equal(a, b, callback=None):
 
             if not equal:
                 break
+    else:
+        # Use basic == comparision.
+        equal = a == b
 
     return equal
 
