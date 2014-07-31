@@ -7,7 +7,7 @@ import copy
 
 from .arrays import flatten
 from .utilities import identity
-from .utils import iter_, iter_callback, get_item, set_item
+from .utils import iterate, iter_callback, get_item, set_item
 from ._compat import (
     iteritems,
     itervalues,
@@ -58,7 +58,7 @@ def clone(value, is_deep=False, callback=None):
     copier = copy.deepcopy if is_deep else copy.copy
     value = copier(value)
 
-    obj = [(key, callback(val)) for key, val in iter_(value)]
+    obj = [(key, callback(val)) for key, val in iterate(value)]
 
     if isinstance(value, list):
         obj = [val for _, val in obj]
@@ -266,7 +266,7 @@ def update(obj, source, callback=None):
         `obj` is modified in place.
     """
 
-    for key, src_value in iter_(source):
+    for key, src_value in iterate(source):
         obj_value = get_item(obj, key, default=None)
         is_sequences = all([src_value,
                             isinstance(src_value, list),
@@ -338,7 +338,7 @@ def transform(obj, callback=None, accumulator=None):
     if accumulator is None:
         accumulator = []
 
-    for key, value in iter_(obj):
+    for key, value in iterate(obj):
         result = callback(accumulator, value, key, obj)
         if result is False:
             break

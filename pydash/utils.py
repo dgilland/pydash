@@ -29,7 +29,7 @@ def iter_dict_callback(collection, callback=None):
         yield (cbk(value, key, collection), value, key, collection)
 
 
-def iter_(collection):
+def iterate(collection):
     """Return iterative based on collection type."""
     if isinstance(collection, dict):
         return iter_dict(collection)

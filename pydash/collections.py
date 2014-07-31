@@ -7,7 +7,7 @@ import random
 
 from .arrays import flatten
 from .utilities import matches, property_, callback as make_callback
-from .utils import iter_callback, iter_
+from .utils import iter_callback, iterate
 
 
 def at(collection, *indexes):  # pylint: disable=invalid-name
@@ -270,7 +270,7 @@ def reduce_(collection, callback=None, accumulator=None):
     successive callback execution consumes the return value of the previous
     execution.
     """
-    iterable = iter_(collection)
+    iterable = iterate(collection)
 
     if accumulator is None:
         try:

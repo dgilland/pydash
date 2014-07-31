@@ -1,6 +1,6 @@
 
 import pydash as pyd
-from pydash.utils import iter_
+from pydash.utils import iterate
 
 from . import fixtures
 from .fixtures import parametrize
@@ -35,7 +35,7 @@ def test_clone(case, args):
 
     assert actual is not case
 
-    for key, value in iter_(actual):
+    for key, value in iterate(actual):
         assert value is case[key]
 
 
@@ -52,7 +52,7 @@ def test_clone_deep(case, kargs):
     for actual in actuals:
         assert actual is not case
 
-        for key, value in iter_(actual):
+        for key, value in iterate(actual):
             assert value is not case[key]
 
 
