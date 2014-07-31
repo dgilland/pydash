@@ -57,7 +57,8 @@ def test_clone_deep(case, kargs):
 
 
 @parametrize('case,expected', [
-    ({'a': 1, 'b': 2, 'c': 3}, {1: 'a', 2: 'b', 3: 'c'})
+    ({'a': 1, 'b': 2, 'c': 3}, {1: 'a', 2: 'b', 3: 'c'}),
+    ([1, 2, 3], {1: 0, 2: 1, 3: 2})
 ])
 def test_invert(case, expected):
     assert pyd.invert(case) == expected

@@ -151,7 +151,7 @@ def invert(obj):
     Note:
         Assumes `dict` values are hashable as `dict` keys.
     """
-    return dict((value, key) for key, value in iteritems(obj))
+    return dict((value, key) for key, value in iterate(obj))
 
 
 def is_list(value):
