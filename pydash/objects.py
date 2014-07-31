@@ -135,7 +135,7 @@ methods = functions_
 def has(obj, key):
     """Checks if `key` exists as a key of `obj`.
     """
-    return key in obj
+    return key in [key for key, value in iterate(obj)]
 
 
 def invert(obj):

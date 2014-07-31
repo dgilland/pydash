@@ -124,6 +124,9 @@ def test_functions_aliases(case):
 
 @parametrize('case,expected', [
     (({'a': 1, 'b': 2, 'c': 3}, 'b'), True),
+    (([1, 2, 3], 0), True),
+    (([1, 2, 3], 1), True),
+    (([1, 2, 3], 3), False),
 ])
 def test_has(case, expected):
     assert pyd.has(*case) == expected
