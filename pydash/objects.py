@@ -363,5 +363,12 @@ def transform(obj, callback=None, accumulator=None):
 
 
 def values(obj):
-    """Creates a list composed of the values of `obj`."""
+    """Creates a list composed of the values of `obj`.
+
+    Args:
+        obj (mixed): Object to extract values from.
+
+    Returns:
+        list: List of values.
+    """
     return [value for key, value in iterate(obj)]
