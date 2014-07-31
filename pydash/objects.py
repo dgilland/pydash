@@ -321,8 +321,14 @@ def omit(obj, callback=None, *properties):
 def pairs(obj):
     """Creates a two dimensional list of an object's key-value pairs, i.e.
     [[key1, value1], [key2, value2]].
+
+    Args:
+        obj (mixed): Object to process.
+
+    Returns:
+        list: Two dimensional list of object's key-value pairs.
     """
-    return [[key, value] for key, value in iteritems(obj)]
+    return [[key, value] for key, value in iterate(obj)]
 
 
 def pick(obj, callback, *properties):

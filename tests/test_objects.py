@@ -276,8 +276,9 @@ def test_omit(case, expected):
 
 @parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, [['a', 1], ['b', 2], ['c', 3]]),
+    ([1, 2, 3], [[0, 1], [1, 2], [2, 3]])
 ])
-def test_paris(case, expected):
+def test_pairs(case, expected):
     assert dict(pyd.pairs(case)) == dict(expected)
 
 
