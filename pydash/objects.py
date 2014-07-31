@@ -311,7 +311,8 @@ def omit(obj, callback=None, *properties):
         dict: Results of omitting properties.
     """
     if not callable(callback):
-        properties = flatten([callback or [], properties])
+        callback = callback if callback is not None else []
+        properties = flatten([callback, properties])
         callback = lambda value, key, item: key in properties
 
     return dict((key, value) for key, value in iterate(obj)
