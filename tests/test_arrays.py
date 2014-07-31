@@ -42,7 +42,8 @@ def test_rest_aliases(alias):
       {'name': 'banana', 'type': 'fruit'},
       {'name': 'beet',   'type': 'vegetable'}],
      {'name': 'banana'},
-     1)
+     1),
+    (['apple', 'banana', 'beet'], lambda *args: False, -1)
 ])
 def test_find_index(case, filter_by, expected):
     assert pyd.find_index(case, filter_by) == expected
@@ -54,7 +55,8 @@ def test_find_index(case, filter_by, expected):
       {'name': 'banana', 'type': 'fruit'},
       {'name': 'beet',   'type': 'vegetable'}],
      {'type': 'fruit'},
-     1)
+     1),
+    (['apple', 'banana', 'beet'], lambda *args: False, -1)
 ])
 def test_find_last_index(case, filter_by, expected):
     assert pyd.find_last_index(case, filter_by) == expected
@@ -86,8 +88,9 @@ def test_flatten(case, filter_by, expected):
     ([1, 2, 3, 1, 2, 3], 2, 0, 1),
     ([1, 2, 3, 1, 2, 3], 2, 3, 4),
     ([1, 1, 2, 2, 3, 3], 2, True, 2),
-    ([1, 1, 2, 2, 3, 3], 4, 0, False),
-    ([1, 1, 2, 2, 3, 3], 2, 10, False)
+    ([1, 1, 2, 2, 3, 3], 4, 0, -1),
+    ([1, 1, 2, 2, 3, 3], 2, 10, -1),
+    ([1, 1, 2, 2, 3, 3], 0, 0, -1),
 ])
 def test_index_of(case, value, from_index, expected):
     assert pyd.index_of(case, value, from_index) == expected
@@ -117,8 +120,23 @@ def test_last(case, expected):
 
 
 @parametrize('case,value,from_index,expected', [
-    ([1, 2, 3, 1, 2, 3], 2, 0, 4),
-    ([1, 2, 3, 1, 2, 3], 2, 3, 1)
+    ([1, 2, 3, 1, 2, 3], 2, 0, -1),
+    ([1, 2, 3, 1, 2, 3], 2, 3, 1),
+    ([1, 2, 3, 1, 2, 3], 0, 0, -1),
+    ([0, 1, 2, 3, 4, 5], 3, 0, -1),
+    ([0, 1, 2, 3, 4, 5], 3, 1, -1),
+    ([0, 1, 2, 3, 4, 5], 3, 2, -1),
+    ([0, 1, 2, 3, 4, 5], 3, 3, 3),
+    ([0, 1, 2, 3, 4, 5], 3, 4, 3),
+    ([0, 1, 2, 3, 4, 5], 3, 5, 3),
+    ([0, 1, 2, 3, 4, 5], 3, 6, 3),
+    ([0, 1, 2, 3, 4, 5], 3, -1, 3),
+    ([0, 1, 2, 3, 4, 5], 3, -2, 3),
+    ([0, 1, 2, 3, 4, 5], 3, -3, 3),
+    ([0, 1, 2, 3, 4, 5], 3, -4, -1),
+    ([0, 1, 2, 3, 4, 5], 3, -5, -1),
+    ([0, 1, 2, 3, 4, 5], 3, -6, -1),
+    ([0, 1, 2, 3, 4, 5], 3, None, 3),
 ])
 def test_last_index_of(case, value, from_index, expected):
     assert pyd.last_index_of(case, value, from_index) == expected

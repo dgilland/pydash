@@ -19,10 +19,10 @@ def compact(array):
     """Creates a list with all falsey values of array removed.
 
     Args:
-        array (list): list to compact
+        array (list): List to compact.
 
     Returns:
-        list: Compacted list
+        list: Compacted list.
     """
     return [item for item in array if item]
 
@@ -31,11 +31,11 @@ def difference(array, *lists):
     """Creates a list of list elements not present in the other lists
 
     Args:
-        array (list): the list to process
-        lists (list): lists to check
+        array (list): List to process.
+        lists (list): Lists to check.
 
     Returns:
-        list: the difference of the lists
+        list: Difference of the lists.
     """
     return (list(difference(set(array).difference(lists[0]),
                             *lists[1:])) if lists
@@ -48,11 +48,11 @@ def find_index(array, callback=None):
     of the element itself.
 
     Args:
-        array (list): list to process
-        callback (mixed, optional): callback applied per iteration
+        array (list): List to process.
+        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
-        int: index of found item
+        int: Index of found item or ``-1`` if not found.
     """
     n = -1
     for is_true, _, i, _ in iter_callback(array, callback):
@@ -68,11 +68,11 @@ def find_last_index(array, callback=None):
     over elements from right to left.
 
     Args:
-        array (list): list to process
-        callback (mixed, optional): callback applied per iteration
+        array (list): List to process.
+        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
-        int: index of found item
+        int: Index of found item or ``-1`` if not found.
     """
     n = find_index(reversed(array), callback)
 
@@ -83,7 +83,14 @@ def find_last_index(array, callback=None):
 
 
 def first(array):
-    """Return the first element of `array`."""
+    """Return the first element of `array`.
+
+    Args:
+        array (list): List to process.
+
+    Returns:
+        mixed: First element of list.
+    """
     return array[0] if array else None
 
 
@@ -98,12 +105,12 @@ def flatten(array, callback=None, _depth=0):
     flattening.
 
     Args:
-        array (list): list to flatten
-        callback (mixed, optional): callback applied per iteration (if `True`
-            then return shallow flatten)
+        array (list): List to process.
+        callback (mixed, optional): Callback applied per iteration. If ``True``
+            then flatten shallowly.
 
     Returns:
-        list: flattened list
+        list: Flattened list.
     """
 
     shallow = False
@@ -131,17 +138,17 @@ def index_of(array, value, from_index=0):
     """Gets the index at which the first occurrence of value is found.
 
     Args:
-        array (list): list to search
-        value (mixed): value to search for
-        from_index (int, optional): the index to search from
+        array (list): List to search.
+        value (mixed): Value to search for.
+        from_index (int, optional): Index to search from.
 
     Returns:
-        int: index of found item or ``False`` if not found
+        int: Index of found item or ``-1`` if not found.
     """
     try:
         return array.index(value, from_index)
     except ValueError:
-        return False
+        return -1
 
 
 def initial(array):
@@ -154,10 +161,10 @@ def intersection(*arrays):
     equality for comparisons, i.e. ===.
 
     Args:
-        arrays (list): arrays to process
+        arrays (list): Lists to process.
 
     Returns:
-        list: the intersection of provided lists
+        list: Intersection of provided lists.
     """
 
     return list(set(arrays[0]).intersection(*arrays))
@@ -168,19 +175,33 @@ def last(array):
     return array[-1] if array else None
 
 
-def last_index_of(array, value, from_index=0):
-    """Gets the index at which the first occurrence of value is found
+def last_index_of(array, value, from_index=None):
+    """Gets the index at which the last occurrence of value is found.
 
     Args:
-        array (list): list to search
-        value (mixed): value to search for
-        from_index (int, optional): the index to search from
+        array (list): List to search.
+        value (mixed): Value to search for.
+        from_index (int, optional): Index to search from.
 
     Returns:
-        int: index of found item or ``False`` if not found
+        int: Index of found item or ``False`` if not found.
     """
-    # reverse array, call index_of(), and subtract from max index
-    return len(array) - 1 - index_of(array[::-1], value, from_index)
+    index = array_len = len(array)
+
+    try:
+        from_index = int(from_index)
+    except (TypeError, ValueError):
+        pass
+    else:
+        # Set starting index base on from_index offset.
+        index = (max(0, index + from_index) if from_index < 0
+                 else min(from_index, index - 1))
+
+    while index:
+        if index < array_len and array[index] == value:
+            return index
+        index -= 1
+    return -1
 
 
 def pull(array, *values):
@@ -188,14 +209,14 @@ def pull(array, *values):
     for comparisons, i.e. ===.
 
     Args:
-        array (list): list to modify
-        values (mixed): values to remove
+        array (list): List to pull from.
+        values (mixed): Values to remove.
 
     Returns
-        list: modified array
+        list: Modified `array`.
 
     Warning:
-        Modified array in place
+        `array` is modified in place.
     """
     for value in values:
         while array.count(value) > 0:
@@ -204,17 +225,38 @@ def pull(array, *values):
     return array
 
 
-def range_(*args, **kargs):
+def range_(*args):
     """Creates a list of numbers (positive and/or negative) progressing from
     start up to but not including end. If start is less than stop a zero-length
     range is created unless a negative step is specified.
+
+    Args:
+        stop (int): Integer - 1 to stop at. Defaults to ``1``.
+        start (int, optional): Integer to start with. Defaults to ``0``.
+        step (int, optional): If positive the last element is the largest
+            ``start + i * step`` less than `stop`. If negative the last
+            element is the smallest ``start + i * step`` greater than `stop`.
+            Defaults to ``1``.
+
+    Returns:
+        list: List of integers in range
     """
-    return list(_range(*args, **kargs))
+    return list(_range(*args))
 
 
 def remove(array, callback=None):
     """Removes all elements from a list that the callback returns truthy for
     and returns an array of removed elements.
+
+    Args:
+        array (list): List to remove elements from.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: Removed elements of `array`.
+
+    Warning:
+        `array` is modified in place.
     """
     removed = []
     for is_true, _, i, _ in iter_callback(array, callback):
@@ -225,7 +267,14 @@ def remove(array, callback=None):
 
 
 def rest(array):
-    """Return all but the first element of `array`."""
+    """Return all but the first element of `array`.
+
+    Args:
+        array (list): List to process.
+
+    Returns:
+        list: Rest of the list.
+    """
     return array[1:]
 
 
@@ -245,12 +294,12 @@ def sorted_index(array, value, callback=None):
     for elements that have the properties of the given object, else ``False``.
 
     Args:
-        array (list): list to inspect
-        value (mixed): value to evaluate
-        callback (mixed, optional): callback to determine sort key
+        array (list): List to inspect.
+        value (mixed): Value to evaluate.
+        callback (mixed, optional): Callback to determine sort key.
 
     Returns:
-        int: smallest index
+        int: Smallest index.
     """
 
     if callback:
@@ -267,10 +316,10 @@ def union(*arrays):
     comparisons, i.e. ===.
 
     Args:
-        arrays (list): lists to unionize
+        arrays (list): Lists to unionize.
 
     Returns:
-        list: unionized list
+        list: Unionized list.
     """
     return uniq(flatten(arrays))
 
@@ -287,11 +336,11 @@ def uniq(array, callback=None):
     have the properties of the given object, else ``False``.
 
     Args:
-        array (list): list to process
-        callback (mixed, optional): callback applied per iteration
+        array (list): List to process.
+        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
-        list: uniqued list
+        list: Unique list.
     """
     if callback:
         cbk = make_callback(callback)
@@ -319,11 +368,11 @@ def without(array, *values):
     strict equality for comparisons, i.e. ===.
 
     Args:
-        array (list): list to filter
-        values (mixed): values to remove
+        array (list): List to filter.
+        values (mixed): Values to remove.
 
     Returns:
-        list: filtered list
+        list: Filtered list.
     """
     return [a for a in array if a not in values]
 
@@ -342,10 +391,10 @@ def zip_(*arrays):
     array indexes.
 
     Args:
-        arrays (list): lists to process
+        arrays (list): Lists to process.
 
     Returns:
-        list: zipped list
+        list: Zipped list.
     """
     # zip returns as a list of tuples so convert to list of lists
     return [list(item) for item in zip(*arrays)]
@@ -357,10 +406,10 @@ def unzip(array):
     corresponding indexes.
 
     Args:
-        array (list): list to process
+        array (list): List to process.
 
     Returns:
-        list: unzipped list
+        list: Unzipped list.
     """
     return zip_(*array)
 
@@ -375,7 +424,7 @@ def zip_object(keys, values=None):
         values (list, optional): list of values to zip
 
     Returns:
-        dict: zipped dict
+        dict: Zipped dict.
     """
 
     if values is None:
