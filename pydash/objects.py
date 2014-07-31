@@ -401,45 +401,6 @@ def merge(obj, *sources, **kargs):
     return obj
 
 
-def update(obj, source, callback=None):
-    """Update properties of `obj` with `source`. If a callback is provided,
-    it will be executed to produce the updated values of the destination and
-    source properties. The callback is invoked with two arguments:
-    (obj_value, source_value).
-
-    Args:
-        obj (dict): destination object to merge source(s) into
-        source (dict): source object to merge from
-        callback (function, optional): callback function to handle merging
-
-    Returns:
-        mixed: merged object
-
-    Warning:
-        `obj` is modified in place.
-    """
-
-    for key, src_value in iterate(source):
-        obj_value = get_item(obj, key, default=None)
-        is_sequences = all([src_value,
-                            isinstance(src_value, list),
-                            isinstance(obj_value, list)])
-        is_mappings = all([src_value,
-                           isinstance(src_value, dict),
-                           isinstance(obj_value, dict)])
-
-        if (is_sequences or is_mappings) and not callback:
-            result = update(obj_value, src_value)
-        elif callback:
-            result = callback(obj_value, src_value)
-        else:
-            result = src_value
-
-        set_item(obj, key, result)
-
-    return obj
-
-
 def omit(obj, callback=None, *properties):
     """Creates a shallow clone of object excluding the specified properties.
     Property names may be specified as individual arguments or as lists of
@@ -559,6 +520,45 @@ def transform(obj, callback=None, accumulator=None):
             break
 
     return accumulator
+
+
+def update(obj, source, callback=None):
+    """Update properties of `obj` with `source`. If a callback is provided,
+    it will be executed to produce the updated values of the destination and
+    source properties. The callback is invoked with two arguments:
+    (obj_value, source_value).
+
+    Args:
+        obj (dict): destination object to merge source(s) into
+        source (dict): source object to merge from
+        callback (function, optional): callback function to handle merging
+
+    Returns:
+        mixed: merged object
+
+    Warning:
+        `obj` is modified in place.
+    """
+
+    for key, src_value in iterate(source):
+        obj_value = get_item(obj, key, default=None)
+        is_sequences = all([src_value,
+                            isinstance(src_value, list),
+                            isinstance(obj_value, list)])
+        is_mappings = all([src_value,
+                           isinstance(src_value, dict),
+                           isinstance(obj_value, dict)])
+
+        if (is_sequences or is_mappings) and not callback:
+            result = update(obj_value, src_value)
+        elif callback:
+            result = callback(obj_value, src_value)
+        else:
+            result = src_value
+
+        set_item(obj, key, result)
+
+    return obj
 
 
 def values(obj):
