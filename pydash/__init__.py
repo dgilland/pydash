@@ -163,7 +163,6 @@ from .objects import (
     parse_int,
     pick,
     transform,
-    update,
     values
 )
 

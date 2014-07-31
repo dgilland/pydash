@@ -80,7 +80,6 @@ vx.x.x (xxxx-xx-xx)
 - Add ``transform()``.
 - Add ``to_list()``. Thanks nathancahill_!
 - Add ``unique_id()``.
-- Add ``update()``.
 - Add ``values()``.
 - Add ``wrap()``.
 - Add ``xor()``.
