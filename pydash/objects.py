@@ -403,7 +403,7 @@ def merge(obj, *sources, **kargs):
 
 def update(obj, source, callback=None):
     """Update properties of `obj` with `source`. If a callback is provided,
-    it will be executed to product the updated values of the destination and
+    it will be executed to produce the updated values of the destination and
     source properties. The callback is invoked with two arguments:
     (obj_value, source_value).
 
