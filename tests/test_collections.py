@@ -128,10 +128,12 @@ def test_count_by(case, expected):
 @parametrize('case,expected', [
     (([0, True, False, None, 1, 2, 3],), [True, 1, 2, 3]),
     (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [2, 4, 6]),
-    ((fixtures.data.filter_,
+    (([{'name': 'barney', 'age': 36, 'blocked': False},
+       {'name': 'fred',   'age': 40, 'blocked': True}],
       'blocked'),
      [{'name': 'fred', 'age': 40, 'blocked': True}]),
-    ((fixtures.data.filter_,
+    (([{'name': 'barney', 'age': 36, 'blocked': False},
+       {'name': 'fred',   'age': 40, 'blocked': True}],
       {'age': 36}),
      [{'name': 'barney', 'age': 36, 'blocked': False}]),
 ])
@@ -140,16 +142,24 @@ def test_filter_(case, expected):
 
 
 @parametrize('case,expected', [
-    ((fixtures.data.find,
+    (([{'name': 'barney',  'age': 36, 'blocked': False},
+       {'name': 'fred',    'age': 40, 'blocked': True},
+       {'name': 'pebbles', 'age': 1,  'blocked': False}],
       lambda c, *args: c['age'] < 40),
      {'name': 'barney', 'age': 36, 'blocked': False}),
-    ((fixtures.data.find,
+    (([{'name': 'barney',  'age': 36, 'blocked': False},
+       {'name': 'fred',    'age': 40, 'blocked': True},
+       {'name': 'pebbles', 'age': 1,  'blocked': False}],
       {'age': 1}),
      {'name': 'pebbles', 'age': 1, 'blocked': False}),
-    ((fixtures.data.find,
+    (([{'name': 'barney',  'age': 36, 'blocked': False},
+       {'name': 'fred',    'age': 40, 'blocked': True},
+       {'name': 'pebbles', 'age': 1,  'blocked': False}],
       'blocked'),
      {'name': 'fred', 'age': 40, 'blocked': True}),
-    ((fixtures.data.find,),
+    (([{'name': 'barney',  'age': 36, 'blocked': False},
+       {'name': 'fred',    'age': 40, 'blocked': True},
+       {'name': 'pebbles', 'age': 1,  'blocked': False}],),
      {'name': 'barney', 'age': 36, 'blocked': False}),
 ])
 def test_find(case, expected):
@@ -229,16 +239,16 @@ def test_invoke(case, expected):
 
 
 @parametrize('case', [
-    fixtures.data.sample,
+    [1, 2, 3, 4, 5, 6],
 ])
 def test_sample(case):
     assert pyd.sample(case) in case
 
 
 @parametrize('case', [
-    (fixtures.data.sample, 2),
-    (fixtures.data.sample, 3),
-    (fixtures.data.sample, 4),
+    ([1, 2, 3, 4, 5, 6], 2),
+    ([1, 2, 3, 4, 5, 6], 3),
+    ([1, 2, 3, 4, 5, 6], 4),
 ])
 def test_sample_list(case):
     collection, n = case
@@ -335,10 +345,12 @@ def test_reduce_right_aliases(case):
 @parametrize('case,expected', [
     (([0, True, False, None, 1, 2, 3],), [0, False, None]),
     (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [1, 3, 5]),
-    ((fixtures.data.filter_,
+    (([{'name': 'barney', 'age': 36, 'blocked': False},
+       {'name': 'fred',   'age': 40, 'blocked': True}],
       'blocked'),
      [{'name': 'barney', 'age': 36, 'blocked': False}]),
-    ((fixtures.data.filter_,
+    (([{'name': 'barney', 'age': 36, 'blocked': False},
+       {'name': 'fred',   'age': 40, 'blocked': True}],
       {'age': 36}),
      [{'name': 'fred', 'age': 40, 'blocked': True}]),
 ])
