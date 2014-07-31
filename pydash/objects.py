@@ -309,6 +309,30 @@ def is_number(value):
     return isinstance(value, number_types)
 
 
+def is_object(value):
+    """Checks if `value` is a ``list`` or ``dict``.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value is ``list`` or ``dict``.
+    """
+    return isinstance(value, (list, dict))
+
+
+def is_plain_object(value):
+    """Checks if `value` is a ``dict``.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value is a ``dict``.
+    """
+    return isinstance(value, dict)
+
+
 def is_string(value):
     """Checks if `value` is a string.
 

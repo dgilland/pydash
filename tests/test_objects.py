@@ -199,7 +199,15 @@ def test_is_empty(case, expected):
     (([1], {'a': 1}), False),
     (([1], {'a': 1}, lambda a, b: True), True),
     (({'a': 1}, {'a': 1}), True),
+    (({'a': 1}, {'b': 1}, lambda a, b: None if isinstance(a, dict) else True),
+     False),
     (([1, 2, 3], [1, 2, 3]), True),
+    (([1, 2, 3], [1, 2]), False),
+    (([1, 2], [1, 2, 3]), False),
+    (([1, 2, 3], [1, 2], lambda a, b: None if isinstance(a, list) else True),
+     False),
+    (([1, 2], [1, 2, 3], lambda a, b: None if isinstance(a, list) else True),
+     False),
     ((['hello', 'goodbye'], ['hi', 'goodbye'], fixtures.is_equal_callback0),
      True)
 ])
@@ -243,6 +251,30 @@ def test_is_none(case, expected):
 ])
 def test_is_number(case, expected):
     assert pyd.is_number(case) == expected
+
+
+@parametrize('case,expected', [
+    ({}, True),
+    ([], True),
+    (1, False),
+    ('a', False),
+    (iter([]), False),
+    (iter({}), False)
+])
+def test_is_object(case, expected):
+    assert pyd.is_object(case) == expected
+
+
+@parametrize('case,expected', [
+    ({}, True),
+    ([], False),
+    (1, False),
+    ('a', False),
+    (iter([]), False),
+    (iter({}), False)
+])
+def test_is_plain_object(case, expected):
+    assert pyd.is_plain_object(case) == expected
 
 
 @parametrize('case,expected', [

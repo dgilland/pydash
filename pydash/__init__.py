@@ -151,6 +151,8 @@ from .objects import (
     is_nan,
     is_none,
     is_number,
+    is_object,
+    is_plain_object,
     is_string,
     keys,
     map_values,

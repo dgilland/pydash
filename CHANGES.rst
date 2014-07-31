@@ -43,6 +43,8 @@ vx.x.x (xxxx-xx-xx)
 - Add ``is_function()``. Thanks nathancahill_!
 - Add ``is_none()``. Thanks nathancahill_!
 - Add ``is_number()``. Thanks nathancahill_!
+- Add ``is_object()``.
+- Add ``is_plain_object()``.
 - Add ``is_string()``. Thanks nathancahill_!
 - Add ``keys()``.
 - Add ``map_values()``.
