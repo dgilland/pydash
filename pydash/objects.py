@@ -142,7 +142,7 @@ def has(obj, key):
     Returns:
         bool: Whether `obj` has `key`.
     """
-    return key in [key for key, value in iterate(obj)]
+    return key in (key for key, value in iterate(obj))
 
 
 def invert(obj):
