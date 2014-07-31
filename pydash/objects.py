@@ -134,6 +134,13 @@ methods = functions_
 
 def has(obj, key):
     """Checks if `key` exists as a key of `obj`.
+
+    Args:
+        obj (mixed): Object to test.
+        key (mixed): Key to test for.
+
+    Returns:
+        bool: Whether `obj` has `key`.
     """
     return key in [key for key, value in iterate(obj)]
 
