@@ -168,19 +168,33 @@ def last(array):
     return array[-1] if array else None
 
 
-def last_index_of(array, value, from_index=0):
-    """Gets the index at which the first occurrence of value is found
+def last_index_of(array, value, from_index=None):
+    """Gets the index at which the last occurrence of value is found.
 
     Args:
-        array (list): list to search
-        value (mixed): value to search for
-        from_index (int, optional): the index to search from
+        array (list): List to search.
+        value (mixed): Value to search for.
+        from_index (int, optional): Index to search from.
 
     Returns:
-        int: index of found item or ``False`` if not found
+        int: Index of found item or ``False`` if not found.
     """
-    # reverse array, call index_of(), and subtract from max index
-    return len(array) - 1 - index_of(array[::-1], value, from_index)
+    index = array_len = len(array)
+
+    try:
+        from_index = int(from_index)
+    except (TypeError, ValueError):
+        pass
+    else:
+        # Set starting index base on from_index offset.
+        index = (max(0, index + from_index) if from_index < 0
+                 else min(from_index, index - 1))
+
+    while index:
+        if index < array_len and array[index] == value:
+            return index
+        index -= 1
+    return -1
 
 
 def pull(array, *values):
