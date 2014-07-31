@@ -5,13 +5,8 @@ from __future__ import absolute_import
 
 import pydash
 
+from .exceptions import InvalidMethod
 from ._compat import text_type
-
-
-class InvalidMethod(Exception):
-    """Raised when an invalid pydash method is invoked through :class:`Chain`.
-    """
-    pass
 
 
 class Chain(object):

@@ -55,7 +55,6 @@ from .arrays import (
 #
 
 from .chaining import (
-    InvalidMethod,
     chain,
     tap
 )
@@ -179,4 +178,12 @@ from .utilities import (
     result,
     times,
     unique_id
+)
+
+
+#
+# Exceptions
+#
+from .exceptions import (
+    InvalidMethod
 )
