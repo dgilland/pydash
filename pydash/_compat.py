@@ -10,6 +10,7 @@
 """
 
 import sys
+from decimal import Decimal
 
 
 PY3 = sys.version_info[0] == 3
@@ -20,6 +21,7 @@ if PY3:
     text_type = str
     string_types = (str,)
     integer_types = (int,)
+    number_types = (int, float, Decimal)
 
     iterkeys = lambda d: iter(d.keys())
     itervalues = lambda d: iter(d.values())
@@ -32,6 +34,7 @@ else:
     text_type = unicode
     string_types = (str, unicode)
     integer_types = (int, long)
+    number_types = (int, long, float, Decimal)
 
     iterkeys = lambda d: d.iterkeys()
     itervalues = lambda d: d.itervalues()

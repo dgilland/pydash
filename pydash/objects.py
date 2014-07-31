@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 
 import copy
+import datetime
 
 from .arrays import flatten
 from .utilities import (
@@ -16,7 +17,9 @@ from .utilities import (
 from ._compat import (
     iteritems,
     integer_types,
-    string_types
+    number_types,
+    string_types,
+    text_type
 )
 
 
@@ -166,42 +169,118 @@ def invert(obj):
 
 def is_list(value):
     """Checks if `value` is a list.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a list.
     """
     return isinstance(value, list)
 
 
 def is_boolean(value):
     """Checks if `value` is a boolean value.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a boolean.
     """
     return isinstance(value, bool)
 
 
+def is_date(value):
+    """Check if `value is a date object.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a date object.
+
+    Note:
+        This will also return ``True`` for datetime objects.
+    """
+    return isinstance(value, datetime.date)
+
+
 def is_empty(value):
     """Checks if `value` is empty.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is empty.
+
+    Note:
+        Returns ``True`` for booleans and numbers.
     """
     return any([is_boolean(value), is_number(value), not value])
 
 
 def is_function(value):
     """Checks if `value` is a function.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is callable.
     """
     return callable(value)
 
 
+def is_nan(value):
+    """Checks if `value` is not a number.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is not a number.
+    """
+    return not is_number(value)
+
+
 def is_none(value):
     """Checks if `value` is `None`.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is ``None``.
     """
     return value is None
 
 
 def is_number(value):
     """Checks if `value` is a number.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a number.
+
+    Note:
+        Returns ``True`` for ``int``, ``long`` (PY2), ``float``, and
+        ``decimal.Decimal``.
     """
-    return isinstance(value, integer_types + (float,))
+    return isinstance(value, number_types)
 
 
 def is_string(value):
     """Checks if `value` is a string.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a string.
     """
     return isinstance(value, string_types)
 
@@ -340,6 +419,42 @@ def pairs(obj):
         list: Two dimensional list of object's key-value pairs.
     """
     return [[key, value] for key, value in iterate(obj)]
+
+
+def parse_int(value, radix=None):
+    """Converts the given `value` into an integer of the specified `radix`. If
+    `radix` is falsey a radix of ``10`` is used unless the `value` is a
+    hexadecimal, in which case a radix of 16 is used.
+
+    Args:
+        value (mixed): Value to parse.
+        radix (int, optional): Base to convert to.
+
+    Returns:
+        mixed: Integer if parsable else ``None``
+    """
+    if not radix and is_string(value):
+        try:
+            # Check if value is hexadcimal and if so use base-16 conversion.
+            int(value, 16)
+        except ValueError:
+            pass
+        else:
+            radix = 16
+
+    if not radix:
+        radix = 10
+
+    try:
+        # NOTE: Must convert value to string when supplying radix to int().
+        # Dropping radix arg when 10 is needed to allow floats to parse
+        # correctly.
+        args = (value,) if radix == 10 else (text_type(value), radix)
+        parsed = int(*args)
+    except (ValueError, TypeError):
+        parsed = None
+
+    return parsed
 
 
 def pick(obj, callback=None, *properties):

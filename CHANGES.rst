@@ -54,7 +54,8 @@ vx.x.x (xxxx-xx-xx)
 - Add ``now()``.
 - Add ``omit()``.
 - Add ``once()``.
-- Add ``pairs()``
+- Add ``pairs()``.
+- Add ``parse_int()``.
 - Add ``partial()``.
 - Add ``partial_right()``.
 - Add ``pick()``.

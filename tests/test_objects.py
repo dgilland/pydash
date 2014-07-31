@@ -1,4 +1,7 @@
 
+import datetime
+import decimal
+
 import pydash as pyd
 from pydash.utilities import iterate
 
@@ -143,67 +146,99 @@ def test_has(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3],), True),
+    ([1, 2, 3], True),
 ])
 def test_is_list(case, expected):
-    assert pyd.is_list(*case) == expected
+    assert pyd.is_list(case) == expected
 
 
 @parametrize('case,expected', [
-    ((True,), True),
-    ((False,), True),
-    ((0,), False),
-    (('',), False),
+    (True, True),
+    (False, True),
+    (0, False),
+    ('', False),
 ])
 def test_is_boolean(case, expected):
-    assert pyd.is_boolean(*case) == expected
+    assert pyd.is_boolean(case) == expected
 
 
 @parametrize('case,expected', [
-    ((True,), True),
-    ((0,), True),
-    ((123.45,), True),
-    (('',), True),
-    (({},), True),
-    (([],), True),
-    (('Hello',), False),
-    ((['Hello', 'World'],), False),
+    (datetime.date.today(), True),
+    (datetime.datetime.today(), True),
+    ('2014-01-01', False),
+    ('2014-01-01T00:00:00', False),
+    (1, False)
+])
+def test_is_date(case, expected):
+    assert pyd.is_date(case) == expected
+
+
+@parametrize('case,expected', [
+    (True, True),
+    (0, True),
+    (123.45, True),
+    ('', True),
+    ({}, True),
+    ([], True),
+    (False, True),
+    (None, True),
+    ({'a': 1}, False),
+    ([1], False),
+    ('Hello', False),
+    (['Hello', 'World'], False),
 ])
 def test_is_empty(case, expected):
-    assert pyd.is_empty(*case) == expected
+    assert pyd.is_empty(case) == expected
 
 
 @parametrize('case,expected', [
-    ((lambda x: x + 1,), True),
-    (('Hello, world!',), False),
+    (lambda x: x + 1, True),
+    ('Hello, world!', False),
 ])
 def test_is_function(case, expected):
-    assert pyd.is_function(*case) == expected
+    assert pyd.is_function(case) == expected
 
 
 @parametrize('case,expected', [
-    ((None,), True),
-    ((0,), False),
+    (0, False),
+    (123456789123456789123456789, False),
+    (123.45, False),
+    (decimal.Decimal(1), False),
+    ('1', True)
+])
+def test_is_nan(case, expected):
+    assert pyd.is_nan(case) == expected
+
+
+@parametrize('case,expected', [
+    (None, True),
+    (0, False),
 ])
 def test_is_none(case, expected):
-    assert pyd.is_none(*case) == expected
+    assert pyd.is_none(case) == expected
 
 
 @parametrize('case,expected', [
-    (('',), True),
-    (('Hello, world!',), True),
-])
-def test_is_string(case, expected):
-    assert pyd.is_string(*case) == expected
-
-
-@parametrize('case,expected', [
-    ((0,), True),
-    ((123456789123456789123456789,), True),
-    ((123.45,), True),
+    (0, True),
+    (123456789123456789123456789, True),
+    (123.45, True),
+    (decimal.Decimal(1), True),
+    ('1', False)
 ])
 def test_is_number(case, expected):
-    assert pyd.is_number(*case) == expected
+    assert pyd.is_number(case) == expected
+
+
+@parametrize('case,expected', [
+    ('', True),
+    ('Hello, world!', True),
+    (1, False),
+    ({}, False),
+    ([], False),
+    (None, False)
+])
+def test_is_string(case, expected):
+    assert pyd.is_string(case) == expected
 
 
 @parametrize('case,expected', [
@@ -295,6 +330,22 @@ def test_omit(case, expected):
 ])
 def test_pairs(case, expected):
     assert dict(pyd.pairs(case)) == dict(expected)
+
+
+@parametrize('case,expected', [
+    ((1,), 1),
+    ((1.0,), 1),
+    (('1',), 1),
+    (('00001',), 1),
+    ((13, 8), 11),
+    (('0A',), 10),
+    (('08',), 8),
+    (('10',), 16),
+    (('10', 10), 10),
+    (('xyz',), None)
+])
+def test_parse_int(case, expected):
+    assert pyd.parse_int(*case) == expected
 
 
 @parametrize('case,expected', [
