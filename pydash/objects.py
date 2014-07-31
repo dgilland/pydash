@@ -94,7 +94,7 @@ def defaults(obj, *sources):
     return obj
 
 
-def find_key(obj, callback):
+def find_key(obj, callback=None):
     """This method is like :func:`pydash.arrays.find_index` except that it
     returns the key of the first element that passes the callback check,
     instead of the element itself.
@@ -107,7 +107,7 @@ def find_key(obj, callback):
 find_last_key = find_key
 
 
-def for_in(obj, callback):
+def for_in(obj, callback=None):
     """Iterates over own and inherited enumerable properties of `obj`,
     executing `callback` for each property.
     """

@@ -73,10 +73,19 @@ def test_defaults(case, expected):
 
 
 @parametrize('case,expected', [
+    # NOTE: The expected is a list of values but find_key returns only a single
+    # value. However, since dicts do not have an order, it's unknown what the
+    # "first" returned value will be.
     (({'barney':  {'age': 36, 'blocked': False},
        'fred':    {'age': 40, 'blocked': True},
        'pebbles': {'age': 1,  'blocked': False}},
-      lambda obj, *args: obj['age'] < 40), ['pebbles', 'barney']),
+      lambda obj, *args: obj['age'] < 40),
+     ['pebbles', 'barney']),
+    (({'barney':  {'age': 36, 'blocked': False},
+       'fred':    {'age': 40, 'blocked': True},
+       'pebbles': {'age': 1,  'blocked': False}},),
+     ['barney', 'fred', 'pebbles']),
+    (([1, 2, 3],), [0])
 ])
 def test_find_key(case, expected):
     assert pyd.find_key(*case) in expected
@@ -94,6 +103,7 @@ def test_find_key_aliases(case):
      {'name': 'fred', 'employer': 'slate'}),
     (({'name': 'fred', 'employer': 'slate'}, lambda *args: False),
      {'name': 'fred', 'employer': 'slate'}),
+    (([1, 2, 3],), [1, 2, 3])
 ])
 def test_for_in(case, expected):
     assert pyd.for_in(*case) == expected
