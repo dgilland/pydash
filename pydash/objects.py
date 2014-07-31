@@ -287,18 +287,27 @@ def update(obj, source, callback=None):
     return obj
 
 
-def omit(obj, callback, *properties):
+def omit(obj, callback=None, *properties):
     """Creates a shallow clone of object excluding the specified properties.
     Property names may be specified as individual arguments or as lists of
     property names. If a callback is provided it will be executed for each
     property of object omitting the properties the callback returns truthy for.
-    The callback is invoked with three arguments; (value, key, object).
+    The callback is invoked with three arguments: (value, key, object).
+
+    Args:
+        obj (mixed): Object to process.
+        *properties (str): Property values to omit.
+        callback (mixed, optional): Callback used to determine whic properties
+            to omit.
+
+    Returns:
+        dict: Results of omitting properties.
     """
     if not callable(callback):
-        properties = flatten([callback, properties])
+        properties = flatten([callback or [], properties])
         callback = lambda value, key, item: key in properties
 
-    return dict((key, value) for key, value in iteritems(obj)
+    return dict((key, value) for key, value in iterate(obj)
                 if not callback(value, key, obj))
 
 

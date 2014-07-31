@@ -266,6 +266,7 @@ def test_merge(case, callback, expected):
     (({'a': 1, 'b': 2, 'c': 3}, ['a'], ['b']), {'c': 3}),
     (({'a': 1, 'b': 2, 'c': 3}, lambda value, key, *args: key in ['a']),
      {'b': 2, 'c': 3}),
+    (([1, 2, 3],), {0: 1, 1: 2, 2: 3})
 ])
 def test_omit(case, expected):
     assert pyd.omit(*case) == expected
