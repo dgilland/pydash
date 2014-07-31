@@ -1,4 +1,6 @@
 
+import time
+
 import pydash as pyd
 from .fixtures import parametrize
 
@@ -48,6 +50,60 @@ def test_curry(case, arglist, expected):
         assert ret == expected
 
 
+def test_debounce():
+    func = lambda: pyd.now()
+
+    wait = 250
+    debounced = pyd.debounce(func, wait)
+
+    start = pyd.now()
+    present = pyd.now()
+
+    expected = debounced()
+
+    while (present - start) <= wait + 100:
+        result = debounced()
+        present = pyd.now()
+
+    assert result == expected
+
+    time.sleep(wait / 1000.0)
+    result = debounced()
+
+    assert result > expected
+
+
+def test_debounce_max_wait():
+    func = lambda: pyd.now()
+
+    wait = 250
+    max_wait = 300
+    debounced = pyd.debounce(func, wait, max_wait=max_wait)
+
+    start = pyd.now()
+    present = pyd.now()
+
+    expected = debounced()
+
+    while (present - start) <= max_wait:
+        result = debounced()
+        present = pyd.now()
+
+    assert result > expected
+
+
+@parametrize('func,wait,args,kargs,expected', [
+    (lambda a, b, c: (a, b, c), 250, (1, 2), {'c': 3}, (1, 2, 3))
+])
+def test_delay(func, wait, args, kargs, expected):
+    start = time.time() * 1000
+    result = pyd.delay(func, wait, *args, **kargs)
+    stop = time.time() * 1000
+
+    assert (wait - 1) <= (stop - start) <= (wait + 1)
+    assert result == expected
+
+
 @parametrize('case,arglist,expected', [
     (lambda a: a * a, [(2,), (4,)], 4)
 ])
@@ -68,6 +124,26 @@ def test_partial(case, case_args, args, expected):
 ])
 def test_partial_right(case, case_args, args, expected):
     assert pyd.partial_right(case, *case_args)(*args) == expected
+
+
+def test_throttle():
+    func = lambda: pyd.now()
+    wait = 250
+    throttled = pyd.throttle(func, wait)
+
+    start = pyd.now()
+    present = pyd.now()
+
+    expected = throttled()
+
+    while (present - start) < (wait - 50):
+        result = throttled()
+        present = pyd.now()
+
+    assert result == expected
+
+    time.sleep(100 / 1000.0)
+    assert throttled() > expected
 
 
 @parametrize('case,args,expected', [

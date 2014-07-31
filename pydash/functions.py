@@ -4,6 +4,10 @@
 from __future__ import absolute_import
 
 import inspect
+import time
+
+from .objects import is_number
+from .utilities import now
 
 
 class After(object):
@@ -88,6 +92,63 @@ class Partial(object):
         return self.func(*args, **kargs)
 
 
+class Debounce(object):
+    """Wrap a function in a debounce context."""
+
+    def __init__(self, func, wait, max_wait=False):
+        self.func = func
+        self.wait = wait
+        self.max_wait = max_wait
+
+        self.last_result = None
+
+        # Initialize last_* times to be prior to the wait periods so that func
+        # is primed to be executed on first call.
+        self.last_call = now() - self.wait
+        self.last_execution = (now() - max_wait if is_number(max_wait)
+                               else None)
+
+    def __call__(self, *args, **kargs):
+        """Execute `self.func` if function hasn't been called witinin last
+        `self.wait` milliseconds or in last `self.max_wait` milliseconds.
+        Return results of last successful call.
+        """
+        present = now()
+
+        if any([(present - self.last_call) >= self.wait,
+                (self.max_wait and
+                 (present - self.last_execution) >= self.max_wait)]):
+            self.last_result = self.func(*args, **kargs)
+            self.last_execution = present
+
+        self.last_call = present
+
+        return self.last_result
+
+
+class Throttle(object):
+    """Wrap a function in a throttle context."""
+
+    def __init__(self, func, wait):
+        self.func = func
+        self.wait = wait
+
+        self.last_result = None
+        self.last_execution = now() - self.wait
+
+    def __call__(self, *args, **kargs):
+        """Execute `self.func` if function hasn't been called witinin last
+        `self.wait` milliseconds. Return results of last successful call.
+        """
+        present = now()
+
+        if (present - self.last_execution) >= self.wait:
+            self.last_result = self.func(*args, **kargs)
+            self.last_execution = present
+
+        return self.last_result
+
+
 def after(n, func):
     """Creates a function that executes `func`, with the arguments of the
     created function, only after being called `n` times.
@@ -126,6 +187,40 @@ def curry(func, arity=None):
     return Curry(func, arity)
 
 
+def debounce(func, wait, max_wait=False):
+    """Creates a function that will delay the execution of `func` until after
+    `wait` milliseconds have elapsed since the last time it was invoked.
+    Subsequent calls to the debounced function will return the result of the
+    last `func` call.
+
+    Args:
+        func (function): Function to execute.
+        wait (int): Milliseconds to wait before executing `func`.
+        max_wait (optional): Maximum time to wait before executing `func`.
+
+    Returns:
+        Debounce: Debounced function class wrapper.
+    """
+    return Debounce(func, wait, max_wait=max_wait)
+
+
+def delay(func, wait, *args, **kargs):
+    """Executes the `func` function after `wait` milliseconds. Additional
+    arguments will be provided to func when it is invoked.
+
+    Args:
+        func (function): Function to execute.
+        wait (int): Milliseconds to wait before executing `func`.
+        *args (optional): Arguments to pass to `func`.
+        **kargs (optional): Keyword arguments to pass to `func`.
+
+    Returns:
+        mixed: Return from `func`
+    """
+    time.sleep(wait / 1000.0)
+    return func(*args, **kargs)
+
+
 def once(func):
     """Creates a function that is restricted to execute func once. Repeat calls
     to the function will return the value of the first call.
@@ -145,6 +240,21 @@ def partial_right(func, *args):
     appended to those provided to the new function.
     """
     return Partial(func, args, from_right=True)
+
+
+def throttle(func, wait):
+    """Creates a function that, when executed, will only call the `func`
+    function at most once per every `wait` milliseconds. Subsequent calls to
+    the throttled function will return the result of the last `func` call.
+
+    Args:
+        func (function): Function to throttle.
+        wait (int): Milliseconds to wait before calling `func` again.
+
+    Returns:
+        mixed: Results of last `func` call.
+    """
+    return Throttle(func, wait)
 
 
 def wrap(value, wrapper):

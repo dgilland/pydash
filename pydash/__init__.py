@@ -113,9 +113,12 @@ from .functions import (
     after,
     compose,
     curry,
+    debounce,
+    delay,
     once,
     partial,
     partial_right,
+    throttle,
     wrap
 )
 

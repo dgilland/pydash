@@ -15,7 +15,9 @@ vx.x.x (xxxx-xx-xx)
 - Add ``constant()``.
 - Add ``count_by()``. Thanks nathancahill_!
 - Add ``curry()``.
+- Add ``debounce()``.
 - Add ``defaults()``. Thanks nathancahill_!
+- Add ``delay()``.
 - Add ``find_key()``. Thanks nathancahill_!
 - Add ``find_last()``. Thanks nathancahill_!
 - Add ``find_last_index()``. Thanks nathancahill_!
@@ -69,6 +71,7 @@ vx.x.x (xxxx-xx-xx)
 - Add ``size()``.
 - Add ``sort_by()``. Thanks nathancahill_!
 - Add ``tap()``.
+- Add ``throttle()``.
 - Add ``times()``.
 - Add ``transform()``.
 - Add ``to_list()``. Thanks nathancahill_!
