@@ -193,7 +193,8 @@ def test_is_number(case, expected):
 
 
 @parametrize('case,expected', [
-    ({'a': 1, 'b': 2, 'c': 3}, ['a', 'b', 'c'])
+    ({'a': 1, 'b': 2, 'c': 3}, ['a', 'b', 'c']),
+    ([1, 2, 3], [0, 1, 2])
 ])
 def test_keys(case, expected):
     assert set(pyd.keys(case)) == set(expected)

@@ -197,8 +197,15 @@ def is_string(value):
 
 
 def keys(obj):
-    """Creates a list composed of the keys of `obj`."""
-    return list(iterkeys(obj))
+    """Creates a list composed of the keys of `obj`.
+
+    Args:
+        obj (mixed): Object to extract keys from.
+
+    Returns:
+        list: List of keys.
+    """
+    return [key for key, value in iterate(obj)]
 
 
 def map_values(obj, callback=None):
