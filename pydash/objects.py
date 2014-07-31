@@ -332,18 +332,28 @@ def pairs(obj):
     return [[key, value] for key, value in iterate(obj)]
 
 
-def pick(obj, callback, *properties):
+def pick(obj, callback=None, *properties):
     """Creates a shallow clone of object composed of the specified properties.
     Property names may be specified as individual arguments or as lists of
     property names. If a callback is provided it will be executed for each
     property of object picking the properties the callback returns truthy for.
     The callback is invoked with three arguments; (value, key, object).
+
+    Args:
+        obj (mixed): Object to pick from.
+        *properties (str): Property values to pick.
+        callback (mixed, optional): Callback used to determine whic properties
+            to pick.
+
+    Returns:
+        dict: Results of picking properties.
     """
     if not callable(callback):
+        callback = callback if callback is not None else []
         properties = flatten([callback, properties])
-        callback = lambda value, key, *args: key in properties
+        callback = lambda value, key, item: key in properties
 
-    return dict((key, value) for key, value in iteritems(obj)
+    return dict((key, value) for key, value in iterate(obj)
                 if callback(value, key, obj))
 
 
