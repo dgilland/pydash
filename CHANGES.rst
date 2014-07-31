@@ -39,6 +39,7 @@ vx.x.x (xxxx-xx-xx)
 - Add ``is_list()``. Thanks nathancahill_!
 - Add ``is_boolean()``. Thanks nathancahill_!
 - Add ``is_empty()``. Thanks nathancahill_!
+- Add ``is_equal()``.
 - Add ``is_function()``. Thanks nathancahill_!
 - Add ``is_none()``. Thanks nathancahill_!
 - Add ``is_number()``. Thanks nathancahill_!

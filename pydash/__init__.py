@@ -146,6 +146,7 @@ from .objects import (
     is_boolean,
     is_date,
     is_empty,
+    is_equal,
     is_function,
     is_nan,
     is_none,

@@ -62,3 +62,10 @@ def transform_callback0(result, num, *args):
     if num % 2:
         result.append(num)
         return len(result) < 3
+
+
+def is_equal_callback0(a, b):
+    a_greet = a.startswith('h') if hasattr(a, 'startswith') else False
+    b_greet = b.startswith('h') if hasattr(b, 'startswith') else False
+
+    return a_greet == b_greet if a_greet or b_greet else None

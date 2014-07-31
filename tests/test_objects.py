@@ -192,6 +192,22 @@ def test_is_empty(case, expected):
 
 
 @parametrize('case,expected', [
+    ((1, 1), True),
+    ((1, 2), False),
+    (('1', '1'), True),
+    (('1', '2'), False),
+    (([1], {'a': 1}), False),
+    (([1], {'a': 1}, lambda a, b: True), True),
+    (({'a': 1}, {'a': 1}), True),
+    (([1, 2, 3], [1, 2, 3]), True),
+    ((['hello', 'goodbye'], ['hi', 'goodbye'], fixtures.is_equal_callback0),
+     True)
+])
+def test_is_equal(case, expected):
+    assert pyd.is_equal(*case) == expected
+
+
+@parametrize('case,expected', [
     (lambda x: x + 1, True),
     ('Hello, world!', False),
 ])

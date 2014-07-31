@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 import copy
 import datetime
+from collections import Sequence, Mapping
 
 from .arrays import flatten
 from .utilities import (
@@ -219,6 +220,42 @@ def is_empty(value):
         Returns ``True`` for booleans and numbers.
     """
     return any([is_boolean(value), is_number(value), not value])
+
+
+def is_equal(a, b, callback=None):
+    """Performs a comparison between two values to determine if they are
+    equivalent to each other. If a callback is provided it will be executed to
+    compare values. If the callback returns ``None``, comparisons will be
+    handled by the method instead. The callback is invoked with two arguments:
+    (a, b).
+    """
+    # If callback provided, use it for comparision.
+    equal = callback(a, b) if callable(callback) else None
+
+    # Return callback results if anything but None.
+    if equal is not None:
+        return equal
+
+    if any([not callable(callback),
+            is_string(a),
+            is_string(b),
+            not isinstance(a, (Mapping, Sequence)),
+            not isinstance(b, (Mapping, Sequence)),
+            type(a) is not type(b)]):
+        # Use basic == comparision.
+        equal = a == b
+    else:
+        # Walk a/b to determine eqaulity using callback.
+        for key, value in iterate(a):
+            if has(b, key):
+                equal = is_equal(value, b[key], callback)
+            else:
+                equal = False
+
+            if not equal:
+                break
+
+    return equal
 
 
 def is_function(value):
