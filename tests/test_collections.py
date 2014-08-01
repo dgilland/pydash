@@ -53,7 +53,7 @@ def test_some(case, expected):
      False)
 ])
 def test_map_(case, expected, sort_results):
-    actual = pyd.map_(*case)
+    actual = pyd.map(*case)
     if sort_results:
         actual = sorted(actual)
 
@@ -64,7 +64,7 @@ def test_map_(case, expected, sort_results):
     pyd.collect
 ])
 def test_map_aliases(case):
-    assert pyd.map_ is case
+    assert pyd.map is case
 
 
 @parametrize('case,expected', [
@@ -78,7 +78,7 @@ def test_map_aliases(case):
      {'name': 'fred', 'age': 40}),
 ])
 def test_max_(case, expected):
-    assert pyd.max_(*case) == expected
+    assert pyd.max(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -92,7 +92,7 @@ def test_max_(case, expected):
      {'name': 'barney', 'age': 36}),
 ])
 def test_min_(case, expected):
-    assert pyd.min_(*case) == expected
+    assert pyd.min(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -138,7 +138,7 @@ def test_count_by(case, expected):
      [{'name': 'barney', 'age': 36, 'blocked': False}]),
 ])
 def test_filter_(case, expected):
-    assert pyd.filter_(*case) == expected
+    assert pyd.filter(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -284,7 +284,7 @@ def test_size(case):
      {'a': 3, 'b': 6, 'c': 9})
 ])
 def test_reduce(case, expected):
-    assert pyd.reduce_(*case) == expected
+    assert pyd.reduce(*case) == expected
 
 
 @parametrize('case,exception', [
@@ -294,7 +294,7 @@ def test_reduce_raise(case, exception):
     raised = False
 
     try:
-        pyd.reduce_(*case)
+        pyd.reduce(*case)
     except exception:
         raised = True
 
@@ -306,7 +306,7 @@ def test_reduce_raise(case, exception):
     pyd.inject
 ])
 def test_reduce_aliases(case):
-    assert pyd.reduce_ is case
+    assert pyd.reduce is case
 
 
 @parametrize('case,expected', [
