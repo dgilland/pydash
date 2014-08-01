@@ -196,6 +196,11 @@ def unique_id(prefix=None):
     return text_type('' if prefix is None else prefix) + text_type(ID_COUNTER)
 
 
+#
+# Generic utility methods not a part of main API.
+#
+
+
 def iter_callback(collection, callback=None):
     """Return iterative callback based on collection type."""
     # pylint: disable=redefined-outer-name
