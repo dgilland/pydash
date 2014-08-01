@@ -6,7 +6,7 @@ from __future__ import absolute_import
 import time
 from random import uniform, randint
 
-from ._compat import (
+from .._compat import (
     _range,
     string_types,
     text_type,

@@ -6,7 +6,7 @@ from __future__ import absolute_import
 import pydash
 
 from .exceptions import InvalidMethod
-from ._compat import text_type
+from .._compat import text_type
 
 
 class Chain(object):

@@ -17,7 +17,7 @@ from .__meta__ import (
 # Arrays
 #
 
-from .arrays import (
+from .api.arrays import (
     compact,
     difference,
     find_index,
@@ -54,7 +54,7 @@ from .arrays import (
 # Chaining
 #
 
-from .chaining import (
+from .api.chaining import (
     chain,
     tap
 )
@@ -64,7 +64,7 @@ from .chaining import (
 # Collections
 #
 
-from .collections import (
+from .api.collections import (
     at,
     contains,
     count_by,
@@ -109,7 +109,7 @@ from .collections import (
 # Functions
 #
 
-from .functions import (
+from .api.functions import (
     after,
     compose,
     curry,
@@ -127,7 +127,7 @@ from .functions import (
 # Objects
 #
 
-from .objects import (
+from .api.objects import (
     assign,
     clone,
     clone_deep,
@@ -139,7 +139,7 @@ from .objects import (
     for_in_right,
     for_own,
     for_own_right,
-    functions_,
+    functions,
     has,
     invert,
     is_list,
@@ -171,7 +171,7 @@ from .objects import (
 # Utilities
 #
 
-from .utilities import (
+from .api.utilities import (
     now,
     constant,
     callback,
@@ -194,6 +194,6 @@ from .utilities import (
 #
 # Exceptions
 #
-from .exceptions import (
+from .api.exceptions import (
     InvalidMethod
 )

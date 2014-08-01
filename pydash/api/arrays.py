@@ -6,7 +6,7 @@ from __future__ import absolute_import
 from collections import Iterable
 from bisect import bisect_left
 
-from ._compat import string_types, _range
+from .._compat import string_types, _range
 from .utilities import (
     create_callback,
     iter_callback,

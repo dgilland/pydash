@@ -14,7 +14,7 @@ from .utilities import (
     get_item,
     set_item
 )
-from ._compat import (
+from .._compat import (
     iteritems,
     number_types,
     string_types,
@@ -128,13 +128,13 @@ for_own = for_in
 for_own_right = for_in
 
 
-def functions_(obj):
+def functions(obj):
     """Creates a list of keys of an object that are callable.
     """
     return [key for key, value in iteritems(obj) if callable(value)]
 
 
-methods = functions_
+methods = functions
 
 
 def has(obj, key):

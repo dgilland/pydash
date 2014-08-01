@@ -2,6 +2,7 @@
 import math
 
 import pydash as pyd
+
 from . import fixtures
 from .fixtures import parametrize
 

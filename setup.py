@@ -7,7 +7,7 @@ Python port of Lodash.
 Project: https://github.com/dgilland/pydash
 """
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
 
@@ -49,7 +49,7 @@ setup(
     author_email=meta['__email__'],
     description=meta['__summary__'],
     long_description=__doc__,
-    packages=['pydash'],
+    packages=find_packages(exclude=['tests']),
     install_requires=[],
     tests_require=['tox'],
     cmdclass={'test': Tox},

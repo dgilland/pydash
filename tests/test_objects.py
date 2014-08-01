@@ -3,7 +3,7 @@ import datetime
 import decimal
 
 import pydash as pyd
-from pydash.utilities import iterate
+from pydash.api.utilities import iterate
 
 from . import fixtures
 from .fixtures import parametrize
@@ -124,15 +124,15 @@ def test_for_in_aliases(case):
 @parametrize('case,expected', [
     (({'name': 'fred', 'greet': lambda: 'Hello, world!'},), ['greet']),
 ])
-def test_functions_(case, expected):
-    assert pyd.functions_(*case) == expected
+def test_functions(case, expected):
+    assert pyd.functions(*case) == expected
 
 
 @parametrize('case', [
     pyd.methods,
 ])
 def test_functions_aliases(case):
-    assert pyd.functions_ is case
+    assert pyd.functions is case
 
 
 @parametrize('case,expected', [

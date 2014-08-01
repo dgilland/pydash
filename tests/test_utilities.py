@@ -2,7 +2,7 @@
 import time
 
 import pydash as pyd
-from pydash.collections import map_
+from pydash.api.collections import map_
 
 from . import fixtures
 from .fixtures import parametrize
