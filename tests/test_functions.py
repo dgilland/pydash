@@ -100,7 +100,7 @@ def test_delay(func, wait, args, kargs, expected):
     result = pyd.delay(func, wait, *args, **kargs)
     stop = time.time() * 1000
 
-    assert (wait - 1) <= (stop - start) <= (wait + 1)
+    assert (wait - 5) <= (stop - start) <= (wait + 5)
     assert result == expected
 
 
