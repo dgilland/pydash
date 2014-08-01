@@ -134,6 +134,16 @@ Run `PEP8`_ compliance check on code base.
     make pep8
 
 
+make docs
+---------
+
+Build documentation. Output folder is ``docs/_build/``.
+
+::
+
+    make docs
+
+
 .. _Travis-CI: https://travis-ci.org/
 .. _Coveralls: https://coveralls.io/
 .. _Dead Snakes PPA: https://launchpad.net/~fkrull/+archive/deadsnakes
