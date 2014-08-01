@@ -18,6 +18,7 @@ vx.x.x (xxxx-xx-xx)
 - Add ``debounce()``.
 - Add ``defaults()``. Thanks nathancahill_!
 - Add ``delay()``.
+- Add ``escape()``.
 - Add ``find_key()``. Thanks nathancahill_!
 - Add ``find_last()``. Thanks nathancahill_!
 - Add ``find_last_index()``. Thanks nathancahill_!
@@ -79,6 +80,7 @@ vx.x.x (xxxx-xx-xx)
 - Add ``times()``.
 - Add ``transform()``.
 - Add ``to_list()``. Thanks nathancahill_!
+- Add ``unescape()``.
 - Add ``unique_id()``.
 - Add ``values()``.
 - Add ``wrap()``.

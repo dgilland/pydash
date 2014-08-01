@@ -10,7 +10,9 @@
 """
 
 import sys
+import cgi
 from decimal import Decimal
+from functools import partial
 
 
 PY3 = sys.version_info[0] == 3
@@ -18,6 +20,7 @@ _identity = lambda x: x
 
 
 if PY3:
+    from html.parser import HTMLParser
     text_type = str
     string_types = (str,)
     integer_types = (int,)
@@ -31,6 +34,7 @@ if PY3:
 
     implements_to_string = _identity
 else:
+    from HTMLParser import HTMLParser
     text_type = unicode
     string_types = (str, unicode)
     integer_types = (int, long)
@@ -46,3 +50,7 @@ else:
         cls.__unicode__ = cls.__str__
         cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
         return cls
+
+
+html_escape = partial(cgi.escape, quote=True)
+html_unescape = HTMLParser().unescape

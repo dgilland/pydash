@@ -176,6 +176,7 @@ from .utilities import (
     constant,
     callback,
     create_callback,
+    escape,
     identity,
     matches,
     memoize,
@@ -185,6 +186,7 @@ from .utilities import (
     random,
     result,
     times,
+    unescape,
     unique_id
 )
 
