@@ -2,6 +2,7 @@
 import time
 
 import pydash as pyd
+
 from .fixtures import parametrize
 
 
@@ -85,7 +86,7 @@ def test_debounce_max_wait():
 
     expected = debounced()
 
-    while (present - start) <= max_wait:
+    while (present - start) <= (max_wait + 5):
         result = debounced()
         present = pyd.now()
 
