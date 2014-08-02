@@ -102,23 +102,41 @@ def test_find_key_aliases(case):
 
 
 @parametrize('case,expected', [
-    (({'name': 'fred', 'employer': 'slate'}, lambda *args: fixtures.noop),
-     {'name': 'fred', 'employer': 'slate'}),
-    (({'name': 'fred', 'employer': 'slate'}, lambda *args: False),
-     {'name': 'fred', 'employer': 'slate'}),
-    (([1, 2, 3],), [1, 2, 3])
+    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback0),
+     ({'name': 'fredfred', 'employer': 'slateslate'},)),
+    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback1),
+     ({'name': 'fredfred', 'employer': 'slate'},
+      {'name': 'fred', 'employer': 'slateslate'})),
+    (([1, 2, 3], fixtures.for_in_callback2), ([False, True, 3],))
 ])
 def test_for_in(case, expected):
-    assert pyd.for_in(*case) == expected
+    assert pyd.for_in(*case) in expected
 
 
 @parametrize('case', [
-    pyd.for_in_right,
-    pyd.for_own,
-    pyd.for_own_right,
+    pyd.for_own
 ])
 def test_for_in_aliases(case):
     assert pyd.for_in is case
+
+
+@parametrize('case,expected', [
+    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback0),
+     ({'name': 'fredfred', 'employer': 'slateslate'},)),
+    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback1),
+     ({'name': 'fredfred', 'employer': 'slate'},
+      {'name': 'fred', 'employer': 'slateslate'})),
+    (([1, 2, 3], fixtures.for_in_callback2), ([1, True, 'index:2'],))
+])
+def test_for_in_right(case, expected):
+    assert pyd.for_in_right(*case) in expected
+
+
+@parametrize('case', [
+    pyd.for_own_right,
+])
+def test_for_in_right_aliases(case):
+    assert pyd.for_in_right is case
 
 
 @parametrize('case,expected', [

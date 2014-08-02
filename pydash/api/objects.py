@@ -123,9 +123,21 @@ def for_in(obj, callback=None):
     return obj
 
 
-for_in_right = for_in
 for_own = for_in
-for_own_right = for_in
+
+
+def for_in_right(obj, callback=None):
+    """This function is like :func:`for_in` except it iterates over the
+    properties in reverse order.
+    """
+    for result, _, _, _ in _iter_callback(obj, callback, reverse=True):
+        if result is False:
+            break
+
+    return obj
+
+
+for_own_right = for_in_right
 
 
 def functions(obj):

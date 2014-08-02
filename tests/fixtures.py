@@ -36,3 +36,24 @@ def is_equal_callback0(a, b):
     b_greet = b.startswith('h') if hasattr(b, 'startswith') else False
 
     return a_greet == b_greet if a_greet or b_greet else None
+
+
+def for_in_callback0(value, key, obj):
+    obj[key] += value
+
+
+def for_in_callback1(value, key, obj):
+    obj[key] += value
+    return False
+
+
+def for_in_callback2(value, index, obj):
+    if index == 2:
+        obj[index] = 'index:2'
+        return True
+    elif index == 0:
+        obj[index] = False
+        return True
+    else:
+        obj[index] = True
+        return False
