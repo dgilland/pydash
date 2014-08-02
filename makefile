@@ -79,6 +79,7 @@ release:
 # docs
 docs:
 	rm -rf docs/_build
+	cd docs; make doctest
 	cd docs; make html
 
 ##
