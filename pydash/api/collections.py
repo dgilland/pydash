@@ -130,7 +130,16 @@ def find_last(collection, callback=None):
     """This method is like :func:`find` except that it iterates over elements
     of a `collection` from right to left.
     """
-    return find(list(reversed(collection)), callback)
+    found = None
+    for is_true, _, key, _ in _iter_callback(collection,
+                                             callback,
+                                             reverse=True):
+        if is_true:
+            found = collection[key]
+            # only return first found item
+            break
+
+    return found
 
 
 def for_each(collection, callback):
@@ -151,13 +160,9 @@ def for_each_right(collection, callback):
     """This method is like :func:`for_each` except that it iterates over
     elements of a `collection` from right to left.
     """
-    if isinstance(collection, dict):
-        # Dicts have no order, nothing to be done.
-        iterator = collection
-    else:
-        iterator = reversed(collection)
-
-    for_each(iterator, callback)
+    for ret, _, _, _ in _iter_callback(collection, callback, reverse=True):
+        if ret is False:
+            break
 
     return collection
 

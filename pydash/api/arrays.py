@@ -74,10 +74,11 @@ def find_last_index(array, callback=None):
     Returns:
         int: Index of found item or ``-1`` if not found.
     """
-    n = find_index(reversed(array), callback)
-
-    if n is not -1:
-        n = len(array) - n - 1
+    n = -1
+    for is_true, _, i, _ in _iter_callback(array, callback, reverse=True):
+        if is_true:
+            n = i
+            break
 
     return n
 
