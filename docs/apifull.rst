@@ -1,4 +1,4 @@
-.. _api:
+.. _apifull:
 
 ******************
 Full API Reference

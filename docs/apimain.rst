@@ -1,8 +1,8 @@
-.. _pydash:
+.. _apimain:
 
-********************
-Public API Reference
-********************
+******************
+Main API Reference
+******************
 
 All public functions are available by importing the main module.
 

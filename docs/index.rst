@@ -13,15 +13,15 @@ Guide
     quickstart
     differences
 
-Public API Reference
-====================
+Main API Reference
+==================
 
 References objects available via importing the main module.
 
 .. toctree::
     :maxdepth: 2
 
-    public
+    apimain
 
 Full API Reference
 ==================
@@ -31,7 +31,7 @@ Includes links to source code.
 .. toctree::
     :maxdepth: 2
 
-    api
+    apifull
 
 Project Info
 ============
@@ -48,7 +48,7 @@ Project Info
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+- :ref:`genindex`
+- :ref:`modindex`
+- :ref:`search`
 
