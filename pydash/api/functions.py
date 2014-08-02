@@ -109,8 +109,8 @@ class Debounce(object):
                                else None)
 
     def __call__(self, *args, **kargs):
-        """Execute `self.func` if function hasn't been called witinin last
-        `self.wait` milliseconds or in last `self.max_wait` milliseconds.
+        """Execute :attr:`func` if function hasn't been called witinin last
+        :attr:`wait` milliseconds or in last :attr:`max_wait` milliseconds.
         Return results of last successful call.
         """
         present = now()
@@ -137,8 +137,8 @@ class Throttle(object):
         self.last_execution = now() - self.wait
 
     def __call__(self, *args, **kargs):
-        """Execute `self.func` if function hasn't been called witinin last
-        `self.wait` milliseconds. Return results of last successful call.
+        """Execute :attr:`func` if function hasn't been called witinin last
+        :attr:`wait` milliseconds. Return results of last successful call.
         """
         present = now()
 
@@ -159,7 +159,8 @@ def after(n, func):
 def compose(*funcs):
     """Creates a function that is the composition of the provided functions,
     where each function consumes the return value of the function that follows.
-    For example, composing the functions f(), g(), and h() produces f(g(h())).
+    For example, composing the functions ``f()``, ``g()``, and ``h()`` produces
+    ``f(g(h()))``.
     """
     def wrapper(*args, **kargs):  # pylint: disable=missing-docstring
         # NOTE: Cannot use `funcs` for the variable name of list(funcs) due to

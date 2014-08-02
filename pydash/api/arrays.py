@@ -91,6 +91,11 @@ def first(array):
 
     Returns:
         mixed: First element of list.
+
+    See Also:
+        - :func:`first` (main definition)
+        - :func:`head` (alias)
+        - :func:`take` (alias)
     """
     return array[0] if array else None
 
@@ -275,6 +280,11 @@ def rest(array):
 
     Returns:
         list: Rest of the list.
+
+    See Also:
+        - :func:`rest` (main definition)
+        - :func:`tail` (alias)
+        - :func:`drop` (alias
     """
     return array[1:]
 
@@ -344,6 +354,10 @@ def uniq(array, callback=None):
 
     Returns:
         list: Unique list.
+
+    See Also:
+        - :func:`uniq` (main definition)
+        - :func:`unique` (alias)
     """
     if callback:
         cbk = create_callback(callback)
@@ -428,6 +442,10 @@ def zip_object(keys, values=None):
 
     Returns:
         dict: Zipped dict.
+
+    See Also:
+        - :func:`zip_object` (main definition)
+        - :func:`object_` (alias)
     """
 
     if values is None:

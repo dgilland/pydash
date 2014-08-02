@@ -16,7 +16,12 @@ class Chain(object):
         self._value = value
 
     def value(self):
-        """Return current value of the chain operations."""
+        """Return current value of the chain operations.
+
+        See Also:
+            - :meth:`value` (main definition)
+            - :meth:`value_of` (alias)
+        """
         return self._value
 
     value_of = value

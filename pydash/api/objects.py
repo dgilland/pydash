@@ -25,6 +25,10 @@ from .._compat import (
 def assign(obj, *sources, **kargs):
     """Assigns own enumerable properties of source object(s) to the destination
     object.
+
+    See Also:
+        - :func:`assign` (main definition)
+        - :func:`extend` (alias)
     """
     sources = list(sources)
     callback = kargs.get('callback')
@@ -103,6 +107,10 @@ def find_key(obj, callback=None):
     """This method is like :func:`pydash.api.arrays.find_index` except that it
     returns the key of the first element that passes the callback check,
     instead of the element itself.
+
+    See Also:
+        - :func:`find_key` (main definition)
+        - :func:`find_last_key` (alias)
     """
     for result, _, key, _ in _iter_callback(obj, callback):
         if result:
@@ -115,6 +123,10 @@ find_last_key = find_key
 def for_in(obj, callback=None):
     """Iterates over own and inherited enumerable properties of `obj`,
     executing `callback` for each property.
+
+    See Also:
+        - :func:`for_in` (main definition)
+        - :func:`for_own` (alias)
     """
     for result, _, _, _ in _iter_callback(obj, callback):
         if result is False:
@@ -129,6 +141,10 @@ for_own = for_in
 def for_in_right(obj, callback=None):
     """This function is like :func:`for_in` except it iterates over the
     properties in reverse order.
+
+    See Also:
+        - :func:`for_in_right` (main definition)
+        - :func:`for_own_right` (alias)
     """
     for result, _, _, _ in _iter_callback(obj, callback, reverse=True):
         if result is False:
@@ -142,6 +158,10 @@ for_own_right = for_in_right
 
 def functions(obj):
     """Creates a list of keys of an object that are callable.
+
+    See Also:
+        - :func:`functions` (main definition)
+        - :func:`methods` (alias)
     """
     return [key for key, value in iteritems(obj) if callable(value)]
 
@@ -203,7 +223,7 @@ def is_boolean(value):
 
 
 def is_date(value):
-    """Check if `value is a date object.
+    """Check if `value` is a date object.
 
     Args:
         value (mixed): Value to check.

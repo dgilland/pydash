@@ -36,6 +36,10 @@ def contains(collection, target, from_index=0):
     """Checks if a given value is present in a collection using strict equality
     for comparisons, i.e. ===. If `from_index` is negative, it is used as the
     offset from the end of the collection.
+
+    See Also:
+        - :func:`contains` (main definition)
+        - :func:`include` (alias)
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -80,6 +84,10 @@ def every(collection, callback=None):
 
     Returns:
         bool: whether all elements are truthy
+
+    See Also:
+        - :func:`every` (main definition)
+        - :func:`all_` (alias)
     """
 
     if callback:
@@ -96,6 +104,9 @@ def filter_(collection, callback=None):
     """Iterates over elements of a collection, returning an list of all
     elements the callback returns truthy for.
 
+    See Also:
+        - :func:`select` (main definition)
+        - :func:`filter_` (alias)
     """
     if callback is None:
         callback = lambda item, *args: item
@@ -111,6 +122,11 @@ select = filter_
 def find(collection, callback=None):
     """Iterates over elements of a collection, returning the first element that
     the callback returns truthy for.
+
+    See Also:
+        - :func:`find` (main definition)
+        - :func:`detect` (alias)
+        - :func:`find_where` (alias)
     """
     found = None
     for is_true, _, key, _ in _iter_callback(collection, callback):
@@ -145,6 +161,10 @@ def find_last(collection, callback=None):
 def for_each(collection, callback):
     """Iterates over elements of a collection, executing the callback for each
     element.
+
+    See Also:
+        - :func:`for_each` (main definition)
+        - :func:`each` (alias)
     """
     for ret, _, _, _ in _iter_callback(collection, callback):
         if ret is False:
@@ -159,6 +179,10 @@ each = for_each
 def for_each_right(collection, callback):
     """This method is like :func:`for_each` except that it iterates over
     elements of a `collection` from right to left.
+
+    See Also:
+        - :func:`for_each_right` (main definition)
+        - :func:`each_right` (alias)
     """
     for ret, _, _, _ in _iter_callback(collection, callback, reverse=True):
         if ret is False:
@@ -228,6 +252,10 @@ def map_(collection, callback=None):
 
     Returns:
         list: mapped list
+
+    See Also:
+        - :func:`map_` (main definition)
+        - :func:`collect` (alias)
     """
     if not callback:
         callback = lambda value, *args: value
@@ -280,6 +308,11 @@ def reduce_(collection, callback=None, accumulator=None):
     running each element in the collection through the callback, where each
     successive callback execution consumes the return value of the previous
     execution.
+
+    See Also:
+        - :func:`reduce_` (main definition)
+        - :func:`foldl` (alias)
+        - :func:`inject` (alias)
     """
     iterable = _iterate(collection)
 
@@ -308,6 +341,10 @@ inject = reduce_
 def reduce_right(collection, callback=None, accumulator=None):
     """This method is like :func:`reduce_` except that it iterates over
     elements of a `collection` from right to left.
+
+    See Also:
+        - :func:`reduce_right` (main definition)
+        - :func:`foldr` (alias)
     """
     if not isinstance(collection, dict):
         collection = sorted(collection, reverse=True)
@@ -372,6 +409,10 @@ def some(collection, callback=None):
 
     Returns:
         bool: whether any of the elements are truthy
+
+    See Also:
+        - :func:`some` (main definition)
+        - :func:`any_` (alias)
     """
 
     if callback:
