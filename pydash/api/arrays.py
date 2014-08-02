@@ -9,9 +9,9 @@ from bisect import bisect_left
 from .._compat import string_types, _range
 from .utilities import (
     create_callback,
-    iter_callback,
-    iter_unique_set,
-    iter_unique
+    _iter_callback,
+    _iter_unique_set,
+    _iter_unique
 )
 
 
@@ -55,7 +55,7 @@ def find_index(array, callback=None):
         int: Index of found item or ``-1`` if not found.
     """
     n = -1
-    for is_true, _, i, _ in iter_callback(array, callback):
+    for is_true, _, i, _ in _iter_callback(array, callback):
         if is_true:
             n = i
             break
@@ -259,7 +259,7 @@ def remove(array, callback=None):
         `array` is modified in place.
     """
     removed = []
-    for is_true, _, i, _ in iter_callback(array, callback):
+    for is_true, _, i, _ in _iter_callback(array, callback):
         if is_true:
             removed.append(array.pop(i))
 
@@ -353,11 +353,11 @@ def uniq(array, callback=None):
     try:
         # Try faster version of uniqifier which requires all array elements to
         # be hashable.
-        lst = [array[i] for i, _ in iter_unique_set(computed)]
+        lst = [array[i] for i, _ in _iter_unique_set(computed)]
     except Exception:  # pylint: disable=broad-except
         # Fallback to version which doesn't require hashable elements but is
         # slower.
-        lst = [array[i] for i, _ in iter_unique(computed)]
+        lst = [array[i] for i, _ in _iter_unique(computed)]
 
     return lst
 

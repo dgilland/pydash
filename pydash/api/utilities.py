@@ -202,16 +202,16 @@ def unique_id(prefix=None):
 #
 
 
-def iter_callback(collection, callback=None):
+def _iter_callback(collection, callback=None, reverse=False):
     """Return iterative callback based on collection type."""
     # pylint: disable=redefined-outer-name
     if isinstance(collection, dict):
-        return iter_dict_callback(collection, callback)
+        return _iter_dict_callback(collection, callback, reverse=reverse)
     else:
-        return iter_list_callback(collection, callback)
+        return _iter_list_callback(collection, callback, reverse=reverse)
 
 
-def iter_list_callback(array, callback=None):
+def _iter_list_callback(array, callback=None, reverse=False):
     """Return iterative list callback."""
     # pylint: disable=redefined-outer-name
     cbk = create_callback(callback)
@@ -219,7 +219,7 @@ def iter_list_callback(array, callback=None):
         yield (cbk(item, i, array), item, i, array)
 
 
-def iter_dict_callback(collection, callback=None):
+def _iter_dict_callback(collection, callback=None, reverse=False):
     """Return iterative dict callback."""
     # pylint: disable=redefined-outer-name
     cbk = create_callback(callback)
@@ -227,26 +227,26 @@ def iter_dict_callback(collection, callback=None):
         yield (cbk(value, key, collection), value, key, collection)
 
 
-def iterate(collection):
+def _iterate(collection):
     """Return iterative based on collection type."""
     if isinstance(collection, dict):
-        return iter_dict(collection)
+        return _iter_dict(collection)
     else:
-        return iter_list(collection)
+        return _iter_list(collection)
 
 
-def iter_dict(collection):
+def _iter_dict(collection):
     """Return iterative dict."""
     return iteritems(collection)
 
 
-def iter_list(array):
+def _iter_list(array):
     """Return iterative list."""
     for i, item in enumerate(array):
         yield i, item
 
 
-def iter_unique_set(array):
+def _iter_unique_set(array):
     """Return iterator to find unique set."""
     seen = set()
     for i, item in enumerate(array):
@@ -254,7 +254,7 @@ def iter_unique_set(array):
             yield (i, item)
 
 
-def iter_unique(array):
+def _iter_unique(array):
     """Return iterator to find unique list."""
     seen = []
     for i, item in enumerate(array):
@@ -263,7 +263,7 @@ def iter_unique(array):
             yield (i, item)
 
 
-def get_item(obj, key, **kargs):
+def _get_item(obj, key, **kargs):
     """Safely get an item by `key` from a sequence or mapping object.
 
     Args:
@@ -290,7 +290,7 @@ def get_item(obj, key, **kargs):
     return ret
 
 
-def set_item(obj, key, value):
+def _set_item(obj, key, value):
     """Set an object's `key` to `value`. If `obj` is a ``list`` and the
     `key` is the next available index position, append to list; otherwise,
     raise ``IndexError``.

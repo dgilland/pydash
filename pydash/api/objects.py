@@ -9,10 +9,10 @@ import datetime
 from .arrays import flatten
 from .utilities import (
     identity,
-    iterate,
-    iter_callback,
-    get_item,
-    set_item
+    _iterate,
+    _iter_callback,
+    _get_item,
+    _set_item
 )
 from .._compat import (
     iteritems,
@@ -63,7 +63,7 @@ def clone(value, is_deep=False, callback=None):
     copier = copy.deepcopy if is_deep else copy.copy
     value = copier(value)
 
-    obj = [(key, callback(val)) for key, val in iterate(value)]
+    obj = [(key, callback(val)) for key, val in _iterate(value)]
 
     if isinstance(value, list):
         obj = [val for _, val in obj]
@@ -104,7 +104,7 @@ def find_key(obj, callback=None):
     returns the key of the first element that passes the callback check,
     instead of the element itself.
     """
-    for result, _, key, _ in iter_callback(obj, callback):
+    for result, _, key, _ in _iter_callback(obj, callback):
         if result:
             return key
 
@@ -116,7 +116,7 @@ def for_in(obj, callback=None):
     """Iterates over own and inherited enumerable properties of `obj`,
     executing `callback` for each property.
     """
-    for result, _, _, _ in iter_callback(obj, callback):
+    for result, _, _, _ in _iter_callback(obj, callback):
         if result is False:
             break
 
@@ -147,7 +147,7 @@ def has(obj, key):
     Returns:
         bool: Whether `obj` has `key`.
     """
-    return key in (key for key, value in iterate(obj))
+    return key in (key for key, value in _iterate(obj))
 
 
 def invert(obj):
@@ -163,7 +163,7 @@ def invert(obj):
     Note:
         Assumes `dict` values are hashable as `dict` keys.
     """
-    return dict((value, key) for key, value in iterate(obj))
+    return dict((value, key) for key, value in _iterate(obj))
 
 
 def is_list(value):
@@ -239,7 +239,7 @@ def is_equal(a, b, callback=None):
           isinstance(b, (list, dict)) and
           len(a) == len(b)):
         # Walk a/b to determine equality using callback.
-        for key, value in iterate(a):
+        for key, value in _iterate(a):
             if has(b, key):
                 equal = is_equal(value, b[key], callback)
             else:
@@ -351,7 +351,7 @@ def keys(obj):
     Returns:
         list: List of keys.
     """
-    return [key for key, _ in iterate(obj)]
+    return [key for key, _ in _iterate(obj)]
 
 
 def map_values(obj, callback=None):
@@ -366,7 +366,7 @@ def map_values(obj, callback=None):
     """
     ret = {}
 
-    for result, _, key, _ in iter_callback(obj, callback):
+    for result, _, key, _ in _iter_callback(obj, callback):
         ret[key] = result
 
     return ret
@@ -423,7 +423,7 @@ def omit(obj, callback=None, *properties):
         properties = flatten([callback, properties])
         callback = lambda value, key, item: key in properties
 
-    return dict((key, value) for key, value in iterate(obj)
+    return dict((key, value) for key, value in _iterate(obj)
                 if not callback(value, key, obj))
 
 
@@ -437,7 +437,7 @@ def pairs(obj):
     Returns:
         list: Two dimensional list of object's key-value pairs.
     """
-    return [[key, value] for key, value in iterate(obj)]
+    return [[key, value] for key, value in _iterate(obj)]
 
 
 def parse_int(value, radix=None):
@@ -497,7 +497,7 @@ def pick(obj, callback=None, *properties):
         properties = flatten([callback, properties])
         callback = lambda value, key, item: key in properties
 
-    return dict((key, value) for key, value in iterate(obj)
+    return dict((key, value) for key, value in _iterate(obj)
                 if callback(value, key, obj))
 
 
@@ -515,7 +515,7 @@ def transform(obj, callback=None, accumulator=None):
     if accumulator is None:
         accumulator = []
 
-    for key, value in iterate(obj):
+    for key, value in _iterate(obj):
         result = callback(accumulator, value, key, obj)
         if result is False:
             break
@@ -541,8 +541,8 @@ def update(obj, source, callback=None):
         `obj` is modified in place.
     """
 
-    for key, src_value in iterate(source):
-        obj_value = get_item(obj, key, default=None)
+    for key, src_value in _iterate(source):
+        obj_value = _get_item(obj, key, default=None)
         is_sequences = all([src_value,
                             isinstance(src_value, list),
                             isinstance(obj_value, list)])
@@ -557,7 +557,7 @@ def update(obj, source, callback=None):
         else:
             result = src_value
 
-        set_item(obj, key, result)
+        _set_item(obj, key, result)
 
     return obj
 
@@ -571,4 +571,4 @@ def values(obj):
     Returns:
         list: List of values.
     """
-    return [value for _, value in iterate(obj)]
+    return [value for _, value in _iterate(obj)]

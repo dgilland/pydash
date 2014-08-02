@@ -10,8 +10,8 @@ from .utilities import (
     matches,
     property_,
     create_callback,
-    iter_callback,
-    iterate
+    _iter_callback,
+    _iterate
 )
 
 
@@ -95,12 +95,13 @@ all_ = every
 def filter_(collection, callback=None):
     """Iterates over elements of a collection, returning an list of all
     elements the callback returns truthy for.
+
     """
     if callback is None:
         callback = lambda item, *args: item
 
     return [value
-            for is_true, value, _, _ in iter_callback(collection, callback)
+            for is_true, value, _, _ in _iter_callback(collection, callback)
             if is_true]
 
 
@@ -112,7 +113,7 @@ def find(collection, callback=None):
     the callback returns truthy for.
     """
     found = None
-    for is_true, _, key, _ in iter_callback(collection, callback):
+    for is_true, _, key, _ in _iter_callback(collection, callback):
         if is_true:
             found = collection[key]
             # only return first found item
@@ -136,7 +137,7 @@ def for_each(collection, callback):
     """Iterates over elements of a collection, executing the callback for each
     element.
     """
-    for ret, _, _, _ in iter_callback(collection, callback):
+    for ret, _, _, _ in _iter_callback(collection, callback):
         if ret is False:
             break
 
@@ -226,7 +227,7 @@ def map_(collection, callback=None):
     if not callback:
         callback = lambda value, *args: value
 
-    return [result[0] for result in iter_callback(collection, callback)]
+    return [result[0] for result in _iter_callback(collection, callback)]
 
 
 collect = map_
@@ -275,7 +276,7 @@ def reduce_(collection, callback=None, accumulator=None):
     successive callback execution consumes the return value of the previous
     execution.
     """
-    iterable = iterate(collection)
+    iterable = _iterate(collection)
 
     if accumulator is None:
         try:
@@ -319,7 +320,7 @@ def reject(collection, callback=None):
         callback = lambda item, *args: item
 
     return [value
-            for is_true, value, _, _ in iter_callback(collection, callback)
+            for is_true, value, _, _ in _iter_callback(collection, callback)
             if not is_true]
 
 

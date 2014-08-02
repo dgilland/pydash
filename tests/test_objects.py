@@ -3,7 +3,7 @@ import datetime
 import decimal
 
 import pydash as pyd
-from pydash.api.utilities import iterate
+from pydash.api.utilities import _iterate
 
 from . import fixtures
 from .fixtures import parametrize
@@ -38,7 +38,7 @@ def test_clone(case, args):
 
     assert actual is not case
 
-    for key, value in iterate(actual):
+    for key, value in _iterate(actual):
         assert value is case[key]
 
 
@@ -55,7 +55,7 @@ def test_clone_deep(case, kargs):
     for actual in actuals:
         assert actual is not case
 
-        for key, value in iterate(actual):
+        for key, value in _iterate(actual):
             assert value is not case[key]
 
 
