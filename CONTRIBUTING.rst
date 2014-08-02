@@ -1,10 +1,6 @@
 How to Contribute
 *****************
 
-
-Table of Contents
-=================
-
 - Overview_
 - Guidelines_
 - Branching_
@@ -29,9 +25,9 @@ Guidelines
 
 Some simple guidelines to follow when contributing code:
 
-- Adhere to [PEP8][].
+- Adhere to `PEP8`_.
 - Clean, well documented code.
-- All tests pass.
+- All tests must pass.
 - 100% test coverage.
 
 
@@ -44,9 +40,9 @@ There are two main development branches: ``master`` and ``develop``. ``master`` 
 Continuous Integration
 ======================
 
-Integration testing is provided by `Travis-CI`_: https://travis-ci.org/dgilland/pydash.
+Integration testing is provided by `Travis-CI`_ at https://travis-ci.org/dgilland/pydash.
 
-Test coverage reporting is provided by `Coveralls`_: https://coveralls.io/r/dgilland/pydash.
+Test coverage reporting is provided by `Coveralls`_ at https://coveralls.io/r/dgilland/pydash.
 
 
 Project CLI
@@ -67,7 +63,7 @@ Run the ``clean`` and ``install`` commands.
 make install
 ------------
 
-Create virtualenv ``env/`` and installs Python dependencies.
+Install Python dependencies into virtualenv located at ``env/``.
 
 ::
 
@@ -87,7 +83,7 @@ Remove build/test related temporary files like ``env/``, ``.tox``, ``.coverage``
 make test
 ---------
 
-Run unittests under the virtualenv's default Python version. Does not test all support Python versions. To test all supported versions, see ``make test-full``.
+Run unittests under the virtualenv's default Python version. Does not test all support Python versions. To test all supported versions, see `make test-full`_.
 
 ::
 
@@ -97,7 +93,7 @@ Run unittests under the virtualenv's default Python version. Does not test all s
 make test-full
 --------------
 
-Run unittest and linting for all supported Python versions. **NOTE:** This will fail if you do not have all Python versions installed on your system. If you are on an Ubuntu based system, the `Dead Snakes PPA`_ is a good resource for easily installing multiple Python versions. If for whatever reason you're unable to have all Python versions on your development machine, note that Travis-CI will run full integration tests on all pull requests (minus linting).
+Run unittest and linting for all supported Python versions. **NOTE:** This will fail if you do not have all Python versions installed on your system. If you are on an Ubuntu based system, the `Dead Snakes PPA`_ is a good resource for easily installing multiple Python versions. If for whatever reason you're unable to have all Python versions on your development machine, note that Travis-CI will run full integration tests on all pull requests.
 
 ::
 
@@ -137,7 +133,7 @@ Run `PEP8`_ compliance check on code base.
 make docs
 ---------
 
-Build documentation. Output folder is ``docs/_build/``.
+Build documentation to ``docs/_build/``.
 
 ::
 
