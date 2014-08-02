@@ -1,5 +1,5 @@
-Differences Between Lo-Dash
-===========================
+Lo-Dash Differences
+===================
 
 - Function names use ``snake_case`` instead of ``camelCase``.
 - Any Lo-Dash function which shares its name with a reserved Python keyword will have an ``_`` appended after it (e.g. ``filter`` in Lo-Dash would be ``filter_`` in pydash.
