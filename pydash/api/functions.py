@@ -206,7 +206,7 @@ def debounce(func, wait, max_wait=False):
 
 def delay(func, wait, *args, **kargs):
     """Executes the `func` function after `wait` milliseconds. Additional
-    arguments will be provided to func when it is invoked.
+    arguments will be provided to `func` when it is invoked.
 
     Args:
         func (function): Function to execute.

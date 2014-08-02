@@ -68,11 +68,11 @@ def count_by(collection, callback):
 def every(collection, callback=None):
     """Checks if the callback returns a truthy value for all elements of a
     collection. The callback is invoked with three arguments:
-    (value, index|key, collection). If a property name is passed for callback,
-    the created :func:`pluck` style callback will return the property value of
-    the given element. If an object is passed for callback, the created
-    :func:`where` style callback will return true for elements that have the
-    properties of the given object, else ``False``.
+    ``(value, index|key, collection)``. If a property name is passed for
+    callback, the created :func:`pluck` style callback will return the property
+    value of the given element. If an object is passed for callback, the
+    created :func:`where` style callback will return ``True`` for elements that
+    have the properties of the given object, else ``False``.
 
     Args:
         collection (iterable): collection to iterate over
@@ -210,11 +210,11 @@ def invoke(collection, method_name, *args):
 def map_(collection, callback=None):
     """Creates an array of values by running each element in the collection
     through the callback. The callback is invoked with three arguments:
-    (value, index|key, collection). If a property name is passed for callback,
-    the created :func:`pluck` style callback will return the property value of
-    the given element. If an object is passed for callback, the created
-    :func:`where` style callback will return true for elements that have the
-    properties of the given object, else false.
+    ``(value, index|key, collection)``. If a property name is passed for
+    callback, the created :func:`pluck` style callback will return the property
+    value of the given element. If an object is passed for callback, the
+    created :func:`where` style callback will return ``True`` for elements that
+    have the properties of the given object, else ``False``.
 
     Args:
         collection (iterable): collection to iterate over
@@ -354,11 +354,11 @@ def size(collection):
 def some(collection, callback=None):
     """Checks if the callback returns a truthy value for any element of a
     collection. The callback is invoked with three arguments:
-    (value, index|key, collection). If a property name is passed for callback,
-    the created :func:`pluck` style callback will return the property value of
-    the given element. If an object is passed for callback, the created
-    :func:`where` style callback will return true for elements that have the
-    properties of the given object, else false.
+    ``(value, index|key, collection)``. If a property name is passed for
+    callback, the created :func:`pluck` style callback will return the property
+    value of the given element. If an object is passed for callback, the
+    created :func:`where` style callback will return ``True`` for elements that
+    have the properties of the given object, else ``False``.
 
     Args:
         collection (iterable): collection to iterate over

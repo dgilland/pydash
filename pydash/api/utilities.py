@@ -42,8 +42,8 @@ def constant(value):
 def callback(func):
     """Return a callback. If `func` is a property name the created callback
     will return the property value for a given element. If `func` is an object
-    the created callback will return `True` for elements that contain the
-    equivalent object properties, otherwise it will return `False`.
+    the created callback will return ``True`` for elements that contain the
+    equivalent object properties, otherwise it will return ``False``.
     """
     if callable(func):
         cbk = func
@@ -81,9 +81,10 @@ def identity(*args):
 
 
 def matches(source):
-    """Creates a :func:`where` style predicate function which performs a deep
-    comparison between a given object and the `source` object, returning `True`
-    if the given object has equivalent property values, else `False`.
+    """Creates a :func:`pydash.api.collections.where` style predicate function
+    which performs a deep comparison between a given object and the `source`
+    object, returning ``True`` if the given object has equivalent property
+    values, else ``False``.
     """
     return lambda obj, *args: all(item in obj.items()
                                   for item in source.items())
@@ -117,8 +118,8 @@ def noop(*args, **kargs):  # pylint: disable=unused-argument
 
 
 def property_(key):
-    """Creates a :func:`pluck` style function, which returns the key value of a
-    given object.
+    """Creates a :func:`pydash.collections.pluck` style function, which returns
+    the key value of a given object.
     """
     return lambda obj, *args: obj.get(key)
 
@@ -150,7 +151,7 @@ def random(start=0, stop=1, floating=False):
 def result(obj, key):
     """Return the value of property `key` on `obj`. If `key` value is a
     function it will be invoked and its result returned, else the property
-    value is returned. If `obj` is falsey then `None` is returned.
+    value is returned. If `obj` is falsey then ``None`` is returned.
     """
     if not obj:
         return None
@@ -165,7 +166,7 @@ def result(obj, key):
 
 def times(n, callback):
     """Executes the callback `n` times, returning a list of the results of each
-    callback execution. The callback is invoked with one argument: (index).
+    callback execution. The callback is invoked with one argument: ``(index)``.
     """
     # pylint: disable=redefined-outer-name
     return [callback(index) for index in _range(n)]
