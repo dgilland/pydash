@@ -3,7 +3,7 @@ Installation
 
 **pydash** requires Python >= 2.6 or >= 3.2. It has no external dependencies.
 
-To install from PyPi:
+To install from `PyPi <https://pypi.python.org/pypi/pydash>`_:
 
 ::
 
