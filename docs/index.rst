@@ -13,8 +13,20 @@ Guide
     quickstart
     differences
 
-API Reference
-=============
+Public API Reference
+====================
+
+References objects available via importing the main module.
+
+.. toctree::
+    :maxdepth: 2
+
+    public
+
+Full API Reference
+==================
+
+Includes links to source code.
 
 .. toctree::
     :maxdepth: 2

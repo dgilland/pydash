@@ -1,43 +1,41 @@
 .. _api:
 
-*************
-API Reference
-*************
-
-.. module:: pydash
+******************
+Full API Reference
+******************
 
 Arrays
 ======
 
-.. automodule:: pydash.arrays
+.. automodule:: pydash.api.arrays
     :members:
 
 Chaining
 ========
 
-.. automodule:: pydash.chaining
+.. automodule:: pydash.api.chaining
     :members:
 
 Collections
 ===========
 
-.. automodule:: pydash.collections
+.. automodule:: pydash.api.collections
     :members:
 
 Functions
 =========
 
-.. automodule:: pydash.functions
+.. automodule:: pydash.api.functions
     :members:
 
 Objects
 =======
 
-.. automodule:: pydash.objects
+.. automodule:: pydash.api.objects
     :members:
 
 Utilities
 =========
 
-.. automodule:: pydash.utilities
+.. automodule:: pydash.api.utilities
     :members:
