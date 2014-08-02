@@ -215,15 +215,31 @@ def _iter_list_callback(array, callback=None, reverse=False):
     """Return iterative list callback."""
     # pylint: disable=redefined-outer-name
     cbk = create_callback(callback)
-    for i, item in enumerate(array):
-        yield (cbk(item, i, array), item, i, array)
+    array_len = len(array)
+
+    if reverse:
+        iterator = list(reversed(array))
+    else:
+        iterator = array
+
+    for index, item in enumerate(iterator):
+        if reverse:
+            index = array_len - index - 1
+
+        yield (cbk(item, index, array), item, index, array)
 
 
 def _iter_dict_callback(collection, callback=None, reverse=False):
     """Return iterative dict callback."""
     # pylint: disable=redefined-outer-name
     cbk = create_callback(callback)
-    for key, value in iteritems(collection):
+
+    if reverse:
+        items = reversed(list(iteritems(collection)))
+    else:
+        items = iteritems(collection)
+
+    for key, value in items:
         yield (cbk(value, key, collection), value, key, collection)
 
 
