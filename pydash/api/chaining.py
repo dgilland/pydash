@@ -18,6 +18,9 @@ class Chain(object):
     def value(self):
         """Return current value of the chain operations.
 
+        Returns:
+            mixed: Current value of chain operations.
+
         See Also:
             - :meth:`value` (main definition)
             - :meth:`value_of` (alias)
@@ -27,7 +30,11 @@ class Chain(object):
     value_of = value
 
     def to_string(self):
-        """Return current value as string."""
+        """Return current value as string.
+
+        Returns:
+            str: Current value of chain operations casted to ``str``.
+        """
         return text_type(self.value())
 
     def __getattr__(self, attr):
@@ -58,6 +65,12 @@ class ChainWrapper(object):
 def chain(value):
     """Creates a :class:`Chain` object which wraps the given value to enable
     intuitive method chaining.
+
+    Args:
+        value (mixed): Value to initialize chain operations with.
+
+    Returns:
+        :class:`Chain`: Instance of :class:`Chain` initialized with `value`.
     """
     return Chain(value)
 
@@ -66,6 +79,13 @@ def tap(value, interceptor):
     """Invokes interceptor with the value as the first argument and then
     returns value. The purpose of this method is to "tap into" a method chain
     in order to perform operations on intermediate results within the chain.
+
+    Args:
+        value (mixed): Current value of chain operation.
+        interceptor (function): Function called on `value`.
+
+    Returns:
+        mixed: `value` after `interceptor` call.
     """
     interceptor(value)
     return value

@@ -417,7 +417,9 @@ def merge(obj, *sources, **kargs):
         obj (dict): Destination object to merge source(s) into.
         *sources (dict): Source objects to merge from. subsequent sources
             overwrite previous ones.
-        **callback (function, optional): Callback function to handle merging
+
+    Keyword Args:
+        callback (function, optional): Callback function to handle merging
             (must be passed in as keyword argument).
 
     Returns:

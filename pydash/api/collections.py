@@ -21,9 +21,9 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
     of indexes.
 
     Args:
-        collection (iterable): collection to iterate over
-        indexes (mixed): the indexes of `collection` to retrieve, specified as
-            individual indexes or arrays of indexes
+        collection (iterable): Collection to iterate over.
+        indexes (mixed): The indexes of `collection` to retrieve, specified as
+            individual indexes or arrays of indexes.
 
     Returns:
         list: filtered list
@@ -36,6 +36,14 @@ def contains(collection, target, from_index=0):
     """Checks if a given value is present in a collection using strict equality
     for comparisons, i.e. ===. If `from_index` is negative, it is used as the
     offset from the end of the collection.
+
+    Args:
+        collection (iterable): Collection to iterate over.
+        target (mixed): Target value to compare to.
+        from_index (optional): Offset to start search from.
+
+    Returns:
+        bool: Whether `target` is in `collection`.
 
     See Also:
         - :func:`contains` (main definition)
@@ -56,6 +64,13 @@ include = contains
 def count_by(collection, callback=None):
     """Creates an object composed of keys generated from the results of running
     each element of `collection` through the callback.
+
+    Args:
+        collection (iterable): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        dict: Dict containing counts by key.
     """
     ret = dict()
 
@@ -76,11 +91,11 @@ def every(collection, callback=None):
     have the properties of the given object, else ``False``.
 
     Args:
-        collection (iterable): collection to iterate over
-        callback (mixed, optional): callback applied per iteration
+        collection (iterable): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
-        bool: whether all elements are truthy
+        bool: Whether all elements are truthy.
 
     See Also:
         - :func:`every` (main definition)
@@ -101,6 +116,13 @@ def filter_(collection, callback=None):
     """Iterates over elements of a collection, returning an list of all
     elements the callback returns truthy for.
 
+    Args:
+        collection (iterable): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: Filtered list.
+
     See Also:
         - :func:`select` (main definition)
         - :func:`filter_` (alias)
@@ -119,6 +141,13 @@ select = filter_
 def find(collection, callback=None):
     """Iterates over elements of a collection, returning the first element that
     the callback returns truthy for.
+
+    Args:
+        collection (iterable): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        mixed: First element found or ``None``.
 
     See Also:
         - :func:`find` (main definition)
@@ -142,6 +171,13 @@ find_where = find
 def find_last(collection, callback=None):
     """This method is like :func:`find` except that it iterates over elements
     of a `collection` from right to left.
+
+    Args:
+        collection (iterable): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        mixed: Last element found or ``None``.
     """
     found = None
     for is_true, _, key, _ in _iter_callback(collection,
@@ -155,9 +191,13 @@ def find_last(collection, callback=None):
     return found
 
 
-def for_each(collection, callback):
+def for_each(collection, callback=None):
     """Iterates over elements of a collection, executing the callback for each
     element.
+
+    Args:
+        collection (iterable): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
 
     See Also:
         - :func:`for_each` (main definition)
@@ -244,11 +284,11 @@ def map_(collection, callback=None):
     have the properties of the given object, else ``False``.
 
     Args:
-        collection (iterable): collection to iterate over
-        callback (mixed, optional): callback applied per iteration
+        collection (iterable): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
-        list: mapped list
+        list: Mapped list.
 
     See Also:
         - :func:`map_` (main definition)
@@ -401,11 +441,11 @@ def some(collection, callback=None):
     have the properties of the given object, else ``False``.
 
     Args:
-        collection (iterable): collection to iterate over
-        callbacked (mixed, optional): callback applied per iteration
+        collection (iterable): Collection to iterate over.
+        callbacked (mixed, optional): Callback applied per iteration.
 
     Returns:
-        bool: whether any of the elements are truthy
+        bool: Whether any of the elements are truthy.
 
     See Also:
         - :func:`some` (main definition)
@@ -439,7 +479,7 @@ def where(collection, properties):
     elements that have the given properties.
 
     Args:
-        collection (iterable): collection to iterate over
+        collection (iterable): Collection to iterate over.
         properties (dict): property values to filter by
 
     Returns:
