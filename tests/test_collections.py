@@ -262,13 +262,18 @@ def test_sample_list(case):
 
 
 @parametrize('case', [
-    [1, 2, 3, 4, 5, 6]
+    [1, 2, 3, 4, 5, 6],
+    {'one': 1, 'two': 2, 'three': 3}
 ])
 def test_shuffle(case):
     shuffled = pyd.shuffle(case)
 
-    assert set(shuffled) == set(case)
     assert len(shuffled) == len(case)
+
+    if isinstance(case, dict):
+        assert set(shuffled) == set(case.values())
+    else:
+        assert set(shuffled) == set(case)
 
 
 @parametrize('case', [
@@ -373,13 +378,15 @@ def test_reject(case, expected):
         {'name': 'barney',  'age': 36},
         {'name': 'fred',    'age': 40},
     ]),
+    (({'a': 1, 'b': 2, 'c': 3}, lambda x: math.sin(x)), [3, 1, 2]),
 ])
 def test_sort_by(case, expected):
     assert pyd.sort_by(*case) == expected
 
 
 @parametrize('case,expected', [
-    (('cat',), ['c', 'a', 't']),
+    ('cat', ['c', 'a', 't']),
+    ({'a': 1, 'b': 2, 'c': 3}, [1, 2, 3])
 ])
 def test_to_list(case, expected):
-    assert pyd.to_list(*case) == expected
+    assert set(pyd.to_list(case)) == set(expected)
