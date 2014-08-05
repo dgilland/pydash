@@ -304,12 +304,6 @@ collect = map_
 
 
 def max_(collection, callback=None):
-    """Retrieves the maximum value of a `collection`."""
-    if not callback:
-        if isinstance(collection, dict):
-            return max(collection.values())
-        else:
-            return max(collection)
     if isinstance(collection, dict):
         collection = collection.values()
 
@@ -317,12 +311,6 @@ def max_(collection, callback=None):
 
 
 def min_(collection, callback=None):
-    """Retrieves the minimum value of a `collection`."""
-    if not callback:
-        if isinstance(collection, dict):
-            return min(collection.values())
-        else:
-            return min(collection)
     if isinstance(collection, dict):
         collection = collection.values()
 
