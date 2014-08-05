@@ -2,9 +2,11 @@
 pydash
 ======
 
-Python port of Lodash.
+Python port of the `Lo-Dash <http://lodash.com/>`_  Javascript library.
 
 Project: https://github.com/dgilland/pydash
+
+Documentation: http://pydash.readthedocs.org/
 """
 
 from setuptools import setup, find_packages
