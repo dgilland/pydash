@@ -496,9 +496,9 @@ def shuffle(collection):
     """
     if isinstance(collection, dict):
         collection = collection.values()
-    else:
-        # Make copy of collection since random.shuffle works on list in-place.
-        collection = list(collection)
+
+    # Make copy of collection since random.shuffle works on list in-place.
+    collection = list(collection)
 
     # NOTE: random.shuffle uses Fisher-Yates.
     random.shuffle(collection)
