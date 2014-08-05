@@ -1,4 +1,4 @@
-"""Exceptions
+"""Exception classes.
 """
 
 
