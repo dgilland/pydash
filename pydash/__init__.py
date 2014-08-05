@@ -21,33 +21,33 @@ from .__meta__ import (
 from .api.arrays import (
     compact,
     difference,
+    drop,
     find_index,
     find_last_index,
     first,
-    head,
-    take,
     flatten,
+    head,
     index_of,
     initial,
     intersection,
     last,
     last_index_of,
+    object_,
     pull,
     range_,
     remove,
     rest,
-    tail,
-    drop,
     sorted_index,
+    tail,
+    take,
     union,
     uniq,
     unique,
+    unzip,
     without,
     xor,
     zip_,
-    unzip,
     zip_object,
-    object_,
 )
 
 
@@ -57,7 +57,7 @@ from .api.arrays import (
 
 from .api.chaining import (
     chain,
-    tap
+    tap,
 )
 
 
@@ -66,43 +66,44 @@ from .api.chaining import (
 #
 
 from .api.collections import (
+    all_,
+    any_,
     at,
+    collect,
     contains,
     count_by,
-    every,
-    all_,
-    filter_,
-    select,
-    find,
     detect,
-    find_where,
-    find_last,
-    for_each,
     each,
-    for_each_right,
     each_right,
+    every,
+    filter_,
+    find,
+    find_last,
+    find_where,
+    foldl,
+    foldr,
+    for_each,
+    for_each_right,
     group_by,
     index_by,
+    inject,
     invoke,
     map_,
-    collect,
     max_,
     min_,
     pluck,
     reduce_,
-    foldl,
-    inject,
     reduce_right,
-    foldr,
     reject,
     sample,
+    select,
     shuffle,
     size,
     some,
-    any_,
     sort_by,
     to_list,
-    where
+    where,
+
 )
 
 
@@ -120,7 +121,7 @@ from .api.functions import (
     partial,
     partial_right,
     throttle,
-    wrap
+    wrap,
 )
 
 
@@ -143,12 +144,12 @@ from .api.objects import (
     functions,
     has,
     invert,
-    is_list,
     is_boolean,
     is_date,
     is_empty,
     is_equal,
     is_function,
+    is_list,
     is_nan,
     is_none,
     is_number,
@@ -164,7 +165,7 @@ from .api.objects import (
     parse_int,
     pick,
     transform,
-    values
+    values,
 )
 
 
@@ -173,22 +174,22 @@ from .api.objects import (
 #
 
 from .api.utilities import (
-    now,
-    constant,
     callback,
+    constant,
     create_callback,
     escape,
     identity,
     matches,
     memoize,
     noop,
-    property_,
+    now,
     prop,
+    property_,
     random,
     result,
     times,
     unescape,
-    unique_id
+    unique_id,
 )
 
 
