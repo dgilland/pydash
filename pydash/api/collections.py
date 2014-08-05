@@ -1,4 +1,4 @@
-"""Collections
+"""Functions that operate on lists and dicts.
 """
 
 from __future__ import absolute_import

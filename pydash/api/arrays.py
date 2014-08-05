@@ -1,4 +1,4 @@
-"""Arrays
+"""Functions that operate on lists.
 """
 
 from __future__ import absolute_import

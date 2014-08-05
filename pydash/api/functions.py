@@ -1,4 +1,4 @@
-"""Functions
+"""Functions that wrap other functions.
 """
 
 from __future__ import absolute_import
@@ -23,16 +23,33 @@ class After(object):
         self.func = func
 
     def __call__(self, *args, **kargs):
-        """Return results of `self.func` after `self.n` calls."""
+        """Return results of :attr:`func` after :attr:`n` calls."""
         self.n -= 1
 
         if self.n < 1:
             return self.func(*args, **kargs)
 
 
+class Compose(object):
+    """Wrap a function in a compose context."""
+    def __init__(self, *funcs):
+        self.funcs = funcs
+
+    def __call__(self, *args, **kargs):
+        """Return results of composing :attr:`funcs`."""
+        funcs = list(self.funcs)
+
+        # Compose functions in reverse order starting with the first.
+        ret = (funcs.pop())(*args, **kargs)
+
+        for func in reversed(funcs):
+            ret = func(ret)
+
+        return ret
+
+
 class Curry(object):
     """Wrap a function in a curry context."""
-
     def __init__(self, func, arity, args=None, kargs=None):
         self.func = func
         self.arity = (len(inspect.getargspec(func).args) if arity is None
@@ -57,7 +74,6 @@ class Curry(object):
 
 class Once(object):
     """Wrap a function in a once context."""
-
     def __init__(self, func):
         self.func = func
         self.result = None
@@ -74,7 +90,6 @@ class Once(object):
 
 class Partial(object):
     """Wrap a function in a partial context."""
-
     def __init__(self, func, args, from_right=False):
         self.func = func
         self.args = args
@@ -94,7 +109,6 @@ class Partial(object):
 
 class Debounce(object):
     """Wrap a function in a debounce context."""
-
     def __init__(self, func, wait, max_wait=False):
         self.func = func
         self.wait = wait
@@ -128,7 +142,6 @@ class Debounce(object):
 
 class Throttle(object):
     """Wrap a function in a throttle context."""
-
     def __init__(self, func, wait):
         self.func = func
         self.wait = wait
@@ -152,6 +165,13 @@ class Throttle(object):
 def after(n, func):
     """Creates a function that executes `func`, with the arguments of the
     created function, only after being called `n` times.
+
+    Args:
+        n (int): Number of times `func` must be called before it is executed.
+        func (function): Function to execute.
+
+    Returns:
+        After: Function wrapped in an :class:`After` context.
     """
     return After(n, func)
 
@@ -161,22 +181,14 @@ def compose(*funcs):
     where each function consumes the return value of the function that follows.
     For example, composing the functions ``f()``, ``g()``, and ``h()`` produces
     ``f(g(h()))``.
+
+    Args:
+        *funcs (function): Function(s) to compose.
+
+    Returns:
+        Compose: Function(s) wrapped in a :class:`Compose` context.
     """
-    def wrapper(*args, **kargs):  # pylint: disable=missing-docstring
-        # NOTE: Cannot use `funcs` for the variable name of list(funcs) due to
-        # the way Python handles closure variables. Basically, `funcs` has to
-        # remain unmodified.
-        fns = list(funcs)
-
-        # Compose functions in reverse order starting with the first.
-        ret = (fns.pop())(*args, **kargs)
-
-        for func in reversed(fns):
-            ret = func(ret)
-
-        return ret
-
-    return wrapper
+    return Compose(*funcs)
 
 
 def curry(func, arity=None):
@@ -184,6 +196,15 @@ def curry(func, arity=None):
     when  invoked either executes `func` returning its result, if all `func`
     arguments have been provided, or returns a function that accepts one or
     more of the remaining `func` arguments, and so on.
+
+    Args:
+        func (function): Function curry.
+        arity (int, optional): Number of function arguments that can be
+            accepted by curried function. Default is to use the number of
+            arguments that are accepted by `func`.
+
+    Returns:
+        Curry: Function wrapped in a :class:`Curry` context.
     """
     return Curry(func, arity)
 
@@ -200,7 +221,7 @@ def debounce(func, wait, max_wait=False):
         max_wait (optional): Maximum time to wait before executing `func`.
 
     Returns:
-        Debounce: Debounced function class wrapper.
+        Debounce: Function wrapped in a :class:`Debounce` context.
     """
     return Debounce(func, wait, max_wait=max_wait)
 
@@ -225,6 +246,12 @@ def delay(func, wait, *args, **kargs):
 def once(func):
     """Creates a function that is restricted to execute func once. Repeat calls
     to the function will return the value of the first call.
+
+    Args:
+        func (function): Function to execute.
+
+    Returns:
+        Once: Function wrapped in a :class:`Once` context.
     """
     return Once(func)
 
@@ -232,6 +259,13 @@ def once(func):
 def partial(func, *args):
     """Creates a function that, when called, invokes `func` with any additional
     partial arguments prepended to those provided to the new function.
+
+    Args:
+        func (function): Function to execute.
+        *args (optional): Partial arguments to prepend to function call.
+
+    Returns:
+        Partial: Function wrapped in a :class:`Partial` context.
     """
     return Partial(func, args)
 
@@ -239,6 +273,13 @@ def partial(func, *args):
 def partial_right(func, *args):
     """This method is like :func:`partial` except that partial arguments are
     appended to those provided to the new function.
+
+    Args:
+        func (function): Function to execute.
+        *args (optional): Partial arguments to append to function call.
+
+    Returns:
+        Partial: Function wrapped in a :class:`Partial` context.
     """
     return Partial(func, args, from_right=True)
 
@@ -258,9 +299,16 @@ def throttle(func, wait):
     return Throttle(func, wait)
 
 
-def wrap(value, wrapper):
+def wrap(value, func):
     """Creates a function that provides value to the wrapper function as its
     first argument. Additional arguments provided to the function are appended
     to those provided to the wrapper function.
+
+    Args:
+        value (mixed): Value provided as first argument to function call.
+        func (function): Function to execute.
+
+    Returns:
+        Partial: Function wrapped in a :class:`Partial` context.
     """
-    return Partial(wrapper, (value,))
+    return Partial(func, (value,))

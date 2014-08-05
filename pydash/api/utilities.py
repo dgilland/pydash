@@ -1,4 +1,4 @@
-"""Utilities
+"""Utility functions.
 """
 
 from __future__ import absolute_import
@@ -30,12 +30,22 @@ HTML_ESCAPES = {
 def now():
     """Return the number of milliseconds that have elapsed since the Unix epoch
     (1 January 1970 00:00:00 UTC).
+
+    Returns:
+        int: Milliseconds since Unix epoch.
     """
     return int(time.time() * 1000)
 
 
 def constant(value):
-    """Creates a function that returns `value`."""
+    """Creates a function that returns `value`.
+
+    Args:
+        value (mixed): Constant value to return.
+
+    Returns:
+        function: Function that always returns `value`.
+    """
     return lambda: value
 
 
@@ -44,6 +54,16 @@ def callback(func):
     will return the property value for a given element. If `func` is an object
     the created callback will return ``True`` for elements that contain the
     equivalent object properties, otherwise it will return ``False``.
+
+    Args:
+        func (mixed): Object to create callback function from.
+
+    Returns:
+        function: Callback function.
+
+    See Also:
+        - :func:`callback` (main definition)
+        - :func:`create_callback` (alias)
     """
     if callable(func):
         cbk = func
@@ -61,6 +81,7 @@ create_callback = callback
 
 
 def escape(string):
+    # pylint: disable=anomalous-backslash-in-string
     """Converts the characters ``&``, ``<``, ``>``, ``", ``'``, and ``\``` in
     `string` to their corresponding HTML entities.
 
@@ -68,7 +89,7 @@ def escape(string):
         string (str): String to escape.
 
     Returns:
-        string: HTML escaped string.
+        str: HTML escaped string.
     """
     # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
     # differently (e.g. "'" isn't escaped by html_escape() but is by Lo-Dash).
@@ -76,7 +97,14 @@ def escape(string):
 
 
 def identity(*args):
-    """Return the first argument provided to it."""
+    """Return the first argument provided to it.
+
+    Args:
+        *args (mixed): Arguments.
+
+    Returns:
+        mixed: First argument or ``None``.
+    """
     return args[0] if args else None
 
 
@@ -85,6 +113,13 @@ def matches(source):
     which performs a deep comparison between a given object and the `source`
     object, returning ``True`` if the given object has equivalent property
     values, else ``False``.
+
+    Args:
+        source (dict): Source object used for comparision.
+
+    Returns:
+        function: Function that compares a ``dict`` to `source` and returns
+            whether the two objects contain the same items.
     """
     return lambda obj, *args: all(item in obj.items()
                                   for item in source.items())
@@ -96,6 +131,14 @@ def memoize(func, resolver=None):
     based on the arguments provided to the memoized function. By default, all
     arguments provided to the memoized function are used as the cache key.
     The result cache is exposed as the cache property on the memoized function.
+
+    Args:
+        func (function): Function to memoize.
+        resolver (function, optional): Function that returns the cache key to
+            use.
+
+    Returns:
+        function: Memoized function.
     """
     def memoized(*args, **kargs):  # pylint: disable=missing-docstring
         if resolver:
@@ -120,8 +163,18 @@ def noop(*args, **kargs):  # pylint: disable=unused-argument
 def property_(key):
     """Creates a :func:`pydash.collections.pluck` style function, which returns
     the key value of a given object.
+
+    Args:
+        key (mixed): Key value to fetch from object.
+
+    Returns:
+        function: Function that returns object's key value.
+
+    See Also:
+        - :func:`property_` (main definition)
+        - :func:`prop` (alias)
     """
-    return lambda obj, *args: obj.get(key)
+    return lambda obj, *args: _get_item(obj, key, default=None)
 
 
 prop = property_
@@ -132,6 +185,15 @@ def random(start=0, stop=1, floating=False):
     one argument is provided a number between 0 and the given number will be
     returned. If floating is truthy or either `start` or `stop` are floats a
     floating-point number will be returned instead of an integer.
+
+    Args:
+        start (int): Minimum value.
+        stop (int): Maximum value.
+        floating (bool, optional): Whether to force random value to ``float``.
+            Default is ``False``.
+
+    Returns:
+        int|float: Random value.
     """
     floating = any([isinstance(start, float),
                     isinstance(stop, float),
@@ -152,11 +214,18 @@ def result(obj, key):
     """Return the value of property `key` on `obj`. If `key` value is a
     function it will be invoked and its result returned, else the property
     value is returned. If `obj` is falsey then ``None`` is returned.
+
+    Args:
+        obj (list|dict): Object to retrieve result from.
+        key (mixed): Key or index to get result from.
+
+    Returns:
+        mixed: Result of ``obj[key]`` or ``None``.
     """
     if not obj:
         return None
 
-    ret = obj.get(key)
+    ret = _get_item(obj, key, default=None)
 
     if callable(ret):
         ret = ret()
@@ -167,6 +236,13 @@ def result(obj, key):
 def times(n, callback):
     """Executes the callback `n` times, returning a list of the results of each
     callback execution. The callback is invoked with one argument: ``(index)``.
+
+    Args:
+        n (int): Number of times to execute `callback`.
+        callback (function): Function to execute.
+
+    Returns:
+        list: A list of results from calling `callback`.
     """
     # pylint: disable=redefined-outer-name
     return [callback(index) for index in _range(n)]
@@ -181,7 +257,7 @@ def unescape(string):
         string (str): String to unescape.
 
     Returns:
-        string: HTML unescaped string.
+        str: HTML unescaped string.
     """
     return html_unescape(string)
 
@@ -189,6 +265,12 @@ def unescape(string):
 def unique_id(prefix=None):
     """Generates a unique ID. If `prefix` is provided the ID will be appended
     to  it.
+
+    Args:
+        prefix (str, optional): String prefix to prepend to ID value.
+
+    Returns:
+        str: ID value.
     """
     # pylint: disable=global-statement
     global ID_COUNTER
@@ -283,14 +365,19 @@ def _get_item(obj, key, **kargs):
     """Safely get an item by `key` from a sequence or mapping object.
 
     Args:
-        obj (mixed): sequence or mapping to retrieve item from
-        key (mixed): hash key or integer index identifying which item to
-            retrieve
-        **default (mixed, optional): default value to return if `key` not
-            found in `obj`
+        obj (list|dict): Sequence or mapping to retrieve item from.
+        key (mixed): Key or index identifying which item to retrieve.
+
+    Keyword Args:
+        default (mixed, optional): Default value to return if `key` not
+            found in `obj`.
 
     Returns:
-        mixed: `obj[key]` or `default`
+        mixed: `obj[key]` or `default`.
+
+    Raises:
+        KeyError|IndexError: If `obj` is missing key or index and no default
+            value provided.
     """
     use_default = 'default' in kargs
     default = kargs.get('default')
@@ -312,16 +399,16 @@ def _set_item(obj, key, value):
     raise ``IndexError``.
 
     Args:
-        obj (mixed): object to assign value to
-        key (mixed): dict or list index to assign to
-        value (mixed): value to assign
+        obj (list|dict): Object to assign value to.
+        key (mixed): Key or index to assign to.
+        value (mixed): Value to assign.
 
     Returns:
         None
 
     Raises:
-        IndexError: if `obj` is a ``list`` and `key` is greater than length of
-            `obj`
+        IndexError: If `obj` is a ``list`` and `key` is greater than length of
+            `obj`.
     """
     if isinstance(obj, dict):
         obj[key] = value

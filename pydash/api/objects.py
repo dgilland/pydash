@@ -1,4 +1,4 @@
-"""Objects
+"""Functions that operate on lists, dicts, and other objects.
 """
 
 from __future__ import absolute_import
@@ -25,6 +25,17 @@ from .._compat import (
 def assign(obj, *sources, **kargs):
     """Assigns own enumerable properties of source object(s) to the destination
     object.
+
+    Args:
+        obj (dict): Destination object whose properties will be modified.
+        *sources (dict): Source objects to assign to `obj`.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        dict: Modified `obj`.
+
+    Warning:
+        `obj` is modified in place.
 
     See Also:
         - :func:`assign` (main definition)
@@ -54,12 +65,12 @@ def clone(value, is_deep=False, callback=None):
     callback is invoked with one argument: ``(value)``.
 
     Args:
-        value (mixed): dict or list to clone
-        is_deep (bool, optional): whether to perform deep clone
-        callback (mixed, optional): function that provides cloned values
+        value (list|dict): Object to clone.
+        is_deep (bool, optional): Whether to perform deep clone.
+        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
-        mixed: cloned dict or list
+        list|dict: Cloned object.
     """
     if callback is None:
         callback = identity
@@ -83,11 +94,11 @@ def clone_deep(value, callback=None):
     argument: ``(value)``.
 
     Args:
-        value (mixed): dict or list to clone
-        callback (mixed, optional): function that provides cloned values
+        value (list|dict): Object to clone.
+        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
-        dict: cloned dict
+        list|dict: Cloned object.
     """
     return clone(value, is_deep=True, callback=callback)
 
@@ -95,6 +106,16 @@ def clone_deep(value, callback=None):
 def defaults(obj, *sources):
     """Assigns own enumerable properties of source object(s) to the destination
     object for all destination properties that resolve to undefined.
+
+    Args:
+        obj (dict): Destination object whose properties will be modified.
+        *sources (dict): Source objects to assign to `obj`.
+
+    Returns:
+        dict: Modified `obj`.
+
+    Warning:
+        `obj` is modified in place.
     """
     for source in sources:
         for key, value in iteritems(source):
@@ -107,6 +128,13 @@ def find_key(obj, callback=None):
     """This method is like :func:`pydash.api.arrays.find_index` except that it
     returns the key of the first element that passes the callback check,
     instead of the element itself.
+
+    Args:
+        obj (list|dict): Object to search.
+        callback (mixed): Callback applied per iteration.
+
+    Returns:
+        mixed: Found key or ``None``.
 
     See Also:
         - :func:`find_key` (main definition)
@@ -123,6 +151,13 @@ find_last_key = find_key
 def for_in(obj, callback=None):
     """Iterates over own and inherited enumerable properties of `obj`,
     executing `callback` for each property.
+
+    Args:
+        obj (list|dict): Object to process.
+        callback (mixed): Callback applied per iteration.
+
+    Returns:
+        list|dict: `obj`.
 
     See Also:
         - :func:`for_in` (main definition)
@@ -142,6 +177,13 @@ def for_in_right(obj, callback=None):
     """This function is like :func:`for_in` except it iterates over the
     properties in reverse order.
 
+    Args:
+        obj (list|dict): Object to process.
+        callback (mixed): Callback applied per iteration.
+
+    Returns:
+        list|dict: `obj`.
+
     See Also:
         - :func:`for_in_right` (main definition)
         - :func:`for_own_right` (alias)
@@ -159,11 +201,17 @@ for_own_right = for_in_right
 def functions(obj):
     """Creates a list of keys of an object that are callable.
 
+    Args:
+        obj (list|dict): Object to inspect.
+
+    Returns:
+        list: All keys whose values are callable.
+
     See Also:
         - :func:`functions` (main definition)
         - :func:`methods` (alias)
     """
-    return [key for key, value in iteritems(obj) if callable(value)]
+    return [key for key, value in _iterate(obj) if callable(value)]
 
 
 methods = functions
@@ -258,6 +306,15 @@ def is_equal(a, b, callback=None):
     compare values. If the callback returns ``None``, comparisons will be
     handled by the method instead. The callback is invoked with two arguments:
     ``(a, b)``.
+
+    Args:
+        a (list|dict): Object to compare.
+        b (list|dict): Object to compare.
+        callback (mixed, optional): Callback used to compare values from `a`
+            and `b`.
+
+    Returns:
+        bool: Whether `a` and `b` are equal.
     """
     # If callback provided, use it for comparision.
     equal = callback(a, b) if callable(callback) else None
@@ -395,6 +452,13 @@ def map_values(obj, callback=None):
     object is provided for callback the created
     :func:`pydash.api.collections.where` style callback will return ``True``
     for elements that have the properties of the given object, else ``False``.
+
+    Args:
+        obj (list|dict): Object to map.
+        callback (mixed): Callback applied per iteration.
+
+    Returns:
+        list|dict: Results of running `obj` through `callback`.
     """
     ret = {}
 
@@ -518,7 +582,7 @@ def pick(obj, callback=None, *properties):
     The callback is invoked with three arguments: ``(value, key, object)``.
 
     Args:
-        obj (mixed): Object to pick from.
+        obj (list|dict): Object to pick from.
         *properties (str): Property values to pick.
         callback (mixed, optional): Callback used to determine whic properties
             to pick.
@@ -536,12 +600,21 @@ def pick(obj, callback=None, *properties):
 
 
 def transform(obj, callback=None, accumulator=None):
-    """An alternative to :func:`pydash.api.collectionsreduce`, this method
+    """An alternative to :func:`pydash.api.collections.reduce`, this method
     transforms `obj` to a new accumulator object which is the result of running
     each of its properties through a callback, with each callback execution
     potentially mutating the accumulator object. The callback is invoked with
     four arguments: ``(accumulator, value, key, object)``. Callbacks may exit
     iteration early by explicitly returning ``False``.
+
+    Args:
+        obj (list|dict): Object to process.
+        callback (mixed): Callback applied per iteration.
+        accumulator (mixed, optional): Accumulated object. Defaults to
+            ``list``.
+
+    Returns:
+        mixed: Accumulated object.
     """
     if callback is None:
         callback = lambda accumulator, *args: accumulator
