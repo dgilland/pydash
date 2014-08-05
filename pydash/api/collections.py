@@ -231,11 +231,11 @@ def for_each_right(collection, callback):
 each_right = for_each_right
 
 
-def group_by(collection, callback):
+def group_by(collection, callback=None):
     """Creates an object composed of keys generated from the results of running
     each element of a `collection` through the callback.
     """
-    ret = dict()
+    ret = {}
     cbk = create_callback(callback)
 
     for value in collection:
@@ -246,11 +246,11 @@ def group_by(collection, callback):
     return ret
 
 
-def index_by(collection, callback):
+def index_by(collection, callback=None):
     """Creates an object composed of keys generated from the results of running
     each element of the collection through the given callback.
     """
-    ret = dict()
+    ret = {}
     cbk = create_callback(callback)
 
     for value in collection:
