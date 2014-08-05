@@ -310,6 +310,8 @@ def max_(collection, callback=None):
             return max(collection.values())
         else:
             return max(collection)
+    if isinstance(collection, dict):
+        collection = collection.values()
 
     return max(collection, key=create_callback(callback))
 
@@ -321,6 +323,8 @@ def min_(collection, callback=None):
             return min(collection.values())
         else:
             return min(collection)
+    if isinstance(collection, dict):
+        collection = collection.values()
 
     return min(collection, key=create_callback(callback))
 
@@ -415,8 +419,11 @@ def shuffle(collection):
     """Creates a list of shuffled values, using a version of the Fisher-Yates
     shuffle.
     """
-    # Make copy of collection since random.shuffle works on list in-place.
-    collection = list(collection)
+    if isinstance(collection, dict):
+        collection = collection.values()
+    else:
+        # Make copy of collection since random.shuffle works on list in-place.
+        collection = list(collection)
 
     # NOTE: random.shuffle uses Fisher-Yates.
     random.shuffle(collection)
@@ -466,12 +473,21 @@ def sort_by(collection, callback):
     """Creates a list of elements, sorted in ascending order by the results of
     running each element in a `collection` through the callback.
     """
+    if isinstance(collection, dict):
+        collection = collection.values()
+
     return sorted(collection, key=create_callback(callback))
 
 
 def to_list(collection):
     """Converts the collection to a list."""
     return list(collection)
+    if isinstance(collection, dict):
+        ret = collection.values()
+    else:
+        ret = list(collection)
+
+    return ret
 
 
 def where(collection, properties):
