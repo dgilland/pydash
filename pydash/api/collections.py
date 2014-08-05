@@ -259,7 +259,7 @@ def index_by(collection, callback=None):
     return ret
 
 
-def invoke(collection, method_name, *args):
+def invoke(collection, method_name, *args, **kargs):
     """Invokes the method named by `method_name` on each element in the
     `collection` returning a list of the results of each invoked method.
     """
@@ -267,9 +267,9 @@ def invoke(collection, method_name, *args):
 
     for item in collection:
         if callable(method_name):
-            lst.append(method_name(item, *args))
+            lst.append(method_name(item, *args, **kargs))
         else:
-            lst.append(getattr(item, method_name)(*args))
+            lst.append(getattr(item, method_name)(*args, **kargs))
 
     return lst
 
