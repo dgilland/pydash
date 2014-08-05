@@ -13,6 +13,6 @@ pydash
 .. image:: http://img.shields.io/pypi/l/pydash.svg?style=flat
     :target: https://pypi.python.org/pypi/pydash/
 
-Python port of the `Lo-Dash <http://Lo-Dash.com/>`_  Javascript library.
+Python port of the `Lo-Dash <http://lodash.com/>`_  Javascript library.
 
 Documentation: http://pydash.readthedocs.org/
