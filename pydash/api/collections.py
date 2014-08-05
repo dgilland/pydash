@@ -21,7 +21,7 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
     of indexes.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         indexes (mixed): The indexes of `collection` to retrieve, specified as
             individual indexes or arrays of indexes.
 
@@ -38,7 +38,7 @@ def contains(collection, target, from_index=0):
     offset from the end of the collection.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         target (mixed): Target value to compare to.
         from_index (optional): Offset to start search from.
 
@@ -66,7 +66,7 @@ def count_by(collection, callback=None):
     each element of `collection` through the callback.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
 
     Returns:
@@ -91,7 +91,7 @@ def every(collection, callback=None):
     have the properties of the given object, else ``False``.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
 
     Returns:
@@ -117,7 +117,7 @@ def filter_(collection, callback=None):
     elements the callback returns truthy for.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
 
     Returns:
@@ -143,7 +143,7 @@ def find(collection, callback=None):
     the callback returns truthy for.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
 
     Returns:
@@ -173,7 +173,7 @@ def find_last(collection, callback=None):
     of a `collection` from right to left.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
 
     Returns:
@@ -196,7 +196,7 @@ def for_each(collection, callback=None):
     element.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
 
     See Also:
@@ -284,7 +284,7 @@ def map_(collection, callback=None):
     have the properties of the given object, else ``False``.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
 
     Returns:
@@ -330,7 +330,7 @@ def pluck(collection, key):
     collection.
 
     Args:
-        collection (iterable): list of dicts
+        collection (list|dict): list of dicts
         key (str): collection's key to pluck
 
     Returns:
@@ -441,7 +441,7 @@ def some(collection, callback=None):
     have the properties of the given object, else ``False``.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         callbacked (mixed, optional): Callback applied per iteration.
 
     Returns:
@@ -479,7 +479,7 @@ def where(collection, properties):
     elements that have the given properties.
 
     Args:
-        collection (iterable): Collection to iterate over.
+        collection (list|dict): Collection to iterate over.
         properties (dict): property values to filter by
 
     Returns:
