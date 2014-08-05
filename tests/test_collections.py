@@ -115,6 +115,13 @@ def test_contains(case, expected):
     assert pyd.contains(*case) == expected
 
 
+@parametrize('case', [
+    pyd.include
+])
+def test_contains_aliases(case):
+    assert pyd.contains is case
+
+
 @parametrize('case,expected', [
     (([4.3, 6.1, 6.4], lambda num, *args: int(math.floor(num))), {4: 1, 6: 2}),
     (([{'one': 1}, {'one': 1}, {'two': 2}, {'one': 1}], {'one': 1}),

@@ -85,6 +85,7 @@ from .api.collections import (
     for_each,
     for_each_right,
     group_by,
+    include,
     index_by,
     inject,
     invoke,
