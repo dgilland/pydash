@@ -38,7 +38,19 @@ class Chain(object):
         return text_type(self.value())
 
     def __getattr__(self, attr):
-        """Proxy attribute access to :mod:`pydash`."""
+        """Proxy attribute access to :mod:`pydash`.
+
+        Args:
+            attr (str): Name of :mod:`pydash` function to chain.
+
+        Returns:
+            ChainWrapper: New instance of :class:`ChainWrapper` with value
+                passed on.
+
+        Raises:
+            InvalidMethod: Raised if `attr` is not a valid :mod:`pydash`
+                function.
+        """
         method = getattr(pydash, attr, None)
 
         # TODO: Be more stringent about which methods are valid?
@@ -58,6 +70,10 @@ class ChainWrapper(object):
     def __call__(self, *args, **kargs):
         """Invoke the :attr:`method` with :attr:`value` as the first argument
         and return a new :class:`Chain` object with the return value.
+
+        Returns:
+            Chain: New instance of :class:`Chain` with the results of
+                :attr:`method` passed in as value.
         """
         return Chain(self.method(self.value, *args, **kargs))
 

@@ -199,6 +199,9 @@ def for_each(collection, callback=None):
         collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
 
+    Returns:
+        list|dict: `collection`
+
     See Also:
         - :func:`for_each` (main definition)
         - :func:`each` (alias)
@@ -217,6 +220,13 @@ def for_each_right(collection, callback):
     """This method is like :func:`for_each` except that it iterates over
     elements of a `collection` from right to left.
 
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list|dict: `collection`
+
     See Also:
         - :func:`for_each_right` (main definition)
         - :func:`each_right` (alias)
@@ -234,6 +244,13 @@ each_right = for_each_right
 def group_by(collection, callback=None):
     """Creates an object composed of keys generated from the results of running
     each element of a `collection` through the callback.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        dict: Results of grouping by `callback`.
     """
     ret = {}
     cbk = create_callback(callback)
@@ -249,6 +266,13 @@ def group_by(collection, callback=None):
 def index_by(collection, callback=None):
     """Creates an object composed of keys generated from the results of running
     each element of the collection through the given callback.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        dict: Results of indexing by `callback`.
     """
     ret = {}
     cbk = create_callback(callback)
@@ -262,6 +286,15 @@ def index_by(collection, callback=None):
 def invoke(collection, method_name, *args, **kargs):
     """Invokes the method named by `method_name` on each element in the
     `collection` returning a list of the results of each invoked method.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        method_name (str): Name of method to invoke.
+        *args (optional): Arguments to pass to method call.
+        **kargs (optional): Keyword arguments to pass to method call.
+
+    Returns:
+        list: List of results of invoking method of each item.
     """
     lst = []
 
@@ -304,6 +337,15 @@ collect = map_
 
 
 def max_(collection, callback=None):
+    """Retrieves the maximum value of a `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        mixed: Maximum value.
+    """
     if isinstance(collection, dict):
         collection = collection.values()
 
@@ -311,6 +353,15 @@ def max_(collection, callback=None):
 
 
 def min_(collection, callback=None):
+    """Retrieves the minimum value of a `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        mixed: Minimum value.
+    """
     if isinstance(collection, dict):
         collection = collection.values()
 
@@ -337,6 +388,15 @@ def reduce_(collection, callback=None, accumulator=None):
     running each element in the collection through the callback, where each
     successive callback execution consumes the return value of the previous
     execution.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+        accumulator (mixed, optional): Object that stores result of reduction.
+            Default is to use the result of the first iteration.
+
+    Returns:
+        mixed: Accumulator object containing results of reduction.
 
     See Also:
         - :func:`reduce_` (main definition)
@@ -371,6 +431,15 @@ def reduce_right(collection, callback=None, accumulator=None):
     """This method is like :func:`reduce_` except that it iterates over
     elements of a `collection` from right to left.
 
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+        accumulator (mixed, optional): Object that stores result of reduction.
+            Default is to use the result of the first iteration.
+
+    Returns:
+        mixed: Accumulator object containing results of reduction.
+
     See Also:
         - :func:`reduce_right` (main definition)
         - :func:`foldr` (alias)
@@ -386,6 +455,13 @@ foldr = reduce_right
 def reject(collection, callback=None):
     """The opposite of :func:`filter_` this method returns the elements of a
     collection that the callback does **not** return truthy for.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: Rejected elements of `collection`.
     """
     return [value
             for is_true, value, _, _ in _iter_callback(collection, callback)
@@ -394,6 +470,14 @@ def reject(collection, callback=None):
 
 def sample(collection, n=None):
     """Retrieves a random element or `n` random elements from a `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        n (int, optional): Number of random samples to return.
+
+    Returns:
+        list|mixed: List of sampled collection value if `n` is provided, else
+            single value from collection if `n` is ``None``.
     """
     num = min(n or 1, len(collection))
     sampled = random.sample(collection, num)
@@ -403,6 +487,12 @@ def sample(collection, n=None):
 def shuffle(collection):
     """Creates a list of shuffled values, using a version of the Fisher-Yates
     shuffle.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+
+    Returns:
+        list: Shuffled list of values.
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -419,6 +509,12 @@ def shuffle(collection):
 def size(collection):
     """Gets the size of the `collection` by returning `len(collection)` for
     iterable objects.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+
+    Returns:
+        int: Collection length.
     """
     return len(collection)
 
@@ -457,6 +553,13 @@ any_ = some
 def sort_by(collection, callback=None):
     """Creates a list of elements, sorted in ascending order by the results of
     running each element in a `collection` through the callback.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: Sorted list.
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -465,8 +568,14 @@ def sort_by(collection, callback=None):
 
 
 def to_list(collection):
-    """Converts the collection to a list."""
-    return list(collection)
+    """Converts the collection to a list.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+
+    Returns:
+        list: Collection converted to list.
+    """
     if isinstance(collection, dict):
         ret = collection.values()
     else:
