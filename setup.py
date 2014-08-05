@@ -9,14 +9,18 @@ Project: https://github.com/dgilland/pydash
 Documentation: http://pydash.readthedocs.org/
 """
 
+import os
+import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-import sys
+
+
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
 meta = {}
-with open('pydash/__meta__.py') as fp:
-    exec(fp.read(), meta)
+exec(read('pydash/__meta__.py'), meta)
 
 
 class Tox(TestCommand):
@@ -50,7 +54,7 @@ setup(
     author=meta['__author__'],
     author_email=meta['__email__'],
     description=meta['__summary__'],
-    long_description=__doc__,
+    long_description=read('README.rst'),
     packages=find_packages(exclude=['tests']),
     install_requires=[],
     tests_require=['tox'],
@@ -58,7 +62,7 @@ setup(
     test_suite='tests',
     keywords='lodash underscore functional',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'License :: OSI Approved :: MIT License',

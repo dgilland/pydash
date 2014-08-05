@@ -1,5 +1,5 @@
 pydash
-******
+======
 
 .. image:: http://img.shields.io/pypi/v/pydash.svg?style=flat
     :target: https://pypi.python.org/pypi/pydash/
