@@ -387,9 +387,6 @@ def reject(collection, callback=None):
     """The opposite of :func:`filter_` this method returns the elements of a
     collection that the callback does **not** return truthy for.
     """
-    if callback is None:
-        callback = lambda item, *args: item
-
     return [value
             for is_true, value, _, _ in _iter_callback(collection, callback)
             if not is_true]
