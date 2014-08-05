@@ -40,6 +40,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
+    'sphinxcontrib.napoleon'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -114,7 +115,6 @@ else:
     import sphinx_rtd_theme
     html_theme = 'sphinx_rtd_theme'
     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-    extensions.append('sphinxcontrib.napoleon')
 
 
 # Theme options are theme-specific and customize the look and feel of a theme
