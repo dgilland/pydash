@@ -120,7 +120,8 @@ def test_contains(case, expected):
     (([{'one': 1}, {'one': 1}, {'two': 2}, {'one': 1}], {'one': 1}),
      {True: 3, False: 1}),
     (([{'one': 1}, {'one': 1}, {'two': 2}, {'one': 1}], 'one'),
-     {1: 3, None: 1})
+     {1: 3, None: 1}),
+    (({1: 0, 2: 0, 4: 3},), {0: 2, 3: 1})
 ])
 def test_count_by(case, expected):
     assert pyd.count_by(*case) == expected

@@ -53,18 +53,15 @@ def contains(collection, target, from_index=0):
 include = contains
 
 
-def count_by(collection, callback):
+def count_by(collection, callback=None):
     """Creates an object composed of keys generated from the results of running
     each element of `collection` through the callback.
     """
     ret = dict()
-    cbk = create_callback(callback)
 
-    for value in collection:
-        key = cbk(value)
-
-        ret.setdefault(key, 0)
-        ret[key] += 1
+    for result, _, _, _ in _iter_callback(collection, callback):
+        ret.setdefault(result, 0)
+        ret[result] += 1
 
     return ret
 
