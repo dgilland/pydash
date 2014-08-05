@@ -454,7 +454,7 @@ def some(collection, callback=None):
 any_ = some
 
 
-def sort_by(collection, callback):
+def sort_by(collection, callback=None):
     """Creates a list of elements, sorted in ascending order by the results of
     running each element in a `collection` through the callback.
     """
