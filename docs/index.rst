@@ -2,6 +2,9 @@
 
 .. include:: ../README.rst
 
+.. include:: quickstart.rst
+
+
 Guide
 =====
 
@@ -12,25 +15,17 @@ Guide
     quickstart
     differences
 
-Main API Reference
-==================
 
-References objects available via importing the main module.
-
-.. toctree::
-    :maxdepth: 2
-
-    apimain
-
-Full API Reference
-==================
+API Reference
+=============
 
 Includes links to source code.
 
 .. toctree::
     :maxdepth: 2
 
-    apifull
+    api
+
 
 Project Info
 ============
@@ -43,6 +38,7 @@ Project Info
     authors
     contributing
     kudos
+
 
 Indices and tables
 ==================
