@@ -40,7 +40,7 @@ Project Info
     kudos
 
 
-Indices and tables
+Indices and Tables
 ==================
 
 - :ref:`genindex`
