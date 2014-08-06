@@ -196,8 +196,7 @@ def initial(array):
 
 
 def intersection(*arrays):
-    """Computes the intersection of all the passed-in arrays using strict
-    equality for comparisons, i.e. ===.
+    """Computes the intersection of all the passed-in arrays.
 
     Args:
         arrays (list): Lists to process.
@@ -244,8 +243,7 @@ def last_index_of(array, value, from_index=None):
 
 
 def pull(array, *values):
-    """Removes all provided values from the given array using strict equality
-    for comparisons, i.e. ===.
+    """Removes all provided values from the given array.
 
     Args:
         array (list): List to pull from.
@@ -332,9 +330,9 @@ def sorted_index(array, value, callback=None):
     is passed, it will be executed for value and each element in array to
     compute their sort ranking. The callback is invoked with one argument:
     ``(value)``. If a property name is passed for callback, the created
-    :func:`pydash.api.collections.pluck` style callback will return the property
-    value of the given element. If an object is passed for callback, the
-    created :func:`pydash.api.collections.where` style callback will return
+    :func:`pydash.api.collections.pluck` style callback will return the
+    property value of the given element. If an object is passed for callback,
+    the created :func:`pydash.api.collections.where` style callback will return
     ``True`` for elements that have the properties of the given object, else
     ``False``.
 
@@ -357,8 +355,7 @@ def sorted_index(array, value, callback=None):
 
 
 def union(*arrays):
-    """Computes the union of the passed-in arrays using strict equality for
-    comparisons, i.e. ===.
+    """Computes the union of the passed-in arrays.
 
     Args:
         arrays (list): Lists to unionize.
@@ -370,14 +367,13 @@ def union(*arrays):
 
 
 def uniq(array, callback=None):
-    """Creates a duplicate-value-free version of the array using strict
-    equality for comparisons, i.e. ===. If callback is passed, each element of
-    array is passed through a callback before uniqueness is computed. The
-    callback is invoked with three arguments: ``(value, index, array)``. If a
-    property name is passed for callback, the created
-    :func:`pydash.api.collections.pluck` style callback will return the property
-    value of the given element. If an object is passed for callback, the
-    created :func:`pydash.api.collections.where` style callback will return
+    """Creates a duplicate-value-free version of the array. If callback is
+    passed, each element of array is passed through a callback before
+    uniqueness is computed. The callback is invoked with three arguments:
+    ``(value, index, array)``. If a property name is passed for callback, the
+    created :func:`pydash.api.collections.pluck` style callback will return the
+    property value of the given element. If an object is passed for callback,
+    the created :func:`pydash.api.collections.where` style callback will return
     ``True`` for elements that have the properties of the given object, else
     ``False``.
 
@@ -414,8 +410,7 @@ unique = uniq
 
 
 def without(array, *values):
-    """Creates an array with all occurrences of the passed values removed using
-    strict equality for comparisons, i.e. ===.
+    """Creates an array with all occurrences of the passed values removed.
 
     Args:
         array (list): List to filter.

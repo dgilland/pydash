@@ -33,9 +33,8 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
 
 
 def contains(collection, target, from_index=0):
-    """Checks if a given value is present in a collection using strict equality
-    for comparisons, i.e. ===. If `from_index` is negative, it is used as the
-    offset from the end of the collection.
+    """Checks if a given value is present in a collection. If `from_index` is
+    negative, it is used as the offset from the end of the collection.
 
     Args:
         collection (list|dict): Collection to iterate over.
