@@ -1,5 +1,5 @@
-Changes
-=======
+Changelog
+=========
 
 vx.x.x (xxxx-xx-xx)
 -------------------
