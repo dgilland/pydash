@@ -32,4 +32,4 @@ Quickstart
 
 
 .. seealso::
-    For further details consult :ref:`Main API Reference <apimain>`.
+    For further details consult :ref:`API Reference <api>`.
