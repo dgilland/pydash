@@ -1,8 +1,17 @@
-.. _apifull:
+.. _api:
 
-******************
-Full API Reference
-******************
+*************
+API Reference
+*************
+
+All public functions are available from the main module.
+
+.. code-block:: python
+
+    import pydash
+
+    pydash.<function>
+
 
 Arrays
 ======
@@ -10,11 +19,13 @@ Arrays
 .. automodule:: pydash.api.arrays
     :members:
 
+
 Chaining
 ========
 
 .. automodule:: pydash.api.chaining
     :members:
+
 
 Collections
 ===========
@@ -22,17 +33,20 @@ Collections
 .. automodule:: pydash.api.collections
     :members:
 
+
 Functions
 =========
 
 .. automodule:: pydash.api.functions
     :members:
 
+
 Objects
 =======
 
 .. automodule:: pydash.api.objects
     :members:
+
 
 Utilities
 =========
