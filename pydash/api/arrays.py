@@ -61,7 +61,7 @@ def compact(array):
 
 
 def difference(array, *lists):
-    """Creates a list of list elements not present in the other lists
+    """Creates a list of list elements not present in the other lists.
 
     Args:
         array (list): List to process.
@@ -332,7 +332,7 @@ def sorted_index(array, value, callback=None):
     is passed, it will be executed for value and each element in array to
     compute their sort ranking. The callback is invoked with one argument:
     ``(value)``. If a property name is passed for callback, the created
-    :func:`pydash.api.collection.pluck` style callback will return the property
+    :func:`pydash.api.collections.pluck` style callback will return the property
     value of the given element. If an object is passed for callback, the
     created :func:`pydash.api.collections.where` style callback will return
     ``True`` for elements that have the properties of the given object, else
@@ -375,9 +375,9 @@ def uniq(array, callback=None):
     array is passed through a callback before uniqueness is computed. The
     callback is invoked with three arguments: ``(value, index, array)``. If a
     property name is passed for callback, the created
-    :func:`pydash.api.collection.pluck` style callback will return the property
+    :func:`pydash.api.collections.pluck` style callback will return the property
     value of the given element. If an object is passed for callback, the
-    created :func:`pydash.api.collection.where` style callback will return
+    created :func:`pydash.api.collections.where` style callback will return
     ``True`` for elements that have the properties of the given object, else
     ``False``.
 

@@ -47,16 +47,6 @@ HTML_ESCAPES = {
 }
 
 
-def now():
-    """Return the number of milliseconds that have elapsed since the Unix epoch
-    (1 January 1970 00:00:00 UTC).
-
-    Returns:
-        int: Milliseconds since Unix epoch.
-    """
-    return int(time.time() * 1000)
-
-
 def constant(value):
     """Creates a function that returns `value`.
 
@@ -178,6 +168,16 @@ def memoize(func, resolver=None):
 def noop(*args, **kargs):  # pylint: disable=unused-argument
     """A no-operation function."""
     pass
+
+
+def now():
+    """Return the number of milliseconds that have elapsed since the Unix epoch
+    (1 January 1970 00:00:00 UTC).
+
+    Returns:
+        int: Milliseconds since Unix epoch.
+    """
+    return int(time.time() * 1000)
 
 
 def property_(key):

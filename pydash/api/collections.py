@@ -40,7 +40,7 @@ def contains(collection, target, from_index=0):
     Args:
         collection (list|dict): Collection to iterate over.
         target (mixed): Target value to compare to.
-        from_index (optional): Offset to start search from.
+        from_index (int, optional): Offset to start search from.
 
     Returns:
         bool: Whether `target` is in `collection`.
