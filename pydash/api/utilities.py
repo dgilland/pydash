@@ -15,6 +15,26 @@ from .._compat import (
 )
 
 
+__all__ = [
+    'now',
+    'constant',
+    'callback',
+    'create_callback',
+    'escape',
+    'identity',
+    'matches',
+    'memoize',
+    'noop',
+    'property_',
+    'prop',
+    'random',
+    'result',
+    'times',
+    'unescape',
+    'unique_id',
+]
+
+
 ID_COUNTER = 0
 
 HTML_ESCAPES = {

@@ -15,6 +15,39 @@ from .utilities import (
 )
 
 
+__all__ = [
+    'compact',
+    'difference',
+    'drop',
+    'find_index',
+    'find_last_index',
+    'first',
+    'flatten',
+    'head',
+    'index_of',
+    'initial',
+    'intersection',
+    'last',
+    'last_index_of',
+    'object_',
+    'pull',
+    'range_',
+    'remove',
+    'rest',
+    'sorted_index',
+    'tail',
+    'take',
+    'union',
+    'uniq',
+    'unique',
+    'without',
+    'xor',
+    'zip_',
+    'unzip',
+    'zip_object',
+]
+
+
 def compact(array):
     """Creates a list with all falsey values of array removed.
 

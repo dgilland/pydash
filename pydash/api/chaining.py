@@ -9,6 +9,12 @@ from .exceptions import InvalidMethod
 from .._compat import text_type
 
 
+__all__ = [
+    'chain',
+    'tap',
+]
+
+
 class Chain(object):
     """Enables chaining of pydash functions."""
 

@@ -22,6 +22,47 @@ from .._compat import (
 )
 
 
+__all__ = [
+    'assign',
+    'clone',
+    'clone_deep',
+    'defaults',
+    'extend',
+    'find_key',
+    'find_last_key',
+    'for_in',
+    'for_in_right',
+    'for_own',
+    'for_own_right',
+    'functions',
+    'has',
+    'invert',
+    'is_list',
+    'is_boolean',
+    'is_date',
+    'is_empty',
+    'is_equal',
+    'is_function',
+    'is_nan',
+    'is_none',
+    'is_number',
+    'is_object',
+    'is_plain_object',
+    'is_string',
+    'keys',
+    'map_values',
+    'merge',
+    'methods',
+    'omit',
+    'pairs',
+    'parse_int',
+    'pick',
+    'transform',
+    'update',
+    'values',
+]
+
+
 def assign(obj, *sources, **kargs):
     """Assigns own enumerable properties of source object(s) to the destination
     object.
