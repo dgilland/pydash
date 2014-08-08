@@ -10,7 +10,6 @@ from .._compat import string_types, _range
 from .utilities import (
     create_callback,
     _iter_callback,
-    _iter_unique_set,
     _iter_unique
 )
 
@@ -394,14 +393,9 @@ def uniq(array, callback=None):
     else:
         computed = array
 
-    try:
-        # Try faster version of uniqifier which requires all array elements to
-        # be hashable.
-        lst = [array[i] for i, _ in _iter_unique_set(computed)]
-    except Exception:  # pylint: disable=broad-except
-        # Fallback to version which doesn't require hashable elements but is
-        # slower.
-        lst = [array[i] for i, _ in _iter_unique(computed)]
+    # NOTE: User array[i] instead of item since callback could have modified
+    # returned item values.
+    lst = [array[i] for i, _ in _iter_unique(computed)]
 
     return lst
 

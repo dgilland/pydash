@@ -364,14 +364,6 @@ def _iter_list(array):
         yield i, item
 
 
-def _iter_unique_set(array):
-    """Return iterator to find unique set."""
-    seen = set()
-    for i, item in enumerate(array):
-        if item not in seen and not seen.add(item):
-            yield (i, item)
-
-
 def _iter_unique(array):
     """Return iterator to find unique list."""
     seen = []
