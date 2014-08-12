@@ -10,7 +10,8 @@ from .._compat import string_types, _range
 from .utilities import (
     create_callback,
     _iter_callback,
-    _iter_unique
+    _iter_unique,
+    _deprecated
 )
 
 
@@ -319,8 +320,15 @@ def rest(array):
     return array[1:]
 
 
-tail = rest
 drop = rest
+@_deprecated
+def tail(array):
+    """Return all but the first element of `array`.
+
+    .. deprecated:: 1.1.0
+       Use :func:`rest` instead.
+    """
+    return rest(array)
 
 
 def sorted_index(array, value, callback=None):
