@@ -5,6 +5,10 @@ Changelog
 v1.x.x (WIP)
 ------------
 
+- Modify ``drop()`` to accept ``n`` argument and remove as alias of ``rest()``.
+- Add ``drop_right()``.
+- Add ``drop_right_while()``.
+- Add ``drop_while()``.
 - Deprecate ``tail()``.
 
 

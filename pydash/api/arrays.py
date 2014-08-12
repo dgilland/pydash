@@ -19,6 +19,9 @@ __all__ = [
     'compact',
     'difference',
     'drop',
+    'drop_right',
+    'drop_right_while',
+    'drop_while',
     'find_index',
     'find_last_index',
     'first',
@@ -73,6 +76,49 @@ def difference(array, *lists):
     return (list(difference(set(array).difference(lists[0]),
                             *lists[1:])) if lists
             else array)
+
+
+def drop(array, n):
+    """Creates a slice of `array` with `n` elements dropped from the beginning.
+    """
+    return drop_while(array, lambda _, index, *args: index < n)
+
+
+def drop_while(array, callback=None):
+    """Creates a slice of `array` excluding elements dropped from the
+    beginning. Elements are dropped until the `callback` returns falsey. The
+    `callback` is invoked with three arguments: ``(value, index, array)``.
+    """
+    n = 0
+    for is_true, _, _, _ in _iter_callback(array, callback):
+        if is_true:
+            n += 1
+        else:
+            break
+
+    return array[n:]
+
+
+def drop_right(array, n):
+    """Creates a slice of `array` with `n` elements dropped from the end."""
+    length = len(array)
+    return drop_right_while(array,
+                            lambda _, index, *args: (length - index) <= n)
+
+
+def drop_right_while(array, callback=None):
+    """Creates a slice of `array` excluding elements dropped from the end.
+    Elements are dropped until the `callback` returns falsey. The `callback` is
+    invoked with three arguments: ``(value, index, array)``.
+    """
+    n = len(array)
+    for is_true, _, _, _ in _iter_callback(array, callback, reverse=True):
+        if is_true:
+            n -= 1
+        else:
+            break
+
+    return array[:n]
 
 
 def find_index(array, callback=None):
@@ -320,7 +366,6 @@ def rest(array):
     return array[1:]
 
 
-drop = rest
 @_deprecated
 def tail(array):
     """Return all but the first element of `array`.

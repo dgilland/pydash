@@ -22,6 +22,40 @@ def test_difference(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], 1), [2, 3, 4, 5]),
+    (([1, 2, 3, 4, 5], 2), [3, 4, 5]),
+    (([1, 2, 3, 4, 5], 5), []),
+    (([1, 2, 3, 4, 5], 6), []),
+])
+def test_drop(case, expected):
+    assert pyd.drop(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], lambda item, *args: item < 3), [3, 4, 5]),
+])
+def test_drop_while(case, expected):
+    assert pyd.drop_while(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], 1), [1, 2, 3, 4]),
+    (([1, 2, 3, 4, 5], 2), [1, 2, 3]),
+    (([1, 2, 3, 4, 5], 5), []),
+    (([1, 2, 3, 4, 5], 6), []),
+])
+def test_drop_right(case, expected):
+    assert pyd.drop_right(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], lambda item, *args: item > 3), [1, 2, 3]),
+])
+def test_drop_right_while(case, expected):
+    assert pyd.drop_right_while(*case) == expected
+
+
+@parametrize('case,expected', [
     ([1, 2, 3], [2, 3]),
     ([], [])
 ])
