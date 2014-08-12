@@ -1,5 +1,6 @@
 
 import math
+import warnings
 
 import pydash as pyd
 from .fixtures import parametrize
@@ -26,14 +27,6 @@ def test_difference(case, expected):
 ])
 def test_rest(case, expected):
     assert pyd.rest(case) == expected
-
-
-@parametrize('alias', [
-    pyd.tail,
-    pyd.drop,
-])
-def test_rest_aliases(alias):
-    assert pyd.rest is alias
 
 
 @parametrize('case,filter_by,expected', [
@@ -283,3 +276,11 @@ def test_sorted_index(case, expected):
 ])
 def test_every(case, expected):
     assert pyd.every(*case) == expected
+
+
+def test_tail_deprecated():
+    with warnings.catch_warnings(record=True) as warns:
+        warnings.simplefilter('always')
+        pyd.tail([1, 2, 3])
+        assert len(warns) == 1
+        assert issubclass(warns[-1].category, DeprecationWarning)
