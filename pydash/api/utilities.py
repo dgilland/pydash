@@ -3,8 +3,10 @@
 
 from __future__ import absolute_import
 
+from functools import wraps
 import time
 from random import uniform, randint
+import warnings
 
 from .._compat import (
     _range,
@@ -432,3 +434,17 @@ def _set_item(obj, key, value):
         else:  # pragma: no cover
             # Trigger exception by assigning to invalid index.
             obj[key] = value
+
+
+def _deprecated(func):  # pragma: no cover
+    """This is a decorator which can be used to mark functions as deprecated.
+    It will result in a warning being emitted when the function is used.
+    """
+    @wraps(func)
+    def wrapper(*args, **kargs):
+        warnings.warn('Call to deprecated function {0}.'.format(func.__name__),
+                      category=DeprecationWarning,
+                      stacklevel=3)
+        return func(*args, **kargs)
+
+    return wrapper
