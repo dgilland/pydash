@@ -109,6 +109,39 @@ class CurryRight(Curry):
         return tuple(list(new_args) + list(self.args))
 
 
+class Debounce(object):
+    """Wrap a function in a debounce context."""
+    def __init__(self, func, wait, max_wait=False):
+        self.func = func
+        self.wait = wait
+        self.max_wait = max_wait
+
+        self.last_result = None
+
+        # Initialize last_* times to be prior to the wait periods so that func
+        # is primed to be executed on first call.
+        self.last_call = now() - self.wait
+        self.last_execution = (now() - max_wait if is_number(max_wait)
+                               else None)
+
+    def __call__(self, *args, **kargs):
+        """Execute :attr:`func` if function hasn't been called witinin last
+        :attr:`wait` milliseconds or in last :attr:`max_wait` milliseconds.
+        Return results of last successful call.
+        """
+        present = now()
+
+        if any([(present - self.last_call) >= self.wait,
+                (self.max_wait and
+                 (present - self.last_execution) >= self.max_wait)]):
+            self.last_result = self.func(*args, **kargs)
+            self.last_execution = present
+
+        self.last_call = present
+
+        return self.last_result
+
+
 class Once(object):
     """Wrap a function in a once context."""
     def __init__(self, func):
@@ -142,39 +175,6 @@ class Partial(object):
             args = list(self.args) + list(args)
 
         return self.func(*args, **kargs)
-
-
-class Debounce(object):
-    """Wrap a function in a debounce context."""
-    def __init__(self, func, wait, max_wait=False):
-        self.func = func
-        self.wait = wait
-        self.max_wait = max_wait
-
-        self.last_result = None
-
-        # Initialize last_* times to be prior to the wait periods so that func
-        # is primed to be executed on first call.
-        self.last_call = now() - self.wait
-        self.last_execution = (now() - max_wait if is_number(max_wait)
-                               else None)
-
-    def __call__(self, *args, **kargs):
-        """Execute :attr:`func` if function hasn't been called witinin last
-        :attr:`wait` milliseconds or in last :attr:`max_wait` milliseconds.
-        Return results of last successful call.
-        """
-        present = now()
-
-        if any([(present - self.last_call) >= self.wait,
-                (self.max_wait and
-                 (present - self.last_execution) >= self.max_wait)]):
-            self.last_result = self.func(*args, **kargs)
-            self.last_execution = present
-
-        self.last_call = present
-
-        return self.last_result
 
 
 class Throttle(object):
