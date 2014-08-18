@@ -13,14 +13,27 @@ from .fixtures import parametrize
 def test_after(case, expected):
     done = pyd.after(*case)
 
-    # Call done() until n - 1, then check the return value for expected.
-
     for _ in range(case[0] - 1):
         ret = done()
         assert ret is None
 
     ret = done()
     assert ret == expected
+
+
+@parametrize('case,expected', [
+    ((2, lambda: 3), 3),
+    ((-1, lambda: 3), 3),
+])
+def test_before(case, expected):
+    done = pyd.before(*case)
+
+    for _ in range(case[0] - 1):
+        ret = done()
+        assert ret == expected
+
+    ret = done()
+    assert ret is None
 
 
 @parametrize('case,args,expected', [

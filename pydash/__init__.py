@@ -117,6 +117,7 @@ from .api.collections import (
 
 from .api.functions import (
     after,
+    before,
     compose,
     curry,
     debounce,

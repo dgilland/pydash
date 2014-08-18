@@ -12,6 +12,7 @@ from .utilities import now
 
 __all__ = [
     'after',
+    'before',
     'compose',
     'curry',
     'debounce',
@@ -24,8 +25,10 @@ __all__ = [
 ]
 
 
-class After(object):
-    """Wrap a function in an after context."""
+class AfterBeforeBase(object):
+    """Base class for :class:`After` and :class:`Before` that provides
+    initialization of each class.
+    """
     def __init__(self, n, func):
         try:
             n = int(n)
@@ -36,11 +39,23 @@ class After(object):
         self.n = n
         self.func = func
 
+
+class After(AfterBeforeBase):
+    """Wrap a function in an after context."""
     def __call__(self, *args, **kargs):
         """Return results of :attr:`func` after :attr:`n` calls."""
         self.n -= 1
 
-        if self.n < 1:
+        if self.n <= 0:
+            return self.func(*args, **kargs)
+
+
+class Before(AfterBeforeBase):
+    """Wrap a function in a before context."""
+    def __call__(self, *args, **kargs):
+        self.n -= 1
+
+        if self.n > 0:
             return self.func(*args, **kargs)
 
 
@@ -188,6 +203,20 @@ def after(n, func):
         After: Function wrapped in an :class:`After` context.
     """
     return After(n, func)
+
+
+def before(n, func):
+    """Creates a function that executes `func`, with the arguments of the
+    created function, until it has been called `n` times.
+
+    Args:
+        n (int): Number of times `func` may be executed.
+        func (function): Function to execute.
+
+    Returns:
+        Before: Function wrapped in an :class:`Before` context.
+    """
+    return Before(n, func)
 
 
 def compose(*funcs):
