@@ -137,6 +137,14 @@ def test_delay(func, wait, args, kargs, expected):
     assert result == expected
 
 
+@parametrize('func,args', [
+    (lambda item: item, (True,)),
+    (lambda item: item, (False,)),
+])
+def test_negate(func, args):
+    assert pyd.negate(func)(*args) == (not func(*args))
+
+
 @parametrize('case,arglist,expected', [
     (lambda a: a * a, [(2,), (4,)], 4)
 ])

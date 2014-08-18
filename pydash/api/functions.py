@@ -18,6 +18,7 @@ __all__ = [
     'curry_right',
     'debounce',
     'delay',
+    'negate',
     'once',
     'partial',
     'partial_right',
@@ -140,6 +141,16 @@ class Debounce(object):
         self.last_call = present
 
         return self.last_result
+
+
+class Negate(object):
+    """Wrap a function in a negate context."""
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, *args, **kargs):
+        """Return negated results of calling `self.func`."""
+        return not self.func(*args, **kargs)
 
 
 class Once(object):
@@ -308,6 +319,13 @@ def delay(func, wait, *args, **kargs):
     """
     time.sleep(wait / 1000.0)
     return func(*args, **kargs)
+
+
+def negate(func):
+    """Creates a function that negates the result of the predicate `func`. The
+    `func` function is executed with the arguments of the created function.
+    """
+    return Negate(func)
 
 
 def once(func):

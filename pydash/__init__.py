@@ -123,6 +123,7 @@ from .api.functions import (
     curry_right,
     debounce,
     delay,
+    negate,
     once,
     partial,
     partial_right,

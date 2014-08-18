@@ -11,6 +11,7 @@ v1.x.x (WIP)
 - Add ``drop_right()``.
 - Add ``drop_right_while()``.
 - Add ``drop_while()``.
+- Add ``negate()``.
 - Add ``partition()``.
 - Deprecate ``tail()``.
 
