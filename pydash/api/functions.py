@@ -25,10 +25,8 @@ __all__ = [
 ]
 
 
-class AfterBeforeBase(object):
-    """Base class for :class:`After` and :class:`Before` that provides
-    initialization of each class.
-    """
+class After(object):
+    """Wrap a function in an after context."""
     def __init__(self, n, func):
         try:
             n = int(n)
@@ -39,9 +37,6 @@ class AfterBeforeBase(object):
         self.n = n
         self.func = func
 
-
-class After(AfterBeforeBase):
-    """Wrap a function in an after context."""
     def __call__(self, *args, **kargs):
         """Return results of :attr:`func` after :attr:`n` calls."""
         self.n -= 1
@@ -50,7 +45,7 @@ class After(AfterBeforeBase):
             return self.func(*args, **kargs)
 
 
-class Before(AfterBeforeBase):
+class Before(After):
     """Wrap a function in a before context."""
     def __call__(self, *args, **kargs):
         self.n -= 1
