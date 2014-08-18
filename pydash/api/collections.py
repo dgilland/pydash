@@ -42,6 +42,7 @@ __all__ = [
     'map_',
     'max_',
     'min_',
+    'partition',
     'pluck',
     'reduce_',
     'reduce_right',
@@ -407,6 +408,38 @@ def min_(collection, callback=None):
         collection = collection.values()
 
     return min(collection, key=create_callback(callback))
+
+
+def partition(collection, callback=None):
+    """Creates an array of elements split into two groups, the first of which
+    contains elements the `callback` returns truthy for, while the second of
+    which contains elements the `callback` returns falsey for. The `callback`
+    is invoked with three arguments: ``(value, index|key, collection)``.
+
+    If a property name is provided for `callback` the created :func:`pluck`
+    style callback returns the property value of the given element.
+
+    If an object is provided for `callback` the created :func:`where` style
+    callback returns ``True`` for elements that have the properties of the
+    given object, else ``False``.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: List of grouped elements.
+    """
+    trues = []
+    falses = []
+
+    for is_true, value, _, _ in _iter_callback(collection, callback):
+        if is_true:
+            trues.append(value)
+        else:
+            falses.append(value)
+
+    return [trues, falses]
 
 
 def pluck(collection, key):

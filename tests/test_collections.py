@@ -213,6 +213,27 @@ def test_min_(case, expected):
     assert pyd.min_(*case) == expected
 
 
+@parametrize('case,expected', [
+    (([1, 2, 3], lambda item, *args: item % 2), [[1, 3], [2]]),
+    (([1.2, 2.3, 3.4], lambda item, *args: math.floor(item) % 2),
+     [[1.2, 3.4], [2.3]]),
+    (([{'name': 'barney', 'age': 36},
+       {'name': 'fred', 'age': 40, 'blocked': True},
+       {'name': 'pebbles', 'age': 1}],
+      {'age': 1}),
+     [[{'name': 'pebbles', 'age': 1}],
+      [{'name': 'barney', 'age': 36},
+       {'name': 'fred', 'age': 40, 'blocked': True}]]),
+    (([{'name': 'barney', 'age': 36},
+       {'name': 'fred', 'age': 40, 'blocked': True},
+       {'name': 'pebbles', 'age': 1}],
+      'blocked'),
+     [[{'name': 'fred', 'age': 40, 'blocked': True}],
+      [{'name': 'barney', 'age': 36},
+       {'name': 'pebbles', 'age': 1}]]),
+])
+def test_partition(case, expected):
+    assert pyd.partition(*case) == expected
 
 
 @parametrize('case,filter_by,expected', [

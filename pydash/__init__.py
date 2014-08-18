@@ -95,6 +95,7 @@ from .api.collections import (
     map_,
     max_,
     min_,
+    partition,
     pluck,
     reduce_,
     reduce_right,
