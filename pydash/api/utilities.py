@@ -12,8 +12,7 @@ from .._compat import (
     _range,
     string_types,
     text_type,
-    iteritems,
-    html_unescape
+    iteritems
 )
 
 
@@ -22,7 +21,6 @@ __all__ = [
     'constant',
     'callback',
     'create_callback',
-    'escape',
     'identity',
     'matches',
     'memoize',
@@ -32,21 +30,11 @@ __all__ = [
     'random',
     'result',
     'times',
-    'unescape',
     'unique_id',
 ]
 
 
 ID_COUNTER = 0
-
-HTML_ESCAPES = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;',
-    '`': '&#96;'
-}
 
 
 def constant(value):
@@ -90,22 +78,6 @@ def callback(func):
 
 
 create_callback = callback
-
-
-def escape(string):
-    # pylint: disable=anomalous-backslash-in-string
-    """Converts the characters ``&``, ``<``, ``>``, ``", ``'``, and ``\``` in
-    `string` to their corresponding HTML entities.
-
-    Args:
-        string (str): String to escape.
-
-    Returns:
-        str: HTML escaped string.
-    """
-    # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
-    # differently (e.g. "'" isn't escaped by html_escape() but is by Lo-Dash).
-    return ''.join(HTML_ESCAPES.get(char, char) for char in text_type(string))
 
 
 def identity(*args):
@@ -268,20 +240,6 @@ def times(n, callback):
     """
     # pylint: disable=redefined-outer-name
     return [callback(index) for index in _range(n)]
-
-
-def unescape(string):
-    """The inverse of :func:`escape`. This method converts the HTML entities
-    ``&amp;``, ``&lt;``, ``&gt;``, ``&quot;``, ``&#39;``, and ``&#96;`` in
-    `string` to their corresponding characters.
-
-    Args:
-        string (str): String to unescape.
-
-    Returns:
-        str: HTML unescaped string.
-    """
-    return html_unescape(string)
 
 
 def unique_id(prefix=None):

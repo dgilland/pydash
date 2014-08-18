@@ -178,6 +178,14 @@ from .api.objects import (
 
 
 #
+# Strings
+from .api.strings import (
+    escape,
+    unescape,
+)
+
+
+#
 # Utilities
 #
 
@@ -185,7 +193,6 @@ from .api.utilities import (
     callback,
     constant,
     create_callback,
-    escape,
     identity,
     matches,
     memoize,
@@ -196,7 +203,6 @@ from .api.utilities import (
     random,
     result,
     times,
-    unescape,
     unique_id,
 )
 

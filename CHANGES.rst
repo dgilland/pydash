@@ -15,6 +15,8 @@ v1.x.x (WIP)
 - Add ``negate()``.
 - Add ``partition()``.
 - Deprecate ``tail()``.
+- Create ``pydash.api.strings`` module.
+- Move ``escape()`` and ``unescape()`` from ``pydash.api.utilities`` to ``pydash.api.strings``. **possible breaking change**
 
 
 v1.0.0 (2014-08-05)
