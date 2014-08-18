@@ -7,95 +7,6 @@ from . import fixtures
 from .fixtures import parametrize
 
 
-@parametrize('case,filter_by,expected,', [
-    ([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
-     {'age': 40},
-     [{'name': 'moe', 'age': 40}])
-])
-def test_where(case, filter_by, expected):
-    assert pyd.where(case, filter_by) == expected
-
-
-@parametrize('case,filter_by,expected', [
-    ([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
-     'name',
-     ['moe', 'larry'])
-])
-def test_pluck(case, filter_by, expected):
-    assert pyd.pluck(case, filter_by) == expected
-
-
-@parametrize('case,expected', [
-    (([None, 0, 'yes', False], bool), True),
-    (([None, 0, 'yes', False],), True),
-    (([{'name': 'apple',  'organic': False, 'type': 'fruit'},
-       {'name': 'carrot', 'organic': True,  'type': 'vegetable'}],
-      'organic'),
-     True),
-    (([{'name': 'apple',  'organic': False, 'type': 'fruit'},
-       {'name': 'carrot', 'organic': True,  'type': 'vegetable'}],
-      {'type': 'meat'}),
-     False)
-])
-def test_some(case, expected):
-    assert pyd.some(*case) == expected
-
-
-@parametrize('case,expected,sort_results', [
-    (([1, 2, 3],), [1, 2, 3], False),
-    (([1, 2, 3], lambda num, *args: num * 3), [3, 6, 9], False),
-    (({'one': 1, 'two': 2, 'three': 3}, lambda num, *args: num * 3),
-     [3, 6, 9],
-     True),
-    (([{'name': 'moe', 'age': 40},
-       {'name': 'larry', 'age': 50}],
-      'name'),
-     ['moe', 'larry'],
-     False)
-])
-def test_map_(case, expected, sort_results):
-    actual = pyd.map_(*case)
-    if sort_results:
-        actual = sorted(actual)
-
-    assert actual == expected
-
-
-@parametrize('case', [
-    pyd.collect
-])
-def test_map_aliases(case):
-    assert pyd.map_ is case
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3],), 3),
-    (({'a': 3, 'b': 2, 'c': 1},), 3),
-    ((['anaconda', 'bison', 'camel'], lambda x: len(x)), 'anaconda'),
-    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}], 'age',),
-     {'name': 'fred', 'age': 40}),
-    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}],
-      lambda chr: chr['age']),
-     {'name': 'fred', 'age': 40}),
-])
-def test_max_(case, expected):
-    assert pyd.max_(*case) == expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3],), 1),
-    (({'a': 3, 'b': 2, 'c': 1},), 1),
-    ((['anaconda', 'bison', 'cat'], lambda x: len(x)), 'cat'),
-    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}], 'age',),
-     {'name': 'barney', 'age': 36}),
-    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}],
-      lambda chr: chr['age']),
-     {'name': 'barney', 'age': 36}),
-])
-def test_min_(case, expected):
-    assert pyd.min_(*case) == expected
-
-
 @parametrize('case,expected', [
     ((['a', 'b', 'c', 'd', 'e'], [0, 2, 4]), ['a', 'c', 'e']),
     ((['moe', 'larry', 'curly'], 0, 2), ['moe', 'curly']),
@@ -247,48 +158,70 @@ def test_invoke(case, expected):
     assert pyd.invoke(*case) == expected
 
 
-@parametrize('case', [
-    [1, 2, 3, 4, 5, 6],
+@parametrize('case,expected,sort_results', [
+    (([1, 2, 3],), [1, 2, 3], False),
+    (([1, 2, 3], lambda num, *args: num * 3), [3, 6, 9], False),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda num, *args: num * 3),
+     [3, 6, 9],
+     True),
+    (([{'name': 'moe', 'age': 40},
+       {'name': 'larry', 'age': 50}],
+      'name'),
+     ['moe', 'larry'],
+     False)
 ])
-def test_sample(case):
-    assert pyd.sample(case) in case
+def test_map_(case, expected, sort_results):
+    actual = pyd.map_(*case)
+    if sort_results:
+        actual = sorted(actual)
 
-
-@parametrize('case', [
-    ([1, 2, 3, 4, 5, 6], 2),
-    ([1, 2, 3, 4, 5, 6], 3),
-    ([1, 2, 3, 4, 5, 6], 4),
-])
-def test_sample_list(case):
-    collection, n = case
-    sample_n = pyd.sample(*case)
-
-    assert isinstance(sample_n, list)
-    assert len(sample_n) == min(n, len(collection))
-    assert set(sample_n).issubset(collection)
-
-
-@parametrize('case', [
-    [1, 2, 3, 4, 5, 6],
-    {'one': 1, 'two': 2, 'three': 3}
-])
-def test_shuffle(case):
-    shuffled = pyd.shuffle(case)
-
-    assert len(shuffled) == len(case)
-
-    if isinstance(case, dict):
-        assert set(shuffled) == set(case.values())
-    else:
-        assert set(shuffled) == set(case)
+    assert actual == expected
 
 
 @parametrize('case', [
-    [1, 2, 3, 4, 5],
-    {'1': 1, '2': 2, '3': 3}
+    pyd.collect
 ])
-def test_size(case):
-    assert pyd.size(case) == len(case)
+def test_map_aliases(case):
+    assert pyd.map_ is case
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3],), 3),
+    (({'a': 3, 'b': 2, 'c': 1},), 3),
+    ((['anaconda', 'bison', 'camel'], lambda x: len(x)), 'anaconda'),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}], 'age',),
+     {'name': 'fred', 'age': 40}),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}],
+      lambda chr: chr['age']),
+     {'name': 'fred', 'age': 40}),
+])
+def test_max_(case, expected):
+    assert pyd.max_(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3],), 1),
+    (({'a': 3, 'b': 2, 'c': 1},), 1),
+    ((['anaconda', 'bison', 'cat'], lambda x: len(x)), 'cat'),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}], 'age',),
+     {'name': 'barney', 'age': 36}),
+    (([{'name': 'barney', 'age': 36}, {'name': 'fred',   'age': 40}],
+      lambda chr: chr['age']),
+     {'name': 'barney', 'age': 36}),
+])
+def test_min_(case, expected):
+    assert pyd.min_(*case) == expected
+
+
+
+
+@parametrize('case,filter_by,expected', [
+    ([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
+     'name',
+     ['moe', 'larry'])
+])
+def test_pluck(case, filter_by, expected):
+    assert pyd.pluck(case, filter_by) == expected
 
 
 @parametrize('case,expected', [
@@ -372,6 +305,66 @@ def test_reject(case, expected):
     assert pyd.reject(*case) == expected
 
 
+@parametrize('case', [
+    [1, 2, 3, 4, 5, 6],
+])
+def test_sample(case):
+    assert pyd.sample(case) in case
+
+
+@parametrize('case', [
+    ([1, 2, 3, 4, 5, 6], 2),
+    ([1, 2, 3, 4, 5, 6], 3),
+    ([1, 2, 3, 4, 5, 6], 4),
+])
+def test_sample_list(case):
+    collection, n = case
+    sample_n = pyd.sample(*case)
+
+    assert isinstance(sample_n, list)
+    assert len(sample_n) == min(n, len(collection))
+    assert set(sample_n).issubset(collection)
+
+
+@parametrize('case', [
+    [1, 2, 3, 4, 5, 6],
+    {'one': 1, 'two': 2, 'three': 3}
+])
+def test_shuffle(case):
+    shuffled = pyd.shuffle(case)
+
+    assert len(shuffled) == len(case)
+
+    if isinstance(case, dict):
+        assert set(shuffled) == set(case.values())
+    else:
+        assert set(shuffled) == set(case)
+
+
+@parametrize('case', [
+    [1, 2, 3, 4, 5],
+    {'1': 1, '2': 2, '3': 3}
+])
+def test_size(case):
+    assert pyd.size(case) == len(case)
+
+
+@parametrize('case,expected', [
+    (([None, 0, 'yes', False], bool), True),
+    (([None, 0, 'yes', False],), True),
+    (([{'name': 'apple',  'organic': False, 'type': 'fruit'},
+       {'name': 'carrot', 'organic': True,  'type': 'vegetable'}],
+      'organic'),
+     True),
+    (([{'name': 'apple',  'organic': False, 'type': 'fruit'},
+       {'name': 'carrot', 'organic': True,  'type': 'vegetable'}],
+      {'type': 'meat'}),
+     False)
+])
+def test_some(case, expected):
+    assert pyd.some(*case) == expected
+
+
 @parametrize('case,expected', [
     (([1, 2, 3], lambda x: math.sin(x)), [3, 1, 2]),
     (([
@@ -397,3 +390,12 @@ def test_sort_by(case, expected):
 ])
 def test_to_list(case, expected):
     assert set(pyd.to_list(case)) == set(expected)
+
+
+@parametrize('case,filter_by,expected,', [
+    ([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
+     {'age': 40},
+     [{'name': 'moe', 'age': 40}])
+])
+def test_where(case, filter_by, expected):
+    assert pyd.where(case, filter_by) == expected
