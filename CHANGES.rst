@@ -6,6 +6,7 @@ v1.x.x (WIP)
 ------------
 
 - Add ``before()``.
+- Add ``curry_right()``.
 - Modify ``drop()`` to accept ``n`` argument and remove as alias of ``rest()``.
 - Add ``drop_right()``.
 - Add ``drop_right_while()``.

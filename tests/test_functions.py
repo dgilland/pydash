@@ -46,14 +46,33 @@ def test_compose(case, args, expected):
 
 
 @parametrize('case,arglist,expected', [
-    ((lambda a, b, c: a + b + c,), [(1, 1, 1)], 3),
-    ((lambda a, b, c: a + b + c,), [(1,), (1, 1)], 3),
-    ((lambda a, b, c: a + b + c,), [(1,), (1,), (1,)], 3),
+    ((lambda a, b, c: [a, b, c],), [(1, 2, 3)], [1, 2, 3]),
+    ((lambda a, b, c: [a, b, c],), [(1, 2), (3,)], [1, 2, 3]),
+    ((lambda a, b, c: [a, b, c],), [(1,), (2,), (3,)], [1, 2, 3]),
     ((lambda *a: sum(a), 3), [(1, 1, 1)], 3),
     ((lambda *a: sum(a), 3), [(1,), (1,), (1,)], 3),
 ])
 def test_curry(case, arglist, expected):
     curried = pyd.curry(*case)
+
+    # Run test twice to verify curried can be reused
+    for _ in range(2):
+        ret = curried
+        for args in arglist:
+            ret = ret(*args)
+
+        assert ret == expected
+
+
+@parametrize('case,arglist,expected', [
+    ((lambda a, b, c: [a, b, c],), [(1, 2, 3)], [1, 2, 3]),
+    ((lambda a, b, c: [a, b, c],), [(2, 3), (1,)], [1, 2, 3]),
+    ((lambda a, b, c: [a, b, c],), [(3,), (2,), (1,)], [1, 2, 3]),
+    ((lambda *a: sum(a), 3), [(1, 1, 1)], 3),
+    ((lambda *a: sum(a), 3), [(1,), (1,), (1,)], 3),
+])
+def test_curry_right(case, arglist, expected):
+    curried = pyd.curry_right(*case)
 
     # Run test twice to verify curried can be reused
     for _ in range(2):

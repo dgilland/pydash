@@ -15,6 +15,7 @@ __all__ = [
     'before',
     'compose',
     'curry',
+    'curry_right',
     'debounce',
     'delay',
     'once',
@@ -85,15 +86,27 @@ class Curry(object):
         """Store `args` and `kargs` and call `self.func` if we've reached or
         exceeded the function arity.
         """
-        args = tuple(list(self.args) + list(args))
+        args = self.compose_args(args)
         kargs.update(self.kargs)
 
         if (len(args) + len(kargs)) >= self.arity:
             curried = self.func(*args, **kargs)
         else:
-            curried = Curry(self.func, self.arity, args, kargs)
+            # NOTE: Use self.__class__ so that subclasses will use their own
+            # class to generate next iteration of call.
+            curried = self.__class__(self.func, self.arity, args, kargs)
 
         return curried
+
+    def compose_args(self, new_args):
+        """Combine `self.args` with `new_args` and return."""
+        return tuple(list(self.args) + list(new_args))
+
+
+class CurryRight(Curry):
+    """Wrap a function in a curry-right context."""
+    def compose_args(self, new_args):
+        return tuple(list(new_args) + list(self.args))
 
 
 class Once(object):
@@ -236,7 +249,7 @@ def curry(func, arity=None):
     more of the remaining `func` arguments, and so on.
 
     Args:
-        func (function): Function curry.
+        func (function): Function to curry.
         arity (int, optional): Number of function arguments that can be
             accepted by curried function. Default is to use the number of
             arguments that are accepted by `func`.
@@ -245,6 +258,22 @@ def curry(func, arity=None):
         Curry: Function wrapped in a :class:`Curry` context.
     """
     return Curry(func, arity)
+
+
+def curry_right(func, arity=None):
+    """This method is like :func:`curry` except that arguments are applied to
+    `func` in the manner of :func:`partial_right` instead of :func:`partial`.
+
+    Args:
+        func (function): Function to curry.
+        arity (int, optional): Number of function arguments that can be
+            accepted by curried function. Default is to use the number of
+            arguments that are accepted by `func`.
+
+    Returns:
+        CurryRight: Function wrapped in a :class:`CurryRight` context.
+    """
+    return CurryRight(func, arity)
 
 
 def debounce(func, wait, max_wait=False):

@@ -120,6 +120,7 @@ from .api.functions import (
     before,
     compose,
     curry,
+    curry_right,
     debounce,
     delay,
     once,
