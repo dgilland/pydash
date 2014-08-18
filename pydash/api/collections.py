@@ -15,6 +15,48 @@ from .utilities import (
 )
 
 
+__all__ = [
+    'all_',
+    'any_',
+    'at',
+    'collect',
+    'contains',
+    'count_by',
+    'detect',
+    'each',
+    'each_right',
+    'every',
+    'filter_',
+    'find',
+    'find_last',
+    'find_where',
+    'foldl',
+    'foldr',
+    'for_each',
+    'for_each_right',
+    'group_by',
+    'include',
+    'index_by',
+    'inject',
+    'invoke',
+    'map_',
+    'max_',
+    'min_',
+    'pluck',
+    'reduce_',
+    'reduce_right',
+    'reject',
+    'sample',
+    'select',
+    'shuffle',
+    'size',
+    'some',
+    'sort_by',
+    'to_list',
+    'where',
+]
+
+
 def at(collection, *indexes):  # pylint: disable=invalid-name
     """Creates a list of elements from the specified indexes, or keys, of the
     collection. Indexes may be specified as individual arguments or as arrays
