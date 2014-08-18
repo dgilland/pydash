@@ -324,6 +324,12 @@ def delay(func, wait, *args, **kargs):
 def negate(func):
     """Creates a function that negates the result of the predicate `func`. The
     `func` function is executed with the arguments of the created function.
+
+    Args:
+        func (function): Function to negate execute.
+
+    Returns:
+        Negate: Function wrapped in a :class:`Negate` context.
     """
     return Negate(func)
 
