@@ -19,6 +19,7 @@ from .__meta__ import (
 #
 
 from .api.arrays import (
+    chunk,
     compact,
     difference,
     drop,

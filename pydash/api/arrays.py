@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 from collections import Iterable
 from bisect import bisect_left
+from math import ceil
 
 from .._compat import string_types, _range
 from .utilities import (
@@ -16,6 +17,7 @@ from .utilities import (
 
 
 __all__ = [
+    'chunk',
     'compact',
     'difference',
     'drop',
@@ -49,6 +51,22 @@ __all__ = [
     'unzip',
     'zip_object',
 ]
+
+
+def chunk(array, size=1):
+    """Creates a list of elements split into groups the length of `size`. If
+    `array` can't be split evenly, the final chunk will be the remaining
+    elements.
+
+    Args:
+        array (list): List to chunk.
+        size (int, optional): Chunk size. Defaults to ``1``.
+
+    Returns:
+        list: New list containing chunks of `array`.
+    """
+    chunks = int(ceil(len(array) / float(size)))
+    return [array[i * size:(i + 1) * size] for i in range(chunks)]
 
 
 def compact(array):

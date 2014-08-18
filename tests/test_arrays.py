@@ -7,6 +7,18 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3, 4, 5],), [[1], [2], [3], [4], [5]]),
+    (([1, 2, 3, 4, 5], 2), [[1, 2], [3, 4], [5]]),
+    (([1, 2, 3, 4, 5], 3), [[1, 2, 3], [4, 5]]),
+    (([1, 2, 3, 4, 5], 4), [[1, 2, 3, 4], [5]]),
+    (([1, 2, 3, 4, 5], 5), [[1, 2, 3, 4, 5]]),
+    (([1, 2, 3, 4, 5], 6), [[1, 2, 3, 4, 5]]),
+])
+def test_chunk(case, expected):
+    assert pyd.chunk(*case) == expected
+
+
+@parametrize('case,expected', [
     ([0, 1, 2, 3], [1, 2, 3]),
     ([True, False, None, True, 1, 'foo'], [True, True, 1, 'foo'])
 ])
