@@ -28,6 +28,7 @@ __all__ = [
     'property_',
     'prop',
     'random',
+    'range_',
     'result',
     'times',
     'unique_id',
@@ -204,6 +205,25 @@ def random(start=0, stop=1, floating=False):
     return rnd
 
 
+def range_(*args):
+    """Creates a list of numbers (positive and/or negative) progressing from
+    start up to but not including end. If start is less than stop a zero-length
+    range is created unless a negative step is specified.
+
+    Args:
+        stop (int): Integer - 1 to stop at. Defaults to ``1``.
+        start (int, optional): Integer to start with. Defaults to ``0``.
+        step (int, optional): If positive the last element is the largest
+            ``start + i * step`` less than `stop`. If negative the last
+            element is the smallest ``start + i * step`` greater than `stop`.
+            Defaults to ``1``.
+
+    Returns:
+        list: List of integers in range
+    """
+    return list(_range(*args))
+
+
 def result(obj, key):
     """Return the value of property `key` on `obj`. If `key` value is a
     function it will be invoked and its result returned, else the property
@@ -260,7 +280,7 @@ def unique_id(prefix=None):
 
 
 #
-# Generic utility methods not a part of main API.
+# Generic utility methods not part of main API.
 #
 
 
@@ -399,7 +419,7 @@ def _deprecated(func):  # pragma: no cover
     It will result in a warning being emitted when the function is used.
     """
     @wraps(func)
-    def wrapper(*args, **kargs):
+    def wrapper(*args, **kargs):  # pylint: disable=missing-docstring
         warnings.warn('Call to deprecated function {0}.'.format(func.__name__),
                       category=DeprecationWarning,
                       stacklevel=3)

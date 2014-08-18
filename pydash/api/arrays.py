@@ -7,7 +7,7 @@ from collections import Iterable
 from bisect import bisect_left
 from math import ceil
 
-from .._compat import string_types, _range
+from .._compat import string_types
 from .utilities import (
     create_callback,
     _iter_callback,
@@ -36,7 +36,6 @@ __all__ = [
     'last_index_of',
     'object_',
     'pull',
-    'range_',
     'remove',
     'rest',
     'sorted_index',
@@ -324,25 +323,6 @@ def pull(array, *values):
             array.remove(value)
 
     return array
-
-
-def range_(*args):
-    """Creates a list of numbers (positive and/or negative) progressing from
-    start up to but not including end. If start is less than stop a zero-length
-    range is created unless a negative step is specified.
-
-    Args:
-        stop (int): Integer - 1 to stop at. Defaults to ``1``.
-        start (int, optional): Integer to start with. Defaults to ``0``.
-        step (int, optional): If positive the last element is the largest
-            ``start + i * step`` less than `stop`. If negative the last
-            element is the smallest ``start + i * step`` greater than `stop`.
-            Defaults to ``1``.
-
-    Returns:
-        list: List of integers in range
-    """
-    return list(_range(*args))
 
 
 def remove(array, callback=None):

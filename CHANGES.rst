@@ -17,6 +17,7 @@ v1.x.x (WIP)
 - Deprecate ``tail()``.
 - Create ``pydash.api.strings`` module.
 - Move ``escape()`` and ``unescape()`` from ``pydash.api.utilities`` to ``pydash.api.strings``. **possible breaking change**
+- Move ``range_()`` from ``pydash.api.arrays`` to ``pydash.api.utilities``. **possible breaking change**
 
 
 v1.0.0 (2014-08-05)
