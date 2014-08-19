@@ -196,6 +196,15 @@ def test_pull(case, values, expected):
     assert pyd.pull(case, *values) == expected
 
 
+@parametrize('case,expected', [
+    (([1, 2, 3, 1, 2, 3], [2, 3]), [1, 2, 2, 3]),
+    (([1, 2, 3, 1, 2, 3], [3, 2]), [1, 2, 2, 3]),
+    (([1, 2, 3, 1, 2, 3], 3, 2), [1, 2, 2, 3])
+])
+def test_pull_at(case, expected):
+    assert pyd.pull_at(*case) == expected
+
+
 @parametrize('case,filter_by,expected', [
     ([1, 2, 3, 4, 5, 6], lambda x, *args: x % 2 == 0, [2, 4, 6])
 ])
@@ -226,51 +235,32 @@ def test_slice_(case, expected):
 
 
 @parametrize('case,expected', [
-    ((['moe', 'larry'], [30, 40]), {'moe': 30, 'larry': 40}),
-    (([['moe', 30], ['larry', 40]],), {'moe': 30, 'larry': 40}),
+    (([4, 4, 5, 5, 6, 6], 5), 2),
+    (([20, 30, 40, 40, 50], 40), 2),
+    (([20, 30, 50], 40), 2),
+    (([20, 30, 50], 10), 0),
+    (([{'x': 20}, {'x': 30}, {'x': 50}], {'x': 40}, 'x'), 2),
+    ((['twenty', 'thirty', 'fifty'],
+      'fourty',
+      lambda x: {'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50}[x]),
+     2)
 ])
-def test_zip_object(case, expected):
-    assert pyd.zip_object(*case) == expected
-
-
-@parametrize('alias', [
-    pyd.object_
-])
-def test_zip_object_aliases(alias):
-    pyd.zip_object is alias
+def test_sorted_index(case, expected):
+    assert pyd.sorted_index(*case) == expected
 
 
 @parametrize('case,expected', [
-    ((['moe', 'larry', 'curly'],
-      [30, 40, 35],
-      [True, False, True]),
-     [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]])
+    (([4, 4, 5, 5, 6, 6], 5), 4),
+    (([20, 30, 40, 40, 50], 40), 4),
+    (([20, 30, 50], 10), 0),
+    (([{'x': 20}, {'x': 30}, {'x': 50}], {'x': 40}, 'x'), 2),
+    ((['twenty', 'thirty', 'fifty'],
+      'fourty',
+      lambda x: {'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50}[x]),
+     2)
 ])
-def test_zip_(case, expected):
-    assert pyd.zip_(*case) == expected
-
-
-@parametrize('case,expected', [
-    ([['moe', 30, True], ['larry', 40, False], ['curly', 35, True]],
-     [['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]])
-])
-def test_unzip(case, expected):
-    pyd.unzip(case) == expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 1, 0, 3, 1, 4], 0, 1), [2, 3, 4])
-])
-def test_without(case, expected):
-    assert pyd.without(*case) == expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3], [5, 2, 1, 4]), [3, 5, 4]),
-    (([1, 2, 5], [2, 3, 5], [3, 4, 5]), [1, 4, 5])
-])
-def test_xor(case, expected):
-    assert set(pyd.xor(*case)) == set(expected)
+def test_sorted_last_index(case, expected):
+    assert pyd.sorted_last_index(*case) == expected
 
 
 @parametrize('case,filter_by,expected', [
@@ -312,16 +302,51 @@ def test_union(case, expected):
 
 
 @parametrize('case,expected', [
-    (([20, 30, 50], 40), 2),
-    (([20, 30, 50], 10), 0),
-    (([{'x': 20}, {'x': 30}, {'x': 50}], {'x': 40}, 'x'), 2),
-    ((['twenty', 'thirty', 'fifty'],
-      'fourty',
-      lambda x: {'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50}[x]),
-     2)
+    ([['moe', 30, True], ['larry', 40, False], ['curly', 35, True]],
+     [['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]])
 ])
-def test_sorted_index(case, expected):
-    assert pyd.sorted_index(*case) == expected
+def test_unzip(case, expected):
+    pyd.unzip(case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 1, 0, 3, 1, 4], 0, 1), [2, 3, 4])
+])
+def test_without(case, expected):
+    assert pyd.without(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], [5, 2, 1, 4]), [3, 5, 4]),
+    (([1, 2, 5], [2, 3, 5], [3, 4, 5]), [1, 4, 5])
+])
+def test_xor(case, expected):
+    assert set(pyd.xor(*case)) == set(expected)
+
+
+@parametrize('case,expected', [
+    ((['moe', 'larry'], [30, 40]), {'moe': 30, 'larry': 40}),
+    (([['moe', 30], ['larry', 40]],), {'moe': 30, 'larry': 40}),
+])
+def test_zip_object(case, expected):
+    assert pyd.zip_object(*case) == expected
+
+
+@parametrize('alias', [
+    pyd.object_
+])
+def test_zip_object_aliases(alias):
+    pyd.zip_object is alias
+
+
+@parametrize('case,expected', [
+    ((['moe', 'larry', 'curly'],
+      [30, 40, 35],
+      [True, False, True]),
+     [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]])
+])
+def test_zip_(case, expected):
+    assert pyd.zip_(*case) == expected
 
 
 def test_tail_deprecated():

@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from collections import Iterable
-from bisect import bisect_left
+from bisect import bisect_left, bisect_right
 from math import ceil
 
 from .._compat import string_types
@@ -36,10 +36,12 @@ __all__ = [
     'last_index_of',
     'object_',
     'pull',
+    'pull_at',
     'remove',
     'rest',
     'slice_',
     'sorted_index',
+    'sorted_last_index',
     'tail',
     'take',
     'union',
@@ -313,7 +315,7 @@ def pull(array, *values):
         array (list): List to pull from.
         values (mixed): Values to remove.
 
-    Returns
+    Returns:
         list: Modified `array`.
 
     Warning:
@@ -322,6 +324,28 @@ def pull(array, *values):
     for value in values:
         while array.count(value) > 0:
             array.remove(value)
+
+    return array
+
+
+def pull_at(array, *indexes):
+    """Removes elements from `array` corresponding to the specified indexes and
+    returns a list of the removed elements. Indexes may be specified as a list
+    of indexes or as individual arguments.
+
+    Args:
+        array (list): List to pull from.
+        *indexes (int): Indexes to pull.
+
+    Returns:
+        list: Modified `array`.
+
+    Warning:
+        `array` is modified in place.
+    """
+    indexes = flatten(indexes)
+    for index in sorted(indexes, reverse=True):
+        del array[index]
 
     return array
 
@@ -410,14 +434,35 @@ def sorted_index(array, value, callback=None):
     Returns:
         int: Smallest index.
     """
-
     if callback:
-        # generate array of sorted keys computed using callback
-        cbk = create_callback(callback)
-        array = sorted(cbk(item) for item in array)
-        value = cbk(value)
+        # Generate array of sorted keys computed using callback.
+        callback = create_callback(callback)
+        array = sorted(callback(item) for item in array)
+        value = callback(value)
 
     return bisect_left(array, value)
+
+
+def sorted_last_index(array, value, callback=None):
+    """This method is like :func:`sorted_index` except that it returns the
+    highest index at which a value should be inserted into a given sorted array
+    in order to maintain the sort order of the array.
+
+    Args:
+        array (list): List to inspect.
+        value (mixed): Value to evaluate.
+        callback (mixed, optional): Callback to determine sort key.
+
+    Returns:
+        int: Highest index.
+    """
+    if callback:
+        # Generate array of sorted keys computed using callback.
+        callback = create_callback(callback)
+        array = sorted(callback(item) for item in array)
+        value = callback(value)
+
+    return bisect_right(array, value)
 
 
 def union(*arrays):
