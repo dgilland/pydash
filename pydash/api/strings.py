@@ -1,10 +1,38 @@
 """String functions.
 """
 
+import re
+import string
+
+from .arrays import compact
+from .objects import is_string, is_reg_exp
 from .._compat import (
     text_type,
+    string_types,
     html_unescape
 )
+
+
+__all__ = [
+    'camel_case',
+    'capitalize',
+    'ends_with',
+    'escape',
+    'escape_reg_exp',
+    'escape_re',
+    'kebab_case',
+    'pad',
+    'pad_left',
+    'pad_right',
+    'repeat',
+    'snake_case',
+    'starts_with',
+    'trim',
+    'trim_left',
+    'trim_right',
+    'trunc',
+    'unescape',
+]
 
 
 HTML_ESCAPES = {
@@ -16,37 +44,296 @@ HTML_ESCAPES = {
     '`': '&#96;'
 }
 
-
-__all__ = [
-    'escape',
-    'unescape',
-]
+RE_WORD_SEPARATORS = '[ {0}]'.format(re.escape(string.punctuation))
 
 
-def escape(string):
-    r"""Converts the characters ``&``, ``<``, ``>``, ``"``, ``'``, and ``\``` in
-    `string` to their corresponding HTML entities.
+def camel_case(text):
+    """Converts `text` to camel case.
 
     Args:
-        string (str): String to escape.
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to camel case.
+    """
+    text = ''.join(word.title() for word in re.split(RE_WORD_SEPARATORS,
+                                                     text_type(text)))
+    return text[0].lower() + text[1:]
+
+
+def capitalize(text):
+    """Capitalizes the first character of `text`.
+
+    Args:
+        text (str): String to capitalize.
+
+    Returns:
+        str: Capitalized string.
+    """
+    return text.capitalize()
+
+
+def ends_with(text, target, position=None):
+    """Checks if `text` ends with a given target string.
+
+    Args:
+        text (str): String to check.
+        target (str): String to check for.
+        position (int, optional): Position to search from. Defaults to
+            end of `text`.
+
+    Returns:
+        bool: Whether `text` ends with `target`.
+    """
+    text = text_type(text)
+
+    if position is None:
+        position = len(text)
+
+    return text[:position].endswith(target)
+
+
+def escape(text):
+    r"""Converts the characters ``&``, ``<``, ``>``, ``"``, ``'``, and ``\``` in
+    `text` to their corresponding HTML entities.
+
+    Args:
+        text (str): String to escape.
 
     Returns:
         str: HTML escaped string.
     """
     # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
     # differently (e.g. "'" isn't escaped by html_escape() but is by Lo-Dash).
-    return ''.join(HTML_ESCAPES.get(char, char) for char in text_type(string))
+    return ''.join(HTML_ESCAPES.get(char, char) for char in text_type(text))
 
 
-def unescape(string):
-    """The inverse of :func:`escape`. This method converts the HTML entities
-    ``&amp;``, ``&lt;``, ``&gt;``, ``&quot;``, ``&#39;``, and ``&#96;`` in
-    `string` to their corresponding characters.
+def escape_reg_exp(text):
+    r"""Escapes the RegExp special characters in `text`.
 
     Args:
-        string (str): String to unescape.
+        text (str): String to escape.
+
+    Returns:
+        str: RegExp escaped string.
+    """
+    return re.escape(text)
+
+
+escape_re = escape_reg_exp
+
+
+def kebab_case(text):
+    """Converts `text` to kebab case (a.k.a. spinal case).
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to kebab case.
+    """
+    return ('-'.join(word
+                     for word in re.split(RE_WORD_SEPARATORS, text_type(text))
+                     if word)
+            .lower())
+
+
+def pad(text, length, chars=' '):
+    """Pads `text` on the left and right sides if it is shorter than the
+    given padding length. The `chars` string may be truncated if the number of
+    padding characters can't be evenly divided by the padding length.
+
+    Args:
+        text (str): String to pad.
+        length (int): Amount to pad.
+        chars (str, optional): Chars to pad with. Defaults to `` ``.
+
+    Returns:
+        str: Padded string
+    """
+    text = text_type(text)
+    text_len = len(text)
+    length = max((length, text_len))
+
+    padding = (length - text_len)
+    left_pad = padding / 2
+    right_pad = padding - left_pad
+
+    text = repeat(chars, left_pad) + text + repeat(chars, right_pad)
+
+    if len(text) > length:
+        # This handles cases when `chars` is more than one character.
+        text = text[left_pad:-right_pad]
+
+    return text
+
+
+def pad_left(text, length, chars=' '):
+    """Pads `text` on the left side if it is shorter than the given padding
+    length. The `chars` string may be truncated if the number of padding
+    characters can't be evenly divided by the padding length.
+
+    Args:
+        text (str): String to pad.
+        length (int): Amount to pad.
+        chars (str, optional): Chars to pad with. Defaults to `` ``.
+
+    Returns:
+        str: Padded string
+    """
+    text = text_type(text)
+    length = max((length, len(text)))
+    return (repeat(chars, length) + text)[-length:]
+
+
+def pad_right(text, length, chars=' '):
+    """Pads `text` on the right side if it is shorter than the given padding
+    length. The `chars` string may be truncated if the number of padding
+    characters can't be evenly divided by the padding length.
+
+    Args:
+        text (str): String to pad.
+        length (int): Amount to pad.
+        chars (str, optional): Chars to pad with. Defaults to `` ``.
+
+    Returns:
+        str: Padded string
+    """
+    text = text_type(text)
+    length = max((length, len(text)))
+    return (text + repeat(chars, length))[:length]
+
+
+def repeat(text, n=0):
+    """Repeats the given string `n` times.
+
+    Args:
+        text (str): String to repeat.
+        n (int, optional): Number of times to repeat the string.
+
+    Returns:
+        str: Repeated string.
+    """
+    return text_type(text) * int(n)
+
+
+def snake_case(text):
+    """Converts `text` to snake case.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to snake case.
+    """
+    return ('_'.join(word
+                     for word in re.split(RE_WORD_SEPARATORS, text_type(text))
+                     if word)
+            .lower())
+
+
+def starts_with(text, target, position=None):
+    """Checks if `text` starts with a given target string.
+
+    Args:
+        text (str): String to check.
+        target (str): String to check for.
+        position (int, optional): Position to search from. Defaults to
+            beginning of `text`.
+
+    Returns:
+        bool: Whether `text` starts with `target`.
+    """
+    text = text_type(text)
+
+    if position is None:
+        position = 0
+
+    return text[position:].startswith(target)
+
+
+def trim(text, chars=None):
+    """Removes leading and trailing whitespace or specified characters from
+    `text`.
+
+    Args:
+        text (str): String to trim.
+        chars (str, optional): Specific characters to remove.
+
+    Returns:
+        str: Trimmed string
+    """
+    return text_type(text).strip(chars)
+
+
+def trim_left(text, chars=None):
+    """Removes leading  whitespace or specified characters from `text`.
+
+    Args:
+        text (str): String to trim.
+        chars (str, optional): Specific characters to remove.
+
+    Returns:
+        str: Trimmed string
+    """
+    return text_type(text).lstrip(chars)
+
+
+def trim_right(text, chars=None):
+    """Removes trailing whitespace or specified characters from `text`.
+
+    Args:
+        text (str): String to trim.
+        chars (str, optional): Specific characters to remove.
+
+    Returns:
+        str: Trimmed string
+    """
+    return text_type(text).rstrip(chars)
+
+
+def trunc(text, length=30, omission='...', separator=None):
+    """Truncates `text` if it is longer than the given maximum string length.
+    The last characters of the truncated string are replaced with the omission
+    string which defaults to ``...``.
+
+    Args:
+        text (str): String to truncate.
+        length (int, optional): Maximum string length. Defaults to ``30``.
+        omission (str, optional): String to indicate text is omitted.
+        separator (mixed, optional): Separator pattern to truncate to.
+
+    Returns:
+        str: Truncated string.
+    """
+    omission_len = len(omission)
+    text_len = length - omission_len
+    text = text_type(text)[:text_len]
+
+    trunc_len = len(text)
+
+    if is_string(separator):
+        trunc_len = text.rfind(separator)
+    elif is_reg_exp(separator):
+        last = None
+        for match in separator.finditer(text):
+            last = match
+
+        if last is not None:
+            trunc_len = last.start()
+
+    return text[:trunc_len] + omission
+
+
+def unescape(text):
+    """The inverse of :func:`escape`. This method converts the HTML entities
+    ``&amp;``, ``&lt;``, ``&gt;``, ``&quot;``, ``&#39;``, and ``&#96;`` in
+    `text` to their corresponding characters.
+
+    Args:
+        text (str): String to unescape.
 
     Returns:
         str: HTML unescaped string.
     """
-    return html_unescape(string)
+    return html_unescape(text)

@@ -190,7 +190,23 @@ from .api.objects import (
 #
 # Strings
 from .api.strings import (
+    camel_case,
+    capitalize,
+    ends_with,
     escape,
+    escape_reg_exp,
+    escape_re,
+    kebab_case,
+    pad,
+    pad_left,
+    pad_right,
+    repeat,
+    snake_case,
+    starts_with,
+    trim,
+    trim_left,
+    trim_right,
+    trunc,
     unescape,
 )
 

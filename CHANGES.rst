@@ -7,27 +7,42 @@ v1.x.x (WIP)
 
 - Add ``attempt()``.
 - Add ``before()``.
+- Add ``camel_case()``.
+- Add ``capitalize()``.
 - Add ``chunk()``.
 - Add ``curry_right()``.
-- Modify ``drop()`` to accept ``n`` argument and remove as alias of ``rest()``.
 - Add ``drop_right()``.
 - Add ``drop_right_while()``.
 - Add ``drop_while()``.
+- Add ``ends_with()``.
+- Add ``escape_reg_exp()`` and ``escape_re()``.
 - Add ``is_error()``.
 - Add ``is_reg_exp()`` and ``is_re()``.
+- Add ``kebab_case()``.
 - Add ``keysIn()`` as alias of ``keys()``.
 - Add ``negate()``.
+- Add ``pad()``.
+- Add ``pad_left()``.
+- Add ``pad_right()``.
 - Add ``partition()``.
 - Add ``pull_at()``.
+- Add ``repeat()``.
 - Add ``slice_()``.
+- Add ``snake_case()``.
 - Add ``sorted_last_index()``.
-- Deprecate ``tail()``.
-- Add ``take()``.
+- Add ``starts_with()``.
 - Add ``take_right()``.
 - Add ``take_right_while()``.
 - Add ``take_while()``.
+- Add ``trim()``.
+- Add ``trim_left()``.
+- Add ``trim_right()``.
+- Add ``trunc()``.
 - Add ``valuesIn()`` as alias of ``values()``.
 - Create ``pydash.api.strings`` module.
+- Deprecate ``tail()``.
+- Modify ``drop()`` to accept ``n`` argument and remove as alias of ``rest()``.
+- Modify ``take()`` to accept ``n`` argument and remove as alias of ``first()``.
 - Move ``escape()`` and ``unescape()`` from ``pydash.api.utilities`` to ``pydash.api.strings``. **possible breaking change**
 - Move ``range_()`` from ``pydash.api.arrays`` to ``pydash.api.utilities``. **possible breaking change**
 
