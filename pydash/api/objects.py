@@ -37,12 +37,12 @@ __all__ = [
     'functions',
     'has',
     'invert',
-    'is_list',
     'is_boolean',
     'is_date',
     'is_empty',
     'is_equal',
     'is_function',
+    'is_list',
     'is_nan',
     'is_none',
     'is_number',
@@ -287,18 +287,6 @@ def invert(obj):
     return dict((value, key) for key, value in _iterate(obj))
 
 
-def is_list(value):
-    """Checks if `value` is a list.
-
-    Args:
-        value (mixed): Value to check.
-
-    Returns:
-        bool: Whether `value` is a list.
-    """
-    return isinstance(value, list)
-
-
 def is_boolean(value):
     """Checks if `value` is a boolean value.
 
@@ -394,6 +382,18 @@ def is_function(value):
         bool: Whether `value` is callable.
     """
     return callable(value)
+
+
+def is_list(value):
+    """Checks if `value` is a list.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a list.
+    """
+    return isinstance(value, list)
 
 
 def is_nan(value):
