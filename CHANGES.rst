@@ -21,6 +21,10 @@ v1.x.x (WIP)
 - Add ``slice_()``.
 - Add ``sorted_last_index()``.
 - Deprecate ``tail()``.
+- Add ``take()``.
+- Add ``take_right()``.
+- Add ``take_right_while()``.
+- Add ``take_while()``.
 - Add ``valuesIn()`` as alias of ``values()``.
 - Create ``pydash.api.strings`` module.
 - Move ``escape()`` and ``unescape()`` from ``pydash.api.utilities`` to ``pydash.api.strings``. **possible breaking change**

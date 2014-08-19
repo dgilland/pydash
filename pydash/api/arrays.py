@@ -44,6 +44,9 @@ __all__ = [
     'sorted_last_index',
     'tail',
     'take',
+    'take_right',
+    'take_right_while',
+    'take_while',
     'union',
     'uniq',
     'unique',
@@ -100,27 +103,27 @@ def difference(array, *lists):
 
 def drop(array, n):
     """Creates a slice of `array` with `n` elements dropped from the beginning.
+
+    Args:
+        array (list): List to process.
+        n (int): Number of elements to drop.
+
+    Returns:
+        list: Dropped list.
     """
     return drop_while(array, lambda _, index, *args: index < n)
 
 
-def drop_while(array, callback=None):
-    """Creates a slice of `array` excluding elements dropped from the
-    beginning. Elements are dropped until the `callback` returns falsey. The
-    `callback` is invoked with three arguments: ``(value, index, array)``.
-    """
-    n = 0
-    for is_true, _, _, _ in _iter_callback(array, callback):
-        if is_true:
-            n += 1
-        else:
-            break
-
-    return array[n:]
-
-
 def drop_right(array, n):
-    """Creates a slice of `array` with `n` elements dropped from the end."""
+    """Creates a slice of `array` with `n` elements dropped from the end.
+
+    Args:
+        array (list): List to process.
+        n (int): Number of elements to drop.
+
+    Returns:
+        list: Dropped list.
+    """
     length = len(array)
     return drop_right_while(array,
                             lambda _, index, *args: (length - index) <= n)
@@ -139,6 +142,28 @@ def drop_right_while(array, callback=None):
             break
 
     return array[:n]
+
+
+def drop_while(array, callback=None):
+    """Creates a slice of `array` excluding elements dropped from the
+    beginning. Elements are dropped until the `callback` returns falsey. The
+    `callback` is invoked with three arguments: ``(value, index, array)``.
+
+    Args:
+        array (list): List to process.
+        callback (mixed): Callback called per iteration
+
+    Returns:
+        list: Dropped list.
+    """
+    n = 0
+    for is_true, _, _, _ in _iter_callback(array, callback):
+        if is_true:
+            n += 1
+        else:
+            break
+
+    return array[n:]
 
 
 def find_index(array, callback=None):
@@ -200,7 +225,6 @@ def first(array):
 
 
 head = first
-take = first
 
 
 def flatten(array, callback=None, _depth=0):
@@ -463,6 +487,71 @@ def sorted_last_index(array, value, callback=None):
         value = callback(value)
 
     return bisect_right(array, value)
+
+
+def take(array, n):
+    """Creates a slice of `array` with `n` elements taken from the beginning.
+
+    Args:
+        array (list): List to process.
+        n (int): Number of elements to take.
+
+    Returns:
+        list: Taken list.
+    """
+    return take_while(array, lambda _, index, *args: index < n)
+
+
+def take_right(array, n):
+    """Creates a slice of `array` with `n` elements taken from the end.
+
+    Args:
+        array (list): List to process.
+        n (int): Number of elements to take.
+
+    Returns:
+        list: Taken list.
+    """
+    length = len(array)
+    return take_right_while(array,
+                            lambda _, index, *args: (length - index) <= n)
+
+
+def take_right_while(array, callback=None):
+    """Creates a slice of `array` with elements taken from the end. Elements
+    are taken until the `callback` returns falsey. The `callback` is
+    invoked with three arguments: ``(value, index, array)``.
+    """
+    n = len(array)
+    for is_true, _, _, _ in _iter_callback(array, callback, reverse=True):
+        if is_true:
+            n -= 1
+        else:
+            break
+
+    return array[n:]
+
+
+def take_while(array, callback=None):
+    """Creates a slice of `array` with elements taken from the beginning.
+    Elements are taken until the `callback` returns falsey. The
+    `callback` is invoked with three arguments: ``(value, index, array)``.
+
+    Args:
+        array (list): List to process.
+        callback (mixed): Callback called per iteration
+
+    Returns:
+        list: Taken list.
+    """
+    n = 0
+    for is_true, _, _, _ in _iter_callback(array, callback):
+        if is_true:
+            n += 1
+        else:
+            break
+
+    return array[:n]
 
 
 def union(*arrays):

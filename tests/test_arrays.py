@@ -263,6 +263,40 @@ def test_sorted_last_index(case, expected):
     assert pyd.sorted_last_index(*case) == expected
 
 
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], 1), [1]),
+    (([1, 2, 3, 4, 5], 2), [1, 2]),
+    (([1, 2, 3, 4, 5], 5), [1, 2, 3, 4, 5]),
+    (([1, 2, 3, 4, 5], 6), [1, 2, 3, 4, 5]),
+])
+def test_take(case, expected):
+    assert pyd.take(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], lambda item, *args: item < 3), [1, 2]),
+])
+def test_take_while(case, expected):
+    assert pyd.take_while(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], 1), [5]),
+    (([1, 2, 3, 4, 5], 2), [4, 5]),
+    (([1, 2, 3, 4, 5], 5), [1, 2, 3, 4, 5]),
+    (([1, 2, 3, 4, 5], 6), [1, 2, 3, 4, 5]),
+])
+def test_take_right(case, expected):
+    assert pyd.take_right(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], lambda item, *args: item > 3), [4, 5]),
+])
+def test_take_right_while(case, expected):
+    assert pyd.take_right_while(*case) == expected
+
+
 @parametrize('case,filter_by,expected', [
     ([1, 2, 1, 3, 1], None, [1, 2, 3]),
     ([dict(a=1), dict(a=2), dict(a=1)], None, [dict(a=1), dict(a=2)]),
