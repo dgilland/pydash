@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 import copy
 import datetime
+import re
 
 from .arrays import flatten
 from .utilities import (
@@ -49,6 +50,8 @@ __all__ = [
     'is_number',
     'is_object',
     'is_plain_object',
+    'is_re',
+    'is_reg_exp',
     'is_string',
     'keys',
     'keysIn',
@@ -64,6 +67,9 @@ __all__ = [
     'values',
     'valuesIn',
 ]
+
+
+RegExp = type(re.compile(''))
 
 
 def assign(obj, *sources, **kargs):
@@ -458,7 +464,7 @@ def is_object(value):
         value (mixed): Value to check.
 
     Returns:
-        bool: Whether `value is ``list`` or ``dict``.
+        bool: Whether `value` is ``list`` or ``dict``.
     """
     return isinstance(value, (list, dict))
 
@@ -470,9 +476,24 @@ def is_plain_object(value):
         value (mixed): Value to check.
 
     Returns:
-        bool: Whether `value is a ``dict``.
+        bool: Whether `value` is a ``dict``.
     """
     return isinstance(value, dict)
+
+
+def is_reg_exp(value):
+    """Checks if `value` is a ``RegExp`` object.
+
+    Args:
+        value (mxied): Value to check.
+
+    Returns:
+        bool: Whether `value` is a RegExp object.
+    """
+    return isinstance(value, RegExp)
+
+
+is_re = is_reg_exp
 
 
 def is_string(value):

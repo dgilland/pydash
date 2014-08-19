@@ -14,6 +14,7 @@ v1.x.x (WIP)
 - Add ``drop_right_while()``.
 - Add ``drop_while()``.
 - Add ``is_error()``.
+- Add ``is_reg_exp()`` and ``is_re()``.
 - Add ``keysIn()`` as alias of ``keys()``.
 - Add ``negate()``.
 - Add ``partition()``.

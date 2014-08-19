@@ -169,6 +169,8 @@ from .api.objects import (
     is_number,
     is_object,
     is_plain_object,
+    is_re,
+    is_reg_exp,
     is_string,
     keys,
     keysIn,

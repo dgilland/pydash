@@ -1,6 +1,7 @@
 
 import datetime
 import decimal
+import re
 
 import pydash as pyd
 from pydash.api.utilities import _iterate
@@ -303,6 +304,26 @@ def test_is_object(case, expected):
 ])
 def test_is_plain_object(case, expected):
     assert pyd.is_plain_object(case) == expected
+
+
+@parametrize('case,expected', [
+    (re.compile(''), True),
+    ('', False),
+    ('Hello, world!', False),
+    (1, False),
+    ({}, False),
+    ([], False),
+    (None, False)
+])
+def test_is_reg_exp(case, expected):
+    assert pyd.is_reg_exp(case) == expected
+
+
+@parametrize('case', [
+    pyd.is_re
+])
+def test_keys_aliases(case):
+    assert pyd.is_reg_exp is case
 
 
 @parametrize('case,expected', [
