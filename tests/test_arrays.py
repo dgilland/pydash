@@ -68,11 +68,19 @@ def test_drop_right_while(case, expected):
 
 
 @parametrize('case,expected', [
-    ([1, 2, 3], [2, 3]),
-    ([], [])
+    (([True, 1, None, 'yes'], bool), False),
+    (([True, 1, None, 'yes'],), False),
+    (([{'name': 'moe', 'age': 40},
+       {'name': 'larry', 'age': 50}],
+      'age'),
+     True),
+    (([{'name': 'moe', 'age': 40},
+       {'name': 'larry', 'age': 50}],
+      {'age': 50}),
+     False)
 ])
-def test_rest(case, expected):
-    assert pyd.rest(case) == expected
+def test_every(case, expected):
+    assert pyd.every(*case) == expected
 
 
 @parametrize('case,filter_by,expected', [
@@ -199,6 +207,13 @@ def test_remove(case, filter_by, expected):
 
 
 @parametrize('case,expected', [
+    ([1, 2, 3], [2, 3]),
+    ([], [])
+])
+def test_rest(case, expected):
+    assert pyd.rest(case) == expected
+
+
     ((['moe', 'larry'], [30, 40]), {'moe': 30, 'larry': 40}),
     (([['moe', 30], ['larry', 40]],), {'moe': 30, 'larry': 40}),
 ])
@@ -229,17 +244,6 @@ def test_zip_(case, expected):
 ])
 def test_unzip(case, expected):
     pyd.unzip(case) == expected
-
-
-@parametrize('case,expected', [
-    ((10,), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
-    ((1, 11), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-    ((0, 30, 5), [0, 5, 10, 15, 20, 25]),
-    ((0, -10, -1), [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]),
-    ((0,), []),
-])
-def test_range_(case, expected):
-    assert pyd.range_(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -306,22 +310,6 @@ def test_union(case, expected):
 ])
 def test_sorted_index(case, expected):
     assert pyd.sorted_index(*case) == expected
-
-
-@parametrize('case,expected', [
-    (([True, 1, None, 'yes'], bool), False),
-    (([True, 1, None, 'yes'],), False),
-    (([{'name': 'moe', 'age': 40},
-       {'name': 'larry', 'age': 50}],
-      'age'),
-     True),
-    (([{'name': 'moe', 'age': 40},
-       {'name': 'larry', 'age': 50}],
-      {'age': 50}),
-     False)
-])
-def test_every(case, expected):
-    assert pyd.every(*case) == expected
 
 
 def test_tail_deprecated():

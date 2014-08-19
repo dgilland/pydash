@@ -62,20 +62,6 @@ def test_callback_aliases(case):
 
 
 @parametrize('case,expected', [
-    ('abc<> &"\'`efg', 'abc&lt;&gt; &amp;&quot;&#39;&#96;efg')
-])
-def test_escape(case, expected):
-    assert pyd.escape(case) == expected
-
-
-@parametrize('case,expected', [
-    ('abc&lt;&gt; &amp;&quot;&#39;&#96;efg', 'abc<> &"\'`efg')
-])
-def test_unescape(case, expected):
-    assert pyd.unescape(case) == expected
-
-
-@parametrize('case,expected', [
     ((1,), 1),
     ((1, 2), 1),
     ((), None)
@@ -164,6 +150,17 @@ def test_random_float(case, floating, minimum, maximum):
         rnd = pyd.random(*case, floating=floating)
         assert isinstance(rnd, float)
         assert minimum <= rnd <= maximum
+
+
+@parametrize('case,expected', [
+    ((10,), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+    ((1, 11), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+    ((0, 30, 5), [0, 5, 10, 15, 20, 25]),
+    ((0, -10, -1), [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]),
+    ((0,), []),
+])
+def test_range_(case, expected):
+    assert pyd.range_(*case) == expected
 
 
 @parametrize('case,expected', [
