@@ -156,7 +156,7 @@ def pad(text, length, chars=' '):
     length = max((length, text_len))
 
     padding = (length - text_len)
-    left_pad = padding / 2
+    left_pad = padding // 2
     right_pad = padding - left_pad
 
     text = repeat(chars, left_pad) + text + repeat(chars, right_pad)
