@@ -17,7 +17,7 @@ from .._compat import (
 
 
 __all__ = [
-    'now',
+    'attempt',
     'constant',
     'callback',
     'create_callback',
@@ -25,6 +25,7 @@ __all__ = [
     'matches',
     'memoize',
     'noop',
+    'now',
     'property_',
     'prop',
     'random',
@@ -36,6 +37,24 @@ __all__ = [
 
 
 ID_COUNTER = 0
+
+
+def attempt(func, *args, **kargs):
+    """Attempts to execute `func`, returning either the result or the caught
+    error object.
+
+    Args:
+        func (function): The function to attempt.
+
+    Returns:
+        mixed: Returns the `func` result or error object.
+    """
+    try:
+        ret = func(*args, **kargs)
+    except Exception as ex:
+        ret = ex
+
+    return ret
 
 
 def constant(value):

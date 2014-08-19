@@ -192,6 +192,7 @@ from .api.strings import (
 #
 
 from .api.utilities import (
+    attempt,
     callback,
     constant,
     create_callback,

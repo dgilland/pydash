@@ -5,6 +5,7 @@ Changelog
 v1.x.x (WIP)
 ------------
 
+- Add ``attempt()``.
 - Add ``before()``.
 - Add ``chunk()``.
 - Add ``curry_right()``.

@@ -8,10 +8,18 @@ from . import fixtures
 from .fixtures import parametrize
 
 
-def test_now():
-    present = int(time.time() * 1000)
-    # Add some leeway when comparing time.
-    assert (present - 1) <= pyd.now() <= (present + 1)
+@parametrize('case,expected', [
+    ((lambda a, b: a / b, 4, 2), 2)
+])
+def test_attempt(case, expected):
+    assert pyd.attempt(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((lambda a, b: a / b, 4, 0), ZeroDivisionError)
+])
+def test_attempt_exception(case, expected):
+    assert isinstance(pyd.attempt(*case), expected)
 
 
 @parametrize('case', [
@@ -104,6 +112,12 @@ def test_memoize(case, args, kargs, key):
 ])
 def test_noop(case, expected):
     assert pyd.noop(*case) == expected
+
+
+def test_now():
+    present = int(time.time() * 1000)
+    # Add some leeway when comparing time.
+    assert (present - 1) <= pyd.now() <= (present + 1)
 
 
 @parametrize('case,arg,expected', [
