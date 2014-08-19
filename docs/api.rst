@@ -48,6 +48,13 @@ Objects
     :members:
 
 
+Strings
+=======
+
+.. automodule:: pydash.api.strings
+    :members:
+
+
 Utilities
 =========
 
