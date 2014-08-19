@@ -164,13 +164,6 @@ def test_has(case, expected):
 
 
 @parametrize('case,expected', [
-    ([1, 2, 3], True),
-])
-def test_is_list(case, expected):
-    assert pyd.is_list(case) == expected
-
-
-@parametrize('case,expected', [
     (True, True),
     (False, True),
     (0, False),
@@ -234,11 +227,28 @@ def test_is_equal(case, expected):
 
 
 @parametrize('case,expected', [
+    (Exception(), True),
+    ({}, False),
+    ([], False)
+])
+def test_is_error(case, expected):
+    assert pyd.is_error(case) == expected
+
+
+@parametrize('case,expected', [
     (lambda x: x + 1, True),
     ('Hello, world!', False),
 ])
 def test_is_function(case, expected):
     assert pyd.is_function(case) == expected
+
+
+@parametrize('case,expected', [
+    ([1, 2, 3], True),
+    ({}, False),
+])
+def test_is_list(case, expected):
+    assert pyd.is_list(case) == expected
 
 
 @parametrize('case,expected', [
@@ -313,6 +323,13 @@ def test_is_string(case, expected):
 ])
 def test_keys(case, expected):
     assert set(pyd.keys(case)) == set(expected)
+
+
+@parametrize('case', [
+    pyd.keysIn
+])
+def test_keys_aliases(case):
+    assert pyd.keys is case
 
 
 @parametrize('case,expected', [
@@ -446,3 +463,10 @@ def test_transform(case, expected):
 ])
 def test_values(case, expected):
     assert set(pyd.values(case)) == set(expected)
+
+
+@parametrize('case', [
+    pyd.valuesIn
+])
+def test_values_aliases(case):
+    assert pyd.values is case

@@ -41,6 +41,7 @@ __all__ = [
     'is_date',
     'is_empty',
     'is_equal',
+    'is_error',
     'is_function',
     'is_list',
     'is_nan',
@@ -50,6 +51,7 @@ __all__ = [
     'is_plain_object',
     'is_string',
     'keys',
+    'keysIn',
     'map_values',
     'merge',
     'methods',
@@ -60,6 +62,7 @@ __all__ = [
     'transform',
     'update',
     'values',
+    'valuesIn',
 ]
 
 
@@ -372,6 +375,18 @@ def is_equal(a, b, callback=None):
     return equal
 
 
+def is_error(value):
+    """Checks if `value` is an ``Exception``.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is an exception.
+    """
+    return isinstance(value, Exception)
+
+
 def is_function(value):
     """Checks if `value` is a function.
 
@@ -480,8 +495,15 @@ def keys(obj):
 
     Returns:
         list: List of keys.
+
+    See Also:
+        - :func:`keys` (main definition)
+        - :func:`keysIn` (alias)
     """
     return [key for key, _ in _iterate(obj)]
+
+
+keysIn = keys
 
 
 def map_values(obj, callback=None):
@@ -718,5 +740,12 @@ def values(obj):
 
     Returns:
         list: List of values.
+
+    See Also:
+        - :func:`values` (main definition)
+        - :func:`valuesIn` (alias)
     """
     return [value for _, value in _iterate(obj)]
+
+
+valuesIn = values

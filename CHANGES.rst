@@ -12,9 +12,12 @@ v1.x.x (WIP)
 - Add ``drop_right()``.
 - Add ``drop_right_while()``.
 - Add ``drop_while()``.
+- Add ``is_error()``.
+- Add ``keysIn()`` as alias of ``keys()``.
 - Add ``negate()``.
 - Add ``partition()``.
 - Deprecate ``tail()``.
+- Add ``valuesIn()`` as alias of ``values()``.
 - Create ``pydash.api.strings`` module.
 - Move ``escape()`` and ``unescape()`` from ``pydash.api.utilities`` to ``pydash.api.strings``. **possible breaking change**
 - Move ``range_()`` from ``pydash.api.arrays`` to ``pydash.api.utilities``. **possible breaking change**

@@ -155,6 +155,7 @@ from .api.objects import (
     is_date,
     is_empty,
     is_equal,
+    is_error,
     is_function,
     is_list,
     is_nan,
@@ -164,6 +165,7 @@ from .api.objects import (
     is_plain_object,
     is_string,
     keys,
+    keysIn,
     map_values,
     merge,
     methods,
@@ -173,6 +175,7 @@ from .api.objects import (
     pick,
     transform,
     values,
+    valuesIn,
 )
 
 
