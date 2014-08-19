@@ -38,6 +38,7 @@ __all__ = [
     'pull',
     'remove',
     'rest',
+    'slice_',
     'sorted_index',
     'tail',
     'take',
@@ -372,6 +373,21 @@ def tail(array):
        Use :func:`rest` instead.
     """
     return rest(array)
+
+
+def slice_(array, start, end):
+    """Slices `array` from the `start` index up to, but not including, the
+    `end` index.
+
+    Args:
+        array (list): Array to slice.
+        start (int): Start index.
+        end (int): End index.
+
+    Returns:
+        list: Sliced list.
+    """
+    return array[start:end]
 
 
 def sorted_index(array, value, callback=None):

@@ -214,6 +214,18 @@ def test_rest(case, expected):
     assert pyd.rest(case) == expected
 
 
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], 0, 1), [1]),
+    (([1, 2, 3, 4, 5], 1, 3), [2, 3]),
+    (([1, 2, 3, 4, 5], 1, 4), [2, 3, 4]),
+    (([1, 2, 3, 4, 5], 1, 5), [2, 3, 4, 5]),
+    (([1, 2, 3, 4, 5], 0, -1), [1, 2, 3, 4]),
+])
+def test_slice_(case, expected):
+    assert pyd.slice_(*case) == expected
+
+
+@parametrize('case,expected', [
     ((['moe', 'larry'], [30, 40]), {'moe': 30, 'larry': 40}),
     (([['moe', 30], ['larry', 40]],), {'moe': 30, 'larry': 40}),
 ])

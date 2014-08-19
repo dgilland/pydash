@@ -17,6 +17,7 @@ v1.x.x (WIP)
 - Add ``keysIn()`` as alias of ``keys()``.
 - Add ``negate()``.
 - Add ``partition()``.
+- Add ``slice_()``.
 - Deprecate ``tail()``.
 - Add ``valuesIn()`` as alias of ``values()``.
 - Create ``pydash.api.strings`` module.

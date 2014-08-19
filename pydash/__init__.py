@@ -40,6 +40,7 @@ from .api.arrays import (
     pull,
     remove,
     rest,
+    slice_,
     sorted_index,
     tail,
     take,
