@@ -68,10 +68,10 @@ class Compose(object):
         funcs = list(self.funcs)
 
         # Compose functions in reverse order starting with the first.
-        ret = (funcs.pop())(*args, **kargs)
-
-        for func in reversed(funcs):
-            ret = func(ret)
+        while funcs:
+            ret = funcs.pop()(*args, **kargs)
+            args = (ret,)
+            kargs = {}
 
         return ret
 
