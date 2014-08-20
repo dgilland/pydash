@@ -406,6 +406,16 @@ def _iter_unique(array):
             yield (i, item)
 
 
+def _iter_flatten(array, is_deep=False, depth=0):
+    """Iteratively flatten a list shallowly or deeply."""
+    for item in array:
+        if isinstance(item, (list, tuple)) and (is_deep or depth == 0):
+            for subitem in _iter_flatten(item, is_deep, depth + 1):
+                yield subitem
+        else:
+            yield item
+
+
 def _get_item(obj, key, **kargs):
     """Safely get an item by `key` from a sequence or mapping object.
 

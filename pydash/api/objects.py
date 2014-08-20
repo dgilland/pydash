@@ -9,7 +9,7 @@ import copy
 import datetime
 import re
 
-from .arrays import flatten
+from .arrays import flatten_deep
 from .utilities import (
     identity,
     _iterate,
@@ -667,7 +667,7 @@ def omit(obj, callback=None, *properties):
     """
     if not callable(callback):
         callback = callback if callback is not None else []
-        properties = flatten([callback, properties])
+        properties = flatten_deep([callback, properties])
         callback = lambda value, key, item: key in properties
 
     return dict((key, value) for key, value in _iterate(obj)
@@ -747,7 +747,7 @@ def pick(obj, callback=None, *properties):
     """
     if not callable(callback):
         callback = callback if callback is not None else []
-        properties = flatten([callback, properties])
+        properties = flatten_deep([callback, properties])
         callback = lambda value, key, item: key in properties
 
     return dict((key, value) for key, value in _iterate(obj)

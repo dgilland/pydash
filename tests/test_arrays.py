@@ -117,18 +117,19 @@ def test_first(case, expected):
     assert pyd.first(case) == expected
 
 
-@parametrize('case,filter_by,expected', [
-    ([1, ['2222'], [3, [[4]]]], None, [1, '2222', 3, 4]),
-    ([1, ['2222'], [3, [[4]]]], True, [1, '2222', 3, [[4]]]),
-    ([{'name': 'curly', 'quotes': ['Oh, a wise guy, eh?', 'Poifect!']},
-      {'name': 'moe', 'quotes': ['Spread out!', 'You knucklehead!']}],
-     'quotes',
-     ['Oh, a wise guy, eh?', 'Poifect!',
-      'Spread out!',
-      'You knucklehead!'])
+@parametrize('case,expected', [
+    (([1, ['2222'], [3, [[4]]]],), [1, '2222', 3, [[4]]]),
+    (([1, ['2222'], [3, [[4]]]], True), [1, '2222', 3, 4]),
 ])
-def test_flatten(case, filter_by, expected):
-    assert pyd.flatten(case, filter_by) == expected
+def test_flatten(case, expected):
+    assert pyd.flatten(*case) == expected
+
+
+@parametrize('case,expected', [
+    ([1, ['2222'], [3, [[4]]]], [1, '2222', 3, 4]),
+])
+def test_flatten_deep(case, expected):
+    assert pyd.flatten_deep(case) == expected
 
 
 @parametrize('case,value,from_index,expected', [

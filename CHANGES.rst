@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+v2.0.0 (xxxx-xx-xx)
+-------------------
+
+- Add ``flatten_deep()``.
+- Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option.
+
+
 v1.1.0 (2014-08-19)
 -------------------
 

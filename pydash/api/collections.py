@@ -7,13 +7,13 @@ from __future__ import absolute_import
 
 import random
 
-from .arrays import flatten
 from .utilities import (
     matches,
     property_,
     create_callback,
     _iter_callback,
-    _iterate
+    _iterate,
+    _iter_flatten
 )
 
 
@@ -73,7 +73,7 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
     Returns:
         list: filtered list
     """
-    indexes = flatten(indexes)
+    indexes = _iter_flatten(indexes, is_deep=True)
     return [collection[i] for i in indexes]
 
 

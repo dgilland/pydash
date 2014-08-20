@@ -30,6 +30,7 @@ from .api.arrays import (
     find_last_index,
     first,
     flatten,
+    flatten_deep,
     head,
     index_of,
     initial,

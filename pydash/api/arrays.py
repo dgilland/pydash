@@ -5,15 +5,14 @@
 
 from __future__ import absolute_import
 
-from collections import Iterable
 from bisect import bisect_left, bisect_right
 from math import ceil
 
-from .._compat import string_types
 from .utilities import (
     create_callback,
     _iter_callback,
     _iter_unique,
+    _iter_flatten,
     _deprecated
 )
 
@@ -30,6 +29,7 @@ __all__ = [
     'find_last_index',
     'first',
     'flatten',
+    'flatten_deep',
     'head',
     'index_of',
     'initial',
@@ -259,42 +259,39 @@ def first(array):
 head = first
 
 
-def flatten(array, callback=None, _depth=0):
-    """Flattens a nested array (the nesting can be to any depth). If callback
-    is True, array will only be flattened a single level. If callback is
-    passed, each element of array is passed through a callback before
-    flattening.
+def flatten(array, is_deep=False):
+    """Flattens a nested array. If `is_deep` is ``True`` the array is
+    recursively flattened, otherwise it is only flattened a single level.
 
     Args:
         array (list): List to process.
-        callback (mixed, optional): Callback applied per iteration. If ``True``
-            then flatten shallowly.
+        is_deep (bool, optional): Whether to recursively flatten `array`.
 
     Returns:
         list: Flattened list.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.0.0
+       Removed ``callback`` option. Added ``is_deep`` option. Made it shallow
+       by default.
     """
+    return list(_iter_flatten(array, is_deep=is_deep))
 
-    shallow = False
 
-    if callback is True:
-        shallow = True
-    elif callback:
-        cbk = create_callback(callback)
-        array = [cbk(item) for item in array]
-        callback = None
+def flatten_deep(array):
+    """Flattens a nested array recursively. This is the same as calling
+    ``flatten(array, is_deep=True)``.
 
-    lst = []
-    if all([isinstance(array, Iterable),
-            not isinstance(array, string_types),
-            not (shallow and _depth > 1)]):
-        for arr in array:
-            lst.extend(flatten(arr, callback, _depth + 1))
-    else:
-        lst.append(array)
+    Args:
+        array (list): List to process.
 
-    return lst
+    Returns:
+        list: Flattened list.
+
+    .. versionadded:: 2.0.0
+    """
+    return flatten(array, is_deep=True)
 
 
 def index_of(array, value, from_index=0):
@@ -322,6 +319,14 @@ def initial(array):
     .. versionadded:: 1.0.0
     """
     return array[:-1]
+
+
+# def intersperse(array, callback):
+#    """
+#    """
+#    return reduce_([[item, callback] for item in array],
+#                   lambda result, item, index: result + item,
+#                   [])[:-1]
 
 
 def intersection(*arrays):
