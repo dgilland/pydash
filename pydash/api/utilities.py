@@ -55,7 +55,7 @@ def attempt(func, *args, **kargs):
     """
     try:
         ret = func(*args, **kargs)
-    except Exception as ex:
+    except Exception as ex:  # pylint: disable=broad-except
         ret = ex
 
     return ret

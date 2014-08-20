@@ -6,11 +6,9 @@
 import re
 import string
 
-from .arrays import compact
 from .objects import is_string, is_reg_exp
 from .._compat import (
     text_type,
-    string_types,
     html_unescape
 )
 

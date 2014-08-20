@@ -457,7 +457,6 @@ def pluck(collection, key):
     Returns:
         list: plucked list
     """
-    # TODO: Do we want to use get() and return None if missing or error out?
     return map_(collection, property_(key))
 
 

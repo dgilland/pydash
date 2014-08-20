@@ -61,8 +61,6 @@ class Chain(object):
         """
         method = getattr(pydash, attr, None)
 
-        # TODO: Be more stringent about which methods are valid?
-
         if callable(method):
             return ChainWrapper(self.value(), getattr(pydash, attr))
         else:
