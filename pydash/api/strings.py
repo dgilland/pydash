@@ -46,7 +46,7 @@ HTML_ESCAPES = {
     '`': '&#96;'
 }
 
-RE_WORD_SEPARATORS = '[ {0}]'.format(re.escape(string.punctuation))
+RE_WORD_SEPARATORS = re.compile('[ {0}]'.format(re.escape(string.punctuation)))
 
 
 def camel_case(text):
@@ -60,8 +60,8 @@ def camel_case(text):
 
     .. versionadded:: 1.1.0
     """
-    text = ''.join(word.title() for word in re.split(RE_WORD_SEPARATORS,
-                                                     text_type(text)))
+    text = ''.join(word.title()
+                   for word in RE_WORD_SEPARATORS.split(text_type(text)))
     return text[0].lower() + text[1:]
 
 
@@ -150,7 +150,7 @@ def kebab_case(text):
     .. versionadded:: 1.1.0
     """
     return ('-'.join(word
-                     for word in re.split(RE_WORD_SEPARATORS, text_type(text))
+                     for word in RE_WORD_SEPARATORS.split(text_type(text))
                      if word)
             .lower())
 
@@ -254,7 +254,7 @@ def snake_case(text):
     .. versionadded:: 1.1.0
     """
     return ('_'.join(word
-                     for word in re.split(RE_WORD_SEPARATORS, text_type(text))
+                     for word in RE_WORD_SEPARATORS.split(text_type(text))
                      if word)
             .lower())
 
