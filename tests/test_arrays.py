@@ -153,10 +153,30 @@ def test_initial(case, expected):
 
 
 @parametrize('case,expected', [
+    (([[10, 20], [30, 40], [50, 60]], [1, 2, 3]),
+     [10, 20, 1, 2, 3, 30, 40, 1, 2, 3, 50, 60]),
+    (([[[10, 20]], [[30, 40]], [50, [60]]], [1, 2, 3]),
+     [[10, 20], 1, 2, 3, [30, 40], 1, 2, 3, 50, [60]]),
+])
+def test_intercalate(case, expected):
+    assert pyd.intercalate(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2])
 ])
 def test_intersection(case, expected):
     assert pyd.intersection(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4], 10), [1, 10, 2, 10, 3, 10, 4]),
+    (([1, 2, 3, 4], [0, 0, 0]), [1, [0, 0, 0], 2, [0, 0, 0], 3, [0, 0, 0], 4]),
+    (([[1, 2, 3], [4, 5, 6], [7, 8, 9]], [0, 0, 0]),
+     [[1, 2, 3], [0, 0, 0], [4, 5, 6], [0, 0, 0], [7, 8, 9]]),
+])
+def test_intersperse(case, expected):
+    assert pyd.intersperse(*case) == expected
 
 
 @parametrize('case,expected', [

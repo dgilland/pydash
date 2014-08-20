@@ -13,6 +13,7 @@ from .utilities import (
     itercallback,
     iterunique,
     iterflatten,
+    iterintersperse
 )
 
 
@@ -32,7 +33,9 @@ __all__ = [
     'head',
     'index_of',
     'initial',
+    'intercalate',
     'intersection',
+    'intersperse',
     'last',
     'last_index_of',
     'object_',
@@ -320,12 +323,20 @@ def initial(array):
     return array[:-1]
 
 
-# def intersperse(array, callback):
-#    """
-#    """
-#    return reduce_([[item, callback] for item in array],
-#                   lambda result, item, index: result + item,
-#                   [])[:-1]
+def intercalate(array, separator):
+    """Like :func:`intersperse` for lists of lists but shallowly flattening the
+    result.
+
+    Args:
+        array (list): List to intercalate.
+        separator (mixed): Element to insert.
+
+    Returns:
+        list: Intercalated list.
+
+    .. versionadded:: 2.0.0
+    """
+    return flatten(intersperse(array, separator))
 
 
 def intersection(*arrays):
@@ -341,6 +352,21 @@ def intersection(*arrays):
     """
 
     return list(set(arrays[0]).intersection(*arrays))
+
+
+def intersperse(array, separator):
+    """Insert a separating element between the elements of `array`.
+
+    Args:
+        array (list): List to intersperse.
+        separator (mixed): Element to insert.
+
+    Returns:
+        list: Interspersed list.
+
+    .. versionadded:: 2.0.0
+    """
+    return list(iterintersperse(array, separator))
 
 
 def last(array):

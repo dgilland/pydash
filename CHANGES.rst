@@ -6,7 +6,9 @@ v2.0.0 (xxxx-xx-xx)
 -------------------
 
 - Add ``flatten_deep()``.
-- Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option.
+- Add ``intersperse()``.
+- Add ``intercalate()``.
+- Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option. **breaking change**
 - Rename ``create_callback()`` to ``iteratee``. **breaking change**
 - Rename *private* utility function ``_iter_callback()`` to ``itercallback()``. **breaking change**
 - Rename *private* utility function ``_iter_list_callback()`` to ``iterlist_callback()``. **breaking change**
