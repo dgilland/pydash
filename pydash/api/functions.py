@@ -1,4 +1,6 @@
 """Functions that wrap other functions.
+
+.. versionadded:: 1.0.0
 """
 
 from __future__ import absolute_import
@@ -220,6 +222,8 @@ def after(n, func):
 
     Returns:
         After: Function wrapped in an :class:`After` context.
+
+    .. versionadded:: 1.0.0
     """
     return After(n, func)
 
@@ -234,6 +238,8 @@ def before(n, func):
 
     Returns:
         Before: Function wrapped in an :class:`Before` context.
+
+    .. versionadded:: 1.1.0
     """
     return Before(n, func)
 
@@ -249,6 +255,8 @@ def compose(*funcs):
 
     Returns:
         Compose: Function(s) wrapped in a :class:`Compose` context.
+
+    .. versionadded:: 1.0.0
     """
     return Compose(*funcs)
 
@@ -267,6 +275,8 @@ def curry(func, arity=None):
 
     Returns:
         Curry: Function wrapped in a :class:`Curry` context.
+
+    .. versionadded:: 1.0.0
     """
     return Curry(func, arity)
 
@@ -283,6 +293,8 @@ def curry_right(func, arity=None):
 
     Returns:
         CurryRight: Function wrapped in a :class:`CurryRight` context.
+
+    .. versionadded:: 1.1.0
     """
     return CurryRight(func, arity)
 
@@ -300,6 +312,8 @@ def debounce(func, wait, max_wait=False):
 
     Returns:
         Debounce: Function wrapped in a :class:`Debounce` context.
+
+    .. versionadded:: 1.0.0
     """
     return Debounce(func, wait, max_wait=max_wait)
 
@@ -315,7 +329,9 @@ def delay(func, wait, *args, **kargs):
         **kargs (optional): Keyword arguments to pass to `func`.
 
     Returns:
-        mixed: Return from `func`
+        mixed: Return from `func`.
+
+    .. versionadded:: 1.0.0
     """
     time.sleep(wait / 1000.0)
     return func(*args, **kargs)
@@ -330,6 +346,8 @@ def negate(func):
 
     Returns:
         Negate: Function wrapped in a :class:`Negate` context.
+
+    .. versionadded:: 1.1.0
     """
     return Negate(func)
 
@@ -343,6 +361,8 @@ def once(func):
 
     Returns:
         Once: Function wrapped in a :class:`Once` context.
+
+    .. versionadded:: 1.0.0
     """
     return Once(func)
 
@@ -357,6 +377,8 @@ def partial(func, *args):
 
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
+
+    .. versionadded:: 1.0.0
     """
     return Partial(func, args)
 
@@ -371,6 +393,8 @@ def partial_right(func, *args):
 
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
+
+    .. versionadded:: 1.0.0
     """
     return Partial(func, args, from_right=True)
 
@@ -386,6 +410,8 @@ def throttle(func, wait):
 
     Returns:
         mixed: Results of last `func` call.
+
+    .. versionadded:: 1.0.0
     """
     return Throttle(func, wait)
 
@@ -401,5 +427,7 @@ def wrap(value, func):
 
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
+
+    .. versionadded:: 1.0.0
     """
     return Partial(func, (value,))

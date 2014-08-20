@@ -1,4 +1,6 @@
 """Functions that operate on lists and dicts.
+
+.. versionadded:: 1.0.0
 """
 
 from __future__ import absolute_import
@@ -429,6 +431,8 @@ def partition(collection, callback=None):
 
     Returns:
         list: List of grouped elements.
+
+    .. versionadded:: 1.1.0
     """
     trues = []
     falses = []

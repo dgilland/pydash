@@ -1,4 +1,6 @@
 """Utility functions.
+
+.. versionadded:: 1.0.0
 """
 
 from __future__ import absolute_import
@@ -48,6 +50,8 @@ def attempt(func, *args, **kargs):
 
     Returns:
         mixed: Returns the `func` result or error object.
+
+    .. versionadded:: 1.1.0
     """
     try:
         ret = func(*args, **kargs)
@@ -65,6 +69,8 @@ def constant(value):
 
     Returns:
         function: Function that always returns `value`.
+
+    .. versionadded:: 1.0.0
     """
     return lambda: value
 
@@ -84,6 +90,8 @@ def callback(func):
     See Also:
         - :func:`callback` (main definition)
         - :func:`create_callback` (alias)
+
+    .. versionadded:: 1.0.0
     """
     if callable(func):
         cbk = func
@@ -108,6 +116,8 @@ def identity(*args):
 
     Returns:
         mixed: First argument or ``None``.
+
+    .. versionadded:: 1.0.0
     """
     return args[0] if args else None
 
@@ -124,6 +134,8 @@ def matches(source):
     Returns:
         function: Function that compares a ``dict`` to `source` and returns
             whether the two objects contain the same items.
+
+    .. versionadded:: 1.0.0
     """
     return lambda obj, *args: all(item in obj.items()
                                   for item in source.items())
@@ -143,6 +155,8 @@ def memoize(func, resolver=None):
 
     Returns:
         function: Memoized function.
+
+    .. versionadded:: 1.0.0
     """
     def memoized(*args, **kargs):  # pylint: disable=missing-docstring
         if resolver:
@@ -160,7 +174,10 @@ def memoize(func, resolver=None):
 
 
 def noop(*args, **kargs):  # pylint: disable=unused-argument
-    """A no-operation function."""
+    """A no-operation function.
+
+    .. versionadded:: 1.0.0
+    """
     pass
 
 
@@ -170,6 +187,8 @@ def now():
 
     Returns:
         int: Milliseconds since Unix epoch.
+
+    .. versionadded:: 1.0.0
     """
     return int(time.time() * 1000)
 
@@ -187,6 +206,8 @@ def property_(key):
     See Also:
         - :func:`property_` (main definition)
         - :func:`prop` (alias)
+
+    .. versionadded:: 1.0.0
     """
     return lambda obj, *args: _get_item(obj, key, default=None)
 
@@ -208,6 +229,8 @@ def random(start=0, stop=1, floating=False):
 
     Returns:
         int|float: Random value.
+
+    .. versionadded:: 1.0.0
     """
     floating = any([isinstance(start, float),
                     isinstance(stop, float),
@@ -239,6 +262,11 @@ def range_(*args):
 
     Returns:
         list: List of integers in range
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 1.1.0
+       Moved to Utilities module.
     """
     return list(_range(*args))
 
@@ -254,6 +282,8 @@ def result(obj, key):
 
     Returns:
         mixed: Result of ``obj[key]`` or ``None``.
+
+    .. versionadded:: 1.0.0
     """
     if not obj:
         return None
@@ -276,6 +306,8 @@ def times(n, callback):
 
     Returns:
         list: A list of results from calling `callback`.
+
+    .. versionadded:: 1.0.0
     """
     # pylint: disable=redefined-outer-name
     return [callback(index) for index in _range(n)]
@@ -290,6 +322,8 @@ def unique_id(prefix=None):
 
     Returns:
         str: ID value.
+
+    .. versionadded:: 1.0.0
     """
     # pylint: disable=global-statement
     global ID_COUNTER

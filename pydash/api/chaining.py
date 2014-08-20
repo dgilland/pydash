@@ -1,4 +1,6 @@
 """Chaining
+
+.. versionadded:: 1.0.0
 """
 
 from __future__ import absolute_import
@@ -93,6 +95,8 @@ def chain(value):
 
     Returns:
         :class:`Chain`: Instance of :class:`Chain` initialized with `value`.
+
+    .. versionadded:: 1.0.0
     """
     return Chain(value)
 
@@ -108,6 +112,8 @@ def tap(value, interceptor):
 
     Returns:
         mixed: `value` after `interceptor` call.
+
+    .. versionadded:: 1.0.0
     """
     interceptor(value)
     return value

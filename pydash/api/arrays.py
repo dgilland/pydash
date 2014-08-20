@@ -1,4 +1,6 @@
 """Functions that operate on lists.
+
+.. versionadded:: 1.0.0
 """
 
 from __future__ import absolute_import
@@ -69,6 +71,8 @@ def chunk(array, size=1):
 
     Returns:
         list: New list containing chunks of `array`.
+
+    .. versionadded:: 1.1.0
     """
     chunks = int(ceil(len(array) / float(size)))
     return [array[i * size:(i + 1) * size] for i in range(chunks)]
@@ -82,6 +86,8 @@ def compact(array):
 
     Returns:
         list: Compacted list.
+
+    .. versionadded:: 1.0.0
     """
     return [item for item in array if item]
 
@@ -95,6 +101,8 @@ def difference(array, *lists):
 
     Returns:
         list: Difference of the lists.
+
+    .. versionadded:: 1.0.0
     """
     return (list(difference(set(array).difference(lists[0]),
                             *lists[1:])) if lists
@@ -110,6 +118,11 @@ def drop(array, n):
 
     Returns:
         list: Dropped list.
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 1.1.0
+       Added ``n`` argument and removed as alias of :func:`rest`.
     """
     return drop_while(array, lambda _, index, *args: index < n)
 
@@ -123,6 +136,8 @@ def drop_right(array, n):
 
     Returns:
         list: Dropped list.
+
+    .. versionadded:: 1.1.0
     """
     length = len(array)
     return drop_right_while(array,
@@ -133,6 +148,15 @@ def drop_right_while(array, callback=None):
     """Creates a slice of `array` excluding elements dropped from the end.
     Elements are dropped until the `callback` returns falsey. The `callback` is
     invoked with three arguments: ``(value, index, array)``.
+
+    Args:
+        array (list): List to process.
+        callback (mixed): Callback called per iteration
+
+    Returns:
+        list: Dropped list.
+
+    .. versionadded:: 1.1.0
     """
     n = len(array)
     for is_true, _, _, _ in _iter_callback(array, callback, reverse=True):
@@ -155,6 +179,8 @@ def drop_while(array, callback=None):
 
     Returns:
         list: Dropped list.
+
+    .. versionadded:: 1.1.0
     """
     n = 0
     for is_true, _, _, _ in _iter_callback(array, callback):
@@ -177,6 +203,8 @@ def find_index(array, callback=None):
 
     Returns:
         int: Index of found item or ``-1`` if not found.
+
+    .. versionadded:: 1.0.0
     """
     n = -1
     for is_true, _, i, _ in _iter_callback(array, callback):
@@ -197,6 +225,8 @@ def find_last_index(array, callback=None):
 
     Returns:
         int: Index of found item or ``-1`` if not found.
+
+    .. versionadded:: 1.0.0
     """
     n = -1
     for is_true, _, i, _ in _iter_callback(array, callback, reverse=True):
@@ -220,6 +250,8 @@ def first(array):
         - :func:`first` (main definition)
         - :func:`head` (alias)
         - :func:`take` (alias)
+
+    .. versionadded:: 1.0.0
     """
     return array[0] if array else None
 
@@ -240,6 +272,8 @@ def flatten(array, callback=None, _depth=0):
 
     Returns:
         list: Flattened list.
+
+    .. versionadded:: 1.0.0
     """
 
     shallow = False
@@ -273,6 +307,8 @@ def index_of(array, value, from_index=0):
 
     Returns:
         int: Index of found item or ``-1`` if not found.
+
+    .. versionadded:: 1.0.0
     """
     try:
         return array.index(value, from_index)
@@ -281,7 +317,10 @@ def index_of(array, value, from_index=0):
 
 
 def initial(array):
-    """Return all but the last element of `array`."""
+    """Return all but the last element of `array`.
+
+    .. versionadded:: 1.0.0
+    """
     return array[:-1]
 
 
@@ -293,13 +332,18 @@ def intersection(*arrays):
 
     Returns:
         list: Intersection of provided lists.
+
+    .. versionadded:: 1.0.0
     """
 
     return list(set(arrays[0]).intersection(*arrays))
 
 
 def last(array):
-    """Return the last element of `array`."""
+    """Return the last element of `array`.
+
+    .. versionadded:: 1.0.0
+    """
     return array[-1] if array else None
 
 
@@ -313,6 +357,8 @@ def last_index_of(array, value, from_index=None):
 
     Returns:
         int: Index of found item or ``False`` if not found.
+
+    .. versionadded:: 1.0.0
     """
     index = array_len = len(array)
 
@@ -344,6 +390,8 @@ def pull(array, *values):
 
     Warning:
         `array` is modified in place.
+
+    .. versionadded:: 1.0.0
     """
     for value in values:
         while array.count(value) > 0:
@@ -366,6 +414,8 @@ def pull_at(array, *indexes):
 
     Warning:
         `array` is modified in place.
+
+    .. versionadded:: 1.1.0
     """
     indexes = flatten(indexes)
     for index in sorted(indexes, reverse=True):
@@ -387,6 +437,8 @@ def remove(array, callback=None):
 
     Warning:
         `array` is modified in place.
+
+    .. versionadded:: 1.0.0
     """
     removed = []
     for is_true, _, i, _ in _iter_callback(array, callback):
@@ -408,7 +460,9 @@ def rest(array):
     See Also:
         - :func:`rest` (main definition)
         - :func:`tail` (alias)
-        - :func:`drop` (alias
+        - :func:`drop` (alias)
+
+    .. versionadded:: 1.0.0
     """
     return array[1:]
 
@@ -416,6 +470,8 @@ def rest(array):
 @_deprecated
 def tail(array):
     """Return all but the first element of `array`.
+
+    .. versionadded:: 1.0.0
 
     .. deprecated:: 1.1.0
        Use :func:`rest` instead.
@@ -434,6 +490,8 @@ def slice_(array, start, end):
 
     Returns:
         list: Sliced list.
+
+    .. versionadded:: 1.1.0
     """
     return array[start:end]
 
@@ -457,6 +515,8 @@ def sorted_index(array, value, callback=None):
 
     Returns:
         int: Smallest index.
+
+    .. versionadded:: 1.0.0
     """
     if callback:
         # Generate array of sorted keys computed using callback.
@@ -479,6 +539,8 @@ def sorted_last_index(array, value, callback=None):
 
     Returns:
         int: Highest index.
+
+    .. versionadded:: 1.1.0
     """
     if callback:
         # Generate array of sorted keys computed using callback.
@@ -498,6 +560,11 @@ def take(array, n):
 
     Returns:
         list: Taken list.
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 1.1.0
+       Added ``n`` argument and removed as alias of :func:`first`.
     """
     return take_while(array, lambda _, index, *args: index < n)
 
@@ -511,6 +578,8 @@ def take_right(array, n):
 
     Returns:
         list: Taken list.
+
+    .. versionadded:: 1.1.0
     """
     length = len(array)
     return take_right_while(array,
@@ -521,6 +590,15 @@ def take_right_while(array, callback=None):
     """Creates a slice of `array` with elements taken from the end. Elements
     are taken until the `callback` returns falsey. The `callback` is
     invoked with three arguments: ``(value, index, array)``.
+
+    Args:
+        array (list): List to process.
+        callback (mixed): Callback called per iteration
+
+    Returns:
+        list: Dropped list.
+
+    .. versionadded:: 1.1.0
     """
     n = len(array)
     for is_true, _, _, _ in _iter_callback(array, callback, reverse=True):
@@ -543,6 +621,8 @@ def take_while(array, callback=None):
 
     Returns:
         list: Taken list.
+
+    .. versionadded:: 1.1.0
     """
     n = 0
     for is_true, _, _, _ in _iter_callback(array, callback):
@@ -562,6 +642,8 @@ def union(*arrays):
 
     Returns:
         list: Unionized list.
+
+    .. versionadded:: 1.0.0
     """
     return uniq(flatten(arrays))
 
@@ -587,6 +669,8 @@ def uniq(array, callback=None):
     See Also:
         - :func:`uniq` (main definition)
         - :func:`unique` (alias)
+
+    .. versionadded:: 1.0.0
     """
     if callback:
         cbk = create_callback(callback)
@@ -613,12 +697,16 @@ def without(array, *values):
 
     Returns:
         list: Filtered list.
+
+    .. versionadded:: 1.0.0
     """
     return [a for a in array if a not in values]
 
 
 def xor(array, *lists):
     """Creates a list that is the symmetric difference of the provided lists.
+
+    .. versionadded:: 1.0.0
     """
     return (list(xor(set(array).symmetric_difference(lists[0]),
                      *lists[1:])) if lists
@@ -635,6 +723,8 @@ def zip_(*arrays):
 
     Returns:
         list: Zipped list.
+
+    .. versionadded:: 1.0.0
     """
     # zip returns as a list of tuples so convert to list of lists
     return [list(item) for item in zip(*arrays)]
@@ -650,6 +740,8 @@ def unzip(array):
 
     Returns:
         list: Unzipped list.
+
+    .. versionadded:: 1.0.0
     """
     return zip_(*array)
 
@@ -669,6 +761,8 @@ def zip_object(keys, values=None):
     See Also:
         - :func:`zip_object` (main definition)
         - :func:`object_` (alias)
+
+    .. versionadded:: 1.0.0
     """
 
     if values is None:

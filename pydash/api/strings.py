@@ -1,4 +1,6 @@
 """String functions.
+
+.. versionadded:: 1.1.0
 """
 
 import re
@@ -55,6 +57,8 @@ def camel_case(text):
 
     Returns:
         str: String converted to camel case.
+
+    .. versionadded:: 1.1.0
     """
     text = ''.join(word.title() for word in re.split(RE_WORD_SEPARATORS,
                                                      text_type(text)))
@@ -69,6 +73,8 @@ def capitalize(text):
 
     Returns:
         str: Capitalized string.
+
+    .. versionadded:: 1.1.0
     """
     return text.capitalize()
 
@@ -84,6 +90,8 @@ def ends_with(text, target, position=None):
 
     Returns:
         bool: Whether `text` ends with `target`.
+
+    .. versionadded:: 1.1.0
     """
     text = text_type(text)
 
@@ -102,6 +110,11 @@ def escape(text):
 
     Returns:
         str: HTML escaped string.
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 1.1.0
+       Moved function to Strings module.
     """
     # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
     # differently (e.g. "'" isn't escaped by html_escape() but is by Lo-Dash).
@@ -116,6 +129,8 @@ def escape_reg_exp(text):
 
     Returns:
         str: RegExp escaped string.
+
+    .. versionadded:: 1.1.0
     """
     return re.escape(text)
 
@@ -131,6 +146,8 @@ def kebab_case(text):
 
     Returns:
         str: String converted to kebab case.
+
+    .. versionadded:: 1.1.0
     """
     return ('-'.join(word
                      for word in re.split(RE_WORD_SEPARATORS, text_type(text))
@@ -149,7 +166,9 @@ def pad(text, length, chars=' '):
         chars (str, optional): Chars to pad with. Defaults to `` ``.
 
     Returns:
-        str: Padded string
+        str: Padded string.
+
+    .. versionadded:: 1.1.0
     """
     text = text_type(text)
     text_len = len(text)
@@ -179,7 +198,9 @@ def pad_left(text, length, chars=' '):
         chars (str, optional): Chars to pad with. Defaults to `` ``.
 
     Returns:
-        str: Padded string
+        str: Padded string.
+
+    .. versionadded:: 1.1.0
     """
     text = text_type(text)
     length = max((length, len(text)))
@@ -197,7 +218,9 @@ def pad_right(text, length, chars=' '):
         chars (str, optional): Chars to pad with. Defaults to `` ``.
 
     Returns:
-        str: Padded string
+        str: Padded string.
+
+    .. versionadded:: 1.1.0
     """
     text = text_type(text)
     length = max((length, len(text)))
@@ -213,6 +236,8 @@ def repeat(text, n=0):
 
     Returns:
         str: Repeated string.
+
+    .. versionadded:: 1.1.0
     """
     return text_type(text) * int(n)
 
@@ -225,6 +250,8 @@ def snake_case(text):
 
     Returns:
         str: String converted to snake case.
+
+    .. versionadded:: 1.1.0
     """
     return ('_'.join(word
                      for word in re.split(RE_WORD_SEPARATORS, text_type(text))
@@ -243,6 +270,8 @@ def starts_with(text, target, position=None):
 
     Returns:
         bool: Whether `text` starts with `target`.
+
+    .. versionadded:: 1.1.0
     """
     text = text_type(text)
 
@@ -261,7 +290,9 @@ def trim(text, chars=None):
         chars (str, optional): Specific characters to remove.
 
     Returns:
-        str: Trimmed string
+        str: Trimmed string.
+
+    .. versionadded:: 1.1.0
     """
     return text_type(text).strip(chars)
 
@@ -274,7 +305,9 @@ def trim_left(text, chars=None):
         chars (str, optional): Specific characters to remove.
 
     Returns:
-        str: Trimmed string
+        str: Trimmed string.
+
+    .. versionadded:: 1.1.0
     """
     return text_type(text).lstrip(chars)
 
@@ -287,7 +320,9 @@ def trim_right(text, chars=None):
         chars (str, optional): Specific characters to remove.
 
     Returns:
-        str: Trimmed string
+        str: Trimmed string.
+
+    .. versionadded:: 1.1.0
     """
     return text_type(text).rstrip(chars)
 
@@ -305,6 +340,8 @@ def trunc(text, length=30, omission='...', separator=None):
 
     Returns:
         str: Truncated string.
+
+    .. versionadded:: 1.1.0
     """
     omission_len = len(omission)
     text_len = length - omission_len
@@ -335,5 +372,10 @@ def unescape(text):
 
     Returns:
         str: HTML unescaped string.
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 1.1.0
+       Moved to Strings module.
     """
     return html_unescape(text)

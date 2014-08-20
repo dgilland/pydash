@@ -1,4 +1,6 @@
 """Functions that operate on lists, dicts, and other objects.
+
+.. versionadded:: 1.0.0
 """
 
 from __future__ import absolute_import
@@ -90,6 +92,8 @@ def assign(obj, *sources, **kargs):
     See Also:
         - :func:`assign` (main definition)
         - :func:`extend` (alias)
+
+    .. versionadded:: 1.0.0
     """
     sources = list(sources)
     callback = kargs.get('callback')
@@ -121,6 +125,8 @@ def clone(value, is_deep=False, callback=None):
 
     Returns:
         list|dict: Cloned object.
+
+    .. versionadded:: 1.0.0
     """
     if callback is None:
         callback = identity
@@ -149,6 +155,8 @@ def clone_deep(value, callback=None):
 
     Returns:
         list|dict: Cloned object.
+
+    .. versionadded:: 1.0.0
     """
     return clone(value, is_deep=True, callback=callback)
 
@@ -166,6 +174,8 @@ def defaults(obj, *sources):
 
     Warning:
         `obj` is modified in place.
+
+    .. versionadded:: 1.0.0
     """
     for source in sources:
         for key, value in iteritems(source):
@@ -189,6 +199,8 @@ def find_key(obj, callback=None):
     See Also:
         - :func:`find_key` (main definition)
         - :func:`find_last_key` (alias)
+
+    .. versionadded:: 1.0.0
     """
     for result, _, key, _ in _iter_callback(obj, callback):
         if result:
@@ -212,6 +224,8 @@ def for_in(obj, callback=None):
     See Also:
         - :func:`for_in` (main definition)
         - :func:`for_own` (alias)
+
+    .. versionadded:: 1.0.0
     """
     for result, _, _, _ in _iter_callback(obj, callback):
         if result is False:
@@ -237,6 +251,8 @@ def for_in_right(obj, callback=None):
     See Also:
         - :func:`for_in_right` (main definition)
         - :func:`for_own_right` (alias)
+
+    .. versionadded:: 1.0.0
     """
     for result, _, _, _ in _iter_callback(obj, callback, reverse=True):
         if result is False:
@@ -260,6 +276,8 @@ def functions(obj):
     See Also:
         - :func:`functions` (main definition)
         - :func:`methods` (alias)
+
+    .. versionadded:: 1.0.0
     """
     return [key for key, value in _iterate(obj) if callable(value)]
 
@@ -276,6 +294,8 @@ def has(obj, key):
 
     Returns:
         bool: Whether `obj` has `key`.
+
+    .. versionadded:: 1.0.0
     """
     return key in (key for key, value in _iterate(obj))
 
@@ -292,6 +312,8 @@ def invert(obj):
 
     Note:
         Assumes `dict` values are hashable as `dict` keys.
+
+    .. versionadded:: 1.0.0
     """
     return dict((value, key) for key, value in _iterate(obj))
 
@@ -304,6 +326,8 @@ def is_boolean(value):
 
     Returns:
         bool: Whether `value` is a boolean.
+
+    .. versionadded:: 1.0.0
     """
     return isinstance(value, bool)
 
@@ -319,6 +343,8 @@ def is_date(value):
 
     Note:
         This will also return ``True`` for datetime objects.
+
+    .. versionadded:: 1.0.0
     """
     return isinstance(value, datetime.date)
 
@@ -334,6 +360,8 @@ def is_empty(value):
 
     Note:
         Returns ``True`` for booleans and numbers.
+
+    .. versionadded:: 1.0.0
     """
     return any([is_boolean(value), is_number(value), not value])
 
@@ -353,6 +381,8 @@ def is_equal(a, b, callback=None):
 
     Returns:
         bool: Whether `a` and `b` are equal.
+
+    .. versionadded:: 1.0.0
     """
     # If callback provided, use it for comparision.
     equal = callback(a, b) if callable(callback) else None
@@ -389,6 +419,8 @@ def is_error(value):
 
     Returns:
         bool: Whether `value` is an exception.
+
+    .. versionadded:: 1.1.0
     """
     return isinstance(value, Exception)
 
@@ -401,6 +433,8 @@ def is_function(value):
 
     Returns:
         bool: Whether `value` is callable.
+
+    .. versionadded:: 1.0.0
     """
     return callable(value)
 
@@ -413,6 +447,8 @@ def is_list(value):
 
     Returns:
         bool: Whether `value` is a list.
+
+    .. versionadded:: 1.0.0
     """
     return isinstance(value, list)
 
@@ -425,6 +461,8 @@ def is_nan(value):
 
     Returns:
         bool: Whether `value` is not a number.
+
+    .. versionadded:: 1.0.0
     """
     return not is_number(value)
 
@@ -437,6 +475,8 @@ def is_none(value):
 
     Returns:
         bool: Whether `value` is ``None``.
+
+    .. versionadded:: 1.0.0
     """
     return value is None
 
@@ -453,6 +493,8 @@ def is_number(value):
     Note:
         Returns ``True`` for ``int``, ``long`` (PY2), ``float``, and
         ``decimal.Decimal``.
+
+    .. versionadded:: 1.0.0
     """
     return isinstance(value, number_types)
 
@@ -465,6 +507,8 @@ def is_object(value):
 
     Returns:
         bool: Whether `value` is ``list`` or ``dict``.
+
+    .. versionadded:: 1.0.0
     """
     return isinstance(value, (list, dict))
 
@@ -477,6 +521,8 @@ def is_plain_object(value):
 
     Returns:
         bool: Whether `value` is a ``dict``.
+
+    .. versionadded:: 1.0.0
     """
     return isinstance(value, dict)
 
@@ -489,6 +535,12 @@ def is_reg_exp(value):
 
     Returns:
         bool: Whether `value` is a RegExp object.
+
+    See Also:
+        - :func:`is_reg_exp` (main definition)
+        - :func:`is_re` (alias)
+
+    .. versionadded:: 1.1.0
     """
     return isinstance(value, RegExp)
 
@@ -504,6 +556,8 @@ def is_string(value):
 
     Returns:
         bool: Whether `value` is a string.
+
+    .. versionadded:: 1.0.0
     """
     return isinstance(value, string_types)
 
@@ -520,6 +574,11 @@ def keys(obj):
     See Also:
         - :func:`keys` (main definition)
         - :func:`keys_in` (alias)
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 1.1.0
+       Added :func:`keys_in` as alias.
     """
     return [key for key, _ in _iterate(obj)]
 
@@ -543,6 +602,8 @@ def map_values(obj, callback=None):
 
     Returns:
         list|dict: Results of running `obj` through `callback`.
+
+    .. versionadded:: 1.0.0
     """
     ret = {}
 
@@ -575,6 +636,8 @@ def merge(obj, *sources, **kargs):
 
     Warning:
         `obj` is modified in place.
+
+    .. versionadded:: 1.0.0
     """
     callback = kargs.get('callback')
 
@@ -599,6 +662,8 @@ def omit(obj, callback=None, *properties):
 
     Returns:
         dict: Results of omitting properties.
+
+    .. versionadded:: 1.0.0
     """
     if not callable(callback):
         callback = callback if callback is not None else []
@@ -611,13 +676,15 @@ def omit(obj, callback=None, *properties):
 
 def pairs(obj):
     """Creates a two dimensional list of an object's key-value pairs, i.e.
-    [[key1, value1], [key2, value2]].
+    ``[[key1, value1], [key2, value2]]``.
 
     Args:
         obj (mixed): Object to process.
 
     Returns:
         list: Two dimensional list of object's key-value pairs.
+
+    .. versionadded:: 1.0.0
     """
     return [[key, value] for key, value in _iterate(obj)]
 
@@ -632,7 +699,9 @@ def parse_int(value, radix=None):
         radix (int, optional): Base to convert to.
 
     Returns:
-        mixed: Integer if parsable else ``None``
+        mixed: Integer if parsable else ``None``.
+
+    .. versionadded:: 1.0.0
     """
     if not radix and is_string(value):
         try:
@@ -673,6 +742,8 @@ def pick(obj, callback=None, *properties):
 
     Returns:
         dict: Results of picking properties.
+
+    .. versionadded:: 1.0.0
     """
     if not callable(callback):
         callback = callback if callback is not None else []
@@ -699,6 +770,8 @@ def transform(obj, callback=None, accumulator=None):
 
     Returns:
         mixed: Accumulated object.
+
+    .. versionadded:: 1.0.0
     """
     if callback is None:
         callback = lambda accumulator, *args: accumulator
@@ -730,6 +803,8 @@ def update(obj, source, callback=None):
 
     Warning:
         `obj` is modified in place.
+
+    .. versionadded:: 1.0.0
     """
 
     for key, src_value in _iterate(source):
@@ -765,6 +840,11 @@ def values(obj):
     See Also:
         - :func:`values` (main definition)
         - :func:`values_in` (alias)
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 1.1.0
+       Added :func:`values_in` as alias.
     """
     return [value for _, value in _iterate(obj)]
 
