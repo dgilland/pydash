@@ -8,3 +8,4 @@ Lo-Dash Differences
 - In addition to ``property_``, pydash has ``prop`` as an alias.
 - In addition to ``escape_reg_exp`` and ``is_reg_exp``, pydash has ``escape_re`` and ``is_re`` as aliases.
 - pydash's ``memoize`` uses all passed in arguments as the cache key by default instead of only using the first argument like Lo-Dash does.
+- pydash doesn't have ``template``. See :ref:`Templating <templating>` for more details.

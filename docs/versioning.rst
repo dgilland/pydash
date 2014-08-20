@@ -1,8 +1,5 @@
-.. _versioning:
-
-**********
 Versioning
-**********
+==========
 
 This project follows `Semantic Versioning`_ with the following caveats:
 

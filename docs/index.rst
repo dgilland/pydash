@@ -14,6 +14,7 @@ Guide
     install
     quickstart
     differences
+    templating
     versioning
 
 
