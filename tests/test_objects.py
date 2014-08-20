@@ -347,7 +347,7 @@ def test_keys(case, expected):
 
 
 @parametrize('case', [
-    pyd.keysIn
+    pyd.keys_in
 ])
 def test_keys_aliases(case):
     assert pyd.keys is case
@@ -487,7 +487,7 @@ def test_values(case, expected):
 
 
 @parametrize('case', [
-    pyd.valuesIn
+    pyd.values_in
 ])
 def test_values_aliases(case):
     assert pyd.values is case

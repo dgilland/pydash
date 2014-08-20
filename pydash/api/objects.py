@@ -54,7 +54,7 @@ __all__ = [
     'is_reg_exp',
     'is_string',
     'keys',
-    'keysIn',
+    'keys_in',
     'map_values',
     'merge',
     'methods',
@@ -65,7 +65,7 @@ __all__ = [
     'transform',
     'update',
     'values',
-    'valuesIn',
+    'values_in',
 ]
 
 
@@ -519,12 +519,12 @@ def keys(obj):
 
     See Also:
         - :func:`keys` (main definition)
-        - :func:`keysIn` (alias)
+        - :func:`keys_in` (alias)
     """
     return [key for key, _ in _iterate(obj)]
 
 
-keysIn = keys
+keys_in = keys
 
 
 def map_values(obj, callback=None):
@@ -764,9 +764,9 @@ def values(obj):
 
     See Also:
         - :func:`values` (main definition)
-        - :func:`valuesIn` (alias)
+        - :func:`values_in` (alias)
     """
     return [value for _, value in _iterate(obj)]
 
 
-valuesIn = values
+values_in = values

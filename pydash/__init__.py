@@ -173,7 +173,7 @@ from .api.objects import (
     is_reg_exp,
     is_string,
     keys,
-    keysIn,
+    keys_in,
     map_values,
     merge,
     methods,
@@ -183,7 +183,7 @@ from .api.objects import (
     pick,
     transform,
     values,
-    valuesIn,
+    values_in,
 )
 
 

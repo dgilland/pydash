@@ -19,7 +19,7 @@ v1.x.x (WIP)
 - Add ``is_error()``.
 - Add ``is_reg_exp()`` and ``is_re()``.
 - Add ``kebab_case()``.
-- Add ``keysIn()`` as alias of ``keys()``.
+- Add ``keys_in()`` as alias of ``keys()``.
 - Add ``negate()``.
 - Add ``pad()``.
 - Add ``pad_left()``.
@@ -38,7 +38,7 @@ v1.x.x (WIP)
 - Add ``trim_left()``.
 - Add ``trim_right()``.
 - Add ``trunc()``.
-- Add ``valuesIn()`` as alias of ``values()``.
+- Add ``values_in()`` as alias of ``values()``.
 - Create ``pydash.api.strings`` module.
 - Deprecate ``tail()``.
 - Modify ``drop()`` to accept ``n`` argument and remove as alias of ``rest()``.
