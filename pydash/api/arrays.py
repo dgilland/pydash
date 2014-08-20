@@ -464,23 +464,13 @@ def rest(array):
     See Also:
         - :func:`rest` (main definition)
         - :func:`tail` (alias)
-        - :func:`drop` (alias)
 
     .. versionadded:: 1.0.0
     """
     return array[1:]
 
 
-@_deprecated
-def tail(array):
-    """Return all but the first element of `array`.
-
-    .. versionadded:: 1.0.0
-
-    .. deprecated:: 1.1.0
-       Use :func:`rest` instead.
-    """
-    return rest(array)
+tail = rest
 
 
 def slice_(array, start, end):

@@ -224,6 +224,13 @@ def test_rest(case, expected):
     assert pyd.rest(case) == expected
 
 
+@parametrize('alias', [
+    pyd.tail
+])
+def test_rest_aliases(alias):
+    pyd.rest is alias
+
+
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5], 0, 1), [1]),
     (([1, 2, 3, 4, 5], 1, 3), [2, 3]),
@@ -382,11 +389,3 @@ def test_zip_object_aliases(alias):
 ])
 def test_zip_(case, expected):
     assert pyd.zip_(*case) == expected
-
-
-def test_tail_deprecated():
-    with warnings.catch_warnings(record=True) as warns:
-        warnings.simplefilter('always')
-        pyd.tail([1, 2, 3])
-        assert len(warns) == 1
-        assert issubclass(warns[-1].category, DeprecationWarning)

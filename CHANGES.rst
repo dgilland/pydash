@@ -18,6 +18,7 @@ v2.0.0 (xxxx-xx-xx)
 - Rename *private* utility function ``_get_item()`` to ``getitem()``. **breaking change**
 - Rename *private* utility function ``_set_item()`` to ``setitem()``. **breaking change**
 - Rename *private* utility function ``_deprecated()`` to ``deprecated()``. **breaking change**
+- Undeprecate ``tail()`` and make alias of ``rest()``.
 
 
 v1.1.0 (2014-08-19)
