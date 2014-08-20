@@ -10,10 +10,10 @@ import random
 from .utilities import (
     matches,
     property_,
-    create_callback,
-    _iter_callback,
-    _iterate,
-    _iter_flatten
+    iteratee,
+    itercallback,
+    iterator,
+    iterflatten
 )
 
 
@@ -73,7 +73,7 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
     Returns:
         list: filtered list
     """
-    indexes = _iter_flatten(indexes, is_deep=True)
+    indexes = iterflatten(indexes, is_deep=True)
     return [collection[i] for i in indexes]
 
 
@@ -118,7 +118,7 @@ def count_by(collection, callback=None):
     """
     ret = dict()
 
-    for result, _, _, _ in _iter_callback(collection, callback):
+    for result, _, _, _ in itercallback(collection, callback):
         ret.setdefault(result, 0)
         ret[result] += 1
 
@@ -147,7 +147,7 @@ def every(collection, callback=None):
     """
 
     if callback:
-        cbk = create_callback(callback)
+        cbk = iteratee(callback)
         collection = [cbk(item) for item in collection]
 
     return all(collection)
@@ -175,7 +175,7 @@ def filter_(collection, callback=None):
         callback = lambda item, *args: item
 
     return [value
-            for is_true, value, _, _ in _iter_callback(collection, callback)
+            for is_true, value, _, _ in itercallback(collection, callback)
             if is_true]
 
 
@@ -199,7 +199,7 @@ def find(collection, callback=None):
         - :func:`find_where` (alias)
     """
     found = None
-    for is_true, _, key, _ in _iter_callback(collection, callback):
+    for is_true, _, key, _ in itercallback(collection, callback):
         if is_true:
             found = collection[key]
             # only return first found item
@@ -224,9 +224,7 @@ def find_last(collection, callback=None):
         mixed: Last element found or ``None``.
     """
     found = None
-    for is_true, _, key, _ in _iter_callback(collection,
-                                             callback,
-                                             reverse=True):
+    for is_true, _, key, _ in itercallback(collection, callback, reverse=True):
         if is_true:
             found = collection[key]
             # only return first found item
@@ -250,7 +248,7 @@ def for_each(collection, callback=None):
         - :func:`for_each` (main definition)
         - :func:`each` (alias)
     """
-    for ret, _, _, _ in _iter_callback(collection, callback):
+    for ret, _, _, _ in itercallback(collection, callback):
         if ret is False:
             break
 
@@ -275,7 +273,7 @@ def for_each_right(collection, callback):
         - :func:`for_each_right` (main definition)
         - :func:`each_right` (alias)
     """
-    for ret, _, _, _ in _iter_callback(collection, callback, reverse=True):
+    for ret, _, _, _ in itercallback(collection, callback, reverse=True):
         if ret is False:
             break
 
@@ -297,7 +295,7 @@ def group_by(collection, callback=None):
         dict: Results of grouping by `callback`.
     """
     ret = {}
-    cbk = create_callback(callback)
+    cbk = iteratee(callback)
 
     for value in collection:
         key = cbk(value)
@@ -319,7 +317,7 @@ def index_by(collection, callback=None):
         dict: Results of indexing by `callback`.
     """
     ret = {}
-    cbk = create_callback(callback)
+    cbk = iteratee(callback)
 
     for value in collection:
         ret[cbk(value)] = value
@@ -374,7 +372,7 @@ def map_(collection, callback=None):
     if not callback:
         callback = lambda value, *args: value
 
-    return [result[0] for result in _iter_callback(collection, callback)]
+    return [result[0] for result in itercallback(collection, callback)]
 
 
 collect = map_
@@ -393,7 +391,7 @@ def max_(collection, callback=None):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return max(collection, key=create_callback(callback))
+    return max(collection, key=iteratee(callback))
 
 
 def min_(collection, callback=None):
@@ -409,7 +407,7 @@ def min_(collection, callback=None):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return min(collection, key=create_callback(callback))
+    return min(collection, key=iteratee(callback))
 
 
 def partition(collection, callback=None):
@@ -437,7 +435,7 @@ def partition(collection, callback=None):
     trues = []
     falses = []
 
-    for is_true, value, _, _ in _iter_callback(collection, callback):
+    for is_true, value, _, _ in itercallback(collection, callback):
         if is_true:
             trues.append(value)
         else:
@@ -480,7 +478,7 @@ def reduce_(collection, callback=None, accumulator=None):
         - :func:`foldl` (alias)
         - :func:`inject` (alias)
     """
-    iterable = _iterate(collection)
+    iterable = iterator(collection)
 
     if accumulator is None:
         try:
@@ -541,7 +539,7 @@ def reject(collection, callback=None):
         list: Rejected elements of `collection`.
     """
     return [value
-            for is_true, value, _, _ in _iter_callback(collection, callback)
+            for is_true, value, _, _ in itercallback(collection, callback)
             if not is_true]
 
 
@@ -618,7 +616,7 @@ def some(collection, callback=None):
     """
 
     if callback:
-        cbk = create_callback(callback)
+        cbk = iteratee(callback)
         collection = [cbk(item) for item in collection]
 
     return any(collection)
@@ -641,7 +639,7 @@ def sort_by(collection, callback=None):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return sorted(collection, key=create_callback(callback))
+    return sorted(collection, key=iteratee(callback))
 
 
 def to_list(collection):

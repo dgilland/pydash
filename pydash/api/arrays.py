@@ -9,11 +9,10 @@ from bisect import bisect_left, bisect_right
 from math import ceil
 
 from .utilities import (
-    create_callback,
-    _iter_callback,
-    _iter_unique,
-    _iter_flatten,
-    _deprecated
+    iteratee,
+    itercallback,
+    iterunique,
+    iterflatten,
 )
 
 
@@ -159,7 +158,7 @@ def drop_right_while(array, callback=None):
     .. versionadded:: 1.1.0
     """
     n = len(array)
-    for is_true, _, _, _ in _iter_callback(array, callback, reverse=True):
+    for is_true, _, _, _ in itercallback(array, callback, reverse=True):
         if is_true:
             n -= 1
         else:
@@ -183,7 +182,7 @@ def drop_while(array, callback=None):
     .. versionadded:: 1.1.0
     """
     n = 0
-    for is_true, _, _, _ in _iter_callback(array, callback):
+    for is_true, _, _, _ in itercallback(array, callback):
         if is_true:
             n += 1
         else:
@@ -207,7 +206,7 @@ def find_index(array, callback=None):
     .. versionadded:: 1.0.0
     """
     n = -1
-    for is_true, _, i, _ in _iter_callback(array, callback):
+    for is_true, _, i, _ in itercallback(array, callback):
         if is_true:
             n = i
             break
@@ -229,7 +228,7 @@ def find_last_index(array, callback=None):
     .. versionadded:: 1.0.0
     """
     n = -1
-    for is_true, _, i, _ in _iter_callback(array, callback, reverse=True):
+    for is_true, _, i, _ in itercallback(array, callback, reverse=True):
         if is_true:
             n = i
             break
@@ -276,7 +275,7 @@ def flatten(array, is_deep=False):
        Removed ``callback`` option. Added ``is_deep`` option. Made it shallow
        by default.
     """
-    return list(_iter_flatten(array, is_deep=is_deep))
+    return list(iterflatten(array, is_deep=is_deep))
 
 
 def flatten_deep(array):
@@ -446,7 +445,7 @@ def remove(array, callback=None):
     .. versionadded:: 1.0.0
     """
     removed = []
-    for is_true, _, i, _ in _iter_callback(array, callback):
+    for is_true, _, i, _ in itercallback(array, callback):
         if is_true:
             removed.append(array.pop(i))
 
@@ -525,7 +524,7 @@ def sorted_index(array, value, callback=None):
     """
     if callback:
         # Generate array of sorted keys computed using callback.
-        callback = create_callback(callback)
+        callback = iteratee(callback)
         array = sorted(callback(item) for item in array)
         value = callback(value)
 
@@ -549,7 +548,7 @@ def sorted_last_index(array, value, callback=None):
     """
     if callback:
         # Generate array of sorted keys computed using callback.
-        callback = create_callback(callback)
+        callback = iteratee(callback)
         array = sorted(callback(item) for item in array)
         value = callback(value)
 
@@ -606,7 +605,7 @@ def take_right_while(array, callback=None):
     .. versionadded:: 1.1.0
     """
     n = len(array)
-    for is_true, _, _, _ in _iter_callback(array, callback, reverse=True):
+    for is_true, _, _, _ in itercallback(array, callback, reverse=True):
         if is_true:
             n -= 1
         else:
@@ -630,7 +629,7 @@ def take_while(array, callback=None):
     .. versionadded:: 1.1.0
     """
     n = 0
-    for is_true, _, _, _ in _iter_callback(array, callback):
+    for is_true, _, _, _ in itercallback(array, callback):
         if is_true:
             n += 1
         else:
@@ -678,14 +677,14 @@ def uniq(array, callback=None):
     .. versionadded:: 1.0.0
     """
     if callback:
-        cbk = create_callback(callback)
+        cbk = iteratee(callback)
         computed = [cbk(item) for item in array]
     else:
         computed = array
 
     # NOTE: User array[i] instead of item since callback could have modified
     # returned item values.
-    lst = [array[i] for i, _ in _iter_unique(computed)]
+    lst = [array[i] for i, _ in iterunique(computed)]
 
     return lst
 

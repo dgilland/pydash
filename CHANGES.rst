@@ -7,6 +7,17 @@ v2.0.0 (xxxx-xx-xx)
 
 - Add ``flatten_deep()``.
 - Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option.
+- Rename ``create_callback()`` to ``iteratee``. **breaking change**
+- Rename *private* utility function ``_iter_callback()`` to ``itercallback()``. **breaking change**
+- Rename *private* utility function ``_iter_list_callback()`` to ``iterlist_callback()``. **breaking change**
+- Rename *private* utility function ``_iter_dict_callback()`` to ``iterdict_callback()``. **breaking change**
+- Rename *private* utility function ``_iterate()`` to ``iterator()``. **breaking change**
+- Rename *private* utility function ``_iter_dict()`` to ``iterdict()``. **breaking change**
+- Rename *private* utility function ``_iter_list()`` to ``iterlist()``. **breaking change**
+- Rename *private* utility function ``_iter_unique()`` to ``iterunique()``. **breaking change**
+- Rename *private* utility function ``_get_item()`` to ``getitem()``. **breaking change**
+- Rename *private* utility function ``_set_item()`` to ``setitem()``. **breaking change**
+- Rename *private* utility function ``_deprecated()`` to ``deprecated()``. **breaking change**
 
 
 v1.1.0 (2014-08-19)

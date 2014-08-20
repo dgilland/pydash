@@ -22,8 +22,8 @@ __all__ = [
     'attempt',
     'constant',
     'callback',
-    'create_callback',
     'identity',
+    'iteratee',
     'matches',
     'memoize',
     'noop',
@@ -89,9 +89,12 @@ def callback(func):
 
     See Also:
         - :func:`callback` (main definition)
-        - :func:`create_callback` (alias)
+        - :func:`iteratee` (alias)
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.0.0
+       Rename ``create_callback()`` to :func:`iteratee`.
     """
     if callable(func):
         cbk = func
@@ -105,7 +108,7 @@ def callback(func):
     return cbk
 
 
-create_callback = callback
+iteratee = callback
 
 
 def identity(*args):
@@ -209,7 +212,7 @@ def property_(key):
 
     .. versionadded:: 1.0.0
     """
-    return lambda obj, *args: _get_item(obj, key, default=None)
+    return lambda obj, *args: getitem(obj, key, default=None)
 
 
 prop = property_
@@ -288,7 +291,7 @@ def result(obj, key):
     if not obj:
         return None
 
-    ret = _get_item(obj, key, default=None)
+    ret = getitem(obj, key, default=None)
 
     if callable(ret):
         ret = ret()
@@ -337,19 +340,19 @@ def unique_id(prefix=None):
 #
 
 
-def _iter_callback(collection, callback=None, reverse=False):
+def itercallback(collection, callback=None, reverse=False):
     """Return iterative callback based on collection type."""
     # pylint: disable=redefined-outer-name
     if isinstance(collection, dict):
-        return _iter_dict_callback(collection, callback, reverse=reverse)
+        return iterdict_callback(collection, callback, reverse=reverse)
     else:
-        return _iter_list_callback(collection, callback, reverse=reverse)
+        return iterlist_callback(collection, callback, reverse=reverse)
 
 
-def _iter_list_callback(array, callback=None, reverse=False):
+def iterlist_callback(array, callback=None, reverse=False):
     """Return iterative list callback."""
     # pylint: disable=redefined-outer-name
-    cbk = create_callback(callback)
+    cbk = iteratee(callback)
     array_len = len(array)
 
     if reverse:
@@ -364,10 +367,10 @@ def _iter_list_callback(array, callback=None, reverse=False):
         yield (cbk(item, index, array), item, index, array)
 
 
-def _iter_dict_callback(collection, callback=None, reverse=False):
+def iterdict_callback(collection, callback=None, reverse=False):
     """Return iterative dict callback."""
     # pylint: disable=redefined-outer-name
-    cbk = create_callback(callback)
+    cbk = iteratee(callback)
 
     if reverse:
         items = reversed(list(iteritems(collection)))
@@ -378,26 +381,26 @@ def _iter_dict_callback(collection, callback=None, reverse=False):
         yield (cbk(value, key, collection), value, key, collection)
 
 
-def _iterate(collection):
+def iterator(collection):
     """Return iterative based on collection type."""
     if isinstance(collection, dict):
-        return _iter_dict(collection)
+        return iterdict(collection)
     else:
-        return _iter_list(collection)
+        return iterlist(collection)
 
 
-def _iter_dict(collection):
+def iterdict(collection):
     """Return iterative dict."""
     return iteritems(collection)
 
 
-def _iter_list(array):
+def iterlist(array):
     """Return iterative list."""
     for i, item in enumerate(array):
         yield i, item
 
 
-def _iter_unique(array):
+def iterunique(array):
     """Return iterator to find unique list."""
     seen = []
     for i, item in enumerate(array):
@@ -406,17 +409,26 @@ def _iter_unique(array):
             yield (i, item)
 
 
-def _iter_flatten(array, is_deep=False, depth=0):
+def iterflatten(array, is_deep=False, depth=0):
     """Iteratively flatten a list shallowly or deeply."""
     for item in array:
         if isinstance(item, (list, tuple)) and (is_deep or depth == 0):
-            for subitem in _iter_flatten(item, is_deep, depth + 1):
+            for subitem in iterflatten(item, is_deep, depth + 1):
                 yield subitem
         else:
             yield item
 
 
-def _get_item(obj, key, **kargs):
+def iterintersperse(iterable, separator):
+    """Iteratively intersperse iterable."""
+    iterable = iter(iterable)
+    yield next(iterable)
+    for item in iterable:
+        yield separator
+        yield item
+
+
+def getitem(obj, key, **kargs):
     """Safely get an item by `key` from a sequence or mapping object.
 
     Args:
@@ -448,7 +460,7 @@ def _get_item(obj, key, **kargs):
     return ret
 
 
-def _set_item(obj, key, value):
+def setitem(obj, key, value):
     """Set an object's `key` to `value`. If `obj` is a ``list`` and the
     `key` is the next available index position, append to list; otherwise,
     raise ``IndexError``.
@@ -477,7 +489,7 @@ def _set_item(obj, key, value):
             obj[key] = value
 
 
-def _deprecated(func):  # pragma: no cover
+def deprecated(func):  # pragma: no cover
     """This is a decorator which can be used to mark functions as deprecated.
     It will result in a warning being emitted when the function is used.
     """

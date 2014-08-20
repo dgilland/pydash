@@ -55,7 +55,7 @@ def test_callback(case, arg, expected):
 
 
 @parametrize('case', [
-    pyd.create_callback
+    pyd.iteratee
 ])
 def test_callback_aliases(case):
     assert pyd.callback is case

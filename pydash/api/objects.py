@@ -12,10 +12,10 @@ import re
 from .arrays import flatten_deep
 from .utilities import (
     identity,
-    _iterate,
-    _iter_callback,
-    _get_item,
-    _set_item
+    iterator,
+    itercallback,
+    getitem,
+    setitem
 )
 from .._compat import (
     iteritems,
@@ -134,7 +134,7 @@ def clone(value, is_deep=False, callback=None):
     copier = copy.deepcopy if is_deep else copy.copy
     value = copier(value)
 
-    obj = [(key, callback(val)) for key, val in _iterate(value)]
+    obj = [(key, callback(val)) for key, val in iterator(value)]
 
     if isinstance(value, list):
         obj = [val for _, val in obj]
@@ -202,7 +202,7 @@ def find_key(obj, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    for result, _, key, _ in _iter_callback(obj, callback):
+    for result, _, key, _ in itercallback(obj, callback):
         if result:
             return key
 
@@ -227,7 +227,7 @@ def for_in(obj, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    for result, _, _, _ in _iter_callback(obj, callback):
+    for result, _, _, _ in itercallback(obj, callback):
         if result is False:
             break
 
@@ -254,7 +254,7 @@ def for_in_right(obj, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    for result, _, _, _ in _iter_callback(obj, callback, reverse=True):
+    for result, _, _, _ in itercallback(obj, callback, reverse=True):
         if result is False:
             break
 
@@ -279,7 +279,7 @@ def functions(obj):
 
     .. versionadded:: 1.0.0
     """
-    return [key for key, value in _iterate(obj) if callable(value)]
+    return [key for key, value in iterator(obj) if callable(value)]
 
 
 methods = functions
@@ -297,7 +297,7 @@ def has(obj, key):
 
     .. versionadded:: 1.0.0
     """
-    return key in (key for key, value in _iterate(obj))
+    return key in (key for key, value in iterator(obj))
 
 
 def invert(obj):
@@ -315,7 +315,7 @@ def invert(obj):
 
     .. versionadded:: 1.0.0
     """
-    return dict((value, key) for key, value in _iterate(obj))
+    return dict((value, key) for key, value in iterator(obj))
 
 
 def is_boolean(value):
@@ -396,7 +396,7 @@ def is_equal(a, b, callback=None):
           isinstance(b, (list, dict)) and
           len(a) == len(b)):
         # Walk a/b to determine equality using callback.
-        for key, value in _iterate(a):
+        for key, value in iterator(a):
             if has(b, key):
                 equal = is_equal(value, b[key], callback)
             else:
@@ -580,7 +580,7 @@ def keys(obj):
     .. versionchanged:: 1.1.0
        Added :func:`keys_in` as alias.
     """
-    return [key for key, _ in _iterate(obj)]
+    return [key for key, _ in iterator(obj)]
 
 
 keys_in = keys
@@ -607,7 +607,7 @@ def map_values(obj, callback=None):
     """
     ret = {}
 
-    for result, _, key, _ in _iter_callback(obj, callback):
+    for result, _, key, _ in itercallback(obj, callback):
         ret[key] = result
 
     return ret
@@ -670,7 +670,7 @@ def omit(obj, callback=None, *properties):
         properties = flatten_deep([callback, properties])
         callback = lambda value, key, item: key in properties
 
-    return dict((key, value) for key, value in _iterate(obj)
+    return dict((key, value) for key, value in iterator(obj)
                 if not callback(value, key, obj))
 
 
@@ -686,7 +686,7 @@ def pairs(obj):
 
     .. versionadded:: 1.0.0
     """
-    return [[key, value] for key, value in _iterate(obj)]
+    return [[key, value] for key, value in iterator(obj)]
 
 
 def parse_int(value, radix=None):
@@ -750,7 +750,7 @@ def pick(obj, callback=None, *properties):
         properties = flatten_deep([callback, properties])
         callback = lambda value, key, item: key in properties
 
-    return dict((key, value) for key, value in _iterate(obj)
+    return dict((key, value) for key, value in iterator(obj)
                 if callback(value, key, obj))
 
 
@@ -779,7 +779,7 @@ def transform(obj, callback=None, accumulator=None):
     if accumulator is None:
         accumulator = []
 
-    for key, value in _iterate(obj):
+    for key, value in iterator(obj):
         result = callback(accumulator, value, key, obj)
         if result is False:
             break
@@ -807,8 +807,8 @@ def update(obj, source, callback=None):
     .. versionadded:: 1.0.0
     """
 
-    for key, src_value in _iterate(source):
-        obj_value = _get_item(obj, key, default=None)
+    for key, src_value in iterator(source):
+        obj_value = getitem(obj, key, default=None)
         is_sequences = all([src_value,
                             isinstance(src_value, list),
                             isinstance(obj_value, list)])
@@ -823,7 +823,7 @@ def update(obj, source, callback=None):
         else:
             result = src_value
 
-        _set_item(obj, key, result)
+        setitem(obj, key, result)
 
     return obj
 
@@ -846,7 +846,7 @@ def values(obj):
     .. versionchanged:: 1.1.0
        Added :func:`values_in` as alias.
     """
-    return [value for _, value in _iterate(obj)]
+    return [value for _, value in iterator(obj)]
 
 
 values_in = values
