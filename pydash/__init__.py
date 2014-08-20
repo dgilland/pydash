@@ -220,7 +220,7 @@ from .api.utilities import (
     attempt,
     callback,
     constant,
-    create_callback,
+    iteratee,
     identity,
     matches,
     memoize,
