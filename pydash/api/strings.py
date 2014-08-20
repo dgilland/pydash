@@ -163,7 +163,7 @@ def pad(text, length, chars=' '):
     Args:
         text (str): String to pad.
         length (int): Amount to pad.
-        chars (str, optional): Chars to pad with. Defaults to `` ``.
+        chars (str, optional): Chars to pad with. Defaults to ``" "``.
 
     Returns:
         str: Padded string.
@@ -195,7 +195,7 @@ def pad_left(text, length, chars=' '):
     Args:
         text (str): String to pad.
         length (int): Amount to pad.
-        chars (str, optional): Chars to pad with. Defaults to `` ``.
+        chars (str, optional): Chars to pad with. Defaults to ``" "``.
 
     Returns:
         str: Padded string.
@@ -215,7 +215,7 @@ def pad_right(text, length, chars=' '):
     Args:
         text (str): String to pad.
         length (int): Amount to pad.
-        chars (str, optional): Chars to pad with. Defaults to `` ``.
+        chars (str, optional): Chars to pad with. Defaults to ``" "``.
 
     Returns:
         str: Padded string.
