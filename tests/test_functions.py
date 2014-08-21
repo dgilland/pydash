@@ -137,6 +137,16 @@ def test_delay(func, wait, args, kargs, expected):
     assert result == expected
 
 
+@parametrize('func,args,expected', [
+    (lambda x: x + x, (2, 0), 2),
+    (lambda x: x + x, (2, 1), 4),
+    (lambda x: x + x, (2, 2), 8),
+    (lambda x: x + x, (2, 3), 16)
+])
+def test_iterated(func, args, expected):
+    assert pyd.iterated(func)(*args) == expected
+
+
 @parametrize('func,args', [
     (lambda item: item, (True,)),
     (lambda item: item, (False,)),

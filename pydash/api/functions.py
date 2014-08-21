@@ -8,6 +8,7 @@ from __future__ import absolute_import
 import inspect
 import time
 
+from .._compat import _range
 from .objects import is_number
 from .utilities import now
 
@@ -20,6 +21,7 @@ __all__ = [
     'curry_right',
     'debounce',
     'delay',
+    'iterated',
     'negate',
     'once',
     'partial',
@@ -143,6 +145,31 @@ class Debounce(object):
         self.last_call = present
 
         return self.last_result
+
+
+class Iterated(object):
+    """Wrap a function in a iterated context."""
+    def __init__(self, func):
+        self.func = func
+
+    def _iteration(self, initial):
+        """Iterator that composing :attr:`func` with itself."""
+        value = initial
+        while True:
+            value = self.func(value)
+            yield value
+
+    def __call__(self, initial, n):
+        """Return value of calling :attr:`func` `n` times using `initial` as
+        seed value.
+        """
+        value = initial
+        iteration = self._iteration(value)
+
+        for _ in _range(n):
+            value = next(iteration)
+
+        return value
 
 
 class Negate(object):
@@ -335,6 +362,24 @@ def delay(func, wait, *args, **kargs):
     """
     time.sleep(wait / 1000.0)
     return func(*args, **kargs)
+
+
+def iterated(func):
+    """Creates a function that is composed with itself. Each call to the
+    iterated function uses the previous function call's result as input.
+    Returned :class:`Iterated` instance can be called with ``(initial, n)``
+    where `initial` is the initial value to seed `func` with and `n` is the
+    number of times to call `func`.
+
+    Args:
+        func (function): Function to iterate.
+
+    Returns:
+        Iterated: Function wrapped in a :class:`Iterated` context.
+
+    .. versionadded:: 2.0.0
+    """
+    return Iterated(func)
 
 
 def negate(func):
