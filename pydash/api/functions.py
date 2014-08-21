@@ -68,6 +68,7 @@ class Compose(object):
     def __call__(self, *args, **kargs):
         """Return results of composing :attr:`funcs`."""
         funcs = list(self.funcs)
+        ret = None
 
         # Compose functions in reverse order starting with the first.
         while funcs:
