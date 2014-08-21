@@ -34,6 +34,7 @@ __all__ = [
     'index_of',
     'initial',
     'intercalate',
+    'interleave',
     'intersection',
     'intersperse',
     'last',
@@ -337,6 +338,21 @@ def intercalate(array, separator):
     .. versionadded:: 2.0.0
     """
     return flatten(intersperse(array, separator))
+
+
+def interleave(*arrays):
+    """Merge multiple lists into a single list by inserting the next element of
+    each list by sequential round-robin into the new list.
+
+    Args:
+        *arrays (list): Lists to interleave.
+
+    Retruns:
+        list: Interleaved list.
+
+    .. versionadded:: 2.0.0
+    """
+    return list(iterinterleave(*arrays))
 
 
 def intersection(*arrays):
@@ -794,3 +810,24 @@ def zip_object(keys, values=None):
 
 
 object_ = zip_object
+
+
+#
+# Utility methods not a part of the main API
+#
+
+
+def iterinterleave(*arrays):
+    """Interleave multiple lists."""
+    iters = map(iter, arrays)
+
+    while iters:
+        nextiters = []
+        for itr in iters:
+            try:
+                yield next(itr)
+                nextiters.append(itr)
+            except StopIteration:
+                pass
+
+        iters = nextiters

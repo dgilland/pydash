@@ -35,6 +35,7 @@ from .api.arrays import (
     index_of,
     initial,
     intercalate,
+    interleave,
     intersection,
     intersperse,
     last,

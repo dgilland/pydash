@@ -6,8 +6,9 @@ v2.0.0 (xxxx-xx-xx)
 -------------------
 
 - Add ``flatten_deep()``.
-- Add ``intersperse()``.
 - Add ``intercalate()``.
+- Add ``interleave()``.
+- Add ``intersperse()``.
 - Add ``iterated()``.
 - Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option. **breaking change**
 - Rename ``create_callback()`` to ``iteratee``. **breaking change**

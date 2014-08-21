@@ -163,6 +163,16 @@ def test_intercalate(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2], [3, 4]), [1, 3, 2, 4]),
+    (([1, 2], [3, 4], [5, 6]), [1, 3, 5, 2, 4, 6]),
+    (([1, 2], [3, 4, 5], [6]), [1, 3, 6, 2, 4, 5]),
+    (([1, 2, 3], [4], [5, 6]), [1, 4, 5, 2, 6, 3]),
+])
+def test_interleave(case, expected):
+    assert pyd.interleave(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2])
 ])
 def test_intersection(case, expected):
