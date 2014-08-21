@@ -400,34 +400,6 @@ def iterlist(array):
         yield i, item
 
 
-def iterunique(array):
-    """Return iterator to find unique list."""
-    seen = []
-    for i, item in enumerate(array):
-        if item not in seen:
-            seen.append(item)
-            yield (i, item)
-
-
-def iterflatten(array, is_deep=False, depth=0):
-    """Iteratively flatten a list shallowly or deeply."""
-    for item in array:
-        if isinstance(item, (list, tuple)) and (is_deep or depth == 0):
-            for subitem in iterflatten(item, is_deep, depth + 1):
-                yield subitem
-        else:
-            yield item
-
-
-def iterintersperse(iterable, separator):
-    """Iteratively intersperse iterable."""
-    iterable = iter(iterable)
-    yield next(iterable)
-    for item in iterable:
-        yield separator
-        yield item
-
-
 def getitem(obj, key, **kargs):
     """Safely get an item by `key` from a sequence or mapping object.
 
