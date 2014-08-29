@@ -15,7 +15,7 @@ __title__ = 'pydash'
 __summary__ = 'Python port of Lo-Dash'
 __url__ = 'https://github.com/dgilland/pydash'
 
-__version__ = '1.1.0'
+__version__ = '2.0.0-dev'
 
 __author__ = 'Derrick Gilland'
 __email__ = 'dgilland@gmail.com'
