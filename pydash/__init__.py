@@ -186,6 +186,7 @@ from .api.objects import (
     pairs,
     parse_int,
     pick,
+    set_path,
     transform,
     values,
     values_in,

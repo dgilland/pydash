@@ -468,6 +468,33 @@ def test_pick(case, expected):
 
 
 @parametrize('case,expected', [
+    (({}, 1, ['one', 'two', 'three', 'four']),
+     {'one': {'two': {'three': {'four': 1}}}}),
+    (({'one': {'two': {}, 'three': {}}}, 1, ['one', 'two', 'three', 'four']),
+     {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
+    (([], 1, [0, 0, 0]), [[[1]]]),
+    (([1, 2, [3, 4, [5, 6]]], 7, [2, 2, 1]), [1, 2, [3, 4, [5, 7]]]),
+    (([1, 2, [3, 4, [5, 6]]], 7, [2, 2, 2]), [1, 2, [3, 4, [5, 6, 7]]])
+])
+def test_set_path(case, expected):
+    assert pyd.set_path(*case) == expected
+
+
+@parametrize('case,exception', [
+    (({}, None, [], 'not a callable'), Exception)
+])
+def test_set_path_exception(case, exception):
+    raised = False
+
+    try:
+        pyd.set_path(*case)
+    except exception:
+        raised = True
+
+    assert raised
+
+
+@parametrize('case,expected', [
     (([1, 2, 3, 4, 5], lambda acc, value, key, obj: acc.append((key, value))),
      [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)]),
     (([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fixtures.transform_callback0),

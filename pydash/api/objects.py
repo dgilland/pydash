@@ -64,6 +64,7 @@ __all__ = [
     'pairs',
     'parse_int',
     'pick',
+    'set_path',
     'transform',
     'update',
     'values',
@@ -752,6 +753,43 @@ def pick(obj, callback=None, *properties):
 
     return dict((key, value) for key, value in iterator(obj)
                 if callback(value, key, obj))
+
+
+def set_path(obj, value, path, default=None):
+    """Sets the value of an object referenced by `path`. If any part of the
+    path doesn't exist, it will be created with `default`.
+
+    Args:
+        obj (list|dict): Object to modify.
+        value (mixed): Value to set.
+        path (list): Target path to set value to.
+        default (callable): Callable that returns default value to assign if
+            path part is not set. Defaults to ``{}`` is `obj` is a ``dict`` or
+            ``[]`` if `obj` is a ``list``.
+
+    Returns:
+        mixed: Modified `obj`.
+
+    Note:
+        A callable is required for `default` to avoid having circular
+        reference issues when assigning `default` to a path in `obj`.
+    """
+    if default is None:
+        default = lambda: {} if isinstance(obj, dict) else []
+
+    if not callable(default):
+        raise Exception(
+            'pydash.set_path(): `default` value must be a callable.')
+
+    part = obj
+
+    for key in path[:-1]:
+        set_item(part, key, default(), allow_override=False)
+        part = part[key]
+
+    set_item(part, path[-1], value)
+
+    return obj
 
 
 def transform(obj, callback=None, accumulator=None):
