@@ -14,8 +14,8 @@ from .utilities import (
     identity,
     iterator,
     itercallback,
-    getitem,
-    setitem
+    get_item,
+    set_item
 )
 from .._compat import (
     iteritems,
@@ -808,7 +808,7 @@ def update(obj, source, callback=None):
     """
 
     for key, src_value in iterator(source):
-        obj_value = getitem(obj, key, default=None)
+        obj_value = get_item(obj, key, default=None)
         is_sequences = all([src_value,
                             isinstance(src_value, list),
                             isinstance(obj_value, list)])
@@ -823,7 +823,7 @@ def update(obj, source, callback=None):
         else:
             result = src_value
 
-        setitem(obj, key, result)
+        set_item(obj, key, result)
 
     return obj
 

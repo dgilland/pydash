@@ -212,7 +212,7 @@ def property_(key):
 
     .. versionadded:: 1.0.0
     """
-    return lambda obj, *args: getitem(obj, key, default=None)
+    return lambda obj, *args: get_item(obj, key, default=None)
 
 
 prop = property_
@@ -291,7 +291,7 @@ def result(obj, key):
     if not obj:
         return None
 
-    ret = getitem(obj, key, default=None)
+    ret = get_item(obj, key, default=None)
 
     if callable(ret):
         ret = ret()
@@ -400,7 +400,7 @@ def iterlist(array):
         yield i, item
 
 
-def getitem(obj, key, **kargs):
+def get_item(obj, key, **kargs):
     """Safely get an item by `key` from a sequence or mapping object.
 
     Args:
@@ -432,7 +432,7 @@ def getitem(obj, key, **kargs):
     return ret
 
 
-def setitem(obj, key, value):
+def set_item(obj, key, value, allow_override=True):
     """Set an object's `key` to `value`. If `obj` is a ``list`` and the
     `key` is the next available index position, append to list; otherwise,
     raise ``IndexError``.
@@ -450,10 +450,12 @@ def setitem(obj, key, value):
             `obj`.
     """
     if isinstance(obj, dict):
-        obj[key] = value
+        if allow_override or key not in obj:
+            obj[key] = value
     elif isinstance(obj, list):
         if key < len(obj):
-            obj[key] = value
+            if allow_override:
+                obj[key] = value
         elif key == len(obj):
             obj.append(value)
         else:  # pragma: no cover
