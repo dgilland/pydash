@@ -292,7 +292,7 @@ def test_reduce_right(case, expected):
 @parametrize('case,exception', [
     (([],), TypeError)
 ])
-def test_reduce_right_raise(case, exception):
+def test_reduce_right_exception(case, exception):
     raised = False
 
     try:
