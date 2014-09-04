@@ -468,6 +468,15 @@ def test_pick(case, expected):
 
 
 @parametrize('case,expected', [
+    (({'a': 1, 'b': 2}, {'a': 'A', 'b': 'B'}), {'A': 1, 'B': 2}),
+    (({'a': 1, 'b': 2}, {'a': 'A'}), {'A': 1, 'b': 2}),
+    (({'a': 1, 'b': 2}, {'c': 'C', 'b': 'B'}), {'a': 1, 'B': 2}),
+])
+def test_rename_keys(case, expected):
+    assert pyd.rename_keys(*case) == expected
+
+
+@parametrize('case,expected', [
     (({}, 1, ['one', 'two', 'three', 'four']),
      {'one': {'two': {'three': {'four': 1}}}}),
     (({'one': {'two': {}, 'three': {}}}, 1, ['one', 'two', 'three', 'four']),

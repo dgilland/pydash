@@ -64,6 +64,7 @@ __all__ = [
     'pairs',
     'parse_int',
     'pick',
+    'rename_keys',
     'set_path',
     'transform',
     'update',
@@ -753,6 +754,21 @@ def pick(obj, callback=None, *properties):
 
     return dict((key, value) for key, value in iterator(obj)
                 if callback(value, key, obj))
+
+
+def rename_keys(obj, key_map):
+    """Rename the keys of `obj` using `key_map` and return new object.
+
+    Args:
+        obj (dict): Object to rename.
+        key_map (dict): Renaming map whose keys correspond to existing keys in
+            `obj` and whose values are the new key name.
+
+    Returns:
+        dict: Renamed `obj`.
+    """
+    return dict((key_map.get(key, key), value)
+                for key, value in iteritems(obj))
 
 
 def set_path(obj, value, path, default=None):

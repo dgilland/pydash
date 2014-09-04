@@ -10,6 +10,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``interleave()``.
 - Add ``intersperse()``.
 - Add ``iterated()``.
+- Add ``rename_keys()``.
 - Add ``set_path()``.
 - Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option. **breaking change**
 - Rename ``create_callback()`` to ``iteratee``. **breaking change**
