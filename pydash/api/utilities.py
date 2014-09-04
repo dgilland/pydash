@@ -401,7 +401,8 @@ def iterlist(array):
 
 
 def get_item(obj, key, **kargs):
-    """Safely get an item by `key` from a sequence or mapping object.
+    """Safely get an item by `key` from a sequence or mapping object when
+    `default` provided.
 
     Args:
         obj (list|dict): Sequence or mapping to retrieve item from.
