@@ -13,6 +13,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``rename_keys()``.
 - Add ``set_path()``.
 - Add ``update_path()``.
+- Modify ``chain()`` to be lazy and only compute the final value when ``value()`` called.
 - Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option. **breaking change**
 - Rename ``create_callback()`` to ``iteratee``. **breaking change**
 - Rename *private* utility function ``_iter_callback()`` to ``itercallback()``. **breaking change**

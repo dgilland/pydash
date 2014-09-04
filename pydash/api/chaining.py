@@ -33,6 +33,8 @@ class Chain(object):
             - :meth:`value` (main definition)
             - :meth:`value_of` (alias)
         """
+        if isinstance(self._value, ChainWrapper):
+            self._value = self._value.unwrap()
         return self._value
 
     value_of = value
@@ -62,16 +64,29 @@ class Chain(object):
         method = getattr(pydash, attr, None)
 
         if callable(method):
-            return ChainWrapper(self.value(), getattr(pydash, attr))
+            # return ChainWrapper(self.value(), getattr(pydash, attr))
+            return ChainWrapper(self._value, getattr(pydash, attr))
         else:
             raise InvalidMethod('Invalid pydash method: {0}'.format(attr))
 
 
 class ChainWrapper(object):
-    """Wrap :mod:`pydash` method call within a :class:`Chain` context."""
+    """Wrap :mod:`pydash` method call within a :class:`ChainWrapper` context.
+    """
     def __init__(self, value, method):
-        self.value = value
+        self._value = value
         self.method = method
+        self.args = ()
+        self.kargs = {}
+
+    def unwrap(self):
+        """Execute :meth:`method` with :attr:`_value`, :attr:`args`, and
+        :attr:`kargs`. If :attr:`_value` is an instance of
+        :class:`ChainWrapper`, then unwrap it before calling :attr:`method`.
+        """
+        if(isinstance(self._value, ChainWrapper)):
+            self._value = self._value.unwrap()
+        return self.method(self._value, *self.args, **self.kargs)
 
     def __call__(self, *args, **kargs):
         """Invoke the :attr:`method` with :attr:`value` as the first argument
@@ -81,12 +96,15 @@ class ChainWrapper(object):
             Chain: New instance of :class:`Chain` with the results of
                 :attr:`method` passed in as value.
         """
-        return Chain(self.method(self.value, *args, **kargs))
+        self.args = args
+        self.kargs = kargs
+        return Chain(self)
 
 
 def chain(value):
     """Creates a :class:`Chain` object which wraps the given value to enable
-    intuitive method chaining.
+    intuitive method chaining. Chaining is lazy and won't compute a final value
+    until :meth:`Chain.value` is called.
 
     Args:
         value (mixed): Value to initialize chain operations with.
@@ -95,13 +113,16 @@ def chain(value):
         :class:`Chain`: Instance of :class:`Chain` initialized with `value`.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.0.0
+        Chaining made lazy.
     """
     return Chain(value)
 
 
 def tap(value, interceptor):
-    """Invokes interceptor with the value as the first argument and then
-    returns value. The purpose of this method is to "tap into" a method chain
+    """Invokes interceptor with the `value` as the first argument and then
+    returns `value`. The purpose of this method is to "tap into" a method chain
     in order to perform operations on intermediate results within the chain.
 
     Args:

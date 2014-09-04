@@ -48,6 +48,27 @@ def test_chaining_value_alias():
     assert chained.value() is chained.value_of()
 
 
+def test_chaining_lazy():
+    tracker = {'called': False}
+
+    def interceptor(value):
+        tracker['called'] = True
+        return value.pop()
+
+    chn = pyd.chain([1, 2, 3, 4, 5]).initial().tap(interceptor)
+
+    assert not tracker['called']
+
+    chn = chn.last()
+
+    assert not tracker['called']
+
+    result = chn.value()
+
+    assert tracker['called']
+    assert result == 3
+
+
 @parametrize('case,expected', [
     ([1, 2, 3], '[1, 2, 3]'),
 ])
