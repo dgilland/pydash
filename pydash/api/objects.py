@@ -785,6 +785,9 @@ def set_path(obj, value, path, default=None):
     Note:
         A callable is required for `default` to avoid having circular
         reference issues when assigning `default` to a path in `obj`.
+
+    Warning:
+        `obj` is modified in place.
     """
     if default is None:
         default = lambda: {} if isinstance(obj, dict) else []
