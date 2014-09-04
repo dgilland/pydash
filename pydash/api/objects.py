@@ -7,6 +7,7 @@ from __future__ import absolute_import
 
 import copy
 import datetime
+import json
 import re
 
 from .arrays import flatten_deep, initial, last
@@ -19,6 +20,7 @@ from .utilities import (
 )
 from .._compat import (
     iteritems,
+    integer_types,
     number_types,
     string_types,
     text_type
@@ -40,21 +42,30 @@ __all__ = [
     'functions',
     'has',
     'invert',
+    'is_associative',
     'is_boolean',
     'is_date',
     'is_empty',
     'is_equal',
     'is_error',
+    'is_float',
     'is_function',
+    'is_indexed',
+    'is_instance_of',
+    'is_integer',
+    'is_json',
     'is_list',
     'is_nan',
+    'is_negative',
     'is_none',
     'is_number',
     'is_object',
     'is_plain_object',
+    'is_positive',
     'is_re',
     'is_reg_exp',
     'is_string',
+    'is_zero',
     'keys',
     'keys_in',
     'map_values',
@@ -320,6 +331,21 @@ def invert(obj):
     return dict((value, key) for key, value in iterator(obj))
 
 
+def is_associative(value):
+    """Checks if `value` is an associative object meaning that it can be
+    accessed via an index or key
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is associative.
+
+    .. versionadded:: 2.0.0
+    """
+    return hasattr(value, '__getitem__')
+
+
 def is_boolean(value):
     """Checks if `value` is a boolean value.
 
@@ -427,6 +453,34 @@ def is_error(value):
     return isinstance(value, Exception)
 
 
+def is_even(value):
+    """Checks if `value` is even.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is even.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_number(value) and value % 2 == 0
+
+
+def is_float(value):
+    """Checks if `value` is a float.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a float.
+
+    .. versionadded:: 2.0.0
+    """
+    return isinstance(value, float)
+
+
 def is_function(value):
     """Checks if `value` is a function.
 
@@ -439,6 +493,68 @@ def is_function(value):
     .. versionadded:: 1.0.0
     """
     return callable(value)
+
+
+def is_indexed(value):
+    """Checks if `value` is integer indexed, i.e., ``list`` or ``str``.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is integer indexed.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_list(value) or is_string(value)
+
+
+def is_instance_of(value, types):
+    """Checks if `value` is an instance of `types`.
+
+    Args:
+        value (mixed): Value to check.
+        types (mixed): Types to check against. Pass as ``tuple`` to check if
+            `value` is one of multiple types.
+
+    Returns:
+        bool: Whether `value` is an instance of `types`.
+
+    .. versionadded:: 2.0.0
+    """
+    return isinstance(value, types)
+
+
+def is_integer(value):
+    """Checks if `value` is a integer.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a integer.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_number(value) and isinstance(value, integer_types)
+
+
+def is_json(value):
+    """Checks if `value` is a valid JSON string.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is JSON.
+
+    .. versionadded:: 2.0.0
+    """
+    try:
+        json.loads(value)
+        return True
+    except Exception:  # pylint: disable=broad-except
+        return False
 
 
 def is_list(value):
@@ -467,6 +583,20 @@ def is_nan(value):
     .. versionadded:: 1.0.0
     """
     return not is_number(value)
+
+
+def is_negative(value):
+    """Checks if `value` is negative.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is negative.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_number(value) and value < 0
 
 
 def is_none(value):
@@ -515,6 +645,20 @@ def is_object(value):
     return isinstance(value, (list, dict))
 
 
+def is_odd(value):
+    """Checks if `value` is odd.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is odd.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_number(value) and value % 2 != 0
+
+
 def is_plain_object(value):
     """Checks if `value` is a ``dict``.
 
@@ -527,6 +671,20 @@ def is_plain_object(value):
     .. versionadded:: 1.0.0
     """
     return isinstance(value, dict)
+
+
+def is_positive(value):
+    """Checks if `value` is positive.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is positive.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_number(value) and value > 0
 
 
 def is_reg_exp(value):
@@ -562,6 +720,20 @@ def is_string(value):
     .. versionadded:: 1.0.0
     """
     return isinstance(value, string_types)
+
+
+def is_zero(value):
+    """Checks if `value` is ``0``.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is ``0``.
+
+    .. versionadded:: 2.0.0
+    """
+    return value is 0
 
 
 def keys(obj):

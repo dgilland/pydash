@@ -165,6 +165,17 @@ def test_has(case, expected):
 
 
 @parametrize('case,expected', [
+    ([], True),
+    ({}, True),
+    ('', True),
+    (0, False),
+    (True, False),
+])
+def test_is_associative(case, expected):
+    assert pyd.is_associative(case) == expected
+
+
+@parametrize('case,expected', [
     (True, True),
     (False, True),
     (0, False),
@@ -237,11 +248,79 @@ def test_is_error(case, expected):
 
 
 @parametrize('case,expected', [
+    (2, True),
+    (16, True),
+    (1, False),
+    (3.0, False),
+    (3.5, False),
+    (None, False),
+])
+def test_is_even(case, expected):
+    assert pyd.is_even(case) == expected
+
+
+@parametrize('case,expected', [
+    (1.0, True),
+    (3.245, True),
+    (1, False),
+    (True, False),
+    ('', False),
+])
+def test_is_float(case, expected):
+    assert pyd.is_float(case) == expected
+
+
+@parametrize('case,expected', [
     (lambda x: x + 1, True),
     ('Hello, world!', False),
 ])
 def test_is_function(case, expected):
     assert pyd.is_function(case) == expected
+
+
+@parametrize('case,expected', [
+    ([], True),
+    ('', True),
+    ({}, False),
+    (1, False),
+    (None, False),
+])
+def test_is_indexed(case, expected):
+    assert pyd.is_indexed(case) == expected
+
+
+@parametrize('case,expected', [
+    ((1, int), True),
+    ((1.0, float), True),
+    (([], (list, str)), True),
+    (([], dict), False),
+    ((True, float), False),
+])
+def test_is_instance_of(case, expected):
+    assert pyd.is_instance_of(*case) == expected
+
+
+@parametrize('case,expected', [
+    (1, True),
+    (2, True),
+    (1.0, False),
+    (True, False),
+    (None, False),
+    ([], False),
+])
+def test_is_integer(case, expected):
+    assert pyd.is_integer(case) == expected
+
+
+@parametrize('case,expected', [
+    ('{"one": 1, "two": {"three": "3"}, "four": [4]}', True),
+    ({"one": 1, "two": {"three": "3"}, "four": [4]}, False),
+    ('', False),
+    (1, False),
+    (True, False),
+])
+def test_is_json(case, expected):
+    assert pyd.is_json(case) == expected
 
 
 @parametrize('case,expected', [
@@ -261,6 +340,19 @@ def test_is_list(case, expected):
 ])
 def test_is_nan(case, expected):
     assert pyd.is_nan(case) == expected
+
+
+@parametrize('case,expected', [
+    (-1, True),
+    (-1.25, True),
+    (-0.1, True),
+    (0, False),
+    (1, False),
+    (True, False),
+    (False, False)
+])
+def test_is_negative(case, expected):
+    assert pyd.is_negative(case) == expected
 
 
 @parametrize('case,expected', [
@@ -297,6 +389,18 @@ def test_is_object(case, expected):
 
 
 @parametrize('case,expected', [
+    (1, True),
+    (3.0, True),
+    (3.5, True),
+    (2, False),
+    (16, False),
+    (None, False),
+])
+def test_is_odd(case, expected):
+    assert pyd.is_odd(case) == expected
+
+
+@parametrize('case,expected', [
     ({}, True),
     ([], False),
     (1, False),
@@ -306,6 +410,19 @@ def test_is_object(case, expected):
 ])
 def test_is_plain_object(case, expected):
     assert pyd.is_plain_object(case) == expected
+
+
+@parametrize('case,expected', [
+    (1, True),
+    (1.25, True),
+    (0.1, True),
+    (-1, False),
+    (0, False),
+    (True, False),
+    (False, False)
+])
+def test_is_positive(case, expected):
+    assert pyd.is_positive(case) == expected
 
 
 @parametrize('case,expected', [
@@ -319,6 +436,17 @@ def test_is_plain_object(case, expected):
 ])
 def test_is_reg_exp(case, expected):
     assert pyd.is_reg_exp(case) == expected
+
+
+@parametrize('case,expected', [
+    (0, True),
+    (0.0, False),
+    ('', False),
+    (True, False),
+    (False, False),
+])
+def test_is_zero(case, expected):
+    assert pyd.is_zero(case) == expected
 
 
 @parametrize('case', [

@@ -9,24 +9,35 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``intercalate()``.
 - Add ``interleave()``.
 - Add ``intersperse()``.
+- Add ``is_associative()``.
+- Add ``is_even()``.
+- Add ``is_float()``.
+- Add ``is_indexed()``.
+- Add ``is_instance_of()``.
+- Add ``is_integer()``.
+- Add ``is_json()``.
+- Add ``is_negative()``.
+- Add ``is_odd()``.
+- Add ``is_positive()``.
+- Add ``is_zero()``.
 - Add ``iterated()``.
 - Add ``rename_keys()``.
 - Add ``set_path()``.
 - Add ``update_path()``.
 - Modify ``chain()`` to be lazy and only compute the final value when ``value()`` called.
-- Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option. **breaking change**
-- Rename ``create_callback()`` to ``iteratee``. **breaking change**
-- Rename *private* utility function ``_iter_callback()`` to ``itercallback()``. **breaking change**
-- Rename *private* utility function ``_iter_list_callback()`` to ``iterlist_callback()``. **breaking change**
-- Rename *private* utility function ``_iter_dict_callback()`` to ``iterdict_callback()``. **breaking change**
-- Rename *private* utility function ``_iterate()`` to ``iterator()``. **breaking change**
-- Rename *private* utility function ``_iter_dict()`` to ``iterdict()``. **breaking change**
-- Rename *private* utility function ``_iter_list()`` to ``iterlist()``. **breaking change**
-- Rename *private* utility function ``_iter_unique()`` to ``iterunique()``. **breaking change**
-- Rename *private* utility function ``_get_item()`` to ``getitem()``. **breaking change**
-- Rename *private* utility function ``_set_item()`` to ``setitem()``. **breaking change**
-- Rename *private* utility function ``_deprecated()`` to ``deprecated()``. **breaking change**
+- Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option. (**breaking change**)
 - Modify ``is_number()`` to return ``False`` for boolean ``True`` and ``False``. (**breaking change**)
+- Rename ``create_callback()`` to ``iteratee``. (**breaking change**)
+- Rename *private* utility function ``_iter_callback()`` to ``itercallback()``. (**breaking change**)
+- Rename *private* utility function ``_iter_list_callback()`` to ``iterlist_callback()``. (**breaking change**)
+- Rename *private* utility function ``_iter_dict_callback()`` to ``iterdict_callback()``. (**breaking change**)
+- Rename *private* utility function ``_iterate()`` to ``iterator()``. (**breaking change**)
+- Rename *private* utility function ``_iter_dict()`` to ``iterdict()``. (**breaking change**)
+- Rename *private* utility function ``_iter_list()`` to ``iterlist()``. (**breaking change**)
+- Rename *private* utility function ``_iter_unique()`` to ``iterunique()``. (**breaking change**)
+- Rename *private* utility function ``_get_item()`` to ``getitem()``. (**breaking change**)
+- Rename *private* utility function ``_set_item()`` to ``setitem()``. (**breaking change**)
+- Rename *private* utility function ``_deprecated()`` to ``deprecated()``. (**breaking change**)
 - Undeprecate ``tail()`` and make alias of ``rest()``.
 
 
@@ -71,8 +82,8 @@ v1.1.0 (2014-08-19)
 - Deprecate ``tail()``.
 - Modify ``drop()`` to accept ``n`` argument and remove as alias of ``rest()``.
 - Modify ``take()`` to accept ``n`` argument and remove as alias of ``first()``.
-- Move ``escape()`` and ``unescape()`` from ``pydash.api.utilities`` to ``pydash.api.strings``. **possible breaking change**
-- Move ``range_()`` from ``pydash.api.arrays`` to ``pydash.api.utilities``. **possible breaking change**
+- Move ``escape()`` and ``unescape()`` from ``pydash.api.utilities`` to ``pydash.api.strings``. (**possible breaking change**)
+- Move ``range_()`` from ``pydash.api.arrays`` to ``pydash.api.utilities``. (**possible breaking change**)
 
 
 v1.0.0 (2014-08-05)
