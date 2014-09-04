@@ -189,6 +189,7 @@ from .api.objects import (
     rename_keys,
     set_path,
     transform,
+    update_path,
     values,
     values_in,
 )

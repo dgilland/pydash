@@ -9,7 +9,7 @@ import copy
 import datetime
 import re
 
-from .arrays import flatten_deep
+from .arrays import flatten_deep, initial, last
 from .utilities import (
     identity,
     iterator,
@@ -67,7 +67,7 @@ __all__ = [
     'rename_keys',
     'set_path',
     'transform',
-    'update',
+    'update_path',
     'values',
     'values_in',
 ]
@@ -785,14 +785,14 @@ def rename_keys(obj, key_map):
                 for key, value in iteritems(obj))
 
 
-def set_path(obj, value, path, default=None):
-    """Sets the value of an object referenced by `path`. If any part of the
-    path doesn't exist, it will be created with `default`.
+def set_path(obj, value, keys, default=None):
+    """Sets the value of an object described by `keys`. If any part of the
+    object path doesn't exist, it will be created with `default`.
 
     Args:
         obj (list|dict): Object to modify.
         value (mixed): Value to set.
-        path (list): Target path to set value to.
+        keys (list): Target path to set value to.
         default (callable): Callable that returns default value to assign if
             path part is not set. Defaults to ``{}`` is `obj` is a ``dict`` or
             ``[]`` if `obj` is a ``list``.
@@ -800,31 +800,9 @@ def set_path(obj, value, path, default=None):
     Returns:
         mixed: Modified `obj`.
 
-    Note:
-        A callable is required for `default` to avoid having circular
-        reference issues when assigning `default` to a path in `obj`.
-
-    Warning:
-        `obj` is modified in place.
-
     .. versionadded:: 2.0.0
     """
-    if default is None:
-        default = lambda: {} if isinstance(obj, dict) else []
-
-    if not callable(default):
-        raise Exception(
-            'pydash.set_path(): `default` value must be a callable.')
-
-    part = obj
-
-    for key in path[:-1]:
-        set_item(part, key, default(), allow_override=False)
-        part = part[key]
-
-    set_item(part, path[-1], value)
-
-    return obj
+    return update_path(obj, lambda *_: value, keys, default=default)
 
 
 def transform(obj, callback=None, accumulator=None):
@@ -860,8 +838,45 @@ def transform(obj, callback=None, accumulator=None):
     return accumulator
 
 
-def update_path():
-    pass
+def update_path(obj, callback, keys, default=None):
+    """Update the value of an object described by `keys` using `callback`. If
+    any part of the object path doesn't exist, it will be created with
+    `default`. The callback is invoked with the last key value of `obj`:
+    ``(value)``
+
+    Args:
+        obj (list|dict): Object to modify.
+        callback (callable): Function that returns updated value.
+        keys (list): A list of string keys that describe the object path to
+            modify.
+        default (mixed): Default value to assign if path part is not set.
+            Defaults to ``{}`` if `obj` is a ``dict`` or ``[]`` if `obj` is a
+            ``list``.
+
+    Returns:
+        mixed: Updated `obj`.
+
+    .. versionadded:: 2.0.0
+    """
+    if default is None:
+        default = {} if isinstance(obj, dict) else []
+
+    if not is_list(keys):
+        keys = [keys]
+
+    last_key = last(keys)
+    obj = clone_deep(obj)
+    target = obj
+
+    for key in initial(keys):
+        set_item(target, key, clone_deep(default), allow_override=False)
+        target = target[key]
+
+    set_item(target, last_key, callback(get_item(target,
+                                                 last_key,
+                                                 default=None)))
+
+    return obj
 
 
 def values(obj):

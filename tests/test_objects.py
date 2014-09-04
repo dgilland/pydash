@@ -481,26 +481,15 @@ def test_rename_keys(case, expected):
      {'one': {'two': {'three': {'four': 1}}}}),
     (({'one': {'two': {}, 'three': {}}}, 1, ['one', 'two', 'three', 'four']),
      {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
+    (({}, 1, 'one'), {'one': 1}),
     (([], 1, [0, 0, 0]), [[[1]]]),
     (([1, 2, [3, 4, [5, 6]]], 7, [2, 2, 1]), [1, 2, [3, 4, [5, 7]]]),
     (([1, 2, [3, 4, [5, 6]]], 7, [2, 2, 2]), [1, 2, [3, 4, [5, 6, 7]]])
 ])
 def test_set_path(case, expected):
-    assert pyd.set_path(*case) == expected
-
-
-@parametrize('case,exception', [
-    (({}, None, [], 'not a callable'), Exception)
-])
-def test_set_path_exception(case, exception):
-    raised = False
-
-    try:
-        pyd.set_path(*case)
-    except exception:
-        raised = True
-
-    assert raised
+    result = pyd.set_path(*case)
+    assert result == expected
+    assert result is not case[0]
 
 
 @parametrize('case,expected', [
@@ -512,6 +501,26 @@ def test_set_path_exception(case, exception):
 ])
 def test_transform(case, expected):
     assert pyd.transform(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({'rome': 'Republic'},
+      lambda value: 'Empire' if value == 'Republic' else value,
+      ['rome']),
+     {'rome': 'Empire'}),
+    (({},
+      lambda value: 'Empire' if value == 'Republic' else value,
+      ['rome']),
+     {'rome': None}),
+    (({'earth': {'rome': 'Republic'}},
+      lambda value: 'Empire' if value == 'Republic' else value,
+      ['earth', 'rome']),
+     {'earth': {'rome': 'Empire'}}),
+])
+def test_update_path(case, expected):
+    result = pyd.update_path(*case)
+    assert result == expected
+    assert result is not case[0]
 
 
 @parametrize('case,expected', [
