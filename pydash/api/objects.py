@@ -607,12 +607,8 @@ def map_values(obj, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    ret = {}
-
-    for result, _, key, _ in itercallback(obj, callback):
-        ret[key] = result
-
-    return ret
+    return dict((key, result)
+                for result, _, key, _ in itercallback(obj, callback))
 
 
 def merge(obj, *sources, **kargs):
