@@ -276,7 +276,9 @@ def test_is_none(case, expected):
     (123456789123456789123456789, True),
     (123.45, True),
     (decimal.Decimal(1), True),
-    ('1', False)
+    ('1', False),
+    (True, False),
+    (False, False),
 ])
 def test_is_number(case, expected):
     assert pyd.is_number(case) == expected

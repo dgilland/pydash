@@ -498,7 +498,7 @@ def is_number(value):
 
     .. versionadded:: 1.0.0
     """
-    return isinstance(value, number_types)
+    return not is_boolean(value) and isinstance(value, number_types)
 
 
 def is_object(value):
