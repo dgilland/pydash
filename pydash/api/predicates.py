@@ -356,13 +356,10 @@ def is_monotone(value, op):
     if not is_list(value):
         value = [value]
 
-    result = True
-    for x, y in izip(value, islice(value, 1, None)):
-        if not op(x, y):
-            result = False
-            break
+    search = (False for x, y in izip(value, islice(value, 1, None))
+              if not op(x, y))
 
-    return result
+    return next(search, True)
 
 
 def is_nan(value):

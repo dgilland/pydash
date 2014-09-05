@@ -207,10 +207,9 @@ def for_in(obj, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    for result, _, _, _ in itercallback(obj, callback):
-        if result is False:
-            break
-
+    next((None for ret, _, _, _ in itercallback(obj, callback)
+          if ret is False),
+         None)
     return obj
 
 
@@ -234,10 +233,9 @@ def for_in_right(obj, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    for result, _, _, _ in itercallback(obj, callback, reverse=True):
-        if result is False:
-            break
-
+    next((None for ret, _, _, _ in itercallback(obj, callback, reverse=True)
+          if ret is False),
+         None)
     return obj
 
 
@@ -549,10 +547,9 @@ def transform(obj, callback=None, accumulator=None):
     if accumulator is None:
         accumulator = []
 
-    for key, value in iterator(obj):
-        result = callback(accumulator, value, key, obj)
-        if result is False:
-            break
+    next((None for key, value in iterator(obj)
+          if callback(accumulator, value, key, obj) is False),
+         None)
 
     return accumulator
 

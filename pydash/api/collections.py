@@ -198,14 +198,10 @@ def find(collection, callback=None):
         - :func:`detect` (alias)
         - :func:`find_where` (alias)
     """
-    found = None
-    for is_true, _, key, _ in itercallback(collection, callback):
-        if is_true:
-            found = collection[key]
-            # only return first found item
-            break
-
-    return found
+    search = (collection[key]
+              for is_true, _, key, _ in itercallback(collection, callback)
+              if is_true)
+    return next(search, None)
 
 
 detect = find
@@ -223,14 +219,12 @@ def find_last(collection, callback=None):
     Returns:
         mixed: Last element found or ``None``.
     """
-    found = None
-    for is_true, _, key, _ in itercallback(collection, callback, reverse=True):
-        if is_true:
-            found = collection[key]
-            # only return first found item
-            break
-
-    return found
+    search = (collection[key]
+              for is_true, _, key, _ in itercallback(collection,
+                                                     callback,
+                                                     reverse=True)
+              if is_true)
+    return next(search, None)
 
 
 def for_each(collection, callback=None):
@@ -248,10 +242,9 @@ def for_each(collection, callback=None):
         - :func:`for_each` (main definition)
         - :func:`each` (alias)
     """
-    for ret, _, _, _ in itercallback(collection, callback):
-        if ret is False:
-            break
-
+    next((None for ret, _, _, _ in itercallback(collection, callback)
+          if ret is False),
+         None)
     return collection
 
 
@@ -273,10 +266,11 @@ def for_each_right(collection, callback):
         - :func:`for_each_right` (main definition)
         - :func:`each_right` (alias)
     """
-    for ret, _, _, _ in itercallback(collection, callback, reverse=True):
-        if ret is False:
-            break
-
+    next((None for ret, _, _, _ in itercallback(collection,
+                                                callback,
+                                                reverse=True)
+          if ret is False),
+         None)
     return collection
 
 

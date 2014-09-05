@@ -206,13 +206,9 @@ def find_index(array, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    n = -1
-    for is_true, _, i, _ in itercallback(array, callback):
-        if is_true:
-            n = i
-            break
-
-    return n
+    search = (i for is_true, _, i, _ in itercallback(array, callback)
+              if is_true)
+    return next(search, -1)
 
 
 def find_last_index(array, callback=None):
@@ -228,13 +224,11 @@ def find_last_index(array, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    n = -1
-    for is_true, _, i, _ in itercallback(array, callback, reverse=True):
-        if is_true:
-            n = i
-            break
-
-    return n
+    search = (i for is_true, _, i, _ in itercallback(array,
+                                                     callback,
+                                                     reverse=True)
+              if is_true)
+    return next(search, -1)
 
 
 def first(array):
