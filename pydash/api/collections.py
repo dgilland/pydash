@@ -67,6 +67,8 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
 
     Returns:
         list: filtered list
+
+    .. versionadded:: 1.0.0
     """
     indexes = pyd.flatten_deep(indexes)
     return [collection[i] for i in indexes]
@@ -87,6 +89,8 @@ def contains(collection, target, from_index=0):
     See Also:
         - :func:`contains` (main definition)
         - :func:`include` (alias)
+
+    .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -110,6 +114,8 @@ def count_by(collection, callback=None):
 
     Returns:
         dict: Dict containing counts by key.
+
+    .. versionadded:: 1.0.0
     """
     ret = dict()
 
@@ -139,6 +145,8 @@ def every(collection, callback=None):
     See Also:
         - :func:`every` (main definition)
         - :func:`all_` (alias)
+
+    .. versionadded:: 1.0.0
     """
 
     if callback:
@@ -165,6 +173,8 @@ def filter_(collection, callback=None):
     See Also:
         - :func:`select` (main definition)
         - :func:`filter_` (alias)
+
+    .. versionadded:: 1.0.0
     """
     if callback is None:
         callback = lambda item, *args: item
@@ -192,6 +202,8 @@ def find(collection, callback=None):
         - :func:`find` (main definition)
         - :func:`detect` (alias)
         - :func:`find_where` (alias)
+
+    .. versionadded:: 1.0.0
     """
     search = (collection[key]
               for is_true, _, key, _ in itercallback(collection, callback)
@@ -213,6 +225,8 @@ def find_last(collection, callback=None):
 
     Returns:
         mixed: Last element found or ``None``.
+
+    .. versionadded:: 1.0.0
     """
     search = (collection[key]
               for is_true, _, key, _ in itercallback(collection,
@@ -236,6 +250,8 @@ def for_each(collection, callback=None):
     See Also:
         - :func:`for_each` (main definition)
         - :func:`each` (alias)
+
+    .. versionadded:: 1.0.0
     """
     next((None for ret, _, _, _ in itercallback(collection, callback)
           if ret is False),
@@ -260,6 +276,8 @@ def for_each_right(collection, callback):
     See Also:
         - :func:`for_each_right` (main definition)
         - :func:`each_right` (alias)
+
+    .. versionadded:: 1.0.0
     """
     next((None for ret, _, _, _ in itercallback(collection,
                                                 callback,
@@ -282,6 +300,8 @@ def group_by(collection, callback=None):
 
     Returns:
         dict: Results of grouping by `callback`.
+
+    .. versionadded:: 1.0.0
     """
     ret = {}
     cbk = pyd.iteratee(callback)
@@ -304,6 +324,8 @@ def index_by(collection, callback=None):
 
     Returns:
         dict: Results of indexing by `callback`.
+
+    .. versionadded:: 1.0.0
     """
     ret = {}
     cbk = pyd.iteratee(callback)
@@ -326,6 +348,8 @@ def invoke(collection, method_name, *args, **kargs):
 
     Returns:
         list: List of results of invoking method of each item.
+
+    .. versionadded:: 1.0.0
     """
     lst = []
 
@@ -357,6 +381,8 @@ def map_(collection, callback=None):
     See Also:
         - :func:`map_` (main definition)
         - :func:`collect` (alias)
+
+    .. versionadded:: 1.0.0
     """
     if not callback:
         callback = lambda value, *args: value
@@ -376,6 +402,8 @@ def max_(collection, callback=None):
 
     Returns:
         mixed: Maximum value.
+
+    .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -392,6 +420,8 @@ def min_(collection, callback=None):
 
     Returns:
         mixed: Minimum value.
+
+    .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -443,6 +473,8 @@ def pluck(collection, key):
 
     Returns:
         list: plucked list
+
+    .. versionadded:: 1.0.0
     """
     return map_(collection, pyd.prop(key))
 
@@ -466,6 +498,8 @@ def reduce_(collection, callback=None, accumulator=None):
         - :func:`reduce_` (main definition)
         - :func:`foldl` (alias)
         - :func:`inject` (alias)
+
+    .. versionadded:: 1.0.0
     """
     iterable = iterator(collection)
 
@@ -507,6 +541,8 @@ def reduce_right(collection, callback=None, accumulator=None):
     See Also:
         - :func:`reduce_right` (main definition)
         - :func:`foldr` (alias)
+
+    .. versionadded:: 1.0.0
     """
     if not isinstance(collection, dict):
         collection = sorted(collection, reverse=True)
@@ -526,6 +562,8 @@ def reject(collection, callback=None):
 
     Returns:
         list: Rejected elements of `collection`.
+
+    .. versionadded:: 1.0.0
     """
     return [value
             for is_true, value, _, _ in itercallback(collection, callback)
@@ -542,6 +580,8 @@ def sample(collection, n=None):
     Returns:
         list|mixed: List of sampled collection value if `n` is provided, else
             single value from collection if `n` is ``None``.
+
+    .. versionadded:: 1.0.0
     """
     num = min(n or 1, len(collection))
     sampled = random.sample(collection, num)
@@ -557,6 +597,8 @@ def shuffle(collection):
 
     Returns:
         list: Shuffled list of values.
+
+    .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -579,6 +621,8 @@ def size(collection):
 
     Returns:
         int: Collection length.
+
+    .. versionadded:: 1.0.0
     """
     return len(collection)
 
@@ -602,6 +646,8 @@ def some(collection, callback=None):
     See Also:
         - :func:`some` (main definition)
         - :func:`any_` (alias)
+
+    .. versionadded:: 1.0.0
     """
 
     if callback:
@@ -624,6 +670,8 @@ def sort_by(collection, callback=None):
 
     Returns:
         list: Sorted list.
+
+    .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -639,6 +687,8 @@ def to_list(collection):
 
     Returns:
         list: Collection converted to list.
+
+    .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         ret = collection.values()
@@ -657,6 +707,8 @@ def where(collection, properties):
         properties (dict): property values to filter by
 
     Returns:
-        list: filtered list
+        list: filtered list.
+
+    .. versionadded:: 1.0.0
     """
     return filter_(collection, pyd.matches(properties))
