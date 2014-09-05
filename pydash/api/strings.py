@@ -6,7 +6,7 @@
 import re
 import string
 
-from .objects import is_string, is_reg_exp
+from .predicates import is_string, is_reg_exp
 from .._compat import (
     text_type,
     html_unescape

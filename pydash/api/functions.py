@@ -9,7 +9,7 @@ import inspect
 import time
 
 from .._compat import _range
-from .objects import is_number
+from .predicates import is_number
 from .utilities import now
 
 

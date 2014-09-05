@@ -160,8 +160,31 @@ from .api.objects import (
     for_own,
     for_own_right,
     functions,
-    has,
     invert,
+    keys,
+    keys_in,
+    map_values,
+    merge,
+    methods,
+    omit,
+    pairs,
+    parse_int,
+    pick,
+    rename_keys,
+    set_path,
+    transform,
+    update_path,
+    values,
+    values_in,
+)
+
+
+#
+# Predicates
+#
+
+from .api.predicates import (
+    has,
     is_associative,
     is_boolean,
     is_date,
@@ -193,26 +216,13 @@ from .api.objects import (
     is_strictly_increasing,
     is_string,
     is_zero,
-    keys,
-    keys_in,
-    map_values,
-    merge,
-    methods,
-    omit,
-    pairs,
-    parse_int,
-    pick,
-    rename_keys,
-    set_path,
-    transform,
-    update_path,
-    values,
-    values_in,
 )
 
 
 #
 # Strings
+#
+
 from .api.strings import (
     camel_case,
     capitalize,
@@ -233,7 +243,6 @@ from .api.strings import (
     trunc,
     unescape,
 )
-
 
 #
 # Utilities
