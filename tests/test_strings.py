@@ -61,6 +61,22 @@ def test_escape_reg_exp_aliases(case):
 
 
 @parametrize('case,expected', [
+    (('string',), ['s', 't', 'r', 'i', 'n', 'g']),
+    (('string1,string2', ','), ['string1', 'string2']),
+])
+def test_explode(case, expected):
+    assert pyd.explode(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((['s', 't', 'r', 'i', 'n', 'g'],), 'string'),
+    ((['string1', 'string2'], ','), 'string1,string2'),
+])
+def test_implode(case, expected):
+    assert pyd.implode(*case) == expected
+
+
+@parametrize('case,expected', [
     ('foo  bar baz', 'foo-bar-baz'),
     ('foo__bar_baz', 'foo-bar-baz'),
     ('foo-_bar-_-baz', 'foo-bar-baz'),

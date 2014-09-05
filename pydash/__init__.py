@@ -230,6 +230,8 @@ from .api.strings import (
     escape,
     escape_reg_exp,
     escape_re,
+    explode,
+    implode,
     kebab_case,
     pad,
     pad_left,

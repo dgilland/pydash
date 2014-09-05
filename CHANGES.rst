@@ -5,7 +5,9 @@ Changelog
 v2.0.0 (xxxx-xx-xx)
 -------------------
 
+- Add ``explode()``.
 - Add ``flatten_deep()``.
+- Add ``implode()``.
 - Add ``intercalate()``.
 - Add ``interleave()``.
 - Add ``intersperse()``.

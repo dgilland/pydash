@@ -20,6 +20,8 @@ __all__ = [
     'escape',
     'escape_reg_exp',
     'escape_re',
+    'explode',
+    'implode',
     'kebab_case',
     'pad',
     'pad_left',
@@ -120,7 +122,7 @@ def escape(text):
 
 
 def escape_reg_exp(text):
-    r"""Escapes the RegExp special characters in `text`.
+    """Escapes the RegExp special characters in `text`.
 
     Args:
         text (str): String to escape.
@@ -134,6 +136,44 @@ def escape_reg_exp(text):
 
 
 escape_re = escape_reg_exp
+
+
+def explode(text, delimiter=None):
+    """Splits `text` on `delimiter`. If `delimiter` not provided or ``None``,
+    then `text` is split on every character.
+
+    Args:
+        text (str): String to explode.
+        delimiter (str, optional): Delimiter string to split on. Defaults to
+            ``None``.
+
+    Returns:
+        list: Exploded string.
+
+    .. versionadded:: 2.0.0
+    """
+    if delimiter:
+        ret = text.split(delimiter)
+    else:
+        # Splits text into list of characters.
+        ret = list(text)
+
+    return ret
+
+
+def implode(array, delimiter=''):
+    """Joins an iterable into a string using `delimiter` between each element.
+
+    Args:
+        array (iterable): Iterable to implode.
+        delimiter (str): Delimiter to using when joining. Defaults to ``''``.
+
+    Returns:
+        str: Imploded iterable.
+
+    .. versionadded:: 2.0.0
+    """
+    return delimiter.join(array)
 
 
 def kebab_case(text):
