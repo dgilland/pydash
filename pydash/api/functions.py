@@ -23,6 +23,7 @@ __all__ = [
     'delay',
     'disjoin',
     'iterated',
+    'juxtapose',
     'negate',
     'once',
     'partial',
@@ -174,7 +175,7 @@ class Disjoin(object):
 
 
 class Iterated(object):
-    """Wrap a function in a iterated context."""
+    """Wrap a function in an iterated context."""
     def __init__(self, func):
         self.func = func
 
@@ -196,6 +197,15 @@ class Iterated(object):
             value = next(iteration)
 
         return value
+
+
+class Juxtapose(object):
+    """Wrap a function in a juxtapose context."""
+    def __init__(self, *funcs):
+        self.funcs = funcs
+
+    def __call__(self, *objs):
+        return pyd.map_(self.funcs, lambda func, *_: func(*objs))
 
 
 class Negate(object):
@@ -438,6 +448,21 @@ def iterated(func):
     .. versionadded:: 2.0.0
     """
     return Iterated(func)
+
+
+def juxtapose(*funcs):
+    """Creates a function whose return value is a list of the results of
+    calling each `funcs` with the supplied arguments.
+
+    Args:
+        *funcs (function): Function(s) to juxtapose.
+
+    Returns:
+        Juxtapose: Function wrapped in a :class:`Juxtapose` context.
+
+    .. versionadded:: 2.0.0
+    """
+    return Juxtapose(*funcs)
 
 
 def negate(func):

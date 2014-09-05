@@ -136,6 +136,7 @@ from .api.functions import (
     delay,
     disjoin,
     iterated,
+    juxtapose,
     negate,
     once,
     partial,

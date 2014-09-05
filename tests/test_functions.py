@@ -165,6 +165,16 @@ def test_iterated(func, args, expected):
     assert pyd.iterated(func)(*args) == expected
 
 
+@parametrize('funcs,args,expected', [
+    ((lambda a: a[0], lambda a: a[-1]), ('Foobar',), ['F', 'r']),
+    ((lambda a, b: a[0] + b[-1], lambda a, b: a[-1] + b[0]),
+     ('Foobar', 'Barbaz'),
+     ['Fz', 'rB']),
+])
+def test_juxtapose(funcs, args, expected):
+    assert pyd.juxtapose(*funcs)(*args) == expected
+
+
 @parametrize('func,args', [
     (lambda item: item, (True,)),
     (lambda item: item, (False,)),

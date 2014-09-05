@@ -32,6 +32,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``is_strictly_increasing()``.
 - Add ``is_zero()``.
 - Add ``iterated()``.
+- Add ``juxtapose()``.
 - Add ``rename_keys()``.
 - Add ``set_path()``.
 - Add ``to_string()``.
