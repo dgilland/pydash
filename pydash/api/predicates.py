@@ -11,18 +11,12 @@ import json
 import operator
 import re
 
-from .utilities import iterator
-from .._compat import (
-    integer_types,
-    number_types,
-    string_types,
-    text_type,
-    izip
-)
+import pydash as pyd
+from ..utils import iterator
+from .._compat import integer_types, number_types, string_types, izip
 
 
 __all__ = [
-    'has',
     'is_associative',
     'is_boolean',
     'is_date',
@@ -56,21 +50,6 @@ __all__ = [
 
 
 RegExp = type(re.compile(''))
-
-
-def has(obj, key):
-    """Checks if `key` exists as a key of `obj`.
-
-    Args:
-        obj (mixed): Object to test.
-        key (mixed): Key to test for.
-
-    Returns:
-        bool: Whether `obj` has `key`.
-
-    .. versionadded:: 1.0.0
-    """
-    return key in (key for key, value in iterator(obj))
 
 
 def is_associative(value):
@@ -181,7 +160,7 @@ def is_equal(a, b, callback=None):
           len(a) == len(b)):
         # Walk a/b to determine equality using callback.
         for key, value in iterator(a):
-            if has(b, key):
+            if pyd.has(b, key):
                 equal = is_equal(value, b[key], callback)
             else:
                 equal = False

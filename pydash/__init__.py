@@ -161,6 +161,7 @@ from .api.objects import (
     for_own_right,
     functions,
     get_path,
+    has,
     has_path,
     invert,
     keys,
@@ -174,6 +175,7 @@ from .api.objects import (
     pick,
     rename_keys,
     set_path,
+    to_string,
     transform,
     update_path,
     values,
@@ -186,7 +188,6 @@ from .api.objects import (
 #
 
 from .api.predicates import (
-    has,
     is_associative,
     is_boolean,
     is_date,

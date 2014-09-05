@@ -8,19 +8,9 @@ from __future__ import absolute_import
 import copy
 import re
 
-from .arrays import flatten_deep, initial, last
-from .predicates import is_string, is_list
-from .utilities import (
-    identity,
-    iterator,
-    itercallback,
-    get_item,
-    set_item
-)
-from .._compat import (
-    iteritems,
-    text_type
-)
+import pydash as pyd
+from ..utils import iterator, itercallback, get_item, set_item
+from .._compat import iteritems, text_type
 
 
 __all__ = [
@@ -37,6 +27,7 @@ __all__ = [
     'for_own_right',
     'functions',
     'get_path',
+    'has',
     'has_path',
     'invert',
     'keys',
@@ -50,6 +41,7 @@ __all__ = [
     'pick',
     'rename_keys',
     'set_path',
+    'to_string',
     'transform',
     'update_path',
     'values',
@@ -112,7 +104,7 @@ def clone(value, is_deep=False, callback=None):
     .. versionadded:: 1.0.0
     """
     if callback is None:
-        callback = identity
+        callback = pyd.identity
 
     copier = copy.deepcopy if is_deep else copy.copy
     value = copier(value)
@@ -281,6 +273,7 @@ def get_path(obj, keys, **kargs):
 
     .. versionadded:: 2.0.0
     """
+    # pylint: disable=redefined-outer-name
     kargs.setdefault('default', None)
     kargs.setdefault('use_default', True)
 
@@ -290,6 +283,21 @@ def get_path(obj, keys, **kargs):
             break
 
     return obj
+
+
+def has(obj, key):
+    """Checks if `key` exists as a key of `obj`.
+
+    Args:
+        obj (mixed): Object to test.
+        key (mixed): Key to test for.
+
+    Returns:
+        bool: Whether `obj` has `key`.
+
+    .. versionadded:: 1.0.0
+    """
+    return has_path(obj, [key])
 
 
 def has_path(obj, keys):
@@ -306,6 +314,7 @@ def has_path(obj, keys):
 
     .. versionadded:: 2.0.0
     """
+    # pylint: disable=redefined-outer-name
     try:
         get_path(obj, keys, use_default=False)
         exists = True
@@ -313,18 +322,6 @@ def has_path(obj, keys):
         exists = False
 
     return exists
-
-
-def path_keys(keys):
-    """Convert keys used to access an object's path into the standard form, a
-    list of keys.
-    """
-    if is_string(keys):
-        re_list_index = re.compile('\[[\d\]]')
-        keys = [int(key[1:-1]) if re_list_index.match(key) else key
-                for key in keys.split('.')]
-
-    return keys
 
 
 def invert(obj):
@@ -462,7 +459,7 @@ def omit(obj, callback=None, *properties):
     """
     if not callable(callback):
         callback = callback if callback is not None else []
-        properties = flatten_deep([callback, properties])
+        properties = pyd.flatten_deep([callback, properties])
         callback = lambda value, key, item: key in properties
 
     return dict((key, value) for key, value in iterator(obj)
@@ -498,7 +495,7 @@ def parse_int(value, radix=None):
 
     .. versionadded:: 1.0.0
     """
-    if not radix and is_string(value):
+    if not radix and pyd.is_string(value):
         try:
             # Check if value is hexadcimal and if so use base-16 conversion.
             int(value, 16)
@@ -514,7 +511,7 @@ def parse_int(value, radix=None):
         # NOTE: Must convert value to string when supplying radix to int().
         # Dropping radix arg when 10 is needed to allow floats to parse
         # correctly.
-        args = (value,) if radix == 10 else (text_type(value), radix)
+        args = (value,) if radix == 10 else (to_string(value), radix)
         parsed = int(*args)
     except (ValueError, TypeError):
         parsed = None
@@ -542,7 +539,7 @@ def pick(obj, callback=None, *properties):
     """
     if not callable(callback):
         callback = callback if callback is not None else []
-        properties = flatten_deep([callback, properties])
+        properties = pyd.flatten_deep([callback, properties])
         callback = lambda value, key, item: key in properties
 
     return dict((key, value) for key, value in iterator(obj)
@@ -583,6 +580,7 @@ def set_path(obj, value, keys, default=None):
 
     .. versionadded:: 2.0.0
     """
+    # pylint: disable=redefined-outer-name
     return update_path(obj, lambda *_: value, keys, default=default)
 
 
@@ -652,17 +650,18 @@ def update_path(obj, callback, keys, default=None):
 
     .. versionadded:: 2.0.0
     """
+    # pylint: disable=redefined-outer-name
     if default is None:
         default = {} if isinstance(obj, dict) else []
 
-    if not is_list(keys):
+    if not pyd.is_list(keys):
         keys = [keys]
 
-    last_key = last(keys)
+    last_key = pyd.last(keys)
     obj = clone_deep(obj)
     target = obj
 
-    for key in initial(keys):
+    for key in pyd.initial(keys):
         set_item(target, key, clone_deep(default), allow_override=False)
         target = target[key]
 
@@ -695,3 +694,21 @@ def values(obj):
 
 
 values_in = values
+
+
+#
+# Helper functions not a part of main API
+#
+
+
+def path_keys(keys):
+    """Convert keys used to access an object's path into the standard form, a
+    list of keys.
+    """
+    # pylint: disable=redefined-outer-name
+    if pyd.is_string(keys):
+        re_list_index = re.compile(r'\[[\d\]]')
+        keys = [int(key[1:-1]) if re_list_index.match(key) else key
+                for key in keys.split('.')]
+
+    return keys

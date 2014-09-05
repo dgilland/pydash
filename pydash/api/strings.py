@@ -6,11 +6,8 @@
 import re
 import string
 
-from .predicates import is_string, is_reg_exp
-from .._compat import (
-    text_type,
-    html_unescape
-)
+import pydash as pyd
+from .._compat import text_type, html_unescape
 
 
 __all__ = [
@@ -387,9 +384,9 @@ def trunc(text, length=30, omission='...', separator=None):
 
     trunc_len = len(text)
 
-    if is_string(separator):
+    if pyd.is_string(separator):
         trunc_len = text.rfind(separator)
-    elif is_reg_exp(separator):
+    elif pyd.is_re(separator):
         last = None
         for match in separator.finditer(text):
             last = match

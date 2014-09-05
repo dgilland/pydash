@@ -8,9 +8,8 @@ from __future__ import absolute_import
 import inspect
 import time
 
+import pydash as pyd
 from .._compat import _range
-from .predicates import is_number
-from .utilities import now
 
 
 __all__ = [
@@ -126,8 +125,8 @@ class Debounce(object):
 
         # Initialize last_* times to be prior to the wait periods so that func
         # is primed to be executed on first call.
-        self.last_call = now() - self.wait
-        self.last_execution = (now() - max_wait if is_number(max_wait)
+        self.last_call = pyd.now() - self.wait
+        self.last_execution = (pyd.now() - max_wait if pyd.is_number(max_wait)
                                else None)
 
     def __call__(self, *args, **kargs):
@@ -135,7 +134,7 @@ class Debounce(object):
         :attr:`wait` milliseconds or in last :attr:`max_wait` milliseconds.
         Return results of last successful call.
         """
-        present = now()
+        present = pyd.now()
 
         if any([(present - self.last_call) >= self.wait,
                 (self.max_wait and
@@ -225,13 +224,13 @@ class Throttle(object):
         self.wait = wait
 
         self.last_result = None
-        self.last_execution = now() - self.wait
+        self.last_execution = pyd.now() - self.wait
 
     def __call__(self, *args, **kargs):
         """Execute :attr:`func` if function hasn't been called witinin last
         :attr:`wait` milliseconds. Return results of last successful call.
         """
-        present = now()
+        present = pyd.now()
 
         if (present - self.last_execution) >= self.wait:
             self.last_result = self.func(*args, **kargs)

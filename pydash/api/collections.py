@@ -7,14 +7,9 @@ from __future__ import absolute_import
 
 import random
 
-from .arrays import flatten_deep
-from .utilities import (
-    matches,
-    property_,
-    iteratee,
-    itercallback,
-    iterator
-)
+import pydash as pyd
+
+from ..utils import itercallback, iterator
 
 
 __all__ = [
@@ -73,7 +68,7 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
     Returns:
         list: filtered list
     """
-    indexes = flatten_deep(indexes)
+    indexes = pyd.flatten_deep(indexes)
     return [collection[i] for i in indexes]
 
 
@@ -147,7 +142,7 @@ def every(collection, callback=None):
     """
 
     if callback:
-        cbk = iteratee(callback)
+        cbk = pyd.iteratee(callback)
         collection = [cbk(item) for item in collection]
 
     return all(collection)
@@ -289,7 +284,7 @@ def group_by(collection, callback=None):
         dict: Results of grouping by `callback`.
     """
     ret = {}
-    cbk = iteratee(callback)
+    cbk = pyd.iteratee(callback)
 
     for value in collection:
         key = cbk(value)
@@ -311,7 +306,7 @@ def index_by(collection, callback=None):
         dict: Results of indexing by `callback`.
     """
     ret = {}
-    cbk = iteratee(callback)
+    cbk = pyd.iteratee(callback)
 
     for value in collection:
         ret[cbk(value)] = value
@@ -385,7 +380,7 @@ def max_(collection, callback=None):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return max(collection, key=iteratee(callback))
+    return max(collection, key=pyd.iteratee(callback))
 
 
 def min_(collection, callback=None):
@@ -401,7 +396,7 @@ def min_(collection, callback=None):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return min(collection, key=iteratee(callback))
+    return min(collection, key=pyd.iteratee(callback))
 
 
 def partition(collection, callback=None):
@@ -449,7 +444,7 @@ def pluck(collection, key):
     Returns:
         list: plucked list
     """
-    return map_(collection, property_(key))
+    return map_(collection, pyd.prop(key))
 
 
 def reduce_(collection, callback=None, accumulator=None):
@@ -610,7 +605,7 @@ def some(collection, callback=None):
     """
 
     if callback:
-        cbk = iteratee(callback)
+        cbk = pyd.iteratee(callback)
         collection = [cbk(item) for item in collection]
 
     return any(collection)
@@ -633,7 +628,7 @@ def sort_by(collection, callback=None):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return sorted(collection, key=iteratee(callback))
+    return sorted(collection, key=pyd.iteratee(callback))
 
 
 def to_list(collection):
@@ -664,4 +659,4 @@ def where(collection, properties):
     Returns:
         list: filtered list
     """
-    return filter_(collection, matches(properties))
+    return filter_(collection, pyd.matches(properties))

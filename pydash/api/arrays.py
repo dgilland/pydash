@@ -8,10 +8,8 @@ from __future__ import absolute_import
 from bisect import bisect_left, bisect_right
 from math import ceil
 
-from .utilities import (
-    iteratee,
-    itercallback
-)
+import pydash as pyd
+from ..utils import itercallback
 
 
 __all__ = [
@@ -547,7 +545,7 @@ def sorted_index(array, value, callback=None):
     """
     if callback:
         # Generate array of sorted keys computed using callback.
-        callback = iteratee(callback)
+        callback = pyd.iteratee(callback)
         array = sorted(callback(item) for item in array)
         value = callback(value)
 
@@ -571,7 +569,7 @@ def sorted_last_index(array, value, callback=None):
     """
     if callback:
         # Generate array of sorted keys computed using callback.
-        callback = iteratee(callback)
+        callback = pyd.iteratee(callback)
         array = sorted(callback(item) for item in array)
         value = callback(value)
 
@@ -700,7 +698,7 @@ def uniq(array, callback=None):
     .. versionadded:: 1.0.0
     """
     if callback:
-        cbk = iteratee(callback)
+        cbk = pyd.iteratee(callback)
         computed = [cbk(item) for item in array]
     else:
         computed = array
@@ -820,7 +818,7 @@ def iterflatten(array, is_deep=False, depth=0):
 
 def iterinterleave(*arrays):
     """Interleave multiple lists."""
-    iters = map(iter, arrays)
+    iters = [iter(arr) for arr in arrays]
 
     while iters:
         nextiters = []

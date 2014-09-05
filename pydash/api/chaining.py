@@ -5,9 +5,8 @@
 
 from __future__ import absolute_import
 
-import pydash
+import pydash as pyd
 
-from .exceptions import InvalidMethod
 from .._compat import text_type
 
 
@@ -61,13 +60,13 @@ class Chain(object):
             InvalidMethod: Raised if `attr` is not a valid :mod:`pydash`
                 function.
         """
-        method = getattr(pydash, attr, None)
+        method = getattr(pyd, attr, None)
 
         if callable(method):
             # return ChainWrapper(self.value(), getattr(pydash, attr))
-            return ChainWrapper(self._value, getattr(pydash, attr))
+            return ChainWrapper(self._value, getattr(pyd, attr))
         else:
-            raise InvalidMethod('Invalid pydash method: {0}'.format(attr))
+            raise pyd.InvalidMethod('Invalid pydash method: {0}'.format(attr))
 
 
 class ChainWrapper(object):
@@ -84,7 +83,7 @@ class ChainWrapper(object):
         :attr:`kargs`. If :attr:`_value` is an instance of
         :class:`ChainWrapper`, then unwrap it before calling :attr:`method`.
         """
-        if(isinstance(self._value, ChainWrapper)):
+        if isinstance(self._value, ChainWrapper):
             self._value = self._value.unwrap()
         return self.method(self._value, *self.args, **self.kargs)
 
