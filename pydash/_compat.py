@@ -33,8 +33,10 @@ if PY3:
     _range = range
 
     implements_to_string = _identity
+    izip = zip
 else:
     from HTMLParser import HTMLParser
+    from itertools import izip
     text_type = unicode
     string_types = (str, unicode)
     integer_types = (int, long)

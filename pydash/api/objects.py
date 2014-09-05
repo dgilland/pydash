@@ -7,7 +7,9 @@ from __future__ import absolute_import
 
 import copy
 import datetime
+from itertools import islice
 import json
+import operator
 import re
 
 from .arrays import flatten_deep, initial, last
@@ -23,7 +25,8 @@ from .._compat import (
     integer_types,
     number_types,
     string_types,
-    text_type
+    text_type,
+    izip
 )
 
 
@@ -45,16 +48,19 @@ __all__ = [
     'is_associative',
     'is_boolean',
     'is_date',
+    'is_decreasing',
     'is_empty',
     'is_equal',
     'is_error',
     'is_float',
     'is_function',
+    'is_increasing',
     'is_indexed',
     'is_instance_of',
     'is_integer',
     'is_json',
     'is_list',
+    'is_monotone',
     'is_nan',
     'is_negative',
     'is_none',
@@ -64,6 +70,8 @@ __all__ = [
     'is_positive',
     'is_re',
     'is_reg_exp',
+    'is_strictly_decreasing',
+    'is_strictly_increasing',
     'is_string',
     'is_zero',
     'keys',
@@ -377,6 +385,20 @@ def is_date(value):
     return isinstance(value, datetime.date)
 
 
+def is_decreasing(value):
+    """Check if `value` is monotonically increasing.
+
+    Args:
+        value (list): Value to check.
+
+    Returns:
+        bool: Whether `value` is monotonically increasing.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_monotone(value, operator.ge)
+
+
 def is_empty(value):
     """Checks if `value` is empty.
 
@@ -495,6 +517,20 @@ def is_function(value):
     return callable(value)
 
 
+def is_increasing(value):
+    """Check if `value` is monotonically increasing.
+
+    Args:
+        value (list): Value to check.
+
+    Returns:
+        bool: Whether `value` is monotonically increasing.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_monotone(value, operator.le)
+
+
 def is_indexed(value):
     """Checks if `value` is integer indexed, i.e., ``list`` or ``str``.
 
@@ -569,6 +605,30 @@ def is_list(value):
     .. versionadded:: 1.0.0
     """
     return isinstance(value, list)
+
+
+def is_monotone(value, op):
+    """Checks if `value` is monotonic when `operator` used for comparison.
+
+    Args:
+        value (list): Value to check.
+        op (function): Operation to used for comparison.
+
+    Returns:
+        bool: Whether `value` is monotone.
+
+    .. versionadded:: 2.0.0
+    """
+    if not is_list(value):
+        value = [value]
+
+    result = True
+    for x, y in izip(value, islice(value, 1, None)):
+        if not op(x, y):
+            result = False
+            break
+
+    return result
 
 
 def is_nan(value):
@@ -706,6 +766,34 @@ def is_reg_exp(value):
 
 
 is_re = is_reg_exp
+
+
+def is_strictly_decreasing(value):
+    """Check if `value` is strictly decreasing.
+
+    Args:
+        value (list): Value to check.
+
+    Returns:
+        bool: Whether `value` is strictly decreasing.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_monotone(value, operator.gt)
+
+
+def is_strictly_increasing(value):
+    """Check if `value` is strictly increasing.
+
+    Args:
+        value (list): Value to check.
+
+    Returns:
+        bool: Whether `value` is strictly increasing.
+
+    .. versionadded:: 2.0.0
+    """
+    return is_monotone(value, operator.lt)
 
 
 def is_string(value):
@@ -978,7 +1066,7 @@ def set_path(obj, value, keys, default=None):
 
 
 def transform(obj, callback=None, accumulator=None):
-    """An alternative to :func:`pydash.api.collections.reduce`, this method
+    """An alernative to :func:`pydash.api.collections.reduce`, this method
     transforms `obj` to a new accumulator object which is the result of running
     each of its properties through a callback, with each callback execution
     potentially mutating the accumulator object. The callback is invoked with

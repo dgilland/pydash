@@ -1,6 +1,7 @@
 
 import datetime
 import decimal
+import operator
 import re
 
 import pydash as pyd
@@ -197,6 +198,17 @@ def test_is_date(case, expected):
 
 
 @parametrize('case,expected', [
+    ([3, 2, 1], True),
+    ([6, 5, 5], True),
+    (0, True),
+    ([5, 4, 4, 3, 1], True),
+    ([5, 4, 4, 5, 4, 3], False)
+])
+def test_is_decreasing(case, expected):
+    assert pyd.is_decreasing(case) == expected
+
+
+@parametrize('case,expected', [
     (True, True),
     (0, True),
     (123.45, True),
@@ -279,6 +291,17 @@ def test_is_function(case, expected):
 
 
 @parametrize('case,expected', [
+    ([1, 2, 3], True),
+    ([5, 5, 6], True),
+    (0, True),
+    ([1, 2, 3, 4, 4, 5], True),
+    ([1, 2, 3, 4, 4, 3], False)
+])
+def test_is_increasing(case, expected):
+    assert pyd.is_increasing(case) == expected
+
+
+@parametrize('case,expected', [
     ([], True),
     ('', True),
     ({}, False),
@@ -329,6 +352,16 @@ def test_is_json(case, expected):
 ])
 def test_is_list(case, expected):
     assert pyd.is_list(case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], operator.le), True),
+    (([3, 2, 1], operator.ge), True),
+    (([1, 1, 2], operator.lt), False),
+    (([3, 3, 2], operator.gt), False),
+])
+def test_is_monotone(case, expected):
+    assert pyd.is_monotone(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -438,22 +471,31 @@ def test_is_reg_exp(case, expected):
     assert pyd.is_reg_exp(case) == expected
 
 
-@parametrize('case,expected', [
-    (0, True),
-    (0.0, False),
-    ('', False),
-    (True, False),
-    (False, False),
-])
-def test_is_zero(case, expected):
-    assert pyd.is_zero(case) == expected
-
-
 @parametrize('case', [
     pyd.is_re
 ])
-def test_keys_aliases(case):
+def test_is_reg_exp_aliases(case):
     assert pyd.is_reg_exp is case
+
+
+@parametrize('case,expected', [
+    ([1, 2, 3], False),
+    ([3, 2, 1], True),
+    ([1, 1, 2], False),
+    ([3, 3, 2], False),
+])
+def test_is_strictly_decreasing(case, expected):
+    assert pyd.is_strictly_decreasing(case) == expected
+
+
+@parametrize('case,expected', [
+    ([1, 2, 3], True),
+    ([3, 2, 1], False),
+    ([1, 1, 2], False),
+    ([3, 3, 2], False),
+])
+def test_is_strictly_increasing(case, expected):
+    assert pyd.is_strictly_increasing(case) == expected
 
 
 @parametrize('case,expected', [
@@ -466,6 +508,17 @@ def test_keys_aliases(case):
 ])
 def test_is_string(case, expected):
     assert pyd.is_string(case) == expected
+
+
+@parametrize('case,expected', [
+    (0, True),
+    (0.0, False),
+    ('', False),
+    (True, False),
+    (False, False),
+])
+def test_is_zero(case, expected):
+    assert pyd.is_zero(case) == expected
 
 
 @parametrize('case,expected', [
