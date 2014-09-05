@@ -7,6 +7,8 @@ v2.0.0 (xxxx-xx-xx)
 
 - Add ``explode()``.
 - Add ``flatten_deep()``.
+- Add ``get_path()``.
+- Add ``has_path()``.
 - Add ``implode()``.
 - Add ``intercalate()``.
 - Add ``interleave()``.

@@ -160,6 +160,8 @@ from .api.objects import (
     for_own,
     for_own_right,
     functions,
+    get_path,
+    has_path,
     invert,
     keys,
     keys_in,

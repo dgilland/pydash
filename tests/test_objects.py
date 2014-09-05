@@ -151,6 +151,38 @@ def test_functions_aliases(case):
 
 
 @parametrize('case,expected', [
+    (({'one': {'two': {'three': 4}}}, 'one.two'), {'three': 4}),
+    (({'one': {'two': {'three': 4}}}, 'one.two.three'), 4),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two']), {'three': 4}),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), 4),
+    (({'one': {'two': {'three': 4}}}, 'one.four'), None),
+    (({'one': {'two': {'three': 4}}}, 'five'), None),
+    (({'one': ['two', {'three': [4, 5]}]}, ['one', 1, 'three', 1]), 5),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), 5),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), None),
+    ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), 4),
+])
+def test_get_path(case, expected):
+    assert pyd.get_path(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({'one': {'two': {'three': 4}}}, 'one.two'), True),
+    (({'one': {'two': {'three': 4}}}, 'one.two.three'), True),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two']), True),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), True),
+    (({'one': {'two': {'three': 4}}}, 'one.four'), False),
+    (({'one': {'two': {'three': 4}}}, 'five'), False),
+    (({'one': ['two', {'three': [4, 5]}]}, ['one', 1, 'three', 1]), True),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), True),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), False),
+    ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), True),
+])
+def test_has_path(case, expected):
+    assert pyd.has_path(*case) == expected
+
+
+@parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, ['a', 'b', 'c']),
     ([1, 2, 3], [0, 1, 2])
 ])

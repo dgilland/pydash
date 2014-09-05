@@ -409,6 +409,8 @@ def get_item(obj, key, **kargs):
         key (mixed): Key or index identifying which item to retrieve.
 
     Keyword Args:
+        use_default (bool, optional): Whether to use `default` value when
+            `key` doesn't exist in `obj`.
         default (mixed, optional): Default value to return if `key` not
             found in `obj`.
 
@@ -416,15 +418,15 @@ def get_item(obj, key, **kargs):
         mixed: `obj[key]` or `default`.
 
     Raises:
-        KeyError|IndexError: If `obj` is missing key or index and no default
-            value provided.
+        KeyError|IndexError|TypeError: If `obj` is missing key or index and no
+            default value provided.
     """
-    use_default = 'default' in kargs
+    use_default = kargs.get('use_default', 'default' in kargs)
     default = kargs.get('default')
 
     try:
         ret = obj[key]
-    except (KeyError, IndexError):
+    except (KeyError, IndexError, TypeError):
         if use_default:
             ret = default
         else:  # pragma: no cover

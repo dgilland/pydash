@@ -6,6 +6,7 @@
 from __future__ import absolute_import
 
 import copy
+import re
 
 from .arrays import flatten_deep, initial, last
 from .predicates import is_string, is_list
@@ -35,6 +36,8 @@ __all__ = [
     'for_own',
     'for_own_right',
     'functions',
+    'get_path',
+    'has_path',
     'invert',
     'keys',
     'keys_in',
@@ -261,6 +264,67 @@ def functions(obj):
 
 
 methods = functions
+
+
+def get_path(obj, keys, **kargs):
+    """Get the value at any depth of a nested object based on the path
+    described by `keys`. If path doesn't exist, ``None`` is returned.
+
+    Args:
+        obj (list|dict): Object to process.
+        keys (str|list): List or ``.`` delimited string of keys describing
+            path. When `keys` is a string, use ``[index]`` as the path key to
+            access list indexes. For example, ``'one.[2].three.[4]'``.
+
+    Returns:
+        mixed: Value of `obj` at path.
+
+    .. versionadded:: 2.0.0
+    """
+    kargs.setdefault('default', None)
+    kargs.setdefault('use_default', True)
+
+    for key in path_keys(keys):
+        obj = get_item(obj, key, **kargs)
+        if obj is None:
+            break
+
+    return obj
+
+
+def has_path(obj, keys):
+    """Returns whether obj has path described by `keys`.
+
+    Args:
+        obj (list|dict): Object to process.
+        keys (str|list): List or ``.`` delimited string of keys describing
+            path. When `keys` is a string, use ``[index]`` as the path key to
+            access list indexes. For example, ``'one.[2].three.[4]'``.
+
+    Returns:
+        bool: Whether `obj` has path.
+
+    .. versionadded:: 2.0.0
+    """
+    try:
+        get_path(obj, keys, use_default=False)
+        exists = True
+    except (KeyError, IndexError, TypeError):
+        exists = False
+
+    return exists
+
+
+def path_keys(keys):
+    """Convert keys used to access an object's path into the standard form, a
+    list of keys.
+    """
+    if is_string(keys):
+        re_list_index = re.compile('\[[\d\]]')
+        keys = [int(key[1:-1]) if re_list_index.match(key) else key
+                for key in keys.split('.')]
+
+    return keys
 
 
 def invert(obj):
