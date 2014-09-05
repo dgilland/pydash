@@ -586,6 +586,20 @@ def set_path(obj, value, keys, default=None):
     return update_path(obj, lambda *_: value, keys, default=default)
 
 
+def to_string(obj):
+    """Converts an object to string.
+
+    Args:
+        obj (mixed): Object to convert.
+
+    Returns:
+        str: String representation of `obj`.
+
+    .. versionadded:: 2.0.0
+    """
+    return text_type(obj)
+
+
 def transform(obj, callback=None, accumulator=None):
     """An alernative to :func:`pydash.api.collections.reduce`, this method
     transforms `obj` to a new accumulator object which is the result of running
