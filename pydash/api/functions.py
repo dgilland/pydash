@@ -16,10 +16,12 @@ __all__ = [
     'after',
     'before',
     'compose',
+    'conjoin',
     'curry',
     'curry_right',
     'debounce',
     'delay',
+    'disjoin',
     'iterated',
     'negate',
     'once',
@@ -76,6 +78,18 @@ class Compose(object):
             kargs = {}
 
         return ret
+
+
+class Conjoin(object):
+    """Wrap a set of functions in a conjoin context."""
+    def __init__(self, *funcs):
+        self.funcs = funcs
+
+    def __call__(self, obj):
+        """Return result of conjoin `obj` with :attr:`funcs` predicates."""
+        return pyd.every(obj,
+                         lambda item: pyd.every(self.funcs,
+                                                lambda func: func(item)))
 
 
 class Curry(object):
@@ -145,6 +159,18 @@ class Debounce(object):
         self.last_call = present
 
         return self.last_result
+
+
+class Disjoin(object):
+    """Wrap a set of functions in a disjoin context."""
+    def __init__(self, *funcs):
+        self.funcs = funcs
+
+    def __call__(self, obj):
+        """Return result of disjoin `obj` with :attr:`funcs` predicates."""
+        return pyd.some(obj,
+                        lambda item: pyd.some(self.funcs,
+                                              lambda func: func(item)))
 
 
 class Iterated(object):
@@ -288,6 +314,22 @@ def compose(*funcs):
     return Compose(*funcs)
 
 
+def conjoin(*funcs):
+    """Creates a function that composes multiple predicate functions into a
+    single predicate that tests whether **all** elements of an object pass each
+    predicate.
+
+    Args:
+        *funcs (function): Function(s) to conjoin.
+
+    Returns:
+        Conjoin: Function(s) wrapped in a :class:`Conjoin` context.
+
+    .. versionadded:: 2.0.0
+    """
+    return Conjoin(*funcs)
+
+
 def curry(func, arity=None):
     """Creates a function which accepts one or more arguments of `func` that
     when  invoked either executes `func` returning its result, if all `func`
@@ -362,6 +404,22 @@ def delay(func, wait, *args, **kargs):
     """
     time.sleep(wait / 1000.0)
     return func(*args, **kargs)
+
+
+def disjoin(*funcs):
+    """Creates a function that composes multiple predicate functions into a
+    single predicate that tests whether **any** elements of an object pass each
+    predicate.
+
+    Args:
+        *funcs (function): Function(s) to disjoin.
+
+    Returns:
+        Disjoin: Function(s) wrapped in a :class:`Disjoin` context.
+
+    .. versionadded:: 2.0.0
+    """
+    return Disjoin(*funcs)
 
 
 def iterated(func):

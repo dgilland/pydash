@@ -45,6 +45,14 @@ def test_compose(case, args, expected):
     assert pyd.compose(*case)(*args) == expected
 
 
+@parametrize('case,arg,expected', [
+    ((pyd.is_boolean, pyd.is_empty), [False, True], True),
+    ((pyd.is_boolean, pyd.is_empty), [False, None], False),
+])
+def test_conjoin(case, arg, expected):
+    assert pyd.conjoin(*case)(arg) == expected
+
+
 @parametrize('case,arglist,expected', [
     ((lambda a, b, c: [a, b, c],), [(1, 2, 3)], [1, 2, 3]),
     ((lambda a, b, c: [a, b, c],), [(1, 2), (3,)], [1, 2, 3]),
@@ -135,6 +143,16 @@ def test_delay(func, wait, args, kargs, expected):
 
     assert (wait - 5) <= (stop - start) <= (wait + 5)
     assert result == expected
+
+
+@parametrize('case,arg,expected', [
+    ((pyd.is_boolean, pyd.is_empty), [False, True], True),
+    ((pyd.is_boolean, pyd.is_empty), [False, None], True),
+    ((pyd.is_string, pyd.is_number), ['one', 1, 'two', 2], True),
+    ((pyd.is_string, pyd.is_number), [True, False, None, []], False),
+])
+def test_disjoin(case, arg, expected):
+    assert pyd.disjoin(*case)(arg) == expected
 
 
 @parametrize('func,args,expected', [

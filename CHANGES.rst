@@ -5,6 +5,8 @@ Changelog
 v2.0.0 (xxxx-xx-xx)
 -------------------
 
+- Add ``conjoin()``.
+- Add ``disjoin()``.
 - Add ``explode()``.
 - Add ``flatten_deep()``.
 - Add ``get_path()``.
