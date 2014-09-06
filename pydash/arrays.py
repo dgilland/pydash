@@ -44,6 +44,7 @@ __all__ = [
     'slice_',
     'sorted_index',
     'sorted_last_index',
+    'split_at',
     'tail',
     'take',
     'take_right',
@@ -588,6 +589,21 @@ def sorted_last_index(array, value, callback=None):
         value = callback(value)
 
     return bisect_right(array, value)
+
+
+def split_at(array, index):
+    """Returns a list of two lists composed of the split of `array` at `index`.
+
+    Args:
+        array (list): List to split.
+        index (int): Index to split at.
+
+    Returns:
+        list: Split list.
+
+    .. versionadded:: 2.0.0
+    """
+    return [take(array, index), drop(array, index)]
 
 
 def take(array, n):

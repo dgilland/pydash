@@ -328,6 +328,14 @@ def test_sorted_last_index(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], 2), [[1, 2], [3, 4, 5]]),
+    (([1, 2, 3, 4, 5], 0), [[], [1, 2, 3, 4, 5]]),
+])
+def test_split_at(case, expected):
+    assert pyd.split_at(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3, 4, 5], 1), [1]),
     (([1, 2, 3, 4, 5], 2), [1, 2]),
     (([1, 2, 3, 4, 5], 5), [1, 2, 3, 4, 5]),

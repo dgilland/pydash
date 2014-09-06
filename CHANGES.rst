@@ -39,6 +39,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``mapcat()``.
 - Add ``rename_keys()``.
 - Add ``set_path()``.
+- Add ``split_list()``.
 - Add ``to_string()``.
 - Add ``update_path()``.
 - Make ``chain()`` lazy and only compute the final value when ``value()`` called.

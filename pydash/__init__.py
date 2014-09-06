@@ -50,6 +50,7 @@ from .arrays import (
     slice_,
     sorted_index,
     sorted_last_index,
+    split_at,
     tail,
     take,
     take_right,
