@@ -10,7 +10,7 @@ from random import uniform, randint
 
 import pydash as pyd
 from .helpers import get_item
-from ._compat import _range, string_types, text_type
+from ._compat import _range, string_types
 
 
 __all__ = [

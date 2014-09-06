@@ -135,6 +135,8 @@ from .functions import (
     debounce,
     delay,
     disjoin,
+    flow,
+    flow_right,
     iterated,
     juxtapose,
     negate,

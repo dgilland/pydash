@@ -22,6 +22,8 @@ __all__ = [
     'debounce',
     'delay',
     'disjoin',
+    'flow',
+    'flow_right',
     'iterated',
     'juxtapose',
     'negate',
@@ -64,21 +66,23 @@ class Before(After):
 
 class Compose(object):
     """Wrap a function in a compose context."""
-    def __init__(self, *funcs):
+    def __init__(self, *funcs, **kargs):
         self.funcs = funcs
+        self.from_right = kargs.get('from_right', True)
 
     def __call__(self, *args, **kargs):
         """Return results of composing :attr:`funcs`."""
         funcs = list(self.funcs)
-        ret = None
+        from_index = -1 if self.from_right else 0
 
-        # Compose functions in reverse order starting with the first.
+        result = None
+
         while funcs:
-            ret = funcs.pop()(*args, **kargs)
-            args = (ret,)
+            result = funcs.pop(from_index)(*args, **kargs)
+            args = (result,)
             kargs = {}
 
-        return ret
+        return result
 
 
 class Conjoin(object):
@@ -307,23 +311,6 @@ def before(n, func):
     return Before(n, func)
 
 
-def compose(*funcs):
-    """Creates a function that is the composition of the provided functions,
-    where each function consumes the return value of the function that follows.
-    For example, composing the functions ``f()``, ``g()``, and ``h()`` produces
-    ``f(g(h()))``.
-
-    Args:
-        *funcs (function): Function(s) to compose.
-
-    Returns:
-        Compose: Function(s) wrapped in a :class:`Compose` context.
-
-    .. versionadded:: 1.0.0
-    """
-    return Compose(*funcs)
-
-
 def conjoin(*funcs):
     """Creates a function that composes multiple predicate functions into a
     single predicate that tests whether **all** elements of an object pass each
@@ -430,6 +417,50 @@ def disjoin(*funcs):
     .. versionadded:: 2.0.0
     """
     return Disjoin(*funcs)
+
+
+def flow(*funcs):
+    """Creates a function that is the composition of the provided functions,
+    where each successive invocation is supplied the return value of the
+    previous. For example, composing the functions ``f()``, ``g()``, and
+    ``h()`` produces ``h(g(g()))``.
+
+    Args:
+        *funcs (function): Function(s) to compose.
+
+    Returns:
+        Compose: Function(s) wrapped in a :class:`Compose` context.
+
+    .. versionadded:: 2.0.0
+    """
+    return Compose(*funcs, from_right=False)
+
+
+def flow_right(*funcs):
+    """This function is like :func:`flow` except that it creates a function
+    that invokes the provided functions from right to left. For example,
+    composing the functions ``f()``, ``g()``, and ``h()`` produces
+    ``f(g(h()))``.
+
+    Args:
+        *funcs (function): Function(s) to compose.
+
+    Returns:
+        Compose: Function(s) wrapped in a :class:`Compose` context.
+
+    See Also:
+        - :func:`flow_right` (main definition)
+        - :func:`compose` (alias)
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.0.0
+        Added :func:`flow_right` and made :func:`compose` an alias.
+    """
+    return Compose(*funcs, from_right=True)
+
+
+compose = flow_right
 
 
 def iterated(func):

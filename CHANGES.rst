@@ -9,6 +9,8 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``disjoin()``.
 - Add ``explode()``.
 - Add ``flatten_deep()``.
+- Add ``flow()``.
+- Add ``flow_right()``.
 - Add ``get_path()``.
 - Add ``has_path()``.
 - Add ``implode()``.
@@ -37,11 +39,12 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``set_path()``.
 - Add ``to_string()``.
 - Add ``update_path()``.
-- Modify ``chain()`` to be lazy and only compute the final value when ``value()`` called.
-- Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option. (**breaking change**)
-- Modify ``invert()`` to accept ``multivalue`` argument.
-- Modify ``is_number()`` to return ``False`` for boolean ``True`` and ``False``. (**breaking change**)
-- Modify ``result()`` to accept ``default`` argument.
+- Make ``chain()`` lazy and only compute the final value when ``value()`` called.
+- Make ``compose()`` an alias of ``flow_right()``.
+- Make ``flatten()`` shallow by default, remove callback option, and add ``is_deep`` option. (**breaking change**)
+- Make ``is_number()`` return ``False`` for boolean ``True`` and ``False``. (**breaking change**)
+- Make ``invert()`` accept ``multivalue`` argument.
+- Make ``result()`` accept ``default`` argument.
 - Move files in ``pydash/api/`` to ``pydash/``. (**possible breaking change**)
 - Move predicate functions from ``pydash.api.objects`` to ``pydash.api.predicates``. (**possible breaking change**)
 - Rename ``create_callback()`` to ``iteratee``. (**breaking change**)

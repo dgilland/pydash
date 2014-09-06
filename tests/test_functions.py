@@ -36,15 +36,6 @@ def test_before(case, expected):
     assert ret is None
 
 
-@parametrize('case,args,expected', [
-    ((lambda x: 'Hi {0}'.format(x), lambda x: '!!!' + x + '!!!'),
-     ('Bob',),
-     'Hi !!!Bob!!!')
-])
-def test_compose(case, args, expected):
-    assert pyd.compose(*case)(*args) == expected
-
-
 @parametrize('case,arg,expected', [
     ((pyd.is_boolean, pyd.is_empty), [False, True], True),
     ((pyd.is_boolean, pyd.is_empty), [False, None], False),
@@ -153,6 +144,37 @@ def test_delay(func, wait, args, kargs, expected):
 ])
 def test_disjoin(case, arg, expected):
     assert pyd.disjoin(*case)(arg) == expected
+
+
+@parametrize('case,args,expected', [
+    ((lambda x: '!!!' + x + '!!!', lambda x: 'Hi {0}'.format(x)),
+     ('Bob',),
+     'Hi !!!Bob!!!'),
+    ((lambda x: x + x, lambda x: x * x),
+     (5,),
+     100)
+])
+def test_flow(case, args, expected):
+    assert pyd.flow(*case)(*args) == expected
+
+
+@parametrize('case,args,expected', [
+    ((lambda x: 'Hi {0}'.format(x), lambda x: '!!!' + x + '!!!'),
+     ('Bob',),
+     'Hi !!!Bob!!!'),
+    ((lambda x: x + x, lambda x: x * x),
+     (5,),
+     50)
+])
+def test_flow_right(case, args, expected):
+    assert pyd.flow_right(*case)(*args) == expected
+
+
+@parametrize('case', [
+    pyd.compose
+])
+def test_flow_right_aliases(case):
+    assert pyd.flow_right is case
 
 
 @parametrize('func,args,expected', [
