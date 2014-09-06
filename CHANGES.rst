@@ -47,6 +47,7 @@ v2.0.0 (xxxx-xx-xx)
 - Make ``is_number()`` return ``False`` for boolean ``True`` and ``False``. (**breaking change**)
 - Make ``invert()`` accept ``multivalue`` argument.
 - Make ``result()`` accept ``default`` argument.
+- Make ``slice_()`` accept optional ``start`` and ``end`` arguments.
 - Move files in ``pydash/api/`` to ``pydash/``. (**possible breaking change**)
 - Move predicate functions from ``pydash.api.objects`` to ``pydash.api.predicates``. (**possible breaking change**)
 - Rename ``create_callback()`` to ``iteratee``. (**breaking change**)

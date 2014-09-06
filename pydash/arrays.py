@@ -514,20 +514,24 @@ def rest(array):
 tail = rest
 
 
-def slice_(array, start, end):
+def slice_(array, start=0, end=None):
     """Slices `array` from the `start` index up to, but not including, the
     `end` index.
 
     Args:
         array (list): Array to slice.
-        start (int): Start index.
-        end (int): End index.
+        start (int, optional): Start index. Defaults to ``0``.
+        end (int, optional): End index. Defaults to selecting the value at
+            ``start`` index.
 
     Returns:
         list: Sliced list.
 
     .. versionadded:: 1.1.0
     """
+    if end is None:
+        end = (start + 1) if start >= 0 else (len(array) + start + 1)
+
     return array[start:end]
 
 
