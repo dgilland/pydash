@@ -62,6 +62,16 @@ __all__ = [
 
 
 def cat(*arrays):
+    """Concatenates zero or more lists into one.
+
+    Args:
+        *arrays (list): Lists to concatenate.
+
+    Returns:
+        list: Concatenated list.
+
+    .. versionadded:: 2.0.0
+    """
     return flatten(arrays)
 
 
@@ -421,6 +431,18 @@ def last_index_of(array, value, from_index=None):
 
 
 def mapcat(array, callback):
+    """Map a callback to each element of a list and concatenate the results
+    into a single list using :func:`cat`.
+
+    Args:
+        array (list): List to map and concatenate.
+        callback (mixed): Callback to apply to each element.
+
+    Returns:
+        list: Mapped and concatenated list.
+
+    .. versionadded:: 2.0.0
+    """
     return cat(*pyd.map_(array, callback))
 
 
