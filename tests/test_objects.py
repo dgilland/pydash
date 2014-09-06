@@ -72,10 +72,21 @@ def test_clone_deep(case, kargs):
 
 @parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, {1: 'a', 2: 'b', 3: 'c'}),
-    ([1, 2, 3], {1: 0, 2: 1, 3: 2})
+    ([1, 2, 3], {1: 0, 2: 1, 3: 2}),
 ])
 def test_invert(case, expected):
     assert pyd.invert(case) == expected
+
+
+@parametrize('case,expected', [
+    ([1, 2, 3], {1: [0], 2: [1], 3: [2]}),
+    ({'first': 'fred', 'second': 'barney', 'third': 'fred'},
+     {'fred': ['first', 'third'], 'barney': ['second']}),
+])
+def test_invert_multivalue(case, expected):
+    result = pyd.invert(case, multivalue=True)
+    for key in result:
+        assert set(result[key]) == set(expected[key])
 
 
 @parametrize('case,expected', [

@@ -327,12 +327,14 @@ def has_path(obj, keys):
     return exists
 
 
-def invert(obj):
+def invert(obj, multivalue=False):
     """Creates an object composed of the inverted keys and values of the given
     object.
 
     Args:
         obj (dict): dict to invert
+        multivalue (bool, optional): Whether to return inverted values as
+            lists. Defaults to ``False``.
 
     Returns:
         dict: Inverted dict
@@ -341,8 +343,18 @@ def invert(obj):
         Assumes `dict` values are hashable as `dict` keys.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.0.0
+        Added ``multivalue`` argument.
     """
-    return dict((value, key) for key, value in iterator(obj))
+    result = {}
+    for key, value in iterator(obj):
+        if multivalue:
+            result.setdefault(value, []).append(key)
+        else:
+            result[value] = key
+
+    return result
 
 
 def keys(obj):

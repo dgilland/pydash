@@ -39,6 +39,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``update_path()``.
 - Modify ``chain()`` to be lazy and only compute the final value when ``value()`` called.
 - Modify ``flatten()`` to be shallow by default, remove callback option, and add ``is_deep`` option. (**breaking change**)
+- Modify ``invert()`` to accept ``multivalue`` argument.
 - Modify ``is_number()`` to return ``False`` for boolean ``True`` and ``False``. (**breaking change**)
 - Move files in ``pydash/api/`` to ``pydash/``. (**possible breaking change**)
 - Move predicate functions from ``pydash.api.objects`` to ``pydash.api.predicates``. (**possible breaking change**)
