@@ -24,6 +24,21 @@ def test_assign_aliases(case):
     assert pyd.assign is case
 
 
+@parametrize('case,expected', [
+    (({'name': 'fred', 'greet': lambda: 'Hello, world!'},), ['greet']),
+    ((['fred', lambda: 'Hello, world!'],), [1]),
+])
+def test_callables(case, expected):
+    assert pyd.callables(*case) == expected
+
+
+@parametrize('case', [
+    pyd.methods,
+])
+def test_callables_aliases(case):
+    assert pyd.callables is case
+
+
 @parametrize('case,args', [
     ({'a': {'d': 1}, 'b': {'c': 2}}, ()),
     ({'a': {'d': 1}, 'b': {'c': 2}}, (False, lambda v: v)),
@@ -34,7 +49,7 @@ def test_clone(case, args):
 
     assert actual is not case
 
-    for key, value in pyd.utils.iterator(actual):
+    for key, value in pyd.helpers.iterator(actual):
         assert value is case[key]
 
 
@@ -51,7 +66,7 @@ def test_clone_deep(case, kargs):
     for actual in actuals:
         assert actual is not case
 
-        for key, value in pyd.utils.iterator(actual):
+        for key, value in pyd.helpers.iterator(actual):
             assert value is not case[key]
 
 
@@ -133,21 +148,6 @@ def test_for_in_right(case, expected):
 ])
 def test_for_in_right_aliases(case):
     assert pyd.for_in_right is case
-
-
-@parametrize('case,expected', [
-    (({'name': 'fred', 'greet': lambda: 'Hello, world!'},), ['greet']),
-    ((['fred', lambda: 'Hello, world!'],), [1]),
-])
-def test_functions(case, expected):
-    assert pyd.functions(*case) == expected
-
-
-@parametrize('case', [
-    pyd.methods,
-])
-def test_functions_aliases(case):
-    assert pyd.functions is case
 
 
 @parametrize('case,expected', [

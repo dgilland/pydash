@@ -12,8 +12,8 @@ import operator
 import re
 
 import pydash as pyd
-from ..utils import iterator
-from .._compat import integer_types, number_types, string_types, izip
+from .helpers import iterator
+from ._compat import integer_types, number_types, string_types, izip
 
 
 __all__ = [

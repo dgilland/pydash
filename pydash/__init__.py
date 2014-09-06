@@ -18,7 +18,7 @@ from .__meta__ import (
 # Arrays
 #
 
-from .api.arrays import (
+from .arrays import (
     chunk,
     compact,
     difference,
@@ -68,7 +68,7 @@ from .api.arrays import (
 # Chaining
 #
 
-from .api.chaining import (
+from .chaining import (
     chain,
     tap,
 )
@@ -78,7 +78,7 @@ from .api.chaining import (
 # Collections
 #
 
-from .api.collections import (
+from .collections import (
     all_,
     any_,
     at,
@@ -125,7 +125,7 @@ from .api.collections import (
 # Functions
 #
 
-from .api.functions import (
+from .functions import (
     after,
     before,
     compose,
@@ -150,8 +150,9 @@ from .api.functions import (
 # Objects
 #
 
-from .api.objects import (
+from .objects import (
     assign,
+    callables,
     clone,
     clone_deep,
     defaults,
@@ -162,7 +163,6 @@ from .api.objects import (
     for_in_right,
     for_own,
     for_own_right,
-    functions,
     get_path,
     has,
     has_path,
@@ -190,7 +190,7 @@ from .api.objects import (
 # Predicates
 #
 
-from .api.predicates import (
+from .predicates import (
     is_associative,
     is_boolean,
     is_date,
@@ -229,7 +229,7 @@ from .api.predicates import (
 # Strings
 #
 
-from .api.strings import (
+from .strings import (
     camel_case,
     capitalize,
     ends_with,
@@ -256,7 +256,7 @@ from .api.strings import (
 # Utilities
 #
 
-from .api.utilities import (
+from .utilities import (
     attempt,
     callback,
     constant,
@@ -279,6 +279,6 @@ from .api.utilities import (
 #
 # Exceptions
 #
-from .api.exceptions import (
+from .exceptions import (
     InvalidMethod
 )

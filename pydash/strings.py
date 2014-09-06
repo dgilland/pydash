@@ -7,7 +7,7 @@ import re
 import string
 
 import pydash as pyd
-from .._compat import text_type, html_unescape
+from ._compat import text_type, html_unescape
 
 
 __all__ = [

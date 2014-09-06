@@ -2,7 +2,6 @@
 import time
 
 import pydash as pyd
-from pydash.api.collections import map_
 
 from . import fixtures
 from .fixtures import parametrize
@@ -51,7 +50,7 @@ def test_constant(case):
 ])
 def test_callback(case, arg, expected):
     getter = pyd.callback(case)
-    assert map_(arg, getter) == expected
+    assert pyd.map_(arg, getter) == expected
 
 
 @parametrize('case', [
@@ -114,7 +113,7 @@ def test_now():
 ])
 def test_property_(case, arg, expected):
     getter = pyd.property_(case)
-    assert map_(arg, getter) == expected
+    assert pyd.map_(arg, getter) == expected
 
 
 @parametrize('case', [

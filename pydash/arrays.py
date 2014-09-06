@@ -9,7 +9,7 @@ from bisect import bisect_left, bisect_right
 from math import ceil
 
 import pydash as pyd
-from ..utils import itercallback
+from .helpers import itercallback
 
 
 __all__ = [

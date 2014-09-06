@@ -9,12 +9,13 @@ import copy
 import re
 
 import pydash as pyd
-from ..utils import iterator, itercallback, get_item, set_item
-from .._compat import iteritems, text_type
+from .helpers import iterator, itercallback, get_item, set_item
+from ._compat import iteritems, text_type
 
 
 __all__ = [
     'assign',
+    'callables',
     'clone',
     'clone_deep',
     'defaults',
@@ -25,7 +26,6 @@ __all__ = [
     'for_in_right',
     'for_own',
     'for_own_right',
-    'functions',
     'get_path',
     'has',
     'has_path',
@@ -85,6 +85,30 @@ def assign(obj, *sources, **kargs):
 
 
 extend = assign
+
+
+def callables(obj):
+    """Creates a sorted list of keys of an object that are callable.
+
+    Args:
+        obj (list|dict): Object to inspect.
+
+    Returns:
+        list: All keys whose values are callable.
+
+    See Also:
+        - :func:`functions` (main definition)
+        - :func:`methods` (alias)
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.0.0
+        Renamed ``functions`` to ``callables``.
+    """
+    return sorted(key for key, value in iterator(obj) if callable(value))
+
+
+methods = callables
 
 
 def clone(value, is_deep=False, callback=None):
@@ -235,27 +259,6 @@ def for_in_right(obj, callback=None):
 
 
 for_own_right = for_in_right
-
-
-def functions(obj):
-    """Creates a sorted list of keys of an object that are callable.
-
-    Args:
-        obj (list|dict): Object to inspect.
-
-    Returns:
-        list: All keys whose values are callable.
-
-    See Also:
-        - :func:`functions` (main definition)
-        - :func:`methods` (alias)
-
-    .. versionadded:: 1.0.0
-    """
-    return sorted(key for key, value in iterator(obj) if callable(value))
-
-
-methods = functions
 
 
 def get_path(obj, keys, **kargs):

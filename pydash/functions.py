@@ -9,7 +9,7 @@ import inspect
 import time
 
 import pydash as pyd
-from .._compat import _range
+from ._compat import _range
 
 
 __all__ = [

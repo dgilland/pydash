@@ -7,8 +7,6 @@ from __future__ import absolute_import
 
 import pydash as pyd
 
-from .._compat import text_type
-
 
 __all__ = [
     'chain',
@@ -44,7 +42,7 @@ class Chain(object):
         Returns:
             str: Current value of chain operations casted to ``str``.
         """
-        return text_type(self.value())
+        return pyd.to_string(self.value())
 
     def __getattr__(self, attr):
         """Proxy attribute access to :mod:`pydash`.

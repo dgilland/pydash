@@ -8,8 +8,9 @@ from __future__ import absolute_import
 import time
 from random import uniform, randint
 
-from ..utils import get_item
-from .._compat import _range, string_types, text_type
+import pydash as pyd
+from .helpers import get_item
+from ._compat import _range, string_types, text_type
 
 
 __all__ = [
@@ -326,4 +327,5 @@ def unique_id(prefix=None):
     global ID_COUNTER
     ID_COUNTER += 1
 
-    return text_type('' if prefix is None else prefix) + text_type(ID_COUNTER)
+    return '{0}{1}'.format(pyd.to_string('' if prefix is None else prefix),
+                           pyd.to_string(ID_COUNTER))
