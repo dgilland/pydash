@@ -37,6 +37,8 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``iterated()``.
 - Add ``juxtapose()``.
 - Add ``mapcat()``.
+- Add ``reductions()``.
+- Add ``reductions_right()``.
 - Add ``rename_keys()``.
 - Add ``set_path()``.
 - Add ``split_list()``.

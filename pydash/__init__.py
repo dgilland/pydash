@@ -112,6 +112,8 @@ from .collections import (
     pluck,
     reduce_,
     reduce_right,
+    reductions,
+    reductions_right,
     reject,
     sample,
     select,

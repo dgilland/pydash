@@ -43,6 +43,8 @@ __all__ = [
     'pluck',
     'reduce_',
     'reduce_right',
+    'reductions',
+    'reductions_right',
     'reject',
     'sample',
     'select',
@@ -487,9 +489,9 @@ def reduce_(collection, callback=None, accumulator=None):
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
-        accumulator (mixed, optional): Object that stores result of reduction.
-            Default is to use the result of the first iteration.
+        callback (mixed): Callback applied per iteration.
+        accumulator (mixed, optional): Initial value of aggregator. Default is
+            to use the result of the first iteration.
 
     Returns:
         mixed: Accumulator object containing results of reduction.
@@ -531,9 +533,9 @@ def reduce_right(collection, callback=None, accumulator=None):
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
-        accumulator (mixed, optional): Object that stores result of reduction.
-            Default is to use the result of the first iteration.
+        callback (mixed): Callback applied per iteration.
+        accumulator (mixed, optional): Initial value of aggregator. Default is
+            to use the result of the first iteration.
 
     Returns:
         mixed: Accumulator object containing results of reduction.
@@ -550,6 +552,63 @@ def reduce_right(collection, callback=None, accumulator=None):
 
 
 foldr = reduce_right
+
+
+def reductions(collection, callback=None, accumulator=None, from_right=False):
+    """This function is like :func:`reduce_` except that it returns a list of
+    every intermediate value in the reduction operation.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed): Callback applied per iteration.
+        accumulator (mixed, optional): Initial value of aggregator. Default is
+            to use the result of the first iteration.
+
+    Returns:
+        list: Results of each reduction operation.
+
+    Note:
+        The last element of the returned list would be the result of using
+        :func:`reduce_`.
+
+    .. versionadded:: 2.0.0
+    """
+    if callback is None:
+        callback = lambda item, *args: item
+
+    results = []
+
+    def interceptor(result, item, index):
+        result = callback(result, item, index)
+        results.append(result)
+        return result
+
+    reducer = reduce_right if from_right else reduce_
+    reducer(collection, interceptor, accumulator)
+
+    return results
+
+
+def reductions_right(collection, callback=None, accumulator=None):
+    """This method is like :func:`reductions` except that it iterates over
+    elements of a `collection` from right to left.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed): Callback applied per iteration.
+        accumulator (mixed, optional): Initial value of aggregator. Default is
+            to use the result of the first iteration.
+
+    Returns:
+        list: Results of each reduction operation.
+
+    Note:
+        The last element of the returned list would be the result of using
+        :func:`reduce_`.
+
+    .. versionadded:: 2.0.0
+    """
+    return reductions(collection, callback, accumulator, from_right=True)
 
 
 def reject(collection, callback=None):

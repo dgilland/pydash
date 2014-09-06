@@ -430,7 +430,7 @@ def last_index_of(array, value, from_index=None):
     return -1
 
 
-def mapcat(array, callback):
+def mapcat(array, callback=None):
     """Map a callback to each element of a list and concatenate the results
     into a single list using :func:`cat`.
 
@@ -641,7 +641,7 @@ def take(array, n):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-       Added ``n`` argument and removed as alias of :func:`first`.
+        Added ``n`` argument and removed as alias of :func:`first`.
     """
     return take_while(array, lambda _, index, *args: index < n)
 

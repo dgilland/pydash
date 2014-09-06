@@ -251,7 +251,7 @@ def test_pluck(case, filter_by, expected):
     (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
      {'a': 3, 'b': 6, 'c': 9})
 ])
-def test_reduce(case, expected):
+def test_reduce_(case, expected):
     assert pyd.reduce_(*case) == expected
 
 
@@ -308,6 +308,25 @@ def test_reduce_right_exception(case, exception):
 ])
 def test_reduce_right_aliases(case):
     assert pyd.reduce_right is case
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], None), [1, 1]),
+    (([1, 2, 3], fixtures.reduce_callback0), [3, 6]),
+    (([1, 2, 3, 4, 5], fixtures.reduce_callback0, 0), [1, 3, 6, 10, 15])
+])
+def test_reductions(case, expected):
+    assert pyd.reductions(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], None), [3, 3]),
+    (([1, 2, 3], fixtures.reduce_callback0), [5, 6]),
+    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_callback0),
+     [[4, 5, 2, 3], [4, 5, 2, 3, 0, 1]]),
+])
+def test_reductions_right(case, expected):
+    assert pyd.reductions_right(*case) == expected
 
 
 @parametrize('case,expected', [
