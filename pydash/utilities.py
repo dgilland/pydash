@@ -269,24 +269,29 @@ def range_(*args):
     return list(_range(*args))
 
 
-def result(obj, key):
+def result(obj, key, default=None):
     """Return the value of property `key` on `obj`. If `key` value is a
     function it will be invoked and its result returned, else the property
-    value is returned. If `obj` is falsey then ``None`` is returned.
+    value is returned. If `obj` is falsey then `default` is returned.
 
     Args:
         obj (list|dict): Object to retrieve result from.
         key (mixed): Key or index to get result from.
+        default (mixed, optional): Default value to return if `obj` is falsey.
+            Defaults to ``None``.
 
     Returns:
         mixed: Result of ``obj[key]`` or ``None``.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.0.0
+        Added ``default`` argument.
     """
     if not obj:
-        return None
+        return default
 
-    ret = get_item(obj, key, default=None)
+    ret = get_item(obj, key, default=default)
 
     if callable(ret):
         ret = ret()

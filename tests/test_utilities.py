@@ -169,7 +169,8 @@ def test_range_(case, expected):
      'nonsense'),
     (({'cheese': 'crumpets', 'stuff': lambda: 'nonsense'}, 'foo'),
      None),
-    ((False, 'foo'), None)
+    ((False, 'foo'), None),
+    ((False, 'foo', 'default'), 'default'),
 ])
 def test_result(case, expected):
     assert pyd.result(*case) == expected
