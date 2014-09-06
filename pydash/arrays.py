@@ -13,6 +13,7 @@ from .helpers import itercallback
 
 
 __all__ = [
+    'cat',
     'chunk',
     'compact',
     'difference',
@@ -34,6 +35,7 @@ __all__ = [
     'intersperse',
     'last',
     'last_index_of',
+    'mapcat',
     'object_',
     'pull',
     'pull_at',
@@ -56,6 +58,10 @@ __all__ = [
     'unzip',
     'zip_object',
 ]
+
+
+def cat(*arrays):
+    return flatten(arrays)
 
 
 def chunk(array, size=1):
@@ -411,6 +417,10 @@ def last_index_of(array, value, from_index=None):
             return index
         index -= 1
     return -1
+
+
+def mapcat(array, callback):
+    return cat(*pyd.map_(array, callback))
 
 
 def pull(array, *values):

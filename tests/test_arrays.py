@@ -7,6 +7,18 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
+    ((), []),
+    (([],), []),
+    (([1, 2, 3],), [1, 2, 3]),
+    (([1, 2, 3], [4, 5, 6]), [1, 2, 3, 4, 5, 6]),
+    (([1, 2, 3], [4, 5, 6], [7]), [1, 2, 3, 4, 5, 6, 7]),
+    ((1, [2], 3, 4), [1, 2, 3, 4]),
+])
+def test_cat(case, expected):
+    assert pyd.cat(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3, 4, 5],), [[1], [2], [3], [4], [5]]),
     (([1, 2, 3, 4, 5], 2), [[1, 2], [3, 4], [5]]),
     (([1, 2, 3, 4, 5], 3), [[1, 2, 3], [4, 5]]),
@@ -218,6 +230,15 @@ def test_last(case, expected):
 ])
 def test_last_index_of(case, value, from_index, expected):
     assert pyd.last_index_of(case, value, from_index) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, None, 4, None, 6],
+      lambda x, i, *args: ['{0}'.format(i)] if x is None else []),
+     ['2', '4'])
+])
+def test_mapcat(case, expected):
+    assert pyd.mapcat(*case) == expected
 
 
 @parametrize('case,values,expected', [

@@ -5,6 +5,7 @@ Changelog
 v2.0.0 (xxxx-xx-xx)
 -------------------
 
+- Add ``cat()``.
 - Add ``conjoin()``.
 - Add ``disjoin()``.
 - Add ``explode()``.
@@ -35,6 +36,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``is_zero()``.
 - Add ``iterated()``.
 - Add ``juxtapose()``.
+- Add ``mapcat()``.
 - Add ``rename_keys()``.
 - Add ``set_path()``.
 - Add ``to_string()``.

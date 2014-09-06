@@ -19,6 +19,7 @@ from .__meta__ import (
 #
 
 from .arrays import (
+    cat,
     chunk,
     compact,
     difference,
@@ -40,6 +41,7 @@ from .arrays import (
     intersperse,
     last,
     last_index_of,
+    mapcat,
     object_,
     pull,
     pull_at,
