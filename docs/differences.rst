@@ -10,6 +10,7 @@ pydash adheres to the following conventions:
 - Function names use ``snake_case`` instead of ``camelCase``.
 - Any Lo-Dash function that shares its name with a reserved Python keyword will have an ``_`` appended after it (e.g. ``filter`` in Lo-Dash would be ``filter_`` in pydash.
 - Lo-Dash's ``toArray()`` is pydash's ``to_list()``.
+- Lo-Dash's ``functions()`` is pydash's ``callables()``. This particular name difference was chosen in order to allow for the ``functions.py`` module file to exist at root of the project. Previously, ``functions.py`` existed in ``pydash/api/`` but in ``v2.0.0``, it was decided to move everything in ``api/`` to ``pydash/``. Therefore, In to avoid import ambiguities, the ``functions()`` function was renamed.
 
 
 Callbacks
