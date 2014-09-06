@@ -238,7 +238,7 @@ for_own_right = for_in_right
 
 
 def functions(obj):
-    """Creates a list of keys of an object that are callable.
+    """Creates a sorted list of keys of an object that are callable.
 
     Args:
         obj (list|dict): Object to inspect.
@@ -252,7 +252,7 @@ def functions(obj):
 
     .. versionadded:: 1.0.0
     """
-    return [key for key, value in iterator(obj) if callable(value)]
+    return sorted(key for key, value in iterator(obj) if callable(value))
 
 
 methods = functions

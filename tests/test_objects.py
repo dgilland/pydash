@@ -137,6 +137,7 @@ def test_for_in_right_aliases(case):
 
 @parametrize('case,expected', [
     (({'name': 'fred', 'greet': lambda: 'Hello, world!'},), ['greet']),
+    ((['fred', lambda: 'Hello, world!'],), [1]),
 ])
 def test_functions(case, expected):
     assert pyd.functions(*case) == expected
