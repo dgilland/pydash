@@ -19,7 +19,7 @@ def test_chaining_methods():
 
 @parametrize('value,methods', [
     ([1, 2, 3, 4], [('without', (2, 3)),
-                    ('reject', (lambda x, *args: x > 1,))])
+                    ('reject', (lambda x: x > 1,))])
 ])
 def test_chaining(value, methods):
     expected = deepcopy(value)

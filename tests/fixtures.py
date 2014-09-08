@@ -7,7 +7,7 @@ import pytest
 parametrize = pytest.mark.parametrize
 
 
-def reduce_callback0(total, num, *args):
+def reduce_callback0(total, num):
     return total + num
 
 
@@ -16,7 +16,7 @@ def reduce_callback1(result, num, key):
     return result
 
 
-def reduce_right_callback0(a, b, *args):
+def reduce_right_callback0(a, b):
     return a + b
 
 
@@ -24,7 +24,7 @@ def noop(*args, **kargs):
     pass
 
 
-def transform_callback0(result, num, *args):
+def transform_callback0(result, num):
     num *= num
     if num % 2:
         result.append(num)

@@ -2,6 +2,7 @@
 """
 
 from functools import wraps
+import inspect
 import warnings
 
 import pydash as pyd
@@ -20,6 +21,19 @@ class _NoValue(object):
 NoValue = _NoValue()
 
 
+def call_callback(callback, *args):
+    """Inspect argspec of `callback` function and only pass the supported
+    arguments when calling it.
+    """
+    argspec = inspect.getargspec(callback)
+    argcount = len(argspec.args)
+    maxargs = len(args)
+
+    argstop = maxargs if argspec.varargs else min([maxargs, argcount])
+
+    return callback(*args[:argstop])
+
+
 def itercallback(collection, callback=None, reverse=False):
     """Return iterative callback based on collection type."""
     if isinstance(collection, dict):
@@ -28,34 +42,34 @@ def itercallback(collection, callback=None, reverse=False):
         return iterlist_callback(collection, callback, reverse=reverse)
 
 
-def iterlist_callback(array, callback=None, reverse=False):
+def iterlist_callback(obj, callback=None, reverse=False):
     """Return iterative list callback."""
     cbk = pyd.iteratee(callback)
-    array_len = len(array)
+    obj_len = len(obj)
 
     if reverse:
-        iterable = list(reversed(array))
+        items = list(reversed(obj))
     else:
-        iterable = array
+        items = obj
 
-    for index, item in enumerate(iterable):
+    for key, item in enumerate(items):
         if reverse:
-            index = array_len - index - 1
+            key = obj_len - key - 1
 
-        yield (cbk(item, index, array), item, index, array)
+        yield (call_callback(cbk, item, key, obj), item, key, obj)
 
 
-def iterdict_callback(collection, callback=None, reverse=False):
+def iterdict_callback(obj, callback=None, reverse=False):
     """Return iterative dict callback."""
     cbk = pyd.iteratee(callback)
 
     if reverse:
-        items = reversed(list(iteritems(collection)))
+        items = reversed(list(iteritems(obj)))
     else:
-        items = iteritems(collection)
+        items = iteritems(obj)
 
-    for key, value in items:
-        yield (cbk(value, key, collection), value, key, collection)
+    for key, item in items:
+        yield (call_callback(cbk, item, key, obj), item, key, obj)
 
 
 def iterator(collection):

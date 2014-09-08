@@ -9,7 +9,14 @@ import copy
 import re
 
 import pydash as pyd
-from .helpers import iterator, itercallback, get_item, set_item, NoValue
+from .helpers import (
+    iterator,
+    itercallback,
+    get_item,
+    set_item,
+    NoValue,
+    call_callback
+)
 from ._compat import iteritems, text_type
 
 
@@ -476,7 +483,7 @@ def omit(obj, callback=None, *properties):
         callback = lambda value, key, item: key in properties
 
     return dict((key, value) for key, value in iterator(obj)
-                if not callback(value, key, obj))
+                if not call_callback(callback, value, key, obj))
 
 
 def pairs(obj):
@@ -556,7 +563,7 @@ def pick(obj, callback=None, *properties):
         callback = lambda value, key, item: key in properties
 
     return dict((key, value) for key, value in iterator(obj)
-                if callback(value, key, obj))
+                if call_callback(callback, value, key, obj))
 
 
 def rename_keys(obj, key_map):
@@ -636,8 +643,8 @@ def transform(obj, callback=None, accumulator=None):
     if accumulator is None:
         accumulator = []
 
-    walk = (None for key, value in iterator(obj)
-            if callback(accumulator, value, key, obj) is False)
+    walk = (None for key, item in iterator(obj)
+            if call_callback(callback, accumulator, item, key, obj) is False)
     next(walk, None)
 
     return accumulator

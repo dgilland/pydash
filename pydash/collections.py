@@ -9,7 +9,7 @@ import random
 
 import pydash as pyd
 
-from .helpers import itercallback, iterator
+from .helpers import itercallback, iterator, call_callback
 
 
 __all__ = [
@@ -518,7 +518,7 @@ def reduce_(collection, callback=None, accumulator=None):
         callback = lambda item, *args: item
 
     for index, item in iterable:
-        result = callback(result, item, index)
+        result = call_callback(callback, result, item, index)
 
     return result
 
@@ -579,7 +579,7 @@ def reductions(collection, callback=None, accumulator=None, from_right=False):
     results = []
 
     def interceptor(result, item, index):
-        result = callback(result, item, index)
+        result = call_callback(callback, result, item, index)
         results.append(result)
         return result
 

@@ -44,6 +44,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``split_at()``.
 - Add ``to_string()``.
 - Add ``update_path()``.
+- Make callback function calling adapt to argspec of given callback function. If, for example, the full callback signature is ``(item, index, obj)`` but the passed in callback only supports ``(item)``, then only ``item`` will be passed in when callback is invoked. Previously, callbacks had to support all arguments or implement star-args.
 - Make ``chain()`` lazy and only compute the final value when ``value()`` called.
 - Make ``compose()`` an alias of ``flow_right()``.
 - Make ``flatten()`` shallow by default, remove callback option, and add ``is_deep`` option. (**breaking change**)

@@ -38,7 +38,7 @@ def test_constant(case):
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      [True, False]),
-    (lambda obj, *args: obj['age'],
+    (lambda obj: obj['age'],
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      [40, 36]),

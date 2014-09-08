@@ -34,7 +34,7 @@ def test_contains_aliases(case):
 
 
 @parametrize('case,expected', [
-    (([4.3, 6.1, 6.4], lambda num, *args: int(math.floor(num))), {4: 1, 6: 2}),
+    (([4.3, 6.1, 6.4], lambda num: int(math.floor(num))), {4: 1, 6: 2}),
     (([{'one': 1}, {'one': 1}, {'two': 2}, {'one': 1}], {'one': 1}),
      {True: 3, False: 1}),
     (([{'one': 1}, {'one': 1}, {'two': 2}, {'one': 1}], 'one'),
@@ -47,7 +47,7 @@ def test_count_by(case, expected):
 
 @parametrize('case,expected', [
     (([0, True, False, None, 1, 2, 3],), [True, 1, 2, 3]),
-    (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [2, 4, 6]),
+    (([1, 2, 3, 4, 5, 6], lambda num: num % 2 == 0), [2, 4, 6]),
     (([{'name': 'barney', 'age': 36, 'blocked': False},
        {'name': 'fred',   'age': 40, 'blocked': True}],
       'blocked'),
@@ -65,7 +65,7 @@ def test_filter_(case, expected):
     (([{'name': 'barney',  'age': 36, 'blocked': False},
        {'name': 'fred',    'age': 40, 'blocked': True},
        {'name': 'pebbles', 'age': 1,  'blocked': False}],
-      lambda c, *args: c['age'] < 40),
+      lambda c: c['age'] < 40),
      {'name': 'barney', 'age': 36, 'blocked': False}),
     (([{'name': 'barney',  'age': 36, 'blocked': False},
        {'name': 'fred',    'age': 40, 'blocked': True},
@@ -87,7 +87,7 @@ def test_find(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4], lambda num, *args: num % 2 == 1), 3),
+    (([1, 2, 3, 4], lambda num: num % 2 == 1), 3),
 ])
 def test_find_last(case, expected):
     assert pyd.find_last(*case) == expected
@@ -95,7 +95,7 @@ def test_find_last(case, expected):
 
 @parametrize('case,expected', [
     (([1, 2, 3], fixtures.noop), [1, 2, 3]),
-    (([1, 2, 3], lambda value, *args: value < 2), [1, 2, 3]),
+    (([1, 2, 3], lambda value: value < 2), [1, 2, 3]),
     (({'one': 1, 'two': 2, 'three': 3}, fixtures.noop),
      {'one': 1, 'two': 2, 'three': 3}),
 ])
@@ -112,7 +112,7 @@ def test_for_each_aliases(case):
 
 @parametrize('case,expected', [
     (([1, 2, 3], fixtures.noop), [1, 2, 3]),
-    (([1, 2, 3], lambda value, *args: value < 2), [1, 2, 3]),
+    (([1, 2, 3], lambda value: value < 2), [1, 2, 3]),
     (({'one': 1, 'two': 2, 'three': 3}, fixtures.noop),
      {'one': 1, 'two': 2, 'three': 3}),
 ])
@@ -129,7 +129,7 @@ def test_for_each_right_aliases(case):
 
 @parametrize('case,expected', [
     (([4.2, 6.1, 6.4],
-      lambda num, *args: int(math.floor(num))),
+      lambda num: int(math.floor(num))),
      {4: [4.2], 6: [6.1, 6.4]}),
 ])
 def test_group_by(case, expected):
@@ -160,8 +160,8 @@ def test_invoke(case, expected):
 
 @parametrize('case,expected,sort_results', [
     (([1, 2, 3],), [1, 2, 3], False),
-    (([1, 2, 3], lambda num, *args: num * 3), [3, 6, 9], False),
-    (({'one': 1, 'two': 2, 'three': 3}, lambda num, *args: num * 3),
+    (([1, 2, 3], lambda num: num * 3), [3, 6, 9], False),
+    (({'one': 1, 'two': 2, 'three': 3}, lambda num: num * 3),
      [3, 6, 9],
      True),
     (([{'name': 'moe', 'age': 40},
@@ -214,8 +214,8 @@ def test_min_(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], lambda item, *args: item % 2), [[1, 3], [2]]),
-    (([1.2, 2.3, 3.4], lambda item, *args: math.floor(item) % 2),
+    (([1, 2, 3], lambda item: item % 2), [[1, 3], [2]]),
+    (([1.2, 2.3, 3.4], lambda item: math.floor(item) % 2),
      [[1.2, 3.4], [2.3]]),
     (([{'name': 'barney', 'age': 36},
        {'name': 'fred', 'age': 40, 'blocked': True},
@@ -331,7 +331,7 @@ def test_reductions_right(case, expected):
 
 @parametrize('case,expected', [
     (([0, True, False, None, 1, 2, 3],), [0, False, None]),
-    (([1, 2, 3, 4, 5, 6], lambda num, *args: num % 2 == 0), [1, 3, 5]),
+    (([1, 2, 3, 4, 5, 6], lambda num: num % 2 == 0), [1, 3, 5]),
     (([{'name': 'barney', 'age': 36, 'blocked': False},
        {'name': 'fred',   'age': 40, 'blocked': True}],
       'blocked'),

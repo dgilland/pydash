@@ -104,7 +104,7 @@ def test_defaults(case, expected):
     (({'barney':  {'age': 36, 'blocked': False},
        'fred':    {'age': 40, 'blocked': True},
        'pebbles': {'age': 1,  'blocked': False}},
-      lambda obj, *args: obj['age'] < 40),
+      lambda obj: obj['age'] < 40),
      ['pebbles', 'barney']),
     (({'barney':  {'age': 36, 'blocked': False},
        'fred':    {'age': 40, 'blocked': True},
@@ -209,7 +209,7 @@ def test_keys_aliases(case):
 
 
 @parametrize('case,expected', [
-    (({'a': 1, 'b': 2, 'c': 3}, lambda num, *args: num * 3),
+    (({'a': 1, 'b': 2, 'c': 3}, lambda num: num * 3),
      {'a': 3, 'b': 6, 'c': 9}),
     (({'fred': {'name': 'fred', 'age': 40},
        'pebbles': {'name': 'pebbles', 'age': 1}},
@@ -273,7 +273,7 @@ def test_merge(case, callback, expected):
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), {'c': 3}),
     (({'a': 1, 'b': 2, 'c': 3}, ['a', 'b']), {'c': 3}),
     (({'a': 1, 'b': 2, 'c': 3}, ['a'], ['b']), {'c': 3}),
-    (({'a': 1, 'b': 2, 'c': 3}, lambda value, key, *args: key in ['a']),
+    (({'a': 1, 'b': 2, 'c': 3}, lambda value, key: key in ['a']),
      {'b': 2, 'c': 3}),
     (([1, 2, 3],), {0: 1, 1: 2, 2: 3}),
     (([1, 2, 3], 0), {1: 2, 2: 3}),
@@ -312,7 +312,7 @@ def test_parse_int(case, expected):
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), {'a': 1, 'b': 2}),
     (({'a': 1, 'b': 2, 'c': 3}, ['a', 'b']), {'a': 1, 'b': 2}),
     (({'a': 1, 'b': 2, 'c': 3}, ['a'], ['b']), {'a': 1, 'b': 2}),
-    (({'a': 1, 'b': 2, 'c': 3}, lambda value, key, *args: key in ['a']),
+    (({'a': 1, 'b': 2, 'c': 3}, lambda value, key: key in ['a']),
      {'a': 1}),
     (([1, 2, 3],), {}),
     (([1, 2, 3], 0), {0: 1}),

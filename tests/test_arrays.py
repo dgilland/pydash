@@ -56,7 +56,7 @@ def test_drop(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4, 5], lambda item, *args: item < 3), [3, 4, 5]),
+    (([1, 2, 3, 4, 5], lambda item: item < 3), [3, 4, 5]),
 ])
 def test_drop_while(case, expected):
     assert pyd.drop_while(*case) == expected
@@ -73,7 +73,7 @@ def test_drop_right(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4, 5], lambda item, *args: item > 3), [1, 2, 3]),
+    (([1, 2, 3, 4, 5], lambda item: item > 3), [1, 2, 3]),
 ])
 def test_drop_right_while(case, expected):
     assert pyd.drop_right_while(*case) == expected
@@ -96,26 +96,26 @@ def test_every(case, expected):
 
 
 @parametrize('case,filter_by,expected', [
-    (['apple', 'banana', 'beet'], lambda item, *args: item.startswith('b'), 1),
+    (['apple', 'banana', 'beet'], lambda item: item.startswith('b'), 1),
     ([{'name': 'apple',  'type': 'fruit'},
       {'name': 'banana', 'type': 'fruit'},
       {'name': 'beet',   'type': 'vegetable'}],
      {'name': 'banana'},
      1),
-    (['apple', 'banana', 'beet'], lambda *args: False, -1)
+    (['apple', 'banana', 'beet'], lambda: False, -1)
 ])
 def test_find_index(case, filter_by, expected):
     assert pyd.find_index(case, filter_by) == expected
 
 
 @parametrize('case,filter_by,expected', [
-    (['apple', 'banana', 'beet'], lambda item, *args: item.startswith('b'), 2),
+    (['apple', 'banana', 'beet'], lambda item: item.startswith('b'), 2),
     ([{'name': 'apple',  'type': 'fruit'},
       {'name': 'banana', 'type': 'fruit'},
       {'name': 'beet',   'type': 'vegetable'}],
      {'type': 'fruit'},
      1),
-    (['apple', 'banana', 'beet'], lambda *args: False, -1)
+    (['apple', 'banana', 'beet'], lambda: False, -1)
 ])
 def test_find_last_index(case, filter_by, expected):
     assert pyd.find_last_index(case, filter_by) == expected
@@ -234,7 +234,7 @@ def test_last_index_of(case, value, from_index, expected):
 
 @parametrize('case,expected', [
     (([1, 2, None, 4, None, 6],
-      lambda x, i, *args: ['{0}'.format(i)] if x is None else []),
+      lambda x, i: ['{0}'.format(i)] if x is None else []),
      ['2', '4'])
 ])
 def test_mapcat(case, expected):
@@ -258,7 +258,7 @@ def test_pull_at(case, expected):
 
 
 @parametrize('case,filter_by,expected', [
-    ([1, 2, 3, 4, 5, 6], lambda x, *args: x % 2 == 0, [2, 4, 6])
+    ([1, 2, 3, 4, 5, 6], lambda x: x % 2 == 0, [2, 4, 6])
 ])
 def test_remove(case, filter_by, expected):
     original = list(case)
@@ -346,7 +346,7 @@ def test_take(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4, 5], lambda item, *args: item < 3), [1, 2]),
+    (([1, 2, 3, 4, 5], lambda item: item < 3), [1, 2]),
 ])
 def test_take_while(case, expected):
     assert pyd.take_while(*case) == expected
@@ -363,7 +363,7 @@ def test_take_right(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4, 5], lambda item, *args: item > 3), [4, 5]),
+    (([1, 2, 3, 4, 5], lambda item: item > 3), [4, 5]),
 ])
 def test_take_right_while(case, expected):
     assert pyd.take_right_while(*case) == expected
@@ -372,7 +372,7 @@ def test_take_right_while(case, expected):
 @parametrize('case,filter_by,expected', [
     ([1, 2, 1, 3, 1], None, [1, 2, 3]),
     ([dict(a=1), dict(a=2), dict(a=1)], None, [dict(a=1), dict(a=2)]),
-    ([1, 2, 1.5, 3, 2.5], lambda num, *args: math.floor(num), [1, 2, 3]),
+    ([1, 2, 1.5, 3, 2.5], lambda num: math.floor(num), [1, 2, 3]),
     ([{'name': 'banana', 'type': 'fruit'},
       {'name': 'apple', 'type': 'fruit'},
       {'name': 'beet',   'type': 'vegetable'},
