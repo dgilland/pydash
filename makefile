@@ -1,4 +1,4 @@
-.PHONY: build clean clean-env clean-files install test pytest test-full test-setuppy lint pep8 pylint docs release travisci-install travisci-test
+.PHONY: build clean clean-env clean-files install test pytest test-full test-setuppy lint pep8 pylint docs serve-docs release travisci-install travisci-test
 
 ##
 # Variables
@@ -78,9 +78,12 @@ release:
 
 # docs
 docs:
-	rm -rf docs/_build
+	rm -r docs/_build
 	$(ENV_ACT) cd docs; make doctest
 	$(ENV_ACT) cd docs; make html
+
+serve-docs:
+	cd docs/_build/html; python2 -m SimpleHTTPServer 8001
 
 ##
 # TravisCI
