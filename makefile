@@ -87,7 +87,7 @@ docs:
 ##
 
 travisci-install:
-	pip install -r requirements-travis.txt
+	pip install -r requirements.txt
 
 travisci-test:
 	pep8 $(PYTEST_TARGET)
