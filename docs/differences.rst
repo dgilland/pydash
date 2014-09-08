@@ -67,10 +67,42 @@ Extra Functions
 
 The following functions exist in pydash but not in Lo-Dash:
 
+- `pydash.arrays.cat`
+- `pydash.functions.conjoin`
+- `pydash.functions.disjoin`
+- `pydash.strings.explode`
+- `pydash.objects.get_path`
+- `pydash.objects.has_path`
+- `pydash.strings.implode`
 - `pydash.arrays.intercalate`
 - `pydash.arrays.interleave`
 - `pydash.arrays.intersperse`
+- `pydash.predicates.is_associative`
+- `pydash.predicates.is_even`
+- `pydash.predicates.is_float`
+- `pydash.predicates.is_decreasing`
+- `pydash.predicates.is_increasing`
+- `pydash.predicates.is_indexed`
+- `pydash.predicates.is_instance_of`
+- `pydash.predicates.is_integer`
+- `pydash.predicates.is_json`
+- `pydash.predicates.is_monotone`
+- `pydash.predicates.is_negative`
+- `pydash.predicates.is_odd`
+- `pydash.predicates.is_positive`
+- `pydash.predicates.is_strictly_decreasing`
+- `pydash.predicates.is_strictly_increasing`
+- `pydash.predicates.is_zero`
 - `pydash.functions.iterated`
+- `pydash.functions.juxtapose`
+- `pydash.arrays.mapcat`
+- `pydash.collections.reductions`
+- `pydash.collections.reductions_right`
+- `pydash.objects.rename_keys`
+- `pydash.objects.set_path`
+- `pydash.arrays.split_at`
+- `pydash.objects.to_string`
+- `pydash.objects.update_path`
 
 
 Function Behavior
@@ -78,7 +110,7 @@ Function Behavior
 
 Some of pydash's functions behave differently:
 
-- :func:`pydash.api.utilities.memoize` uses all passed in arguments as the cache key by default instead of only using the first argument.
+- :func:`pydash.utilities.memoize` uses all passed in arguments as the cache key by default instead of only using the first argument.
 
 
 Templating
