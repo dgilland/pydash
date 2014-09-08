@@ -21,17 +21,17 @@ As of ``v2.0.0``, callback functions no longer need to handle all possible argum
 
 .. code-block:: python
 
-	# Valid in v1
-	def mycallback(item, value, obj):
-		pass
+    # Valid in v1
+    def mycallback(item, value, obj):
+        pass
 
-	# Valid in v1
-	def mycallback(item, *args):
-		pass
+    # Valid in v1
+    def mycallback(item, *args):
+        pass
 
-	# Invalid in v1
-	def mycallback(item):
-		pass
+    # Invalid in v1
+    def mycallback(item):
+        pass
 
 
 But in ``v2.0.0`` partial callback signatures are handled properly:
@@ -39,17 +39,17 @@ But in ``v2.0.0`` partial callback signatures are handled properly:
 
 .. code-block:: python
 
-	# Valid in v2
-	def mycallback(item, value, obj):
-		pass
+    # Valid in v2
+    def mycallback(item, value, obj):
+        pass
 
-	# Valid in v2
-	def mycallback(item, *args):
-		pass
+    # Valid in v2
+    def mycallback(item, *args):
+        pass
 
-	# Valid in v2
-	def mycallback(item):
-		pass
+    # Valid in v2
+    def mycallback(item):
+        pass
 
 
 Extra Aliases
