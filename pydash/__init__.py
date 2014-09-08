@@ -74,6 +74,7 @@ from .arrays import (
 from .chaining import (
     chain,
     tap,
+    thru,
 )
 
 

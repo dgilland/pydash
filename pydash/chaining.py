@@ -11,6 +11,7 @@ import pydash as pyd
 __all__ = [
     'chain',
     'tap',
+    'thru',
 ]
 
 
@@ -118,7 +119,7 @@ def chain(value):
 
 
 def tap(value, interceptor):
-    """Invokes interceptor with the `value` as the first argument and then
+    """Invokes `interceptor` with the `value` as the first argument and then
     returns `value`. The purpose of this method is to "tap into" a method chain
     in order to perform operations on intermediate results within the chain.
 
@@ -133,3 +134,19 @@ def tap(value, interceptor):
     """
     interceptor(value)
     return value
+
+
+def thru(value, func):
+    """Returns the result of calling `func` on `value`. The purpose of this
+    method is to pass `value` through a function during a method chain.
+
+    Args:
+        value (mixed): Current value of chain operation.
+        func (function): Function called with `value`.
+
+    Returns:
+        mixed: Results of ``func(value)``.
+
+    .. versionadded:: 2.0.0
+    """
+    return func(value)
