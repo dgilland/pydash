@@ -62,7 +62,6 @@ class Chain(object):
         method = getattr(pyd, attr, None)
 
         if callable(method):
-            # return ChainWrapper(self.value(), getattr(pydash, attr))
             return ChainWrapper(self._value, getattr(pyd, attr))
         else:
             raise pyd.InvalidMethod('Invalid pydash method: {0}'.format(attr))

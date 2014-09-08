@@ -578,7 +578,7 @@ def reductions(collection, callback=None, accumulator=None, from_right=False):
 
     results = []
 
-    def interceptor(result, item, index):
+    def interceptor(result, item, index):  # pylint: disable=missing-docstring
         result = call_callback(callback, result, item, index)
         results.append(result)
         return result
