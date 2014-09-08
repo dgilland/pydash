@@ -41,7 +41,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``reductions_right()``.
 - Add ``rename_keys()``.
 - Add ``set_path()``.
-- Add ``split_list()``.
+- Add ``split_at()``.
 - Add ``to_string()``.
 - Add ``update_path()``.
 - Make ``chain()`` lazy and only compute the final value when ``value()`` called.
