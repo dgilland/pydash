@@ -16,9 +16,40 @@ pydash adheres to the following conventions:
 Callbacks
 ---------
 
-Callbacks in pydash are handled a little differently due to differences between Javascript and Python:
+As of ``v2.0.0``, callback functions no longer need to handle all possible arguments. Prior to ``v2.0.0``, callbacks had to define all arguments or have star-args:
 
-- Extra callback args must be explictly handled. In Javascript, it's perfectly fine to pass in extra arguments to a function that aren't explictly accepted by that function (e.g. ``function foo(a1){}; foo(1, 2, 3);``). In Python, those extra arguments must be explictly handled (e.g. ``def foo(a1, *args): ...; foo(1, 2, 3)``). Therefore, callbacks passed to ``pydash`` functions must use named args or a catch-all like ``*args`` since each callbacks will be passed arguments like ``(value, index|key, array)``. **NOTE:** *Future versions of pydash may attempt to infer the number of arguments a callback can handle and only pass what's supported.*
+
+.. code-block:: python
+
+	# Valid in v1
+	def mycallback(item, value, obj):
+		pass
+
+	# Valid in v1
+	def mycallback(item, *args):
+		pass
+
+	# Invalid in v1
+	def mycallback(item):
+		pass
+
+
+But in ``v2.0.0`` partial callback signatures are handled properly:
+
+
+.. code-block:: python
+
+	# Valid in v2
+	def mycallback(item, value, obj):
+		pass
+
+	# Valid in v2
+	def mycallback(item, *args):
+		pass
+
+	# Valid in v2
+	def mycallback(item):
+		pass
 
 
 Extra Aliases
