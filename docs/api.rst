@@ -48,6 +48,13 @@ Objects
     :members:
 
 
+Predicates
+==========
+
+.. automodule:: pydash.predicates
+    :members:
+
+
 Strings
 =======
 
