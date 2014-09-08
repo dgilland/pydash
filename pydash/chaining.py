@@ -113,7 +113,7 @@ def chain(value):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
-        Chaining made lazy.
+        Made chaining lazy.
     """
     return Chain(value)
 
