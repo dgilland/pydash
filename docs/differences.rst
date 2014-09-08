@@ -26,9 +26,9 @@ Extra Aliases
 
 The following extra function aliases exist in pydash but not in Lo-Dash:
 
-- :func:`pydash.api.utilities.prop` >> :func:`pydash.api.utilities.property_`
-- :func:`pydash.api.objects.is_re` >> :func:`pydash.api.objects.is_reg_exp`
-- :func:`pydash.api.strings.escape_re` >> :func:`pydash.api.strings.escape_reg_exp`
+- :func:`pydash.utilities.prop` >> :func:`pydash.utilities.property_`
+- :func:`pydash.objects.is_re` >> :func:`pydash.objects.is_reg_exp`
+- :func:`pydash.strings.escape_re` >> :func:`pydash.strings.escape_reg_exp`
 
 
 Extra Functions
@@ -36,10 +36,10 @@ Extra Functions
 
 The following functions exist in pydash but not in Lo-Dash:
 
-- :func:`pydash.api.arrays.intercalate`
-- :func:`pydash.api.arrays.interleave`
-- :func:`pydash.api.arrays.interspearse`
-- :func:`pydash.api.arrays.iterated`
+- `pydash.arrays.intercalate`
+- `pydash.arrays.interleave`
+- `pydash.arrays.intersperse`
+- `pydash.functions.iterated`
 
 
 Function Behavior

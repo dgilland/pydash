@@ -6,7 +6,7 @@
 
 class InvalidMethod(Exception):
     """Raised when an invalid pydash method is invoked through
-    :func:`pydash.api.chaining.chain`.
+    :func:`pydash.chaining.chain`.
 
     .. versionadded:: 1.0.0
     """

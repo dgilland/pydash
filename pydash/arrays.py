@@ -208,7 +208,7 @@ def drop_while(array, callback=None):
 
 
 def find_index(array, callback=None):
-    """This method is similar to :func:`pydash.api.collections.find`, except
+    """This method is similar to :func:`pydash.collections.find`, except
     that it returns the index of the element that passes the callback check,
     instead of the element itself.
 
@@ -564,9 +564,9 @@ def sorted_index(array, value, callback=None):
     is passed, it will be executed for value and each element in array to
     compute their sort ranking. The callback is invoked with one argument:
     ``(value)``. If a property name is passed for callback, the created
-    :func:`pydash.api.collections.pluck` style callback will return the
+    :func:`pydash.collections.pluck` style callback will return the
     property value of the given element. If an object is passed for callback,
-    the created :func:`pydash.api.collections.where` style callback will return
+    the created :func:`pydash.collections.where` style callback will return
     ``True`` for elements that have the properties of the given object, else
     ``False``.
 
@@ -730,9 +730,9 @@ def uniq(array, callback=None):
     passed, each element of array is passed through a callback before
     uniqueness is computed. The callback is invoked with three arguments:
     ``(value, index, array)``. If a property name is passed for callback, the
-    created :func:`pydash.api.collections.pluck` style callback will return the
+    created :func:`pydash.collections.pluck` style callback will return the
     property value of the given element. If an object is passed for callback,
-    the created :func:`pydash.api.collections.where` style callback will return
+    the created :func:`pydash.collections.where` style callback will return
     ``True`` for elements that have the properties of the given object, else
     ``False``.
 

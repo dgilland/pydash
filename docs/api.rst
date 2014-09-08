@@ -16,47 +16,47 @@ All public functions are available from the main module.
 Arrays
 ======
 
-.. automodule:: pydash.api.arrays
+.. automodule:: pydash.arrays
     :members:
 
 
 Chaining
 ========
 
-.. automodule:: pydash.api.chaining
+.. automodule:: pydash.chaining
     :members:
 
 
 Collections
 ===========
 
-.. automodule:: pydash.api.collections
+.. automodule:: pydash.collections
     :members:
 
 
 Functions
 =========
 
-.. automodule:: pydash.api.functions
+.. automodule:: pydash.functions
     :members:
 
 
 Objects
 =======
 
-.. automodule:: pydash.api.objects
+.. automodule:: pydash.objects
     :members:
 
 
 Strings
 =======
 
-.. automodule:: pydash.api.strings
+.. automodule:: pydash.strings
     :members:
 
 
 Utilities
 =========
 
-.. automodule:: pydash.api.utilities
+.. automodule:: pydash.utilities
     :members:

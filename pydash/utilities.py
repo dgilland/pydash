@@ -71,10 +71,11 @@ def constant(value):
 
 
 def callback(func):
-    """Return a callback. If `func` is a property name the created callback
-    will return the property value for a given element. If `func` is an object
-    the created callback will return ``True`` for elements that contain the
-    equivalent object properties, otherwise it will return ``False``.
+    """Return a pydash style callback. If `func` is a property name the created
+    callback will return the property value for a given element. If `func` is
+    an object the created callback will return ``True`` for elements that
+    contain the equivalent object properties, otherwise it will return
+    ``False``.
 
     Args:
         func (mixed): Object to create callback function from.
@@ -121,7 +122,7 @@ def identity(*args):
 
 
 def matches(source):
-    """Creates a :func:`pydash.api.collections.where` style predicate function
+    """Creates a :func:`pydash.collections.where` style predicate function
     which performs a deep comparison between a given object and the `source`
     object, returning ``True`` if the given object has equivalent property
     values, else ``False``.
