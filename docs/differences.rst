@@ -58,7 +58,7 @@ Extra Aliases
 The following extra function aliases exist in pydash but not in Lo-Dash:
 
 - :func:`pydash.utilities.prop` >> :func:`pydash.utilities.property_`
-- :func:`pydash.objects.is_re` >> :func:`pydash.objects.is_reg_exp`
+- :func:`pydash.predicates.is_re` >> :func:`pydash.predicates.is_reg_exp`
 - :func:`pydash.strings.escape_re` >> :func:`pydash.strings.escape_reg_exp`
 
 
@@ -67,42 +67,42 @@ Extra Functions
 
 The following functions exist in pydash but not in Lo-Dash:
 
-- `pydash.arrays.cat`
-- `pydash.functions.conjoin`
-- `pydash.functions.disjoin`
-- `pydash.strings.explode`
-- `pydash.objects.get_path`
-- `pydash.objects.has_path`
-- `pydash.strings.implode`
-- `pydash.arrays.intercalate`
-- `pydash.arrays.interleave`
-- `pydash.arrays.intersperse`
-- `pydash.predicates.is_associative`
-- `pydash.predicates.is_even`
-- `pydash.predicates.is_float`
-- `pydash.predicates.is_decreasing`
-- `pydash.predicates.is_increasing`
-- `pydash.predicates.is_indexed`
-- `pydash.predicates.is_instance_of`
-- `pydash.predicates.is_integer`
-- `pydash.predicates.is_json`
-- `pydash.predicates.is_monotone`
-- `pydash.predicates.is_negative`
-- `pydash.predicates.is_odd`
-- `pydash.predicates.is_positive`
-- `pydash.predicates.is_strictly_decreasing`
-- `pydash.predicates.is_strictly_increasing`
-- `pydash.predicates.is_zero`
-- `pydash.functions.iterated`
-- `pydash.functions.juxtapose`
-- `pydash.arrays.mapcat`
-- `pydash.collections.reductions`
-- `pydash.collections.reductions_right`
-- `pydash.objects.rename_keys`
-- `pydash.objects.set_path`
-- `pydash.arrays.split_at`
-- `pydash.objects.to_string`
-- `pydash.objects.update_path`
+- :func:`pydash.arrays.cat`
+- :func:`pydash.functions.conjoin`
+- :func:`pydash.functions.disjoin`
+- :func:`pydash.strings.explode`
+- :func:`pydash.objects.get_path`
+- :func:`pydash.objects.has_path`
+- :func:`pydash.strings.implode`
+- :func:`pydash.arrays.intercalate`
+- :func:`pydash.arrays.interleave`
+- :func:`pydash.arrays.intersperse`
+- :func:`pydash.predicates.is_associative`
+- :func:`pydash.predicates.is_even`
+- :func:`pydash.predicates.is_float`
+- :func:`pydash.predicates.is_decreasing`
+- :func:`pydash.predicates.is_increasing`
+- :func:`pydash.predicates.is_indexed`
+- :func:`pydash.predicates.is_instance_of`
+- :func:`pydash.predicates.is_integer`
+- :func:`pydash.predicates.is_json`
+- :func:`pydash.predicates.is_monotone`
+- :func:`pydash.predicates.is_negative`
+- :func:`pydash.predicates.is_odd`
+- :func:`pydash.predicates.is_positive`
+- :func:`pydash.predicates.is_strictly_decreasing`
+- :func:`pydash.predicates.is_strictly_increasing`
+- :func:`pydash.predicates.is_zero`
+- :func:`pydash.functions.iterated`
+- :func:`pydash.functions.juxtapose`
+- :func:`pydash.arrays.mapcat`
+- :func:`pydash.collections.reductions`
+- :func:`pydash.collections.reductions_right`
+- :func:`pydash.objects.rename_keys`
+- :func:`pydash.objects.set_path`
+- :func:`pydash.arrays.split_at`
+- :func:`pydash.objects.to_string`
+- :func:`pydash.objects.update_path`
 
 
 Function Behavior
