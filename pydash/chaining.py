@@ -33,6 +33,7 @@ class Chain(object):
             - :meth:`value_of` (alias)
         """
         if isinstance(self._value, ChainWrapper):
+            # pylint: disable=maybe-no-member
             self._value = self._value.unwrap()
         return self._value
 
