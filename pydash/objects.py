@@ -9,7 +9,7 @@ import copy
 import re
 
 import pydash as pyd
-from .helpers import iterator, itercallback, get_item, set_item
+from .helpers import iterator, itercallback, get_item, set_item, NoValue
 from ._compat import iteritems, text_type
 
 
@@ -261,7 +261,7 @@ def for_in_right(obj, callback=None):
 for_own_right = for_in_right
 
 
-def get_path(obj, keys, **kargs):
+def get_path(obj, keys, default=None):
     """Get the value at any depth of a nested object based on the path
     described by `keys`. If path doesn't exist, ``None`` is returned.
 
@@ -277,11 +277,9 @@ def get_path(obj, keys, **kargs):
     .. versionadded:: 2.0.0
     """
     # pylint: disable=redefined-outer-name
-    kargs.setdefault('default', None)
-    kargs.setdefault('use_default', True)
 
     for key in path_keys(keys):
-        obj = get_item(obj, key, **kargs)
+        obj = get_item(obj, key, default=default)
         if obj is None:
             break
 
@@ -319,7 +317,7 @@ def has_path(obj, keys):
     """
     # pylint: disable=redefined-outer-name
     try:
-        get_path(obj, keys, use_default=False)
+        get_path(obj, keys, default=NoValue)
         exists = True
     except (KeyError, IndexError, TypeError):
         exists = False

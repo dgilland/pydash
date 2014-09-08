@@ -8,6 +8,18 @@ import pydash as pyd
 from ._compat import iteritems
 
 
+class _NoValue(object):
+    """Represents an unset value. Used to differeniate between an explicit
+    ``None`` and an unset value.
+    """
+    pass
+
+
+#: Singleton object that differeniates between an explicit ``None`` value and
+#: an unset value.
+NoValue = _NoValue()
+
+
 def itercallback(collection, callback=None, reverse=False):
     """Return iterative callback based on collection type."""
     if isinstance(collection, dict):
@@ -65,7 +77,7 @@ def iterlist(array):
         yield i, item
 
 
-def get_item(obj, key, **kargs):
+def get_item(obj, key, default=NoValue):
     """Safely get an item by `key` from a sequence or mapping object when
     `default` provided.
 
@@ -86,13 +98,10 @@ def get_item(obj, key, **kargs):
         KeyError|IndexError|TypeError: If `obj` is missing key or index and no
             default value provided.
     """
-    use_default = kargs.get('use_default', 'default' in kargs)
-    default = kargs.get('default')
-
     try:
         ret = obj[key]
     except (KeyError, IndexError, TypeError):
-        if use_default:
+        if default is not NoValue:
             ret = default
         else:  # pragma: no cover
             raise
