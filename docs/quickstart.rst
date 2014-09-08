@@ -1,12 +1,21 @@
 Quickstart
 ==========
 
+The functions available from pydash can be used in two styles.
+
+The first is by using the module directly or importing from it:
+
+
 .. doctest::
 
     >>> import pydash as pyd
+    >>> from pydash import flatten
 
     # Arrays
-    >>> pyd.flatten([1, 2, [3, [4, 5, [6, 7]]]])
+    >>> flatten([1, 2, [3, [4, 5, [6, 7]]]])
+    [1, 2, 3, [4, 5, [6, 7]]]
+
+    >>> pyd.flatten_deep([1, 2, [3, [4, 5, [6, 7]]]])
     [1, 2, 3, 4, 5, 6, 7]
 
     # Collections
@@ -27,7 +36,21 @@ Quickstart
     [0, 1, 2]
 
     # Chaining
-    >>> pyd.chain([1, 2, 3, 4]).without(2, 3).reject(lambda x, *args: x > 1).value()
+    >>> pyd.chain([1, 2, 3, 4]).without(2, 3).reject(lambda x: x > 1).value()
+    [1]
+
+
+The second style is to use the ``_`` instance:
+
+
+.. doctest::
+
+    >>> from pydash import _
+
+    >>> _.flatten([1, 2, [3, [4, 5, [6, 7]]]])
+    [1, 2, 3, [4, 5, [6, 7]]]
+
+    >>> _([1, 2, 3, 4]).without(2, 3).reject(lambda x: x > 1).value()
     [1]
 
 
