@@ -1,4 +1,4 @@
-"""Chaining
+"""Method chaining interface.
 
 .. versionadded:: 1.0.0
 """
@@ -6,6 +6,7 @@
 from __future__ import absolute_import
 
 import pydash as pyd
+from .helpers import NoValue
 
 
 __all__ = [
@@ -18,7 +19,7 @@ __all__ = [
 class Chain(object):
     """Enables chaining of pydash functions."""
 
-    def __init__(self, value):
+    def __init__(self, value=NoValue):
         self._value = value
 
     def value(self):
@@ -61,10 +62,19 @@ class Chain(object):
         """
         method = getattr(pyd, attr, None)
 
-        if callable(method):
+        if self._value is NoValue and callable(method):
+            # When :attr:`_value` is the special ``NoValue`` object, we don't
+            # start/continue chaining but instead return the method itself as
+            # if it was being called directly.
+            return method
+        elif callable(method):
             return ChainWrapper(self._value, getattr(pyd, attr))
         else:
             raise pyd.InvalidMethod('Invalid pydash method: {0}'.format(attr))
+
+    def __call__(self, value):
+        """Return a new instance of :class:`Chain` with `value` as the seed."""
+        return Chain(value)
 
 
 class ChainWrapper(object):

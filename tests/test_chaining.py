@@ -69,6 +69,24 @@ def test_chaining_lazy():
     assert result == 3
 
 
+def test_underscore_instance_chaining():
+    value = [1, 2, 3, 4]
+    from__ = pyd._(value).without(2, 3).reject(lambda x: x > 1)
+    from_chain = pyd.chain(value).without(2, 3).reject(lambda x: x > 1)
+
+    assert from__.value() == from_chain.value()
+
+
+def test_underscore_instance_methods():
+    for method in pyd.filter_(dir(pyd), lambda m: callable(m)):
+        assert getattr(pyd._, method) is getattr(pyd, method)
+
+
+def test_underscore_method_call():
+    value = [1, 2, 3, 4, 5]
+    assert pyd._.initial(value) == pyd.initial(value)
+
+
 @parametrize('case,expected', [
     ([1, 2, 3], '[1, 2, 3]'),
 ])

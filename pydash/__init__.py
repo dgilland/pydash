@@ -1,8 +1,6 @@
 """Python port of Lo-Dash
 """
 
-from __future__ import absolute_import
-
 from .__meta__ import (
     __title__,
     __summary__,
@@ -287,6 +285,18 @@ from .utilities import (
 #
 # Exceptions
 #
+
 from .exceptions import (
     InvalidMethod
 )
+
+
+#
+# Chaining Instance
+#
+
+from .chaining import (
+    Chain
+)
+
+_ = Chain()
