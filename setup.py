@@ -2,7 +2,8 @@
 pydash
 ======
 
-Python port of the `Lo-Dash <http://lodash.com/>`_  Javascript library.
+A utility library for doing "stuff" in a functional way. Based on the
+`Lo-Dash <http://lodash.com/>`_  Javascript library.
 
 Project: https://github.com/dgilland/pydash
 
@@ -38,7 +39,7 @@ class Tox(TestCommand):
         self.test_suite = True
 
     def run_tests(self):
-        #import here, cause outside the eggs aren't loaded
+        # Import here because outside the eggs aren't loaded.
         import tox
         import shlex
 
@@ -60,7 +61,7 @@ setup(
     tests_require=['tox'],
     cmdclass={'test': Tox},
     test_suite='tests',
-    keywords='lodash underscore functional',
+    keywords='utility functional lodash underscore',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

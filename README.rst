@@ -4,7 +4,7 @@ pydash
 
 |version| |travis| |coveralls| |license|
 
-Python port of the `Lo-Dash <http://lodash.com/>`_  Javascript library.
+A utility library for doing "stuff" in a functional way. Based on the `Lo-Dash <http://lodash.com/>`_  Javascript library.
 
 
 Links
