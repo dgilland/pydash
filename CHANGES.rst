@@ -35,6 +35,8 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``is_strictly_increasing()``.
 - Add ``is_zero()``.
 - Add ``iterated()``.
+- Add ``js_match()``.
+- Add ``js_replace()``.
 - Add ``juxtapose()``.
 - Add ``mapcat()``.
 - Add ``reductions()``.
@@ -45,6 +47,7 @@ v2.0.0 (xxxx-xx-xx)
 - Add ``thru()``.
 - Add ``to_string()``.
 - Add ``update_path()``.
+- Add ``words()``.
 - Make callback function calling adapt to argspec of given callback function. If, for example, the full callback signature is ``(item, index, obj)`` but the passed in callback only supports ``(item)``, then only ``item`` will be passed in when callback is invoked. Previously, callbacks had to support all arguments or implement star-args.
 - Make ``chain()`` lazy and only compute the final value when ``value()`` called.
 - Make ``compose()`` an alias of ``flow_right()``.

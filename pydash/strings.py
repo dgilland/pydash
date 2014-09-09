@@ -19,6 +19,8 @@ __all__ = [
     'escape_re',
     'explode',
     'implode',
+    'js_match',
+    'js_replace',
     'kebab_case',
     'pad',
     'pad_left',
@@ -31,6 +33,7 @@ __all__ = [
     'trim_right',
     'trunc',
     'unescape',
+    'words',
 ]
 
 
@@ -43,7 +46,8 @@ HTML_ESCAPES = {
     '`': '&#96;'
 }
 
-RE_WORD_SEPARATORS = re.compile('[ {0}]'.format(re.escape(string.punctuation)))
+# Use Javascript style regex to make Lo-Dash compatibility easier.
+RE_WORDS = '/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*)|[A-Z]?[a-z]+[0-9]*|[A-Z]+|[0-9]+/g'
 
 
 def camel_case(text):
@@ -57,8 +61,7 @@ def camel_case(text):
 
     .. versionadded:: 1.1.0
     """
-    text = ''.join(word.title()
-                   for word in RE_WORD_SEPARATORS.split(text_type(text)))
+    text = ''.join(word.title() for word in words(pyd.to_string(text)))
     return text[0].lower() + text[1:]
 
 
@@ -173,6 +176,38 @@ def implode(array, delimiter=''):
     return delimiter.join(array)
 
 
+def js_match(reg_exp, text):
+    """Return list of matches using Javascript style regular expression.
+
+    Args:
+        reg_exp (str): Javascript style regular expression.
+        text (str): String to evaluate.
+
+    Returns:
+        list: List of matches.
+
+    .. versionadded:: 2.0.0
+    """
+    return js_to_py_re_find(reg_exp)(text)
+
+
+def js_replace(reg_exp, text, repl):
+    """Replace `text` with `repl` using Javascript style regular expression to
+    find matches.
+
+    Args:
+        reg_exp (str): Javascript style regular expression.
+        text (str): String to evaluate.
+        repl (str): Replacement string.
+
+    Returns:
+        str: Modified string.
+
+    .. versionadded:: 2.0.0
+    """
+    return js_to_py_re_replace(reg_exp)(text, repl)
+
+
 def kebab_case(text):
     """Converts `text` to kebab case (a.k.a. spinal case).
 
@@ -184,10 +219,7 @@ def kebab_case(text):
 
     .. versionadded:: 1.1.0
     """
-    return ('-'.join(word
-                     for word in RE_WORD_SEPARATORS.split(text_type(text))
-                     if word)
-            .lower())
+    return '-'.join(wrd for wrd in words(pyd.to_string(text)) if wrd.lower())
 
 
 def pad(text, length, chars=' '):
@@ -288,10 +320,7 @@ def snake_case(text):
 
     .. versionadded:: 1.1.0
     """
-    return ('_'.join(word
-                     for word in RE_WORD_SEPARATORS.split(text_type(text))
-                     if word)
-            .lower())
+    return '_'.join(wrd for wrd in words(pyd.to_string(text)) if wrd.lower())
 
 
 def starts_with(text, target, position=None):
@@ -414,3 +443,60 @@ def unescape(text):
        Moved to Strings module.
     """
     return html_unescape(text)
+
+
+def words(text):
+    """Return list of words contained in `text`.
+
+    Args:
+        text (str): String to split.
+
+    Returns:
+        list: List of words.
+
+    .. versionadded:: 2.0.0
+    """
+    return js_match(RE_WORDS, text)
+
+
+#
+# Utility functions not a part of main API
+#
+
+
+def js_to_py_re_find(reg_exp):
+    """Return Python regular expression matching function based on Javascript
+    style regexp.
+    """
+    pattern, options = reg_exp[1:].rsplit('/', 1)
+    flags = re.I if 'i' in options else 0
+
+    def find(text):
+        if 'g' in options:
+            results = re.findall(pattern, text, flags=flags)
+        else:
+            results = re.search(pattern, text, flags=flags)
+
+            if results:
+                results = [results.group()]
+            else:
+                results = []
+
+        return results
+
+    return find
+
+
+def js_to_py_re_replace(reg_exp):
+    """Return Python regular expression substitution function based on
+    Javascript style regexp.
+    """
+    pattern, options = reg_exp[1:].rsplit('/', 1)
+    count = 0 if 'g' in options else 1
+    flags = re.I if 'i' in options else 0
+
+    return lambda text, repl: re.sub(pattern,
+                                     repl,
+                                     text,
+                                     count=count,
+                                     flags=flags)

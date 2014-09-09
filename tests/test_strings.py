@@ -77,6 +77,27 @@ def test_implode(case, expected):
 
 
 @parametrize('case,expected', [
+    (('/[A-Z]/', 'Hello World'), ['H']),
+    (('/[A-Z]/g', 'Hello World'), ['H', 'W']),
+    (('/[A-Z]/i', 'hello world'), ['h']),
+    (('/[A-Z]/gi', 'hello world'),
+     ['h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd']),
+])
+def test_js_match(case, expected):
+    assert pyd.js_match(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('/[A-Z]/', 'Hello World', '!'), '!ello World'),
+    (('/[A-Z]/g', 'Hello World', '!'), '!ello !orld'),
+    (('/[A-Z]/i', 'hello world', '!'), '!ello world'),
+    (('/[A-Z]/gi', 'hello world', '!'), '!!!!! !!!!!'),
+])
+def test_js_replace(case, expected):
+    assert pyd.js_replace(*case) == expected
+
+
+@parametrize('case,expected', [
     ('foo  bar baz', 'foo-bar-baz'),
     ('foo__bar_baz', 'foo-bar-baz'),
     ('foo-_bar-_-baz', 'foo-bar-baz'),
@@ -186,3 +207,13 @@ def test_trunc(case, expected):
 ])
 def test_unescape(case, expected):
     assert pyd.unescape(case) == expected
+
+
+@parametrize('case,expected', [
+    ('hello world!', ['hello', 'world']),
+    ('hello_world', ['hello', 'world']),
+    ('hello!@#$%^&*()_+{}|:"<>?-=[]\;\,.\'/world', ['hello', 'world']),
+    ('hello 12345 world', ['hello', '12345', 'world']),
+])
+def test_words(case, expected):
+    assert pyd.words(case) == expected

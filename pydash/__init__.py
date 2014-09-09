@@ -244,6 +244,8 @@ from .strings import (
     escape_re,
     explode,
     implode,
+    js_match,
+    js_replace,
     kebab_case,
     pad,
     pad_left,
@@ -256,6 +258,7 @@ from .strings import (
     trim_right,
     trunc,
     unescape,
+    words,
 )
 
 #
