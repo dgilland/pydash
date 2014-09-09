@@ -16,6 +16,8 @@ from functools import partial
 
 
 PY3 = sys.version_info[0] == 3
+PY26 = sys.version_info[0:2] == (2, 6)
+
 _identity = lambda x: x
 
 

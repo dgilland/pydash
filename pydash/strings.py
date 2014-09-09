@@ -3,11 +3,11 @@
 .. versionadded:: 1.1.0
 """
 
+from functools import partial
 import re
-import string
 
 import pydash as pyd
-from ._compat import html_unescape
+from ._compat import html_unescape, PY26
 
 
 __all__ = [
@@ -472,7 +472,7 @@ def js_to_py_re_find(reg_exp):
     pattern, options = reg_exp[1:].rsplit('/', 1)
     flags = re.I if 'i' in options else 0
 
-    def find(text):
+    def find(text):  # pylint: disable=missing-docstring
         if 'g' in options:
             results = re.findall(pattern, text, flags=flags)
         else:
@@ -496,8 +496,12 @@ def js_to_py_re_replace(reg_exp):
     count = 0 if 'g' in options else 1
     flags = re.I if 'i' in options else 0
 
-    return lambda text, repl: re.sub(pattern,
-                                     repl,
-                                     text,
-                                     count=count,
-                                     flags=flags)
+    def replace(text, repl):  # pylint: disable=missing-docstring
+        if PY26:  # pragma: no cover
+            sub = partial(re.compile(pattern, flags=flags).sub, count=count)
+        else:
+            sub = partial(re.sub, pattern, count=count, flags=flags)
+
+        return sub(repl, text)
+
+    return replace
