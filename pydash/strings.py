@@ -13,6 +13,7 @@ from ._compat import html_unescape, PY26
 __all__ = [
     'camel_case',
     'capitalize',
+    'deburr',
     'ends_with',
     'escape',
     'escape_reg_exp',
@@ -46,8 +47,76 @@ HTML_ESCAPES = {
     '`': '&#96;'
 }
 
+DEBURRED_LETTERS = {
+    '\xC0': 'A',
+    '\xC1': 'A',
+    '\xC2': 'A',
+    '\xC3': 'A',
+    '\xC4': 'A',
+    '\xC5': 'A',
+    '\xE0': 'a',
+    '\xE1': 'a',
+    '\xE2': 'a',
+    '\xE3': 'a',
+    '\xE4': 'a',
+    '\xE5': 'a',
+    '\xC7': 'C',
+    '\xE7': 'c',
+    '\xD0': 'D',
+    '\xF0': 'd',
+    '\xC8': 'E',
+    '\xC9': 'E',
+    '\xCA': 'E',
+    '\xCB': 'E',
+    '\xE8': 'e',
+    '\xE9': 'e',
+    '\xEA': 'e',
+    '\xEB': 'e',
+    '\xCC': 'I',
+    '\xCD': 'I',
+    '\xCE': 'I',
+    '\xCF': 'I',
+    '\xEC': 'i',
+    '\xED': 'i',
+    '\xEE': 'i',
+    '\xEF': 'i',
+    '\xD1': 'N',
+    '\xF1': 'n',
+    '\xD2': 'O',
+    '\xD3': 'O',
+    '\xD4': 'O',
+    '\xD5': 'O',
+    '\xD6': 'O',
+    '\xD8': 'O',
+    '\xF2': 'o',
+    '\xF3': 'o',
+    '\xF4': 'o',
+    '\xF5': 'o',
+    '\xF6': 'o',
+    '\xF8': 'o',
+    '\xD9': 'U',
+    '\xDA': 'U',
+    '\xDB': 'U',
+    '\xDC': 'U',
+    '\xF9': 'u',
+    '\xFA': 'u',
+    '\xFB': 'u',
+    '\xFC': 'u',
+    '\xDD': 'Y',
+    '\xFD': 'y',
+    '\xFF': 'y',
+    '\xC6': 'Ae',
+    '\xE6': 'ae',
+    '\xDE': 'Th',
+    '\xFE': 'th',
+    '\xDF': 'ss',
+    '\xD7': ' ',
+    '\xF7': ' '
+}
+
 # Use Javascript style regex to make Lo-Dash compatibility easier.
 RE_WORDS = '/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*)|[A-Z]?[a-z]+[0-9]*|[A-Z]+|[0-9]+/g'
+RE_LATIN1 = '/[\xC0-\xFF]/g'
 
 
 def camel_case(text):
@@ -77,6 +146,24 @@ def capitalize(text):
     .. versionadded:: 1.1.0
     """
     return text.capitalize()
+
+
+def deburr(text):
+    """Deburrs `text` by converting latin-1 supplementary letters to basic
+    latin letters.
+
+    Args:
+        text (str): String to deburr.
+
+    Returns:
+        str: Deburred string.
+
+    .. versionadded:: 2.0.0
+    """
+    return js_replace(RE_LATIN1,
+                      text,
+                      lambda match: DEBURRED_LETTERS.get(match.group(),
+                                                         match.group()))
 
 
 def ends_with(text, target, position=None):

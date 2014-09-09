@@ -239,6 +239,7 @@ from .predicates import (
 from .strings import (
     camel_case,
     capitalize,
+    deburr,
     ends_with,
     escape,
     escape_reg_exp,

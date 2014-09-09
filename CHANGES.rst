@@ -7,6 +7,7 @@ v2.0.0 (xxxx-xx-xx)
 
 - Add ``cat()``.
 - Add ``conjoin()``.
+- Add ``deburr()``.
 - Add ``disjoin()``.
 - Add ``explode()``.
 - Add ``flatten_deep()``.
