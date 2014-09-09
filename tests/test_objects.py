@@ -352,6 +352,7 @@ def test_set_path(case, expected):
     (1.25, '1.25'),
     (True, 'True'),
     ([1], '[1]'),
+    ('d\xc3\xa9j\xc3\xa0 vu', 'd\xc3\xa9j\xc3\xa0 vu'),
 ])
 def test_to_string(case, expected):
     assert pyd.to_string(case) == expected

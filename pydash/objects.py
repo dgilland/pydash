@@ -618,7 +618,7 @@ def to_string(obj):
 
     .. versionadded:: 2.0.0
     """
-    return text_type(obj)
+    return text_type(obj) if not pyd.is_string(obj) else obj
 
 
 def transform(obj, callback=None, accumulator=None):
