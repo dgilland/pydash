@@ -114,7 +114,7 @@ def escape(text):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-       Moved function to Strings module.
+        Moved function to Strings module.
     """
     # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
     # differently (e.g. "'" isn't escaped by html_escape() but is by Lo-Dash).
@@ -440,7 +440,7 @@ def unescape(text):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-       Moved to Strings module.
+        Moved to Strings module.
     """
     return html_unescape(text)
 

@@ -381,7 +381,7 @@ def keys(obj):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-       Added :func:`keys_in` as alias.
+        Added :func:`keys_in` as alias.
     """
     return [key for key, _ in iterator(obj)]
 
@@ -711,7 +711,7 @@ def values(obj):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-       Added :func:`values_in` as alias.
+        Added :func:`values_in` as alias.
     """
     return [value for _, value in iterator(obj)]
 

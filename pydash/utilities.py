@@ -90,7 +90,7 @@ def callback(func):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
-       Rename ``create_callback()`` to :func:`iteratee`.
+        Rename ``create_callback()`` to :func:`iteratee`.
     """
     if callable(func):
         cbk = func
@@ -265,7 +265,7 @@ def range_(*args):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-       Moved to Utilities module.
+        Moved to Utilities module.
     """
     return list(_range(*args))
 

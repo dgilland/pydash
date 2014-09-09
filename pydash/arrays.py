@@ -137,7 +137,7 @@ def drop(array, n):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-       Added ``n`` argument and removed as alias of :func:`rest`.
+        Added ``n`` argument and removed as alias of :func:`rest`.
     """
     return drop_while(array, lambda _, index, *args: index < n)
 
@@ -282,8 +282,8 @@ def flatten(array, is_deep=False):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
-       Removed ``callback`` option. Added ``is_deep`` option. Made it shallow
-       by default.
+        Removed ``callback`` option. Added ``is_deep`` option. Made it shallow
+        by default.
     """
     return list(iterflatten(array, is_deep=is_deep))
 

@@ -146,17 +146,17 @@ def tap(value, interceptor):
     return value
 
 
-def thru(value, func):
-    """Returns the result of calling `func` on `value`. The purpose of this
+def thru(value, interceptor):
+    """Returns the result of calling `interceptor` on `value`. The purpose of this
     method is to pass `value` through a function during a method chain.
 
     Args:
         value (mixed): Current value of chain operation.
-        func (function): Function called with `value`.
+        interceptor (function): Function called with `value`.
 
     Returns:
-        mixed: Results of ``func(value)``.
+        mixed: Results of ``interceptor(value)``.
 
     .. versionadded:: 2.0.0
     """
-    return func(value)
+    return interceptor(value)
