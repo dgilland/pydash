@@ -7,7 +7,7 @@ import re
 import string
 
 import pydash as pyd
-from ._compat import text_type, html_unescape
+from ._compat import html_unescape
 
 
 __all__ = [
@@ -93,7 +93,7 @@ def ends_with(text, target, position=None):
 
     .. versionadded:: 1.1.0
     """
-    text = text_type(text)
+    text = pyd.to_string(text)
 
     if position is None:
         position = len(text)
@@ -118,7 +118,8 @@ def escape(text):
     """
     # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
     # differently (e.g. "'" isn't escaped by html_escape() but is by Lo-Dash).
-    return ''.join(HTML_ESCAPES.get(char, char) for char in text_type(text))
+    return ''.join(HTML_ESCAPES.get(char, char)
+                   for char in pyd.to_string(text))
 
 
 def escape_reg_exp(text):
@@ -237,7 +238,7 @@ def pad(text, length, chars=' '):
 
     .. versionadded:: 1.1.0
     """
-    text = text_type(text)
+    text = pyd.to_string(text)
     text_len = len(text)
     length = max((length, text_len))
 
@@ -269,7 +270,7 @@ def pad_left(text, length, chars=' '):
 
     .. versionadded:: 1.1.0
     """
-    text = text_type(text)
+    text = pyd.to_string(text)
     length = max((length, len(text)))
     return (repeat(chars, length) + text)[-length:]
 
@@ -289,7 +290,7 @@ def pad_right(text, length, chars=' '):
 
     .. versionadded:: 1.1.0
     """
-    text = text_type(text)
+    text = pyd.to_string(text)
     length = max((length, len(text)))
     return (text + repeat(chars, length))[:length]
 
@@ -306,7 +307,7 @@ def repeat(text, n=0):
 
     .. versionadded:: 1.1.0
     """
-    return text_type(text) * int(n)
+    return pyd.to_string(text) * int(n)
 
 
 def snake_case(text):
@@ -337,7 +338,7 @@ def starts_with(text, target, position=None):
 
     .. versionadded:: 1.1.0
     """
-    text = text_type(text)
+    text = pyd.to_string(text)
 
     if position is None:
         position = 0
@@ -358,7 +359,7 @@ def trim(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
-    return text_type(text).strip(chars)
+    return pyd.to_string(text).strip(chars)
 
 
 def trim_left(text, chars=None):
@@ -373,7 +374,7 @@ def trim_left(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
-    return text_type(text).lstrip(chars)
+    return pyd.to_string(text).lstrip(chars)
 
 
 def trim_right(text, chars=None):
@@ -388,7 +389,7 @@ def trim_right(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
-    return text_type(text).rstrip(chars)
+    return pyd.to_string(text).rstrip(chars)
 
 
 def trunc(text, length=30, omission='...', separator=None):
@@ -409,7 +410,7 @@ def trunc(text, length=30, omission='...', separator=None):
     """
     omission_len = len(omission)
     text_len = length - omission_len
-    text = text_type(text)[:text_len]
+    text = pyd.to_string(text)[:text_len]
 
     trunc_len = len(text)
 
