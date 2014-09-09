@@ -82,6 +82,7 @@ def test_implode(case, expected):
     (('/[A-Z]/i', 'hello world'), ['h']),
     (('/[A-Z]/gi', 'hello world'),
      ['h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd']),
+    (('/[A-Z]/', '12345'), [])
 ])
 def test_js_match(case, expected):
     assert pyd.js_match(*case) == expected
