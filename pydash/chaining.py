@@ -6,7 +6,6 @@
 from __future__ import absolute_import
 
 import pydash as pyd
-from .helpers import NoValue
 
 
 __all__ = [
@@ -19,7 +18,7 @@ __all__ = [
 class Chain(object):
     """Enables chaining of pydash functions."""
 
-    def __init__(self, value=NoValue):
+    def __init__(self, value):
         self._value = value
 
     def value(self):
@@ -47,6 +46,27 @@ class Chain(object):
         """
         return pyd.to_string(self.value())
 
+    @staticmethod
+    def get_method(name):
+        """Return valid pydash method.
+
+        Args:
+            name (str): Name of pydash method to get.
+
+        Returns:
+            function: pydash callable.
+
+        Raises:
+            InvalidMethod: Raised if `name` is not a valid :mod:`pydash`
+                method.
+        """
+        method = getattr(pyd, name, None)
+
+        if not callable(method):
+            raise pyd.InvalidMethod('Invalid pydash method: {0}'.format(name))
+
+        return method
+
     def __getattr__(self, attr):
         """Proxy attribute access to :mod:`pydash`.
 
@@ -61,21 +81,7 @@ class Chain(object):
             InvalidMethod: Raised if `attr` is not a valid :mod:`pydash`
                 function.
         """
-        method = getattr(pyd, attr, None)
-
-        if self._value is NoValue and callable(method):
-            # When :attr:`_value` is the special ``NoValue`` object, we don't
-            # start/continue chaining but instead return the method itself as
-            # if it was being called directly.
-            return method
-        elif callable(method):
-            return ChainWrapper(self._value, getattr(pyd, attr))
-        else:
-            raise pyd.InvalidMethod('Invalid pydash method: {0}'.format(attr))
-
-    def __call__(self, value):
-        """Return a new instance of :class:`Chain` with `value` as the seed."""
-        return Chain(value)
+        return ChainWrapper(self._value, self.get_method(attr))
 
 
 class ChainWrapper(object):
@@ -107,6 +113,20 @@ class ChainWrapper(object):
         self.args = args
         self.kargs = kargs
         return Chain(self)
+
+
+class _Underscore(object):
+    """Class that provides attribute access to valid :mod:`pydash` methods and
+    callable access to :mod:`pydash` method chaining.
+    """
+
+    def __getattr__(self, attr):
+        """Proxy to :meth:`Chain.get_method`."""
+        return Chain.get_method(attr)
+
+    def __call__(self, value):
+        """Return a new instance of :class:`Chain` with `value` as the seed."""
+        return Chain(value)
 
 
 def chain(value):

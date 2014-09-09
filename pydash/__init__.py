@@ -73,6 +73,7 @@ from .chaining import (
     chain,
     tap,
     thru,
+    _Underscore
 )
 
 
@@ -295,11 +296,7 @@ from .exceptions import (
 
 
 #
-# Chaining Instance
+# "_" Instance
 #
 
-from .chaining import (
-    Chain
-)
-
-_ = Chain()
+_ = _Underscore()
