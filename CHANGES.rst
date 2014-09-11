@@ -5,6 +5,7 @@ Changelog
 v2.0.0 (2014-09-11)
 -------------------
 
+- Add ``_`` instance that supports both method chaining and module method calling.
 - Add ``cat()``.
 - Add ``conjoin()``.
 - Add ``deburr()``.
@@ -61,16 +62,16 @@ v2.0.0 (2014-09-11)
 - Move predicate functions from ``pydash.api.objects`` to ``pydash.api.predicates``. (**possible breaking change**)
 - Rename ``create_callback()`` to ``iteratee``. (**breaking change**)
 - Rename ``functions()`` to ``callables`` in order to allow ``functions.py`` to exist at the root of the pydash module folder. (**breaking change**)
-- Rename *private* utility function ``_iter_callback()`` to ``itercallback()``. (**breaking change**)
-- Rename *private* utility function ``_iter_list_callback()`` to ``iterlist_callback()``. (**breaking change**)
-- Rename *private* utility function ``_iter_dict_callback()`` to ``iterdict_callback()``. (**breaking change**)
-- Rename *private* utility function ``_iterate()`` to ``iterator()``. (**breaking change**)
-- Rename *private* utility function ``_iter_dict()`` to ``iterdict()``. (**breaking change**)
-- Rename *private* utility function ``_iter_list()`` to ``iterlist()``. (**breaking change**)
-- Rename *private* utility function ``_iter_unique()`` to ``iterunique()``. (**breaking change**)
-- Rename *private* utility function ``_get_item()`` to ``getitem()``. (**breaking change**)
-- Rename *private* utility function ``_set_item()`` to ``setitem()``. (**breaking change**)
-- Rename *private* utility function ``_deprecated()`` to ``deprecated()``. (**breaking change**)
+- Rename *private* utility function ``_iter_callback()`` to ``itercallback()``. (**possible breaking change**)
+- Rename *private* utility function ``_iter_list_callback()`` to ``iterlist_callback()``. (**possible breaking change**)
+- Rename *private* utility function ``_iter_dict_callback()`` to ``iterdict_callback()``. (**possible breaking change**)
+- Rename *private* utility function ``_iterate()`` to ``iterator()``. (**possible breaking change**)
+- Rename *private* utility function ``_iter_dict()`` to ``iterdict()``. (**possible breaking change**)
+- Rename *private* utility function ``_iter_list()`` to ``iterlist()``. (**possible breaking change**)
+- Rename *private* utility function ``_iter_unique()`` to ``iterunique()``. (**possible breaking change**)
+- Rename *private* utility function ``_get_item()`` to ``getitem()``. (**possible breaking change**)
+- Rename *private* utility function ``_set_item()`` to ``setitem()``. (**possible breaking change**)
+- Rename *private* utility function ``_deprecated()`` to ``deprecated()``. (**possible breaking change**)
 - Undeprecate ``tail()`` and make alias of ``rest()``.
 
 
