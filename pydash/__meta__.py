@@ -16,7 +16,7 @@ __summary__ = ('A utility library for doing "stuff" in a functional way. '
                'Based on the Lo-Dash Javascript library.')
 __url__ = 'https://github.com/dgilland/pydash'
 
-__version__ = '2.0.0-dev'
+__version__ = '2.0.0'
 
 __author__ = 'Derrick Gilland'
 __email__ = 'dgilland@gmail.com'
