@@ -16,6 +16,7 @@ Guide
     differences
     templating
     versioning
+    upgrading
 
 
 API Reference
