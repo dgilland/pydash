@@ -1,3 +1,5 @@
+.. _differences:
+
 Lo-Dash Differences
 ===================
 
@@ -12,6 +14,8 @@ pydash adheres to the following conventions:
 - Lo-Dash's ``toArray()`` is pydash's ``to_list()``.
 - Lo-Dash's ``functions()`` is pydash's ``callables()``. This particular name difference was chosen in order to allow for the ``functions.py`` module file to exist at root of the project. Previously, ``functions.py`` existed in ``pydash/api/`` but in ``v2.0.0``, it was decided to move everything in ``api/`` to ``pydash/``. Therefore, In to avoid import ambiguities, the ``functions()`` function was renamed.
 
+
+.. _differences-callbacks:
 
 Callbacks
 ---------

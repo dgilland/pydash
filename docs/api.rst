@@ -32,6 +32,8 @@ This is the recommended way to use pydash.
 Only the main pydash module API is guaranteed to adhere to semver. It's possible that backwards incompatibility could be broken between minor releases outside the main module API.
 
 
+.. _api-dash-instance:
+
 "_" Instance
 ============
 
