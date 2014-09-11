@@ -115,7 +115,7 @@ class ChainWrapper(object):
         return Chain(self)
 
 
-class _Underscore(object):
+class _Dash(object):
     """Class that provides attribute access to valid :mod:`pydash` methods and
     callable access to :mod:`pydash` method chaining.
     """

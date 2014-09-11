@@ -73,7 +73,7 @@ from .chaining import (
     chain,
     tap,
     thru,
-    _Underscore
+    _Dash
 )
 
 
@@ -300,4 +300,4 @@ from .exceptions import (
 # "_" Instance
 #
 
-_ = _Underscore()
+_ = _Dash()
