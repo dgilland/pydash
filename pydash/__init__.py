@@ -154,6 +154,32 @@ from .functions import (
 
 
 #
+# Numerical
+#
+
+from .numerical import (
+    add,
+    average,
+    avg,
+    curve,
+    mean,
+    moving_average,
+    moving_avg,
+    pow_,
+    power,
+    round_,
+    scale,
+    sigma,
+    slope,
+    std_deviation,
+    sum_,
+    transpose,
+    variance,
+    zscore,
+)
+
+
+#
 # Objects
 #
 
