@@ -220,6 +220,13 @@ def test_partial(case, case_args, args, expected):
     assert pyd.partial(case, *case_args)(*args) == expected
 
 
+def test_partial_as_callback():
+    func = pyd.partial(lambda offset, value, *args: value + offset, 5)
+    case = [1, 2, 3]
+    expected = [6, 7, 8]
+    pyd.map_(case, func) == expected
+
+
 @parametrize('case,case_args,args,expected', [
     (lambda a, b, c: a + b + c, ('a', 'b'), ('c',), 'cab')
 ])

@@ -25,11 +25,24 @@ def call_callback(callback, *args):
     """Inspect argspec of `callback` function and only pass the supported
     arguments when calling it.
     """
-    argspec = inspect.getargspec(callback)
-    argcount = len(argspec.args)
     maxargs = len(args)
+    argspec = None
 
-    argstop = maxargs if argspec.varargs else min([maxargs, argcount])
+    try:
+        argspec = inspect.getargspec(callback)
+    except TypeError:
+        try:
+            argspec = inspect.getargspec(getattr(callback, '__call__', None))
+        except TypeError:  # pragma: no cover
+            pass
+    finally:
+        if argspec:
+            argcount = len(argspec.args)
+        else:  # pragma: no cover
+            argcount = maxargs
+
+    argstop = (maxargs if argspec and argspec.varargs
+               else min([maxargs, argcount]))
 
     return callback(*args[:argstop])
 
