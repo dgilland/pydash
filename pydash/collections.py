@@ -386,9 +386,6 @@ def map_(collection, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    if not callback:
-        callback = lambda value, *args: value
-
     return [result[0] for result in itercallback(collection, callback)]
 
 
