@@ -67,8 +67,7 @@ pylint-errors:
 master:
 	git checkout master
 	git merge develop
-	git push origin master
-	git push --tags
+	git push origin develop master --tags
 	git checkout develop
 
 release:
