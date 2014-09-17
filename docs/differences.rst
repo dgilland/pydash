@@ -71,6 +71,8 @@ Extra Functions
 
 The following functions exist in pydash but not in Lo-Dash:
 
+- :func:`pydash.numerical.add`, :func:`pydash.numerical.sum_`
+- :func:`pydash.numerical.average`, :func:`pydash.numerical.avg`, :func:`pydash.numerical.mean`
 - :func:`pydash.arrays.cat`
 - :func:`pydash.functions.conjoin`
 - :func:`pydash.functions.disjoin`
@@ -100,13 +102,24 @@ The following functions exist in pydash but not in Lo-Dash:
 - :func:`pydash.functions.iterated`
 - :func:`pydash.functions.juxtapose`
 - :func:`pydash.arrays.mapcat`
+- :func:`pydash.collections.mapiter`
+- :func:`pydash.numerical.median`
+- :func:`pydash.numerical.moving_average`, :func:`pydash.numerical.moving_avg`
+- :func:`pydash.numerical.power`, :func:`pydash.numerical.pow_`
 - :func:`pydash.collections.reductions`
 - :func:`pydash.collections.reductions_right`
 - :func:`pydash.objects.rename_keys`
+- :func:`pydash.numerical.round_`, :func:`pydash.numerical.curve`
+- :func:`pydash.numerical.scale`
 - :func:`pydash.objects.set_path`
+- :func:`pydash.numerical.slope`
+- :func:`pydash.numerical.std_deviation`, :func:`pydash.numerical.sigma`
 - :func:`pydash.arrays.split_at`
 - :func:`pydash.objects.to_string`
+- :func:`pydash.numerical.transpose`
 - :func:`pydash.objects.update_path`
+- :func:`pydash.numerical.variance`
+- :func:`pydash.numerical.zscore`
 
 
 Function Behavior

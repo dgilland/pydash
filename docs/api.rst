@@ -25,7 +25,7 @@ This is the recommended way to use pydash.
     import pydash
     pydash.where({})
 
-    # NOT OK
+    # NOT RECOMMENDED
     from pydash.collections import where
 
 
@@ -79,6 +79,13 @@ Functions
 =========
 
 .. automodule:: pydash.functions
+    :members:
+
+
+Numerical
+=========
+
+.. automodule:: pydash.numerical
     :members:
 
 
