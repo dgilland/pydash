@@ -185,6 +185,15 @@ def test_map_aliases(case):
     assert pyd.map_ is case
 
 
+@parametrize('case,expectations', [
+    (([1, 2, 3], lambda num: num * 3), (3, 6, 9)),
+])
+def test_mapiter(case, expectations):
+    mapper = pyd.mapiter(*case)
+    for expected in expectations:
+        assert next(mapper) == expected
+
+
 @parametrize('case,expected', [
     (([1, 2, 3],), 3),
     (({'a': 3, 'b': 2, 'c': 1},), 3),

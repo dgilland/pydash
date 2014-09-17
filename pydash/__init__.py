@@ -106,6 +106,7 @@ from .collections import (
     inject,
     invoke,
     map_,
+    mapiter,
     max_,
     min_,
     partition,

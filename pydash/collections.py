@@ -37,6 +37,7 @@ __all__ = [
     'inject',
     'invoke',
     'map_',
+    'mapiter',
     'max_',
     'min_',
     'partition',
@@ -119,11 +120,11 @@ def count_by(collection, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    ret = dict()
+    ret = {}
 
-    for result, _, _, _ in itercallback(collection, callback):
-        ret.setdefault(result, 0)
-        ret[result] += 1
+    for result in itercallback(collection, callback):
+        ret.setdefault(result[0], 0)
+        ret[result[0]] += 1
 
     return ret
 
@@ -178,9 +179,6 @@ def filter_(collection, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    if callback is None:
-        callback = lambda item, *args: item
-
     return [value
             for is_true, value, _, _ in itercallback(collection, callback)
             if is_true]
@@ -386,10 +384,26 @@ def map_(collection, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    return [result[0] for result in itercallback(collection, callback)]
+    return list(mapiter(collection, callback))
 
 
 collect = map_
+
+
+def mapiter(collection, callback=None):
+    """Like :func:`map_` except returns a generator.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        generator: Each mapped item.
+
+    .. versionadded:: 2.1.0
+    """
+    for result in itercallback(collection, callback):
+        yield result[0]
 
 
 def max_(collection, callback=None):

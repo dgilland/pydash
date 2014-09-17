@@ -7,6 +7,7 @@ v2.1.0 (xxxx-xx-xx)
 
 - Add ``add()`` (``sum_()``).
 - Add ``average()`` (``avg()``, ``mean()``).
+- Add ``mapiter()``.
 - Add ``median()``.
 - Add ``moving_average()`` (``moving_avg()``).
 - Add ``power()`` (``pow_()``).
