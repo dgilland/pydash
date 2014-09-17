@@ -163,6 +163,7 @@ from .numerical import (
     avg,
     curve,
     mean,
+    median,
     moving_average,
     moving_avg,
     pow_,

@@ -18,6 +18,7 @@ __all__ = [
     'avg',
     'curve',
     'mean',
+    'median',
     'moving_average',
     'moving_avg',
     'pow_',
@@ -52,7 +53,19 @@ avg = average
 mean = average
 
 
-# def median(collection, callback=None):
+def median(collection, callback=None):
+    length = len(collection)
+    middle = (length + 1) / 2
+    collection = [ret[0] for ret in itercallback(sorted(collection), callback)]
+
+    if pyd.is_odd(length):
+        result = collection[int(middle - 1)]
+    else:
+        left = int(middle - 1.5)
+        right = int(middle - 0.5)
+        result = (collection[left] + collection[right]) / 2
+
+    return result
 
 
 def moving_average(array, size):

@@ -5,17 +5,18 @@ Changelog
 v2.1.0 (xxxx-xx-xx)
 -------------------
 
-- Add ``add()`` (``sum_()``)
-- Add ``average()`` (``avg()``, ``mean()``)
-- Add ``moving_average()`` (``moving_avg()``)
-- Add ``power()`` (``pow_()``)
-- Add ``round_()`` (``curve()``)
-- Add ``scale()``
-- Add ``slope()``
-- Add ``std_deviation()`` (``sigma()``)
-- Add ``transpose()``
-- Add ``variance()``
-- Add ``zscore()``
+- Add ``add()`` (``sum_()``).
+- Add ``average()`` (``avg()``, ``mean()``).
+- Add ``median()``.
+- Add ``moving_average()`` (``moving_avg()``).
+- Add ``power()`` (``pow_()``).
+- Add ``round_()`` (``curve()``).
+- Add ``scale()``.
+- Add ``slope()``.
+- Add ``std_deviation()`` (``sigma()``).
+- Add ``transpose()``.
+- Add ``variance()``.
+- Add ``zscore()``.
 
 
 v2.0.0 (2014-09-11)
