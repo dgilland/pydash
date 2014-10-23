@@ -23,6 +23,8 @@ _identity = lambda x: x
 
 if PY3:
     from html.parser import HTMLParser
+    from urllib.parse import (
+        urlencode, urlsplit, urlunsplit, parse_qs, parse_qsl)
     text_type = str
     string_types = (str,)
     integer_types = (int,)
@@ -39,6 +41,9 @@ if PY3:
 else:
     from HTMLParser import HTMLParser
     from itertools import izip
+    from urllib import urlencode
+    from urlparse import urlsplit, urlunsplit, parse_qs, parse_qsl
+
     text_type = unicode
     string_types = (str, unicode)
     integer_types = (int, long)

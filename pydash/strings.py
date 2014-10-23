@@ -7,7 +7,15 @@ from functools import partial
 import re
 
 import pydash as pyd
-from ._compat import html_unescape, PY26
+from ._compat import (
+    html_unescape,
+    iteritems,
+    parse_qsl,
+    PY26,
+    urlencode,
+    urlsplit,
+    urlunsplit
+)
 
 
 __all__ = [
@@ -34,6 +42,7 @@ __all__ = [
     'trim_right',
     'trunc',
     'unescape',
+    'url',
     'words',
 ]
 
@@ -533,6 +542,37 @@ def unescape(text):
     return html_unescape(text)
 
 
+def url(*paths, **params):
+    """Combines a series of URL parts into a single URL. Optionally, pass in
+    keyword arguments to append query parameters.
+
+    Args:
+        *parts (str): URL parts to combine.
+
+    Keyword Args:
+        **params (str, optional): Query parameters.
+
+    Returns:
+        str: URL string.
+
+    .. versionadded:: 2.2.0
+    """
+    paths_list = []
+    params_list = flatten_url_params(params)
+
+    for path in paths:
+        scheme, netloc, path, query, fragment = urlsplit(path)
+        query = parse_qsl(query)
+        params_list += query
+        paths_list.append(urlunsplit((scheme, netloc, path, '', fragment)))
+
+    path = delimitedpathjoin('/', *paths_list)
+    scheme, netloc, path, query, fragment = urlsplit(path)
+    query = urlencode(params_list)
+
+    return urlunsplit((scheme, netloc, path, query, fragment))
+
+
 def words(text):
     """Return list of words contained in `text`.
 
@@ -592,3 +632,58 @@ def js_to_py_re_replace(reg_exp):
         return sub(repl, text)
 
     return replace
+
+
+def delimitedpathjoin(delimiter, *paths):
+    """Join delimited path using specified delimiter.
+
+    >>> assert delimitedpathjoin('.', '') == ''
+    >>> assert delimitedpathjoin('.', '.') == '.'
+    >>> assert delimitedpathjoin('.', ['', '.a']) == '.a'
+    >>> assert delimitedpathjoin('.', ['a', '.']) == 'a.'
+    >>> assert delimitedpathjoin('.', ['', '.a', '', '', 'b']) == '.a.b'
+    >>> ret = '.a.b.c.d.e.'
+    >>> assert delimitedpathjoin('.', ['.a.', 'b.', '.c', 'd', 'e.']) == ret
+    >>> assert delimitedpathjoin('.', ['a', 'b', 'c']) == 'a.b.c'
+    >>> ret = 'a.b.c.d.e.f'
+    >>> assert delimitedpathjoin('.', ['a.b', '.c.d.', '.e.f']) == ret
+    >>> ret = '.a.b.c.1.'
+    >>> assert delimitedpathjoin('.', '.', 'a', 'b', 'c', 1, '.') == ret
+    >>> assert delimitedpathjoin('.', []) == ''
+    """
+    paths = [pyd.to_string(path) for path in pyd.flatten_deep(paths) if path]
+
+    if len(paths) == 1:
+        # Special case where there's no need to join anything.
+        # Doing this because if path==[delimiter], then an extra delimiter
+        # would be added if the else clause ran instead.
+        path = paths[0]
+    else:
+        leading = delimiter if paths and paths[0].startswith(delimiter) else ''
+        trailing = delimiter if paths and paths[-1].endswith(delimiter) else ''
+        middle = delimiter.join([path.strip(delimiter)
+                                 for path in paths if path.strip(delimiter)])
+        path = ''.join([leading, middle, trailing])
+
+    return path
+
+
+def flatten_url_params(params):
+    """Flatten URL params into list of tuples. If any param value is a list or
+    tuple, then map each value to the param key.
+    >>> params = [('a', 1), ('a', [2, 3])]
+    >>> assert flatten_url_params(params) == [('a', 1), ('a', 2), ('a', 3)]
+    >>> params = {'a': [1, 2, 3]}
+    >>> assert flatten_url_params(params) == [('a', 1), ('a', 2), ('a', 3)]
+    """
+    if isinstance(params, dict):
+        params = list(iteritems(params))
+
+    flattened = []
+    for param, value in params:
+        if isinstance(value, (list, tuple)):
+            flattened += zip([param] * len(value), value)
+        else:
+            flattened.append((param, value))
+
+    return flattened

@@ -2,6 +2,7 @@
 import re
 
 import pydash as pyd
+from pydash._compat import urlsplit, parse_qsl
 from .fixtures import parametrize
 
 
@@ -222,6 +223,41 @@ def test_trunc(case, expected):
 ])
 def test_unescape(case, expected):
     assert pyd.unescape(case) == expected
+
+
+@parametrize('case,expected', [
+    ({'args': [''], 'kargs': {}}, ''),
+    ({'args': ['/'], 'kargs': {}}, '/'),
+    ({'args': ['http://github.com'], 'kargs': {}}, 'http://github.com'),
+    ({'args': ['http://github.com:80'], 'kargs': {}}, 'http://github.com:80'),
+    ({'args': ['http://github.com:80', 'pydash', 'issues/'], 'kargs': {}},
+     'http://github.com:80/pydash/issues/'),
+    ({'args': ['/foo', 'bar', '/baz', '/qux/'], 'kargs': {}},
+     '/foo/bar/baz/qux/'),
+    ({'args': ['/foo/bar'], 'kargs': {'a': 1, 'b': 'two'}},
+     '/foo/bar?a=1&b=two'),
+    ({'args': ['/foo/bar?x=5'], 'kargs': {'a': 1, 'b': 'two'}},
+     '/foo/bar?x=5&a=1&b=two'),
+    ({'args': ['/foo/bar?x=5', 'baz?z=3'], 'kargs': {'a': 1, 'b': 'two'}},
+     '/foo/bar/baz?x=5&a=1&b=two&z=3'),
+    ({'args': ['/foo/bar?x=5', 'baz?z=3'], 'kargs': {'a': [1, 2], 'b': 'two'}},
+     '/foo/bar/baz?x=5&a=1&a=2&b=two&z=3'),
+    ({'args': ['/foo#bar', 'baz'], 'kargs': {'a': [1, 2], 'b': 'two'}},
+     '/foo?a=1&a=2&b=two#bar/baz'),
+    ({'args': ['/foo', 'baz#bar'], 'kargs': {'a': [1, 2], 'b': 'two'}},
+     '/foo/baz?a=1&a=2&b=two#bar'),
+])
+def test_url(case, expected):
+    result = pyd.url(*case['args'], **case['kargs'])
+
+    r_scheme, r_netloc, r_path, r_query, r_fragment = urlsplit(result)
+    e_scheme, e_netloc, e_path, e_query, e_fragment = urlsplit(expected)
+
+    assert r_scheme == e_scheme
+    assert r_netloc == e_netloc
+    assert r_path == e_path
+    assert set(parse_qsl(r_query)) == set(parse_qsl(e_query))
+    assert r_fragment == e_fragment
 
 
 @parametrize('case,expected', [

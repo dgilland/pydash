@@ -288,6 +288,7 @@ from .strings import (
     trim_right,
     trunc,
     unescape,
+    url,
     words,
 )
 
