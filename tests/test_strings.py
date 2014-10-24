@@ -163,6 +163,7 @@ def test_pad_right(case, expected):
     ('foo-_bar-_-baz', 'foo_bar_baz'),
     ('foo!bar,baz', 'foo_bar_baz'),
     ('--foo.bar;baz', 'foo_bar_baz'),
+    ('FooBar', 'foo_bar'),
 ])
 def test_snake_case(case, expected):
     assert pyd.snake_case(case) == expected

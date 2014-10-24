@@ -417,7 +417,7 @@ def snake_case(text):
 
     .. versionadded:: 1.1.0
     """
-    return '_'.join(wrd for wrd in words(pyd.to_string(text)) if wrd.lower())
+    return '_'.join(wrd.lower() for wrd in words(pyd.to_string(text)) if wrd)
 
 
 def starts_with(text, target, position=None):

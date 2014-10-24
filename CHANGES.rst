@@ -5,7 +5,8 @@ Changelog
 v2.2.0-dev (xxxx-xx-xx)
 -----------------------
 
-- Add ``url``
+- Add ``url``.
+- Fix bug in ``snake_case`` that resulted in returned string not being converted to lower case.
 
 
 v2.1.0 (2014-09-17)
