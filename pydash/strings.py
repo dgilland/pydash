@@ -543,11 +543,11 @@ def unescape(text):
 
 
 def url(*paths, **params):
-    """Combines a series of URL parts into a single URL. Optionally, pass in
+    """Combines a series of URL paths into a single URL. Optionally, pass in
     keyword arguments to append query parameters.
 
     Args:
-        *parts (str): URL parts to combine.
+        *paths (str): URL paths to combine.
 
     Keyword Args:
         **params (str, optional): Query parameters.
