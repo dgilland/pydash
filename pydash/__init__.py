@@ -45,6 +45,7 @@ from .arrays import (
     pull_at,
     remove,
     rest,
+    reverse,
     slice_,
     sorted_index,
     sorted_last_index,

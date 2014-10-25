@@ -41,6 +41,7 @@ __all__ = [
     'pull_at',
     'remove',
     'rest',
+    'reverse',
     'slice_',
     'sorted_index',
     'sorted_last_index',
@@ -535,6 +536,22 @@ def rest(array):
 
 
 tail = rest
+
+
+def reverse(array):
+    """Return `array` in reverse order.
+
+    Args:
+        array (list|string): Object to process.
+
+    Returns:
+        list|string: Reverse of object.
+
+    .. versionadded:: 2.2.0
+    """
+    # NOTE: Using this method to reverse object since it works for both lists
+    # and strings.
+    return array[::-1]
 
 
 def slice_(array, start=0, end=None):
