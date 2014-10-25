@@ -5,8 +5,10 @@ Changelog
 v2.2.0-dev (xxxx-xx-xx)
 -----------------------
 
+- Add ``reverse``.
 - Add ``url``.
 - Fix bug in ``snake_case`` that resulted in returned string not being converted to lower case.
+- Make ``get_path`` handle escaping the ``.`` delimiter for string keys.
 
 
 v2.1.0 (2014-09-17)
