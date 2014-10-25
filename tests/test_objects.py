@@ -172,6 +172,9 @@ def test_for_in_right_aliases(case):
     (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), 5),
     (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), None),
     ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), 4),
+    (({'lev.el1': {'lev\\el2': {'level3': ['value']}}},
+      'lev\\.el1.lev\\\\el2.level3.[0]'),
+     'value')
 ])
 def test_get_path(case, expected):
     assert pyd.get_path(*case) == expected
@@ -188,6 +191,9 @@ def test_get_path(case, expected):
     (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), True),
     (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), False),
     ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), True),
+    (({'lev.el1': {'lev\\el2': {'level3': ['value']}}},
+      'lev\\.el1.lev\\\\el2.level3.[0]'),
+     True)
 ])
 def test_has_path(case, expected):
     assert pyd.has_path(*case) == expected

@@ -285,6 +285,9 @@ def get_path(obj, keys, default=None):
         mixed: Value of `obj` at path.
 
     .. versionadded:: 2.0.0
+
+    .. versionchanged:: 2.2.0
+        Support escaping "." delimiter in single string path key.
     """
     # pylint: disable=redefined-outer-name
 
@@ -725,13 +728,29 @@ values_in = values
 
 
 def path_keys(keys):
-    """Convert keys used to access an object's path into the standard form, a
+    """Convert keys used to access an object's path into the standard form: a
     list of keys.
     """
     # pylint: disable=redefined-outer-name
     if pyd.is_string(keys):
+        # This matches "." as delimiter unless it is escaped by "//".
+        re_dot_delim = re.compile(r'(?<!\\)(?:\\\\)*\.')
+
+        # Since we can't tell whether a bare number is supposed to be dict key
+        # or a list index, we support a special syntax where any string-integer
+        # surrounded by brackets is treated as a list index and converted to an
+        # integer.
         re_list_index = re.compile(r'\[[\d\]]')
-        keys = [int(key[1:-1]) if re_list_index.match(key) else key
-                for key in keys.split('.')]
+
+        keys = [int(key[1:-1]) if re_list_index.match(key)
+                else unescape_path_key(key)
+                for key in re_dot_delim.split(keys)]
 
     return keys
+
+
+def unescape_path_key(key):
+    """Unescape path key."""
+    key = pyd.js_replace(r'/\\\\/g', key, r'\\')
+    key = pyd.js_replace(r'/\\\./g', key, '.')
+    return key
