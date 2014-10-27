@@ -370,6 +370,16 @@ def test_sort(case, expected):
     assert array == expected
 
 
+def test_sort_comparison_key_exception():
+    raised = False
+    try:
+        pyd.sort([], comparison=lambda: None, key=lambda: None)
+    except Exception:
+        raised = True
+
+    assert raised
+
+
 @parametrize('case,expected', [
     (([4, 4, 5, 5, 6, 6], 5), 2),
     (([20, 30, 40, 40, 50], 40), 2),

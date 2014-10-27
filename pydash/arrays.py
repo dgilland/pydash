@@ -690,7 +690,7 @@ def sort(array, comparison=None, key=None, reverse=False):
 
     .. versionadded:: 2.2.0
     """
-    if comparison is not None and key is not None:
+    if comparison and key:
         raise Exception(
             'The "comparison" and "key" arguments are mutually exclusive')
 
