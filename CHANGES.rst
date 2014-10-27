@@ -8,6 +8,7 @@ v2.2.0-dev (xxxx-xx-xx)
 - Add ``append``.
 - Add ``deep_get``.
 - Add ``deep_set``.
+- Add ``deep_has``.
 - Add ``join``.
 - Add ``pop``.
 - Add ``push``.
@@ -19,7 +20,7 @@ v2.2.0-dev (xxxx-xx-xx)
 - Add ``url``.
 - Fix bug in ``snake_case`` that resulted in returned string not being converted to lower case.
 - Make ``has`` work with deep paths.
-- Make ``has_path`` and ``deep_has`` aliases of ``has``.
+- Make ``has_path`` an alias of ``deep_has``.
 - Make ``get_path`` handle escaping the ``.`` delimiter for string keys.
 - Make ``concat`` and alias of ``cat``.
 

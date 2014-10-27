@@ -90,6 +90,36 @@ def test_deep_get(case, expected):
 
 
 @parametrize('case,expected', [
+    (({'a': 1, 'b': 2, 'c': 3}, 'b'), True),
+    (([1, 2, 3], 0), True),
+    (([1, 2, 3], 1), True),
+    (([1, 2, 3], 3), False),
+    (({'one': {'two': {'three': 4}}}, 'one.two'), True),
+    (({'one': {'two': {'three': 4}}}, 'one.two.three'), True),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two']), True),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), True),
+    (({'one': {'two': {'three': 4}}}, 'one.four'), False),
+    (({'one': {'two': {'three': 4}}}, 'five'), False),
+    (({'one': ['two', {'three': [4, 5]}]}, ['one', 1, 'three', 1]), True),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), True),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), False),
+    ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), True),
+    (({'lev.el1': {'lev\\el2': {'level3': ['value']}}},
+      'lev\\.el1.lev\\\\el2.level3.[0]'),
+     True)
+])
+def test_deep_has(case, expected):
+    assert pyd.deep_has(*case) == expected
+
+
+@parametrize('case', [
+    pyd.has_path,
+])
+def test_deep_has_aliases(case):
+    assert pyd.deep_has is case
+
+
+@parametrize('case,expected', [
     (({}, ['one', 'two', 'three', 'four'], 1),
      {'one': {'two': {'three': {'four': 1}}}}),
     (({}, 'one.two.three.four', 1),
@@ -225,30 +255,9 @@ def test_get_path(case, expected):
     (([1, 2, 3], 0), True),
     (([1, 2, 3], 1), True),
     (([1, 2, 3], 3), False),
-    (({'one': {'two': {'three': 4}}}, 'one.two'), True),
-    (({'one': {'two': {'three': 4}}}, 'one.two.three'), True),
-    (({'one': {'two': {'three': 4}}}, ['one', 'two']), True),
-    (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), True),
-    (({'one': {'two': {'three': 4}}}, 'one.four'), False),
-    (({'one': {'two': {'three': 4}}}, 'five'), False),
-    (({'one': ['two', {'three': [4, 5]}]}, ['one', 1, 'three', 1]), True),
-    (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), True),
-    (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), False),
-    ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), True),
-    (({'lev.el1': {'lev\\el2': {'level3': ['value']}}},
-      'lev\\.el1.lev\\\\el2.level3.[0]'),
-     True)
 ])
 def test_has(case, expected):
     assert pyd.has(*case) == expected
-
-
-@parametrize('case', [
-    pyd.has_path,
-    pyd.deep_has
-])
-def test_has_aliases(case):
-    assert pyd.has is case
 
 
 @parametrize('case,expected', [

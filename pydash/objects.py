@@ -208,6 +208,38 @@ def deep_set(obj, path, value):
     return set_path(obj, value, path_keys(path))
 
 
+def deep_has(obj, path):
+    """Checks if `path` exists as a key of `obj`.
+
+    Args:
+        obj (mixed): Object to test.
+        path (mixed): Path to test for. Can be a list of nested keys or a ``.``
+            delimited string of path describing the path. When `path` is a
+            string, use ``[index]`` as the path key to access list indexes. For
+            example, ``'one.[2].three.[4]'``.
+
+    Returns:
+        bool: Whether `obj` has `path`.
+
+    See Also:
+        - :func:`deep_has` (main definition)
+        - :func:`has_path` (alias)
+
+    .. versionchanged: 2.2.0
+        Made :func:`has_path` an alias.
+    """
+    try:
+        get_path(obj, path, default=NoValue)
+        exists = True
+    except (KeyError, IndexError, TypeError):
+        exists = False
+
+    return exists
+
+
+has_path = deep_has
+
+
 def defaults(obj, *sources):
     """Assigns own enumerable properties of source object(s) to the destination
     object for all destination properties that resolve to undefined.
@@ -340,35 +372,14 @@ def has(obj, key):
 
     Args:
         obj (mixed): Object to test.
-        key (mixed): Key to test for. Can be a list of nested keys or a ``.``
-            delimited string of path describing the path. When `path` is a
-            string, use ``[index]`` as the path key to access list indexes. For
-            example, ``'one.[2].three.[4]'``.
+        key (mixed): Key to test for.
 
     Returns:
         bool: Whether `obj` has `key`.
 
-    See Also:
-        - :func:`has` (main definition)
-        - :func:`has_path` (alias)
-        - :func:`deep_has` (alias)
-
     .. versionadded:: 1.0.0
-
-    .. versionchanged: 2.2.0
-        Made :func:`has_path` and :func:`deep_has` aliases of :func:`has`.
     """
-    try:
-        get_path(obj, key, default=NoValue)
-        exists = True
-    except (KeyError, IndexError, TypeError):
-        exists = False
-
-    return exists
-
-
-has_path = has
-deep_has = has
+    return deep_has(obj, [key])
 
 
 def invert(obj, multivalue=False):
