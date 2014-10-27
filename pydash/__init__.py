@@ -200,6 +200,8 @@ from .objects import (
     callables,
     clone,
     clone_deep,
+    deep_get,
+    deep_set,
     defaults,
     extend,
     find_key,

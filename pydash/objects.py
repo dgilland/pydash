@@ -25,6 +25,8 @@ __all__ = [
     'callables',
     'clone',
     'clone_deep',
+    'deep_get',
+    'deep_set',
     'defaults',
     'extend',
     'find_key',
@@ -168,6 +170,41 @@ def clone_deep(value, callback=None):
     .. versionadded:: 1.0.0
     """
     return clone(value, is_deep=True, callback=callback)
+
+
+def deep_get(obj, path):
+    """Get the value at any depth of a nested object based on the path
+    described by `path`. If path doesn't exist, ``None`` is returned.
+
+    Args:
+        obj (list|dict): Object to process.
+        keys (str|list): List or ``.`` delimited string of keys describing
+            path. When `keys` is a string, use ``[index]`` as the path key to
+            access list indexes. For example, ``'one.[2].three.[4]'``.
+
+    Returns:
+        mixed: Value of `obj` at path.
+
+    .. versionadded:: 2.2.0
+    """
+    return get_path(obj, path)
+
+
+def deep_set(obj, path, value):
+    """Sets the value of an object described by `path`. If any part of the
+    object path doesn't exist, it will be created.
+
+    Args:
+        obj (list|dict): Object to modify.
+        path (str | list): Target path to set value to.
+        value (mixed): Value to set.
+
+    Returns:
+        mixed: Modified `obj`.
+
+    .. versionadded:: 2.2.0
+    """
+    return set_path(obj, value, path_keys(path))
 
 
 def defaults(obj, *sources):

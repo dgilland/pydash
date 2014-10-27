@@ -71,6 +71,54 @@ def test_clone_deep(case, kargs):
 
 
 @parametrize('case,expected', [
+    (({'one': {'two': {'three': 4}}}, 'one.two'), {'three': 4}),
+    (({'one': {'two': {'three': 4}}}, 'one.two.three'), 4),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two']), {'three': 4}),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), 4),
+    (({'one': {'two': {'three': 4}}}, 'one.four'), None),
+    (({'one': {'two': {'three': 4}}}, 'five'), None),
+    (({'one': ['two', {'three': [4, 5]}]}, ['one', 1, 'three', 1]), 5),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), 5),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), None),
+    ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), 4),
+    (({'lev.el1': {'lev\\el2': {'level3': ['value']}}},
+      'lev\\.el1.lev\\\\el2.level3.[0]'),
+     'value')
+])
+def test_deep_get(case, expected):
+    assert pyd.deep_get(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({}, ['one', 'two', 'three', 'four'], 1),
+     {'one': {'two': {'three': {'four': 1}}}}),
+    (({}, 'one.two.three.four', 1),
+     {'one': {'two': {'three': {'four': 1}}}}),
+    (({'one': {'two': {}, 'three': {}}}, ['one', 'two', 'three', 'four'], 1),
+     {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
+    (({'one': {'two': {}, 'three': {}}}, 'one.two.three.four', 1),
+     {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
+    (({}, 'one', 1), {'one': 1}),
+    (([], [0, 0, 0], 1), [[[1]]]),
+    (([], '[0].[0].[0]', 1), [[[1]]]),
+    (([1, 2, [3, 4, [5, 6]]], [2, 2, 1], 7), [1, 2, [3, 4, [5, 7]]]),
+    (([1, 2, [3, 4, [5, 6]]], '[2].[2].[1]', 7), [1, 2, [3, 4, [5, 7]]]),
+    (([1, 2, [3, 4, [5, 6]]], [2, 2, 2], 7), [1, 2, [3, 4, [5, 6, 7]]]),
+    (([1, 2, [3, 4, [5, 6]]], '[2].[2].[2]', 7), [1, 2, [3, 4, [5, 6, 7]]]),
+])
+def test_deep_set(case, expected):
+    assert pyd.deep_set(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({'name': 'barney'}, {'name': 'fred', 'employer': 'slate'}),
+     {'name': 'barney', 'employer': 'slate'}),
+])
+def test_defaults(case, expected):
+    assert pyd.defaults(*case) == expected
+
+
+@parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, {1: 'a', 2: 'b', 3: 'c'}),
     ([1, 2, 3], {1: 0, 2: 1, 3: 2}),
 ])
@@ -87,14 +135,6 @@ def test_invert_multivalue(case, expected):
     result = pyd.invert(case, multivalue=True)
     for key in result:
         assert set(result[key]) == set(expected[key])
-
-
-@parametrize('case,expected', [
-    (({'name': 'barney'}, {'name': 'fred', 'employer': 'slate'}),
-     {'name': 'barney', 'employer': 'slate'}),
-])
-def test_defaults(case, expected):
-    assert pyd.defaults(*case) == expected
 
 
 @parametrize('case,expected', [

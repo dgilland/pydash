@@ -6,6 +6,8 @@ v2.2.0-dev (xxxx-xx-xx)
 -----------------------
 
 - Add ``append``.
+- Add ``deep_get``.
+- Add ``deep_set``.
 - Add ``join``.
 - Add ``pop``.
 - Add ``push``.
