@@ -13,9 +13,11 @@ from .helpers import itercallback
 
 
 __all__ = [
+    'append',
     'cat',
     'chunk',
     'compact',
+    'concat',
     'difference',
     'drop',
     'drop_right',
@@ -33,18 +35,23 @@ __all__ = [
     'interleave',
     'intersection',
     'intersperse',
+    'join',
     'last',
     'last_index_of',
     'mapcat',
     'object_',
     'pull',
     'pull_at',
+    'push',
     'remove',
     'rest',
     'reverse',
+    'shift',
     'slice_',
+    'sort',
     'sorted_index',
     'sorted_last_index',
+    'splice',
     'split_at',
     'tail',
     'take',
@@ -57,6 +64,7 @@ __all__ = [
     'without',
     'xor',
     'zip_',
+    'unshift',
     'unzip',
     'zip_object',
 ]
@@ -74,6 +82,9 @@ def cat(*arrays):
     .. versionadded:: 2.0.0
     """
     return flatten(arrays)
+
+
+concat = cat
 
 
 def chunk(array, size=1):
@@ -392,6 +403,21 @@ def intersperse(array, separator):
     return list(iterintersperse(array, separator))
 
 
+def join(array, separator):
+    """Return the elements of `array` as a string joined with `separator`.
+
+    Args:
+        array (list): List to join.
+        separator (str): String to join with.
+
+    Returns:
+        str: Joined string.
+
+    ..versionadded:: 2.2.0
+    """
+    return separator.join(pyd.map_(array, pyd.to_string))
+
+
 def last(array):
     """Return the last element of `array`.
 
@@ -447,6 +473,24 @@ def mapcat(array, callback=None):
     return cat(*pyd.map_(array, callback))
 
 
+def pop(array, index=-1):
+    """Remove element of array at `index` and return element.
+
+    Args:
+        array (list): List to pop from.
+        index (int, optional): Index to remove element from. Default is ``-1``.
+
+    Returns:
+        mixed: Value at `index`.
+
+    Warning:
+        `array` is modified in place.
+
+    .. versionadded:: 2.2.0
+    """
+    return array.pop(index)
+
+
 def pull(array, *values):
     """Removes all provided values from the given array.
 
@@ -491,6 +535,28 @@ def pull_at(array, *indexes):
         del array[index]
 
     return array
+
+
+def push(array, *items):
+    """Push items onto the end of `array` and return modified `array`.
+
+    Args:
+        array (list): List to push to.
+        *items (mixed): Items to append.
+
+    Returns:
+        list: Modified `array`.
+
+    Warning:
+        `array` is modified in place.
+
+    .. versionadded:: 2.2.0
+    """
+    pyd.each(items, lambda item: array.append(item))
+    return array
+
+
+append = push
 
 
 def remove(array, callback=None):
@@ -554,6 +620,23 @@ def reverse(array):
     return array[::-1]
 
 
+def shift(array):
+    """Remove the first element of `array` and return it.
+
+    Args:
+        array (list): List to shift.
+
+    Returns:
+        mixed: First element of `array`.
+
+    Warning:
+        `array` is modified in place.
+
+    .. versionadded:: 2.2.0
+    """
+    return pop(array, 0)
+
+
 def slice_(array, start=0, end=None):
     """Slices `array` from the `start` index up to, but not including, the
     `end` index.
@@ -573,6 +656,33 @@ def slice_(array, start=0, end=None):
         end = (start + 1) if start >= 0 else (len(array) + start + 1)
 
     return array[start:end]
+
+
+def sort(array, callback=None, key=None, reverse=False):
+    """Sort `array` using optional `callback`, `key`, and `reverse` options and
+    return sorted `array`.
+
+    Args:
+        array (list): List to sort.
+        callback (callable, optional): A custom comparison function used to
+            sort the list. Function should accept two arguments and return a
+            negative, zero, or position number depending on whether the first
+            argument is considered smaller than, equal to, or larger than the
+            second argument. Default is ``None``.
+        key (callback, optional): A function of one argument used to extract a
+            a comparision key from each list element. Default is ``None``.
+        reverse: Whether to reverse the sort. Default is ``False``.
+
+    Returns:
+        list: Sorted list.
+
+    Warning:
+        `array` is modified in place.
+
+    .. versionadded:: 2.2.0
+    """
+    array.sort(callback, key, reverse)
+    return array
 
 
 def sorted_index(array, value, callback=None):
@@ -628,6 +738,39 @@ def sorted_last_index(array, value, callback=None):
         value = callback(value)
 
     return bisect_right(array, value)
+
+
+def splice(array, index, how_many=None, *items):
+    """Modify the contents of `array` by inserting elements starting at `index`
+    and removing `how_many` number of elements after `index`.
+
+    Args:
+        array (list): List to splice.
+        index (int): Index to splice at.
+        how_many (int, optional): Number of items to remove starting at
+            `index`. If ``None`` then all items after `index` are removed.
+            Default is ``None``.
+        *items (mixed): Elements to insert starting at `index`. Each item is
+            inserted in the order given.
+
+    Returns:
+        list: The removed elements of `array`.
+
+    Warning:
+        `array` is modified in place.
+
+    .. versionadded:: 2.2.0
+    """
+    if how_many is None:
+        how_many = len(array) - index
+
+    removed = array[index:index + how_many]
+    del array[index:index + how_many]
+
+    for item in reverse(items):
+        array.insert(index, item)
+
+    return removed
 
 
 def split_at(array, index):
@@ -822,6 +965,28 @@ def zip_(*arrays):
     """
     # zip returns as a list of tuples so convert to list of lists
     return [list(item) for item in zip(*arrays)]
+
+
+def unshift(array, *items):
+    """Insert the given elements at the beginning of `array` and return the
+    modified list.
+
+    Args:
+        array (list): List to modify.
+        *items (mixed): Items to insert.
+
+    Returns:
+        list: Modified list.
+
+    Warning:
+        `array` is modified in place.
+
+    .. versionadded:: 2.2.0
+    """
+    for item in reverse(items):
+        array.insert(0, item)
+
+    return array
 
 
 def unzip(array):

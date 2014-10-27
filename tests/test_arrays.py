@@ -18,6 +18,13 @@ def test_cat(case, expected):
     assert pyd.cat(*case) == expected
 
 
+@parametrize('alias', [
+    pyd.concat
+])
+def test_cat_aliases(alias):
+    pyd.cat is alias
+
+
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5],), [[1], [2], [3], [4], [5]]),
     (([1, 2, 3, 4, 5], 2), [[1, 2], [3, 4], [5]]),
@@ -202,6 +209,14 @@ def test_intersperse(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3], '.'), '1.2.3'),
+    ((['one', 'two', 'three'], '-.-'), 'one-.-two-.-three')
+])
+def test_join(case, expected):
+    assert pyd.join(*case) == expected
+
+
+@parametrize('case,expected', [
     ([1, 2, 3], 3),
     ([], None)
 ])
@@ -241,6 +256,17 @@ def test_mapcat(case, expected):
     assert pyd.mapcat(*case) == expected
 
 
+@parametrize('case,expected,after', [
+    (([1, 2, 3],), 3, [1, 2]),
+    (([1, 2, 3], 0), 1, [2, 3]),
+    (([1, 2, 3], 1), 2, [1, 3]),
+])
+def test_pop(case, expected, after):
+    array = case[0]
+    assert pyd.pop(*case) == expected
+    assert array == after
+
+
 @parametrize('case,values,expected', [
     ([1, 2, 3, 1, 2, 3], [2, 3], [1, 1])
 ])
@@ -255,6 +281,22 @@ def test_pull(case, values, expected):
 ])
 def test_pull_at(case, expected):
     assert pyd.pull_at(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], 4), [1, 2, 3, 4]),
+    (([1, 2, 3], 4, 5), [1, 2, 3, 4, 5]),
+    (([1, 2, 3], [4, 5], 6, [7, 8]), [1, 2, 3, [4, 5], 6, [7, 8]]),
+])
+def test_push(case, expected):
+    assert pyd.push(*case) == expected
+
+
+@parametrize('alias', [
+    pyd.append
+])
+def test_push_aliases(alias):
+    pyd.push is alias
 
 
 @parametrize('case,filter_by,expected', [
@@ -290,6 +332,14 @@ def test_reverse(case, expected):
     assert pyd.reverse(case) == expected
 
 
+@parametrize('case,expected,after', [
+    ([1, 2, 3], 1, [2, 3]),
+])
+def test_shift(case, expected, after):
+    assert pyd.shift(case) == expected
+    assert case == after
+
+
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5], 0, 1), [1]),
     (([1, 2, 3, 4, 5], 1, 3), [2, 3]),
@@ -304,6 +354,20 @@ def test_reverse(case, expected):
 ])
 def test_slice_(case, expected):
     assert pyd.slice_(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([2, 1, 3, 4, 6, 5],), [1, 2, 3, 4, 5, 6]),
+    (([2, 1, 3, 4, 6, 5], None, None, True), [6, 5, 4, 3, 2, 1]),
+    (([{'v': 2}, {'v': 3}, {'v': 1}], None, lambda x: x['v']),
+     [{'v': 1}, {'v': 2}, {'v': 3}]),
+    (([2, 1, 3, 4, 6, 5], lambda a, b: -1 if a > b else 1),
+     [6, 5, 4, 3, 2, 1]),
+])
+def test_sort(case, expected):
+    array = case[0]
+    assert pyd.sort(*case) == expected
+    assert array == expected
 
 
 @parametrize('case,expected', [
@@ -333,6 +397,20 @@ def test_sorted_index(case, expected):
 ])
 def test_sorted_last_index(case, expected):
     assert pyd.sorted_last_index(*case) == expected
+
+
+@parametrize('case,expected,after', [
+    (([1, 2, 3], 1, 0, 'splice'), [], [1, 'splice', 2, 3]),
+    (([1, 2, 3], 1, 1, 'splice'), [2], [1, 'splice', 3]),
+    (([1, 2, 3], 0, 2, 'splice', 'slice', 'dice'), [1, 2],
+     ['splice', 'slice', 'dice', 3]),
+    (([1, 2, 3], 0), [1, 2, 3], []),
+    (([1, 2, 3], 1), [2, 3], [1]),
+])
+def test_splice(case, expected, after):
+    array = case[0]
+    assert pyd.splice(*case) == expected
+    assert array == after
 
 
 @parametrize('case,expected', [
@@ -413,6 +491,16 @@ def test_uniq_aliases(alias):
 ])
 def test_union(case, expected):
     assert pyd.union(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], 4), [4, 1, 2, 3]),
+    (([1, 2, 3], 4, 5), [4, 5, 1, 2, 3]),
+    (([1, 2, 3], [4, 5], 6, [7, 8]), [[4, 5], 6, [7, 8], 1, 2, 3]),
+])
+def test_unshift(case, expected):
+    assert pyd.unshift(*case) == expected
+    assert case[0] == expected
 
 
 @parametrize('case,expected', [

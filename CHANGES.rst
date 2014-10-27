@@ -5,10 +5,19 @@ Changelog
 v2.2.0-dev (xxxx-xx-xx)
 -----------------------
 
+- Add ``append``.
+- Add ``join``.
+- Add ``pop``.
+- Add ``push``.
 - Add ``reverse``.
+- Add ``shift``.
+- Add ``sort``.
+- Add ``splice``.
+- Add ``unshift``.
 - Add ``url``.
 - Fix bug in ``snake_case`` that resulted in returned string not being converted to lower case.
 - Make ``get_path`` handle escaping the ``.`` delimiter for string keys.
+- Make ``concat`` and alias of ``cat``.
 
 
 v2.1.0 (2014-09-17)
