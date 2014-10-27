@@ -9,6 +9,8 @@ v2.2.0-dev (xxxx-xx-xx)
 - Add ``deep_get``.
 - Add ``deep_set``.
 - Add ``deep_has``.
+- Add ``deep_pluck``.
+- Add ``deep_property``.
 - Add ``join``.
 - Add ``pop``.
 - Add ``push``.
@@ -19,6 +21,7 @@ v2.2.0-dev (xxxx-xx-xx)
 - Add ``unshift``.
 - Add ``url``.
 - Fix bug in ``snake_case`` that resulted in returned string not being converted to lower case.
+- Make ``deep_prop`` an alias of ``deep_property``.
 - Make ``has`` work with deep paths.
 - Make ``has_path`` an alias of ``deep_has``.
 - Make ``get_path`` handle escaping the ``.`` delimiter for string keys.

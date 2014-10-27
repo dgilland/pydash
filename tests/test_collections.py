@@ -46,6 +46,20 @@ def test_count_by(case, expected):
 
 
 @parametrize('case,expected', [
+    (([{'level1': {'level2': {'level3': {'value': 1}}}},
+       {'level1': {'level2': {'level3': {'value': 2}}}},
+       {'level1': {'level2': {'level3': {'value': 3}}}},
+       {'level1': {'level2': {'level3': {'value': 4}}}},
+       {'level1': {'level2': {}}},
+        {}],
+      'level1.level2.level3.value'),
+     [1, 2, 3, 4, None, None])
+])
+def test_deep_pluck(case, expected):
+    assert pyd.deep_pluck(*case) == expected
+
+
+@parametrize('case,expected', [
     (([0, True, False, None, 1, 2, 3],), [True, 1, 2, 3]),
     (([1, 2, 3, 4, 5, 6], lambda num: num % 2 == 0), [2, 4, 6]),
     (([{'name': 'barney', 'age': 36, 'blocked': False},

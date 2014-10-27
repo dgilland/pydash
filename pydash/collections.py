@@ -9,7 +9,7 @@ import random
 
 import pydash as pyd
 
-from .helpers import itercallback, iterator, call_callback
+from .helpers import itercallback, iterator, call_callback, NoValue
 
 
 __all__ = [
@@ -19,6 +19,7 @@ __all__ = [
     'collect',
     'contains',
     'count_by',
+    'deep_pluck',
     'detect',
     'each',
     'each_right',
@@ -127,6 +128,10 @@ def count_by(collection, callback=None):
         ret[result[0]] += 1
 
     return ret
+
+
+def deep_pluck(collection, path):
+    return map_(collection, pyd.deep_property(path))
 
 
 def every(collection, callback=None):

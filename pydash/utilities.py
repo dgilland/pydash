@@ -17,6 +17,8 @@ __all__ = [
     'attempt',
     'constant',
     'callback',
+    'deep_property',
+    'deep_prop',
     'identity',
     'iteratee',
     'matches',
@@ -105,6 +107,28 @@ def callback(func):
 
 
 iteratee = callback
+
+
+def deep_property(path):
+    """Creates a :func:`pydash.collections.pluck` style function, which returns
+    the key value of a given object.
+
+    Args:
+        key (mixed): Key value to fetch from object.
+
+    Returns:
+        function: Function that returns object's key value.
+
+    See Also:
+        - :func:`property_` (main definition)
+        - :func:`prop` (alias)
+
+    .. versionadded:: 1.0.0
+    """
+    return lambda obj: pyd.deep_get(obj, path)
+
+
+deep_prop = deep_property
 
 
 def identity(*args):

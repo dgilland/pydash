@@ -60,6 +60,27 @@ def test_callback_aliases(case):
     assert pyd.callback is case
 
 
+@parametrize('case,arg,expected', [
+    ('name',
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     ['fred', 'barney']),
+    ('spouse.name',
+     [{'name': 'fred', 'age': 40, 'spouse': {'name': 'wilma'}},
+      {'name': 'barney', 'age': 36, 'spouse': {'name': 'betty'}}],
+     ['wilma', 'betty'])
+])
+def test_deep_property(case, arg, expected):
+    assert pyd.map_(arg, pyd.deep_property(case)) == expected
+
+
+@parametrize('case', [
+    pyd.deep_prop
+])
+def test_deep_property_aliases(case):
+    assert pyd.deep_property is case
+
+
 @parametrize('case,expected', [
     ((1,), 1),
     ((1, 2), 1),
@@ -112,8 +133,7 @@ def test_now():
      ['fred', 'barney']),
 ])
 def test_property_(case, arg, expected):
-    getter = pyd.property_(case)
-    assert pyd.map_(arg, getter) == expected
+    assert pyd.map_(arg, pyd.property_(case)) == expected
 
 
 @parametrize('case', [
