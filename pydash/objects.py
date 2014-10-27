@@ -27,6 +27,7 @@ __all__ = [
     'clone_deep',
     'deep_get',
     'deep_set',
+    'deep_has',
     'defaults',
     'extend',
     'find_key',
@@ -308,14 +309,14 @@ def for_in_right(obj, callback=None):
 for_own_right = for_in_right
 
 
-def get_path(obj, keys, default=None):
+def get_path(obj, path, default=None):
     """Get the value at any depth of a nested object based on the path
-    described by `keys`. If path doesn't exist, ``None`` is returned.
+    described by `path`. If path doesn't exist, ``None`` is returned.
 
     Args:
         obj (list|dict): Object to process.
-        keys (str|list): List or ``.`` delimited string of keys describing
-            path. When `keys` is a string, use ``[index]`` as the path key to
+        path (str|list): List or ``.`` delimited string of path describing
+            path. When `path` is a string, use ``[index]`` as the path key to
             access list indexes. For example, ``'one.[2].three.[4]'``.
 
     Returns:
@@ -326,9 +327,7 @@ def get_path(obj, keys, default=None):
     .. versionchanged:: 2.2.0
         Support escaping "." delimiter in single string path key.
     """
-    # pylint: disable=redefined-outer-name
-
-    for key in path_keys(keys):
+    for key in path_keys(path):
         obj = get_item(obj, key, default=default)
         if obj is None:
             break
@@ -341,38 +340,35 @@ def has(obj, key):
 
     Args:
         obj (mixed): Object to test.
-        key (mixed): Key to test for.
+        key (mixed): Key to test for. Can be a list of nested keys or a ``.``
+            delimited string of path describing the path. When `path` is a
+            string, use ``[index]`` as the path key to access list indexes. For
+            example, ``'one.[2].three.[4]'``.
 
     Returns:
         bool: Whether `obj` has `key`.
 
+    See Also:
+        - :func:`has` (main definition)
+        - :func:`has_path` (alias)
+        - :func:`deep_has` (alias)
+
     .. versionadded:: 1.0.0
+
+    .. versionchanged: 2.2.0
+        Made :func:`has_path` and :func:`deep_has` aliases of :func:`has`.
     """
-    return has_path(obj, [key])
-
-
-def has_path(obj, keys):
-    """Returns whether obj has path described by `keys`.
-
-    Args:
-        obj (list|dict): Object to process.
-        keys (str|list): List or ``.`` delimited string of keys describing
-            path. When `keys` is a string, use ``[index]`` as the path key to
-            access list indexes. For example, ``'one.[2].three.[4]'``.
-
-    Returns:
-        bool: Whether `obj` has path.
-
-    .. versionadded:: 2.0.0
-    """
-    # pylint: disable=redefined-outer-name
     try:
-        get_path(obj, keys, default=NoValue)
+        get_path(obj, key, default=NoValue)
         exists = True
     except (KeyError, IndexError, TypeError):
         exists = False
 
     return exists
+
+
+has_path = has
+deep_has = has
 
 
 def invert(obj, multivalue=False):
@@ -782,6 +778,8 @@ def path_keys(keys):
         keys = [int(key[1:-1]) if re_list_index.match(key)
                 else unescape_path_key(key)
                 for key in re_dot_delim.split(keys)]
+    elif pyd.is_number(keys):
+        keys = [keys]
 
     return keys
 

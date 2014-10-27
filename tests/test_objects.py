@@ -221,6 +221,10 @@ def test_get_path(case, expected):
 
 
 @parametrize('case,expected', [
+    (({'a': 1, 'b': 2, 'c': 3}, 'b'), True),
+    (([1, 2, 3], 0), True),
+    (([1, 2, 3], 1), True),
+    (([1, 2, 3], 3), False),
     (({'one': {'two': {'three': 4}}}, 'one.two'), True),
     (({'one': {'two': {'three': 4}}}, 'one.two.three'), True),
     (({'one': {'two': {'three': 4}}}, ['one', 'two']), True),
@@ -235,8 +239,16 @@ def test_get_path(case, expected):
       'lev\\.el1.lev\\\\el2.level3.[0]'),
      True)
 ])
-def test_has_path(case, expected):
-    assert pyd.has_path(*case) == expected
+def test_has(case, expected):
+    assert pyd.has(*case) == expected
+
+
+@parametrize('case', [
+    pyd.has_path,
+    pyd.deep_has
+])
+def test_has_aliases(case):
+    assert pyd.has is case
 
 
 @parametrize('case,expected', [

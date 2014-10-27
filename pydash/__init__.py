@@ -201,6 +201,7 @@ from .objects import (
     clone,
     clone_deep,
     deep_get,
+    deep_has,
     deep_set,
     defaults,
     extend,
