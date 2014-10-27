@@ -10,6 +10,7 @@ from math import ceil
 
 import pydash as pyd
 from .helpers import itercallback
+from ._compat import cmp_to_key
 
 
 __all__ = [
@@ -658,19 +659,27 @@ def slice_(array, start=0, end=None):
     return array[start:end]
 
 
-def sort(array, callback=None, key=None, reverse=False):
-    """Sort `array` using optional `callback`, `key`, and `reverse` options and
-    return sorted `array`.
+def sort(array, comparison=None, key=None, reverse=False):
+    """Sort `array` using optional `comparison`, `key`, and `reverse` options
+    and return sorted `array`.
+
+    Note:
+        Python 3 removed the option to pass a custom comparison function and
+        instead only allows a key function. Therefore, if a comparison
+        function is passed in, it will be converted to a key function
+        automatically using ``functools.cmp_to_key``.
 
     Args:
         array (list): List to sort.
-        callback (callable, optional): A custom comparison function used to
+        comparison (callable, optional): A custom comparison function used to
             sort the list. Function should accept two arguments and return a
             negative, zero, or position number depending on whether the first
             argument is considered smaller than, equal to, or larger than the
-            second argument. Default is ``None``.
+            second argument. Default is ``None``. This argument is mutually
+            exclusive with `key`.
         key (callback, optional): A function of one argument used to extract a
-            a comparision key from each list element. Default is ``None``.
+            a comparison key from each list element. Default is ``None``. This
+            argument is mutually exclusive with `comparison`.
         reverse: Whether to reverse the sort. Default is ``False``.
 
     Returns:
@@ -681,7 +690,14 @@ def sort(array, callback=None, key=None, reverse=False):
 
     .. versionadded:: 2.2.0
     """
-    array.sort(callback, key, reverse)
+    if comparison is not None and key is not None:
+        raise Exception(
+            'The "comparison" and "key" arguments are mutually exclusive')
+
+    if comparison:
+        key = cmp_to_key(comparison)
+
+    array.sort(key=key, reverse=reverse)
     return array
 
 
