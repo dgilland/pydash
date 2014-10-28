@@ -138,7 +138,9 @@ def test_deep_has_aliases(case):
              }
          }}}),
     (([['value 1', [['value 2', ['value 3']]]]],
-      lambda value, property_path: pyd.join(property_path, '.') + '==' + value),
+      lambda value, property_path: (pyd.join(property_path, '.')
+                                    + '=='
+                                    + value)),
      [['0.0==value 1', [['0.1.0.0==value 2', ['0.1.0.1.0==value 3']]]]]),
 ])
 def test_deep_map_values(case, expected):
