@@ -6,6 +6,10 @@ import pydash as pyd
 from .fixtures import parametrize
 
 
+pydash_methods = pyd.filter_(dir(pyd),
+                             lambda m: callable(getattr(pyd, m, None)))
+
+
 def test_chaining_methods():
     chain = pyd.chain([])
 
@@ -78,7 +82,9 @@ def test_underscore_instance_chaining():
 
 
 def test_underscore_instance_methods():
-    for method in pyd.filter_(dir(pyd), lambda m: callable(m)):
+    assert pydash_methods
+
+    for method in pydash_methods:
         assert getattr(pyd._, method) is getattr(pyd, method)
 
 

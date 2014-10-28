@@ -22,6 +22,7 @@ v2.2.0-dev (xxxx-xx-xx)
 - Add ``unshift``.
 - Add ``url``.
 - Fix bug in ``snake_case`` that resulted in returned string not being converted to lower case.
+- Fix bug in chaining method access test which skipped the actual test.
 - Make ``deep_prop`` an alias of ``deep_property``.
 - Make ``has`` work with deep paths.
 - Make ``has_path`` an alias of ``deep_has``.
