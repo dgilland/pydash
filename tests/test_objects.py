@@ -120,6 +120,32 @@ def test_deep_has_aliases(case):
 
 
 @parametrize('case,expected', [
+    (({'level1': {
+        'value': 'value 1',
+        'level2': {
+            'value': 'value 2',
+            'level3': {
+                'value': 'value 3'
+            }
+        }}},
+      lambda value, property_path: '.'.join(property_path) + '==' + value),
+     {'level1': {
+         'value': 'level1.value==value 1',
+         'level2': {
+             'value': 'level1.level2.value==value 2',
+             'level3': {
+                 'value': 'level1.level2.level3.value==value 3'
+             }
+         }}}),
+    (([['value 1', [['value 2', ['value 3']]]]],
+      lambda value, property_path: pyd.join(property_path, '.') + '==' + value),
+     [['0.0==value 1', [['0.1.0.0==value 2', ['0.1.0.1.0==value 3']]]]]),
+])
+def test_deep_map_values(case, expected):
+    assert pyd.deep_map_values(*case) == expected
+
+
+@parametrize('case,expected', [
     (({}, ['one', 'two', 'three', 'four'], 1),
      {'one': {'two': {'three': {'four': 1}}}}),
     (({}, 'one.two.three.four', 1),

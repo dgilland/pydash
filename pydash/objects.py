@@ -26,8 +26,9 @@ __all__ = [
     'clone',
     'clone_deep',
     'deep_get',
-    'deep_set',
     'deep_has',
+    'deep_set',
+    'deep_map_values',
     'defaults',
     'extend',
     'find_key',
@@ -180,8 +181,7 @@ def deep_get(obj, path):
     Args:
         obj (list|dict): Object to process.
         keys (str|list): List or ``.`` delimited string of keys describing
-            path. When `keys` is a string, use ``[index]`` as the path key to
-            access list indexes. For example, ``'one.[2].three.[4]'``.
+            path.
 
     Returns:
         mixed: Value of `obj` at path.
@@ -191,32 +191,13 @@ def deep_get(obj, path):
     return get_path(obj, path)
 
 
-def deep_set(obj, path, value):
-    """Sets the value of an object described by `path`. If any part of the
-    object path doesn't exist, it will be created.
-
-    Args:
-        obj (list|dict): Object to modify.
-        path (str | list): Target path to set value to.
-        value (mixed): Value to set.
-
-    Returns:
-        mixed: Modified `obj`.
-
-    .. versionadded:: 2.2.0
-    """
-    return set_path(obj, value, path_keys(path))
-
-
 def deep_has(obj, path):
     """Checks if `path` exists as a key of `obj`.
 
     Args:
         obj (mixed): Object to test.
         path (mixed): Path to test for. Can be a list of nested keys or a ``.``
-            delimited string of path describing the path. When `path` is a
-            string, use ``[index]`` as the path key to access list indexes. For
-            example, ``'one.[2].three.[4]'``.
+            delimited string of path describing the path.
 
     Returns:
         bool: Whether `obj` has `path`.
@@ -238,6 +219,53 @@ def deep_has(obj, path):
 
 
 has_path = deep_has
+
+
+def deep_map_values(obj, callback=None, property_path=NoValue):
+    """Map all non-object values in `obj` with return values from `callback`.
+    The callback is invoked with two arguments: ``(obj_value, property_path)``
+    where ``property_path`` contains the list of path keys corresponding to the
+    path of ``obj_value``.
+
+    Args:
+        obj (list|dict): Object to map.
+        callback (callable): Callback applied to each value.
+
+    Returns:
+        mixed: The modified object.
+
+    Warning:
+        `obj` is modified in place.
+
+    .. versionadded: 2.2.0
+    """
+    properties = path_keys(property_path)
+
+    if pyd.is_object(obj):
+        deep_callback = (
+            lambda value, key: deep_map_values(value,
+                                               callback,
+                                               pyd.flatten([properties, key])))
+        return pyd.extend(obj, map_values(obj, deep_callback))
+    else:
+        return callback(obj, properties)
+
+
+def deep_set(obj, path, value):
+    """Sets the value of an object described by `path`. If any part of the
+    object path doesn't exist, it will be created.
+
+    Args:
+        obj (list|dict): Object to modify.
+        path (str | list): Target path to set value to.
+        value (mixed): Value to set.
+
+    Returns:
+        mixed: Modified `obj`.
+
+    .. versionadded:: 2.2.0
+    """
+    return set_path(obj, value, path_keys(path))
 
 
 def defaults(obj, *sources):
@@ -348,8 +376,7 @@ def get_path(obj, path, default=None):
     Args:
         obj (list|dict): Object to process.
         path (str|list): List or ``.`` delimited string of path describing
-            path. When `path` is a string, use ``[index]`` as the path key to
-            access list indexes. For example, ``'one.[2].three.[4]'``.
+            path.
 
     Returns:
         mixed: Value of `obj` at path.
@@ -791,6 +818,8 @@ def path_keys(keys):
                 for key in re_dot_delim.split(keys)]
     elif pyd.is_number(keys):
         keys = [keys]
+    elif keys is NoValue:
+        keys = []
 
     return keys
 

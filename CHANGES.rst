@@ -7,8 +7,9 @@ v2.2.0-dev (xxxx-xx-xx)
 
 - Add ``append``.
 - Add ``deep_get``.
-- Add ``deep_set``.
 - Add ``deep_has``.
+- Add ``deep_map_values``.
+- Add ``deep_set``.
 - Add ``deep_pluck``.
 - Add ``deep_property``.
 - Add ``join``.

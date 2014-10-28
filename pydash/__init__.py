@@ -203,6 +203,7 @@ from .objects import (
     clone_deep,
     deep_get,
     deep_has,
+    deep_map_values,
     deep_set,
     defaults,
     extend,
