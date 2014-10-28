@@ -131,6 +131,17 @@ def count_by(collection, callback=None):
 
 
 def deep_pluck(collection, path):
+    """Like pluck but works with deep paths.
+
+    Args:
+        collection (list|dict): list of dicts
+        path (str|list): collection's path to pluck
+
+    Returns:
+        list: plucked list
+
+    .. versionadded:: 2.2.0
+    """
     return map_(collection, pyd.deep_property(path))
 
 
