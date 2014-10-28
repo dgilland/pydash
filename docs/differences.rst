@@ -69,12 +69,21 @@ The following extra function aliases exist in pydash but not in Lo-Dash:
 Extra Functions
 ---------------
 
+In addition to porting Lo-Dash, pydash contains functions found in lodashcontrib_, lodashdeep_, and lodashmath_.
+
 The following functions exist in pydash but not in Lo-Dash:
 
 - :func:`pydash.numerical.add`, :func:`pydash.numerical.sum_`
+- :func:`pydash.arrays.append`, :func:`pydash.arrays.push`
 - :func:`pydash.numerical.average`, :func:`pydash.numerical.avg`, :func:`pydash.numerical.mean`
 - :func:`pydash.arrays.cat`
 - :func:`pydash.functions.conjoin`
+- :func:`pydash.objects.deep_get`
+- :func:`pydash.objects.deep_has`
+- :func:`pydash.objects.deep_map_values`
+- :func:`pydash.collections.deep_pluck`
+- :func:`pydash.objects.deep_property`, - :func:`pydash.objects.deep_prop`
+- :func:`pydash.objects.deep_set`
 - :func:`pydash.functions.disjoin`
 - :func:`pydash.strings.explode`
 - :func:`pydash.objects.get_path`
@@ -100,24 +109,32 @@ The following functions exist in pydash but not in Lo-Dash:
 - :func:`pydash.predicates.is_strictly_increasing`
 - :func:`pydash.predicates.is_zero`
 - :func:`pydash.functions.iterated`
+- :func:`pydash.arrays.join`
 - :func:`pydash.functions.juxtapose`
 - :func:`pydash.arrays.mapcat`
 - :func:`pydash.collections.mapiter`
 - :func:`pydash.numerical.median`
 - :func:`pydash.numerical.moving_average`, :func:`pydash.numerical.moving_avg`
+- :func:`pydash.arrays.pop`
 - :func:`pydash.numerical.power`, :func:`pydash.numerical.pow_`
 - :func:`pydash.collections.reductions`
 - :func:`pydash.collections.reductions_right`
 - :func:`pydash.objects.rename_keys`
+- :func:`pydash.arrays.reverse`
 - :func:`pydash.numerical.round_`, :func:`pydash.numerical.curve`
 - :func:`pydash.numerical.scale`
 - :func:`pydash.objects.set_path`
+- :func:`pydash.arrays.shift`
 - :func:`pydash.numerical.slope`
-- :func:`pydash.numerical.std_deviation`, :func:`pydash.numerical.sigma`
+- :func:`pydash.arrays.sort`
+- :func:`pydash.arrays.splice`
 - :func:`pydash.arrays.split_at`
+- :func:`pydash.numerical.std_deviation`, :func:`pydash.numerical.sigma`
 - :func:`pydash.objects.to_string`
 - :func:`pydash.numerical.transpose`
+- :func:`pydash.arrays.unshift`
 - :func:`pydash.objects.update_path`
+- :func:`pydash.strings.url`
 - :func:`pydash.numerical.variance`
 - :func:`pydash.numerical.zscore`
 
@@ -134,3 +151,8 @@ Templating
 ----------
 
 - pydash doesn't have ``template()``. See :ref:`Templating <templating>` for more details.
+
+
+.. _lodashcontrib: https://github.com/TheNodeILs/lodash-contrib
+.. _lodashdeep: https://github.com/marklagendijk/lodash-deep
+.. _lodashmath: https://github.com/Delapouite/lodash.math
