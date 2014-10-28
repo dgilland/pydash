@@ -23,6 +23,7 @@ v2.2.0-dev (xxxx-xx-xx)
 - Add ``url``.
 - Fix bug in ``snake_case`` that resulted in returned string not being converted to lower case.
 - Fix bug in chaining method access test which skipped the actual test.
+- Make ``_`` instance alias method access to methods with a trailing underscore in their name. For example, ``_.map()`` becomes an alias for ``map_()``.
 - Make ``deep_prop`` an alias of ``deep_property``.
 - Make ``has`` work with deep paths.
 - Make ``has_path`` an alias of ``deep_has``.

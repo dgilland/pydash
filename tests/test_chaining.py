@@ -88,6 +88,14 @@ def test_underscore_instance_methods():
         assert getattr(pyd._, method) is getattr(pyd, method)
 
 
+def test_underscore_suffixed_method_aliases():
+    methods = pyd.filter_(pydash_methods, lambda m: m.endswith('_'))
+    assert methods
+
+    for method in methods:
+        assert getattr(pyd._, method[:-1]) is getattr(pyd, method)
+
+
 def test_underscore_method_call():
     value = [1, 2, 3, 4, 5]
     assert pyd._.initial(value) == pyd.initial(value)

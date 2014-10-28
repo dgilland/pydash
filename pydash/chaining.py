@@ -62,6 +62,12 @@ class Chain(object):
         """
         method = getattr(pyd, name, None)
 
+        if not callable(method) and not name.endswith('_'):
+            # Alias method names not ending in underscore to their underscore
+            # counterpart. This allows chaining of functions like "map_()"
+            # using "map()" instead.
+            method = getattr(pyd, name + '_', None)
+
         if not callable(method):
             raise pyd.InvalidMethod('Invalid pydash method: {0}'.format(name))
 
