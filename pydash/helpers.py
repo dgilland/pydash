@@ -126,7 +126,12 @@ def get_item(obj, key, default=NoValue):
             default value provided.
     """
     try:
-        ret = obj[key]
+        try:
+            ret = obj[key]
+        except TypeError:
+            # It's possible that a string integer is being used to access a
+            # list index. Re-try object access using casted integer.
+            ret = obj[int(key)]
     except (KeyError, IndexError, TypeError):
         if default is not NoValue:
             ret = default

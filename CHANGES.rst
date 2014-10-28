@@ -25,6 +25,7 @@ v2.2.0-dev (xxxx-xx-xx)
 - Make ``has`` work with deep paths.
 - Make ``has_path`` an alias of ``deep_has``.
 - Make ``get_path`` handle escaping the ``.`` delimiter for string keys.
+- Make ``get_path`` handle list indexing using strings such as ``'0.1.2'`` to access ``'value'`` in ``[[0, [0, 0, 'value']]]``.
 - Make ``concat`` and alias of ``cat``.
 
 
