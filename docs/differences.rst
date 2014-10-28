@@ -76,7 +76,7 @@ The following functions exist in pydash but not in Lo-Dash:
 - :func:`pydash.numerical.add`, :func:`pydash.numerical.sum_`
 - :func:`pydash.arrays.append`, :func:`pydash.arrays.push`
 - :func:`pydash.numerical.average`, :func:`pydash.numerical.avg`, :func:`pydash.numerical.mean`
-- :func:`pydash.arrays.cat`
+- :func:`pydash.arrays.cat`, :func:`pydash.arrays.concat`
 - :func:`pydash.functions.conjoin`
 - :func:`pydash.objects.deep_get`
 - :func:`pydash.objects.deep_has`
