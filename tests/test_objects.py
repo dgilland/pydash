@@ -1,5 +1,5 @@
 
-import pydash as pyd
+import pydash as _
 
 from . import fixtures
 from .fixtures import parametrize
@@ -14,14 +14,14 @@ from .fixtures import parametrize
      {'name': 'fred', 'age': 27}),
 ])
 def test_assign(case, expected):
-    assert pyd.assign(*case) == expected
+    assert _.assign(*case) == expected
 
 
 @parametrize('case', [
-    pyd.extend
+    _.extend
 ])
 def test_assign_aliases(case):
-    assert pyd.assign is case
+    assert _.assign is case
 
 
 @parametrize('case,expected', [
@@ -29,14 +29,14 @@ def test_assign_aliases(case):
     ((['fred', lambda: 'Hello, world!'],), [1]),
 ])
 def test_callables(case, expected):
-    assert pyd.callables(*case) == expected
+    assert _.callables(*case) == expected
 
 
 @parametrize('case', [
-    pyd.methods,
+    _.methods,
 ])
 def test_callables_aliases(case):
-    assert pyd.callables is case
+    assert _.callables is case
 
 
 @parametrize('case,args', [
@@ -45,11 +45,11 @@ def test_callables_aliases(case):
     ([{'a': {'d': 1}, 'b': {'c': 2}}], ())
 ])
 def test_clone(case, args):
-    actual = pyd.clone(case, *args)
+    actual = _.clone(case, *args)
 
     assert actual is not case
 
-    for key, value in pyd.helpers.iterator(actual):
+    for key, value in _.helpers.iterator(actual):
         assert value is case[key]
 
 
@@ -60,13 +60,13 @@ def test_clone(case, args):
 ])
 def test_clone_deep(case, kargs):
     kargs['is_deep'] = True
-    actuals = [pyd.clone(case, **kargs),
-               pyd.clone_deep(case, callback=kargs.get('callback'))]
+    actuals = [_.clone(case, **kargs),
+               _.clone_deep(case, callback=kargs.get('callback'))]
 
     for actual in actuals:
         assert actual is not case
 
-        for key, value in pyd.helpers.iterator(actual):
+        for key, value in _.helpers.iterator(actual):
             assert value is not case[key]
 
 
@@ -86,7 +86,7 @@ def test_clone_deep(case, kargs):
      'value')
 ])
 def test_deep_get(case, expected):
-    assert pyd.deep_get(*case) == expected
+    assert _.deep_get(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -109,14 +109,14 @@ def test_deep_get(case, expected):
      True)
 ])
 def test_deep_has(case, expected):
-    assert pyd.deep_has(*case) == expected
+    assert _.deep_has(*case) == expected
 
 
 @parametrize('case', [
-    pyd.has_path,
+    _.has_path,
 ])
 def test_deep_has_aliases(case):
-    assert pyd.deep_has is case
+    assert _.deep_has is case
 
 
 @parametrize('case,expected', [
@@ -138,13 +138,13 @@ def test_deep_has_aliases(case):
              }
          }}}),
     (([['value 1', [['value 2', ['value 3']]]]],
-      lambda value, property_path: (pyd.join(property_path, '.')
+      lambda value, property_path: (_.join(property_path, '.')
                                     + '=='
                                     + value)),
      [['0.0==value 1', [['0.1.0.0==value 2', ['0.1.0.1.0==value 3']]]]]),
 ])
 def test_deep_map_values(case, expected):
-    assert pyd.deep_map_values(*case) == expected
+    assert _.deep_map_values(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -165,7 +165,7 @@ def test_deep_map_values(case, expected):
     (([1, 2, [3, 4, [5, 6]]], '[2].[2].[2]', 7), [1, 2, [3, 4, [5, 6, 7]]]),
 ])
 def test_deep_set(case, expected):
-    assert pyd.deep_set(*case) == expected
+    assert _.deep_set(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -173,7 +173,7 @@ def test_deep_set(case, expected):
      {'name': 'barney', 'employer': 'slate'}),
 ])
 def test_defaults(case, expected):
-    assert pyd.defaults(*case) == expected
+    assert _.defaults(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -181,7 +181,7 @@ def test_defaults(case, expected):
     ([1, 2, 3], {1: 0, 2: 1, 3: 2}),
 ])
 def test_invert(case, expected):
-    assert pyd.invert(case) == expected
+    assert _.invert(case) == expected
 
 
 @parametrize('case,expected', [
@@ -190,7 +190,7 @@ def test_invert(case, expected):
      {'fred': ['first', 'third'], 'barney': ['second']}),
 ])
 def test_invert_multivalue(case, expected):
-    result = pyd.invert(case, multivalue=True)
+    result = _.invert(case, multivalue=True)
     for key in result:
         assert set(result[key]) == set(expected[key])
 
@@ -211,14 +211,14 @@ def test_invert_multivalue(case, expected):
     (([1, 2, 3],), [0])
 ])
 def test_find_key(case, expected):
-    assert pyd.find_key(*case) in expected
+    assert _.find_key(*case) in expected
 
 
 @parametrize('case', [
-    pyd.find_last_key
+    _.find_last_key
 ])
 def test_find_key_aliases(case):
-    assert pyd.find_key is case
+    assert _.find_key is case
 
 
 @parametrize('case,expected', [
@@ -230,14 +230,14 @@ def test_find_key_aliases(case):
     (([1, 2, 3], fixtures.for_in_callback2), ([False, True, 3],))
 ])
 def test_for_in(case, expected):
-    assert pyd.for_in(*case) in expected
+    assert _.for_in(*case) in expected
 
 
 @parametrize('case', [
-    pyd.for_own
+    _.for_own
 ])
 def test_for_in_aliases(case):
-    assert pyd.for_in is case
+    assert _.for_in is case
 
 
 @parametrize('case,expected', [
@@ -249,14 +249,14 @@ def test_for_in_aliases(case):
     (([1, 2, 3], fixtures.for_in_callback2), ([1, True, 'index:2'],))
 ])
 def test_for_in_right(case, expected):
-    assert pyd.for_in_right(*case) in expected
+    assert _.for_in_right(*case) in expected
 
 
 @parametrize('case', [
-    pyd.for_own_right,
+    _.for_own_right,
 ])
 def test_for_in_right_aliases(case):
-    assert pyd.for_in_right is case
+    assert _.for_in_right is case
 
 
 @parametrize('case,expected', [
@@ -275,7 +275,7 @@ def test_for_in_right_aliases(case):
      'value')
 ])
 def test_get_path(case, expected):
-    assert pyd.get_path(*case) == expected
+    assert _.get_path(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -285,7 +285,7 @@ def test_get_path(case, expected):
     (([1, 2, 3], 3), False),
 ])
 def test_has(case, expected):
-    assert pyd.has(*case) == expected
+    assert _.has(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -293,14 +293,14 @@ def test_has(case, expected):
     ([1, 2, 3], [0, 1, 2])
 ])
 def test_keys(case, expected):
-    assert set(pyd.keys(case)) == set(expected)
+    assert set(_.keys(case)) == set(expected)
 
 
 @parametrize('case', [
-    pyd.keys_in
+    _.keys_in
 ])
 def test_keys_aliases(case):
-    assert pyd.keys is case
+    assert _.keys is case
 
 
 @parametrize('case,expected', [
@@ -312,7 +312,7 @@ def test_keys_aliases(case):
      {'fred': 40, 'pebbles': 1})
 ])
 def test_map_values(case, expected):
-    assert pyd.map_values(*case) == expected
+    assert _.map_values(*case) == expected
 
 
 @parametrize('case,callback,expected', [
@@ -360,7 +360,7 @@ def test_map_values(case, expected):
      {'fruits': ['apple', 'banana'], 'vegetables': ['beet', 'carrot']})
 ])
 def test_merge(case, callback, expected):
-    assert pyd.merge(*case, callback=callback) == expected
+    assert _.merge(*case, callback=callback) == expected
 
 
 @parametrize('case,expected', [
@@ -375,7 +375,7 @@ def test_merge(case, callback, expected):
     (([1, 2, 3], 0, 1), {2: 3})
 ])
 def test_omit(case, expected):
-    assert pyd.omit(*case) == expected
+    assert _.omit(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -383,7 +383,7 @@ def test_omit(case, expected):
     ([1, 2, 3], [[0, 1], [1, 2], [2, 3]])
 ])
 def test_pairs(case, expected):
-    assert dict(pyd.pairs(case)) == dict(expected)
+    assert dict(_.pairs(case)) == dict(expected)
 
 
 @parametrize('case,expected', [
@@ -399,7 +399,7 @@ def test_pairs(case, expected):
     (('xyz',), None)
 ])
 def test_parse_int(case, expected):
-    assert pyd.parse_int(*case) == expected
+    assert _.parse_int(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -414,7 +414,7 @@ def test_parse_int(case, expected):
     (([1, 2, 3], 0, 1), {0: 1, 1: 2})
 ])
 def test_pick(case, expected):
-    assert pyd.pick(*case) == expected
+    assert _.pick(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -423,7 +423,7 @@ def test_pick(case, expected):
     (({'a': 1, 'b': 2}, {'c': 'C', 'b': 'B'}), {'a': 1, 'B': 2}),
 ])
 def test_rename_keys(case, expected):
-    assert pyd.rename_keys(*case) == expected
+    assert _.rename_keys(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -437,7 +437,7 @@ def test_rename_keys(case, expected):
     (([1, 2, [3, 4, [5, 6]]], 7, [2, 2, 2]), [1, 2, [3, 4, [5, 6, 7]]])
 ])
 def test_set_path(case, expected):
-    result = pyd.set_path(*case)
+    result = _.set_path(*case)
     assert result == expected
     assert result is not case[0]
 
@@ -450,7 +450,7 @@ def test_set_path(case, expected):
     ('d\xc3\xa9j\xc3\xa0 vu', 'd\xc3\xa9j\xc3\xa0 vu'),
 ])
 def test_to_string(case, expected):
-    assert pyd.to_string(case) == expected
+    assert _.to_string(case) == expected
 
 
 @parametrize('case,expected', [
@@ -461,7 +461,7 @@ def test_to_string(case, expected):
     (([1, 2, 3, 4, 5],), [])
 ])
 def test_transform(case, expected):
-    assert pyd.transform(*case) == expected
+    assert _.transform(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -479,7 +479,7 @@ def test_transform(case, expected):
      {'earth': {'rome': 'Empire'}}),
 ])
 def test_update_path(case, expected):
-    result = pyd.update_path(*case)
+    result = _.update_path(*case)
     assert result == expected
     assert result is not case[0]
 
@@ -489,11 +489,11 @@ def test_update_path(case, expected):
     ([1, 2, 3], [1, 2, 3])
 ])
 def test_values(case, expected):
-    assert set(pyd.values(case)) == set(expected)
+    assert set(_.values(case)) == set(expected)
 
 
 @parametrize('case', [
-    pyd.values_in
+    _.values_in
 ])
 def test_values_aliases(case):
-    assert pyd.values is case
+    assert _.values is case

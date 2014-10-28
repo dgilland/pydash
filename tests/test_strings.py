@@ -1,7 +1,7 @@
 
 import re
 
-import pydash as pyd
+import pydash as _
 from pydash._compat import urlsplit, parse_qsl
 from .fixtures import parametrize
 
@@ -15,7 +15,7 @@ from .fixtures import parametrize
     ('--foo.bar;baz', 'fooBarBaz'),
 ])
 def test_camel_case(case, expected):
-    assert pyd.camel_case(case) == expected
+    assert _.camel_case(case) == expected
 
 
 @parametrize('case,expected', [
@@ -24,7 +24,7 @@ def test_camel_case(case, expected):
     ('fOO bar', 'Foo bar'),
 ])
 def test_capitalize(case, expected):
-    assert pyd.capitalize(case) == expected
+    assert _.capitalize(case) == expected
 
 
 @parametrize('case,expected', [
@@ -38,7 +38,7 @@ def test_capitalize(case, expected):
      'dnooooo ouuuuythy')
 ])
 def test_deburr(case, expected):
-    assert pyd.deburr(case) == expected
+    assert _.deburr(case) == expected
 
 
 @parametrize('case,expected', [
@@ -50,14 +50,14 @@ def test_deburr(case, expected):
     (('abc', 'b', 1), False),
 ])
 def test_ends_with(case, expected):
-    assert pyd.ends_with(*case) == expected
+    assert _.ends_with(*case) == expected
 
 
 @parametrize('case,expected', [
     ('abc<> &"\'`efg', 'abc&lt;&gt; &amp;&quot;&#39;&#96;efg')
 ])
 def test_escape(case, expected):
-    assert pyd.escape(case) == expected
+    assert _.escape(case) == expected
 
 
 @parametrize('case,expected', [
@@ -65,14 +65,14 @@ def test_escape(case, expected):
      '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)')
 ])
 def test_escape_reg_exp(case, expected):
-    assert pyd.escape_reg_exp(case) == expected
+    assert _.escape_reg_exp(case) == expected
 
 
 @parametrize('case', [
-    pyd.escape_re
+    _.escape_re
 ])
 def test_escape_reg_exp_aliases(case):
-    assert pyd.escape_reg_exp is case
+    assert _.escape_reg_exp is case
 
 
 @parametrize('case,expected', [
@@ -80,7 +80,7 @@ def test_escape_reg_exp_aliases(case):
     (('string1,string2', ','), ['string1', 'string2']),
 ])
 def test_explode(case, expected):
-    assert pyd.explode(*case) == expected
+    assert _.explode(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -88,7 +88,7 @@ def test_explode(case, expected):
     ((['string1', 'string2'], ','), 'string1,string2'),
 ])
 def test_implode(case, expected):
-    assert pyd.implode(*case) == expected
+    assert _.implode(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -100,7 +100,7 @@ def test_implode(case, expected):
     (('/[A-Z]/', '12345'), [])
 ])
 def test_js_match(case, expected):
-    assert pyd.js_match(*case) == expected
+    assert _.js_match(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -110,7 +110,7 @@ def test_js_match(case, expected):
     (('/[A-Z]/gi', 'hello world', '!'), '!!!!! !!!!!'),
 ])
 def test_js_replace(case, expected):
-    assert pyd.js_replace(*case) == expected
+    assert _.js_replace(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -121,7 +121,7 @@ def test_js_replace(case, expected):
     ('--foo.bar;baz', 'foo-bar-baz'),
 ])
 def test_kebab_case(case, expected):
-    assert pyd.kebab_case(case) == expected
+    assert _.kebab_case(case) == expected
 
 
 @parametrize('case,expected', [
@@ -130,7 +130,7 @@ def test_kebab_case(case, expected):
     (('abc', 3), 'abc'),
 ])
 def test_pad(case, expected):
-    assert pyd.pad(*case) == expected
+    assert _.pad(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -142,7 +142,7 @@ def test_pad(case, expected):
     (('aaaaa', 9, 'bc'), 'bcbcaaaaa'),
 ])
 def test_pad_left(case, expected):
-    assert pyd.pad_left(*case) == expected
+    assert _.pad_left(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -154,7 +154,7 @@ def test_pad_left(case, expected):
     (('aaaaa', 9, 'bc'), 'aaaaabcbc'),
 ])
 def test_pad_right(case, expected):
-    assert pyd.pad_right(*case) == expected
+    assert _.pad_right(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -166,7 +166,7 @@ def test_pad_right(case, expected):
     ('FooBar', 'foo_bar'),
 ])
 def test_snake_case(case, expected):
-    assert pyd.snake_case(case) == expected
+    assert _.snake_case(case) == expected
 
 
 @parametrize('case,expected', [
@@ -178,7 +178,7 @@ def test_snake_case(case, expected):
     (('abc', 'b', 2), False),
 ])
 def test_starts_with(case, expected):
-    assert pyd.starts_with(*case) == expected
+    assert _.starts_with(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -186,7 +186,7 @@ def test_starts_with(case, expected):
     (('-_-fred-_-', '_-'), 'fred'),
 ])
 def test_trim(case, expected):
-    assert pyd.trim(*case) == expected
+    assert _.trim(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -194,7 +194,7 @@ def test_trim(case, expected):
     (('-_-fred-_-', '_-'), 'fred-_-'),
 ])
 def test_trim_left(case, expected):
-    assert pyd.trim_left(*case) == expected
+    assert _.trim_left(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -202,7 +202,7 @@ def test_trim_left(case, expected):
     (('-_-fred-_-', '_-'), '-_-fred'),
 ])
 def test_trim_right(case, expected):
-    assert pyd.trim_right(*case) == expected
+    assert _.trim_right(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -216,14 +216,14 @@ def test_trim_right(case, expected):
      'hi-diddly-ho there, neig [...]')
 ])
 def test_trunc(case, expected):
-    assert pyd.trunc(*case) == expected
+    assert _.trunc(*case) == expected
 
 
 @parametrize('case,expected', [
     ('abc&lt;&gt; &amp;&quot;&#39;&#96;efg', 'abc<> &"\'`efg')
 ])
 def test_unescape(case, expected):
-    assert pyd.unescape(case) == expected
+    assert _.unescape(case) == expected
 
 
 @parametrize('case,expected', [
@@ -249,7 +249,7 @@ def test_unescape(case, expected):
      '/foo/baz?a=1&a=2&b=two#bar'),
 ])
 def test_url(case, expected):
-    result = pyd.url(*case['args'], **case['kargs'])
+    result = _.url(*case['args'], **case['kargs'])
 
     r_scheme, r_netloc, r_path, r_query, r_fragment = urlsplit(result)
     e_scheme, e_netloc, e_path, e_query, e_fragment = urlsplit(expected)
@@ -268,4 +268,4 @@ def test_url(case, expected):
     ('hello 12345 world', ['hello', '12345', 'world']),
 ])
 def test_words(case, expected):
-    assert pyd.words(case) == expected
+    assert _.words(case) == expected

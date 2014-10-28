@@ -1,7 +1,7 @@
 
 import time
 
-import pydash as pyd
+import pydash as _
 
 from .fixtures import parametrize
 
@@ -11,9 +11,9 @@ from .fixtures import parametrize
     ((-1, lambda: 3), 3),
 ])
 def test_after(case, expected):
-    done = pyd.after(*case)
+    done = _.after(*case)
 
-    for _ in range(case[0] - 1):
+    for x in range(case[0] - 1):
         ret = done()
         assert ret is None
 
@@ -26,9 +26,9 @@ def test_after(case, expected):
     ((-1, lambda: 3), 3),
 ])
 def test_before(case, expected):
-    done = pyd.before(*case)
+    done = _.before(*case)
 
-    for _ in range(case[0] - 1):
+    for x in range(case[0] - 1):
         ret = done()
         assert ret == expected
 
@@ -37,11 +37,11 @@ def test_before(case, expected):
 
 
 @parametrize('case,arg,expected', [
-    ((pyd.is_boolean, pyd.is_empty), [False, True], True),
-    ((pyd.is_boolean, pyd.is_empty), [False, None], False),
+    ((_.is_boolean, _.is_empty), [False, True], True),
+    ((_.is_boolean, _.is_empty), [False, None], False),
 ])
 def test_conjoin(case, arg, expected):
-    assert pyd.conjoin(*case)(arg) == expected
+    assert _.conjoin(*case)(arg) == expected
 
 
 @parametrize('case,arglist,expected', [
@@ -52,10 +52,10 @@ def test_conjoin(case, arg, expected):
     ((lambda *a: sum(a), 3), [(1,), (1,), (1,)], 3),
 ])
 def test_curry(case, arglist, expected):
-    curried = pyd.curry(*case)
+    curried = _.curry(*case)
 
     # Run test twice to verify curried can be reused
-    for _ in range(2):
+    for x in range(2):
         ret = curried
         for args in arglist:
             ret = ret(*args)
@@ -71,10 +71,10 @@ def test_curry(case, arglist, expected):
     ((lambda *a: sum(a), 3), [(1,), (1,), (1,)], 3),
 ])
 def test_curry_right(case, arglist, expected):
-    curried = pyd.curry_right(*case)
+    curried = _.curry_right(*case)
 
     # Run test twice to verify curried can be reused
-    for _ in range(2):
+    for x in range(2):
         ret = curried
         for args in arglist:
             ret = ret(*args)
@@ -83,19 +83,19 @@ def test_curry_right(case, arglist, expected):
 
 
 def test_debounce():
-    func = lambda: pyd.now()
+    func = lambda: _.now()
 
     wait = 250
-    debounced = pyd.debounce(func, wait)
+    debounced = _.debounce(func, wait)
 
-    start = pyd.now()
-    present = pyd.now()
+    start = _.now()
+    present = _.now()
 
     expected = debounced()
 
     while (present - start) <= wait + 100:
         result = debounced()
-        present = pyd.now()
+        present = _.now()
 
     assert result == expected
 
@@ -106,20 +106,20 @@ def test_debounce():
 
 
 def test_debounce_max_wait():
-    func = lambda: pyd.now()
+    func = lambda: _.now()
 
     wait = 250
     max_wait = 300
-    debounced = pyd.debounce(func, wait, max_wait=max_wait)
+    debounced = _.debounce(func, wait, max_wait=max_wait)
 
-    start = pyd.now()
-    present = pyd.now()
+    start = _.now()
+    present = _.now()
 
     expected = debounced()
 
     while (present - start) <= (max_wait + 5):
         result = debounced()
-        present = pyd.now()
+        present = _.now()
 
     assert result > expected
 
@@ -129,7 +129,7 @@ def test_debounce_max_wait():
 ])
 def test_delay(func, wait, args, kargs, expected):
     start = time.time() * 1000
-    result = pyd.delay(func, wait, *args, **kargs)
+    result = _.delay(func, wait, *args, **kargs)
     stop = time.time() * 1000
 
     assert (wait - 5) <= (stop - start) <= (wait + 5)
@@ -137,13 +137,13 @@ def test_delay(func, wait, args, kargs, expected):
 
 
 @parametrize('case,arg,expected', [
-    ((pyd.is_boolean, pyd.is_empty), [False, True], True),
-    ((pyd.is_boolean, pyd.is_empty), [False, None], True),
-    ((pyd.is_string, pyd.is_number), ['one', 1, 'two', 2], True),
-    ((pyd.is_string, pyd.is_number), [True, False, None, []], False),
+    ((_.is_boolean, _.is_empty), [False, True], True),
+    ((_.is_boolean, _.is_empty), [False, None], True),
+    ((_.is_string, _.is_number), ['one', 1, 'two', 2], True),
+    ((_.is_string, _.is_number), [True, False, None, []], False),
 ])
 def test_disjoin(case, arg, expected):
-    assert pyd.disjoin(*case)(arg) == expected
+    assert _.disjoin(*case)(arg) == expected
 
 
 @parametrize('case,args,expected', [
@@ -155,7 +155,7 @@ def test_disjoin(case, arg, expected):
      100)
 ])
 def test_flow(case, args, expected):
-    assert pyd.flow(*case)(*args) == expected
+    assert _.flow(*case)(*args) == expected
 
 
 @parametrize('case,args,expected', [
@@ -167,14 +167,14 @@ def test_flow(case, args, expected):
      50)
 ])
 def test_flow_right(case, args, expected):
-    assert pyd.flow_right(*case)(*args) == expected
+    assert _.flow_right(*case)(*args) == expected
 
 
 @parametrize('case', [
-    pyd.compose
+    _.compose
 ])
 def test_flow_right_aliases(case):
-    assert pyd.flow_right is case
+    assert _.flow_right is case
 
 
 @parametrize('func,args,expected', [
@@ -184,7 +184,7 @@ def test_flow_right_aliases(case):
     (lambda x: x + x, (2, 3), 16)
 ])
 def test_iterated(func, args, expected):
-    assert pyd.iterated(func)(*args) == expected
+    assert _.iterated(func)(*args) == expected
 
 
 @parametrize('funcs,args,expected', [
@@ -194,7 +194,7 @@ def test_iterated(func, args, expected):
      ['Fz', 'rB']),
 ])
 def test_juxtapose(funcs, args, expected):
-    assert pyd.juxtapose(*funcs)(*args) == expected
+    assert _.juxtapose(*funcs)(*args) == expected
 
 
 @parametrize('func,args', [
@@ -202,7 +202,7 @@ def test_juxtapose(funcs, args, expected):
     (lambda item: item, (False,)),
 ])
 def test_negate(func, args):
-    assert pyd.negate(func)(*args) == (not func(*args))
+    assert _.negate(func)(*args) == (not func(*args))
 
 
 @parametrize('case,arglist,expected', [
@@ -210,43 +210,43 @@ def test_negate(func, args):
 ])
 def test_once(case, arglist, expected):
     for args in arglist:
-        pyd.once(case)(*args) == expected
+        _.once(case)(*args) == expected
 
 
 @parametrize('case,case_args,args,expected', [
     (lambda a, b, c: a + b + c, ('a', 'b'), ('c',), 'abc')
 ])
 def test_partial(case, case_args, args, expected):
-    assert pyd.partial(case, *case_args)(*args) == expected
+    assert _.partial(case, *case_args)(*args) == expected
 
 
 def test_partial_as_callback():
-    func = pyd.partial(lambda offset, value, *args: value + offset, 5)
+    func = _.partial(lambda offset, value, *args: value + offset, 5)
     case = [1, 2, 3]
     expected = [6, 7, 8]
-    pyd.map_(case, func) == expected
+    _.map_(case, func) == expected
 
 
 @parametrize('case,case_args,args,expected', [
     (lambda a, b, c: a + b + c, ('a', 'b'), ('c',), 'cab')
 ])
 def test_partial_right(case, case_args, args, expected):
-    assert pyd.partial_right(case, *case_args)(*args) == expected
+    assert _.partial_right(case, *case_args)(*args) == expected
 
 
 def test_throttle():
-    func = lambda: pyd.now()
+    func = lambda: _.now()
     wait = 250
-    throttled = pyd.throttle(func, wait)
+    throttled = _.throttle(func, wait)
 
-    start = pyd.now()
-    present = pyd.now()
+    start = _.now()
+    present = _.now()
 
     expected = throttled()
 
     while (present - start) < (wait - 50):
         result = throttled()
-        present = pyd.now()
+        present = _.now()
 
     assert result == expected
 
@@ -260,4 +260,4 @@ def test_throttle():
      '<p>hello world!</p>')
 ])
 def test_wrap(case, args, expected):
-    assert pyd.wrap(*case)(*args) == expected
+    assert _.wrap(*case)(*args) == expected

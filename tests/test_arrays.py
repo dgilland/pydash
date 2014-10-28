@@ -2,7 +2,7 @@
 import math
 import warnings
 
-import pydash as pyd
+import pydash as _
 from .fixtures import parametrize
 
 
@@ -15,14 +15,14 @@ from .fixtures import parametrize
     ((1, [2], 3, 4), [1, 2, 3, 4]),
 ])
 def test_cat(case, expected):
-    assert pyd.cat(*case) == expected
+    assert _.cat(*case) == expected
 
 
 @parametrize('alias', [
-    pyd.concat
+    _.concat
 ])
 def test_cat_aliases(alias):
-    pyd.cat is alias
+    _.cat is alias
 
 
 @parametrize('case,expected', [
@@ -34,7 +34,7 @@ def test_cat_aliases(alias):
     (([1, 2, 3, 4, 5], 6), [[1, 2, 3, 4, 5]]),
 ])
 def test_chunk(case, expected):
-    assert pyd.chunk(*case) == expected
+    assert _.chunk(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -42,14 +42,14 @@ def test_chunk(case, expected):
     ([True, False, None, True, 1, 'foo'], [True, True, 1, 'foo'])
 ])
 def test_compact(case, expected):
-    assert pyd.compact(case) == expected
+    assert _.compact(case) == expected
 
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4], [2, 4], [3, 5, 6]), [1])
 ])
 def test_difference(case, expected):
-    assert pyd.difference(*case) == expected
+    assert _.difference(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -59,14 +59,14 @@ def test_difference(case, expected):
     (([1, 2, 3, 4, 5], 6), []),
 ])
 def test_drop(case, expected):
-    assert pyd.drop(*case) == expected
+    assert _.drop(*case) == expected
 
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5], lambda item: item < 3), [3, 4, 5]),
 ])
 def test_drop_while(case, expected):
-    assert pyd.drop_while(*case) == expected
+    assert _.drop_while(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -76,14 +76,14 @@ def test_drop_while(case, expected):
     (([1, 2, 3, 4, 5], 6), []),
 ])
 def test_drop_right(case, expected):
-    assert pyd.drop_right(*case) == expected
+    assert _.drop_right(*case) == expected
 
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5], lambda item: item > 3), [1, 2, 3]),
 ])
 def test_drop_right_while(case, expected):
-    assert pyd.drop_right_while(*case) == expected
+    assert _.drop_right_while(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -99,7 +99,7 @@ def test_drop_right_while(case, expected):
      False)
 ])
 def test_every(case, expected):
-    assert pyd.every(*case) == expected
+    assert _.every(*case) == expected
 
 
 @parametrize('case,filter_by,expected', [
@@ -112,7 +112,7 @@ def test_every(case, expected):
     (['apple', 'banana', 'beet'], lambda: False, -1)
 ])
 def test_find_index(case, filter_by, expected):
-    assert pyd.find_index(case, filter_by) == expected
+    assert _.find_index(case, filter_by) == expected
 
 
 @parametrize('case,filter_by,expected', [
@@ -125,7 +125,7 @@ def test_find_index(case, filter_by, expected):
     (['apple', 'banana', 'beet'], lambda: False, -1)
 ])
 def test_find_last_index(case, filter_by, expected):
-    assert pyd.find_last_index(case, filter_by) == expected
+    assert _.find_last_index(case, filter_by) == expected
 
 
 @parametrize('case,expected', [
@@ -133,7 +133,7 @@ def test_find_last_index(case, filter_by, expected):
     ([], None)
 ])
 def test_first(case, expected):
-    assert pyd.first(case) == expected
+    assert _.first(case) == expected
 
 
 @parametrize('case,expected', [
@@ -141,14 +141,14 @@ def test_first(case, expected):
     (([1, ['2222'], [3, [[4]]]], True), [1, '2222', 3, 4]),
 ])
 def test_flatten(case, expected):
-    assert pyd.flatten(*case) == expected
+    assert _.flatten(*case) == expected
 
 
 @parametrize('case,expected', [
     ([1, ['2222'], [3, [[4]]]], [1, '2222', 3, 4]),
 ])
 def test_flatten_deep(case, expected):
-    assert pyd.flatten_deep(case) == expected
+    assert _.flatten_deep(case) == expected
 
 
 @parametrize('case,value,from_index,expected', [
@@ -160,7 +160,7 @@ def test_flatten_deep(case, expected):
     ([1, 1, 2, 2, 3, 3], 0, 0, -1),
 ])
 def test_index_of(case, value, from_index, expected):
-    assert pyd.index_of(case, value, from_index) == expected
+    assert _.index_of(case, value, from_index) == expected
 
 
 @parametrize('case,expected', [
@@ -168,7 +168,7 @@ def test_index_of(case, value, from_index, expected):
     ([1], [])
 ])
 def test_initial(case, expected):
-    assert pyd.initial(case) == expected
+    assert _.initial(case) == expected
 
 
 @parametrize('case,expected', [
@@ -178,7 +178,7 @@ def test_initial(case, expected):
      [[10, 20], 1, 2, 3, [30, 40], 1, 2, 3, 50, [60]]),
 ])
 def test_intercalate(case, expected):
-    assert pyd.intercalate(*case) == expected
+    assert _.intercalate(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -188,14 +188,14 @@ def test_intercalate(case, expected):
     (([1, 2, 3], [4], [5, 6]), [1, 4, 5, 2, 6, 3]),
 ])
 def test_interleave(case, expected):
-    assert pyd.interleave(*case) == expected
+    assert _.interleave(*case) == expected
 
 
 @parametrize('case,expected', [
     (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2])
 ])
 def test_intersection(case, expected):
-    assert pyd.intersection(*case) == expected
+    assert _.intersection(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -205,7 +205,7 @@ def test_intersection(case, expected):
      [[1, 2, 3], [0, 0, 0], [4, 5, 6], [0, 0, 0], [7, 8, 9]]),
 ])
 def test_intersperse(case, expected):
-    assert pyd.intersperse(*case) == expected
+    assert _.intersperse(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -213,7 +213,7 @@ def test_intersperse(case, expected):
     ((['one', 'two', 'three'], '-.-'), 'one-.-two-.-three')
 ])
 def test_join(case, expected):
-    assert pyd.join(*case) == expected
+    assert _.join(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -221,7 +221,7 @@ def test_join(case, expected):
     ([], None)
 ])
 def test_last(case, expected):
-    assert pyd.last(case) == expected
+    assert _.last(case) == expected
 
 
 @parametrize('case,value,from_index,expected', [
@@ -244,7 +244,7 @@ def test_last(case, expected):
     ([0, 1, 2, 3, 4, 5], 3, None, 3),
 ])
 def test_last_index_of(case, value, from_index, expected):
-    assert pyd.last_index_of(case, value, from_index) == expected
+    assert _.last_index_of(case, value, from_index) == expected
 
 
 @parametrize('case,expected', [
@@ -253,7 +253,7 @@ def test_last_index_of(case, value, from_index, expected):
      ['2', '4'])
 ])
 def test_mapcat(case, expected):
-    assert pyd.mapcat(*case) == expected
+    assert _.mapcat(*case) == expected
 
 
 @parametrize('case,expected,after', [
@@ -263,7 +263,7 @@ def test_mapcat(case, expected):
 ])
 def test_pop(case, expected, after):
     array = case[0]
-    assert pyd.pop(*case) == expected
+    assert _.pop(*case) == expected
     assert array == after
 
 
@@ -271,7 +271,7 @@ def test_pop(case, expected, after):
     ([1, 2, 3, 1, 2, 3], [2, 3], [1, 1])
 ])
 def test_pull(case, values, expected):
-    assert pyd.pull(case, *values) == expected
+    assert _.pull(case, *values) == expected
 
 
 @parametrize('case,expected', [
@@ -280,7 +280,7 @@ def test_pull(case, values, expected):
     (([1, 2, 3, 1, 2, 3], 3, 2), [1, 2, 2, 3])
 ])
 def test_pull_at(case, expected):
-    assert pyd.pull_at(*case) == expected
+    assert _.pull_at(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -289,14 +289,14 @@ def test_pull_at(case, expected):
     (([1, 2, 3], [4, 5], 6, [7, 8]), [1, 2, 3, [4, 5], 6, [7, 8]]),
 ])
 def test_push(case, expected):
-    assert pyd.push(*case) == expected
+    assert _.push(*case) == expected
 
 
 @parametrize('alias', [
-    pyd.append
+    _.append
 ])
 def test_push_aliases(alias):
-    pyd.push is alias
+    _.push is alias
 
 
 @parametrize('case,filter_by,expected', [
@@ -304,7 +304,7 @@ def test_push_aliases(alias):
 ])
 def test_remove(case, filter_by, expected):
     original = list(case)
-    assert pyd.remove(case, filter_by) == expected
+    assert _.remove(case, filter_by) == expected
     assert set(case).intersection(expected) == set([])
     assert set(original) == set(case + expected)
 
@@ -314,14 +314,14 @@ def test_remove(case, filter_by, expected):
     ([], [])
 ])
 def test_rest(case, expected):
-    assert pyd.rest(case) == expected
+    assert _.rest(case) == expected
 
 
 @parametrize('alias', [
-    pyd.tail
+    _.tail
 ])
 def test_rest_aliases(alias):
-    pyd.rest is alias
+    _.rest is alias
 
 
 @parametrize('case,expected', [
@@ -329,14 +329,14 @@ def test_rest_aliases(alias):
     ('abcdef', 'fedcba'),
 ])
 def test_reverse(case, expected):
-    assert pyd.reverse(case) == expected
+    assert _.reverse(case) == expected
 
 
 @parametrize('case,expected,after', [
     ([1, 2, 3], 1, [2, 3]),
 ])
 def test_shift(case, expected, after):
-    assert pyd.shift(case) == expected
+    assert _.shift(case) == expected
     assert case == after
 
 
@@ -353,7 +353,7 @@ def test_shift(case, expected, after):
     (([1, 2, 3, 4, 5], -5), [1]),
 ])
 def test_slice_(case, expected):
-    assert pyd.slice_(*case) == expected
+    assert _.slice_(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -366,14 +366,14 @@ def test_slice_(case, expected):
 ])
 def test_sort(case, expected):
     array = case[0]
-    assert pyd.sort(*case) == expected
+    assert _.sort(*case) == expected
     assert array == expected
 
 
 def test_sort_comparison_key_exception():
     raised = False
     try:
-        pyd.sort([], comparison=lambda: None, key=lambda: None)
+        _.sort([], comparison=lambda: None, key=lambda: None)
     except Exception:
         raised = True
 
@@ -392,7 +392,7 @@ def test_sort_comparison_key_exception():
      2)
 ])
 def test_sorted_index(case, expected):
-    assert pyd.sorted_index(*case) == expected
+    assert _.sorted_index(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -406,7 +406,7 @@ def test_sorted_index(case, expected):
      2)
 ])
 def test_sorted_last_index(case, expected):
-    assert pyd.sorted_last_index(*case) == expected
+    assert _.sorted_last_index(*case) == expected
 
 
 @parametrize('case,expected,after', [
@@ -419,7 +419,7 @@ def test_sorted_last_index(case, expected):
 ])
 def test_splice(case, expected, after):
     array = case[0]
-    assert pyd.splice(*case) == expected
+    assert _.splice(*case) == expected
     assert array == after
 
 
@@ -428,7 +428,7 @@ def test_splice(case, expected, after):
     (([1, 2, 3, 4, 5], 0), [[], [1, 2, 3, 4, 5]]),
 ])
 def test_split_at(case, expected):
-    assert pyd.split_at(*case) == expected
+    assert _.split_at(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -438,14 +438,14 @@ def test_split_at(case, expected):
     (([1, 2, 3, 4, 5], 6), [1, 2, 3, 4, 5]),
 ])
 def test_take(case, expected):
-    assert pyd.take(*case) == expected
+    assert _.take(*case) == expected
 
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5], lambda item: item < 3), [1, 2]),
 ])
 def test_take_while(case, expected):
-    assert pyd.take_while(*case) == expected
+    assert _.take_while(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -455,14 +455,14 @@ def test_take_while(case, expected):
     (([1, 2, 3, 4, 5], 6), [1, 2, 3, 4, 5]),
 ])
 def test_take_right(case, expected):
-    assert pyd.take_right(*case) == expected
+    assert _.take_right(*case) == expected
 
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5], lambda item: item > 3), [4, 5]),
 ])
 def test_take_right_while(case, expected):
-    assert pyd.take_right_while(*case) == expected
+    assert _.take_right_while(*case) == expected
 
 
 @parametrize('case,filter_by,expected', [
@@ -486,21 +486,21 @@ def test_take_right_while(case, expected):
      ['A', 'b', 'C'])
 ])
 def test_uniq(case, filter_by, expected):
-    assert pyd.uniq(case, filter_by) == expected
+    assert _.uniq(case, filter_by) == expected
 
 
 @parametrize('alias', [
-    pyd.unique
+    _.unique
 ])
 def test_uniq_aliases(alias):
-    assert pyd.uniq is alias
+    assert _.uniq is alias
 
 
 @parametrize('case,expected', [
     (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2, 3, 101, 10])
 ])
 def test_union(case, expected):
-    assert pyd.union(*case) == expected
+    assert _.union(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -509,7 +509,7 @@ def test_union(case, expected):
     (([1, 2, 3], [4, 5], 6, [7, 8]), [[4, 5], 6, [7, 8], 1, 2, 3]),
 ])
 def test_unshift(case, expected):
-    assert pyd.unshift(*case) == expected
+    assert _.unshift(*case) == expected
     assert case[0] == expected
 
 
@@ -518,14 +518,14 @@ def test_unshift(case, expected):
      [['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]])
 ])
 def test_unzip(case, expected):
-    pyd.unzip(case) == expected
+    _.unzip(case) == expected
 
 
 @parametrize('case,expected', [
     (([1, 2, 1, 0, 3, 1, 4], 0, 1), [2, 3, 4])
 ])
 def test_without(case, expected):
-    assert pyd.without(*case) == expected
+    assert _.without(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -533,7 +533,7 @@ def test_without(case, expected):
     (([1, 2, 5], [2, 3, 5], [3, 4, 5]), [1, 4, 5])
 ])
 def test_xor(case, expected):
-    assert set(pyd.xor(*case)) == set(expected)
+    assert set(_.xor(*case)) == set(expected)
 
 
 @parametrize('case,expected', [
@@ -541,14 +541,14 @@ def test_xor(case, expected):
     (([['moe', 30], ['larry', 40]],), {'moe': 30, 'larry': 40}),
 ])
 def test_zip_object(case, expected):
-    assert pyd.zip_object(*case) == expected
+    assert _.zip_object(*case) == expected
 
 
 @parametrize('alias', [
-    pyd.object_
+    _.object_
 ])
 def test_zip_object_aliases(alias):
-    pyd.zip_object is alias
+    _.zip_object is alias
 
 
 @parametrize('case,expected', [
@@ -558,4 +558,4 @@ def test_zip_object_aliases(alias):
      [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]])
 ])
 def test_zip_(case, expected):
-    assert pyd.zip_(*case) == expected
+    assert _.zip_(*case) == expected

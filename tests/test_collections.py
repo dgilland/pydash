@@ -1,7 +1,7 @@
 
 import math
 
-import pydash as pyd
+import pydash as _
 
 from . import fixtures
 from .fixtures import parametrize
@@ -13,7 +13,7 @@ from .fixtures import parametrize
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), [1, 2])
 ])
 def test_at(case, expected):
-    assert pyd.at(*case) == expected
+    assert _.at(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -23,14 +23,14 @@ def test_at(case, expected):
     (('pebbles', 'eb'), True)
 ])
 def test_contains(case, expected):
-    assert pyd.contains(*case) == expected
+    assert _.contains(*case) == expected
 
 
 @parametrize('case', [
-    pyd.include
+    _.include
 ])
 def test_contains_aliases(case):
-    assert pyd.contains is case
+    assert _.contains is case
 
 
 @parametrize('case,expected', [
@@ -42,7 +42,7 @@ def test_contains_aliases(case):
     (({1: 0, 2: 0, 4: 3},), {0: 2, 3: 1})
 ])
 def test_count_by(case, expected):
-    assert pyd.count_by(*case) == expected
+    assert _.count_by(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -56,7 +56,7 @@ def test_count_by(case, expected):
      [1, 2, 3, 4, None, None])
 ])
 def test_deep_pluck(case, expected):
-    assert pyd.deep_pluck(*case) == expected
+    assert _.deep_pluck(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -72,7 +72,7 @@ def test_deep_pluck(case, expected):
      [{'name': 'barney', 'age': 36, 'blocked': False}]),
 ])
 def test_filter_(case, expected):
-    assert pyd.filter_(*case) == expected
+    assert _.filter_(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -97,14 +97,14 @@ def test_filter_(case, expected):
      {'name': 'barney', 'age': 36, 'blocked': False}),
 ])
 def test_find(case, expected):
-    assert pyd.find(*case) == expected
+    assert _.find(*case) == expected
 
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4], lambda num: num % 2 == 1), 3),
 ])
 def test_find_last(case, expected):
-    assert pyd.find_last(*case) == expected
+    assert _.find_last(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -114,14 +114,14 @@ def test_find_last(case, expected):
      {'one': 1, 'two': 2, 'three': 3}),
 ])
 def test_for_each(case, expected):
-    assert pyd.for_each(*case) == expected
+    assert _.for_each(*case) == expected
 
 
 @parametrize('case', [
-    pyd.each
+    _.each
 ])
 def test_for_each_aliases(case):
-    assert pyd.for_each is case
+    assert _.for_each is case
 
 
 @parametrize('case,expected', [
@@ -131,14 +131,14 @@ def test_for_each_aliases(case):
      {'one': 1, 'two': 2, 'three': 3}),
 ])
 def test_for_each_right(case, expected):
-    assert pyd.for_each_right(*case) == expected
+    assert _.for_each_right(*case) == expected
 
 
 @parametrize('case', [
-    pyd.each_right
+    _.each_right
 ])
 def test_for_each_right_aliases(case):
-    assert pyd.for_each_right is case
+    assert _.for_each_right is case
 
 
 @parametrize('case,expected', [
@@ -147,7 +147,7 @@ def test_for_each_right_aliases(case):
      {4: [4.2], 6: [6.1, 6.4]}),
 ])
 def test_group_by(case, expected):
-    assert pyd.group_by(*case) == expected
+    assert _.group_by(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -156,7 +156,7 @@ def test_group_by(case, expected):
       'right': {'dir': 'right', 'code': 100}}),
 ])
 def test_index_by(case, expected):
-    assert pyd.index_by(*case) == expected
+    assert _.index_by(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -169,7 +169,7 @@ def test_index_by(case, expected):
     (([1, 2, 3], lambda item, num: item + num, 1), [2, 3, 4]),
 ])
 def test_invoke(case, expected):
-    assert pyd.invoke(*case) == expected
+    assert _.invoke(*case) == expected
 
 
 @parametrize('case,expected,sort_results', [
@@ -185,7 +185,7 @@ def test_invoke(case, expected):
      False)
 ])
 def test_map_(case, expected, sort_results):
-    actual = pyd.map_(*case)
+    actual = _.map_(*case)
     if sort_results:
         actual = sorted(actual)
 
@@ -193,17 +193,17 @@ def test_map_(case, expected, sort_results):
 
 
 @parametrize('case', [
-    pyd.collect
+    _.collect
 ])
 def test_map_aliases(case):
-    assert pyd.map_ is case
+    assert _.map_ is case
 
 
 @parametrize('case,expectations', [
     (([1, 2, 3], lambda num: num * 3), (3, 6, 9)),
 ])
 def test_mapiter(case, expectations):
-    mapper = pyd.mapiter(*case)
+    mapper = _.mapiter(*case)
     for expected in expectations:
         assert next(mapper) == expected
 
@@ -219,7 +219,7 @@ def test_mapiter(case, expectations):
      {'name': 'fred', 'age': 40}),
 ])
 def test_max_(case, expected):
-    assert pyd.max_(*case) == expected
+    assert _.max_(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -233,7 +233,7 @@ def test_max_(case, expected):
      {'name': 'barney', 'age': 36}),
 ])
 def test_min_(case, expected):
-    assert pyd.min_(*case) == expected
+    assert _.min_(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -256,7 +256,7 @@ def test_min_(case, expected):
        {'name': 'pebbles', 'age': 1}]]),
 ])
 def test_partition(case, expected):
-    assert pyd.partition(*case) == expected
+    assert _.partition(*case) == expected
 
 
 @parametrize('case,filter_by,expected', [
@@ -265,7 +265,7 @@ def test_partition(case, expected):
      ['moe', 'larry'])
 ])
 def test_pluck(case, filter_by, expected):
-    assert pyd.pluck(case, filter_by) == expected
+    assert _.pluck(case, filter_by) == expected
 
 
 @parametrize('case,expected', [
@@ -275,7 +275,7 @@ def test_pluck(case, filter_by, expected):
      {'a': 3, 'b': 6, 'c': 9})
 ])
 def test_reduce_(case, expected):
-    assert pyd.reduce_(*case) == expected
+    assert _.reduce_(*case) == expected
 
 
 @parametrize('case,exception', [
@@ -285,7 +285,7 @@ def test_reduce_raise(case, exception):
     raised = False
 
     try:
-        pyd.reduce_(*case)
+        _.reduce_(*case)
     except exception:
         raised = True
 
@@ -293,11 +293,11 @@ def test_reduce_raise(case, exception):
 
 
 @parametrize('case', [
-    pyd.foldl,
-    pyd.inject
+    _.foldl,
+    _.inject
 ])
 def test_reduce_aliases(case):
-    assert pyd.reduce_ is case
+    assert _.reduce_ is case
 
 
 @parametrize('case,expected', [
@@ -309,7 +309,7 @@ def test_reduce_aliases(case):
      {'a': 3, 'b': 6, 'c': 9})
 ])
 def test_reduce_right(case, expected):
-    assert pyd.reduce_right(*case) == expected
+    assert _.reduce_right(*case) == expected
 
 
 @parametrize('case,exception', [
@@ -319,7 +319,7 @@ def test_reduce_right_exception(case, exception):
     raised = False
 
     try:
-        pyd.reduce_right(*case)
+        _.reduce_right(*case)
     except exception:
         raised = True
 
@@ -327,10 +327,10 @@ def test_reduce_right_exception(case, exception):
 
 
 @parametrize('case', [
-    pyd.foldr
+    _.foldr
 ])
 def test_reduce_right_aliases(case):
-    assert pyd.reduce_right is case
+    assert _.reduce_right is case
 
 
 @parametrize('case,expected', [
@@ -339,7 +339,7 @@ def test_reduce_right_aliases(case):
     (([1, 2, 3, 4, 5], fixtures.reduce_callback0, 0), [1, 3, 6, 10, 15])
 ])
 def test_reductions(case, expected):
-    assert pyd.reductions(*case) == expected
+    assert _.reductions(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -349,7 +349,7 @@ def test_reductions(case, expected):
      [[4, 5, 2, 3], [4, 5, 2, 3, 0, 1]]),
 ])
 def test_reductions_right(case, expected):
-    assert pyd.reductions_right(*case) == expected
+    assert _.reductions_right(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -365,14 +365,14 @@ def test_reductions_right(case, expected):
      [{'name': 'fred', 'age': 40, 'blocked': True}]),
 ])
 def test_reject(case, expected):
-    assert pyd.reject(*case) == expected
+    assert _.reject(*case) == expected
 
 
 @parametrize('case', [
     [1, 2, 3, 4, 5, 6],
 ])
 def test_sample(case):
-    assert pyd.sample(case) in case
+    assert _.sample(case) in case
 
 
 @parametrize('case', [
@@ -382,7 +382,7 @@ def test_sample(case):
 ])
 def test_sample_list(case):
     collection, n = case
-    sample_n = pyd.sample(*case)
+    sample_n = _.sample(*case)
 
     assert isinstance(sample_n, list)
     assert len(sample_n) == min(n, len(collection))
@@ -394,7 +394,7 @@ def test_sample_list(case):
     {'one': 1, 'two': 2, 'three': 3}
 ])
 def test_shuffle(case):
-    shuffled = pyd.shuffle(case)
+    shuffled = _.shuffle(case)
 
     assert len(shuffled) == len(case)
 
@@ -409,7 +409,7 @@ def test_shuffle(case):
     {'1': 1, '2': 2, '3': 3}
 ])
 def test_size(case):
-    assert pyd.size(case) == len(case)
+    assert _.size(case) == len(case)
 
 
 @parametrize('case,expected', [
@@ -425,7 +425,7 @@ def test_size(case):
      False)
 ])
 def test_some(case, expected):
-    assert pyd.some(*case) == expected
+    assert _.some(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -444,7 +444,7 @@ def test_some(case, expected):
     (({'a': 1, 'b': 2, 'c': 3}, lambda x: math.sin(x)), [3, 1, 2]),
 ])
 def test_sort_by(case, expected):
-    assert pyd.sort_by(*case) == expected
+    assert _.sort_by(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -452,7 +452,7 @@ def test_sort_by(case, expected):
     ({'a': 1, 'b': 2, 'c': 3}, [1, 2, 3])
 ])
 def test_to_list(case, expected):
-    assert set(pyd.to_list(case)) == set(expected)
+    assert set(_.to_list(case)) == set(expected)
 
 
 @parametrize('case,filter_by,expected,', [
@@ -461,4 +461,4 @@ def test_to_list(case, expected):
      [{'name': 'moe', 'age': 40}])
 ])
 def test_where(case, filter_by, expected):
-    assert pyd.where(case, filter_by) == expected
+    assert _.where(case, filter_by) == expected

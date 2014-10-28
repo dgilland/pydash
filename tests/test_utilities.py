@@ -1,7 +1,7 @@
 
 import time
 
-import pydash as pyd
+import pydash as _
 
 from . import fixtures
 from .fixtures import parametrize
@@ -11,14 +11,14 @@ from .fixtures import parametrize
     ((lambda a, b: a / b, 4, 2), 2)
 ])
 def test_attempt(case, expected):
-    assert pyd.attempt(*case) == expected
+    assert _.attempt(*case) == expected
 
 
 @parametrize('case,expected', [
     ((lambda a, b: a / b, 4, 0), ZeroDivisionError)
 ])
 def test_attempt_exception(case, expected):
-    assert isinstance(pyd.attempt(*case), expected)
+    assert isinstance(_.attempt(*case), expected)
 
 
 @parametrize('case', [
@@ -26,7 +26,7 @@ def test_attempt_exception(case, expected):
     'bar'
 ])
 def test_constant(case):
-    assert pyd.constant(case)() == case
+    assert _.constant(case)() == case
 
 
 @parametrize('case,arg,expected', [
@@ -49,15 +49,15 @@ def test_constant(case):
       {'name': 'barney', 'age': 36}])
 ])
 def test_callback(case, arg, expected):
-    getter = pyd.callback(case)
-    assert pyd.map_(arg, getter) == expected
+    getter = _.callback(case)
+    assert _.map_(arg, getter) == expected
 
 
 @parametrize('case', [
-    pyd.iteratee
+    _.iteratee
 ])
 def test_callback_aliases(case):
-    assert pyd.callback is case
+    assert _.callback is case
 
 
 @parametrize('case,arg,expected', [
@@ -71,14 +71,14 @@ def test_callback_aliases(case):
      ['wilma', 'betty'])
 ])
 def test_deep_property(case, arg, expected):
-    assert pyd.map_(arg, pyd.deep_property(case)) == expected
+    assert _.map_(arg, _.deep_property(case)) == expected
 
 
 @parametrize('case', [
-    pyd.deep_prop
+    _.deep_prop
 ])
 def test_deep_property_aliases(case):
-    assert pyd.deep_property is case
+    assert _.deep_property is case
 
 
 @parametrize('case,expected', [
@@ -87,7 +87,7 @@ def test_deep_property_aliases(case):
     ((), None)
 ])
 def test_identity(case, expected):
-    assert pyd.identity(*case) == expected
+    assert _.identity(*case) == expected
 
 
 @parametrize('case,arg,expected', [
@@ -95,7 +95,7 @@ def test_identity(case, expected):
     ({'age': 36}, {'name': 'barney', 'age': 40}, False),
 ])
 def test_matches(case, arg, expected):
-    assert pyd.matches(case)(arg) is expected
+    assert _.matches(case)(arg) is expected
 
 
 @parametrize('case,args,kargs,key', [
@@ -105,7 +105,7 @@ def test_matches(case, arg, expected):
     ((lambda a, b: a + b, lambda a, b: a * b), (1,), {'b': 2}, 2),
 ])
 def test_memoize(case, args, kargs, key):
-    memoized = pyd.memoize(*case)
+    memoized = _.memoize(*case)
     expected = case[0](*args, **kargs)
     assert memoized(*args, **kargs) == expected
     assert memoized.cache
@@ -117,13 +117,13 @@ def test_memoize(case, args, kargs, key):
     ((1, 2, 3), None)
 ])
 def test_noop(case, expected):
-    assert pyd.noop(*case) == expected
+    assert _.noop(*case) == expected
 
 
 def test_now():
     present = int(time.time() * 1000)
     # Add some leeway when comparing time.
-    assert (present - 1) <= pyd.now() <= (present + 1)
+    assert (present - 1) <= _.now() <= (present + 1)
 
 
 @parametrize('case,arg,expected', [
@@ -133,14 +133,14 @@ def test_now():
      ['fred', 'barney']),
 ])
 def test_property_(case, arg, expected):
-    assert pyd.map_(arg, pyd.property_(case)) == expected
+    assert _.map_(arg, _.property_(case)) == expected
 
 
 @parametrize('case', [
-    pyd.prop
+    _.prop
 ])
 def test_property_aliases(case):
-    assert pyd.property_ is case
+    assert _.property_ is case
 
 
 @parametrize('case,minimum,maximum', [
@@ -149,8 +149,8 @@ def test_property_aliases(case):
     ((5, 10), 5, 10)
 ])
 def test_random(case, minimum, maximum):
-    for _ in range(50):
-        rnd = pyd.random(*case)
+    for x in range(50):
+        rnd = _.random(*case)
         assert isinstance(rnd, int)
         assert minimum <= rnd <= maximum
 
@@ -165,8 +165,8 @@ def test_random(case, minimum, maximum):
     ((5.0, 10.0), True, 5, 10),
 ])
 def test_random_float(case, floating, minimum, maximum):
-    for _ in range(50):
-        rnd = pyd.random(*case, floating=floating)
+    for x in range(50):
+        rnd = _.random(*case, floating=floating)
         assert isinstance(rnd, float)
         assert minimum <= rnd <= maximum
 
@@ -179,7 +179,7 @@ def test_random_float(case, floating, minimum, maximum):
     ((0,), []),
 ])
 def test_range_(case, expected):
-    assert pyd.range_(*case) == expected
+    assert _.range_(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -193,14 +193,14 @@ def test_range_(case, expected):
     ((False, 'foo', 'default'), 'default'),
 ])
 def test_result(case, expected):
-    assert pyd.result(*case) == expected
+    assert _.result(*case) == expected
 
 
 @parametrize('case,expected', [
     ((5, lambda i: i * i), [0, 1, 4, 9, 16]),
 ])
 def test_times(case, expected):
-    assert pyd.times(*case) == expected
+    assert _.times(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -208,4 +208,4 @@ def test_times(case, expected):
     (('foo',), 'foo2')
 ])
 def test_unique_id(case, expected):
-    assert pyd.unique_id(*case) == expected
+    assert _.unique_id(*case) == expected

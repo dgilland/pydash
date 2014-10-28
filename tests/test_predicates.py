@@ -4,7 +4,7 @@ import decimal
 import operator
 import re
 
-import pydash as pyd
+import pydash as _
 
 from . import fixtures
 from .fixtures import parametrize
@@ -18,7 +18,7 @@ from .fixtures import parametrize
     (True, False),
 ])
 def test_is_associative(case, expected):
-    assert pyd.is_associative(case) == expected
+    assert _.is_associative(case) == expected
 
 
 @parametrize('case,expected', [
@@ -28,7 +28,7 @@ def test_is_associative(case, expected):
     ('', False),
 ])
 def test_is_boolean(case, expected):
-    assert pyd.is_boolean(case) == expected
+    assert _.is_boolean(case) == expected
 
 
 @parametrize('case,expected', [
@@ -39,7 +39,7 @@ def test_is_boolean(case, expected):
     (1, False)
 ])
 def test_is_date(case, expected):
-    assert pyd.is_date(case) == expected
+    assert _.is_date(case) == expected
 
 
 @parametrize('case,expected', [
@@ -50,7 +50,7 @@ def test_is_date(case, expected):
     ([5, 4, 4, 5, 4, 3], False)
 ])
 def test_is_decreasing(case, expected):
-    assert pyd.is_decreasing(case) == expected
+    assert _.is_decreasing(case) == expected
 
 
 @parametrize('case,expected', [
@@ -68,7 +68,7 @@ def test_is_decreasing(case, expected):
     (['Hello', 'World'], False),
 ])
 def test_is_empty(case, expected):
-    assert pyd.is_empty(case) == expected
+    assert _.is_empty(case) == expected
 
 
 @parametrize('case,expected', [
@@ -92,7 +92,7 @@ def test_is_empty(case, expected):
      True)
 ])
 def test_is_equal(case, expected):
-    assert pyd.is_equal(*case) == expected
+    assert _.is_equal(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -101,7 +101,7 @@ def test_is_equal(case, expected):
     ([], False)
 ])
 def test_is_error(case, expected):
-    assert pyd.is_error(case) == expected
+    assert _.is_error(case) == expected
 
 
 @parametrize('case,expected', [
@@ -113,7 +113,7 @@ def test_is_error(case, expected):
     (None, False),
 ])
 def test_is_even(case, expected):
-    assert pyd.is_even(case) == expected
+    assert _.is_even(case) == expected
 
 
 @parametrize('case,expected', [
@@ -124,7 +124,7 @@ def test_is_even(case, expected):
     ('', False),
 ])
 def test_is_float(case, expected):
-    assert pyd.is_float(case) == expected
+    assert _.is_float(case) == expected
 
 
 @parametrize('case,expected', [
@@ -132,7 +132,7 @@ def test_is_float(case, expected):
     ('Hello, world!', False),
 ])
 def test_is_function(case, expected):
-    assert pyd.is_function(case) == expected
+    assert _.is_function(case) == expected
 
 
 @parametrize('case,expected', [
@@ -143,7 +143,7 @@ def test_is_function(case, expected):
     ([1, 2, 3, 4, 4, 3], False)
 ])
 def test_is_increasing(case, expected):
-    assert pyd.is_increasing(case) == expected
+    assert _.is_increasing(case) == expected
 
 
 @parametrize('case,expected', [
@@ -154,7 +154,7 @@ def test_is_increasing(case, expected):
     (None, False),
 ])
 def test_is_indexed(case, expected):
-    assert pyd.is_indexed(case) == expected
+    assert _.is_indexed(case) == expected
 
 
 @parametrize('case,expected', [
@@ -165,7 +165,7 @@ def test_is_indexed(case, expected):
     ((True, float), False),
 ])
 def test_is_instance_of(case, expected):
-    assert pyd.is_instance_of(*case) == expected
+    assert _.is_instance_of(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -177,7 +177,7 @@ def test_is_instance_of(case, expected):
     ([], False),
 ])
 def test_is_integer(case, expected):
-    assert pyd.is_integer(case) == expected
+    assert _.is_integer(case) == expected
 
 
 @parametrize('case,expected', [
@@ -188,7 +188,7 @@ def test_is_integer(case, expected):
     (True, False),
 ])
 def test_is_json(case, expected):
-    assert pyd.is_json(case) == expected
+    assert _.is_json(case) == expected
 
 
 @parametrize('case,expected', [
@@ -196,7 +196,7 @@ def test_is_json(case, expected):
     ({}, False),
 ])
 def test_is_list(case, expected):
-    assert pyd.is_list(case) == expected
+    assert _.is_list(case) == expected
 
 
 @parametrize('case,expected', [
@@ -206,7 +206,7 @@ def test_is_list(case, expected):
     (([3, 3, 2], operator.gt), False),
 ])
 def test_is_monotone(case, expected):
-    assert pyd.is_monotone(*case) == expected
+    assert _.is_monotone(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -217,7 +217,7 @@ def test_is_monotone(case, expected):
     ('1', True)
 ])
 def test_is_nan(case, expected):
-    assert pyd.is_nan(case) == expected
+    assert _.is_nan(case) == expected
 
 
 @parametrize('case,expected', [
@@ -230,7 +230,7 @@ def test_is_nan(case, expected):
     (False, False)
 ])
 def test_is_negative(case, expected):
-    assert pyd.is_negative(case) == expected
+    assert _.is_negative(case) == expected
 
 
 @parametrize('case,expected', [
@@ -238,7 +238,7 @@ def test_is_negative(case, expected):
     (0, False),
 ])
 def test_is_none(case, expected):
-    assert pyd.is_none(case) == expected
+    assert _.is_none(case) == expected
 
 
 @parametrize('case,expected', [
@@ -251,7 +251,7 @@ def test_is_none(case, expected):
     (False, False),
 ])
 def test_is_number(case, expected):
-    assert pyd.is_number(case) == expected
+    assert _.is_number(case) == expected
 
 
 @parametrize('case,expected', [
@@ -263,7 +263,7 @@ def test_is_number(case, expected):
     (iter({}), False)
 ])
 def test_is_object(case, expected):
-    assert pyd.is_object(case) == expected
+    assert _.is_object(case) == expected
 
 
 @parametrize('case,expected', [
@@ -275,7 +275,7 @@ def test_is_object(case, expected):
     (None, False),
 ])
 def test_is_odd(case, expected):
-    assert pyd.is_odd(case) == expected
+    assert _.is_odd(case) == expected
 
 
 @parametrize('case,expected', [
@@ -287,7 +287,7 @@ def test_is_odd(case, expected):
     (iter({}), False)
 ])
 def test_is_plain_object(case, expected):
-    assert pyd.is_plain_object(case) == expected
+    assert _.is_plain_object(case) == expected
 
 
 @parametrize('case,expected', [
@@ -300,7 +300,7 @@ def test_is_plain_object(case, expected):
     (False, False)
 ])
 def test_is_positive(case, expected):
-    assert pyd.is_positive(case) == expected
+    assert _.is_positive(case) == expected
 
 
 @parametrize('case,expected', [
@@ -313,14 +313,14 @@ def test_is_positive(case, expected):
     (None, False)
 ])
 def test_is_reg_exp(case, expected):
-    assert pyd.is_reg_exp(case) == expected
+    assert _.is_reg_exp(case) == expected
 
 
 @parametrize('case', [
-    pyd.is_re
+    _.is_re
 ])
 def test_is_reg_exp_aliases(case):
-    assert pyd.is_reg_exp is case
+    assert _.is_reg_exp is case
 
 
 @parametrize('case,expected', [
@@ -330,7 +330,7 @@ def test_is_reg_exp_aliases(case):
     ([3, 3, 2], False),
 ])
 def test_is_strictly_decreasing(case, expected):
-    assert pyd.is_strictly_decreasing(case) == expected
+    assert _.is_strictly_decreasing(case) == expected
 
 
 @parametrize('case,expected', [
@@ -340,7 +340,7 @@ def test_is_strictly_decreasing(case, expected):
     ([3, 3, 2], False),
 ])
 def test_is_strictly_increasing(case, expected):
-    assert pyd.is_strictly_increasing(case) == expected
+    assert _.is_strictly_increasing(case) == expected
 
 
 @parametrize('case,expected', [
@@ -352,7 +352,7 @@ def test_is_strictly_increasing(case, expected):
     (None, False)
 ])
 def test_is_string(case, expected):
-    assert pyd.is_string(case) == expected
+    assert _.is_string(case) == expected
 
 
 @parametrize('case,expected', [
@@ -363,4 +363,4 @@ def test_is_string(case, expected):
     (False, False),
 ])
 def test_is_zero(case, expected):
-    assert pyd.is_zero(case) == expected
+    assert _.is_zero(case) == expected

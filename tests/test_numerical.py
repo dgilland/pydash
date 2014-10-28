@@ -1,5 +1,5 @@
 
-import pydash as pyd
+import pydash as _
 from .fixtures import parametrize
 
 
@@ -10,14 +10,14 @@ from .fixtures import parametrize
     (({'one': {'a': 1}, 'two': {'a': 2}, 'three': {'a': 3}}, 'a'), 6),
 ])
 def test_add(case, expected):
-    assert pyd.add(*case) == expected
+    assert _.add(*case) == expected
 
 
 @parametrize('case', [
-    pyd.sum_
+    _.sum_
 ])
 def test_add_aliases(case):
-    assert pyd.add is case
+    assert _.add is case
 
 
 @parametrize('case,expected', [
@@ -27,15 +27,15 @@ def test_add_aliases(case):
     (({'one': {'a': 1}, 'two': {'a': 2}, 'three': {'a': 3}}, 'a'), 2),
 ])
 def test_average(case, expected):
-    assert pyd.average(*case) == expected
+    assert _.average(*case) == expected
 
 
 @parametrize('case', [
-    pyd.avg,
-    pyd.mean
+    _.avg,
+    _.mean
 ])
 def test_average_aliases(case):
-    assert pyd.average is case
+    assert _.average is case
 
 
 @parametrize('case,expected', [
@@ -45,7 +45,7 @@ def test_average_aliases(case):
     (([0, 0, 1, 2, 3, 4],), 1.5),
 ])
 def test_median(case, expected):
-    assert pyd.median(*case) == expected
+    assert _.median(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -55,14 +55,14 @@ def test_median(case, expected):
      [2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5]),
 ])
 def test_moving_average(case, expected):
-    assert pyd.moving_average(*case) == expected
+    assert _.moving_average(*case) == expected
 
 
 @parametrize('case', [
-    pyd.moving_avg
+    _.moving_avg
 ])
 def test_moving_average_aliases(case):
-    assert pyd.moving_average is case
+    assert _.moving_average is case
 
 
 @parametrize('case,expected', [
@@ -72,14 +72,14 @@ def test_moving_average_aliases(case):
     (('junk', 2), None),
 ])
 def test_power(case, expected):
-    assert pyd.power(*case) == expected
+    assert _.power(*case) == expected
 
 
 @parametrize('case', [
-    pyd.pow_
+    _.pow_
 ])
 def test_power_aliases(case):
-    assert pyd.power is case
+    assert _.power is case
 
 
 @parametrize('case,expected', [
@@ -90,14 +90,14 @@ def test_power_aliases(case):
     (('junk',), None)
 ])
 def test_round_(case, expected):
-    assert pyd.round_(*case) == expected
+    assert _.round_(*case) == expected
 
 
 @parametrize('case', [
-    pyd.curve
+    _.curve
 ])
 def test_round__aliases(case):
-    assert pyd.round_ is case
+    assert _.round_ is case
 
 
 @parametrize('case,expected', [
@@ -107,7 +107,7 @@ def test_round__aliases(case):
     (([1, 2, 5],), [0.2, 0.4, 1]),
 ])
 def test_scale(case, expected):
-    assert pyd.scale(*case) == expected
+    assert _.scale(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -117,35 +117,35 @@ def test_scale(case, expected):
     (([0, 0], [10, 0]), 0),
 ])
 def test_slope(case, expected):
-    assert pyd.slope(*case) == expected
+    assert _.slope(*case) == expected
 
 
 @parametrize('case,expected', [
     ([1, 2, 3], (2.0 / 3.0) ** 0.5),
 ])
 def test_std_deviation(case, expected):
-    assert pyd.std_deviation(case) == expected
+    assert _.std_deviation(case) == expected
 
 
 @parametrize('case', [
-    pyd.sigma
+    _.sigma
 ])
 def test_std_deviation_aliases(case):
-    assert pyd.std_deviation is case
+    assert _.std_deviation is case
 
 
 @parametrize('case,expected', [
     ([[1, 2, 3], [4, 5, 6], [7, 8, 9]], [[1, 4, 7], [2, 5, 8], [3, 6, 9]]),
 ])
 def test_transpose(case, expected):
-    assert pyd.transpose(case) == expected
+    assert _.transpose(case) == expected
 
 
 @parametrize('case,expected', [
     ([1, 2, 3], 2.0 / 3.0),
 ])
 def test_variance(case, expected):
-    assert pyd.variance(case) == expected
+    assert _.variance(case) == expected
 
 
 @parametrize('case,expected', [
@@ -153,4 +153,4 @@ def test_variance(case, expected):
     (([{'a': 1}, {'a': 2}, {'a': 3}], 'a'), [-1.225, 0.0, 1.225]),
 ])
 def test_zscore(case, expected):
-    assert pyd.map_(pyd.zscore(*case), lambda v: round(v, 3)) == expected
+    assert _.map_(_.zscore(*case), lambda v: round(v, 3)) == expected
