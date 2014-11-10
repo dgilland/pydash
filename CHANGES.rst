@@ -2,6 +2,9 @@ Changelog
 =========
 
 
+v2.3.0 (2014-11-10)
+-------------------
+
 - Support ``type`` callbacks (e.g. ``int``, ``float``, ``str``, etc) by only passing a single callback argument when invoking the callback.
 
 
