@@ -36,17 +36,20 @@ def call_callback(callback, *args):
         except TypeError:  # pragma: no cover
             pass
     finally:
-        if argspec:
-            argcount = len(argspec.args)
-        elif isinstance(callback, type):
+        if isinstance(callback, type):
             # Only pass single argument to type callbacks. This is for things
             # like int(), float(), str(), etc.
             argcount = 1
+        elif argspec and argspec.varargs:
+            # Callback supports variable arguments.
+            argcount = maxargs
+        elif argspec:
+            # Use inspected arg count.
+            argcount = len(argspec.args)
         else:  # pragma: no cover
             argcount = maxargs
 
-    argstop = (maxargs if argspec and argspec.varargs
-               else min([maxargs, argcount]))
+    argstop = min([maxargs, argcount])
 
     return callback(*args[:argstop])
 
