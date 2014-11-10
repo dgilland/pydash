@@ -41,7 +41,7 @@ install:
 	$(PIP) install -r requirements.txt
 
 .PHONY: test
-test: pep8 pytest
+test: pylint-errors pep8 pytest
 
 .PHONY: pytest
 pytest:
