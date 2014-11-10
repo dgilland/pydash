@@ -174,6 +174,7 @@ def test_invoke(case, expected):
 
 @parametrize('case,expected,sort_results', [
     (([1, 2, 3],), [1, 2, 3], False),
+    (([1.1, 2.1, 3.1], int), [1, 2, 3], False),
     (([1, 2, 3], lambda num: num * 3), [3, 6, 9], False),
     (({'one': 1, 'two': 2, 'three': 3}, lambda num: num * 3),
      [3, 6, 9],
@@ -186,6 +187,7 @@ def test_invoke(case, expected):
 ])
 def test_map_(case, expected, sort_results):
     actual = _.map_(*case)
+
     if sort_results:
         actual = sorted(actual)
 

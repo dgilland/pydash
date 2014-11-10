@@ -38,6 +38,10 @@ def call_callback(callback, *args):
     finally:
         if argspec:
             argcount = len(argspec.args)
+        elif isinstance(callback, type):
+            # Only pass single argument to type callbacks. This is for things
+            # like int(), float(), str(), etc.
+            argcount = 1
         else:  # pragma: no cover
             argcount = maxargs
 
