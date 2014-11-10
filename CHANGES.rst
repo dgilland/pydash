@@ -5,7 +5,8 @@ Changelog
 v2.3.0 (2014-11-10)
 -------------------
 
-- Support ``type`` callbacks (e.g. ``int``, ``float``, ``str``, etc) by only passing a single callback argument when invoking the callback.
+- Support ``type`` callbacks (e.g. ``int``, ``float``, ``str``, etc.) by only passing a single callback argument when invoking the callback.
+- Drop official support for Python 3.2. Too many testing dependencies no longer work on it.
 
 
 v2.2.0 (2014-10-28)
