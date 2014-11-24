@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+vx.x.x (xxxx-xx-xx)
+-------------------
+
+- Add ``pipe`` and ``pipe_right`` as aliases of ``flow`` and ``flow_right``.
+
+
 v2.3.0 (2014-11-10)
 -------------------
 
