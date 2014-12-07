@@ -517,11 +517,9 @@ def merge(obj, *sources, **kargs):
     for source in sources:
         for key, src_value in iterator(source):
             obj_value = get_item(obj, key, default=None)
-            is_sequences = all([src_value,
-                                isinstance(src_value, list),
+            is_sequences = all([isinstance(src_value, list),
                                 isinstance(obj_value, list)])
-            is_mappings = all([src_value,
-                               isinstance(src_value, dict),
+            is_mappings = all([isinstance(src_value, dict),
                                isinstance(obj_value, dict)])
 
             if (is_sequences or is_mappings) and not callback:

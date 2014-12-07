@@ -357,7 +357,8 @@ def test_map_values(case, expected):
     (({'fruits': ['apple'], 'vegetables': ['beet']},
       {'fruits': ['banana'], 'vegetables': ['carrot']}),
      lambda a, b: a + b if isinstance(a, list) else b,
-     {'fruits': ['apple', 'banana'], 'vegetables': ['beet', 'carrot']})
+     {'fruits': ['apple', 'banana'], 'vegetables': ['beet', 'carrot']}),
+    (({'foo': {'bar': 1}}, {'foo': {}}), None, {'foo': {'bar': 1}})
 ])
 def test_merge(case, callback, expected):
     assert _.merge(*case, callback=callback) == expected
