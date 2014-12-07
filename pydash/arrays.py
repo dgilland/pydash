@@ -75,7 +75,7 @@ def cat(*arrays):
     """Concatenates zero or more lists into one.
 
     Args:
-        *arrays (list): Lists to concatenate.
+        arrays (list): Lists to concatenate.
 
     Returns:
         list: Concatenated list.
@@ -364,7 +364,7 @@ def interleave(*arrays):
     each list by sequential round-robin into the new list.
 
     Args:
-        *arrays (list): Lists to interleave.
+        arrays (list): Lists to interleave.
 
     Retruns:
         list: Interleaved list.
@@ -521,7 +521,7 @@ def pull_at(array, *indexes):
 
     Args:
         array (list): List to pull from.
-        *indexes (int): Indexes to pull.
+        indexes (int): Indexes to pull.
 
     Returns:
         list: Modified `array`.
@@ -543,7 +543,7 @@ def push(array, *items):
 
     Args:
         array (list): List to push to.
-        *items (mixed): Items to append.
+        items (mixed): Items to append.
 
     Returns:
         list: Modified `array`.
@@ -766,7 +766,7 @@ def splice(array, index, how_many=None, *items):
         how_many (int, optional): Number of items to remove starting at
             `index`. If ``None`` then all items after `index` are removed.
             Default is ``None``.
-        *items (mixed): Elements to insert starting at `index`. Each item is
+        items (mixed): Elements to insert starting at `index`. Each item is
             inserted in the order given.
 
     Returns:
@@ -989,7 +989,7 @@ def unshift(array, *items):
 
     Args:
         array (list): List to modify.
-        *items (mixed): Items to insert.
+        items (mixed): Items to insert.
 
     Returns:
         list: Modified list.

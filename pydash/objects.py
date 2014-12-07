@@ -67,7 +67,7 @@ def assign(obj, *sources, **kargs):
 
     Args:
         obj (dict): Destination object whose properties will be modified.
-        *sources (dict): Source objects to assign to `obj`.
+        sources (dict): Source objects to assign to `obj`.
 
     Keyword Args:
         callback (mixed, optional): Callback applied per iteration.
@@ -274,7 +274,7 @@ def defaults(obj, *sources):
 
     Args:
         obj (dict): Destination object whose properties will be modified.
-        *sources (dict): Source objects to assign to `obj`.
+        sources (dict): Source objects to assign to `obj`.
 
     Returns:
         dict: Modified `obj`.
@@ -493,11 +493,11 @@ def merge(obj, *sources, **kargs):
     callback is provided it will be executed to produce the merged values of
     the destination and source properties. If the callback returns undefined
     merging will be handled by the method instead. The callback is invoked with
-    two arguments: ``(obj_value, source_value)``.
+    at least two arguments: ``(obj_value, *source_value)``.
 
     Args:
         obj (dict): Destination object to merge source(s) into.
-        *sources (dict): Source objects to merge from. subsequent sources
+        sources (dict): Source objects to merge from. subsequent sources
             overwrite previous ones.
 
     Keyword Args:
@@ -543,7 +543,7 @@ def omit(obj, callback=None, *properties):
 
     Args:
         obj (mixed): Object to process.
-        *properties (str): Property values to omit.
+        properties (str): Property values to omit.
         callback (mixed, optional): Callback used to determine whic properties
             to omit.
 
@@ -623,7 +623,7 @@ def pick(obj, callback=None, *properties):
 
     Args:
         obj (list|dict): Object to pick from.
-        *properties (str): Property values to pick.
+        properties (str): Property values to pick.
         callback (mixed, optional): Callback used to determine whic properties
             to pick.
 

@@ -547,10 +547,10 @@ def url(*paths, **params):
     keyword arguments to append query parameters.
 
     Args:
-        *paths (str): URL paths to combine.
+        paths (str): URL paths to combine.
 
     Keyword Args:
-        **params (str, optional): Query parameters.
+        params (str, optional): Query parameters.
 
     Returns:
         str: URL string.

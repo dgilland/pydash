@@ -359,8 +359,8 @@ def invoke(collection, method_name, *args, **kargs):
     Args:
         collection (list|dict): Collection to iterate over.
         method_name (str): Name of method to invoke.
-        *args (optional): Arguments to pass to method call.
-        **kargs (optional): Keyword arguments to pass to method call.
+        args (optional): Arguments to pass to method call.
+        kargs (optional): Keyword arguments to pass to method call.
 
     Returns:
         list: List of results of invoking method of each item.
