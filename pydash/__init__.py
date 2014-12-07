@@ -347,3 +347,4 @@ from .exceptions import (
 #
 
 _ = _Dash()
+py_ = _

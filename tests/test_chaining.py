@@ -72,7 +72,7 @@ def test_chaining_lazy():
     assert result == 3
 
 
-def test_underscore_instance_chaining():
+def test_dash_instance_chaining():
     value = [1, 2, 3, 4]
     from__ = _._(value).without(2, 3).reject(lambda x: x > 1)
     from_chain = _.chain(value).without(2, 3).reject(lambda x: x > 1)
@@ -80,14 +80,14 @@ def test_underscore_instance_chaining():
     assert from__.value() == from_chain.value()
 
 
-def test_underscore_instance_methods():
+def test_dash_instance_methods():
     assert pydash_methods
 
     for method in pydash_methods:
         assert getattr(_._, method) is getattr(_, method)
 
 
-def test_underscore_suffixed_method_aliases():
+def test_dash_suffixed_method_aliases():
     methods = _.filter_(pydash_methods, lambda m: m.endswith('_'))
     assert methods
 
@@ -95,9 +95,13 @@ def test_underscore_suffixed_method_aliases():
         assert getattr(_._, method[:-1]) is getattr(_, method)
 
 
-def test_underscore_method_call():
+def test_dash_method_call():
     value = [1, 2, 3, 4, 5]
     assert _._.initial(value) == _.initial(value)
+
+
+def test_dash_alias():
+    assert _.py_ is _._
 
 
 @parametrize('case,expected', [

@@ -3,6 +3,9 @@ Changelog
 
 
 - Fix ``merge`` so that trailing ``{}`` or ``[]`` don't overwrite previous source values.
+- Make ``py_`` an alias for ``_``.
+
+
 v2.3.0 (2014-11-10)
 -------------------
 
