@@ -30,6 +30,8 @@ __all__ = [
     'once',
     'partial',
     'partial_right',
+    'pipe',
+    'pipe_right',
     'throttle',
     'wrap',
 ]
