@@ -160,6 +160,8 @@ from .functions import (
     once,
     partial,
     partial_right,
+    pipe,
+    pipe_right,
     throttle,
     wrap,
 )

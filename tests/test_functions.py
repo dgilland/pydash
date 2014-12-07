@@ -171,7 +171,15 @@ def test_flow_right(case, args, expected):
 
 
 @parametrize('case', [
-    _.compose
+    _.pipe
+])
+def test_flow_aliases(case):
+    assert _.flow is case
+
+
+@parametrize('case', [
+    _.compose,
+    _.pipe_right
 ])
 def test_flow_right_aliases(case):
     assert _.flow_right is case

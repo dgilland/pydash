@@ -423,7 +423,7 @@ def flow(*funcs):
     """Creates a function that is the composition of the provided functions,
     where each successive invocation is supplied the return value of the
     previous. For example, composing the functions ``f()``, ``g()``, and
-    ``h()`` produces ``h(g(g()))``.
+    ``h()`` produces ``h(g(f()))``.
 
     Args:
         *funcs (function): Function(s) to compose.
@@ -431,9 +431,19 @@ def flow(*funcs):
     Returns:
         Compose: Function(s) wrapped in a :class:`Compose` context.
 
+    See Also:
+        - :func:`flow` (main definition)
+        - :func:`pipe` (alias)
+
     .. versionadded:: 2.0.0
+
+    .. versionchanged:: x.x.x
+        Added :func:`pipe` as alias.
     """
     return Compose(*funcs, from_right=False)
+
+
+pipe = flow
 
 
 def flow_right(*funcs):
@@ -451,16 +461,21 @@ def flow_right(*funcs):
     See Also:
         - :func:`flow_right` (main definition)
         - :func:`compose` (alias)
+        - :func:`pipe_right` (alias)
 
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
         Added :func:`flow_right` and made :func:`compose` an alias.
+
+    .. versionchanged:: x.x.x
+        Added :func:`pipe_right` as alias.
     """
     return Compose(*funcs, from_right=True)
 
 
 compose = flow_right
+pipe_right = flow_right
 
 
 def iterated(func):
