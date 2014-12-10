@@ -2,6 +2,9 @@ Changelog
 =========
 
 
+- Make ``merge`` accept a callback as a positional argument if it is last.
+
+
 v2.3.1 (2014-12-07)
 
 - Add ``pipe`` and ``pipe_right`` as aliases of ``flow`` and ``flow_right``.

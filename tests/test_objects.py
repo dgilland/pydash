@@ -315,53 +315,47 @@ def test_map_values(case, expected):
     assert _.map_values(*case) == expected
 
 
-@parametrize('case,callback,expected', [
+@parametrize('case,expected', [
     (({'characters': [{'name': 'barney'}, {'name': 'fred'}]},
       {'characters': [{'age': 36}, {'age': 40}]}),
-     None,
      {'characters': [{'name': 'barney', 'age': 36},
                      {'name': 'fred', 'age': 40}]}),
     (({'characters': [{'name': 'barney'}, {'name': 'fred'}, {}]},
       {'characters': [{'age': 36}, {'age': 40}]}),
-     None,
      {'characters': [{'name': 'barney', 'age': 36},
                      {'name': 'fred', 'age': 40},
                      {}]}),
     (({'characters': [{'name': 'barney'}, {'name': 'fred'}]},
       {'characters': [{'age': 36}, {'age': 40}, {}]}),
-     None,
      {'characters': [{'name': 'barney', 'age': 36},
                      {'name': 'fred', 'age': 40},
                      {}]}),
     (({'characters': [{'name': 'barney'}, {'name': 'fred'}]},
       {'characters': [{'age': 36}, {'age': 40}]},
       {'characters': [{'score': 5}, {'score': 7}]}),
-     None,
      {'characters': [{'name': 'barney', 'age': 36, 'score': 5},
                      {'name': 'fred', 'age': 40, 'score': 7}]}),
     (({'characters': {'barney': {'age': 36}, 'fred': {'score': 7}}},
       {'characters': {'barney': {'score': 5}, 'fred': {'age': 40}}}),
-     None,
      {'characters': {'barney': {'age': 36, 'score': 5},
                      'fred': {'age': 40, 'score': 7}}}),
     (({'characters': {'barney': {'age': 36}, 'fred': {'score': 7}}},
       {'characters': {'barney': [5], 'fred': 7}}),
-     None,
      {'characters': {'barney': [5],
                      'fred': 7}}),
     (({'characters': {'barney': {'age': 36}, 'fred': {'score': 7}}},
       {'foo': {'barney': [5], 'fred': 7}}),
-     None,
      {'characters': {'barney': {'age': 36}, 'fred': {'score': 7}},
       'foo': {'barney': [5], 'fred': 7}}),
     (({'fruits': ['apple'], 'vegetables': ['beet']},
-      {'fruits': ['banana'], 'vegetables': ['carrot']}),
-     lambda a, b: a + b if isinstance(a, list) else b,
+      {'fruits': ['banana'], 'vegetables': ['carrot']},
+      lambda a, b: a + b if isinstance(a, list) else b),
      {'fruits': ['apple', 'banana'], 'vegetables': ['beet', 'carrot']}),
-    (({'foo': {'bar': 1}}, {'foo': {}}), None, {'foo': {'bar': 1}})
+    (({'foo': {'bar': 1}}, {'foo': {}}),
+     {'foo': {'bar': 1}})
 ])
-def test_merge(case, callback, expected):
-    assert _.merge(*case, callback=callback) == expected
+def test_merge(case, expected):
+    assert _.merge(*case) == expected
 
 
 @parametrize('case,expected', [

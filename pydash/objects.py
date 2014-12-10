@@ -511,8 +511,16 @@ def merge(obj, *sources, **kargs):
         `obj` is modified in place.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.3.2
+        Allow `callback` to be passed by reference if it is the last positional
+        argument.
     """
+    sources = list(sources)
     callback = kargs.get('callback')
+
+    if callback is None and callable(sources[-1]):
+        callback = sources.pop()
 
     for source in sources:
         for key, src_value in iterator(source):
