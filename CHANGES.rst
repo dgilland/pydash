@@ -2,6 +2,9 @@ Changelog
 =========
 
 
+v2.3.2 (2014-12-10)
+-------------------
+
 - Fix ``merge`` and ``assign``/``extend`` so they apply ``clone_deep`` to source values before assigning to destination object.
 - Make ``merge`` accept a callback as a positional argument if it is last.
 
