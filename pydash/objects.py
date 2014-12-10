@@ -83,6 +83,9 @@ def assign(obj, *sources, **kargs):
         - :func:`extend` (alias)
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.3.2
+        Apply :func:`clone_deep` to each `source` before assigning to `obj`.
     """
     sources = list(sources)
     callback = kargs.get('callback')
@@ -91,6 +94,8 @@ def assign(obj, *sources, **kargs):
         callback = sources.pop()
 
     for source in sources:
+        source = clone_deep(source)
+
         for key, value in iteritems(source):
             obj[key] = (value if callback is None
                         else callback(obj.get(key), value))
@@ -513,27 +518,35 @@ def merge(obj, *sources, **kargs):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.3.2
+        Apply :func:`clone_deep` to each `source` before assigning to `obj`.
+
+    .. versionchanged:: 2.3.2
         Allow `callback` to be passed by reference if it is the last positional
         argument.
     """
     sources = list(sources)
+    _clone = kargs.get('_clone', True)
     callback = kargs.get('callback')
 
     if callback is None and callable(sources[-1]):
         callback = sources.pop()
 
     for source in sources:
+        # Don't re-clone if we've already cloned before.
+        if _clone:
+            source = clone_deep(source)
+
         for key, src_value in iterator(source):
             obj_value = get_item(obj, key, default=None)
-            is_sequences = all([isinstance(src_value, list),
-                                isinstance(obj_value, list)])
-            is_mappings = all([isinstance(src_value, dict),
-                               isinstance(obj_value, dict)])
+            all_sequences = all([isinstance(src_value, list),
+                                 isinstance(obj_value, list)])
+            all_mappings = all([isinstance(src_value, dict),
+                                isinstance(obj_value, dict)])
 
-            if (is_sequences or is_mappings) and not callback:
-                result = merge(obj_value, src_value)
-            elif callback:
+            if callback:
                 result = callback(obj_value, src_value)
+            elif all_sequences or all_mappings:
+                result = merge(obj_value, src_value, _clone=False)
             else:
                 result = src_value
 

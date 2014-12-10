@@ -358,6 +358,24 @@ def test_merge(case, expected):
     assert _.merge(*case) == expected
 
 
+def test_merge_no_link_dict():
+    case1 = {'foo': {'bar': None}}
+    case2 = {'foo': {'bar': False}}
+    result = _.merge({}, case1, case2)
+    result['foo']['bar'] = True
+
+    assert case1 == {'foo': {'bar': None}}
+    assert case2 == {'foo': {'bar': False}}
+
+
+def test_merge_no_link_list():
+    case = {'foo': [{}]}
+    result = _.merge({}, case)
+    result['foo'][0]['bar'] = True
+
+    assert case == {'foo': [{}]}
+
+
 @parametrize('case,expected', [
     (({'a': 1, 'b': 2, 'c': 3}, 'a'), {'b': 2, 'c': 3}),
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), {'c': 3}),
