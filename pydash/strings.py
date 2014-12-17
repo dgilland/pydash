@@ -687,3 +687,33 @@ def flatten_url_params(params):
             flattened.append((param, value))
 
     return flattened
+
+def surround(text, wrapper):
+    """
+    Surround a string with another string.
+
+    Args:
+        text (str): String to surround with `wrapper`
+        wrapper (str): String by which `text` is to be surrounded
+
+    Returns:
+        str: surrounded string.
+
+    .. versionadded:: 2.3.3
+    """
+    return wrapper + text + wrapper
+
+def quote(text, quote_char='"'):
+    """
+    Quote a string with another string.
+
+    Args:
+        text (str): String to be quoted
+        quote_char (str): the quote character. Defaults to `"`
+
+    Returns:
+        str: the quoted string.
+
+    .. versionadded:: 2.3.3
+    """
+    return surround(text, quote_char)
