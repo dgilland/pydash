@@ -688,6 +688,7 @@ def flatten_url_params(params):
 
     return flattened
 
+
 def surround(text, wrapper):
     """
     Surround a string with another string.
@@ -702,6 +703,7 @@ def surround(text, wrapper):
     .. versionadded:: 2.3.3
     """
     return wrapper + text + wrapper
+
 
 def quote(text, quote_char='"'):
     """
