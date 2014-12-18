@@ -307,6 +307,8 @@ from .strings import (
     unescape,
     url,
     words,
+    surround,
+    quote,
 )
 
 #
