@@ -690,11 +690,14 @@ def flatten_url_params(params):
 
 
 def ensure_ends_with(text, suffix):
-    """Append a given suffix to a string, but only if the source string does not end with that suffix.
+    """Append a given suffix to a string, but only if the source string does
+    not end with that suffix.
 
     Args:
         text (str): Source string to append `suffix` to. Must not be `None`.
-        suffix (str): String to append to the source string if the source string does not end with `suffix`
+        suffix (str): String to append to the source string if the source
+                      string does not end with `suffix`
+                      Must not be `None`.
     Returns:
         str: source string possibly extended by `suffix`
                       Must not be `None`.
@@ -704,11 +707,13 @@ def ensure_ends_with(text, suffix):
 
 
 def ensure_starts_with(text, prefix):
-    """Prepend a given prefix to a string, but only if the source string does not start with that prefix.
+    """Prepend a given prefix to a string, but only if the source string does
+    not start with that prefix.
 
     Args:
         text (str): Source string to prepend `prefix` to. Must not be `None`.
-        suffix (str): String to prepend to the source string if the source string does not start with `prefix`.
+        suffix (str): String to prepend to the source string if the source
+                      string does not start with `prefix`.
                       Must not be `None`.
     Returns:
         str: source string possibly prefixed by `prefix`
