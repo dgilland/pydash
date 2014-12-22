@@ -44,6 +44,8 @@ __all__ = [
     'unescape',
     'url',
     'words',
+    'ensure_ends_with',
+    'ensure_starts_with',
 ]
 
 
@@ -701,7 +703,7 @@ def ensure_ends_with(text, suffix):
     Returns:
         str: source string possibly extended by `suffix`
                       Must not be `None`.
-    .. versionadded:: 2.3.3
+    .. versionadded:: 2.4.0
     """
     return text if text.endswith(suffix) else '{0}{1}'.format(text, suffix)
 
@@ -717,6 +719,6 @@ def ensure_starts_with(text, prefix):
                       Must not be `None`.
     Returns:
         str: source string possibly prefixed by `prefix`
-    .. versionadded:: 2.3.3
+    .. versionadded:: 2.4.0
     """
     return text if text.startswith(prefix) else '{1}{0}'.format(text, prefix)
