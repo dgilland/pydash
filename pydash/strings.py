@@ -44,6 +44,8 @@ __all__ = [
     'unescape',
     'url',
     'words',
+    'surround',
+    'quote',
 ]
 
 
