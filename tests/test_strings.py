@@ -271,29 +271,29 @@ def test_words(case, expected):
     assert _.words(case) == expected
 
 
-@parametrize('s,wrapper,expected', (
+@parametrize('source,wrapper,expected', (
     ('hello world!', '*', '*hello world!*'),
     ('hello world!', '**', '**hello world!**'),
     ('', '**', '****'),
     ('hello world!', '', 'hello world!'),
 ))
-def test_surround(s, wrapper, expected):
-    assert _.surround(s, wrapper) == expected
+def test_surround(source, wrapper, expected):
+    assert _.surround(source, wrapper) == expected
 
 
-@parametrize('s,quote_char,expected', (
+@parametrize('source,quote_char,expected', (
     ('hello world!', '*', '*hello world!*'),
     ('hello world!', '**', '**hello world!**'),
     ('', '**', '****'),
     ('hello world!', '', 'hello world!'),
 ))
-def test_quote(s, quote_char, expected):
-    assert _.quote(s, quote_char) == expected
+def test_quote(source, quote_char, expected):
+    assert _.quote(source, quote_char) == expected
 
 
-@parametrize('s,expected', (
+@parametrize('source,expected', (
     ('hello world!', '\"hello world!\"'),
     ('', '""'),
 ))
-def test_default_quote(s, expected):
-    assert _.quote(s) == expected
+def test_default_quote(source, expected):
+    assert _.quote(source) == expected
