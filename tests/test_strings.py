@@ -269,3 +269,27 @@ def test_url(case, expected):
 ])
 def test_words(case, expected):
     assert _.words(case) == expected
+
+
+@parametrize('text,prefix,expected', [
+    ('Hello world!', 'Hello', 'Hello world!'),
+    (' world!', 'Hello', 'Hello world!'),
+    ('', 'Hello', 'Hello'),
+    ('', '', ''),
+    ('1', '', '1'),
+    ('1', '1', '1'),
+])
+def test_ensure_starts_with(text, prefix, expected):
+    assert _.ensure_starts_with(text, prefix) == expected
+
+
+@parametrize('text,suffix,expected', [
+    ('Hello world!', 'world!', 'Hello world!'),
+    ('Hello ', 'world!', 'Hello world!'),
+    ('', 'Hello', 'Hello'),
+    ('', '', ''),
+    ('1', '', '1'),
+    ('1', '1', '1'),
+])
+def test_ensure_ends_with(text, suffix, expected):
+    assert _.ensure_ends_with(text, suffix) == expected

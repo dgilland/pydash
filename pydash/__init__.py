@@ -307,6 +307,8 @@ from .strings import (
     unescape,
     url,
     words,
+    ensure_starts_with,
+    ensure_ends_with,
 )
 
 #
