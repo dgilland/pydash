@@ -276,6 +276,12 @@ def test_words(case, expected):
     ('hello world!', '**', '**hello world!**'),
     ('', '**', '****'),
     ('hello world!', '', 'hello world!'),
+    (5, '1', '151'),
+    (5, 1, '151'),
+    ('5', 1, '151'),
+    ('5', 12, '12512'),
+    (5, '', '5'),
+    ('', 5, '55'),
 ))
 def test_surround(source, wrapper, expected):
     assert _.surround(source, wrapper) == expected

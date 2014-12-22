@@ -702,9 +702,9 @@ def surround(text, wrapper):
     Returns:
         str: surrounded string.
 
-    .. versionadded:: 2.3.3
+    .. versionadded:: 2.4.0
     """
-    return wrapper + text + wrapper
+    return '{1}{0}{1}'.format(text, wrapper)
 
 
 def quote(text, quote_char='"'):
