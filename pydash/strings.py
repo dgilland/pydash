@@ -18,7 +18,7 @@ from ._compat import (
 )
 
 
-__all__ = [
+__all__ = (
     'camel_case',
     'capitalize',
     'deburr',
@@ -44,7 +44,7 @@ __all__ = [
     'unescape',
     'url',
     'words',
-]
+)
 
 
 HTML_ESCAPES = {
