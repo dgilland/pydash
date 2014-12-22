@@ -718,6 +718,6 @@ def quote(text, quote_char='"'):
     Returns:
         str: the quoted string.
 
-    .. versionadded:: 2.3.3
+    .. versionadded:: 2.4.0
     """
     return surround(text, quote_char)

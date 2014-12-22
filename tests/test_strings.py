@@ -292,6 +292,12 @@ def test_surround(source, wrapper, expected):
     ('hello world!', '**', '**hello world!**'),
     ('', '**', '****'),
     ('hello world!', '', 'hello world!'),
+    (28, '**', '**28**'),
+    (28, '', '28'),
+    (2, 8, '828'),
+    (-2, 8, '8-28'),
+    (-2, -8, '-8-2-8'),
+    (-8.5, 0, '0-8.50'),
 ))
 def test_quote(source, quote_char, expected):
     assert _.quote(source, quote_char) == expected
@@ -300,6 +306,8 @@ def test_quote(source, quote_char, expected):
 @parametrize('source,expected', (
     ('hello world!', '\"hello world!\"'),
     ('', '""'),
+    (5, '"5"'),
+    (-89, '"-89"'),
 ))
 def test_default_quote(source, expected):
     assert _.quote(source) == expected
