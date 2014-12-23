@@ -44,3 +44,4 @@ node_modules
 
 # Docs
 /docs/_build
+.idea/
