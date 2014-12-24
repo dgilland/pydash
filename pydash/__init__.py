@@ -286,6 +286,8 @@ from .strings import (
     capitalize,
     deburr,
     ends_with,
+    ensure_starts_with,
+    ensure_ends_with,
     escape,
     escape_reg_exp,
     escape_re,
@@ -297,9 +299,11 @@ from .strings import (
     pad,
     pad_left,
     pad_right,
+    quote,
     repeat,
     snake_case,
     starts_with,
+    surround,
     trim,
     trim_left,
     trim_right,
@@ -307,8 +311,6 @@ from .strings import (
     unescape,
     url,
     words,
-    surround,
-    quote,
 )
 
 #

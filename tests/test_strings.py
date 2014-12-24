@@ -75,6 +75,30 @@ def test_escape_reg_exp_aliases(case):
     assert _.escape_reg_exp is case
 
 
+@parametrize('text,prefix,expected', [
+    ('Hello world!', 'Hello', 'Hello world!'),
+    (' world!', 'Hello', 'Hello world!'),
+    ('', 'Hello', 'Hello'),
+    ('', '', ''),
+    ('1', '', '1'),
+    ('1', '1', '1'),
+])
+def test_ensure_starts_with(text, prefix, expected):
+    assert _.ensure_starts_with(text, prefix) == expected
+
+
+@parametrize('text,suffix,expected', [
+    ('Hello world!', 'world!', 'Hello world!'),
+    ('Hello ', 'world!', 'Hello world!'),
+    ('', 'Hello', 'Hello'),
+    ('', '', ''),
+    ('1', '', '1'),
+    ('1', '1', '1'),
+])
+def test_ensure_ends_with(text, suffix, expected):
+    assert _.ensure_ends_with(text, suffix) == expected
+
+
 @parametrize('case,expected', [
     (('string',), ['s', 't', 'r', 'i', 'n', 'g']),
     (('string1,string2', ','), ['string1', 'string2']),
@@ -157,6 +181,32 @@ def test_pad_right(case, expected):
     assert _.pad_right(*case) == expected
 
 
+@parametrize('source,quote_char,expected', (
+    ('hello world!', '*', '*hello world!*'),
+    ('hello world!', '**', '**hello world!**'),
+    ('', '**', '****'),
+    ('hello world!', '', 'hello world!'),
+    (28, '**', '**28**'),
+    (28, '', '28'),
+    (2, 8, '828'),
+    (-2, 8, '8-28'),
+    (-2, -8, '-8-2-8'),
+    (-8.5, 0, '0-8.50'),
+))
+def test_quote(source, quote_char, expected):
+    assert _.quote(source, quote_char) == expected
+
+
+@parametrize('source,expected', (
+    ('hello world!', '\"hello world!\"'),
+    ('', '""'),
+    (5, '"5"'),
+    (-89, '"-89"'),
+))
+def test_default_quote(source, expected):
+    assert _.quote(source) == expected
+
+
 @parametrize('case,expected', [
     ('foo  bar baz', 'foo_bar_baz'),
     ('foo__bar_baz', 'foo_bar_baz'),
@@ -179,6 +229,22 @@ def test_snake_case(case, expected):
 ])
 def test_starts_with(case, expected):
     assert _.starts_with(*case) == expected
+
+
+@parametrize('source,wrapper,expected', (
+    ('hello world!', '*', '*hello world!*'),
+    ('hello world!', '**', '**hello world!**'),
+    ('', '**', '****'),
+    ('hello world!', '', 'hello world!'),
+    (5, '1', '151'),
+    (5, 1, '151'),
+    ('5', 1, '151'),
+    ('5', 12, '12512'),
+    (5, '', '5'),
+    ('', 5, '55'),
+))
+def test_surround(source, wrapper, expected):
+    assert _.surround(source, wrapper) == expected
 
 
 @parametrize('case,expected', [
@@ -269,45 +335,3 @@ def test_url(case, expected):
 ])
 def test_words(case, expected):
     assert _.words(case) == expected
-
-
-@parametrize('source,wrapper,expected', (
-    ('hello world!', '*', '*hello world!*'),
-    ('hello world!', '**', '**hello world!**'),
-    ('', '**', '****'),
-    ('hello world!', '', 'hello world!'),
-    (5, '1', '151'),
-    (5, 1, '151'),
-    ('5', 1, '151'),
-    ('5', 12, '12512'),
-    (5, '', '5'),
-    ('', 5, '55'),
-))
-def test_surround(source, wrapper, expected):
-    assert _.surround(source, wrapper) == expected
-
-
-@parametrize('source,quote_char,expected', (
-    ('hello world!', '*', '*hello world!*'),
-    ('hello world!', '**', '**hello world!**'),
-    ('', '**', '****'),
-    ('hello world!', '', 'hello world!'),
-    (28, '**', '**28**'),
-    (28, '', '28'),
-    (2, 8, '828'),
-    (-2, 8, '8-28'),
-    (-2, -8, '-8-2-8'),
-    (-8.5, 0, '0-8.50'),
-))
-def test_quote(source, quote_char, expected):
-    assert _.quote(source, quote_char) == expected
-
-
-@parametrize('source,expected', (
-    ('hello world!', '\"hello world!\"'),
-    ('', '""'),
-    (5, '"5"'),
-    (-89, '"-89"'),
-))
-def test_default_quote(source, expected):
-    assert _.quote(source) == expected

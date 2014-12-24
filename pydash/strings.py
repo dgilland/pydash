@@ -23,6 +23,8 @@ __all__ = [
     'capitalize',
     'deburr',
     'ends_with',
+    'ensure_ends_with',
+    'ensure_starts_with',
     'escape',
     'escape_reg_exp',
     'escape_re',
@@ -34,9 +36,12 @@ __all__ = [
     'pad',
     'pad_left',
     'pad_right',
+    'quote',
     'repeat',
     'snake_case',
     'starts_with',
+    'surround',
+
     'trim',
     'trim_left',
     'trim_right',
@@ -44,8 +49,6 @@ __all__ = [
     'unescape',
     'url',
     'words',
-    'surround',
-    'quote',
 ]
 
 
@@ -197,6 +200,39 @@ def ends_with(text, target, position=None):
         position = len(text)
 
     return text[:position].endswith(target)
+
+
+def ensure_ends_with(text, suffix):
+    """Append a given suffix to a string, but only if the source string does
+    not end with that suffix.
+
+    Args:
+        text (str): Source string to append `suffix` to. Must not be `None`.
+        suffix (str): String to append to the source string if the source
+                      string does not end with `suffix`
+                      Must not be `None`.
+    Returns:
+        str: source string possibly extended by `suffix`
+                      Must not be `None`.
+    .. versionadded:: 2.4.0
+    """
+    return text if text.endswith(suffix) else '{0}{1}'.format(text, suffix)
+
+
+def ensure_starts_with(text, prefix):
+    """Prepend a given prefix to a string, but only if the source string does
+    not start with that prefix.
+
+    Args:
+        text (str): Source string to prepend `prefix` to. Must not be `None`.
+        suffix (str): String to prepend to the source string if the source
+                      string does not start with `prefix`.
+                      Must not be `None`.
+    Returns:
+        str: source string possibly prefixed by `prefix`
+    .. versionadded:: 2.4.0
+    """
+    return text if text.startswith(prefix) else '{1}{0}'.format(text, prefix)
 
 
 def escape(text):
@@ -393,6 +429,22 @@ def pad_right(text, length, chars=' '):
     return (text + repeat(chars, length))[:length]
 
 
+def quote(text, quote_char='"'):
+    """
+    Quote a string with another string.
+
+    Args:
+        text (str): String to be quoted
+        quote_char (str): the quote character. Defaults to `"`
+
+    Returns:
+        str: the quoted string.
+
+    .. versionadded:: 2.4.0
+    """
+    return surround(text, quote_char)
+
+
 def repeat(text, n=0):
     """Repeats the given string `n` times.
 
@@ -442,6 +494,22 @@ def starts_with(text, target, position=None):
         position = 0
 
     return text[position:].startswith(target)
+
+
+def surround(text, wrapper):
+    """
+    Surround a string with another string.
+
+    Args:
+        text (str): String to surround with `wrapper`
+        wrapper (str): String by which `text` is to be surrounded
+
+    Returns:
+        str: surrounded string.
+
+    .. versionadded:: 2.4.0
+    """
+    return '{1}{0}{1}'.format(text, wrapper)
 
 
 def trim(text, chars=None):
@@ -689,35 +757,3 @@ def flatten_url_params(params):
             flattened.append((param, value))
 
     return flattened
-
-
-def surround(text, wrapper):
-    """
-    Surround a string with another string.
-
-    Args:
-        text (str): String to surround with `wrapper`
-        wrapper (str): String by which `text` is to be surrounded
-
-    Returns:
-        str: surrounded string.
-
-    .. versionadded:: 2.4.0
-    """
-    return '{1}{0}{1}'.format(text, wrapper)
-
-
-def quote(text, quote_char='"'):
-    """
-    Quote a string with another string.
-
-    Args:
-        text (str): String to be quoted
-        quote_char (str): the quote character. Defaults to `"`
-
-    Returns:
-        str: the quoted string.
-
-    .. versionadded:: 2.4.0
-    """
-    return surround(text, quote_char)
