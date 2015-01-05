@@ -12,7 +12,7 @@ import pydash as pyd
 from .helpers import itercallback, iterator, call_callback, NoValue
 
 
-__all__ = [
+__all__ = (
     'all_',
     'any_',
     'at',
@@ -56,7 +56,7 @@ __all__ = [
     'sort_by',
     'to_list',
     'where',
-]
+)
 
 
 def at(collection, *indexes):  # pylint: disable=invalid-name

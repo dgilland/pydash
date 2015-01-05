@@ -16,7 +16,7 @@ from .helpers import iterator
 from ._compat import integer_types, number_types, string_types, izip
 
 
-__all__ = [
+__all__ = (
     'is_associative',
     'is_boolean',
     'is_date',
@@ -48,7 +48,7 @@ __all__ = [
     'is_strictly_increasing',
     'is_string',
     'is_zero',
-]
+)
 
 
 RegExp = type(re.compile(''))

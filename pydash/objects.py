@@ -20,7 +20,7 @@ from .helpers import (
 from ._compat import iteritems, text_type
 
 
-__all__ = [
+__all__ = (
     'assign',
     'callables',
     'clone',
@@ -57,7 +57,7 @@ __all__ = [
     'update_path',
     'values',
     'values_in',
-]
+)
 
 
 def assign(obj, *sources, **kargs):

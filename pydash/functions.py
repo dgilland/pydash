@@ -12,7 +12,7 @@ import pydash as pyd
 from ._compat import _range
 
 
-__all__ = [
+__all__ = (
     'after',
     'before',
     'compose',
@@ -34,7 +34,7 @@ __all__ = [
     'pipe_right',
     'throttle',
     'wrap',
-]
+)
 
 
 class After(object):

@@ -13,7 +13,7 @@ from .helpers import itercallback
 from ._compat import cmp_to_key
 
 
-__all__ = [
+__all__ = (
     'append',
     'cat',
     'chunk',
@@ -68,7 +68,7 @@ __all__ = [
     'unshift',
     'unzip',
     'zip_object',
-]
+)
 
 
 def cat(*arrays):

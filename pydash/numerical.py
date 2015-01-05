@@ -12,7 +12,7 @@ from .helpers import itercallback, iterator
 from ._compat import _range
 
 
-__all__ = [
+__all__ = (
     'add',
     'average',
     'avg',
@@ -32,7 +32,7 @@ __all__ = [
     'transpose',
     'variance',
     'zscore',
-]
+)
 
 
 INFINITY = float('inf')

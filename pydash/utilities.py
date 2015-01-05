@@ -13,7 +13,7 @@ from .helpers import get_item
 from ._compat import _range, string_types
 
 
-__all__ = [
+__all__ = (
     'attempt',
     'constant',
     'callback',
@@ -32,7 +32,7 @@ __all__ = [
     'result',
     'times',
     'unique_id',
-]
+)
 
 
 ID_COUNTER = 0

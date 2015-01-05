@@ -8,11 +8,11 @@ from __future__ import absolute_import
 import pydash as pyd
 
 
-__all__ = [
+__all__ = (
     'chain',
     'tap',
     'thru',
-]
+)
 
 
 class Chain(object):
