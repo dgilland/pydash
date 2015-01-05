@@ -41,7 +41,6 @@ __all__ = (
     'snake_case',
     'starts_with',
     'surround',
-
     'trim',
     'trim_left',
     'trim_right',
