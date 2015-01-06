@@ -2,6 +2,15 @@ Changelog
 =========
 
 
+v?.?.? (2015-??-??)
+-------------------
+
+- Add ``quote``.
+- Add ``surround``.
+- Add ``ensure_ends_with``.
+- Add ``ensure_starts_with``.
+
+
 v2.3.2 (2014-12-10)
 -------------------
 
