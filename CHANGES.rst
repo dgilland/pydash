@@ -19,6 +19,7 @@ v2.3.2 (2014-12-10)
 
 
 v2.3.1 (2014-12-07)
+-------------------
 
 - Add ``pipe`` and ``pipe_right`` as aliases of ``flow`` and ``flow_right``.
 - Fix ``merge`` so that trailing ``{}`` or ``[]`` don't overwrite previous source values.
