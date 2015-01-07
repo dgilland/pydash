@@ -2,13 +2,13 @@ Changelog
 =========
 
 
-v?.?.? (2015-??-??)
+v2.4.0 (2015-01-07)
 -------------------
 
-- Add ``quote``.
-- Add ``surround``.
 - Add ``ensure_ends_with``.
 - Add ``ensure_starts_with``.
+- Add ``quote``.
+- Add ``surround``.
 
 
 v2.3.2 (2014-12-10)
