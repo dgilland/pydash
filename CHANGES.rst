@@ -10,6 +10,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``clean``.
 - Add ``count_substr``.
 - Add ``decapitalize``.
+- Add ``has_substr``.
 - Make ``camel_case`` work with empty string.
 
 

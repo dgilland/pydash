@@ -34,6 +34,7 @@ __all__ = (
     'escape_reg_exp',
     'escape_re',
     'explode',
+    'has_substr',
     'implode',
     'js_match',
     'js_replace',
@@ -391,6 +392,21 @@ def implode(array, delimiter=''):
     .. versionadded:: 2.0.0
     """
     return delimiter.join(array)
+
+
+def has_substr(text, subtext):
+    """Returns whether `subtext` is included in `text`.
+
+    Args:
+        text (str): String to search.
+        subtext (str): String to search for.
+
+    Returns:
+        bool: Whether `subtext` is found in `text`.
+
+    .. versionadded:: 3.0.0
+    """
+    return text.find(subtext) >= 0
 
 
 def js_match(reg_exp, text):

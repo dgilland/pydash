@@ -157,6 +157,16 @@ def test_explode(case, expected):
 
 
 @parametrize('case,expected', [
+    (('foobar', 'oo'), True),
+    (('foobar', 'x'), False),
+    (('foobar', 'f'), True),
+    (('foobar', 'r'), True),
+])
+def test_has_substr(case, expected):
+    assert _.has_substr(*case) == expected
+
+
+@parametrize('case,expected', [
     ((['s', 't', 'r', 'i', 'n', 'g'],), 'string'),
     ((['string1', 'string2'], ','), 'string1,string2'),
 ])

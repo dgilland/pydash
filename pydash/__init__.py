@@ -297,6 +297,7 @@ from .strings import (
     escape_reg_exp,
     escape_re,
     explode,
+    has_substr,
     implode,
     js_match,
     js_replace,
