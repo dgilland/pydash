@@ -6,6 +6,7 @@ v3.0.0 (xxxx-xx-xx)
 -------------------
 
 - Add ``decapitalize``
+- Make ``camel_case`` work with empty string.
 
 
 v2.4.0 (2015-01-07)

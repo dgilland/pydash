@@ -13,6 +13,7 @@ from .fixtures import parametrize
     ('foo-_bar-_-baz', 'fooBarBaz'),
     ('foo!bar,baz', 'fooBarBaz'),
     ('--foo.bar;baz', 'fooBarBaz'),
+    ('', ''),
 ])
 def test_camel_case(case, expected):
     assert _.camel_case(case) == expected

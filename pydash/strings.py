@@ -145,7 +145,7 @@ def camel_case(text):
     .. versionadded:: 1.1.0
     """
     text = ''.join(word.title() for word in words(pyd.to_string(text)))
-    return text[0].lower() + text[1:]
+    return text[:1].lower() + text[1:]
 
 
 def capitalize(text):
