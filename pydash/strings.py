@@ -206,13 +206,13 @@ def ensure_ends_with(text, suffix):
     not end with that suffix.
 
     Args:
-        text (str): Source string to append `suffix` to. Must not be `None`.
+        text (str): Source string to append `suffix` to.
         suffix (str): String to append to the source string if the source
-                      string does not end with `suffix`
-                      Must not be `None`.
+            string does not end with `suffix`.
+
     Returns:
-        str: source string possibly extended by `suffix`
-                      Must not be `None`.
+        str: source string possibly extended by `suffix`.
+
     .. versionadded:: 2.4.0
     """
     return text if text.endswith(suffix) else '{0}{1}'.format(text, suffix)
@@ -223,12 +223,13 @@ def ensure_starts_with(text, prefix):
     not start with that prefix.
 
     Args:
-        text (str): Source string to prepend `prefix` to. Must not be `None`.
+        text (str): Source string to prepend `prefix` to.
         suffix (str): String to prepend to the source string if the source
-                      string does not start with `prefix`.
-                      Must not be `None`.
+            string does not start with `prefix`.
+
     Returns:
         str: source string possibly prefixed by `prefix`
+
     .. versionadded:: 2.4.0
     """
     return text if text.startswith(prefix) else '{1}{0}'.format(text, prefix)
@@ -429,12 +430,11 @@ def pad_right(text, length, chars=' '):
 
 
 def quote(text, quote_char='"'):
-    """
-    Quote a string with another string.
+    """Quote a string with another string.
 
     Args:
         text (str): String to be quoted
-        quote_char (str): the quote character. Defaults to `"`
+        quote_char (str): the quote character. Defaults to ``"``
 
     Returns:
         str: the quoted string.
@@ -496,8 +496,7 @@ def starts_with(text, target, position=None):
 
 
 def surround(text, wrapper):
-    """
-    Surround a string with another string.
+    """Surround a string with another string.
 
     Args:
         text (str): String to surround with `wrapper`
