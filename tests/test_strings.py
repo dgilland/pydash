@@ -240,7 +240,7 @@ def test_pad_right(case, expected):
     assert _.pad_right(*case) == expected
 
 
-@parametrize('source,quote_char,expected', (
+@parametrize('source,quote_char,expected', [
     ('hello world!', '*', '*hello world!*'),
     ('hello world!', '**', '**hello world!**'),
     ('', '**', '****'),
@@ -251,17 +251,17 @@ def test_pad_right(case, expected):
     (-2, 8, '8-28'),
     (-2, -8, '-8-2-8'),
     (-8.5, 0, '0-8.50'),
-))
+])
 def test_quote(source, quote_char, expected):
     assert _.quote(source, quote_char) == expected
 
 
-@parametrize('source,expected', (
+@parametrize('source,expected', [
     ('hello world!', '\"hello world!\"'),
     ('', '""'),
     (5, '"5"'),
     (-89, '"-89"'),
-))
+])
 def test_default_quote(source, expected):
     assert _.quote(source) == expected
 
@@ -290,7 +290,7 @@ def test_starts_with(case, expected):
     assert _.starts_with(*case) == expected
 
 
-@parametrize('source,wrapper,expected', (
+@parametrize('source,wrapper,expected', [
     ('hello world!', '*', '*hello world!*'),
     ('hello world!', '**', '**hello world!**'),
     ('', '**', '****'),
@@ -301,9 +301,16 @@ def test_starts_with(case, expected):
     ('5', 12, '12512'),
     (5, '', '5'),
     ('', 5, '55'),
-))
+])
 def test_surround(source, wrapper, expected):
     assert _.surround(source, wrapper) == expected
+
+
+@parametrize('case,expected', [
+    ('fOoBaR', 'FoObAr'),
+])
+def test_swap_case(case, expected):
+    assert _.swap_case(case) == expected
 
 
 @parametrize('case,expected', [

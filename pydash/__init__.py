@@ -310,6 +310,7 @@ from .strings import (
     snake_case,
     starts_with,
     surround,
+    swap_case,
     trim,
     trim_left,
     trim_right,

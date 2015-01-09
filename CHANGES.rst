@@ -11,6 +11,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``count_substr``.
 - Add ``decapitalize``.
 - Add ``has_substr``.
+- Add ``swap_case``.
 - Make ``camel_case`` work with empty string.
 
 

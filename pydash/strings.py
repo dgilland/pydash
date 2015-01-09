@@ -47,6 +47,7 @@ __all__ = (
     'snake_case',
     'starts_with',
     'surround',
+    'swap_case',
     'trim',
     'trim_left',
     'trim_right',
@@ -597,15 +598,29 @@ def surround(text, wrapper):
     """Surround a string with another string.
 
     Args:
-        text (str): String to surround with `wrapper`
-        wrapper (str): String by which `text` is to be surrounded
+        text (str): String to surround with `wrapper`.
+        wrapper (str): String by which `text` is to be surrounded.
 
     Returns:
-        str: surrounded string.
+        str: Surrounded string.
 
     .. versionadded:: 2.4.0
     """
     return '{1}{0}{1}'.format(text, wrapper)
+
+
+def swap_case(text):
+    """Swap case of `text` characters.
+
+    Args:
+        text (str): String to swap case.
+
+    Returns:
+        str: String with swapped case.
+
+    .. versionadded:: 3.0.0
+    """
+    return text.swapcase()
 
 
 def trim(text, chars=None):
