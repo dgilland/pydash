@@ -23,6 +23,7 @@ __all__ = (
     'camel_case',
     'capitalize',
     'chop',
+    'chars',
     'deburr',
     'decapitalize',
     'ends_with',
@@ -162,6 +163,20 @@ def capitalize(text):
     .. versionadded:: 1.1.0
     """
     return text.capitalize()
+
+
+def chars(text):
+    """Split `text` into a list of single characters.
+
+    Args:
+        text (str): String to split up.
+
+    Returns:
+        list: List of individual characters.
+
+    .. versionadded:: 3.0.0
+    """
+    return list(text)
 
 
 def chop(text, step):
