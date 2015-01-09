@@ -41,6 +41,15 @@ def test_chop(case, expected):
 
 
 @parametrize('case,expected', [
+    ('  foo bar', 'foo bar'),
+    ('  foo  bar', 'foo bar'),
+    ('  foo  bar  ', 'foo bar'),
+])
+def test_clean(case, expected):
+    assert _.clean(case) == expected
+
+
+@parametrize('case,expected', [
     ('\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF'
      '\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF'
      '\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF'

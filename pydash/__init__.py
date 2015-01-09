@@ -285,6 +285,7 @@ from .strings import (
     camel_case,
     capitalize,
     chop,
+    clean,
     deburr,
     decapitalize,
     ends_with,

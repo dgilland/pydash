@@ -184,6 +184,20 @@ def chop(text, step):
     return chopped
 
 
+def clean(text):
+    """Trim and replace multiple spaces with a single space.
+
+    Args:
+        text (str): String to clean.
+
+    Returns:
+        str: Cleaned string.
+
+    ..versionadded:: 3.0.0
+    """
+    return ' '.join(pyd.compact(text.split()))
+
+
 def deburr(text):
     """Deburrs `text` by converting latin-1 supplementary letters to basic
     latin letters.
