@@ -287,6 +287,7 @@ from .strings import (
     chars,
     chop,
     clean,
+    count_substr,
     deburr,
     decapitalize,
     ends_with,

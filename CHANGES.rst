@@ -8,6 +8,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``chars``.
 - Add ``chop``.
 - Add ``clean``.
+- Add ``count_substr``.
 - Add ``decapitalize``.
 - Make ``camel_case`` work with empty string.
 

@@ -24,6 +24,7 @@ __all__ = (
     'capitalize',
     'chop',
     'chars',
+    'count_substr',
     'deburr',
     'decapitalize',
     'ends_with',
@@ -211,6 +212,21 @@ def clean(text):
     ..versionadded:: 3.0.0
     """
     return ' '.join(pyd.compact(text.split()))
+
+
+def count_substr(text, subtext):
+    """Count the occurrences of `subtext` in `text`.
+
+    Args:
+        text (str): Source string to count from.
+        subtext (str): String to count.
+
+    Returns:
+        int: Number of occurrences of `subtext` in `text`.
+
+    ..versionadded:: 3.0.0
+    """
+    return text.count(subtext)
 
 
 def deburr(text):
