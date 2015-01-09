@@ -42,6 +42,16 @@ def test_deburr(case, expected):
 
 
 @parametrize('case,expected', [
+    ('Foo', 'foo'),
+    ('Foo bar', 'foo bar'),
+    ('Foo Bar', 'foo Bar'),
+    ('FOO BAR', 'fOO BAR'),
+])
+def test_decapitalize(case, expected):
+    assert _.decapitalize(case) == expected
+
+
+@parametrize('case,expected', [
     (('abc', 'c'), True),
     (('abc', 'b'), False),
     (('abc', 'c', 3), True),

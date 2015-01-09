@@ -22,6 +22,7 @@ __all__ = (
     'camel_case',
     'capitalize',
     'deburr',
+    'decapitalize',
     'ends_with',
     'ensure_ends_with',
     'ensure_starts_with',
@@ -177,6 +178,20 @@ def deburr(text):
                       text,
                       lambda match: DEBURRED_LETTERS.get(match.group(),
                                                          match.group()))
+
+
+def decapitalize(text):
+    """Decaptitalizes the first character of `text`.
+
+    Args:
+        text (str): String to decapitalize.
+
+    Returns:
+        str: Decapitalized string.
+
+    .. versionadded:: 3.0.0
+    """
+    return text[:1].lower() + text[1:]
 
 
 def ends_with(text, target, position=None):
