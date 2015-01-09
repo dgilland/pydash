@@ -5,7 +5,8 @@ Changelog
 v3.0.0 (xxxx-xx-xx)
 -------------------
 
-- Add ``decapitalize``
+- Add ``chop``.
+- Add ``decapitalize``.
 - Make ``camel_case`` work with empty string.
 
 

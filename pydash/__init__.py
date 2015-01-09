@@ -284,6 +284,7 @@ from .predicates import (
 from .strings import (
     camel_case,
     capitalize,
+    chop,
     deburr,
     decapitalize,
     ends_with,

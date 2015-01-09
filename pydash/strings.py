@@ -14,13 +14,15 @@ from ._compat import (
     PY26,
     urlencode,
     urlsplit,
-    urlunsplit
+    urlunsplit,
+    _range
 )
 
 
 __all__ = (
     'camel_case',
     'capitalize',
+    'chop',
     'deburr',
     'decapitalize',
     'ends_with',
@@ -160,6 +162,26 @@ def capitalize(text):
     .. versionadded:: 1.1.0
     """
     return text.capitalize()
+
+
+def chop(text, step):
+    """Break up `text` into intervals of length `step`.
+
+    Args:
+        text (str): String to chop.
+        step (int): Interval to chop `text`.
+
+    Returns:
+        list: List of chopped characters.
+
+    .. versionadded:: 3.0.0
+    """
+    if step <= 0:
+        chopped = [text]
+    else:
+        chopped = [text[i:i + step] for i in _range(0, len(text), step)]
+
+    return chopped
 
 
 def deburr(text):
