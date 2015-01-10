@@ -761,7 +761,7 @@ def splice(array, index, how_many=None, *items):
     and removing `how_many` number of elements after `index`.
 
     Args:
-        array (list): List to splice.
+        array (list|str): List to splice.
         index (int): Index to splice at.
         how_many (int, optional): Number of items to remove starting at
             `index`. If ``None`` then all items after `index` are removed.
@@ -770,15 +770,23 @@ def splice(array, index, how_many=None, *items):
             inserted in the order given.
 
     Returns:
-        list: The removed elements of `array`.
+        list|str: The removed elements of `array` or the spliced string.
 
     Warning:
-        `array` is modified in place.
+        `array` is modified in place if ``list``.
 
     .. versionadded:: 2.2.0
+
+    .. versionchanged:: 3.0.0
+        Support string splicing.
     """
     if how_many is None:
         how_many = len(array) - index
+
+    is_string = pyd.is_string(array)
+
+    if is_string:
+        array = list(array)
 
     removed = array[index:index + how_many]
     del array[index:index + how_many]
@@ -786,7 +794,10 @@ def splice(array, index, how_many=None, *items):
     for item in reverse(items):
         array.insert(index, item)
 
-    return removed
+    if is_string:
+        return ''.join(array)
+    else:
+        return removed
 
 
 def split_at(array, index):

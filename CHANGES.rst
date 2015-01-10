@@ -19,6 +19,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``successor``, ``succ``.
 - Add ``swap_case``.
 - Make ``camel_case`` work with empty string.
+- Make ``splice`` work with strings.
 
 
 v2.4.0 (2015-01-07)

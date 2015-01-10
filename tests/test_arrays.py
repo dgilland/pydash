@@ -424,6 +424,13 @@ def test_splice(case, expected, after):
 
 
 @parametrize('case,expected', [
+    (('123', 1, 0, 'splice'), '1splice23'),
+])
+def test_splice_string(case, expected):
+    assert _.splice(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3, 4, 5], 2), [[1, 2], [3, 4, 5]]),
     (([1, 2, 3, 4, 5], 0), [[], [1, 2, 3, 4, 5]]),
 ])
