@@ -13,6 +13,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``has_substr``.
 - Add ``insert_substr``.
 - Add ``is_blank``.
+- Add ``lines``.
 - Add ``replace``.
 - Add ``swap_case``.
 - Make ``camel_case`` work with empty string.

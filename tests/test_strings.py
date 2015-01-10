@@ -219,6 +219,18 @@ def test_kebab_case(case, expected):
 
 
 @parametrize('case,expected', [
+    ('foo\nbar', ['foo', 'bar']),
+    ('foo\rbar', ['foo', 'bar']),
+    ('foo\r\nbar', ['foo', 'bar']),
+    ('foo\n', ['foo']),
+    ('\nfoo', ['', 'foo']),
+    ('', []),
+])
+def test_lines(case, expected):
+    assert _.lines(case) == expected
+
+
+@parametrize('case,expected', [
     (('abc', 8), '  abc   '),
     (('abc', 8, '_-'), '_-abc_-_'),
     (('abc', 3), 'abc'),

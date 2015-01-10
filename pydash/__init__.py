@@ -304,6 +304,7 @@ from .strings import (
     js_match,
     js_replace,
     kebab_case,
+    lines,
     pad,
     pad_left,
     pad_right,

@@ -40,6 +40,7 @@ __all__ = (
     'js_match',
     'js_replace',
     'kebab_case',
+    'lines',
     'pad',
     'pad_left',
     'pad_right',
@@ -472,6 +473,20 @@ def kebab_case(text):
     .. versionadded:: 1.1.0
     """
     return '-'.join(wrd for wrd in words(pyd.to_string(text)) if wrd.lower())
+
+
+def lines(text):
+    """Split lines in `text` into an array.
+
+    Args:
+        text (str): String to split.
+
+    Returns:
+        list: String split by lines.
+
+    .. versionadded:: 3.0.0
+    """
+    return text.splitlines()
 
 
 def pad(text, length, chars=' '):
