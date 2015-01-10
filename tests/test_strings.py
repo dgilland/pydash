@@ -263,6 +263,21 @@ def test_pad_right(case, expected):
     assert _.pad_right(*case) == expected
 
 
+@parametrize('case,expected', [
+    ('a', 'b'),
+    ('A', 'B'),
+])
+def test_predecessor(case, expected):
+    assert _.predecessor(case) == expected
+
+
+@parametrize('case', [
+    _.pred
+])
+def test_predecessor_aliases(case):
+    assert _.predecessor is case
+
+
 @parametrize('source,quote_char,expected', [
     ('hello world!', '*', '*hello world!*'),
     ('hello world!', '**', '**hello world!**'),

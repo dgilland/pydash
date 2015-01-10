@@ -308,6 +308,8 @@ from .strings import (
     pad,
     pad_left,
     pad_right,
+    pred,
+    predecessor,
     quote,
     repeat,
     replace,

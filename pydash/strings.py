@@ -44,6 +44,8 @@ __all__ = (
     'pad',
     'pad_left',
     'pad_right',
+    'pred',
+    'predecessor',
     'quote',
     'repeat',
     'replace',
@@ -559,6 +561,23 @@ def pad_right(text, length, chars=' '):
     text = pyd.to_string(text)
     length = max((length, len(text)))
     return (text + repeat(chars, length))[:length]
+
+
+def predecessor(char):
+    """Return the predecessor character of `char`.
+
+    Args:
+        char (str): Character to find the predecessor of.
+
+    Returns:
+        str: Predecessor character.
+
+    .. versionadded:: 3.0.0
+    """
+    return chr(ord(char) + 1)
+
+
+pred = predecessor
 
 
 def quote(text, quote_char='"'):
