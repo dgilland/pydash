@@ -273,7 +273,7 @@ def test_quote(source, quote_char, expected):
     (5, '"5"'),
     (-89, '"-89"'),
 ])
-def test_default_quote(source, expected):
+def test_quote_default(source, expected):
     assert _.quote(source) == expected
 
 
