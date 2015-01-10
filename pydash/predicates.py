@@ -18,6 +18,7 @@ from ._compat import integer_types, number_types, string_types, izip
 
 __all__ = (
     'is_associative',
+    'is_blank',
     'is_boolean',
     'is_date',
     'is_decreasing',
@@ -67,6 +68,20 @@ def is_associative(value):
     .. versionadded:: 2.0.0
     """
     return hasattr(value, '__getitem__')
+
+
+def is_blank(text):
+    """Checks if `text` contains only whitespace characters.
+
+    Args:
+        text (str): String to test.
+
+    Returns:
+        bool: Whether `text` is blank.
+
+    ..versionadded:: 3.0.0
+    """
+    return bool(re.match('^(\s+)?$', text))
 
 
 def is_boolean(value):

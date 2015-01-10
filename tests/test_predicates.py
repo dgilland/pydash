@@ -22,6 +22,16 @@ def test_is_associative(case, expected):
 
 
 @parametrize('case,expected', [
+    ('', True),
+    ('\n', True),
+    (' ', True),
+    ('a', False),
+])
+def test_is_blank(case, expected):
+    assert _.is_blank(case) == expected
+
+
+@parametrize('case,expected', [
     (True, True),
     (False, True),
     (0, False),

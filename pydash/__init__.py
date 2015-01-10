@@ -244,6 +244,7 @@ from .objects import (
 
 from .predicates import (
     is_associative,
+    is_blank,
     is_boolean,
     is_date,
     is_decreasing,
