@@ -338,6 +338,21 @@ def test_starts_with(case, expected):
     assert _.starts_with(*case) == expected
 
 
+@parametrize('case,expected', [
+    ('b', 'a'),
+    ('B', 'A'),
+])
+def test_successor(case, expected):
+    assert _.successor(case) == expected
+
+
+@parametrize('case', [
+    _.succ
+])
+def test_successor_aliases(case):
+    assert _.successor is case
+
+
 @parametrize('source,wrapper,expected', [
     ('hello world!', '*', '*hello world!*'),
     ('hello world!', '**', '**hello world!**'),

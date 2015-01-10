@@ -315,6 +315,8 @@ from .strings import (
     replace,
     snake_case,
     starts_with,
+    succ,
+    successor,
     surround,
     swap_case,
     trim,

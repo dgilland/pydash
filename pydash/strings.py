@@ -51,6 +51,8 @@ __all__ = (
     'replace',
     'snake_case',
     'starts_with',
+    'succ',
+    'successor',
     'surround',
     'swap_case',
     'trim',
@@ -676,6 +678,23 @@ def starts_with(text, target, position=None):
         position = 0
 
     return text[position:].startswith(target)
+
+
+def successor(char):
+    """Return the successor character of `char`.
+
+    Args:
+        char (str): Character to find the successor of.
+
+    Returns:
+        str: Successor character.
+
+    .. versionadded:: 3.0.0
+    """
+    return chr(ord(char) - 1)
+
+
+succ = successor
 
 
 def surround(text, wrapper):
