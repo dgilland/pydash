@@ -45,6 +45,7 @@ __all__ = (
     'pad_right',
     'quote',
     'repeat',
+    'replace',
     'snake_case',
     'starts_with',
     'surround',
@@ -575,6 +576,38 @@ def repeat(text, n=0):
     return pyd.to_string(text) * int(n)
 
 
+def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
+    """Replace occurrences of `pattern` with `repl` in `text`. Optionally,
+    ignore case when replacing. Optionally, set `count` to limit number of
+    replacements.
+
+    Args:
+        text (str): String to replace.
+        pattern (str): String pattern to find and replace.
+        repl (str): String to substitute `pattern` with.
+        ignore_clase (bool): Whether to ignore case when replacing. Default is
+            ``False``.
+        count (int): Maximum number of occurrences to replace. Default is ``0``
+            which replaces all.
+        escape (bool): Whether to escape `pattern` when searching. This is
+            needed if a literal replacement is desired when `pattern` may
+            contain special regular expression characters. Default is ``True``.
+
+    Returns:
+        str: Replaced string.
+
+    .. versionadded:: 3.0.0
+    """
+    if escape:
+        pattern = re.escape(pattern)
+
+    flags = re.IGNORECASE if ignore_case else 0
+
+    # NOTE: Can't use `flags` argument to re.sub in Python 2.6 so have to use
+    # this version instead.
+    return re.compile(pattern, flags=flags).sub(repl, text, count=count)
+
+
 def snake_case(text):
     """Converts `text` to snake case.
 
@@ -819,17 +852,17 @@ def js_to_py_re_replace(reg_exp):
     """
     pattern, options = reg_exp[1:].rsplit('/', 1)
     count = 0 if 'g' in options else 1
-    flags = re.I if 'i' in options else 0
+    ignore_case = 'i' in options
 
-    def replace(text, repl):  # pylint: disable=missing-docstring
-        if PY26:  # pragma: no cover
-            sub = partial(re.compile(pattern, flags=flags).sub, count=count)
-        else:
-            sub = partial(re.sub, pattern, count=count, flags=flags)
+    def _replace(text, repl):  # pylint: disable=missing-docstring
+        return replace(text,
+                       pattern,
+                       repl,
+                       ignore_case=ignore_case,
+                       count=count,
+                       escape=False)
 
-        return sub(repl, text)
-
-    return replace
+    return _replace
 
 
 def delimitedpathjoin(delimiter, *paths):

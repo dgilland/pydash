@@ -308,6 +308,7 @@ from .strings import (
     pad_right,
     quote,
     repeat,
+    replace,
     snake_case,
     starts_with,
     surround,

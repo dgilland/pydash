@@ -278,6 +278,16 @@ def test_default_quote(source, expected):
 
 
 @parametrize('case,expected', [
+    (('foo', 'o', 'a'), 'faa'),
+    (('', '', ''), ''),
+    (('foo', 'o', ''), 'f'),
+    (('foo', 'x', 'y'), 'foo'),
+])
+def test_replace(case, expected):
+    assert _.replace(*case) == expected
+
+
+@parametrize('case,expected', [
     ('foo  bar baz', 'foo_bar_baz'),
     ('foo__bar_baz', 'foo_bar_baz'),
     ('foo-_bar-_-baz', 'foo_bar_baz'),
