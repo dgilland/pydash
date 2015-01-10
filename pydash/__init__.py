@@ -299,6 +299,7 @@ from .strings import (
     explode,
     has_substr,
     implode,
+    insert_substr,
     js_match,
     js_replace,
     kebab_case,

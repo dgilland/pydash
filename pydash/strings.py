@@ -36,6 +36,7 @@ __all__ = (
     'explode',
     'has_substr',
     'implode',
+    'insert_substr',
     'js_match',
     'js_replace',
     'kebab_case',
@@ -378,6 +379,22 @@ def explode(text, delimiter=None):
         ret = list(text)
 
     return ret
+
+
+def insert_substr(text, index, subtext):
+    """Insert `subtext` in `text` starting at position `index`.
+
+    Args:
+        text (str): String to add substring to.
+        index (int): String index to insert into.
+        subtext (str): String to insert.
+
+    Returns:
+        str: Modified string.
+
+    .. versionadded:: 3.0.0
+    """
+    return text[:index] + subtext + text[index:]
 
 
 def implode(array, delimiter=''):

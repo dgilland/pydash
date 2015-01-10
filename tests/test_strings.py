@@ -175,6 +175,17 @@ def test_implode(case, expected):
 
 
 @parametrize('case,expected', [
+    (('foobar', 0, 'xx'), 'xxfoobar'),
+    (('foobar', 1, 'xx'), 'fxxoobar'),
+    (('foobar', 4, 'xx'), 'foobxxar'),
+    (('foobar', 6, 'xx'), 'foobarxx'),
+    (('foobar', 7, 'xx'), 'foobarxx'),
+])
+def test_insert_substr(case, expected):
+    assert _.insert_substr(*case) == expected
+
+
+@parametrize('case,expected', [
     (('/[A-Z]/', 'Hello World'), ['H']),
     (('/[A-Z]/g', 'Hello World'), ['H', 'W']),
     (('/[A-Z]/i', 'hello world'), ['h']),
