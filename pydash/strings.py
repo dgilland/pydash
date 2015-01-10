@@ -382,6 +382,21 @@ def explode(text, delimiter=None):
     return ret
 
 
+def has_substr(text, subtext):
+    """Returns whether `subtext` is included in `text`.
+
+    Args:
+        text (str): String to search.
+        subtext (str): String to search for.
+
+    Returns:
+        bool: Whether `subtext` is found in `text`.
+
+    .. versionadded:: 3.0.0
+    """
+    return text.find(subtext) >= 0
+
+
 def insert_substr(text, index, subtext):
     """Insert `subtext` in `text` starting at position `index`.
 
@@ -411,21 +426,6 @@ def implode(array, delimiter=''):
     .. versionadded:: 2.0.0
     """
     return delimiter.join(array)
-
-
-def has_substr(text, subtext):
-    """Returns whether `subtext` is included in `text`.
-
-    Args:
-        text (str): String to search.
-        subtext (str): String to search for.
-
-    Returns:
-        bool: Whether `subtext` is found in `text`.
-
-    .. versionadded:: 3.0.0
-    """
-    return text.find(subtext) >= 0
 
 
 def js_match(reg_exp, text):
