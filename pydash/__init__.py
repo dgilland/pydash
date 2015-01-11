@@ -317,6 +317,7 @@ from .strings import (
     successor,
     surround,
     swap_case,
+    title_case,
     trim,
     trim_left,
     trim_right,

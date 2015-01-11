@@ -53,6 +53,7 @@ __all__ = (
     'successor',
     'surround',
     'swap_case',
+    'title_case',
     'trim',
     'trim_left',
     'trim_right',
@@ -716,6 +717,21 @@ def swap_case(text):
     .. versionadded:: 3.0.0
     """
     return text.swapcase()
+
+
+def title_case(text):
+    """Convert `text` to title case.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to title case.
+
+    .. versionadded:: 3.0.0
+    """
+    # NOTE: Can't use text.title() since it doesn't handle apostrophes.
+    return ' '.join(capitalize(word) for word in re.split(' ', text))
 
 
 def trim(text, chars=None):

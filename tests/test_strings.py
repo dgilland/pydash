@@ -363,6 +363,15 @@ def test_swap_case(case, expected):
 
 
 @parametrize('case,expected', [
+    ('foo bar baz', 'Foo Bar Baz'),
+    ("they're bill's friends from the UK",
+     "They're Bill's Friends From The Uk")
+])
+def test_title_case(case, expected):
+    assert _.title_case(case) == expected
+
+
+@parametrize('case,expected', [
     (('  fred  ',), 'fred'),
     (('-_-fred-_-', '_-'), 'fred'),
 ])

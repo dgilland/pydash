@@ -18,6 +18,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``replace``.
 - Add ``successor``.
 - Add ``swap_case``.
+- Add ``title_case``.
 - Make ``camel_case`` work with empty string.
 - Make ``splice`` work with strings.
 
