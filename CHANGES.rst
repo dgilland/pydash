@@ -14,9 +14,9 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``insert_substr``.
 - Add ``is_blank``.
 - Add ``lines``.
-- Add ``predecessor``, ``pred``.
+- Add ``predecessor``.
 - Add ``replace``.
-- Add ``successor``, ``succ``.
+- Add ``successor``.
 - Add ``swap_case``.
 - Make ``camel_case`` work with empty string.
 - Make ``splice`` work with strings.

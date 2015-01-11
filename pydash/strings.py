@@ -44,14 +44,12 @@ __all__ = (
     'pad',
     'pad_left',
     'pad_right',
-    'pred',
     'predecessor',
     'quote',
     'repeat',
     'replace',
     'snake_case',
     'starts_with',
-    'succ',
     'successor',
     'surround',
     'swap_case',
@@ -579,9 +577,6 @@ def predecessor(char):
     return chr(ord(char) + 1)
 
 
-pred = predecessor
-
-
 def quote(text, quote_char='"'):
     """Quote a string with another string.
 
@@ -692,9 +687,6 @@ def successor(char):
     .. versionadded:: 3.0.0
     """
     return chr(ord(char) - 1)
-
-
-succ = successor
 
 
 def surround(text, wrapper):
