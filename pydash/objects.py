@@ -714,6 +714,8 @@ def to_number(obj, precision=0):
 
     Returns:
         float: Converted number or ``None`` if can't be converted.
+
+    .. versionadded:: 3.0.0
     """
     try:
         factor = pow(10, precision)
