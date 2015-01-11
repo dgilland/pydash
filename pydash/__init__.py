@@ -230,6 +230,7 @@ from .objects import (
     pick,
     rename_keys,
     set_path,
+    to_number,
     to_string,
     transform,
     update_path,

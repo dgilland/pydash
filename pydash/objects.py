@@ -6,6 +6,7 @@
 from __future__ import absolute_import
 
 import copy
+import math
 import re
 
 import pydash as pyd
@@ -52,6 +53,7 @@ __all__ = (
     'pick',
     'rename_keys',
     'set_path',
+    'to_number',
     'to_string',
     'transform',
     'update_path',
@@ -698,6 +700,36 @@ def set_path(obj, value, keys, default=None):
     """
     # pylint: disable=redefined-outer-name
     return update_path(obj, lambda *_: value, keys, default=default)
+
+
+def to_number(obj, precision=0):
+    """Convert `obj` to a number. All numbers are retuned as ``float``. If
+    precision is negative, round `obj` to the nearest positive integer place.
+    If `obj` can't be converted to a number, ``None`` is returned.
+
+    Args:
+        obj (str|int|float): Object to convert.
+        precision (int, optional): Precision to round number to. Defaults to
+            ``0`.
+
+    Returns:
+        float: Converted number or ``None`` if can't be converted.
+    """
+    try:
+        factor = pow(10, precision)
+
+        if precision < 0:
+            # Round down since negative `precision` means we are going to
+            # the nearest positive integer place.
+            rounder = math.floor
+        else:
+            rounder = round
+
+        num = rounder(float(obj) * factor) / factor
+    except Exception:
+        num = None
+
+    return num
 
 
 def to_string(obj):

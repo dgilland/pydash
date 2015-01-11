@@ -456,6 +456,16 @@ def test_set_path(case, expected):
 
 
 @parametrize('case,expected', [
+    (('2.556',), 3.0),
+    (('2.556', 1), 2.6),
+    (('999.999', -1), 990.0),
+    (('foo',), None)
+])
+def test_to_number(case, expected):
+    assert _.to_number(*case) == expected
+
+
+@parametrize('case,expected', [
     (1, '1'),
     (1.25, '1.25'),
     (True, 'True'),
