@@ -479,7 +479,7 @@ def pop(array, index=-1):
 
     Args:
         array (list): List to pop from.
-        index (int, optional): Index to remove element from. Default is ``-1``.
+        index (int, optional): Index to remove element from. Defaults to ``-1``.
 
     Returns:
         mixed: Value at `index`.
@@ -675,12 +675,13 @@ def sort(array, comparison=None, key=None, reverse=False):
             sort the list. Function should accept two arguments and return a
             negative, zero, or position number depending on whether the first
             argument is considered smaller than, equal to, or larger than the
-            second argument. Default is ``None``. This argument is mutually
+            second argument. Defaults to ``None``. This argument is mutually
             exclusive with `key`.
         key (callback, optional): A function of one argument used to extract a
-            a comparison key from each list element. Default is ``None``. This
+            a comparison key from each list element. Defaults to ``None``. This
             argument is mutually exclusive with `comparison`.
-        reverse: Whether to reverse the sort. Default is ``False``.
+        reverse (bool, optional): Whether to reverse the sort. Defaults to
+            ``False``.
 
     Returns:
         list: Sorted list.
@@ -765,7 +766,7 @@ def splice(array, index, how_many=None, *items):
         index (int): Index to splice at.
         how_many (int, optional): Number of items to remove starting at
             `index`. If ``None`` then all items after `index` are removed.
-            Default is ``None``.
+            Defaults to ``None``.
         items (mixed): Elements to insert starting at `index`. Each item is
             inserted in the order given.
 

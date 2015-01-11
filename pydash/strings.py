@@ -422,7 +422,8 @@ def implode(array, delimiter=''):
 
     Args:
         array (iterable): Iterable to implode.
-        delimiter (str): Delimiter to using when joining. Defaults to ``''``.
+        delimiter (str, optional): Delimiter to using when joining. Defaults to
+            ``''``.
 
     Returns:
         str: Imploded iterable.
@@ -582,8 +583,8 @@ def quote(text, quote_char='"'):
     """Quote a string with another string.
 
     Args:
-        text (str): String to be quoted
-        quote_char (str): the quote character. Defaults to ``"``
+        text (str): String to be quoted.
+        quote_char (str, optional): the quote character. Defaults to ``"``.
 
     Returns:
         str: the quoted string.
@@ -617,13 +618,14 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
         text (str): String to replace.
         pattern (str): String pattern to find and replace.
         repl (str): String to substitute `pattern` with.
-        ignore_clase (bool): Whether to ignore case when replacing. Default is
-            ``False``.
-        count (int): Maximum number of occurrences to replace. Default is ``0``
-            which replaces all.
-        escape (bool): Whether to escape `pattern` when searching. This is
-            needed if a literal replacement is desired when `pattern` may
-            contain special regular expression characters. Default is ``True``.
+        ignore_clase (bool, optional): Whether to ignore case when replacing.
+            Defaults to ``False``.
+        count (int, optional): Maximum number of occurrences to replace.
+            Defaults to ``0`` which replaces all.
+        escape (bool, optional): Whether to escape `pattern` when searching.
+            This is needed if a literal replacement is desired when `pattern`
+            may contain special regular expression characters. Defaults to
+            ``True``.
 
     Returns:
         str: Replaced string.

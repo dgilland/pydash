@@ -689,9 +689,9 @@ def set_path(obj, value, keys, default=None):
         obj (list|dict): Object to modify.
         value (mixed): Value to set.
         keys (list): Target path to set value to.
-        default (callable): Callable that returns default value to assign if
-            path part is not set. Defaults to ``{}`` is `obj` is a ``dict`` or
-            ``[]`` if `obj` is a ``list``.
+        default (callable, optional): Callable that returns default value to
+            assign if path part is not set. Defaults to ``{}`` is `obj` is a
+            ``dict`` or ``[]`` if `obj` is a ``list``.
 
     Returns:
         mixed: Modified `obj`.
@@ -789,9 +789,9 @@ def update_path(obj, callback, keys, default=None):
         callback (callable): Function that returns updated value.
         keys (list): A list of string keys that describe the object path to
             modify.
-        default (mixed): Default value to assign if path part is not set.
-            Defaults to ``{}`` if `obj` is a ``dict`` or ``[]`` if `obj` is a
-            ``list``.
+        default (mixed, optional): Default value to assign if path part is not
+            set. Defaults to ``{}`` if `obj` is a ``dict`` or ``[]`` if `obj`
+            is a ``list``.
 
     Returns:
         mixed: Updated `obj`.
