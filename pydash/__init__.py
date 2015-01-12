@@ -315,6 +315,7 @@ from .strings import (
     pad_right,
     predecessor,
     quote,
+    re_replace,
     repeat,
     replace,
     slugify,
