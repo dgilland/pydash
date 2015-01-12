@@ -143,6 +143,7 @@ def test_js_replace(case, expected):
     ('foo-_bar-_-baz', 'foo-bar-baz'),
     ('foo!bar,baz', 'foo-bar-baz'),
     ('--foo.bar;baz', 'foo-bar-baz'),
+    ('Foo Bar', 'foo-bar'),
 ])
 def test_kebab_case(case, expected):
     assert _.kebab_case(case) == expected

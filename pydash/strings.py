@@ -353,7 +353,7 @@ def kebab_case(text):
 
     .. versionadded:: 1.1.0
     """
-    return '-'.join(wrd for wrd in words(pyd.to_string(text)) if wrd.lower())
+    return '-'.join(wrd.lower() for wrd in words(pyd.to_string(text)) if wrd)
 
 
 def pad(text, length, chars=' '):
