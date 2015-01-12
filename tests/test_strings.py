@@ -43,6 +43,19 @@ def test_chop(case, expected):
 
 
 @parametrize('case,expected', [
+    ('foo bar baz', 'FooBarBaz'),
+    ('foo  bar baz', 'FooBarBaz'),
+    ('foo__bar_baz', 'FooBarBaz'),
+    ('foo-_bar-_-baz', 'FooBarBaz'),
+    ('foo!bar,baz', 'FooBarBaz'),
+    ('--foo.bar;baz', 'FooBarBaz'),
+    ('', ''),
+])
+def test_class_case(case, expected):
+    assert _.class_case(case) == expected
+
+
+@parametrize('case,expected', [
     ('  foo bar', 'foo bar'),
     ('  foo  bar', 'foo bar'),
     ('  foo  bar  ', 'foo bar'),

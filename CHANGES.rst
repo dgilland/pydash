@@ -7,6 +7,7 @@ v3.0.0 (xxxx-xx-xx)
 
 - Add ``chars``.
 - Add ``chop``.
+- Add ``class_case``.
 - Add ``clean``.
 - Add ``count_substr``.
 - Add ``decapitalize``.

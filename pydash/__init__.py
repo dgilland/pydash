@@ -290,6 +290,7 @@ from .strings import (
     capitalize,
     chars,
     chop,
+    class_case,
     clean,
     count_substr,
     deburr,

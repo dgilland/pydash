@@ -27,6 +27,8 @@ __all__ = (
     'capitalize',
     'chop',
     'chars',
+    'class_case',
+    'clean',
     'count_substr',
     'deburr',
     'decapitalize',
@@ -175,6 +177,7 @@ def capitalize(text):
         str: Capitalized string.
 
     .. versionadded:: 1.1.0
+
     .. versionchanged:: 3.0.0
         Only modify first character. Leave other characters unmodified.
     """
@@ -213,6 +216,20 @@ def chop(text, step):
         chopped = [text[i:i + step] for i in _range(0, len(text), step)]
 
     return chopped
+
+
+def class_case(text):
+    """Like :func:`camel_case` except the first letter is capitalized.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to class case.
+
+    .. versionadded:: 3.0.0
+    """
+    return capitalize(camel_case(text))
 
 
 def clean(text):
