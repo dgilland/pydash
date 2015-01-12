@@ -315,6 +315,7 @@ from .strings import (
     quote,
     repeat,
     replace,
+    slugify,
     snake_case,
     starts_with,
     successor,

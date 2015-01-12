@@ -304,6 +304,15 @@ def test_replace(case, expected):
 
 
 @parametrize('case,expected', [
+    ('Foo Bar', 'foo-bar'),
+    (' foo bar ', 'foo-bar'),
+    (u'Un éléphant à l\'orée du bois', 'un-elephant-a-l-oree-du-bois'),
+])
+def test_slugify(case, expected):
+    assert _.slugify(case) == expected
+
+
+@parametrize('case,expected', [
     ('foo  bar baz', 'foo_bar_baz'),
     ('foo__bar_baz', 'foo_bar_baz'),
     ('foo-_bar-_-baz', 'foo_bar_baz'),

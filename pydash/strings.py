@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """String functions.
 
 .. versionadded:: 1.1.0
@@ -5,6 +6,7 @@
 
 from functools import partial
 import re
+import unicodedata
 
 import pydash as pyd
 from ._compat import (
@@ -12,6 +14,7 @@ from ._compat import (
     iteritems,
     parse_qsl,
     PY26,
+    text_type,
     urlencode,
     urlsplit,
     urlunsplit,
@@ -48,6 +51,7 @@ __all__ = (
     'quote',
     'repeat',
     'replace',
+    'slugify',
     'snake_case',
     'starts_with',
     'successor',
@@ -641,6 +645,27 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
     # NOTE: Can't use `flags` argument to re.sub in Python 2.6 so have to use
     # this version instead.
     return re.compile(pattern, flags=flags).sub(repl, text, count=count)
+
+
+def slugify(text):
+    """Convert `text` into an ASCII slug which can be used safely in URLs.
+    Incoming `text` is converted to unicode and noramlzied using the ``NFKD``
+    form. This results in some accented characters being converted to their
+    ASCII "equivalent" (e.g. ``é`` is converted to ``e``). Leading and trailing
+    whitespace is trimmed and any remaining whitespace or other special
+    characters without an ASCII equivalent are replaced with ``-``.
+
+    Args:
+        text (str): String to slugify.
+
+    Returns:
+        str: Slugified string.
+
+    .. versionadded:: 3.0.0
+    """
+    return (kebab_case(unicodedata.normalize('NFKD', text_type(text))
+                       .encode('ascii', 'ignore')
+                       .decode('utf8')))
 
 
 def snake_case(text):

@@ -16,6 +16,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``lines``.
 - Add ``predecessor``.
 - Add ``replace``.
+- Add ``slugify``.
 - Add ``successor``.
 - Add ``swap_case``.
 - Add ``title_case``.
