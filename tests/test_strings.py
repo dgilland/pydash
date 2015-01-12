@@ -377,6 +377,13 @@ def test_snake_case(case, expected):
     assert _.snake_case(case) == expected
 
 
+@parametrize('case', [
+    _.underscore_case
+])
+def test_snake_case_aliases(case):
+    assert _.snake_case is case
+
+
 @parametrize('case,expected', [
     (('This_is_a_test_string', '_'), 'This'),
     (('This_is_a_test_string', ''), 'This_is_a_test_string'),
@@ -411,13 +418,6 @@ def test_string_right(case, expected):
 ])
 def test_string_right_back(case, expected):
     assert _.string_right_back(*case) == expected
-
-
-@parametrize('case', [
-    _.underscore_case
-])
-def test_escape_reg_exp_aliases(case):
-    assert _.snake_case is case
 
 
 @parametrize('case,expected', [
