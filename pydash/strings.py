@@ -62,6 +62,7 @@ __all__ = (
     'string_left_back',
     'string_right',
     'string_right_back',
+    'strip_tags',
     'successor',
     'surround',
     'swap_case',
@@ -846,6 +847,20 @@ def string_right_back(text, subtext):
     .. versionadded:: 3.0.0
     """
     return text.rpartition(subtext)[2] if subtext else text
+
+
+def strip_tags(text):
+    """Removes all HTML tags from `text`.
+
+    Args:
+        text (str): String to strip.
+
+    Returns:
+        str: String without HTML tags.
+
+    .. versionadded:: 3.0.0
+    """
+    return re_replace(text, '<\/?[^>]+>', '')
 
 
 def successor(char):

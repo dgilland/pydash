@@ -324,6 +324,7 @@ from .strings import (
     string_left_back,
     string_right,
     string_right_back,
+    strip_tags,
     successor,
     surround,
     swap_case,

@@ -433,6 +433,15 @@ def test_starts_with(case, expected):
 
 
 @parametrize('case,expected', [
+    ('a <a href="#">link</a>', 'a link'),
+    ('a <a href="#">link</a><script>alert("hello world!")</script>',
+     'a linkalert("hello world!")')
+])
+def test_strip_tags(case, expected):
+    assert _.strip_tags(case) == expected
+
+
+@parametrize('case,expected', [
     ('b', 'a'),
     ('B', 'A'),
 ])
