@@ -834,8 +834,8 @@ def string_right(text, subtext):
 
 def string_right_back(text, subtext):
     """Searches `text` from left-to-right for `subtext` and returns a substring
-    consisting of the characters in `text` that are to the right of `subtext` or
-    all string if no match found.
+    consisting of the characters in `text` that are to the right of `subtext`
+    or all string if no match found.
 
     Args:
         text (str): String to partition.
