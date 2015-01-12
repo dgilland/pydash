@@ -19,6 +19,10 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``predecessor``.
 - Add ``replace``.
 - Add ``slugify``.
+- Add ``string_left``.
+- Add ``string_left_back``.
+- Add ``string_right``.
+- Add ``string_right_back``.
 - Add ``successor``.
 - Add ``swap_case``.
 - Add ``title_case``.

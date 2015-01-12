@@ -57,6 +57,10 @@ __all__ = (
     'slugify',
     'snake_case',
     'starts_with',
+    'string_left',
+    'string_left_back',
+    'string_right',
+    'string_right_back',
     'successor',
     'surround',
     'swap_case',
@@ -746,6 +750,74 @@ def starts_with(text, target, position=None):
         position = 0
 
     return text[position:].startswith(target)
+
+
+def string_left(text, subtext):
+    """Searches `text` from left-to-right for `subtext` and returns a substring
+    consisting of the characters in `text` that are to the left of `subtext` or
+    all string if no match found.
+
+    Args:
+        text (str): String to partition.
+        subtext (str): String to search for.
+
+    Returns:
+        str: Substring to left of `subtext`.
+
+    .. versionadded:: 3.0.0
+    """
+    return text.partition(subtext)[0] if subtext else text
+
+
+def string_left_back(text, subtext):
+    """Searches `text` from right-to-left for `subtext` and returns a substring
+    consisting of the characters in `text` that are to the left of `subtext`
+    or all string if no match found.
+
+    Args:
+        text (str): String to partition.
+        subtext (str): String to search for.
+
+    Returns:
+        str: Substring to left of `subtext`.
+
+    .. versionadded:: 3.0.0
+    """
+    return text.rpartition(subtext)[0] or text if subtext else text
+
+
+def string_right(text, subtext):
+    """Searches `text` from right-to-left for `subtext` and returns a substring
+    consisting of the characters in `text` that are to the right of `subtext`
+    or all string if no match found.
+
+    Args:
+        text (str): String to partition.
+        subtext (str): String to search for.
+
+    Returns:
+        str: Substring to right of `subtext`.
+
+    .. versionadded:: 3.0.0
+    """
+    return text.partition(subtext)[2] or text if subtext else text
+
+
+def string_right_back(text, subtext):
+    """Searches `text` from left-to-right for `subtext` and returns a substring
+    consisting of the characters in `text` that are to the right of `subtext` or
+    all string if no match found.
+
+    Args:
+        text (str): String to partition.
+        subtext (str): String to search for.
+
+    Returns:
+        str: Substring to right of `subtext`.
+
+    .. versionadded:: 3.0.0
+    """
+    return text.rpartition(subtext)[2] if subtext else text
 
 
 def successor(char):
