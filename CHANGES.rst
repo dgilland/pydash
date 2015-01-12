@@ -2,6 +2,9 @@ Changelog
 =========
 
 
+v2.4.1 (2015-01-11)
+-------------------
+
 - Fix ``kebab_case`` so that it casts string to lower case.
 
 
