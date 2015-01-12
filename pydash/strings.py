@@ -1121,12 +1121,11 @@ def js_to_py_re_replace(reg_exp):
     ignore_case = 'i' in options
 
     def _replace(text, repl):  # pylint: disable=missing-docstring
-        return replace(text,
-                       pattern,
-                       repl,
-                       ignore_case=ignore_case,
-                       count=count,
-                       escape=False)
+        return re_replace(text,
+                          pattern,
+                          repl,
+                          ignore_case=ignore_case,
+                          count=count)
 
     return _replace
 
