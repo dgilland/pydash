@@ -21,6 +21,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``title_case``.
 - Add ``to_boolean``.
 - Add ``to_number``.
+- Add ``unquote``.
 - Make ``camel_case`` work with empty string.
 - Make ``splice`` work with strings.
 

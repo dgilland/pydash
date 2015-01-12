@@ -417,6 +417,16 @@ def test_unescape(case, expected):
 
 
 @parametrize('case,expected', [
+    (('"foo"',), 'foo'),
+    (("'foo'", "'"), 'foo'),
+    (('"foo',), '"foo'),
+    (('foo"',), 'foo"'),
+])
+def test_unquote(case, expected):
+    assert _.unquote(*case) == expected
+
+
+@parametrize('case,expected', [
     ({'args': [''], 'kargs': {}}, ''),
     ({'args': ['/'], 'kargs': {}}, '/'),
     ({'args': ['http://github.com'], 'kargs': {}}, 'http://github.com'),

@@ -59,6 +59,7 @@ __all__ = (
     'trim_right',
     'trunc',
     'unescape',
+    'unquote',
     'url',
     'words',
 )
@@ -834,6 +835,24 @@ def unescape(text):
         Moved to Strings module.
     """
     return html_unescape(text)
+
+
+def unquote(text, quote_char='"'):
+    """Unquote `text` by removing `quote_char` if `text` begins and ends with
+    it.
+
+    Args:
+        text (str): String to unquote.
+
+    Returns:
+        str: Unquoted string.
+
+    .. versionadded:: 3.0.0
+    """
+    if text[:1] == quote_char and text[-1] == quote_char:
+        text = text[1:-1]
+
+    return text
 
 
 def url(*paths, **params):
