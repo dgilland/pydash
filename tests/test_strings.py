@@ -182,6 +182,17 @@ def test_has_substr(case, expected):
 
 
 @parametrize('case,expected', [
+    ('  capitalize dash-CamelCase_underscore trim_id  ',
+     'Capitalize dash camel case underscore trim'),
+    ('foo_bar_id', 'Foo bar'),
+    ('FooBar', 'Foo bar'),
+    ('fooBar', 'Foo bar'),
+])
+def test_human_case(case, expected):
+    assert _.human_case(case) == expected
+
+
+@parametrize('case,expected', [
     ((['s', 't', 'r', 'i', 'n', 'g'],), 'string'),
     ((['string1', 'string2'], ','), 'string1,string2'),
 ])

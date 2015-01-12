@@ -40,6 +40,7 @@ __all__ = (
     'escape_re',
     'explode',
     'has_substr',
+    'human_case',
     'implode',
     'insert_substr',
     'js_match',
@@ -423,6 +424,26 @@ def has_substr(text, subtext):
     .. versionadded:: 3.0.0
     """
     return text.find(subtext) >= 0
+
+
+def human_case(text):
+    """Converts `text` to human case which has only the first letter
+    capitalized and each word separated by a space.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to human case.
+
+    .. versionadded:: 3.0.0
+    """
+    return (pyd.chain(text)
+            .snake_case()
+            .replace('_id$', '', escape=False)
+            .replace('_', ' ')
+            .capitalize()
+            .value())
 
 
 def insert_substr(text, index, subtext):

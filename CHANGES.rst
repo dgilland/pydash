@@ -12,6 +12,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``count_substr``.
 - Add ``decapitalize``.
 - Add ``has_substr``.
+- Add ``human_case``.
 - Add ``insert_substr``.
 - Add ``is_blank``.
 - Add ``lines``.

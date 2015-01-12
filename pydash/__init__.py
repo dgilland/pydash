@@ -303,6 +303,7 @@ from .strings import (
     escape_re,
     explode,
     has_substr,
+    human_case,
     implode,
     insert_substr,
     js_match,
