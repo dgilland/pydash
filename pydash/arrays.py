@@ -479,7 +479,8 @@ def pop(array, index=-1):
 
     Args:
         array (list): List to pop from.
-        index (int, optional): Index to remove element from. Defaults to ``-1``.
+        index (int, optional): Index to remove element from. Defaults to
+            ``-1``.
 
     Returns:
         mixed: Value at `index`.
