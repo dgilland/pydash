@@ -26,6 +26,12 @@ v3.0.0 (xxxx-xx-xx)
 - Make ``splice`` work with strings.
 
 
+v2.4.1 (2015-01-11)
+-------------------
+
+- Fix ``kebab_case`` so that it casts string to lower case.
+
+
 v2.4.0 (2015-01-07)
 -------------------
 
