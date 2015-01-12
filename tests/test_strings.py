@@ -334,6 +334,16 @@ def test_re_replace(case, expected):
 
 
 @parametrize('case,expected', [
+    (('foo',), ''),
+    (('foo', 0), ''),
+    (('foo', 1), 'foo'),
+    (('foo', 3), 'foofoofoo'),
+])
+def test_repeat(case, expected):
+    assert _.repeat(*case) == expected
+
+
+@parametrize('case,expected', [
     (('foo', 'o', 'a'), 'faa'),
     (('foo', 'o', 'a', False, 1), 'fao'),
     (('fOO', 'o', 'a'), 'fOO'),
