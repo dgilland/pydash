@@ -175,8 +175,10 @@ def capitalize(text):
         str: Capitalized string.
 
     .. versionadded:: 1.1.0
+    .. versionchanged:: 3.0.0
+        Only modify first character. Leave other characters unmodified.
     """
-    return text.capitalize()
+    return text[:1].upper() + text[1:]
 
 
 def chars(text):
@@ -759,7 +761,7 @@ def title_case(text):
     .. versionadded:: 3.0.0
     """
     # NOTE: Can't use text.title() since it doesn't handle apostrophes.
-    return ' '.join(capitalize(word) for word in re.split(' ', text))
+    return ' '.join(word.capitalize() for word in re.split(' ', text))
 
 
 def trim(text, chars=None):

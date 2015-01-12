@@ -23,7 +23,8 @@ def test_camel_case(case, expected):
 @parametrize('case,expected', [
     ('foo', 'Foo'),
     ('foo bar', 'Foo bar'),
-    ('fOO bar', 'Foo bar'),
+    ('fOO bar', 'FOO bar'),
+    ('foo Bar', 'Foo Bar'),
 ])
 def test_capitalize(case, expected):
     assert _.capitalize(case) == expected
