@@ -320,6 +320,24 @@ def test_quote(case, expected):
 
 @parametrize('case,expected', [
     (('foo', 'o', 'a'), 'faa'),
+    (('foo', 'o', 'a', False, 1), 'fao'),
+    (('fOO', 'o', 'a'), 'fOO'),
+    (('fOO', 'o', 'a', True), 'faa'),
+    (('', '', ''), ''),
+    (('foo', 'o', ''), 'f'),
+    (('foo', 'x', 'y'), 'foo'),
+    (('foo', '^o', 'a'), 'foo'),
+    (('foo', 'o$', 'a'), 'foa'),
+])
+def test_re_replace(case, expected):
+    assert _.re_replace(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('foo', 'o', 'a'), 'faa'),
+    (('foo', 'o', 'a', False, 1), 'fao'),
+    (('fOO', 'o', 'a'), 'fOO'),
+    (('fOO', 'o', 'a', True), 'faa'),
     (('', '', ''), ''),
     (('foo', 'o', ''), 'f'),
     (('foo', 'x', 'y'), 'foo'),

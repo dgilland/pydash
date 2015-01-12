@@ -52,6 +52,7 @@ __all__ = (
     'pad_right',
     'predecessor',
     'quote',
+    're_replace',
     'repeat',
     'replace',
     'slugify',
@@ -445,7 +446,7 @@ def human_case(text):
     """
     return (pyd.chain(text)
             .snake_case()
-            .replace('_id$', '', escape=False)
+            .re_replace('_id$', '')
             .replace('_', ' ')
             .capitalize()
             .value())
@@ -642,6 +643,33 @@ def quote(text, quote_char='"'):
     .. versionadded:: 2.4.0
     """
     return surround(text, quote_char)
+
+
+def re_replace(text, pattern, repl, ignore_case=False, count=0):
+    """Replace occurrences of regex `pattern` with `repl` in `text`.
+    Optionally, ignore case when replacing. Optionally, set `count` to limit
+    number of replacements.
+
+    Args:
+        text (str): String to replace.
+        pattern (str): String pattern to find and replace.
+        repl (str): String to substitute `pattern` with.
+        ignore_clase (bool, optional): Whether to ignore case when replacing.
+            Defaults to ``False``.
+        count (int, optional): Maximum number of occurrences to replace.
+            Defaults to ``0`` which replaces all.
+
+    Returns:
+        str: Replaced string.
+
+    .. versionadded:: 3.0.0
+    """
+    return replace(text,
+                   pattern,
+                   repl,
+                   ignore_case=ignore_case,
+                   count=count,
+                   escape=False)
 
 
 def repeat(text, n=0):

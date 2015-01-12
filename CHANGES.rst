@@ -17,6 +17,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``is_blank``.
 - Add ``lines``.
 - Add ``predecessor``.
+- Add ``re_replace``.
 - Add ``replace``.
 - Add ``slugify``.
 - Add ``string_left``.
