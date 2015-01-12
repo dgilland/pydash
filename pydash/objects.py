@@ -53,6 +53,7 @@ __all__ = (
     'pick',
     'rename_keys',
     'set_path',
+    'to_boolean',
     'to_number',
     'to_string',
     'transform',
@@ -700,6 +701,51 @@ def set_path(obj, value, keys, default=None):
     """
     # pylint: disable=redefined-outer-name
     return update_path(obj, lambda *_: value, keys, default=default)
+
+
+def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
+    """Convert `obj` to boolean. This is not like the builtin ``bool``
+    function. By default commonly considered strings values are converted to
+    their boolean equivalent, i.e., ``'0'`` and ``'false'`` are converted to
+    ``False`` while ``'1'`` and ``'true'`` are converted to ``True``. If a
+    string value is provided that isn't recognized as having a common boolean
+    conversion, then the returned value is ``None``. Non-string values of `obj`
+    are converted using ``bool``. Optionally, `true_values` and `false_values`
+    can be overridden must each value must be a string.
+
+    Args:
+        obj (mixed): Object to convert.
+        true_values (tuple, optional): Values to consider ``True``. Each value
+            must be a string. Comparision is case-insensitive. Defaults to
+            ``('true', '1')``.
+        false_values (tuple, optional): Values to consider ``False``. Each
+            value must be a string. Comparision is case-insensitive. Defaults
+            to ``('false', '0')``.
+
+    Returns:
+        bool: Boolean value of `obj`.
+
+    .. versionadded:: 3.0.0
+    """
+    if pyd.is_string(obj):
+        obj = obj.strip()
+
+        def booleanMatch(text, values):
+            if text.lower() in [value.lower() for value in values]:
+                return True
+            else:
+                return re.match('|'.join(values), text)
+
+        if true_values and booleanMatch(obj, true_values):
+            value = True
+        elif false_values and booleanMatch(obj, false_values):
+            value = False
+        else:
+            value = None
+    else:
+        value = bool(obj)
+
+    return value
 
 
 def to_number(obj, precision=0):

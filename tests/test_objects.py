@@ -456,6 +456,32 @@ def test_set_path(case, expected):
 
 
 @parametrize('case,expected', [
+    (('1',), True),
+    (('0',), False),
+    (('true',), True),
+    (('True',), True),
+    (('false',), False),
+    (('False',), False),
+    (('',), None),
+    (('a',), None),
+    ((0,), False),
+    ((1,), True),
+    (([],), False),
+    ((True,), True),
+    ((False,), False),
+    ((None,), False),
+    (('Truthy', ['truthy']), True),
+    (('Falsey', [], ['falsey']), False),
+    (('foobar', ['^[f]']), True),
+    (('ofobar', ['^[f]']), None),
+    (('foobar', [], ['.+[r]$']), False),
+    (('foobra', [], ['.+[r]$']), None),
+])
+def test_to_boolean(case, expected):
+    assert _.to_boolean(*case) is expected
+
+
+@parametrize('case,expected', [
     (('2.556',), 3.0),
     (('2.556', 1), 2.6),
     (('999.999', -1), 990.0),
