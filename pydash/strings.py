@@ -65,6 +65,7 @@ __all__ = (
     'trim_left',
     'trim_right',
     'trunc',
+    'underscore_case',
     'unescape',
     'unquote',
     'url',
@@ -720,6 +721,9 @@ def snake_case(text):
     .. versionadded:: 1.1.0
     """
     return '_'.join(wrd.lower() for wrd in words(pyd.to_string(text)) if wrd)
+
+
+underscore_case = snake_case
 
 
 def starts_with(text, target, position=None):

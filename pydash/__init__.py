@@ -328,6 +328,7 @@ from .strings import (
     trim_left,
     trim_right,
     trunc,
+    underscore_case,
     unescape,
     unquote,
     url,
