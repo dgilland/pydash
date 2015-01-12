@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Numerical/mathemetical related functions.
 
 .. versionadded:: 2.1.0

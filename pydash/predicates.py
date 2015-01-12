@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Predicate functions that return boolean evaluations of objects.
 
 .. versionadded:: 2.0.0

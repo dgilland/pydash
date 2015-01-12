@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Functions that wrap other functions.
 
 .. versionadded:: 1.0.0

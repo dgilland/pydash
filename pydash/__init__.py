@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Python port of Lo-Dash
 """
 

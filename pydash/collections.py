@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Functions that operate on lists and dicts.
 
 .. versionadded:: 1.0.0

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Exception classes.
 
 .. versionadded:: 1.0.0

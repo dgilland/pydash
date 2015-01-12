@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Method chaining interface.
 
 .. versionadded:: 1.0.0

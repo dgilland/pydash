@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Generic utility methods not part of main API.
 """
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Utility functions.
 
 .. versionadded:: 1.0.0

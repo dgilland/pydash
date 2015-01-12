@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # pylint: skip-file
 """Python 2/3 compatibility
 
