@@ -47,6 +47,18 @@ def test_chop(case, expected):
 
 
 @parametrize('case,expected', [
+    (('foobarbaz', 3), ['foo', 'bar', 'baz']),
+    (('foobarbazaa', 3), ['fo', 'oba', 'rba', 'zaa']),
+    (('foo', 4), ['foo']),
+    (('foo', 0), ['foo']),
+    (('', 3), []),
+    (('foo', -2), ['foo'])
+])
+def test_chop_right(case, expected):
+    assert _.chop_right(*case) == expected
+
+
+@parametrize('case,expected', [
     ('foo bar baz', 'FooBarBaz'),
     ('foo  bar baz', 'FooBarBaz'),
     ('foo__bar_baz', 'FooBarBaz'),

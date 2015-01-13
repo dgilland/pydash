@@ -26,6 +26,7 @@ __all__ = (
     'camel_case',
     'capitalize',
     'chop',
+    'chop_right',
     'chars',
     'class_case',
     'clean',
@@ -230,6 +231,28 @@ def chop(text, step):
         chopped = [text]
     else:
         chopped = [text[i:i + step] for i in _range(0, len(text), step)]
+
+    return chopped
+
+
+def chop_right(text, step):
+    """Like :func:`chop` except `text` is chopped from right.
+
+    Args:
+        text (str): String to chop.
+        step (int): Interval to chop `text`.
+
+    Returns:
+        list: List of chopped characters.
+
+    .. versionadded:: 3.0.0
+    """
+    if step <= 0:
+        chopped = [text]
+    else:
+        text_len = len(text)
+        chopped = [text[-(i + step):text_len - i]
+                   for i in _range(0, text_len, step)][::-1]
 
     return chopped
 
