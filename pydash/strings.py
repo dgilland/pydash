@@ -58,11 +58,11 @@ __all__ = (
     'slugify',
     'snake_case',
     'starts_with',
-    'string_left',
-    'string_left_back',
-    'string_right',
-    'string_right_back',
     'strip_tags',
+    'substr_left',
+    'substr_left_end',
+    'substr_right',
+    'substr_right_end',
     'successor',
     'surround',
     'swap_case',
@@ -781,7 +781,21 @@ def starts_with(text, target, position=None):
     return text[position:].startswith(target)
 
 
-def string_left(text, subtext):
+def strip_tags(text):
+    """Removes all HTML tags from `text`.
+
+    Args:
+        text (str): String to strip.
+
+    Returns:
+        str: String without HTML tags.
+
+    .. versionadded:: 3.0.0
+    """
+    return re_replace(text, '<\/?[^>]+>', '')
+
+
+def substr_left(text, subtext):
     """Searches `text` from left-to-right for `subtext` and returns a substring
     consisting of the characters in `text` that are to the left of `subtext` or
     all string if no match found.
@@ -798,7 +812,7 @@ def string_left(text, subtext):
     return text.partition(subtext)[0] if subtext else text
 
 
-def string_left_back(text, subtext):
+def substr_left_end(text, subtext):
     """Searches `text` from right-to-left for `subtext` and returns a substring
     consisting of the characters in `text` that are to the left of `subtext`
     or all string if no match found.
@@ -815,7 +829,7 @@ def string_left_back(text, subtext):
     return text.rpartition(subtext)[0] or text if subtext else text
 
 
-def string_right(text, subtext):
+def substr_right(text, subtext):
     """Searches `text` from right-to-left for `subtext` and returns a substring
     consisting of the characters in `text` that are to the right of `subtext`
     or all string if no match found.
@@ -832,7 +846,7 @@ def string_right(text, subtext):
     return text.partition(subtext)[2] or text if subtext else text
 
 
-def string_right_back(text, subtext):
+def substr_right_end(text, subtext):
     """Searches `text` from left-to-right for `subtext` and returns a substring
     consisting of the characters in `text` that are to the right of `subtext`
     or all string if no match found.
@@ -847,20 +861,6 @@ def string_right_back(text, subtext):
     .. versionadded:: 3.0.0
     """
     return text.rpartition(subtext)[2] if subtext else text
-
-
-def strip_tags(text):
-    """Removes all HTML tags from `text`.
-
-    Args:
-        text (str): String to strip.
-
-    Returns:
-        str: String without HTML tags.
-
-    .. versionadded:: 3.0.0
-    """
-    return re_replace(text, '<\/?[^>]+>', '')
 
 
 def successor(char):

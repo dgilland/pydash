@@ -20,11 +20,11 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``re_replace``.
 - Add ``replace``.
 - Add ``slugify``.
-- Add ``string_left``.
-- Add ``string_left_back``.
-- Add ``string_right``.
-- Add ``string_right_back``.
 - Add ``strip_tags``.
+- Add ``substr_left``.
+- Add ``substr_left_end``.
+- Add ``substr_right``.
+- Add ``substr_right_end``.
 - Add ``successor``.
 - Add ``swap_case``.
 - Add ``title_case``.

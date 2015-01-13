@@ -385,42 +385,6 @@ def test_snake_case_aliases(case):
 
 
 @parametrize('case,expected', [
-    (('This_is_a_test_string', '_'), 'This'),
-    (('This_is_a_test_string', ''), 'This_is_a_test_string'),
-    (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
-def test_string_left(case, expected):
-    assert _.string_left(*case) == expected
-
-
-@parametrize('case,expected', [
-    (('This_is_a_test_string', '_'), 'This_is_a_test'),
-    (('This_is_a_test_string', ''), 'This_is_a_test_string'),
-    (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
-def test_string_left_back(case, expected):
-    assert _.string_left_back(*case) == expected
-
-
-@parametrize('case,expected', [
-    (('This_is_a_test_string', '_'), 'is_a_test_string'),
-    (('This_is_a_test_string', ''), 'This_is_a_test_string'),
-    (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
-def test_string_right(case, expected):
-    assert _.string_right(*case) == expected
-
-
-@parametrize('case,expected', [
-    (('This_is_a_test_string', '_'), 'string'),
-    (('This_is_a_test_string', ''), 'This_is_a_test_string'),
-    (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
-def test_string_right_back(case, expected):
-    assert _.string_right_back(*case) == expected
-
-
-@parametrize('case,expected', [
     (('abc', 'a'), True),
     (('abc', 'b'), False),
     (('abc', 'a', 0), True),
@@ -439,6 +403,42 @@ def test_starts_with(case, expected):
 ])
 def test_strip_tags(case, expected):
     assert _.strip_tags(case) == expected
+
+
+@parametrize('case,expected', [
+    (('This_is_a_test_string', '_'), 'This'),
+    (('This_is_a_test_string', ''), 'This_is_a_test_string'),
+    (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
+])
+def test_substr_left(case, expected):
+    assert _.substr_left(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('This_is_a_test_string', '_'), 'This_is_a_test'),
+    (('This_is_a_test_string', ''), 'This_is_a_test_string'),
+    (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
+])
+def test_substr_left_end(case, expected):
+    assert _.substr_left_end(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('This_is_a_test_string', '_'), 'is_a_test_string'),
+    (('This_is_a_test_string', ''), 'This_is_a_test_string'),
+    (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
+])
+def test_substr_right(case, expected):
+    assert _.substr_right(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('This_is_a_test_string', '_'), 'string'),
+    (('This_is_a_test_string', ''), 'This_is_a_test_string'),
+    (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
+])
+def test_substr_right_end(case, expected):
+    assert _.substr_right_end(*case) == expected
 
 
 @parametrize('case,expected', [
