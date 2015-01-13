@@ -310,6 +310,7 @@ from .strings import (
     js_replace,
     kebab_case,
     lines,
+    number_format,
     pad,
     pad_left,
     pad_right,

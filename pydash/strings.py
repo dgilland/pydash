@@ -47,6 +47,7 @@ __all__ = (
     'js_replace',
     'kebab_case',
     'lines',
+    'number_format',
     'pad',
     'pad_left',
     'pad_right',
@@ -543,6 +544,44 @@ def lines(text):
     .. versionadded:: 3.0.0
     """
     return text.splitlines()
+
+
+def number_format(number, scale=0, decimal_separator='.', order_separator=','):
+    """Format a number to scale with custom decimal and order separators.
+
+    Args:
+        number (int|float): Number to format.
+        scale (int, optional): Number of decimals to include. Defaults to
+            ``0``.
+        decimal_separator (str, optional): Decimal separator to use. Defaults
+            to ``'.'``.
+        order_separator (str, optional): Order separator to use. Defaults to
+            ``','``.
+
+    Returns:
+        str: Formatted number as string.
+
+    .. versionadded:: 3.0.0
+    """
+    # Create a string formatter which converts number to the appropriately
+    # scaled representation.
+    fmt = '{{0:.{0:d}f}}'.format(scale)
+
+    try:
+        num_parts = fmt.format(number).split('.')
+    except ValueError:
+        text = ''
+    else:
+        int_part = num_parts[0]
+        dec_part = (num_parts + [''])[1]
+
+        # Reverse the integer part, chop it into groups of 3, join on
+        # `order_separator`, and then unreverse the string.
+        int_part = order_separator.join(chop(int_part[::-1], 3))[::-1]
+
+        text = decimal_separator.join(pyd.compact([int_part, dec_part]))
+
+    return text
 
 
 def pad(text, length, chars=' '):

@@ -258,6 +258,18 @@ def test_lines(case, expected):
 
 
 @parametrize('case,expected', [
+    ((1234,), '1,234'),
+    ((1234567890,), '1,234,567,890'),
+    ((1234, 2), '1,234.00'),
+    ((1234, 1), '1,234.0'),
+    ((1234, 2, ',', '.'), '1.234,00'),
+    (('1234',), ''),
+])
+def test_number_format(case, expected):
+    assert _.number_format(*case) == expected
+
+
+@parametrize('case,expected', [
     (('abc', 8), '  abc   '),
     (('abc', 8, '_-'), '_-abc_-_'),
     (('abc', 3), 'abc'),

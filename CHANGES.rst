@@ -16,6 +16,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``insert_substr``.
 - Add ``is_blank``.
 - Add ``lines``.
+- Add ``number_format``.
 - Add ``predecessor``.
 - Add ``re_replace``.
 - Add ``replace``.
