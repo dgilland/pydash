@@ -311,6 +311,18 @@ def test_predecessor(case, expected):
 
 
 @parametrize('case,expected', [
+    (('Hello, world',), '...'),
+    (('Hello, world', 5), 'Hello...'),
+    (('Hello, world', 8), 'Hello...'),
+    (('Hello, world', 5, ' (read a lot more)'), 'Hello, world'),
+    (('Hello, cruel world', 15), 'Hello, cruel...'),
+    (('Hello', 10), 'Hello'),
+])
+def test_prune(case, expected):
+    assert _.prune(*case) == expected
+
+
+@parametrize('case,expected', [
     (('hello world!',), '"hello world!"'),
     (('',), '""'),
     ((5,), '"5"'),

@@ -52,6 +52,7 @@ __all__ = (
     'pad_left',
     'pad_right',
     'predecessor',
+    'prune',
     'quote',
     're_replace',
     'repeat',
@@ -670,6 +671,55 @@ def predecessor(char):
     .. versionadded:: 3.0.0
     """
     return chr(ord(char) + 1)
+
+
+def prune(text, length=0, omission='...'):
+    """Like :func:`truncate` except it ensures that the pruned string doesn't
+    exceed the original length, i.e., it avoids half-chopped words when
+    truncating. If the pruned text + `omission` text is longer than the
+    original text, then the original text is returned.
+
+    Args:
+        text (str): String to prune.
+        length (int, optional): Target prune length. Defaults to ``0``.
+        omission (str, optional): Omission text to append to the end of the
+            pruned string. Defaults to ``'...'``.
+
+    Returns:
+        str: Pruned string.
+
+    .. versionadded:: 3.0.0
+    """
+    text_len = len(text)
+    omission_len = len(omission)
+
+    if text_len < (length + omission_len):
+        return text
+
+    # Replace non-alphanumeric chars with whitespace.
+    def repl(match):  # pylint: disable=missing-docstring
+        char = match.group(0)
+        return ' ' if char.upper() == char.lower() else char
+
+    subtext = re_replace(text[:length + 1], '.(?=\W*\w*$)', repl)
+
+    if re.match('\w\w', subtext[-2:]):
+        # Last two characters are alphanumeric. Remove last "word" from end of
+        # string so that we prune to the next whole word.
+        subtext = re_replace(subtext, '\s*\S+$', '')
+    else:
+        # Last character (at least) is whitespace. So remove that character as
+        # well as any other whitespace.
+        subtext = subtext[:-1].rstrip()
+
+    subtext_len = len(subtext)
+
+    # Only add omission text if doing so will result in a string that is
+    # equal two or smaller in length than the original.
+    if (subtext_len + omission_len) <= text_len:
+        text = text[:subtext_len] + omission
+
+    return text
 
 
 def quote(text, quote_char='"'):

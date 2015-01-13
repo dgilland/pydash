@@ -18,6 +18,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``lines``.
 - Add ``number_format``.
 - Add ``predecessor``.
+- Add ``prune``.
 - Add ``re_replace``.
 - Add ``replace``.
 - Add ``series_phrase``.
