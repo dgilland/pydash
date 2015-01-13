@@ -319,6 +319,8 @@ from .strings import (
     re_replace,
     repeat,
     replace,
+    series_phrase,
+    series_phrase_serial,
     slugify,
     snake_case,
     starts_with,

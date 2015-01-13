@@ -20,6 +20,8 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``predecessor``.
 - Add ``re_replace``.
 - Add ``replace``.
+- Add ``series_phrase``.
+- Add ``series_phrase_serial``.
 - Add ``slugify``.
 - Add ``strip_tags``.
 - Add ``substr_left``.

@@ -56,6 +56,8 @@ __all__ = (
     're_replace',
     'repeat',
     'replace',
+    'series_phrase',
+    'series_phrase_serial',
     'slugify',
     'snake_case',
     'starts_with',
@@ -758,6 +760,54 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
     # NOTE: Can't use `flags` argument to re.sub in Python 2.6 so have to use
     # this version instead.
     return re.compile(pattern, flags=flags).sub(repl, text, count=count)
+
+
+def series_phrase(items, separator=', ', last_separator=' and ', serial=False):
+    """Join items into a grammatical series phrase, e.g., ``"item1, item2,
+    item3 and item4"``.
+
+    Args:
+        items (list): List of string items to join.
+        separator (str, optional): Item separator. Defaults to ``', '``.
+        last_separator (str, optional): Last item separator. Defaults to
+            ``' and '``.
+        serial (bool, optional): Whether to include `separator` with
+            `last_separator` when number of items is greater than 2. Defaults
+            to ``False``.
+
+    Returns:
+        str: Joined string.
+
+    .. versionadded:: 3.0.0
+    """
+    items = pyd.chain(items).map(pyd.to_string).compact().value()
+    item_count = len(items)
+
+    if item_count > 2 and serial:
+        last_separator = separator.rstrip() + last_separator
+
+    if item_count >= 2:
+        items = items[:-2] + [last_separator.join(items[-2:])]
+
+    return separator.join(items)
+
+
+def series_phrase_serial(items, separator=', ', last_separator=' and '):
+    """Join items into a grammatical series phrase using a serial separator,
+    e.g., ``"item1, item2, item3, and item4"``.
+
+    Args:
+        items (list): List of string items to join.
+        separator (str, optional): Item separator. Defaults to ``', '``.
+        last_separator (str, optional): Last item separator. Defaults to
+            ``' and '``.
+
+    Returns:
+        str: Joined string.
+
+    .. versionadded:: 3.0.0
+    """
+    return series_phrase(items, separator, last_separator, serial=True)
 
 
 def slugify(text):

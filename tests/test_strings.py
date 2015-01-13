@@ -369,6 +369,31 @@ def test_replace(case, expected):
 
 
 @parametrize('case,expected', [
+    (([],), ''),
+    ((['', ''],), ''),
+    ((['foo'],), 'foo'),
+    ((['foo', 'bar'],), 'foo and bar'),
+    ((['foo', 'bar', 'baz'],), 'foo, bar and baz'),
+    ((['foo', 'bar', 'baz', 'qux'], ', ', ' or '), 'foo, bar, baz or qux'),
+    ((['foo', 'bar', 'baz', 'qux'], ';', ' or '), 'foo;bar;baz or qux'),
+])
+def test_series_phrase(case, expected):
+    assert _.series_phrase(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([],), ''),
+    ((['', ''],), ''),
+    ((['foo'],), 'foo'),
+    ((['foo', 'bar'],), 'foo and bar'),
+    ((['foo', 'bar', 'baz'],), 'foo, bar, and baz'),
+    ((['foo', 'bar', 'baz', 'qux'], ', ', ' or '), 'foo, bar, baz, or qux'),
+    ((['foo', 'bar', 'baz', 'qux'], ';', ' or '), 'foo;bar;baz; or qux'),
+])
+def test_series_phrase_serial(case, expected):
+    assert _.series_phrase_serial(*case) == expected
+
+@parametrize('case,expected', [
     ('Foo Bar', 'foo-bar'),
     (' foo bar ', 'foo-bar'),
     (u'Un éléphant à l\'orée du bois', 'un-elephant-a-l-oree-du-bois'),
