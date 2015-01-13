@@ -22,6 +22,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``prune``.
 - Add ``re_replace``.
 - Add ``replace``.
+- Add ``separator_case``.
 - Add ``series_phrase``.
 - Add ``series_phrase_serial``.
 - Add ``slugify``.

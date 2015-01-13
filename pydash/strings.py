@@ -58,6 +58,7 @@ __all__ = (
     're_replace',
     'repeat',
     'replace',
+    'separator_case',
     'series_phrase',
     'series_phrase_serial',
     'slugify',
@@ -563,7 +564,7 @@ def kebab_case(text):
 
     .. versionadded:: 1.1.0
     """
-    return '-'.join(wrd.lower() for wrd in words(pyd.to_string(text)) if wrd)
+    return separator_case(text, '-')
 
 
 def lines(text):
@@ -843,6 +844,22 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
     return re.compile(pattern, flags=flags).sub(repl, text, count=count)
 
 
+def separator_case(text, separator):
+    """Splits `text` on words and joins with `separator`.
+
+    Args:
+        text (str): String to convert.
+        separator (str): Separator to join words with.
+
+    Returns:
+        str: Converted string.
+
+    .. versionadded:: 3.0.0
+    """
+    return separator.join(word.lower()
+                          for word in words(pyd.to_string(text)) if word)
+
+
 def series_phrase(items, separator=', ', last_separator=' and ', serial=False):
     """Join items into a grammatical series phrase, e.g., ``"item1, item2,
     item3 and item4"``.
@@ -891,7 +908,7 @@ def series_phrase_serial(items, separator=', ', last_separator=' and '):
     return series_phrase(items, separator, last_separator, serial=True)
 
 
-def slugify(text):
+def slugify(text, separator='-'):
     """Convert `text` into an ASCII slug which can be used safely in URLs.
     Incoming `text` is converted to unicode and noramlzied using the ``NFKD``
     form. This results in some accented characters being converted to their
@@ -901,15 +918,18 @@ def slugify(text):
 
     Args:
         text (str): String to slugify.
+        separator (str, optional): Separator to use. Defaults to ``'-'``.
 
     Returns:
         str: Slugified string.
 
     .. versionadded:: 3.0.0
     """
-    return (kebab_case(unicodedata.normalize('NFKD', text_type(text))
-                       .encode('ascii', 'ignore')
-                       .decode('utf8')))
+    normalized = (unicodedata.normalize('NFKD', text_type(text))
+                  .encode('ascii', 'ignore')
+                  .decode('utf8'))
+
+    return separator_case(normalized, separator)
 
 
 def snake_case(text):
@@ -927,7 +947,7 @@ def snake_case(text):
 
     .. versionadded:: 1.1.0
     """
-    return '_'.join(wrd.lower() for wrd in words(pyd.to_string(text)) if wrd)
+    return separator_case(text, '_')
 
 
 underscore_case = snake_case

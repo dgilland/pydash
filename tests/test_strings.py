@@ -397,6 +397,24 @@ def test_replace(case, expected):
 
 
 @parametrize('case,expected', [
+    (('foo  bar baz', '-'), 'foo-bar-baz'),
+    (('foo__bar_baz', '-'), 'foo-bar-baz'),
+    (('foo-_bar-_-baz', '-'), 'foo-bar-baz'),
+    (('foo!bar,baz', '-'), 'foo-bar-baz'),
+    (('--foo.bar;baz', '-'), 'foo-bar-baz'),
+    (('Foo Bar', '-'), 'foo-bar'),
+    (('foo  bar baz', '_'), 'foo_bar_baz'),
+    (('foo__bar_baz', '_'), 'foo_bar_baz'),
+    (('foo-_bar-_-baz', '_'), 'foo_bar_baz'),
+    (('foo!bar,baz', '_'), 'foo_bar_baz'),
+    (('--foo.bar;baz', '_'), 'foo_bar_baz'),
+    (('Foo Bar', '_'), 'foo_bar'),
+])
+def test_separator_case(case, expected):
+    assert _.separator_case(*case) == expected
+
+
+@parametrize('case,expected', [
     (([],), ''),
     ((['', ''],), ''),
     ((['foo'],), 'foo'),
@@ -420,6 +438,7 @@ def test_series_phrase(case, expected):
 ])
 def test_series_phrase_serial(case, expected):
     assert _.series_phrase_serial(*case) == expected
+
 
 @parametrize('case,expected', [
     ('Foo Bar', 'foo-bar'),

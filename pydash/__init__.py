@@ -321,6 +321,7 @@ from .strings import (
     re_replace,
     repeat,
     replace,
+    separator_case,
     series_phrase,
     series_phrase_serial,
     slugify,
