@@ -180,11 +180,13 @@ def camel_case(text):
     return text[:1].lower() + text[1:]
 
 
-def capitalize(text):
+def capitalize(text, lower_rest=True):
     """Capitalizes the first character of `text`.
 
     Args:
         text (str): String to capitalize.
+        lower_rest (bool, optional): Whether to cast rest of string to lower
+            case. Defaults to ``True``.
 
     Returns:
         str: Capitalized string.
@@ -192,9 +194,10 @@ def capitalize(text):
     .. versionadded:: 1.1.0
 
     .. versionchanged:: 3.0.0
-        Only modify first character. Leave other characters unmodified.
+        Added `lower_rest` option.
     """
-    return text[:1].upper() + text[1:]
+    return (text.capitalize() if lower_rest
+            else text[:1].upper() + text[1:])
 
 
 def chars(text):
@@ -242,7 +245,7 @@ def class_case(text):
 
     .. versionadded:: 3.0.0
     """
-    return capitalize(camel_case(text))
+    return capitalize(camel_case(text), lower_rest=False)
 
 
 def clean(text):

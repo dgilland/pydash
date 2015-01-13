@@ -38,7 +38,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
 - Make ``camel_case`` work with empty string.
-- Make ``capitalize`` only modify the first character of the string. Previously, it would convert rest of string to lower case. (**breaking change**)
+- Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.
 
 
