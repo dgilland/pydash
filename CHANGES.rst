@@ -32,9 +32,10 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``successor``.
 - Add ``swap_case``.
 - Add ``title_case``.
+- Add ``truncate`` as alias of ``trunc``.
 - Add ``to_boolean``.
 - Add ``to_number``.
-- Add ``underscore_case`` as alias to ``snake_case``.
+- Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
 - Make ``camel_case`` work with empty string.
 - Make ``capitalize`` only modify the first character of the string. Previously, it would convert rest of string to lower case. (**breaking change**)

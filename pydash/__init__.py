@@ -338,6 +338,7 @@ from .strings import (
     trim_left,
     trim_right,
     trunc,
+    truncate,
     underscore_case,
     unescape,
     unquote,

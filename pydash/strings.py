@@ -75,6 +75,7 @@ __all__ = (
     'trim_left',
     'trim_right',
     'trunc',
+    'truncate',
     'underscore_case',
     'unescape',
     'unquote',
@@ -390,6 +391,10 @@ def escape_reg_exp(text):
 
     Returns:
         str: RegExp escaped string.
+
+    See Also:
+        - :func:`escape_reg_exp` (main definition)
+        - :func:`escape_re` (alias)
 
     .. versionadded:: 1.1.0
     """
@@ -890,6 +895,10 @@ def snake_case(text):
     Returns:
         str: String converted to snake case.
 
+    See Also:
+        - :func:`snake_case` (main definition)
+        - :func:`underscore_case` (alias)
+
     .. versionadded:: 1.1.0
     """
     return '_'.join(wrd.lower() for wrd in words(pyd.to_string(text)) if wrd)
@@ -1106,7 +1115,7 @@ def trim_right(text, chars=None):
     return pyd.to_string(text).rstrip(chars)
 
 
-def trunc(text, length=30, omission='...', separator=None):
+def truncate(text, length=30, omission='...', separator=None):
     """Truncates `text` if it is longer than the given maximum string length.
     The last characters of the truncated string are replaced with the omission
     string which defaults to ``...``.
@@ -1120,7 +1129,15 @@ def trunc(text, length=30, omission='...', separator=None):
     Returns:
         str: Truncated string.
 
+    See Also:
+        - :func:`truncate` (main definition)
+        - :func:`trunc` (alias)
+
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: 3.0.0
+        Made :func:`truncate` main function definition and added :func:`trunc`
+        as alias.
     """
     omission_len = len(omission)
     text_len = length - omission_len
@@ -1139,6 +1156,9 @@ def trunc(text, length=30, omission='...', separator=None):
             trunc_len = last.start()
 
     return text[:trunc_len] + omission
+
+
+trunc = truncate
 
 
 def unescape(text):

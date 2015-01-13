@@ -564,8 +564,15 @@ def test_trim_right(case, expected):
     (('hi-diddly-ho there, neighborino', 30, ' [...]'),
      'hi-diddly-ho there, neig [...]')
 ])
-def test_trunc(case, expected):
-    assert _.trunc(*case) == expected
+def test_truncate(case, expected):
+    assert _.truncate(*case) == expected
+
+
+@parametrize('case', [
+    _.trunc
+])
+def test_truncate_aliases(case):
+    assert _.truncate is case
 
 
 @parametrize('case,expected', [
