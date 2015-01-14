@@ -792,7 +792,13 @@ def to_string(obj):
 
     .. versionadded:: 2.0.0
     """
-    return text_type(obj) if not pyd.is_string(obj) else obj
+    if pyd.is_string(obj):
+        res = obj
+    elif obj is None:
+        res = ''
+    else:
+        res = text_type(obj)
+    return res
 
 
 def transform(obj, callback=None, accumulator=None):

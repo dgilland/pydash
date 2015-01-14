@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import datetime as dt
+
 import pydash as _
 
 from . import fixtures
 from .fixtures import parametrize
 
+
+today = dt.date.today()
 
 @parametrize('case,expected', [
     (({'name': 'fred'}, {'employer': 'slate'}),
@@ -491,13 +495,15 @@ def test_to_boolean(case, expected):
 def test_to_number(case, expected):
     assert _.to_number(*case) == expected
 
-
 @parametrize('case,expected', [
     (1, '1'),
     (1.25, '1.25'),
     (True, 'True'),
     ([1], '[1]'),
     ('d\xc3\xa9j\xc3\xa0 vu', 'd\xc3\xa9j\xc3\xa0 vu'),
+    ('', ''),
+    (None, ''),
+    (today, str(today)),
 ])
 def test_to_string(case, expected):
     assert _.to_string(case) == expected
