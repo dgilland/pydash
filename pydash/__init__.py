@@ -326,6 +326,7 @@ from .strings import (
     series_phrase_serial,
     slugify,
     snake_case,
+    split,
     starts_with,
     strip_tags,
     substr_left,

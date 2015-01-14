@@ -9,6 +9,7 @@ import re
 import unicodedata
 
 import pydash as pyd
+from .helpers import NoValue
 from ._compat import (
     html_unescape,
     iteritems,
@@ -64,6 +65,7 @@ __all__ = (
     'series_phrase_serial',
     'slugify',
     'snake_case',
+    'split',
     'starts_with',
     'strip_tags',
     'substr_left',
@@ -427,33 +429,11 @@ def escape_reg_exp(text):
 
     .. versionadded:: 1.1.0
     """
+    text = pyd.to_string(text)
     return re.escape(text)
 
 
 escape_re = escape_reg_exp
-
-
-def explode(text, delimiter=None):
-    """Splits `text` on `delimiter`. If `delimiter` not provided or ``None``,
-    then `text` is split on every character.
-
-    Args:
-        text (str): String to explode.
-        delimiter (str, optional): Delimiter string to split on. Defaults to
-            ``None``.
-
-    Returns:
-        list: Exploded string.
-
-    .. versionadded:: 2.0.0
-    """
-    if delimiter:
-        ret = text.split(delimiter)
-    else:
-        # Splits text into list of characters.
-        ret = list(text)
-
-    return ret
 
 
 def has_substr(text, subtext):
@@ -964,6 +944,44 @@ def snake_case(text):
 
 
 underscore_case = snake_case
+
+
+def split(text, separator=NoValue):
+    """Splits `text` on `separator`. If `separator` not provided, then `text`
+    is split on whitespace. If `separator` is falsey, then `text` is split on
+    every character.
+
+    Args:
+        text (str): String to explode.
+        separator (str, optional): Separator string to split on. Defaults to
+            ``NoValue``.
+
+    Returns:
+        list: Split string.
+
+    See Also:
+        - :func:`split` (main definition)
+        - :func:`explode` (alias)
+
+    .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Changed `separator` default to ``NoValue`` and supported splitting on
+        whitespace by default.
+    """
+    text = pyd.to_string(text)
+
+    if separator is NoValue:
+        ret = text.split()
+    elif separator:
+        ret = text.split(separator)
+    else:
+        ret = chars(text)
+
+    return ret
+
+
+explode = split
 
 
 def starts_with(text, target, position=None):

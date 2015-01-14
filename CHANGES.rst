@@ -45,6 +45,7 @@ v3.0.0 (xxxx-xx-xx)
 - Make ``splice`` work with strings.
 - Move ``arrays.join`` to ``strings.join``. (**breaking change**)
 - Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
+- Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 
 
 v2.4.1 (2015-01-11)

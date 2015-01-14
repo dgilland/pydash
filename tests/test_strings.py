@@ -186,14 +186,6 @@ def test_ensure_ends_with(text, suffix, expected):
 
 
 @parametrize('case,expected', [
-    (('string',), ['s', 't', 'r', 'i', 'n', 'g']),
-    (('string1,string2', ','), ['string1', 'string2']),
-])
-def test_explode(case, expected):
-    assert _.explode(*case) == expected
-
-
-@parametrize('case,expected', [
     (('foobar', 'oo'), True),
     (('foobar', 'x'), False),
     (('foobar', 'f'), True),
@@ -481,6 +473,22 @@ def test_snake_case(case, expected):
 ])
 def test_snake_case_aliases(case):
     assert _.snake_case is case
+
+
+@parametrize('case,expected', [
+    (('string1 string2',), ['string1', 'string2']),
+    (('string', ''), ['s', 't', 'r', 'i', 'n', 'g']),
+    (('string1,string2', ','), ['string1', 'string2']),
+])
+def test_split(case, expected):
+    assert _.split(*case) == expected
+
+
+@parametrize('case', [
+    _.explode
+])
+def test_split_aliases(case):
+    assert _.split is case
 
 
 @parametrize('case,expected', [
