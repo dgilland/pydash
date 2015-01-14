@@ -215,14 +215,6 @@ def test_human_case(case, expected):
 
 
 @parametrize('case,expected', [
-    ((['s', 't', 'r', 'i', 'n', 'g'],), 'string'),
-    ((['string1', 'string2'], ','), 'string1,string2'),
-])
-def test_implode(case, expected):
-    assert _.implode(*case) == expected
-
-
-@parametrize('case,expected', [
     (('foobar', 0, 'xx'), 'xxfoobar'),
     (('foobar', 1, 'xx'), 'fxxoobar'),
     (('foobar', 4, 'xx'), 'foobxxar'),
@@ -231,6 +223,23 @@ def test_implode(case, expected):
 ])
 def test_insert_substr(case, expected):
     assert _.insert_substr(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], '.'), '1.2.3'),
+    ((['one', 'two', 'three'], '-.-'), 'one-.-two-.-three'),
+    ((['s', 't', 'r', 'i', 'n', 'g'],), 'string'),
+    ((['string1', 'string2'], ','), 'string1,string2'),
+])
+def test_join(case, expected):
+    assert _.join(*case) == expected
+
+
+@parametrize('case', [
+    _.implode
+])
+def test_join_aliases(case):
+    assert _.join is case
 
 
 @parametrize('case,expected', [

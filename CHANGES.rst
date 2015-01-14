@@ -16,6 +16,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``human_case``.
 - Add ``insert_substr``.
 - Add ``is_blank``.
+- Add ``join`` as alias of ``implode``.
 - Add ``lines``.
 - Add ``number_format``.
 - Add ``predecessor``.
@@ -42,6 +43,8 @@ v3.0.0 (xxxx-xx-xx)
 - Make ``camel_case`` work with empty string.
 - Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.
+- Move ``arrays.join`` to ``strings.join``. (**breaking change**)
+- Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 
 
 v2.4.1 (2015-01-11)

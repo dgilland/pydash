@@ -44,6 +44,7 @@ __all__ = (
     'human_case',
     'implode',
     'insert_substr',
+    'join',
     'js_match',
     'js_replace',
     'kebab_case',
@@ -506,20 +507,31 @@ def insert_substr(text, index, subtext):
     return text[:index] + subtext + text[index:]
 
 
-def implode(array, delimiter=''):
-    """Joins an iterable into a string using `delimiter` between each element.
+def join(array, separator=''):
+    """Joins an iterable into a string using `separator` between each element.
 
     Args:
         array (iterable): Iterable to implode.
-        delimiter (str, optional): Delimiter to using when joining. Defaults to
+        separator (str, optional): Separator to using when joining. Defaults to
             ``''``.
 
     Returns:
-        str: Imploded iterable.
+        str: Joined string
+
+    See Also:
+        - :func:`join` (main definition)
+        - :func:`implode` (alias)
 
     .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Modified :func:`implode` to have :func:`join` as main definition and
+        :func:`implode` as alias.
     """
-    return delimiter.join(array)
+    return separator.join(pyd.map_(array, pyd.to_string))
+
+
+implode = join
 
 
 def js_match(reg_exp, text):

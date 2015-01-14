@@ -37,7 +37,6 @@ __all__ = (
     'interleave',
     'intersection',
     'intersperse',
-    'join',
     'last',
     'last_index_of',
     'mapcat',
@@ -403,21 +402,6 @@ def intersperse(array, separator):
     .. versionadded:: 2.0.0
     """
     return list(iterintersperse(array, separator))
-
-
-def join(array, separator):
-    """Return the elements of `array` as a string joined with `separator`.
-
-    Args:
-        array (list): List to join.
-        separator (str): String to join with.
-
-    Returns:
-        str: Joined string.
-
-    ..versionadded:: 2.2.0
-    """
-    return separator.join(pyd.map_(array, pyd.to_string))
 
 
 def last(array):

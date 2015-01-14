@@ -210,14 +210,6 @@ def test_intersperse(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], '.'), '1.2.3'),
-    ((['one', 'two', 'three'], '-.-'), 'one-.-two-.-three')
-])
-def test_join(case, expected):
-    assert _.join(*case) == expected
-
-
-@parametrize('case,expected', [
     ([1, 2, 3], 3),
     ([], None)
 ])
