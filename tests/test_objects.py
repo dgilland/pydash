@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import datetime as dt
+
 import pydash as _
 
 from . import fixtures
 from .fixtures import parametrize
+
+
+today = dt.date.today()
 
 
 @parametrize('case,expected', [
@@ -498,6 +503,9 @@ def test_to_number(case, expected):
     (True, 'True'),
     ([1], '[1]'),
     ('d\xc3\xa9j\xc3\xa0 vu', 'd\xc3\xa9j\xc3\xa0 vu'),
+    ('', ''),
+    (None, ''),
+    (today, str(today)),
 ])
 def test_to_string(case, expected):
     assert _.to_string(case) == expected

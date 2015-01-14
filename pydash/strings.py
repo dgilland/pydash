@@ -198,6 +198,7 @@ def capitalize(text, lower_rest=True):
     .. versionchanged:: 3.0.0
         Added `lower_rest` option.
     """
+    text = pyd.to_string(text)
     return (text.capitalize() if lower_rest
             else text[:1].upper() + text[1:])
 

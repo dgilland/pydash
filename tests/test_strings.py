@@ -14,7 +14,9 @@ from .fixtures import parametrize
     ('foo-_bar-_-baz', 'fooBarBaz'),
     ('foo!bar,baz', 'fooBarBaz'),
     ('--foo.bar;baz', 'fooBarBaz'),
+    (8, '8'),
     ('', ''),
+    (None, ''),
 ])
 def test_camel_case(case, expected):
     assert _.camel_case(case) == expected
@@ -29,6 +31,10 @@ def test_camel_case(case, expected):
     (('foo bar', False), 'Foo bar'),
     (('fOO bar', False), 'FOO bar'),
     (('foo Bar', False), 'Foo Bar'),
+    ((8,), '8'),
+    ((' ',), ' '),
+    (('',), ''),
+    ((None,), ''),
 ])
 def test_capitalize(case, expected):
     assert _.capitalize(*case) == expected
