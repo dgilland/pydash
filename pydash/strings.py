@@ -181,7 +181,7 @@ def camel_case(text):
 
     .. versionadded:: 1.1.0
     """
-    text = ''.join(word.title() for word in words(pyd.to_string(text)))
+    text = ''.join(word.title() for word in words(text))
     return text[:1].lower() + text[1:]
 
 
@@ -217,6 +217,7 @@ def chars(text):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return list(text)
 
 
@@ -232,6 +233,7 @@ def chop(text, step):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     if step <= 0:
         chopped = [text]
     else:
@@ -252,6 +254,7 @@ def chop_right(text, step):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     if step <= 0:
         chopped = [text]
     else:
@@ -287,6 +290,7 @@ def clean(text):
 
     ..versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return ' '.join(pyd.compact(text.split()))
 
 
@@ -302,6 +306,7 @@ def count_substr(text, subtext):
 
     ..versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text.count(subtext)
 
 
@@ -317,6 +322,7 @@ def deburr(text):
 
     .. versionadded:: 2.0.0
     """
+    text = pyd.to_string(text)
     return js_replace(RE_LATIN1,
                       text,
                       lambda match: DEBURRED_LETTERS.get(match.group(),
@@ -334,6 +340,7 @@ def decapitalize(text):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text[:1].lower() + text[1:]
 
 
@@ -373,6 +380,7 @@ def ensure_ends_with(text, suffix):
 
     .. versionadded:: 2.4.0
     """
+    text = pyd.to_string(text)
     return text if text.endswith(suffix) else '{0}{1}'.format(text, suffix)
 
 
@@ -390,6 +398,7 @@ def ensure_starts_with(text, prefix):
 
     .. versionadded:: 2.4.0
     """
+    text = pyd.to_string(text)
     return text if text.startswith(prefix) else '{1}{0}'.format(text, prefix)
 
 
@@ -408,10 +417,10 @@ def escape(text):
     .. versionchanged:: 1.1.0
         Moved function to Strings module.
     """
+    text = pyd.to_string(text)
     # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
     # differently (e.g. "'" isn't escaped by html_escape() but is by Lo-Dash).
-    return ''.join(HTML_ESCAPES.get(char, char)
-                   for char in pyd.to_string(text))
+    return ''.join(HTML_ESCAPES.get(char, char) for char in text)
 
 
 def escape_reg_exp(text):
@@ -448,6 +457,7 @@ def has_substr(text, subtext):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text.find(subtext) >= 0
 
 
@@ -484,6 +494,7 @@ def insert_substr(text, index, subtext):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text[:index] + subtext + text[index:]
 
 
@@ -526,6 +537,7 @@ def js_match(reg_exp, text):
 
     .. versionadded:: 2.0.0
     """
+    text = pyd.to_string(text)
     return js_to_py_re_find(reg_exp)(text)
 
 
@@ -543,6 +555,7 @@ def js_replace(reg_exp, text, repl):
 
     .. versionadded:: 2.0.0
     """
+    text = pyd.to_string(text)
     return js_to_py_re_replace(reg_exp)(text, repl)
 
 
@@ -571,6 +584,7 @@ def lines(text):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text.splitlines()
 
 
@@ -695,6 +709,7 @@ def predecessor(char):
 
     .. versionadded:: 3.0.0
     """
+    char = pyd.to_string(char)
     return chr(ord(char) + 1)
 
 
@@ -715,6 +730,7 @@ def prune(text, length=0, omission='...'):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     text_len = len(text)
     omission_len = len(omission)
 
@@ -827,6 +843,8 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
+
     if escape:
         pattern = re.escape(pattern)
 
@@ -850,7 +868,7 @@ def separator_case(text, separator):
     .. versionadded:: 3.0.0
     """
     return separator.join(word.lower()
-                          for word in words(pyd.to_string(text)) if word)
+                          for word in words(text) if word)
 
 
 def series_phrase(items, separator=', ', last_separator=' and ', serial=False):
@@ -1034,6 +1052,7 @@ def substr_left(text, subtext):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text.partition(subtext)[0] if subtext else text
 
 
@@ -1051,6 +1070,7 @@ def substr_left_end(text, subtext):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text.rpartition(subtext)[0] or text if subtext else text
 
 
@@ -1068,6 +1088,7 @@ def substr_right(text, subtext):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text.partition(subtext)[2] or text if subtext else text
 
 
@@ -1085,6 +1106,7 @@ def substr_right_end(text, subtext):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text.rpartition(subtext)[2] if subtext else text
 
 
@@ -1099,6 +1121,7 @@ def successor(char):
 
     .. versionadded:: 3.0.0
     """
+    char = pyd.to_string(char)
     return chr(ord(char) - 1)
 
 
@@ -1128,6 +1151,7 @@ def swap_case(text):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     return text.swapcase()
 
 
@@ -1142,6 +1166,7 @@ def title_case(text):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
     # NOTE: Can't use text.title() since it doesn't handle apostrophes.
     return ' '.join(word.capitalize() for word in re.split(' ', text))
 
@@ -1159,7 +1184,8 @@ def trim(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
-    return pyd.to_string(text).strip(chars)
+    text = pyd.to_string(text)
+    return text.strip(chars)
 
 
 def trim_left(text, chars=None):
@@ -1174,7 +1200,8 @@ def trim_left(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
-    return pyd.to_string(text).lstrip(chars)
+    text = pyd.to_string(text)
+    return text.lstrip(chars)
 
 
 def trim_right(text, chars=None):
@@ -1189,7 +1216,8 @@ def trim_right(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
-    return pyd.to_string(text).rstrip(chars)
+    text = pyd.to_string(text)
+    return text.rstrip(chars)
 
 
 def truncate(text, length=30, omission='...', separator=None):
@@ -1216,9 +1244,11 @@ def truncate(text, length=30, omission='...', separator=None):
         Made :func:`truncate` main function definition and added :func:`trunc`
         as alias.
     """
+    text = pyd.to_string(text)
+
     omission_len = len(omission)
     text_len = length - omission_len
-    text = pyd.to_string(text)[:text_len]
+    text = text[:text_len]
 
     trunc_len = len(text)
 
@@ -1254,6 +1284,7 @@ def unescape(text):
     .. versionchanged:: 1.1.0
         Moved to Strings module.
     """
+    text = pyd.to_string(text)
     return html_unescape(text)
 
 
@@ -1269,6 +1300,8 @@ def unquote(text, quote_char='"'):
 
     .. versionadded:: 3.0.0
     """
+    text = pyd.to_string(text)
+
     if text[:1] == quote_char and text[-1] == quote_char:
         text = text[1:-1]
 
@@ -1290,6 +1323,7 @@ def url(*paths, **params):
 
     .. versionadded:: 2.2.0
     """
+    paths = pyd.map_(paths, pyd.to_string)
     paths_list = []
     params_list = flatten_url_params(params)
 
