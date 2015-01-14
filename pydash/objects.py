@@ -791,6 +791,9 @@ def to_string(obj):
         str: String representation of `obj`.
 
     .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Convert ``None`` to empty string.
     """
     if pyd.is_string(obj):
         res = obj

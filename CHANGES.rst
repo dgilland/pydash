@@ -43,6 +43,7 @@ v3.0.0 (xxxx-xx-xx)
 - Make ``camel_case`` work with empty string.
 - Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.
+- Make ``to_string`` convert ``None`` to empty string.
 - Move ``arrays.join`` to ``strings.join``. (**breaking change**)
 - Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 - Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
