@@ -10,6 +10,7 @@ from .fixtures import parametrize
 
 today = dt.date.today()
 
+
 @parametrize('case,expected', [
     (({'name': 'fred'}, {'employer': 'slate'}),
      {'name': 'fred', 'employer': 'slate'}),
@@ -494,6 +495,7 @@ def test_to_boolean(case, expected):
 ])
 def test_to_number(case, expected):
     assert _.to_number(*case) == expected
+
 
 @parametrize('case,expected', [
     (1, '1'),
