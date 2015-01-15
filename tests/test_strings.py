@@ -88,6 +88,8 @@ def test_class_case(case, expected):
     ('  foo bar', 'foo bar'),
     ('  foo  bar', 'foo bar'),
     ('  foo  bar  ', 'foo bar'),
+    ('', ''),
+    (None, ''),
 ])
 def test_clean(case, expected):
     assert _.clean(case) == expected

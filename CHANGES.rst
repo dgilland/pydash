@@ -46,6 +46,7 @@ v3.0.0 (xxxx-xx-xx)
   - ``capitalize``
   - ``chop`` and ``chop_right``
   - ``class_case``
+  - ``clean``
 
 - Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.
