@@ -230,15 +230,16 @@ def chop(text, step):
 
     Returns:
         list: List of chopped characters.
+              If `text` is `None` an empty list is returned.
 
     .. versionadded:: 3.0.0
     """
+    if text is None: return []
     text = pyd.to_string(text)
     if step <= 0:
         chopped = [text]
     else:
         chopped = [text[i:i + step] for i in _range(0, len(text), step)]
-
     return chopped
 
 

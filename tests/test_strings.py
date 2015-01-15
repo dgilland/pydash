@@ -46,7 +46,10 @@ def test_capitalize(case, expected):
     (('foo', 4), ['foo']),
     (('foo', 0), ['foo']),
     (('', 3), []),
-    (('foo', -2), ['foo'])
+    (('foo', -2), ['foo']),
+    ((None, 0), []),
+    ((None, 1), []),
+    ((None, -1), []),
 ])
 def test_chop(case, expected):
     assert _.chop(*case) == expected

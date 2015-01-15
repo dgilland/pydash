@@ -40,7 +40,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``to_number``.
 - Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
-- Make ``camel_case`` and ``capitalize`` work with empty string and ``None``.
+- Make ``camel_case``, ``capitalize`` and ``chop`` work with empty strings and ``None``.
 - Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.
 - Make ``to_string`` convert ``None`` to empty string (**breaking change**).
