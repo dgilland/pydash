@@ -254,7 +254,7 @@ def test_insert_substr(case, expected):
 @parametrize('case,expected', [
     (((1, 2, 3), '.'), '1.2.3'),
     ((('one', 'two', 'three'), '-.-'), 'one-.-two-.-three'),
-    ((('s', 't', 'r', 'i', 'n', 'g'),''), 'string'),
+    ((('s', 't', 'r', 'i', 'n', 'g'), ''), 'string'),
     ((('s', 't', 'r', 'i', 'n', 'g'),), 'string'),
     ((('s', 't', 'r', 'i', 'n', 'g'), None), 'string'),
     ((('string1', 'string2'), ','), 'string1,string2'),

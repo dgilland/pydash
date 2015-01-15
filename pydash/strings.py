@@ -527,7 +527,9 @@ def join(array, separator=''):
         Modified :func:`implode` to have :func:`join` as main definition and
         :func:`implode` as alias.
     """
-    return pyd.to_string(separator).join(pyd.map_(array or tuple(), pyd.to_string))
+    return pyd.to_string(separator).join(pyd.map_(
+        array or tuple(), pyd.to_string)
+    )
 
 
 implode = join
