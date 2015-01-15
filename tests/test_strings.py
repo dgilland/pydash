@@ -78,6 +78,7 @@ def test_chop_right(case, expected):
     ('foo!bar,baz', 'FooBarBaz'),
     ('--foo.bar;baz', 'FooBarBaz'),
     ('', ''),
+    (None, ''),
 ])
 def test_class_case(case, expected):
     assert _.class_case(case) == expected
