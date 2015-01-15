@@ -4,7 +4,6 @@
 .. versionadded:: 1.1.0
 """
 
-from functools import partial
 import re
 import unicodedata
 
@@ -234,7 +233,8 @@ def chop(text, step):
 
     .. versionadded:: 3.0.0
     """
-    if text is None: return []
+    if text is None:
+        return []
     text = pyd.to_string(text)
     if step <= 0:
         chopped = [text]
@@ -255,7 +255,8 @@ def chop_right(text, step):
 
     .. versionadded:: 3.0.0
     """
-    if text is None: return []
+    if text is None:
+        return []
     text = pyd.to_string(text)
     if step <= 0:
         chopped = [text]
