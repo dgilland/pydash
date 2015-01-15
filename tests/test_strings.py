@@ -98,6 +98,9 @@ def test_clean(case, expected):
 @parametrize('case,expected', [
     ('foobar', ['f', 'o', 'o', 'b', 'a', 'r']),
     ('', []),
+    (5, ['5']),
+    (-5.6, ['-', '5', '.', '6']),
+    (None, []),
 ])
 def test_chars(case, expected):
     assert _.chars(case) == expected
