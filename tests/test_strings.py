@@ -323,6 +323,7 @@ def test_kebab_case(case, expected):
     ('foo\n', ['foo']),
     ('\nfoo', ['', 'foo']),
     ('', []),
+    (None, []),
 ])
 def test_lines(case, expected):
     assert _.lines(case) == expected

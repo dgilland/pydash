@@ -45,7 +45,7 @@ v3.0.0 (xxxx-xx-xx)
   - ``camel_case``, ``kebab_case`` and ``class_case``
   - ``capitalize`` and ``decapitalize``
   - ``chop`` and ``chop_right``
-  - ``join``
+  - ``lines`` and ``join``
   - ``clean``
   - ``chars``
   - ``count_substr``
