@@ -41,6 +41,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
 - Make the following functions work with empty strings and ``None``:
+
   - ``camel_case``
   - ``capitalize``
   - ``chop`` and ``chop_right``
