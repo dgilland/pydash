@@ -43,7 +43,7 @@ v3.0.0 (xxxx-xx-xx)
 - Make the following functions work with empty strings and ``None`` (**breaking change**):
 
   - ``camel_case``
-  - ``capitalize``
+  - ``capitalize`` and ``decapitalize``
   - ``chop`` and ``chop_right``
   - ``class_case``
   - ``clean``

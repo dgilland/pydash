@@ -147,6 +147,7 @@ def test_deburr(case, expected):
     ('Foo bar', 'foo bar'),
     ('Foo Bar', 'foo Bar'),
     ('FOO BAR', 'fOO BAR'),
+    (None, ''),
 ])
 def test_decapitalize(case, expected):
     assert _.decapitalize(case) == expected
