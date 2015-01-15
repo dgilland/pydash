@@ -308,7 +308,10 @@ def count_substr(text, subtext):
 
     ..versionadded:: 3.0.0
     """
+    if text is None or subtext is None:
+        return 0
     text = pyd.to_string(text)
+    subtext = pyd.to_string(subtext)
     return text.count(subtext)
 
 

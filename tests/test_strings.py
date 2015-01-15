@@ -110,6 +110,19 @@ def test_chars(case, expected):
     (('foobar', 'o'), 2),
     (('foobar', 'oo'), 1),
     (('foobar', 'ooo'), 0),
+    (('', 'ooo'), 0),
+    (('', None), 0),
+    ((None, 'ooo'), 0),
+    ((None, None), 0),
+    ((5, None), 0),
+    ((5, 5), 1),
+    ((5.5, 5), 2),
+    ((5.5, '5.'), 1),
+    ((65.5, '5.'), 1),
+    ((654.5, '5.'), 0),
+    (('', ''), 1),
+    (('1', ''), 2),
+    ((1.4, ''), 4),
 ])
 def test_count_substr(case, expected):
     assert _.count_substr(*case) == expected
