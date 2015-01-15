@@ -45,6 +45,7 @@ v3.0.0 (xxxx-xx-xx)
   - ``camel_case``
   - ``capitalize``
   - ``chop`` and ``chop_right``
+
 - Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.
 - Make ``to_string`` convert ``None`` to empty string (**breaking change**).
