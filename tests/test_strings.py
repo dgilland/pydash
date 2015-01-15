@@ -397,7 +397,11 @@ def test_prune(case, expected):
 @parametrize('case,expected', [
     (('hello world!',), '"hello world!"'),
     (('',), '""'),
+    (('', None), ''),
+    ((None,), '""'),
+    ((None, None), ''),
     ((5,), '"5"'),
+    ((5, None), '5'),
     ((-89,), '"-89"'),
     (('hello world!', '*'), '*hello world!*'),
     (('hello world!', '**'), '**hello world!**'),
@@ -616,6 +620,9 @@ def test_successor(case, expected):
     ('5', 12, '12512'),
     (5, '', '5'),
     ('', 5, '55'),
+    ('', None, ''),
+    (None, None, ''),
+    (5, None, '5'),
 ])
 def test_surround(source, wrapper, expected):
     assert _.surround(source, wrapper) == expected

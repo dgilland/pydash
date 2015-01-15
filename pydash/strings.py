@@ -1147,7 +1147,7 @@ def surround(text, wrapper):
 
     .. versionadded:: 2.4.0
     """
-    return '{1}{0}{1}'.format(text, wrapper)
+    return '{1}{0}{1}'.format(pyd.to_string(text), pyd.to_string(wrapper))
 
 
 def swap_case(text):
