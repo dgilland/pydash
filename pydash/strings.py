@@ -255,6 +255,7 @@ def chop_right(text, step):
 
     .. versionadded:: 3.0.0
     """
+    if text is None: return []
     text = pyd.to_string(text)
     if step <= 0:
         chopped = [text]
@@ -262,7 +263,6 @@ def chop_right(text, step):
         text_len = len(text)
         chopped = [text[-(i + step):text_len - i]
                    for i in _range(0, text_len, step)][::-1]
-
     return chopped
 
 

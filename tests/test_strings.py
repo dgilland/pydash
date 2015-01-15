@@ -61,7 +61,10 @@ def test_chop(case, expected):
     (('foo', 4), ['foo']),
     (('foo', 0), ['foo']),
     (('', 3), []),
-    (('foo', -2), ['foo'])
+    (('foo', -2), ['foo']),
+    ((None, 0), []),
+    ((None, 1), []),
+    ((None, -1), []),
 ])
 def test_chop_right(case, expected):
     assert _.chop_right(*case) == expected
