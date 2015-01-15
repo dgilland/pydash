@@ -252,10 +252,20 @@ def test_insert_substr(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], '.'), '1.2.3'),
-    ((['one', 'two', 'three'], '-.-'), 'one-.-two-.-three'),
-    ((['s', 't', 'r', 'i', 'n', 'g'],), 'string'),
-    ((['string1', 'string2'], ','), 'string1,string2'),
+    (((1, 2, 3), '.'), '1.2.3'),
+    ((('one', 'two', 'three'), '-.-'), 'one-.-two-.-three'),
+    ((('s', 't', 'r', 'i', 'n', 'g'),''), 'string'),
+    ((('s', 't', 'r', 'i', 'n', 'g'),), 'string'),
+    ((('s', 't', 'r', 'i', 'n', 'g'), None), 'string'),
+    ((('string1', 'string2'), ','), 'string1,string2'),
+    ((('string1', 'string2'), 5.6), 'string15.6string2'),
+    (((None, 'string2'), 5.6), '5.6string2'),
+    (((7, ), 5.6), '7'),
+    (((None, ), 5.6), ''),
+    (((None, None), 5.6), '5.6'),
+    (((None, None, None), 5.6), '5.65.6'),
+    (((None, None, None), None), ''),
+    ((None, None), ''),
 ])
 def test_join(case, expected):
     assert _.join(*case) == expected

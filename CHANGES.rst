@@ -42,10 +42,10 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``unquote``.
 - Make the following functions work with empty strings and ``None`` (**breaking change**):
 
-  - ``camel_case``
+  - ``camel_case`` and ``class_case``
   - ``capitalize`` and ``decapitalize``
   - ``chop`` and ``chop_right``
-  - ``class_case``
+  - ``join``
   - ``clean``
   - ``chars``
   - ``count_substr``
