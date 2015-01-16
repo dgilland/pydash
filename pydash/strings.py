@@ -4,7 +4,6 @@
 .. versionadded:: 1.1.0
 """
 
-from functools import partial
 import re
 import unicodedata
 
@@ -230,15 +229,17 @@ def chop(text, step):
 
     Returns:
         list: List of chopped characters.
+              If `text` is `None` an empty list is returned.
 
     .. versionadded:: 3.0.0
     """
+    if text is None:
+        return []
     text = pyd.to_string(text)
     if step <= 0:
         chopped = [text]
     else:
         chopped = [text[i:i + step] for i in _range(0, len(text), step)]
-
     return chopped
 
 
@@ -254,6 +255,8 @@ def chop_right(text, step):
 
     .. versionadded:: 3.0.0
     """
+    if text is None:
+        return []
     text = pyd.to_string(text)
     if step <= 0:
         chopped = [text]
@@ -261,7 +264,6 @@ def chop_right(text, step):
         text_len = len(text)
         chopped = [text[-(i + step):text_len - i]
                    for i in _range(0, text_len, step)][::-1]
-
     return chopped
 
 
@@ -306,7 +308,10 @@ def count_substr(text, subtext):
 
     ..versionadded:: 3.0.0
     """
+    if text is None or subtext is None:
+        return 0
     text = pyd.to_string(text)
+    subtext = pyd.to_string(subtext)
     return text.count(subtext)
 
 
@@ -358,6 +363,9 @@ def ends_with(text, target, position=None):
 
     .. versionadded:: 1.1.0
     """
+    if text is None or target is None:
+        return False
+    target = pyd.to_string(target)
     text = pyd.to_string(text)
 
     if position is None:
@@ -519,7 +527,9 @@ def join(array, separator=''):
         Modified :func:`implode` to have :func:`join` as main definition and
         :func:`implode` as alias.
     """
-    return separator.join(pyd.map_(array, pyd.to_string))
+    return pyd.to_string(separator).join(pyd.map_(
+        array or tuple(), pyd.to_string)
+    )
 
 
 implode = join
@@ -1137,7 +1147,7 @@ def surround(text, wrapper):
 
     .. versionadded:: 2.4.0
     """
-    return '{1}{0}{1}'.format(text, wrapper)
+    return '{1}{0}{1}'.format(pyd.to_string(text), pyd.to_string(wrapper))
 
 
 def swap_case(text):

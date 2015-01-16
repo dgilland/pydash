@@ -46,7 +46,10 @@ def test_capitalize(case, expected):
     (('foo', 4), ['foo']),
     (('foo', 0), ['foo']),
     (('', 3), []),
-    (('foo', -2), ['foo'])
+    (('foo', -2), ['foo']),
+    ((None, 0), []),
+    ((None, 1), []),
+    ((None, -1), []),
 ])
 def test_chop(case, expected):
     assert _.chop(*case) == expected
@@ -58,7 +61,10 @@ def test_chop(case, expected):
     (('foo', 4), ['foo']),
     (('foo', 0), ['foo']),
     (('', 3), []),
-    (('foo', -2), ['foo'])
+    (('foo', -2), ['foo']),
+    ((None, 0), []),
+    ((None, 1), []),
+    ((None, -1), []),
 ])
 def test_chop_right(case, expected):
     assert _.chop_right(*case) == expected
@@ -72,6 +78,7 @@ def test_chop_right(case, expected):
     ('foo!bar,baz', 'FooBarBaz'),
     ('--foo.bar;baz', 'FooBarBaz'),
     ('', ''),
+    (None, ''),
 ])
 def test_class_case(case, expected):
     assert _.class_case(case) == expected
@@ -81,6 +88,8 @@ def test_class_case(case, expected):
     ('  foo bar', 'foo bar'),
     ('  foo  bar', 'foo bar'),
     ('  foo  bar  ', 'foo bar'),
+    ('', ''),
+    (None, ''),
 ])
 def test_clean(case, expected):
     assert _.clean(case) == expected
@@ -89,6 +98,9 @@ def test_clean(case, expected):
 @parametrize('case,expected', [
     ('foobar', ['f', 'o', 'o', 'b', 'a', 'r']),
     ('', []),
+    (5, ['5']),
+    (-5.6, ['-', '5', '.', '6']),
+    (None, []),
 ])
 def test_chars(case, expected):
     assert _.chars(case) == expected
@@ -98,6 +110,19 @@ def test_chars(case, expected):
     (('foobar', 'o'), 2),
     (('foobar', 'oo'), 1),
     (('foobar', 'ooo'), 0),
+    (('', 'ooo'), 0),
+    (('', None), 0),
+    ((None, 'ooo'), 0),
+    ((None, None), 0),
+    ((5, None), 0),
+    ((5, 5), 1),
+    ((5.5, 5), 2),
+    ((5.5, '5.'), 1),
+    ((65.5, '5.'), 1),
+    ((654.5, '5.'), 0),
+    (('', ''), 1),
+    (('1', ''), 2),
+    ((1.4, ''), 4),
 ])
 def test_count_substr(case, expected):
     assert _.count_substr(*case) == expected
@@ -122,6 +147,7 @@ def test_deburr(case, expected):
     ('Foo bar', 'foo bar'),
     ('Foo Bar', 'foo Bar'),
     ('FOO BAR', 'fOO BAR'),
+    (None, ''),
 ])
 def test_decapitalize(case, expected):
     assert _.decapitalize(case) == expected
@@ -130,10 +156,18 @@ def test_decapitalize(case, expected):
 @parametrize('case,expected', [
     (('abc', 'c'), True),
     (('abc', 'b'), False),
+    (('abc', None), False),
+    (('', 'b'), False),
+    (('', None), False),
+    ((None, 'b'), False),
+    ((None, None), False),
+    ((6.34, 4), True),
+    ((6.34, 3), False),
     (('abc', 'c', 3), True),
     (('abc', 'c', 2), False),
     (('abc', 'b', 2), True),
     (('abc', 'b', 1), False),
+    ((6.34, 'b', 1), False),
 ])
 def test_ends_with(case, expected):
     assert _.ends_with(*case) == expected
@@ -218,10 +252,20 @@ def test_insert_substr(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], '.'), '1.2.3'),
-    ((['one', 'two', 'three'], '-.-'), 'one-.-two-.-three'),
-    ((['s', 't', 'r', 'i', 'n', 'g'],), 'string'),
-    ((['string1', 'string2'], ','), 'string1,string2'),
+    (((1, 2, 3), '.'), '1.2.3'),
+    ((('one', 'two', 'three'), '-.-'), 'one-.-two-.-three'),
+    ((('s', 't', 'r', 'i', 'n', 'g'), ''), 'string'),
+    ((('s', 't', 'r', 'i', 'n', 'g'),), 'string'),
+    ((('s', 't', 'r', 'i', 'n', 'g'), None), 'string'),
+    ((('string1', 'string2'), ','), 'string1,string2'),
+    ((('string1', 'string2'), 5.6), 'string15.6string2'),
+    (((None, 'string2'), 5.6), '5.6string2'),
+    (((7, ), 5.6), '7'),
+    (((None, ), 5.6), ''),
+    (((None, None), 5.6), '5.6'),
+    (((None, None, None), 5.6), '5.65.6'),
+    (((None, None, None), None), ''),
+    ((None, None), ''),
 ])
 def test_join(case, expected):
     assert _.join(*case) == expected
@@ -263,6 +307,10 @@ def test_js_replace(case, expected):
     ('foo!bar,baz', 'foo-bar-baz'),
     ('--foo.bar;baz', 'foo-bar-baz'),
     ('Foo Bar', 'foo-bar'),
+    (None, ''),
+    (5, '5'),
+    (5.6, '5-6'),
+    (-5.6, '5-6'),
 ])
 def test_kebab_case(case, expected):
     assert _.kebab_case(case) == expected
@@ -275,6 +323,7 @@ def test_kebab_case(case, expected):
     ('foo\n', ['foo']),
     ('\nfoo', ['', 'foo']),
     ('', []),
+    (None, []),
 ])
 def test_lines(case, expected):
     assert _.lines(case) == expected
@@ -348,7 +397,11 @@ def test_prune(case, expected):
 @parametrize('case,expected', [
     (('hello world!',), '"hello world!"'),
     (('',), '""'),
+    (('', None), ''),
+    ((None,), '""'),
+    ((None, None), ''),
     ((5,), '"5"'),
+    ((5, None), '5'),
     ((-89,), '"-89"'),
     (('hello world!', '*'), '*hello world!*'),
     (('hello world!', '**'), '**hello world!**'),
@@ -512,38 +565,54 @@ def test_strip_tags(case, expected):
     assert _.strip_tags(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('This_is_a_test_string', '_'), 'This'),
     (('This_is_a_test_string', ''), 'This_is_a_test_string'),
     (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
+    (('This_is_a_test_string', None), 'This_is_a_test_string'),
+    ((None, None), ''),
+    ((None, '4'), ''),
+    ((None, ''), ''),
+))
 def test_substr_left(case, expected):
     assert _.substr_left(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('This_is_a_test_string', '_'), 'This_is_a_test'),
     (('This_is_a_test_string', ''), 'This_is_a_test_string'),
     (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
+    (('This_is_a_test_string', None), 'This_is_a_test_string'),
+    ((None, None), ''),
+    ((None, '4'), ''),
+    ((None, ''), ''),
+))
 def test_substr_left_end(case, expected):
     assert _.substr_left_end(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('This_is_a_test_string', '_'), 'is_a_test_string'),
     (('This_is_a_test_string', ''), 'This_is_a_test_string'),
     (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
+    (('This_is_a_test_string', None), 'This_is_a_test_string'),
+    ((None, None), ''),
+    ((None, '4'), ''),
+    ((None, ''), ''),
+))
 def test_substr_right(case, expected):
     assert _.substr_right(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('This_is_a_test_string', '_'), 'string'),
     (('This_is_a_test_string', ''), 'This_is_a_test_string'),
     (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
+    (('This_is_a_test_string', None), 'This_is_a_test_string'),
+    ((None, None), ''),
+    ((None, '4'), ''),
+    ((None, ''), ''),
+))
 def test_substr_right_end(case, expected):
     assert _.substr_right_end(*case) == expected
 
@@ -567,31 +636,42 @@ def test_successor(case, expected):
     ('5', 12, '12512'),
     (5, '', '5'),
     ('', 5, '55'),
+    ('', None, ''),
+    (None, None, ''),
+    (5, None, '5'),
 ])
 def test_surround(source, wrapper, expected):
     assert _.surround(source, wrapper) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('fOoBaR', 'FoObAr'),
-])
+    ('', ''),
+    (None, ''),
+))
 def test_swap_case(case, expected):
     assert _.swap_case(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('foo bar baz', 'Foo Bar Baz'),
     ("they're bill's friends from the UK",
-     "They're Bill's Friends From The Uk")
-])
+     "They're Bill's Friends From The Uk"),
+    ("", ""),
+    (None, ""),
+    (5, "5"),
+))
 def test_title_case(case, expected):
     assert _.title_case(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('  fred  ',), 'fred'),
     (('-_-fred-_-', '_-'), 'fred'),
-])
+    (('-_-fred-_-', None), '-_-fred-_-'),
+    ((None,), ''),
+    ((None, None), ''),
+))
 def test_trim(case, expected):
     assert _.trim(*case) == expected
 
@@ -599,6 +679,9 @@ def test_trim(case, expected):
 @parametrize('case,expected', [
     (('  fred  ',), 'fred  '),
     (('-_-fred-_-', '_-'), 'fred-_-'),
+    (('-_-fred-_-', None), '-_-fred-_-'),
+    ((None,), ''),
+    ((None, None), ''),
 ])
 def test_trim_left(case, expected):
     assert _.trim_left(*case) == expected
@@ -607,6 +690,9 @@ def test_trim_left(case, expected):
 @parametrize('case,expected', [
     (('  fred  ',), '  fred'),
     (('-_-fred-_-', '_-'), '-_-fred'),
+    (('-_-fred-_-', None), '-_-fred-_-'),
+    ((None,), ''),
+    ((None, None), ''),
 ])
 def test_trim_right(case, expected):
     assert _.trim_right(*case) == expected
