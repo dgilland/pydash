@@ -655,6 +655,9 @@ def test_trim(case, expected):
 @parametrize('case,expected', [
     (('  fred  ',), 'fred  '),
     (('-_-fred-_-', '_-'), 'fred-_-'),
+    (('-_-fred-_-', None), '-_-fred-_-'),
+    ((None,), ''),
+    ((None, None), ''),
 ])
 def test_trim_left(case, expected):
     assert _.trim_left(*case) == expected
