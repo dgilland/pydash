@@ -565,11 +565,15 @@ def test_strip_tags(case, expected):
     assert _.strip_tags(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('This_is_a_test_string', '_'), 'This'),
     (('This_is_a_test_string', ''), 'This_is_a_test_string'),
     (('This_is_a_test_string', ' '), 'This_is_a_test_string'),
-])
+    (('This_is_a_test_string', None), 'This_is_a_test_string'),
+    ((None, None), ''),
+    ((None, '4'), ''),
+    ((None, ''), ''),
+))
 def test_substr_left(case, expected):
     assert _.substr_left(*case) == expected
 
