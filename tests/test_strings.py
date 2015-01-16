@@ -628,9 +628,11 @@ def test_surround(source, wrapper, expected):
     assert _.surround(source, wrapper) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('fOoBaR', 'FoObAr'),
-])
+    ('', ''),
+    (None, ''),
+))
 def test_swap_case(case, expected):
     assert _.swap_case(case) == expected
 
