@@ -644,10 +644,13 @@ def test_title_case(case, expected):
     assert _.title_case(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('  fred  ',), 'fred'),
     (('-_-fred-_-', '_-'), 'fred'),
-])
+    (('-_-fred-_-', None), '-_-fred-_-'),
+    ((None,), ''),
+    ((None, None), ''),
+))
 def test_trim(case, expected):
     assert _.trim(*case) == expected
 
