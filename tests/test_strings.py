@@ -731,6 +731,9 @@ def test_unescape(case, expected):
     (("'foo'", "'"), 'foo'),
     (('"foo',), '"foo'),
     (('foo"',), 'foo"'),
+    ((' ',), ' '),
+    (('',), ''),
+    ((None,), ''),
 ])
 def test_unquote(case, expected):
     assert _.unquote(*case) == expected
