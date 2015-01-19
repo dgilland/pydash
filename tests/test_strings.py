@@ -706,7 +706,13 @@ def test_trim_right(case, expected):
     (('hi-diddly-ho there, neighborino', 24, '...', re.compile(',? +')),
      'hi-diddly-ho there...'),
     (('hi-diddly-ho there, neighborino', 30, ' [...]'),
-     'hi-diddly-ho there, neig [...]')
+     'hi-diddly-ho there, neig [...]'),
+    (('123456789', 9), '123456789'),
+    (('123456789', 8), '12345...'),
+    (('x',), 'x'),
+    ((' ',), ' '),
+    (('',), ''),
+    ((None,), ''),
 ])
 def test_truncate(case, expected):
     assert _.truncate(*case) == expected

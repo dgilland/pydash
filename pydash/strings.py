@@ -1256,6 +1256,9 @@ def truncate(text, length=30, omission='...', separator=None):
     """
     text = pyd.to_string(text)
 
+    if len(text) <= length:
+        return text
+
     omission_len = len(omission)
     text_len = length - omission_len
     text = text[:text_len]
