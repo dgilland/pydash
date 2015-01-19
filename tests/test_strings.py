@@ -719,9 +719,12 @@ def test_truncate_aliases(case):
     assert _.truncate is case
 
 
-@parametrize('case,expected', [
-    ('abc&lt;&gt; &amp;&quot;&#39;&#96;efg', 'abc<> &"\'`efg')
-])
+@parametrize('case,expected', (
+    ('abc&lt;&gt; &amp;&quot;&#39;&#96;efg', 'abc<> &"\'`efg'),
+    ('', ''),
+    (' ', ' '),
+    (None, ''),
+))
 def test_unescape(case, expected):
     assert _.unescape(case) == expected
 
