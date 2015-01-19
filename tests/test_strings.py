@@ -771,11 +771,14 @@ def test_url(case, expected):
     assert r_fragment == e_fragment
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('hello world!', ['hello', 'world']),
     ('hello_world', ['hello', 'world']),
     ('hello!@#$%^&*()_+{}|:"<>?-=[]\;\,.\'/world', ['hello', 'world']),
     ('hello 12345 world', ['hello', '12345', 'world']),
-])
+    (' ', []),
+    ('', []),
+    (None, []),
+))
 def test_words(case, expected):
     assert _.words(case) == expected
