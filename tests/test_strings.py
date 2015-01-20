@@ -239,6 +239,14 @@ def test_ensure_ends_with(text, suffix, expected):
     (('foobar', 'x'), False),
     (('foobar', 'f'), True),
     (('foobar', 'r'), True),
+    (('foobar', ''), True),
+    (('foobar', None), True),
+    (('', ''), True),
+    (('', None), True),
+    ((None, None), True),
+    ((56, 6), True),
+    ((56, 7), False),
+    ((5.6, '.'), True),
 ])
 def test_has_substr(case, expected):
     assert _.has_substr(*case) == expected
