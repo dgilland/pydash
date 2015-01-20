@@ -211,6 +211,9 @@ def test_escape_reg_exp_aliases(case):
     ('', '', ''),
     ('1', '', '1'),
     ('1', '1', '1'),
+    (5, 6, '65'),
+    (None, 6, '6'),
+    (None, None, ''),
 ])
 def test_ensure_starts_with(text, prefix, expected):
     assert _.ensure_starts_with(text, prefix) == expected

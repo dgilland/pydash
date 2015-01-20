@@ -407,6 +407,7 @@ def ensure_starts_with(text, prefix):
     .. versionadded:: 2.4.0
     """
     text = pyd.to_string(text)
+    prefix = pyd.to_string(prefix)
     return text if text.startswith(prefix) else '{1}{0}'.format(text, prefix)
 
 
