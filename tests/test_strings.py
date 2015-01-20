@@ -226,6 +226,9 @@ def test_ensure_starts_with(text, prefix, expected):
     ('', '', ''),
     ('1', '', '1'),
     ('1', '1', '1'),
+    (5, 6, '56'),
+    (None, 6, '6'),
+    (None, None, ''),
 ])
 def test_ensure_ends_with(text, suffix, expected):
     assert _.ensure_ends_with(text, suffix) == expected

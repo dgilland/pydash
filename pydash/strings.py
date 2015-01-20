@@ -389,6 +389,7 @@ def ensure_ends_with(text, suffix):
     .. versionadded:: 2.4.0
     """
     text = pyd.to_string(text)
+    suffix = pyd.to_string(suffix)
     return text if text.endswith(suffix) else '{0}{1}'.format(text, suffix)
 
 
