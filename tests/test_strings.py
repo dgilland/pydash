@@ -176,9 +176,12 @@ def test_ends_with(case, expected):
     assert _.ends_with(*case) == expected
 
 
-@parametrize('case,expected', [
-    ('abc<> &"\'`efg', 'abc&lt;&gt; &amp;&quot;&#39;&#96;efg')
-])
+@parametrize('case,expected', (
+    ('abc<> &"\'`efg', 'abc&lt;&gt; &amp;&quot;&#39;&#96;efg'),
+    ('abc', 'abc'),
+    ('', ''),
+    (None, ''),
+))
 def test_escape(case, expected):
     assert _.escape(case) == expected
 
