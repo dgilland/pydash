@@ -186,10 +186,13 @@ def test_escape(case, expected):
     assert _.escape(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('[pydash](http://pydash.readthedocs.org/)',
-     '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)')
-])
+     '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)'),
+    ('abc', 'abc'),
+    ('', ''),
+    (None, ''),
+))
 def test_escape_reg_exp(case, expected):
     assert _.escape_reg_exp(case) == expected
 
