@@ -271,6 +271,12 @@ def test_human_case(case, expected):
     (('foobar', 4, 'xx'), 'foobxxar'),
     (('foobar', 6, 'xx'), 'foobarxx'),
     (('foobar', 7, 'xx'), 'foobarxx'),
+    (('f', 7, 'xx'), 'fxx'),
+    (('', 7, 'xx'), 'xx'),
+    (('', 7, ''), ''),
+    (('', 7, None), ''),
+    ((None, 7, None), ''),
+    ((None, 0, None), ''),
 ])
 def test_insert_substr(case, expected):
     assert _.insert_substr(*case) == expected

@@ -506,6 +506,7 @@ def insert_substr(text, index, subtext):
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
+    subtext = pyd.to_string(subtext)
     return text[:index] + subtext + text[index:]
 
 
