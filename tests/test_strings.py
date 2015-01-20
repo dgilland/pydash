@@ -257,7 +257,9 @@ def test_has_substr(case, expected):
      'Capitalize dash camel case underscore trim'),
     ('foo_bar_id', 'Foo bar'),
     ('FooBar', 'Foo bar'),
-    ('fooBar', 'Foo bar'),
+    (5, '5'),
+    ('', ''),
+    (None, ''),
 ])
 def test_human_case(case, expected):
     assert _.human_case(case) == expected
