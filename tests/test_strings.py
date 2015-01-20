@@ -128,7 +128,7 @@ def test_count_substr(case, expected):
     assert _.count_substr(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF'
      '\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF'
      '\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF'
@@ -136,8 +136,11 @@ def test_count_substr(case, expected):
      'AAAAAAAeCEEEEIIII'
      'DNOOOOO OUUUUYThss'
      'aaaaaaaeceeeeiiii'
-     'dnooooo ouuuuythy')
-])
+     'dnooooo ouuuuythy'),
+    ('abcABC', 'abcABC'),
+    ('', ''),
+    (None, ''),
+))
 def test_deburr(case, expected):
     assert _.deburr(case) == expected
 
