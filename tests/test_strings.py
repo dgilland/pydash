@@ -493,6 +493,10 @@ def test_re_replace(case, expected):
     (('foo', 0), ''),
     (('foo', 1), 'foo'),
     (('foo', 3), 'foofoofoo'),
+    (('', 3), ''),
+    (('', 0), ''),
+    ((None, 0), ''),
+    ((None, 1), ''),
 ))
 def test_repeat(case, expected):
     assert _.repeat(*case) == expected
