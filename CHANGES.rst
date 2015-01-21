@@ -51,7 +51,7 @@ v3.0.0 (xxxx-xx-xx)
   - ``count_substr``
   - ``ends_with``
   - ``quote``, ``surround``
-  - ``js_replace``
+  - ``js_replace``, ``re_replace``
 
 - Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.
