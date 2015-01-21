@@ -570,6 +570,8 @@ def js_replace(reg_exp, text, repl):
     .. versionadded:: 2.0.0
     """
     text = pyd.to_string(text)
+    if not pyd.is_function(repl):
+        repl = pyd.to_string(repl)
     return js_to_py_re_replace(reg_exp)(text, repl)
 
 

@@ -326,6 +326,8 @@ def test_js_match(case, expected):
     (('/[A-Z]/g', 'Hello World', '!'), '!ello !orld'),
     (('/[A-Z]/i', 'hello world', '!'), '!ello world'),
     (('/[A-Z]/gi', 'hello world', '!'), '!!!!! !!!!!'),
+    (('/[A-Z]/gi', 'hello world', ''), ' '),
+    (('/[A-Z]/gi', 'hello world', None), ' '),
 ])
 def test_js_replace(case, expected):
     assert _.js_replace(*case) == expected
