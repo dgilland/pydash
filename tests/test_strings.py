@@ -482,6 +482,7 @@ def test_quote(case, expected):
     (('foo', None, None), 'foo'),
     (('foo', None, ''), 'foo'),
     (('foo', None, 'a'), 'foo'),
+    ((54.7, 5, 6), '64.7'),
 ])
 def test_re_replace(case, expected):
     assert _.re_replace(*case) == expected
