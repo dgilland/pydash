@@ -393,6 +393,10 @@ def test_pad(case, expected):
     (('aaaaa', 6, 'b'), 'baaaaa'),
     (('aaaaa', 6, 'bc'), 'caaaaa'),
     (('aaaaa', 9, 'bc'), 'bcbcaaaaa'),
+    (('a', 9, '12'), '12121212a'),
+    (('a', 8, '12'), '2121212a'),
+    (('', 8, '12'), '12121212'),
+    ((None, 8, '12'), '12121212'),
 ])
 def test_pad_left(case, expected):
     assert _.pad_left(*case) == expected
