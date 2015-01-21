@@ -818,7 +818,7 @@ def re_replace(text, pattern, repl, ignore_case=False, count=0):
                    repl,
                    ignore_case=ignore_case,
                    count=count,
-                   escape=False)
+                   escape=False) if pattern is not None else pyd.to_string(text)
 
 
 def repeat(text, n=0):
@@ -863,6 +863,9 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
 
     if escape:
         pattern = re.escape(pattern)
+
+    if not pyd.is_function(repl):
+        repl = pyd.to_string(repl)
 
     flags = re.IGNORECASE if ignore_case else 0
 
