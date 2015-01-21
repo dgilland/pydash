@@ -465,7 +465,7 @@ def test_quote(case, expected):
     assert _.quote(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('foo', 'o', 'a'), 'faa'),
     (('foo', 'o', 'a', False, 1), 'fao'),
     (('fOO', 'o', 'a'), 'fOO'),
@@ -483,22 +483,22 @@ def test_quote(case, expected):
     (('foo', None, ''), 'foo'),
     (('foo', None, 'a'), 'foo'),
     ((54.7, 5, 6), '64.7'),
-])
+))
 def test_re_replace(case, expected):
     assert _.re_replace(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('foo',), ''),
     (('foo', 0), ''),
     (('foo', 1), 'foo'),
     (('foo', 3), 'foofoofoo'),
-])
+))
 def test_repeat(case, expected):
     assert _.repeat(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('foo', 'o', 'a'), 'faa'),
     (('foo', 'o', 'a', False, 1), 'fao'),
     (('fOO', 'o', 'a'), 'fOO'),
@@ -506,7 +506,13 @@ def test_repeat(case, expected):
     (('', '', ''), ''),
     (('foo', 'o', ''), 'f'),
     (('foo', 'x', 'y'), 'foo'),
-])
+    (('foo', '', ''), 'foo'),
+    (('foo', '', None), 'foo'),
+    (('foo', None, None), 'foo'),
+    (('foo', None, ''), 'foo'),
+    (('foo', None, 'a'), 'foo'),
+    ((54.7, 5, 6), '64.7'),
+))
 def test_replace(case, expected):
     assert _.replace(*case) == expected
 

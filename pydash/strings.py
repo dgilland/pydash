@@ -860,6 +860,10 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
+
+    if pattern is None:
+        return text
+
     pattern = pyd.to_string(pattern)
 
     if escape:
