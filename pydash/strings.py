@@ -813,12 +813,15 @@ def re_replace(text, pattern, repl, ignore_case=False, count=0):
 
     .. versionadded:: 3.0.0
     """
-    return replace(text,
+    return (
+        replace(text,
                    pattern,
                    repl,
                    ignore_case=ignore_case,
                    count=count,
-                   escape=False) if pattern is not None else pyd.to_string(text)
+                   escape=False) if pattern is not None
+        else pyd.to_string(text)
+    )
 
 
 def repeat(text, n=0):
