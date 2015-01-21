@@ -389,6 +389,7 @@ def ensure_ends_with(text, suffix):
     .. versionadded:: 2.4.0
     """
     text = pyd.to_string(text)
+    suffix = pyd.to_string(suffix)
     return text if text.endswith(suffix) else '{0}{1}'.format(text, suffix)
 
 
@@ -407,6 +408,7 @@ def ensure_starts_with(text, prefix):
     .. versionadded:: 2.4.0
     """
     text = pyd.to_string(text)
+    prefix = pyd.to_string(prefix)
     return text if text.startswith(prefix) else '{1}{0}'.format(text, prefix)
 
 
@@ -466,6 +468,7 @@ def has_substr(text, subtext):
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
+    subtext = pyd.to_string(subtext)
     return text.find(subtext) >= 0
 
 
@@ -503,6 +506,7 @@ def insert_substr(text, index, subtext):
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
+    subtext = pyd.to_string(subtext)
     return text[:index] + subtext + text[index:]
 
 
@@ -566,6 +570,8 @@ def js_replace(reg_exp, text, repl):
     .. versionadded:: 2.0.0
     """
     text = pyd.to_string(text)
+    if not pyd.is_function(repl):
+        repl = pyd.to_string(repl)
     return js_to_py_re_replace(reg_exp)(text, repl)
 
 
@@ -807,12 +813,12 @@ def re_replace(text, pattern, repl, ignore_case=False, count=0):
 
     .. versionadded:: 3.0.0
     """
-    return replace(text,
-                   pattern,
-                   repl,
-                   ignore_case=ignore_case,
-                   count=count,
-                   escape=False)
+    return (
+        replace(
+            text, pattern, repl, ignore_case=ignore_case, count=count,
+            escape=False
+        ) if pattern is not None else pyd.to_string(text)
+    )
 
 
 def repeat(text, n=0):
@@ -855,8 +861,16 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
     """
     text = pyd.to_string(text)
 
+    if pattern is None:
+        return text
+
+    pattern = pyd.to_string(pattern)
+
     if escape:
         pattern = re.escape(pattern)
+
+    if not pyd.is_function(repl):
+        repl = pyd.to_string(repl)
 
     flags = re.IGNORECASE if ignore_case else 0
 
@@ -1255,6 +1269,9 @@ def truncate(text, length=30, omission='...', separator=None):
         as alias.
     """
     text = pyd.to_string(text)
+
+    if len(text) <= length:
+        return text
 
     omission_len = len(omission)
     text_len = length - omission_len

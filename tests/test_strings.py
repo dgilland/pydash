@@ -128,7 +128,7 @@ def test_count_substr(case, expected):
     assert _.count_substr(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF'
      '\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF'
      '\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF'
@@ -136,8 +136,11 @@ def test_count_substr(case, expected):
      'AAAAAAAeCEEEEIIII'
      'DNOOOOO OUUUUYThss'
      'aaaaaaaeceeeeiiii'
-     'dnooooo ouuuuythy')
-])
+     'dnooooo ouuuuythy'),
+    ('abcABC', 'abcABC'),
+    ('', ''),
+    (None, ''),
+))
 def test_deburr(case, expected):
     assert _.deburr(case) == expected
 
@@ -173,17 +176,23 @@ def test_ends_with(case, expected):
     assert _.ends_with(*case) == expected
 
 
-@parametrize('case,expected', [
-    ('abc<> &"\'`efg', 'abc&lt;&gt; &amp;&quot;&#39;&#96;efg')
-])
+@parametrize('case,expected', (
+    ('abc<> &"\'`efg', 'abc&lt;&gt; &amp;&quot;&#39;&#96;efg'),
+    ('abc', 'abc'),
+    ('', ''),
+    (None, ''),
+))
 def test_escape(case, expected):
     assert _.escape(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('[pydash](http://pydash.readthedocs.org/)',
-     '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)')
-])
+     '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)'),
+    ('abc', 'abc'),
+    ('', ''),
+    (None, ''),
+))
 def test_escape_reg_exp(case, expected):
     assert _.escape_reg_exp(case) == expected
 
@@ -202,6 +211,9 @@ def test_escape_reg_exp_aliases(case):
     ('', '', ''),
     ('1', '', '1'),
     ('1', '1', '1'),
+    (5, 6, '65'),
+    (None, 6, '6'),
+    (None, None, ''),
 ])
 def test_ensure_starts_with(text, prefix, expected):
     assert _.ensure_starts_with(text, prefix) == expected
@@ -214,6 +226,9 @@ def test_ensure_starts_with(text, prefix, expected):
     ('', '', ''),
     ('1', '', '1'),
     ('1', '1', '1'),
+    (5, 6, '56'),
+    (None, 6, '6'),
+    (None, None, ''),
 ])
 def test_ensure_ends_with(text, suffix, expected):
     assert _.ensure_ends_with(text, suffix) == expected
@@ -224,6 +239,14 @@ def test_ensure_ends_with(text, suffix, expected):
     (('foobar', 'x'), False),
     (('foobar', 'f'), True),
     (('foobar', 'r'), True),
+    (('foobar', ''), True),
+    (('foobar', None), True),
+    (('', ''), True),
+    (('', None), True),
+    ((None, None), True),
+    ((56, 6), True),
+    ((56, 7), False),
+    ((5.6, '.'), True),
 ])
 def test_has_substr(case, expected):
     assert _.has_substr(*case) == expected
@@ -234,7 +257,9 @@ def test_has_substr(case, expected):
      'Capitalize dash camel case underscore trim'),
     ('foo_bar_id', 'Foo bar'),
     ('FooBar', 'Foo bar'),
-    ('fooBar', 'Foo bar'),
+    (5, '5'),
+    ('', ''),
+    (None, ''),
 ])
 def test_human_case(case, expected):
     assert _.human_case(case) == expected
@@ -246,6 +271,12 @@ def test_human_case(case, expected):
     (('foobar', 4, 'xx'), 'foobxxar'),
     (('foobar', 6, 'xx'), 'foobarxx'),
     (('foobar', 7, 'xx'), 'foobarxx'),
+    (('f', 7, 'xx'), 'fxx'),
+    (('', 7, 'xx'), 'xx'),
+    (('', 7, ''), ''),
+    (('', 7, None), ''),
+    ((None, 7, None), ''),
+    ((None, 0, None), ''),
 ])
 def test_insert_substr(case, expected):
     assert _.insert_substr(*case) == expected
@@ -295,6 +326,8 @@ def test_js_match(case, expected):
     (('/[A-Z]/g', 'Hello World', '!'), '!ello !orld'),
     (('/[A-Z]/i', 'hello world', '!'), '!ello world'),
     (('/[A-Z]/gi', 'hello world', '!'), '!!!!! !!!!!'),
+    (('/[A-Z]/gi', 'hello world', ''), ' '),
+    (('/[A-Z]/gi', 'hello world', None), ' '),
 ])
 def test_js_replace(case, expected):
     assert _.js_replace(*case) == expected
@@ -345,31 +378,42 @@ def test_number_format(case, expected):
     (('abc', 8), '  abc   '),
     (('abc', 8, '_-'), '_-abc_-_'),
     (('abc', 3), 'abc'),
+    (('', 3), '   '),
+    ((' ', 3), '   '),
+    ((None, 3), '   '),
 ])
 def test_pad(case, expected):
     assert _.pad(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('aaaaa', 3), 'aaaaa'),
     (('aaaaa', 6), ' aaaaa'),
     (('aaaaa', 10), '     aaaaa'),
     (('aaaaa', 6, 'b'), 'baaaaa'),
     (('aaaaa', 6, 'bc'), 'caaaaa'),
     (('aaaaa', 9, 'bc'), 'bcbcaaaaa'),
-])
+    (('a', 9, '12'), '12121212a'),
+    (('a', 8, '12'), '2121212a'),
+    (('', 8, '12'), '12121212'),
+    ((None, 8, '12'), '12121212'),
+))
 def test_pad_left(case, expected):
     assert _.pad_left(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('aaaaa', 3), 'aaaaa'),
     (('aaaaa', 6), 'aaaaa '),
     (('aaaaa', 10), 'aaaaa     '),
     (('aaaaa', 6, 'b'), 'aaaaab'),
     (('aaaaa', 6, 'bc'), 'aaaaab'),
     (('aaaaa', 9, 'bc'), 'aaaaabcbc'),
-])
+    (('a', 9, '12'), 'a12121212'),
+    (('a', 8, '12'), 'a1212121'),
+    (('', 8, '12'), '12121212'),
+    ((None, 8, '12'), '12121212'),
+))
 def test_pad_right(case, expected):
     assert _.pad_right(*case) == expected
 
@@ -389,6 +433,9 @@ def test_predecessor(case, expected):
     (('Hello, world', 5, ' (read a lot more)'), 'Hello, world'),
     (('Hello, cruel world', 15), 'Hello, cruel...'),
     (('Hello', 10), 'Hello'),
+    (('', 10), ''),
+    (('',), ''),
+    ((None,), ''),
 ])
 def test_prune(case, expected):
     assert _.prune(*case) == expected
@@ -418,7 +465,7 @@ def test_quote(case, expected):
     assert _.quote(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('foo', 'o', 'a'), 'faa'),
     (('foo', 'o', 'a', False, 1), 'fao'),
     (('fOO', 'o', 'a'), 'fOO'),
@@ -427,23 +474,35 @@ def test_quote(case, expected):
     (('foo', 'o', ''), 'f'),
     (('foo', 'x', 'y'), 'foo'),
     (('foo', '^o', 'a'), 'foo'),
+    (('ooo', '^o', 'f'), 'foo'),
     (('foo', 'o$', 'a'), 'foa'),
-])
+    (('foo', '', 'a'), 'afaoaoa'),
+    (('foo', '', ''), 'foo'),
+    (('foo', '', None), 'foo'),
+    (('foo', None, None), 'foo'),
+    (('foo', None, ''), 'foo'),
+    (('foo', None, 'a'), 'foo'),
+    ((54.7, 5, 6), '64.7'),
+))
 def test_re_replace(case, expected):
     assert _.re_replace(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('foo',), ''),
     (('foo', 0), ''),
     (('foo', 1), 'foo'),
     (('foo', 3), 'foofoofoo'),
-])
+    (('', 3), ''),
+    (('', 0), ''),
+    ((None, 0), ''),
+    ((None, 1), ''),
+))
 def test_repeat(case, expected):
     assert _.repeat(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('foo', 'o', 'a'), 'faa'),
     (('foo', 'o', 'a', False, 1), 'fao'),
     (('fOO', 'o', 'a'), 'fOO'),
@@ -451,7 +510,13 @@ def test_repeat(case, expected):
     (('', '', ''), ''),
     (('foo', 'o', ''), 'f'),
     (('foo', 'x', 'y'), 'foo'),
-])
+    (('foo', '', ''), 'foo'),
+    (('foo', '', None), 'foo'),
+    (('foo', None, None), 'foo'),
+    (('foo', None, ''), 'foo'),
+    (('foo', None, 'a'), 'foo'),
+    ((54.7, 5, 6), '64.7'),
+))
 def test_replace(case, expected):
     assert _.replace(*case) == expected
 
@@ -706,7 +771,13 @@ def test_trim_right(case, expected):
     (('hi-diddly-ho there, neighborino', 24, '...', re.compile(',? +')),
      'hi-diddly-ho there...'),
     (('hi-diddly-ho there, neighborino', 30, ' [...]'),
-     'hi-diddly-ho there, neig [...]')
+     'hi-diddly-ho there, neig [...]'),
+    (('123456789', 9), '123456789'),
+    (('123456789', 8), '12345...'),
+    (('x',), 'x'),
+    ((' ',), ' '),
+    (('',), ''),
+    ((None,), ''),
 ])
 def test_truncate(case, expected):
     assert _.truncate(*case) == expected
@@ -719,9 +790,12 @@ def test_truncate_aliases(case):
     assert _.truncate is case
 
 
-@parametrize('case,expected', [
-    ('abc&lt;&gt; &amp;&quot;&#39;&#96;efg', 'abc<> &"\'`efg')
-])
+@parametrize('case,expected', (
+    ('abc&lt;&gt; &amp;&quot;&#39;&#96;efg', 'abc<> &"\'`efg'),
+    ('', ''),
+    (' ', ' '),
+    (None, ''),
+))
 def test_unescape(case, expected):
     assert _.unescape(case) == expected
 
@@ -731,6 +805,9 @@ def test_unescape(case, expected):
     (("'foo'", "'"), 'foo'),
     (('"foo',), '"foo'),
     (('foo"',), 'foo"'),
+    ((' ',), ' '),
+    (('',), ''),
+    ((None,), ''),
 ])
 def test_unquote(case, expected):
     assert _.unquote(*case) == expected
@@ -771,11 +848,14 @@ def test_url(case, expected):
     assert r_fragment == e_fragment
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('hello world!', ['hello', 'world']),
     ('hello_world', ['hello', 'world']),
     ('hello!@#$%^&*()_+{}|:"<>?-=[]\;\,.\'/world', ['hello', 'world']),
     ('hello 12345 world', ['hello', '12345', 'world']),
-])
+    (' ', []),
+    ('', []),
+    (None, []),
+))
 def test_words(case, expected):
     assert _.words(case) == expected

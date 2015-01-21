@@ -5,6 +5,7 @@ Changelog
 v3.0.0 (xxxx-xx-xx)
 -------------------
 
+- Make ``re_replace`` accept non-stirng arguments
 - Add ``chars``.
 - Add ``chop``.
 - Add ``chop_right``.
@@ -51,6 +52,7 @@ v3.0.0 (xxxx-xx-xx)
   - ``count_substr``
   - ``ends_with``
   - ``quote``, ``surround``
+  - ``js_replace``, ``re_replace``, ``replace``
 
 - Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.
@@ -58,6 +60,7 @@ v3.0.0 (xxxx-xx-xx)
 - Move ``arrays.join`` to ``strings.join`` (**breaking change**).
 - Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator`` (**breaking change**).
 - Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator`` (**breaking change**).
+- Fix ``trunc`` and ``truncate`` so that they handle texts shorter than the max string length correctly.
 
 
 v2.4.1 (2015-01-11)
