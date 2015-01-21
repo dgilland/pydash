@@ -433,6 +433,9 @@ def test_predecessor(case, expected):
     (('Hello, world', 5, ' (read a lot more)'), 'Hello, world'),
     (('Hello, cruel world', 15), 'Hello, cruel...'),
     (('Hello', 10), 'Hello'),
+    (('', 10), ''),
+    (('',), ''),
+    ((None,), ''),
 ])
 def test_prune(case, expected):
     assert _.prune(*case) == expected
