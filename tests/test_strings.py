@@ -386,7 +386,7 @@ def test_pad(case, expected):
     assert _.pad(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('aaaaa', 3), 'aaaaa'),
     (('aaaaa', 6), ' aaaaa'),
     (('aaaaa', 10), '     aaaaa'),
@@ -397,19 +397,23 @@ def test_pad(case, expected):
     (('a', 8, '12'), '2121212a'),
     (('', 8, '12'), '12121212'),
     ((None, 8, '12'), '12121212'),
-])
+))
 def test_pad_left(case, expected):
     assert _.pad_left(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('aaaaa', 3), 'aaaaa'),
     (('aaaaa', 6), 'aaaaa '),
     (('aaaaa', 10), 'aaaaa     '),
     (('aaaaa', 6, 'b'), 'aaaaab'),
     (('aaaaa', 6, 'bc'), 'aaaaab'),
     (('aaaaa', 9, 'bc'), 'aaaaabcbc'),
-])
+    (('a', 9, '12'), 'a12121212'),
+    (('a', 8, '12'), 'a1212121'),
+    (('', 8, '12'), '12121212'),
+    ((None, 8, '12'), '12121212'),
+))
 def test_pad_right(case, expected):
     assert _.pad_right(*case) == expected
 
