@@ -378,6 +378,9 @@ def test_number_format(case, expected):
     (('abc', 8), '  abc   '),
     (('abc', 8, '_-'), '_-abc_-_'),
     (('abc', 3), 'abc'),
+    (('', 3), '   '),
+    ((' ', 3), '   '),
+    ((None, 3), '   '),
 ])
 def test_pad(case, expected):
     assert _.pad(*case) == expected
