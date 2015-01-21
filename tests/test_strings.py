@@ -474,7 +474,10 @@ def test_quote(case, expected):
     (('foo', 'o', ''), 'f'),
     (('foo', 'x', 'y'), 'foo'),
     (('foo', '^o', 'a'), 'foo'),
+    (('ooo', '^o', 'f'), 'foo'),
     (('foo', 'o$', 'a'), 'foa'),
+    (('foo', '', 'a'), 'afaoaoa'),
+    (('foo', '', ''), 'foo'),
 ])
 def test_re_replace(case, expected):
     assert _.re_replace(*case) == expected
