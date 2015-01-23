@@ -156,14 +156,14 @@ def test_decapitalize(case, expected):
     assert _.decapitalize(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('abc', 'c'), True),
     (('abc', 'b'), False),
-    (('abc', None), False),
+    (('abc', None), True),
     (('', 'b'), False),
-    (('', None), False),
+    (('', None), True),
     ((None, 'b'), False),
-    ((None, None), False),
+    ((None, None), True),
     ((6.34, 4), True),
     ((6.34, 3), False),
     (('abc', 'c', 3), True),
@@ -171,7 +171,7 @@ def test_decapitalize(case, expected):
     (('abc', 'b', 2), True),
     (('abc', 'b', 1), False),
     ((6.34, 'b', 1), False),
-])
+))
 def test_ends_with(case, expected):
     assert _.ends_with(*case) == expected
 

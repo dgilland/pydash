@@ -363,8 +363,6 @@ def ends_with(text, target, position=None):
 
     .. versionadded:: 1.1.0
     """
-    if text is None or target is None:
-        return False
     target = pyd.to_string(target)
     text = pyd.to_string(text)
 
