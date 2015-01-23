@@ -554,6 +554,13 @@ def test_series_phrase(case, expected):
 
 @parametrize('case,expected', [
     (([],), ''),
+    ((tuple(),), ''),
+    (((None,),), ''),
+    (((None, None),), ''),
+    ((('', None),), ''),
+    (((None, ''),), ''),
+    (((None, 5),), '5'),
+    (((7.88, None),), '7.88'),
     ((['', ''],), ''),
     ((['foo'],), 'foo'),
     ((['foo', 'bar'],), 'foo and bar'),
