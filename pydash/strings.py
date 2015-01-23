@@ -958,7 +958,7 @@ def slugify(text, separator='-'):
 
     .. versionadded:: 3.0.0
     """
-    normalized = (unicodedata.normalize('NFKD', text_type(text))
+    normalized = (unicodedata.normalize('NFKD', pyd.to_string(text))
                   .encode('ascii', 'ignore')
                   .decode('utf8'))
 
