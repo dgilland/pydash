@@ -534,6 +534,8 @@ def test_replace(case, expected):
     (('foo!bar,baz', '_'), 'foo_bar_baz'),
     (('--foo.bar;baz', '_'), 'foo_bar_baz'),
     (('Foo Bar', '_'), 'foo_bar'),
+    (('', '_'), ''),
+    ((None, '_'), ''),
 ])
 def test_separator_case(case, expected):
     assert _.separator_case(*case) == expected
