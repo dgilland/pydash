@@ -581,14 +581,17 @@ def test_slugify(case, expected):
     ('foo!bar,baz', 'foo_bar_baz'),
     ('--foo.bar;baz', 'foo_bar_baz'),
     ('FooBar', 'foo_bar'),
+    ('', ''),
+    (None, ''),
+    (5, '5'),
 ])
 def test_snake_case(case, expected):
     assert _.snake_case(case) == expected
 
 
-@parametrize('case', [
-    _.underscore_case
-])
+@parametrize('case', (
+    _.underscore_case,
+))
 def test_snake_case_aliases(case):
     assert _.snake_case is case
 
