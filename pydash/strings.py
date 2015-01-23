@@ -914,6 +914,9 @@ def series_phrase(items, separator=', ', last_separator=' and ', serial=False):
     items = pyd.chain(items).map(pyd.to_string).compact().value()
     item_count = len(items)
 
+    separator = pyd.to_string(separator)
+    last_separator = pyd.to_string(last_separator)
+
     if item_count > 2 and serial:
         last_separator = separator.rstrip() + last_separator
 

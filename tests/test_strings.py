@@ -539,20 +539,31 @@ def test_separator_case(case, expected):
     assert _.separator_case(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (([],), ''),
+    ((tuple(),), ''),
+    (((None,),), ''),
+    (((None, None),), ''),
+    ((('', None),), ''),
+    (((None, ''),), ''),
+    (((None, 5),), '5'),
+    (((7.88, None),), '7.88'),
     ((['', ''],), ''),
     ((['foo'],), 'foo'),
     ((['foo', 'bar'],), 'foo and bar'),
     ((['foo', 'bar', 'baz'],), 'foo, bar and baz'),
     ((['foo', 'bar', 'baz', 'qux'], ', ', ' or '), 'foo, bar, baz or qux'),
     ((['foo', 'bar', 'baz', 'qux'], ';', ' or '), 'foo;bar;baz or qux'),
-])
+    ((['foo', 'bar', 'baz', 'qux'], 0.6, ' or '), 'foo0.6bar0.6baz or qux'),
+    ((['foo', 'bar', 'baz', 'qux'], 0.6, 1), 'foo0.6bar0.6baz1qux'),
+    ((['foo', 'bar', 'baz', 'qux'], 0.6, None), 'foo0.6bar0.6bazqux'),
+    ((['foo', 23, 'baz', 'qux'], None, None), 'foo23bazqux'),
+))
 def test_series_phrase(case, expected):
     assert _.series_phrase(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (([],), ''),
     ((tuple(),), ''),
     (((None,),), ''),
@@ -567,7 +578,7 @@ def test_series_phrase(case, expected):
     ((['foo', 'bar', 'baz'],), 'foo, bar, and baz'),
     ((['foo', 'bar', 'baz', 'qux'], ', ', ' or '), 'foo, bar, baz, or qux'),
     ((['foo', 'bar', 'baz', 'qux'], ';', ' or '), 'foo;bar;baz; or qux'),
-])
+))
 def test_series_phrase_serial(case, expected):
     assert _.series_phrase_serial(*case) == expected
 
