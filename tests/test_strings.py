@@ -593,11 +593,15 @@ def test_snake_case_aliases(case):
     assert _.snake_case is case
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('string1 string2',), ['string1', 'string2']),
     (('string', ''), ['s', 't', 'r', 'i', 'n', 'g']),
+    (('string', None), ['s', 't', 'r', 'i', 'n', 'g']),
+    (('', ''), []),
+    (('', None), []),
+    ((None, None), []),
     (('string1,string2', ','), ['string1', 'string2']),
-])
+))
 def test_split(case, expected):
     assert _.split(*case) == expected
 
