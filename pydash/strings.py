@@ -1026,7 +1026,7 @@ def split(text, separator=NoValue):
 explode = split
 
 
-def starts_with(text, target, position=None):
+def starts_with(text, target, position=0):
     """Checks if `text` starts with a given target string.
 
     Args:
@@ -1041,10 +1041,7 @@ def starts_with(text, target, position=None):
     .. versionadded:: 1.1.0
     """
     text = pyd.to_string(text)
-
-    if position is None:
-        position = 0
-
+    target = pyd.to_string(target)
     return text[position:].startswith(target)
 
 

@@ -609,14 +609,22 @@ def test_split_aliases(case):
     assert _.split is case
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('abc', 'a'), True),
     (('abc', 'b'), False),
     (('abc', 'a', 0), True),
     (('abc', 'a', 1), False),
     (('abc', 'b', 1), True),
     (('abc', 'b', 2), False),
-])
+    ((5.78, 5), True),
+    (("5.78", 5), True),
+    ((5.78, '5'), True),
+    ((5.78, ''), True),
+    ((5.78, None), True),
+    ((None, None), True),
+    (('', None), True),
+    ((' ', None), True),
+))
 def test_starts_with(case, expected):
     assert _.starts_with(*case) == expected
 

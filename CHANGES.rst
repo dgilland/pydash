@@ -50,7 +50,7 @@ v3.0.0 (xxxx-xx-xx)
   - ``clean``
   - ``chars``
   - ``count_substr``
-  - ``ends_with``
+  - ``ends_with``, ``starts_with``
   - ``quote``, ``surround``
   - ``js_replace``, ``re_replace``, ``replace``
 
