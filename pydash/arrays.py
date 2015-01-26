@@ -538,7 +538,7 @@ def push(array, *items):
 
     .. versionadded:: 2.2.0
     """
-    pyd.each(items, lambda item: array.append(item))
+    pyd.each(items, array.append)
     return array
 
 
