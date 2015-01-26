@@ -163,6 +163,7 @@ from .functions import (
     partial_right,
     pipe,
     pipe_right,
+    rearg,
     throttle,
     wrap,
 )

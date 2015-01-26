@@ -34,6 +34,7 @@ __all__ = (
     'partial_right',
     'pipe',
     'pipe_right',
+    'rearg',
     'throttle',
     'wrap',
 )
@@ -134,7 +135,7 @@ class Curry(object):
         self.kargs = {} if kargs is None else kargs
 
     def __call__(self, *args, **kargs):
-        """Store `args` and `kargs` and call `self.func` if we've reached or
+        """Store `args` and `kargs` and call :attr:`func` if we've reached or
         exceeded the function arity.
         """
         args = self.compose_args(args)
@@ -245,7 +246,7 @@ class Negate(object):
         self.func = func
 
     def __call__(self, *args, **kargs):
-        """Return negated results of calling `self.func`."""
+        """Return negated results of calling :attr:`func`."""
         return not self.func(*args, **kargs)
 
 
@@ -257,7 +258,7 @@ class Once(object):
         self.called = False
 
     def __call__(self, *args, **kargs):
-        """Return results from the first call of `self.func`."""
+        """Return results from the first call of :attr:`func`."""
         if not self.called:
             self.result = self.func(*args, **kargs)
             self.called = True
@@ -273,8 +274,8 @@ class Partial(object):
         self.from_right = from_right
 
     def __call__(self, *args, **kargs):
-        """Return results from `self.func` with `self.args` + `args. Apply args
-        from left or right depending on `self.from_right`.
+        """Return results from :attr:`func` with :attr:`args` + `args`. Apply
+        arguments from left or right depending on :attr:`from_right`.
         """
         if self.from_right:
             args = list(args) + list(self.args)
@@ -282,6 +283,41 @@ class Partial(object):
             args = list(self.args) + list(args)
 
         return self.func(*args, **kargs)
+
+
+class Rearg(object):
+    """Wrap a function in a rearg context."""
+    def __init__(self, func, *indexes):
+        self.func = func
+
+        # Index `indexes` by the index value so we can do a lookup mapping by
+        # walking the function arguments.
+        self.indexes = dict(
+            (src_index, dest_index)
+            for dest_index, src_index in enumerate(pyd.flatten(indexes)))
+
+    def __call__(self, *args, **kargs):
+        """Return results from :attr:`func` using rearranged arguments."""
+        reargs = {}
+        rest = []
+
+        # Walk arguments to ensure each one is added to the final argument
+        # list.
+        for src_index, arg in enumerate(args):
+            # NOTE: dest_index will range from 0 to len(indexes).
+            dest_index = self.indexes.get(src_index)
+
+            if dest_index is not None:
+                # Remap argument index.
+                reargs[dest_index] = arg
+            else:
+                # Argumnet index is not contained in `indexes` so stick in the
+                # back.
+                rest.append(arg)
+
+        reargs = [reargs[key] for key in sorted(reargs)] + rest
+
+        return self.func(*reargs, **kargs)
 
 
 class Throttle(object):
@@ -615,6 +651,23 @@ def partial_right(func, *args):
     .. versionadded:: 1.0.0
     """
     return Partial(func, args, from_right=True)
+
+
+def rearg(func, *indexes):
+    """Creates a function that invokes `func` with arguments arranged according
+    to the specified indexes where the argument value at the first index is
+    provided as the first argument, the argument value at the second index is
+    provided as the second argument, and so on.
+
+    Args:
+        func (function): Function to rearrange arguments for.
+        *indexes (int): The arranged argument indexes.
+
+    Returns:
+        Rearg: Function wrapped in a :class:`Rearg` context.
+    .. versionadded:: 3.0.0
+    """
+    return Rearg(func, *indexes)
 
 
 def throttle(func, wait):

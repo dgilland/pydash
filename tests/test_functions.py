@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import time
 
@@ -44,8 +43,7 @@ def test_after(case, expected):
      10),
 ])
 def test_ary(case, args, kargs, expected):
-    func = _.ary(*case)
-    assert func(*args, **kargs) == expected
+    assert _.ary(*case)(*args, **kargs) == expected
 
 
 @parametrize('case,expected', [
@@ -267,6 +265,32 @@ def test_partial_as_callback():
 ])
 def test_partial_right(case, case_args, args, expected):
     assert _.partial_right(case, *case_args)(*args) == expected
+
+
+@parametrize('case,args,kargs,expected', [
+    ((lambda a, b, c: [a, b, c], 2, 0, 1),
+     ('b', 'c', 'a'),
+     {},
+     ['a', 'b', 'c']),
+    ((lambda a, b, c: [a, b, c], [2, 0, 1]),
+     ('b', 'c', 'a'),
+     {},
+     ['a', 'b', 'c']),
+    ((lambda a, b, c: [a, b, c], 2, 1),
+     ('b', 'c', 'a'),
+     {},
+     ['a', 'c', 'b']),
+    ((lambda a, b, c: [a, b, c], 1),
+     ('b', 'c', 'a'),
+     {},
+     ['c', 'b', 'a']),
+    ((lambda a, b, c: [a, b, c], 3, 2, 0, 1),
+     ('b', 'c', 'a'),
+     {},
+     ['a', 'b', 'c']),
+])
+def test_rearg(case, args, kargs, expected):
+    assert _.rearg(*case)(*args, **kargs) == expected
 
 
 def test_throttle():

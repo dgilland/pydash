@@ -23,6 +23,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``predecessor``.
 - Add ``prune``.
 - Add ``re_replace``.
+- Add ``rearg``.
 - Add ``replace``.
 - Add ``separator_case``.
 - Add ``series_phrase``.
