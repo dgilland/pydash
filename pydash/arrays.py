@@ -677,6 +677,7 @@ def sort(array, comparison=None, key=None, reverse=False):
 
     .. versionadded:: 2.2.0
     """
+    # pylint: disable=redefined-outer-name
     if comparison and key:
         raise Exception(
             'The "comparison" and "key" arguments are mutually exclusive')

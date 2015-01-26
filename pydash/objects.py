@@ -731,15 +731,15 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
     if pyd.is_string(obj):
         obj = obj.strip()
 
-        def booleanMatch(text, values):
-            if text.lower() in [value.lower() for value in values]:
+        def boolean_match(text, vals):  # pylint: disable=missing-docstring
+            if text.lower() in [val.lower() for val in vals]:
                 return True
             else:
-                return re.match('|'.join(values), text)
+                return re.match('|'.join(vals), text)
 
-        if true_values and booleanMatch(obj, true_values):
+        if true_values and boolean_match(obj, true_values):
             value = True
-        elif false_values and booleanMatch(obj, false_values):
+        elif false_values and boolean_match(obj, false_values):
             value = False
         else:
             value = None
@@ -775,7 +775,7 @@ def to_number(obj, precision=0):
             rounder = round
 
         num = rounder(float(obj) * factor) / factor
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         num = None
 
     return num

@@ -10,7 +10,7 @@ import random
 
 import pydash as pyd
 
-from .helpers import itercallback, iterator, call_callback, NoValue
+from .helpers import itercallback, iterator, call_callback
 
 
 __all__ = (

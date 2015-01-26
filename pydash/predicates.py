@@ -82,7 +82,7 @@ def is_blank(text):
 
     ..versionadded:: 3.0.0
     """
-    return bool(re.match('^(\s+)?$', text))
+    return bool(re.match(r'^(\s+)?$', text))
 
 
 def is_boolean(value):

@@ -13,7 +13,6 @@ from ._compat import (
     html_unescape,
     iteritems,
     parse_qsl,
-    PY26,
     text_type,
     urlencode,
     urlsplit,
@@ -529,9 +528,7 @@ def join(array, separator=''):
         Modified :func:`implode` to have :func:`join` as main definition and
         :func:`implode` as alias.
     """
-    return pyd.to_string(separator).join(pyd.map_(
-        array or tuple(), pyd.to_string)
-    )
+    return pyd.to_string(separator).join(pyd.map_(array or (), pyd.to_string))
 
 
 implode = join
@@ -648,13 +645,14 @@ def pad(text, length, chars=' '):
     Args:
         text (str): String to pad.
         length (int): Amount to pad.
-        chars (str, optional): Chars to pad with. Defaults to ``" "``.
+        chars (str, optional): Characters to pad with. Defaults to ``" "``.
 
     Returns:
         str: Padded string.
 
     .. versionadded:: 1.1.0
     """
+    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     text_len = len(text)
     length = max((length, text_len))
@@ -680,13 +678,14 @@ def pad_left(text, length, chars=' '):
     Args:
         text (str): String to pad.
         length (int): Amount to pad.
-        chars (str, optional): Chars to pad with. Defaults to ``" "``.
+        chars (str, optional): Characters to pad with. Defaults to ``" "``.
 
     Returns:
         str: Padded string.
 
     .. versionadded:: 1.1.0
     """
+    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     length = max((length, len(text)))
     return (repeat(chars, length) + text)[-length:]
@@ -700,13 +699,14 @@ def pad_right(text, length, chars=' '):
     Args:
         text (str): String to pad.
         length (int): Amount to pad.
-        chars (str, optional): Chars to pad with. Defaults to ``" "``.
+        chars (str, optional): Characters to pad with. Defaults to ``" "``.
 
     Returns:
         str: Padded string.
 
     .. versionadded:: 1.1.0
     """
+    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     length = max((length, len(text)))
     return (text + repeat(chars, length))[:length]
@@ -756,12 +756,12 @@ def prune(text, length=0, omission='...'):
         char = match.group(0)
         return ' ' if char.upper() == char.lower() else char
 
-    subtext = re_replace(text[:length + 1], '.(?=\W*\w*$)', repl)
+    subtext = re_replace(text[:length + 1], r'.(?=\W*\w*$)', repl)
 
-    if re.match('\w\w', subtext[-2:]):
+    if re.match(r'\w\w', subtext[-2:]):
         # Last two characters are alphanumeric. Remove last "word" from end of
         # string so that we prune to the next whole word.
-        subtext = re_replace(subtext, '\s*\S+$', '')
+        subtext = re_replace(subtext, r'\s*\S+$', '')
     else:
         # Last character (at least) is whitespace. So remove that character as
         # well as any other whitespace.
@@ -857,6 +857,7 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
 
     .. versionadded:: 3.0.0
     """
+    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
 
     if pattern is None:
@@ -1057,7 +1058,7 @@ def strip_tags(text):
 
     .. versionadded:: 3.0.0
     """
-    return re_replace(text, '<\/?[^>]+>', '')
+    return re_replace(text, r'<\/?[^>]+>', '')
 
 
 def substr_left(text, subtext):
@@ -1206,6 +1207,7 @@ def trim(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
+    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     return text.strip(chars)
 
@@ -1222,6 +1224,7 @@ def trim_left(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
+    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     return text.lstrip(chars)
 
@@ -1238,6 +1241,7 @@ def trim_right(text, chars=None):
 
     .. versionadded:: 1.1.0
     """
+    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     return text.rstrip(chars)
 
