@@ -363,8 +363,6 @@ def ends_with(text, target, position=None):
 
     .. versionadded:: 1.1.0
     """
-    if text is None or target is None:
-        return False
     target = pyd.to_string(target)
     text = pyd.to_string(text)
 
@@ -916,6 +914,9 @@ def series_phrase(items, separator=', ', last_separator=' and ', serial=False):
     items = pyd.chain(items).map(pyd.to_string).compact().value()
     item_count = len(items)
 
+    separator = pyd.to_string(separator)
+    last_separator = pyd.to_string(last_separator)
+
     if item_count > 2 and serial:
         last_separator = separator.rstrip() + last_separator
 
@@ -960,7 +961,7 @@ def slugify(text, separator='-'):
 
     .. versionadded:: 3.0.0
     """
-    normalized = (unicodedata.normalize('NFKD', text_type(text))
+    normalized = (unicodedata.normalize('NFKD', text_type(pyd.to_string(text)))
                   .encode('ascii', 'ignore')
                   .decode('utf8'))
 
@@ -1026,7 +1027,7 @@ def split(text, separator=NoValue):
 explode = split
 
 
-def starts_with(text, target, position=None):
+def starts_with(text, target, position=0):
     """Checks if `text` starts with a given target string.
 
     Args:
@@ -1041,10 +1042,7 @@ def starts_with(text, target, position=None):
     .. versionadded:: 1.1.0
     """
     text = pyd.to_string(text)
-
-    if position is None:
-        position = 0
-
+    target = pyd.to_string(target)
     return text[position:].startswith(target)
 
 

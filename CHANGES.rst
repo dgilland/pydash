@@ -50,9 +50,10 @@ v3.0.0 (xxxx-xx-xx)
   - ``clean``
   - ``chars``
   - ``count_substr``
-  - ``ends_with``
+  - ``ends_with``, ``starts_with``
   - ``quote``, ``surround``
   - ``js_replace``, ``re_replace``, ``replace``
+  - ``series_phrase``, ``series_phrase_serial``, ``replace``
 
 - Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``splice`` work with strings.

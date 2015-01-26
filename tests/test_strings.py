@@ -156,14 +156,14 @@ def test_decapitalize(case, expected):
     assert _.decapitalize(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('abc', 'c'), True),
     (('abc', 'b'), False),
-    (('abc', None), False),
+    (('abc', None), True),
     (('', 'b'), False),
-    (('', None), False),
+    (('', None), True),
     ((None, 'b'), False),
-    ((None, None), False),
+    ((None, None), True),
     ((6.34, 4), True),
     ((6.34, 3), False),
     (('abc', 'c', 3), True),
@@ -171,7 +171,7 @@ def test_decapitalize(case, expected):
     (('abc', 'b', 2), True),
     (('abc', 'b', 1), False),
     ((6.34, 'b', 1), False),
-])
+))
 def test_ends_with(case, expected):
     assert _.ends_with(*case) == expected
 
@@ -534,33 +534,53 @@ def test_replace(case, expected):
     (('foo!bar,baz', '_'), 'foo_bar_baz'),
     (('--foo.bar;baz', '_'), 'foo_bar_baz'),
     (('Foo Bar', '_'), 'foo_bar'),
+    (('', '_'), ''),
+    ((None, '_'), ''),
 ])
 def test_separator_case(case, expected):
     assert _.separator_case(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (([],), ''),
+    ((tuple(),), ''),
+    (((None,),), ''),
+    (((None, None),), ''),
+    ((('', None),), ''),
+    (((None, ''),), ''),
+    (((None, 5),), '5'),
+    (((7.88, None),), '7.88'),
     ((['', ''],), ''),
     ((['foo'],), 'foo'),
     ((['foo', 'bar'],), 'foo and bar'),
     ((['foo', 'bar', 'baz'],), 'foo, bar and baz'),
     ((['foo', 'bar', 'baz', 'qux'], ', ', ' or '), 'foo, bar, baz or qux'),
     ((['foo', 'bar', 'baz', 'qux'], ';', ' or '), 'foo;bar;baz or qux'),
-])
+    ((['foo', 'bar', 'baz', 'qux'], 0.6, ' or '), 'foo0.6bar0.6baz or qux'),
+    ((['foo', 'bar', 'baz', 'qux'], 0.6, 1), 'foo0.6bar0.6baz1qux'),
+    ((['foo', 'bar', 'baz', 'qux'], 0.6, None), 'foo0.6bar0.6bazqux'),
+    ((['foo', 23, 'baz', 'qux'], None, None), 'foo23bazqux'),
+))
 def test_series_phrase(case, expected):
     assert _.series_phrase(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (([],), ''),
+    ((tuple(),), ''),
+    (((None,),), ''),
+    (((None, None),), ''),
+    ((('', None),), ''),
+    (((None, ''),), ''),
+    (((None, 5),), '5'),
+    (((7.88, None),), '7.88'),
     ((['', ''],), ''),
     ((['foo'],), 'foo'),
     ((['foo', 'bar'],), 'foo and bar'),
     ((['foo', 'bar', 'baz'],), 'foo, bar, and baz'),
     ((['foo', 'bar', 'baz', 'qux'], ', ', ' or '), 'foo, bar, baz, or qux'),
     ((['foo', 'bar', 'baz', 'qux'], ';', ' or '), 'foo;bar;baz; or qux'),
-])
+))
 def test_series_phrase_serial(case, expected):
     assert _.series_phrase_serial(*case) == expected
 
@@ -569,6 +589,9 @@ def test_series_phrase_serial(case, expected):
     ('Foo Bar', 'foo-bar'),
     (' foo bar ', 'foo-bar'),
     (u'Un éléphant à l\'orée du bois', 'un-elephant-a-l-oree-du-bois'),
+    ('', ''),
+    (5, '5'),
+    (None, ''),
 ])
 def test_slugify(case, expected):
     assert _.slugify(case) == expected
@@ -581,23 +604,30 @@ def test_slugify(case, expected):
     ('foo!bar,baz', 'foo_bar_baz'),
     ('--foo.bar;baz', 'foo_bar_baz'),
     ('FooBar', 'foo_bar'),
+    ('', ''),
+    (None, ''),
+    (5, '5'),
 ])
 def test_snake_case(case, expected):
     assert _.snake_case(case) == expected
 
 
-@parametrize('case', [
-    _.underscore_case
-])
+@parametrize('case', (
+    _.underscore_case,
+))
 def test_snake_case_aliases(case):
     assert _.snake_case is case
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('string1 string2',), ['string1', 'string2']),
     (('string', ''), ['s', 't', 'r', 'i', 'n', 'g']),
+    (('string', None), ['s', 't', 'r', 'i', 'n', 'g']),
+    (('', ''), []),
+    (('', None), []),
+    ((None, None), []),
     (('string1,string2', ','), ['string1', 'string2']),
-])
+))
 def test_split(case, expected):
     assert _.split(*case) == expected
 
@@ -609,23 +639,33 @@ def test_split_aliases(case):
     assert _.split is case
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     (('abc', 'a'), True),
     (('abc', 'b'), False),
     (('abc', 'a', 0), True),
     (('abc', 'a', 1), False),
     (('abc', 'b', 1), True),
     (('abc', 'b', 2), False),
-])
+    ((5.78, 5), True),
+    (("5.78", 5), True),
+    ((5.78, '5'), True),
+    ((5.78, ''), True),
+    ((5.78, None), True),
+    ((None, None), True),
+    (('', None), True),
+    ((' ', None), True),
+))
 def test_starts_with(case, expected):
     assert _.starts_with(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', (
     ('a <a href="#">link</a>', 'a link'),
     ('a <a href="#">link</a><script>alert("hello world!")</script>',
-     'a linkalert("hello world!")')
-])
+     'a linkalert("hello world!")'),
+    ('', ''),
+    (None, ''),
+))
 def test_strip_tags(case, expected):
     assert _.strip_tags(case) == expected
 
