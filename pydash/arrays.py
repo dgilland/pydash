@@ -152,7 +152,7 @@ def drop(array, n):
     .. versionchanged:: 1.1.0
         Added ``n`` argument and removed as alias of :func:`rest`.
     """
-    return drop_while(array, lambda _, index, *args: index < n)
+    return drop_while(array, lambda _, index: index < n)
 
 
 def drop_right(array, n):
@@ -168,8 +168,7 @@ def drop_right(array, n):
     .. versionadded:: 1.1.0
     """
     length = len(array)
-    return drop_right_while(array,
-                            lambda _, index, *args: (length - index) <= n)
+    return drop_right_while(array, lambda _, index: (length - index) <= n)
 
 
 def drop_right_while(array, callback=None):
@@ -818,7 +817,7 @@ def take(array, n):
     .. versionchanged:: 1.1.0
         Added ``n`` argument and removed as alias of :func:`first`.
     """
-    return take_while(array, lambda _, index, *args: index < n)
+    return take_while(array, lambda _, index: index < n)
 
 
 def take_right(array, n):
@@ -834,8 +833,7 @@ def take_right(array, n):
     .. versionadded:: 1.1.0
     """
     length = len(array)
-    return take_right_while(array,
-                            lambda _, index, *args: (length - index) <= n)
+    return take_right_while(array, lambda _, index: (length - index) <= n)
 
 
 def take_right_while(array, callback=None):

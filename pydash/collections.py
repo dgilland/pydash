@@ -543,7 +543,7 @@ def reduce_(collection, callback=None, accumulator=None):
     result = accumulator
 
     if callback is None:
-        callback = lambda item, *args: item
+        callback = pyd.identity
 
     for index, item in iterable:
         result = call_callback(callback, result, item, index)
@@ -602,7 +602,7 @@ def reductions(collection, callback=None, accumulator=None, from_right=False):
     .. versionadded:: 2.0.0
     """
     if callback is None:
-        callback = lambda item, *args: item
+        callback = pyd.identity
 
     results = []
 

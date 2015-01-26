@@ -161,8 +161,7 @@ def matches(source):
 
     .. versionadded:: 1.0.0
     """
-    return lambda obj, *args: all(item in obj.items()
-                                  for item in source.items())
+    return lambda obj: all(item in obj.items() for item in source.items())
 
 
 def memoize(func, resolver=None):
@@ -233,7 +232,7 @@ def property_(key):
 
     .. versionadded:: 1.0.0
     """
-    return lambda obj, *args: get_item(obj, key, default=None)
+    return lambda obj: get_item(obj, key, default=None)
 
 
 prop = property_

@@ -237,7 +237,7 @@ class Juxtapose(object):
         self.funcs = funcs
 
     def __call__(self, *objs):
-        return pyd.map_(self.funcs, lambda func, *_: func(*objs))
+        return pyd.map_(self.funcs, lambda func: func(*objs))
 
 
 class Negate(object):

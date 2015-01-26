@@ -824,7 +824,7 @@ def transform(obj, callback=None, accumulator=None):
     .. versionadded:: 1.0.0
     """
     if callback is None:
-        callback = lambda accumulator, *args: accumulator
+        callback = pyd.identity
 
     if accumulator is None:
         accumulator = []
