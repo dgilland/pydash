@@ -5,7 +5,6 @@ Changelog
 v3.0.0 (xxxx-xx-xx)
 -------------------
 
-- Make ``re_replace`` accept non-stirng arguments
 - Add ``ary``.
 - Add ``chars``.
 - Add ``chop``.
@@ -42,27 +41,38 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``to_number``.
 - Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
-- Make the following functions work with empty strings and ``None`` (**breaking change**):
-
-  - ``camel_case``, ``kebab_case`` and ``class_case``
-  - ``capitalize`` and ``decapitalize``
-  - ``chop`` and ``chop_right``
-  - ``lines`` and ``join``
-  - ``clean``
-  - ``chars``
-  - ``count_substr``
-  - ``ends_with``, ``starts_with``
-  - ``quote``, ``surround``
-  - ``js_replace``, ``re_replace``, ``replace``
-  - ``series_phrase``, ``series_phrase_serial``, ``replace``
-
-- Make ``capitalize`` accept ``lower_rest`` argument to determine whether to convert the rest of the string to lower case or not. Defaults to ``True``.
-- Make ``splice`` work with strings.
-- Make ``to_string`` convert ``None`` to empty string (**breaking change**).
-- Move ``arrays.join`` to ``strings.join`` (**breaking change**).
-- Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator`` (**breaking change**).
-- Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator`` (**breaking change**).
 - Fix ``trunc`` and ``truncate`` so that they handle texts shorter than the max string length correctly.
+- Make the following functions work with empty strings and ``None``: (**breaking change**)
+
+  - ``camel_case``
+  - ``capitalize``
+  - ``chars``
+  - ``chop``
+  - ``chop_right``
+  - ``class_case``
+  - ``clean``
+  - ``count_substr``
+  - ``decapitalize``
+  - ``ends_with``
+  - ``join``
+  - ``js_replace``
+  - ``kebab_case``
+  - ``lines``
+  - ``quote``
+  - ``re_replace``
+  - ``replace``
+  - ``series_phrase``
+  - ``series_phrase_serial``
+  - ``starts_with``
+  - ``surround``
+
+- Make ``capitalize`` accept ``lower_rest`` argument to control whether to convert the rest of the string to lower case or not. Defaults to ``True``.
+- Make ``splice`` work with strings.
+- Make ``to_string`` convert ``None`` to empty string. (**breaking change**)
+- Make ``re_replace`` accept non-stirng arguments.
+- Move ``arrays.join`` to ``strings.join`` (**breaking change**).
+- Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
+- Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 
 
 v2.4.1 (2015-01-11)
