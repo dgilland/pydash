@@ -15,6 +15,7 @@ from ._compat import _range
 
 __all__ = (
     'after',
+    'ary',
     'before',
     'compose',
     'conjoin',
@@ -56,6 +57,29 @@ class After(object):
 
         if self.n <= 0:
             return self.func(*args, **kargs)
+
+
+class Ary(object):
+    """Wrap a function in an ary context."""
+    def __init__(self, func, n):
+        try:
+            n = int(n)
+            assert n >= 0
+        except (ValueError, TypeError, AssertionError):
+            n = None
+
+        self.n = n
+        self.func = func
+
+    def __call__(self, *args, **kargs):
+        """Return results of :attr:`func` with arguments capped to :attr:`n`.
+        Only positional arguments are capped. Any number of keyword arguments
+        are allowed.
+        """
+        if self.n is not None:
+            args = args[:self.n]
+
+        return self.func(*args, **kargs)
 
 
 class Before(After):
@@ -296,6 +320,24 @@ def after(n, func):
     .. versionadded:: 1.0.0
     """
     return After(n, func)
+
+
+def ary(func, n):
+    """Creates a function that accepts up to `n` arguments ignoring any
+    additional arguments. Only positional arguments are capped. All keyword
+    arguments are allowed through.
+
+    Args:
+        func (function): Function to cap arguments for.
+        n (int): Number of arguments to accept.
+
+    Returns:
+        Ary: Function wrapped in an :class:`Ary` context.
+
+    .. versionadded:: 3.0.0
+    """
+    return Ary(func, n)
+
 
 
 def before(n, func):

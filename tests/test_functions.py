@@ -22,6 +22,32 @@ def test_after(case, expected):
     assert ret == expected
 
 
+@parametrize('case,args,kargs,expected', [
+    ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 1), (1, 2, 3, 4), {}, 1),
+    ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 2), (1, 2, 3, 4), {}, 3),
+    ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 3), (1, 2, 3, 4), {}, 6),
+    ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 1),
+     (1, 2, 3, 4),
+     {'d': 10},
+     11),
+    ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 2),
+     (1, 2, 3, 4),
+     {'d': 10},
+     13),
+    ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 3),
+     (1, 2, 3, 4),
+     {'d': 10},
+     16),
+    ((lambda a=0, b=0, c=0, d=0: a + b + c + d, None),
+     (1, 2, 3, 4),
+     {},
+     10),
+])
+def test_ary(case, args, kargs, expected):
+    func = _.ary(*case)
+    assert func(*args, **kargs) == expected
+
+
 @parametrize('case,expected', [
     ((2, lambda: 3), 3),
     ((-1, lambda: 3), 3),

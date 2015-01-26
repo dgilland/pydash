@@ -6,6 +6,7 @@ v3.0.0 (xxxx-xx-xx)
 -------------------
 
 - Make ``re_replace`` accept non-stirng arguments
+- Add ``ary``.
 - Add ``chars``.
 - Add ``chop``.
 - Add ``chop_right``.
