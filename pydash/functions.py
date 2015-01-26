@@ -339,7 +339,6 @@ def ary(func, n):
     return Ary(func, n)
 
 
-
 def before(n, func):
     """Creates a function that executes `func`, with the arguments of the
     created function, until it has been called `n` times.
