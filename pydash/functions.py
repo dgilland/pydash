@@ -45,7 +45,7 @@ class After(object):
         try:
             n = int(n)
             assert n >= 0
-        except (ValueError, AssertionError):
+        except (ValueError, TypeError, AssertionError):
             n = 0
 
         self.n = n
