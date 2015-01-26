@@ -59,18 +59,23 @@ def test_chaining_lazy():
         tracker['called'] = True
         return value.pop()
 
-    chn = _.chain([1, 2, 3, 4, 5]).initial().tap(interceptor)
+    chain = _.chain([1, 2, 3, 4, 5]).initial().tap(interceptor)
 
     assert not tracker['called']
 
-    chn = chn.last()
+    chain = chain.last()
 
     assert not tracker['called']
 
-    result = chn.value()
+    result = chain.value()
 
     assert tracker['called']
     assert result == 3
+
+
+def test_chaining_late_value():
+    square_sum = _.chain().power(2).sum()
+    assert square_sum([1, 2, 3, 4]) == 30
 
 
 def test_dash_instance_chaining():

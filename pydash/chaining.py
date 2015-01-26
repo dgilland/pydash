@@ -7,6 +7,7 @@
 from __future__ import absolute_import
 
 import pydash as pyd
+from .helpers import NoValue
 
 
 __all__ = (
@@ -19,7 +20,7 @@ __all__ = (
 class Chain(object):
     """Enables chaining of pydash functions."""
 
-    def __init__(self, value):
+    def __init__(self, value=NoValue):
         self._value = value
 
     def value(self):
@@ -32,9 +33,7 @@ class Chain(object):
             - :meth:`value` (main definition)
             - :meth:`value_of` (alias)
         """
-        if isinstance(self._value, ChainWrapper):
-            # pylint: disable=maybe-no-member
-            self._value = self._value.unwrap()
+        self._value = self(self._value)
         return self._value
 
     value_of = value
@@ -90,6 +89,20 @@ class Chain(object):
         """
         return ChainWrapper(self._value, self.get_method(attr))
 
+    def __call__(self, value):
+        """Return result of passing `value` through chained methods.
+
+        Args:
+            value (mixed): Initial value to pass through chained methods.
+
+        Returns:
+            mixed: Result of method chain evaluation of `value`.
+        """
+        if isinstance(self._value, ChainWrapper):
+            # pylint: disable=maybe-no-member
+            value = self._value.unwrap(value)
+        return value
+
 
 class ChainWrapper(object):
     """Wrap :mod:`pydash` method call within a :class:`ChainWrapper` context.
@@ -100,14 +113,18 @@ class ChainWrapper(object):
         self.args = ()
         self.kargs = {}
 
-    def unwrap(self):
+    def unwrap(self, value=NoValue):
         """Execute :meth:`method` with :attr:`_value`, :attr:`args`, and
         :attr:`kargs`. If :attr:`_value` is an instance of
         :class:`ChainWrapper`, then unwrap it before calling :attr:`method`.
         """
         if isinstance(self._value, ChainWrapper):
-            self._value = self._value.unwrap()
-        return self.method(self._value, *self.args, **self.kargs)
+            self._value = self._value.unwrap(value)
+
+        if self._value is not NoValue:
+            value = self._value
+
+        return self.method(value, *self.args, **self.kargs)
 
     def __call__(self, *args, **kargs):
         """Invoke the :attr:`method` with :attr:`value` as the first argument
@@ -136,7 +153,7 @@ class _Dash(object):
         return Chain(value)
 
 
-def chain(value):
+def chain(value=NoValue):
     """Creates a :class:`Chain` object which wraps the given value to enable
     intuitive method chaining. Chaining is lazy and won't compute a final value
     until :meth:`Chain.value` is called.
@@ -151,6 +168,9 @@ def chain(value):
 
     .. versionchanged:: 2.0.0
         Made chaining lazy.
+
+    .. versionchanged:: 3.0.0
+        Added support for late passing of `value`.
     """
     return Chain(value)
 
