@@ -211,6 +211,20 @@ def test_is_list(case, expected):
 
 
 @parametrize('case,expected', [
+    (({'name': 'fred', 'age': 40}, {'age': 40}), True),
+    (({'name': 'fred', 'age': 40}, {'age': 40, 'active': True}), False),
+    (([1, 2, 3], [1, 2]), True),
+    (([1, 2, 3], [1, 2, 3, 4]), False),
+    (([1, 2],
+      [2, 4],
+      lambda a, b: None if isinstance(a, list) else b == a + a),
+     True),
+])
+def test_is_match(case, expected):
+    assert _.is_match(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3], operator.le), True),
     (([3, 2, 1], operator.ge), True),
     (([1, 1, 2], operator.lt), False),

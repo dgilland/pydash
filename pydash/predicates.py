@@ -35,6 +35,7 @@ __all__ = (
     'is_integer',
     'is_json',
     'is_list',
+    'is_match',
     'is_monotone',
     'is_nan',
     'is_negative',
@@ -336,6 +337,49 @@ def is_list(value):
     .. versionadded:: 1.0.0
     """
     return isinstance(value, list)
+
+
+def is_match(obj, source, callback=None):
+    """Performs a comparison between `obj` and `source` to determine if `obj`
+    contains equivalent property values as `source`. If a callback is provided
+    it will be executed to compare values. If the callback returns ``None``,
+    comparisons will be handled by the method instead. The callback is invoked
+    with two arguments: ``(obj, source)``.
+
+    Args:
+        obj (list|dict): Object to compare.
+        source (list|dict): Object of property values to match.
+        callback (mixed, optional): Callback used to compare values from `obj`
+            and `source`.
+
+    Returns:
+        bool: Whether `obj` is a match or not.
+
+    .. versionadded:: 3.0.0
+    """
+    # If callback provided, use it for comparision.
+    equal = callback(obj, source) if callable(callback) else None
+
+    # Return callback results if anything but None.
+    if equal is not None:
+        pass
+    elif (type(obj) is type(source) and
+          isinstance(obj, (list, dict)) and
+          isinstance(source, (list, dict))):
+        # Walk a/b to determine equality.
+        for key, value in iterator(source):
+            if pyd.has(obj, key):
+                equal = is_match(obj[key], value, callback)
+            else:
+                equal = False
+
+            if not equal:
+                break
+    else:
+        # Use basic == comparision.
+        equal = obj == source
+
+    return equal
 
 
 def is_monotone(value, op):

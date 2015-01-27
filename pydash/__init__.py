@@ -264,6 +264,7 @@ from .predicates import (
     is_integer,
     is_json,
     is_list,
+    is_match,
     is_monotone,
     is_nan,
     is_negative,
