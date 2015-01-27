@@ -369,6 +369,8 @@ from .utilities import (
     now,
     prop,
     property_,
+    prop_of,
+    property_of,
     random,
     range_,
     result,

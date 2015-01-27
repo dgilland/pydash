@@ -21,6 +21,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``lines``.
 - Add ``number_format``.
 - Add ``predecessor``.
+- Add ``property_of``, ``prop_of``.
 - Add ``prune``.
 - Add ``re_replace``.
 - Add ``rearg``.

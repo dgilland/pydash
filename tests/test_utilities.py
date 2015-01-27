@@ -144,6 +144,20 @@ def test_property_aliases(case):
     assert _.property_ is case
 
 
+@parametrize('case,arg,expected', [
+    ({'name': 'fred', 'age': 40}, ['name', 'age'], ['fred', 40]),
+])
+def test_property_of(case, arg, expected):
+    assert _.map_(arg, _.property_of(case)) == expected
+
+
+@parametrize('case', [
+    _.prop_of
+])
+def test_property_of_aliases(case):
+    assert _.property_of is case
+
+
 @parametrize('case,minimum,maximum', [
     ((), 0, 1),
     ((25,), 0, 25),

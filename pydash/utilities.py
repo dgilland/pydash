@@ -238,6 +238,28 @@ def property_(key):
 prop = property_
 
 
+def property_of(obj):
+    """The inverse of :func:`property_`. This method creates a function that
+    returns the key value of a given key on `obj`.
+
+    Args:
+        obj (dict|list): Object to fetch values from.
+
+    Returns:
+        function: Function that returns object's key value.
+
+    See Also:
+        - :func:`property_of` (main definition)
+        - :func:`prop_of` (alias)
+
+    .. versionadded:: 3.0.0
+    """
+    return lambda key: property_(key)(obj)
+
+
+prop_of = property_of
+
+
 def random(start=0, stop=1, floating=False):
     """Produces a random number between `start` and `stop` (inclusive). If only
     one argument is provided a number between 0 and the given number will be
