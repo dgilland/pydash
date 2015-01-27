@@ -747,13 +747,15 @@ def some(collection, callback=None):
 any_ = some
 
 
-def sort_by(collection, callback=None):
+def sort_by(collection, callback=None, reverse=False):
     """Creates a list of elements, sorted in ascending order by the results of
     running each element in a `collection` through the callback.
 
     Args:
         collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
+        reverse (bool, optional): Whether to reverse the sort. Defaults to
+            ``False``.
 
     Returns:
         list: Sorted list.
@@ -763,7 +765,7 @@ def sort_by(collection, callback=None):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return sorted(collection, key=pyd.iteratee(callback))
+    return sorted(collection, key=pyd.iteratee(callback), reverse=reverse)
 
 
 def to_list(collection):

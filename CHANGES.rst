@@ -75,9 +75,10 @@ v3.0.0 (xxxx-xx-xx)
 - Make callback invocation have better support for builtin functions and methods. Previously, if one wanted to pass a builtin function or method as a callback, it had to be wrapped in a lambda which limited the number of arguments that would be passed it. For example, ``_.each([1, 2, 3], array.append)`` would fail and would need to be converted to ``_.each([1, 2, 3], lambda item: array.append(item)``. That is no longer the case as the non-wrapped method is now supported.
 - Make ``capitalize`` accept ``lower_rest`` argument to control whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``chain`` support late passing of initial ``value`` argument.
+- Make ``re_replace`` accept non-stirng arguments.
+- Make ``sort_by`` accept ``reverse`` parameter.
 - Make ``splice`` work with strings.
 - Make ``to_string`` convert ``None`` to empty string. (**breaking change**)
-- Make ``re_replace`` accept non-stirng arguments.
 - Move ``arrays.join`` to ``strings.join`` (**breaking change**).
 - Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 - Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
