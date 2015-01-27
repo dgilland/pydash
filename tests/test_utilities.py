@@ -212,7 +212,7 @@ def test_result(case, expected):
 
 
 @parametrize('case,expected', [
-    ((5, lambda i: i * i), [0, 1, 4, 9, 16]),
+    ((lambda i: i * i, 5), [0, 1, 4, 9, 16]),
 ])
 def test_times(case, expected):
     assert _.times(*case) == expected

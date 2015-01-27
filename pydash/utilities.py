@@ -348,18 +348,21 @@ def result(obj, key, default=None):
     return ret
 
 
-def times(n, callback):
+def times(callback, n):
     """Executes the callback `n` times, returning a list of the results of each
     callback execution. The callback is invoked with one argument: ``(index)``.
 
     Args:
-        n (int): Number of times to execute `callback`.
         callback (function): Function to execute.
+        n (int): Number of times to execute `callback`.
 
     Returns:
         list: A list of results from calling `callback`.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 3.0.0
+        Reordered arguments to make `callback` first.
     """
     # pylint: disable=redefined-outer-name
     return [callback(index) for index in _range(n)]

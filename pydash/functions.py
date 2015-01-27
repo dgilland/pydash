@@ -42,7 +42,7 @@ __all__ = (
 
 class After(object):
     """Wrap a function in an after context."""
-    def __init__(self, n, func):
+    def __init__(self, func, n):
         try:
             n = int(n)
             assert n >= 0
@@ -342,20 +342,23 @@ class Throttle(object):
         return self.last_result
 
 
-def after(n, func):
+def after(func, n):
     """Creates a function that executes `func`, with the arguments of the
     created function, only after being called `n` times.
 
     Args:
-        n (int): Number of times `func` must be called before it is executed.
         func (function): Function to execute.
+        n (int): Number of times `func` must be called before it is executed.
 
     Returns:
         After: Function wrapped in an :class:`After` context.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 3.0.0
+        Reordered arguments to make `func` first.
     """
-    return After(n, func)
+    return After(func, n)
 
 
 def ary(func, n):
@@ -375,20 +378,23 @@ def ary(func, n):
     return Ary(func, n)
 
 
-def before(n, func):
+def before(func, n):
     """Creates a function that executes `func`, with the arguments of the
     created function, until it has been called `n` times.
 
     Args:
-        n (int): Number of times `func` may be executed.
         func (function): Function to execute.
+        n (int): Number of times `func` may be executed.
 
     Returns:
         Before: Function wrapped in an :class:`Before` context.
 
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: 3.0.0
+        Reordered arguments to make `func` first.
     """
-    return Before(n, func)
+    return Before(func, n)
 
 
 def conjoin(*funcs):
@@ -517,7 +523,7 @@ def flow(*funcs):
 
     .. versionadded:: 2.0.0
 
-    .. versionchanged:: x.x.x
+    .. versionchanged:: 2.3.1
         Added :func:`pipe` as alias.
     """
     return Compose(*funcs, from_right=False)
@@ -548,7 +554,7 @@ def flow_right(*funcs):
     .. versionchanged:: 2.0.0
         Added :func:`flow_right` and made :func:`compose` an alias.
 
-    .. versionchanged:: x.x.x
+    .. versionchanged:: 2.3.1
         Added :func:`pipe_right` as alias.
     """
     return Compose(*funcs, from_right=True)

@@ -83,6 +83,11 @@ v3.0.0 (xxxx-xx-xx)
 - Move ``arrays.join`` to ``strings.join`` (**breaking change**).
 - Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 - Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
+- Reorder function arguments for ``after`` from ``(n, func)`` to ``(func, n)``. (**breaking change**)
+- Reorder function arguments for ``before`` from ``(n, func)`` to ``(func, n)``. (**breaking change**)
+- Reorder function arguments for ``times`` from ``(n, callback)`` to ``(callback, n)``. (**breaking change**)
+- Reorder function arguments for ``js_match`` from ``(reg_exp, text)`` to ``(text, reg_exp)``. (**breaking change**)
+- Reorder function arguments for ``js_replace`` from ``(reg_exp, text, repl)`` to ``(text, reg_exp, repl)``. (**breaking change**)
 
 
 v2.4.1 (2015-01-11)

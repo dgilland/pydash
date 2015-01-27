@@ -310,24 +310,24 @@ def test_join_aliases(case):
 
 
 @parametrize('case,expected', [
-    (('/[A-Z]/', 'Hello World'), ['H']),
-    (('/[A-Z]/g', 'Hello World'), ['H', 'W']),
-    (('/[A-Z]/i', 'hello world'), ['h']),
-    (('/[A-Z]/gi', 'hello world'),
+    (('Hello World', '/[A-Z]/'), ['H']),
+    (('Hello World', '/[A-Z]/g'), ['H', 'W']),
+    (('hello world', '/[A-Z]/i'), ['h']),
+    (('hello world', '/[A-Z]/gi'),
      ['h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd']),
-    (('/[A-Z]/', '12345'), [])
+    (('12345', '/[A-Z]/'), [])
 ])
 def test_js_match(case, expected):
     assert _.js_match(*case) == expected
 
 
 @parametrize('case,expected', [
-    (('/[A-Z]/', 'Hello World', '!'), '!ello World'),
-    (('/[A-Z]/g', 'Hello World', '!'), '!ello !orld'),
-    (('/[A-Z]/i', 'hello world', '!'), '!ello world'),
-    (('/[A-Z]/gi', 'hello world', '!'), '!!!!! !!!!!'),
-    (('/[A-Z]/gi', 'hello world', ''), ' '),
-    (('/[A-Z]/gi', 'hello world', None), ' '),
+    (('Hello World', '/[A-Z]/', '!'), '!ello World'),
+    (('Hello World', '/[A-Z]/g', '!'), '!ello !orld'),
+    (('hello world', '/[A-Z]/i', '!'), '!ello world'),
+    (('hello world', '/[A-Z]/gi', '!'), '!!!!! !!!!!'),
+    (('hello world', '/[A-Z]/gi', ''), ' '),
+    (('hello world', '/[A-Z]/gi', None), ' '),
 ])
 def test_js_replace(case, expected):
     assert _.js_replace(*case) == expected

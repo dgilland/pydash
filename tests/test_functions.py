@@ -7,13 +7,13 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
-    ((2, lambda: 3), 3),
-    ((-1, lambda: 3), 3),
+    ((lambda: 3, 2), 3),
+    ((lambda: 3, -1), 3),
 ])
 def test_after(case, expected):
     done = _.after(*case)
 
-    for x in range(case[0] - 1):
+    for x in range(case[1] - 1):
         ret = done()
         assert ret is None
 
@@ -47,13 +47,13 @@ def test_ary(case, args, kargs, expected):
 
 
 @parametrize('case,expected', [
-    ((2, lambda: 3), 3),
-    ((-1, lambda: 3), 3),
+    ((lambda: 3, 2), 3),
+    ((lambda: 3, -1), 3),
 ])
 def test_before(case, expected):
     done = _.before(*case)
 
-    for x in range(case[0] - 1):
+    for x in range(case[1] - 1):
         ret = done()
         assert ret == expected
 

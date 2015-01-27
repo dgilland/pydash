@@ -327,8 +327,8 @@ def deburr(text):
     .. versionadded:: 2.0.0
     """
     text = pyd.to_string(text)
-    return js_replace(RE_LATIN1,
-                      text,
+    return js_replace(text,
+                      RE_LATIN1,
                       lambda match: DEBURRED_LETTERS.get(match.group(),
                                                          match.group()))
 
@@ -534,35 +534,41 @@ def join(array, separator=''):
 implode = join
 
 
-def js_match(reg_exp, text):
+def js_match(text, reg_exp):
     """Return list of matches using Javascript style regular expression.
 
     Args:
-        reg_exp (str): Javascript style regular expression.
         text (str): String to evaluate.
+        reg_exp (str): Javascript style regular expression.
 
     Returns:
         list: List of matches.
 
     .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Reordered arguments to make `text` first.
     """
     text = pyd.to_string(text)
     return js_to_py_re_find(reg_exp)(text)
 
 
-def js_replace(reg_exp, text, repl):
+def js_replace(text, reg_exp, repl):
     """Replace `text` with `repl` using Javascript style regular expression to
     find matches.
 
     Args:
-        reg_exp (str): Javascript style regular expression.
         text (str): String to evaluate.
+        reg_exp (str): Javascript style regular expression.
         repl (str): Replacement string.
 
     Returns:
         str: Modified string.
 
     .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Reordered arguments to make `text` first.
     """
     text = pyd.to_string(text)
     if not pyd.is_function(repl):
@@ -1380,7 +1386,7 @@ def words(text):
 
     .. versionadded:: 2.0.0
     """
-    return js_match(RE_WORDS, text)
+    return js_match(text, RE_WORDS)
 
 
 #

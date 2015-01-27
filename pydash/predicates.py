@@ -173,7 +173,7 @@ def is_dict(value):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: 3.3.0
+    .. versionchanged:: 3.0.0
         Added :func:`is_dict` as main definition and made
         :func:`is_plain_object` an alias.
     """

@@ -955,6 +955,6 @@ def path_keys(keys):
 
 def unescape_path_key(key):
     """Unescape path key."""
-    key = pyd.js_replace(r'/\\\\/g', key, r'\\')
-    key = pyd.js_replace(r'/\\\./g', key, '.')
+    key = pyd.js_replace(key, r'/\\\\/g', r'\\')
+    key = pyd.js_replace(key, r'/\\\./g', '.')
     return key
