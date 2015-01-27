@@ -89,6 +89,25 @@ def test_is_decreasing(case, expected):
 
 
 @parametrize('case,expected', [
+    ({}, True),
+    ([], False),
+    (1, False),
+    ('a', False),
+    (iter([]), False),
+    (iter({}), False)
+])
+def test_is_dict(case, expected):
+    assert _.is_dict(case) == expected
+
+
+@parametrize('case', [
+    _.is_plain_object
+])
+def test_is_dict_aliases(case):
+    assert _.is_dict is case
+
+
+@parametrize('case,expected', [
     (True, True),
     (0, True),
     (123.45, True),
@@ -325,18 +344,6 @@ def test_is_object(case, expected):
 ])
 def test_is_odd(case, expected):
     assert _.is_odd(case) == expected
-
-
-@parametrize('case,expected', [
-    ({}, True),
-    ([], False),
-    (1, False),
-    ('a', False),
-    (iter([]), False),
-    (iter({}), False)
-])
-def test_is_plain_object(case, expected):
-    assert _.is_plain_object(case) == expected
 
 
 @parametrize('case,expected', [

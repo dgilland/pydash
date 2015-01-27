@@ -253,6 +253,7 @@ from .predicates import (
     is_builtin,
     is_date,
     is_decreasing,
+    is_dict,
     is_empty,
     is_equal,
     is_error,

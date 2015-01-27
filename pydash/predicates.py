@@ -26,6 +26,7 @@ __all__ = (
     'is_builtin',
     'is_date',
     'is_decreasing',
+    'is_dict',
     'is_empty',
     'is_equal',
     'is_error',
@@ -155,6 +156,27 @@ def is_decreasing(value):
     .. versionadded:: 2.0.0
     """
     return is_monotone(value, operator.ge)
+
+
+def is_dict(value):
+    """Checks if `value` is a ``dict``.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a ``dict``.
+
+    See Also:
+        - :func:`is_dict` (main definition)
+        - :func:`is_plain_object` (alias)
+
+    .. versionadded:: 1.0.0
+    """
+    return isinstance(value, dict)
+
+
+is_plain_object = is_dict
 
 
 def is_empty(value):
@@ -515,20 +537,6 @@ def is_odd(value):
     .. versionadded:: 2.0.0
     """
     return is_number(value) and value % 2 != 0
-
-
-def is_plain_object(value):
-    """Checks if `value` is a ``dict``.
-
-    Args:
-        value (mixed): Value to check.
-
-    Returns:
-        bool: Whether `value` is a ``dict``.
-
-    .. versionadded:: 1.0.0
-    """
-    return isinstance(value, dict)
 
 
 def is_positive(value):
