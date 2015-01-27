@@ -172,6 +172,10 @@ def is_dict(value):
         - :func:`is_plain_object` (alias)
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 3.3.0
+        Added :func:`is_dict` as main definition and made
+        :func:`is_plain_object` an alias.
     """
     return isinstance(value, dict)
 
