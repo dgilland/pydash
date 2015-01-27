@@ -148,39 +148,39 @@ def is_empty(value):
     return any([is_boolean(value), is_number(value), not value])
 
 
-def is_equal(a, b, callback=None):
+def is_equal(value, other, callback=None):
     """Performs a comparison between two values to determine if they are
     equivalent to each other. If a callback is provided it will be executed to
     compare values. If the callback returns ``None``, comparisons will be
     handled by the method instead. The callback is invoked with two arguments:
-    ``(a, b)``.
+    ``(value, other)``.
 
     Args:
-        a (list|dict): Object to compare.
-        b (list|dict): Object to compare.
-        callback (mixed, optional): Callback used to compare values from `a`
-            and `b`.
+        value (list|dict): Object to compare.
+        other (list|dict): Object to compare.
+        callback (mixed, optional): Callback used to compare values from
+            `value` and `other`.
 
     Returns:
-        bool: Whether `a` and `b` are equal.
+        bool: Whether `value` and `other` are equal.
 
     .. versionadded:: 1.0.0
     """
     # If callback provided, use it for comparision.
-    equal = callback(a, b) if callable(callback) else None
+    equal = callback(value, other) if callable(callback) else None
 
     # Return callback results if anything but None.
     if equal is not None:
         pass
     elif (callable(callback) and
-          type(a) is type(b) and
-          isinstance(a, (list, dict)) and
-          isinstance(b, (list, dict)) and
-          len(a) == len(b)):
+          type(value) is type(other) and
+          isinstance(value, (list, dict)) and
+          isinstance(other, (list, dict)) and
+          len(value) == len(other)):
         # Walk a/b to determine equality using callback.
-        for key, value in iterator(a):
-            if pyd.has(b, key):
-                equal = is_equal(value, b[key], callback)
+        for key, value in iterator(value):
+            if pyd.has(other, key):
+                equal = is_equal(value, other[key], callback)
             else:
                 equal = False
 
@@ -188,7 +188,7 @@ def is_equal(a, b, callback=None):
                 break
     else:
         # Use basic == comparision.
-        equal = a == b
+        equal = value == other
 
     return equal
 
