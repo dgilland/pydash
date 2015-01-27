@@ -55,7 +55,9 @@ __all__ = (
     'rename_keys',
     'set_path',
     'to_boolean',
+    'to_dict',
     'to_number',
+    'to_plain_object',
     'to_string',
     'transform',
     'update_path',
@@ -747,6 +749,24 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
         value = bool(obj)
 
     return value
+
+
+def to_dict(obj):
+    """Convert `obj` to ``dict`` by created a new ``dict`` using `obj` keys and
+    values.
+
+    Args:
+        obj: (mixed): Object to convert.
+
+    Returns:
+        dict: Object converted to ``dict``.
+
+    .. versionadded:: 3.0.0
+    """
+    return dict(zip(pyd.keys(obj), pyd.values(obj)))
+
+
+to_plain_object = to_dict
 
 
 def to_number(obj, precision=0):

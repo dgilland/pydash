@@ -183,6 +183,21 @@ def test_defaults(case, expected):
 
 
 @parametrize('case,expected', [
+    ([1, 2, 3], {0: 1, 1: 2, 2: 3}),
+    ({0: 1, 1: 2, 2: 3}, {0: 1, 1: 2, 2: 3}),
+])
+def test_to_dict(case, expected):
+    assert _.to_dict(case) == expected
+
+
+@parametrize('case', [
+    _.to_plain_object
+])
+def test_to_dict_aliases(case):
+    assert _.to_dict is case
+
+
+@parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, {1: 'a', 2: 'b', 3: 'c'}),
     ([1, 2, 3], {1: 0, 2: 1, 3: 2}),
 ])

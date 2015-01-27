@@ -43,6 +43,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``title_case``.
 - Add ``truncate`` as alias of ``trunc``.
 - Add ``to_boolean``.
+- Add ``to_dict``, ``to_plain_object``.
 - Add ``to_number``.
 - Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
