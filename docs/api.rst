@@ -19,15 +19,15 @@ This is the recommended way to use pydash.
 
 .. code-block:: python
 
-    # OK
-    from pydash import where
-    where({})
-
-    # OK
+    # OK (importing main module)
     import pydash
     pydash.where({})
 
-    # NOT RECOMMENDED
+    # OK (import from main module)
+    from pydash import where
+    where({})
+
+    # NOT RECOMMENDED (importing from submodule)
     from pydash.collections import where
 
 
