@@ -43,6 +43,30 @@ def test_is_boolean(case, expected):
 
 
 @parametrize('case,expected', [
+    (list, True),
+    (dict, True),
+    ([].append, True),
+    ({}.update, True),
+    (1, True),
+    (True, True),
+    (None, True),
+    (datetime, False),
+    (parametrize, False),
+    ('a', False),
+    (lambda: None, False),
+])
+def test_is_builtin(case, expected):
+    assert _.is_builtin(case) == expected
+
+
+@parametrize('case', [
+    _.is_native
+])
+def test_is_builtin_aliases(case):
+    assert _.is_builtin is case
+
+
+@parametrize('case,expected', [
     (datetime.date.today(), True),
     (datetime.datetime.today(), True),
     ('2014-01-01', False),

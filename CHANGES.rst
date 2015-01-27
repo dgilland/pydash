@@ -17,6 +17,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``human_case``.
 - Add ``insert_substr``.
 - Add ``is_blank``.
+- Add ``is_builtin``, ``is_native``.
 - Add ``is_match``.
 - Add ``join`` as alias of ``implode``.
 - Add ``lines``.

@@ -6,11 +6,13 @@
 
 from __future__ import absolute_import
 
+import __builtin__
 import datetime
 from itertools import islice
 import json
 import operator
 import re
+from types import BuiltinFunctionType
 
 import pydash as pyd
 from .helpers import iterator
@@ -21,6 +23,7 @@ __all__ = (
     'is_associative',
     'is_blank',
     'is_boolean',
+    'is_builtin',
     'is_date',
     'is_decreasing',
     'is_empty',
@@ -38,6 +41,7 @@ __all__ = (
     'is_match',
     'is_monotone',
     'is_nan',
+    'is_native',
     'is_negative',
     'is_none',
     'is_number',
@@ -98,6 +102,28 @@ def is_boolean(value):
     .. versionadded:: 1.0.0
     """
     return isinstance(value, bool)
+
+
+def is_builtin(value):
+    """Checks if `value` is a Python builtin function or method.
+
+    Args:
+        value (callable): Value to check.
+
+    Returns:
+        bool: Whether `value` is a Python builtin function or method.
+
+    See Also:
+        - :func:`is_builtin` (main definition)
+        - :func:`is_native` (alias)
+
+    .. versionadded:: 3.0.0
+    """
+    return (value in __builtin__.__dict__.values()
+            or isinstance(value, BuiltinFunctionType))
+
+
+is_native = is_builtin
 
 
 def is_date(value):
