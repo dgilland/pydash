@@ -42,7 +42,7 @@ def call_callback(callback, *args):
             # Only pass single argument to type callbacks. This is for things
             # like int(), float(), str(), etc.
             argcount = 1
-        elif callback.__class__.__name__ == 'builtin_function_or_method':
+        elif pyd.is_builtin(callback):
             argcount = guess_builtin_argcount(callback) or maxargs
         elif argspec and argspec.varargs:
             # Callback supports variable arguments.
