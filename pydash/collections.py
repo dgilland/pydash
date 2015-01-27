@@ -55,6 +55,7 @@ __all__ = (
     'size',
     'some',
     'sort_by',
+    'sort_by_all',
     'to_list',
     'where',
 )
@@ -766,6 +767,44 @@ def sort_by(collection, callback=None, reverse=False):
         collection = collection.values()
 
     return sorted(collection, key=pyd.iteratee(callback), reverse=reverse)
+
+
+def sort_by_all(collection, keys, reverse=False):
+    """This method is like :func:`sort_by` except that it sorts by key names
+    instead of an iteratee function. Keys can be sorted in descending order by
+    prepending a ``"-"`` to the key name (e.g. ``"name"`` would become
+    ``"-name"``).
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        keys (list): List of keys to sort by. By default, keys will be sorted
+            in ascending order. To sort a key in descending order, prepend a
+            ``"-"`` to the key name. For example, to sort the key value for
+            ``"name"`` in descending order, use ``"-name"``.
+        reverse (bool, optional): Whether to reverse the sort. Defaults to
+            ``False``.
+
+    Returns:
+        list: Sorted list.
+
+    .. versionadded:: 3.0.0
+    """
+    if isinstance(collection, dict):
+        collection = collection.values()
+
+    comparers = [((pyd.prop(key[1:].strip()), -1) if key.startswith('-')
+                  else (pyd.prop(key.strip()), 1))
+                 for key in keys]
+
+    def comparer(left, right):
+        for func, mult in comparers:
+            result = cmp(func(left), func(right))
+            if result:
+                return mult * result
+        else:
+            return 0
+
+    return sorted(collection, cmp=comparer, reverse=reverse)
 
 
 def to_list(collection):

@@ -133,6 +133,7 @@ from .collections import (
     size,
     some,
     sort_by,
+    sort_by_all,
     to_list,
     where,
 )

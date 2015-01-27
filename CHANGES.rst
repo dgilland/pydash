@@ -33,6 +33,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``series_phrase``.
 - Add ``series_phrase_serial``.
 - Add ``slugify``.
+- Add ``sort_by_all``.
 - Add ``strip_tags``.
 - Add ``substr_left``.
 - Add ``substr_left_end``.
