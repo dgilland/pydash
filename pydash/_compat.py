@@ -26,6 +26,7 @@ if PY3:
     from html.parser import HTMLParser
     from urllib.parse import (
         urlencode, urlsplit, urlunsplit, parse_qs, parse_qsl)
+    import builtins
     text_type = str
     string_types = (str,)
     integer_types = (int,)
@@ -39,11 +40,13 @@ if PY3:
 
     implements_to_string = _identity
     izip = zip
+    _cmp = lambda a, b: (a > b) - (a < b)
 else:
     from HTMLParser import HTMLParser
     from itertools import izip
     from urllib import urlencode
     from urlparse import urlsplit, urlunsplit, parse_qs, parse_qsl
+    import __builtin__ as builtins
 
     text_type = unicode
     string_types = (str, unicode)
@@ -55,6 +58,7 @@ else:
     iteritems = lambda d: d.iteritems()
 
     _range = xrange
+    _cmp = cmp
 
     def implements_to_string(cls):
         cls.__unicode__ = cls.__str__

@@ -11,6 +11,7 @@ import random
 import pydash as pyd
 
 from .helpers import itercallback, iterator, call_callback
+from ._compat import cmp_to_key, _cmp
 
 
 __all__ = (
@@ -796,15 +797,15 @@ def sort_by_all(collection, keys, reverse=False):
                   else (pyd.prop(key.strip()), 1))
                  for key in keys]
 
-    def comparer(left, right):
+    def comparison(left, right):
         for func, mult in comparers:
-            result = cmp(func(left), func(right))
+            result = _cmp(func(left), func(right))
             if result:
                 return mult * result
         else:
             return 0
 
-    return sorted(collection, cmp=comparer, reverse=reverse)
+    return sorted(collection, key=cmp_to_key(comparison), reverse=reverse)
 
 
 def to_list(collection):

@@ -6,7 +6,6 @@
 
 from __future__ import absolute_import
 
-import __builtin__
 import datetime
 from itertools import islice
 import json
@@ -16,7 +15,7 @@ from types import BuiltinFunctionType
 
 import pydash as pyd
 from .helpers import iterator
-from ._compat import integer_types, number_types, string_types, izip
+from ._compat import builtins, integer_types, number_types, string_types, izip
 
 
 __all__ = (
@@ -120,7 +119,7 @@ def is_builtin(value):
 
     .. versionadded:: 3.0.0
     """
-    return (value in __builtin__.__dict__.values()
+    return (value in builtins.__dict__.values()
             or isinstance(value, BuiltinFunctionType))
 
 
