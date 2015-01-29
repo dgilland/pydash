@@ -88,6 +88,7 @@ v3.0.0 (xxxx-xx-xx)
 - Reorder function arguments for ``times`` from ``(n, callback)`` to ``(callback, n)``. (**breaking change**)
 - Reorder function arguments for ``js_match`` from ``(reg_exp, text)`` to ``(text, reg_exp)``. (**breaking change**)
 - Reorder function arguments for ``js_replace`` from ``(reg_exp, text, repl)`` to ``(text, reg_exp, repl)``. (**breaking change**)
+- Support iteration over class instance properties for non-list, non-dict, and non-iterable objects.
 
 
 v2.4.1 (2015-01-11)

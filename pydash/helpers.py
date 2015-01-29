@@ -2,6 +2,9 @@
 """Generic utility methods not part of main API.
 """
 
+from __future__ import absolute_import
+
+from collections import Iterable
 from functools import wraps
 import inspect
 import re
@@ -76,61 +79,30 @@ def guess_builtin_argcount(obj):
     return count
 
 
-def itercallback(collection, callback=None, reverse=False):
+def itercallback(obj, callback=None, reverse=False):
     """Return iterative callback based on collection type."""
-    if isinstance(collection, dict):
-        return iterdict_callback(collection, callback, reverse=reverse)
-    else:
-        return iterlist_callback(collection, callback, reverse=reverse)
-
-
-def iterlist_callback(obj, callback=None, reverse=False):
-    """Return iterative list callback."""
     cbk = pyd.iteratee(callback)
-    obj_len = len(obj)
+    items = iterator(obj)
 
     if reverse:
-        items = list(reversed(obj))
-    else:
-        items = obj
-
-    for key, item in enumerate(items):
-        if reverse:
-            key = obj_len - key - 1
-
-        yield (call_callback(cbk, item, key, obj), item, key, obj)
-
-
-def iterdict_callback(obj, callback=None, reverse=False):
-    """Return iterative dict callback."""
-    cbk = pyd.iteratee(callback)
-
-    if reverse:
-        items = reversed(list(iteritems(obj)))
-    else:
-        items = iteritems(obj)
+        items = reversed(tuple(items))
 
     for key, item in items:
         yield (call_callback(cbk, item, key, obj), item, key, obj)
 
 
-def iterator(collection):
-    """Return iterative based on collection type."""
-    if isinstance(collection, dict):
-        return iterdict(collection)
+def iterator(obj):
+    """Return iterative based on object type."""
+    if isinstance(obj, dict):
+        return iteritems(obj)
+    elif hasattr(obj, 'iteritems'):
+        return obj.iteritems()
+    elif hasattr(obj, 'items'):
+        return iter(obj.items())
+    elif isinstance(obj, Iterable):
+        return enumerate(obj)
     else:
-        return iterlist(collection)
-
-
-def iterdict(collection):
-    """Return iterative dict."""
-    return iteritems(collection)
-
-
-def iterlist(array):
-    """Return iterative list."""
-    for i, item in enumerate(array):
-        yield i, item
+        return iteritems(getattr(obj, '__dict__', {}))
 
 
 def get_item(obj, key, default=NoValue):
