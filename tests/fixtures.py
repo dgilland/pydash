@@ -4,8 +4,41 @@ from copy import deepcopy
 
 import pytest
 
+from pydash._compat import iteritems
+
+
 # pytest.mark is a generator so create alias for convenience
 parametrize = pytest.mark.parametrize
+
+
+class Object(object):
+    def __init__(self, **attrs):
+        for key, value in iteritems(attrs):
+            setattr(self, key, value)
+
+
+class ItemsObject(object):
+    def __init__(self, items):
+        self._items = items
+
+    def items(self):
+        if isinstance(self._items, dict):
+            return list(iteritems(self._items))
+        else:
+            return enumerate(self._items)
+
+
+class IteritemsObject(object):
+    def __init__(self, items):
+        self._items = items
+
+    def iteritems(self):
+        if isinstance(self._items, dict):
+            for key, value in iteritems(self._items):
+                yield key, value
+        else:
+            for i, item in enumerate(self._items):
+                yield i, item
 
 
 def reduce_callback0(total, num):

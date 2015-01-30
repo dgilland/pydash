@@ -445,7 +445,11 @@ def test_parse_int(case, expected):
      {'a': 1}),
     (([1, 2, 3],), {}),
     (([1, 2, 3], 0), {0: 1}),
-    (([1, 2, 3], 0, 1), {0: 1, 1: 2})
+    (([1, 2, 3], 0, 1), {0: 1, 1: 2}),
+    ((fixtures.Object(a=1, b=2, c=3), 'a'), {'a': 1}),
+    ((fixtures.Object(a=1, b=2, c=3), 'a', 'b'), {'a': 1, 'b': 2}),
+    ((fixtures.ItemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
+    ((fixtures.IteritemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
 ])
 def test_pick(case, expected):
     assert _.pick(*case) == expected
