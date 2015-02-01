@@ -148,7 +148,7 @@ class _Dash(object):
         """Proxy to :meth:`Chain.get_method`."""
         return Chain.get_method(attr)
 
-    def __call__(self, value):
+    def __call__(self, value=NoValue):
         """Return a new instance of :class:`Chain` with `value` as the seed."""
         return Chain(value)
 
