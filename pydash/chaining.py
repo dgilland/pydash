@@ -18,7 +18,10 @@ __all__ = (
 
 
 class Chain(object):
-    """Enables chaining of pydash functions."""
+    """Enables chaining of :attr:`module` functions."""
+
+    #: Object that contains attribute references to available methods.
+    module = pyd
 
     def __init__(self, value=NoValue):
         self._value = value
@@ -44,48 +47,48 @@ class Chain(object):
         Returns:
             str: Current value of chain operations casted to ``str``.
         """
-        return pyd.to_string(self.value())
+        return self.module.to_string(self.value())
 
-    @staticmethod
-    def get_method(name):
-        """Return valid pydash method.
+    @classmethod
+    def get_method(cls, name):
+        """Return valid :attr:`module` method.
 
         Args:
             name (str): Name of pydash method to get.
 
         Returns:
-            function: pydash callable.
+            function: :attr:`module` callable.
 
         Raises:
-            InvalidMethod: Raised if `name` is not a valid :mod:`pydash`
+            InvalidMethod: Raised if `name` is not a valid :attr:`module`
                 method.
         """
-        method = getattr(pyd, name, None)
+        method = getattr(cls.module, name, None)
 
         if not callable(method) and not name.endswith('_'):
             # Alias method names not ending in underscore to their underscore
             # counterpart. This allows chaining of functions like "map_()"
             # using "map()" instead.
-            method = getattr(pyd, name + '_', None)
+            method = getattr(cls.module, name + '_', None)
 
         if not callable(method):
-            raise pyd.InvalidMethod('Invalid pydash method: {0}'.format(name))
+            raise cls.module.InvalidMethod(('Invalid pydash method: {0}'
+                                            .format(name)))
 
         return method
 
     def __getattr__(self, attr):
-        """Proxy attribute access to :mod:`pydash`.
+        """Proxy attribute access to :attr:`module`.
 
         Args:
-            attr (str): Name of :mod:`pydash` function to chain.
+            attr (str): Name of :attr:`module` function to chain.
 
         Returns:
             ChainWrapper: New instance of :class:`ChainWrapper` with value
                 passed on.
 
         Raises:
-            InvalidMethod: Raised if `attr` is not a valid :mod:`pydash`
-                function.
+            InvalidMethod: Raised if `attr` is not a valid function.
         """
         return ChainWrapper(self._value, self.get_method(attr))
 
@@ -105,7 +108,7 @@ class Chain(object):
 
 
 class ChainWrapper(object):
-    """Wrap :mod:`pydash` method call within a :class:`ChainWrapper` context.
+    """Wrap :class:`Chain` method call within a :class:`ChainWrapper` context.
     """
     def __init__(self, value, method):
         self._value = value
