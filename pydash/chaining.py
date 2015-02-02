@@ -133,15 +133,15 @@ class ChainWrapper(object):
         # "freeze" the chain wrapper value when a value is first passed.
         # Otherwise, we'd locked the chain wrapper value permanently and not be
         # able to reuse it.
-        self = self._generate()
+        wrapper = self._generate()
 
-        if isinstance(self._value, ChainWrapper):
-            self._value = self._value.unwrap(value)
+        if isinstance(wrapper._value, ChainWrapper):
+            wrapper._value = wrapper._value.unwrap(value)
 
-        if self._value is not NoValue:
-            value = self._value
+        if wrapper._value is not NoValue:
+            value = wrapper._value
 
-        return self.method(value, *self.args, **self.kargs)
+        return wrapper.method(value, *wrapper.args, **wrapper.kargs)
 
     def __call__(self, *args, **kargs):
         """Invoke the :attr:`method` with :attr:`value` as the first argument
