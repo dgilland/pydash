@@ -798,6 +798,7 @@ def sort_by_all(collection, keys, reverse=False):
                  for key in keys]
 
     def comparison(left, right):
+        # pylint: disable=useless-else-on-loop,missing-docstring
         for func, mult in comparers:
             result = _cmp(func(left), func(right))
             if result:
