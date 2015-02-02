@@ -92,7 +92,7 @@ docs:
 
 .PHONY: serve-docs
 serve-docs:
-	cd docs/_build/html; python2 -m SimpleHTTPServer 8001
+	cd docs/_build/html; python2 -m SimpleHTTPServer 8000
 
 ##
 # TravisCI
