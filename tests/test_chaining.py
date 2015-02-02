@@ -78,6 +78,12 @@ def test_chaining_late_value():
     assert square_sum([1, 2, 3, 4]) == 30
 
 
+def test_chaining_late_value_reuse():
+    square_sum = _.chain().power(2).sum()
+    assert square_sum([1, 2, 3, 4]) == 30
+    assert square_sum([2]) == 4
+
+
 def test_dash_instance_chaining():
     value = [1, 2, 3, 4]
     from__ = _._(value).without(2, 3).reject(lambda x: x > 1)

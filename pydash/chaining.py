@@ -116,11 +116,25 @@ class ChainWrapper(object):
         self.args = ()
         self.kargs = {}
 
+    def _generate(self):
+        """Generate a copy of this instance."""
+        # pylint: disable=attribute-defined-outside-init
+        new = self.__class__.__new__(self.__class__)
+        new.__dict__ = self.__dict__.copy()
+        return new
+
     def unwrap(self, value=NoValue):
         """Execute :meth:`method` with :attr:`_value`, :attr:`args`, and
         :attr:`kargs`. If :attr:`_value` is an instance of
         :class:`ChainWrapper`, then unwrap it before calling :attr:`method`.
         """
+        # Generate a copy of ourself so that we don't modify the chain wrapper
+        # _value directly. This way if we are late passing a value, we don't
+        # "freeze" the chain wrapper value when a value is first passed.
+        # Otherwise, we'd locked the chain wrapper value permanently and not be
+        # able to reuse it.
+        self = self._generate()
+
         if isinstance(self._value, ChainWrapper):
             self._value = self._value.unwrap(value)
 
