@@ -588,7 +588,7 @@ def mapcat(array, callback=None):
 
     Example:
 
-        >>> mapcat(range(4), lambda x: range(x))
+        >>> mapcat(range(4), lambda x: list(range(x)))
         [0, 0, 1, 0, 1, 2]
 
     .. versionadded:: 2.0.0
