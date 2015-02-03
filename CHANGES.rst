@@ -53,7 +53,6 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``to_number``.
 - Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
-- Fix ``remove`` so that array is modified after callback iteration.
 - Fix ``trunc`` and ``truncate`` so that they handle texts shorter than the max string length correctly.
 - Make the following functions work with empty strings and ``None``: (**breaking change**)
 
@@ -95,6 +94,12 @@ v3.0.0 (xxxx-xx-xx)
 - Reorder function arguments for ``js_match`` from ``(reg_exp, text)`` to ``(text, reg_exp)``. (**breaking change**)
 - Reorder function arguments for ``js_replace`` from ``(reg_exp, text, repl)`` to ``(text, reg_exp, repl)``. (**breaking change**)
 - Support iteration over class instance properties for non-list, non-dict, and non-iterable objects.
+
+
+v2.4.2 (2015-01-03)
+-------------------
+
+- Fix ``remove`` so that array is modified after callback iteration.
 
 
 v2.4.1 (2015-01-11)
