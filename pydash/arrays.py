@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Functions that operate on lists.
 
+.. testsetup::
+
+    from pydash.arrays import *
+
 .. versionadded:: 1.0.0
 """
 
@@ -80,6 +84,11 @@ def cat(*arrays):
     Returns:
         list: Concatenated list.
 
+    Example:
+
+        >>> cat([1, 2], [3, 4], [[5], [6]])
+        [1, 2, 3, 4, [5], [6]]
+
     .. versionadded:: 2.0.0
     """
     return flatten(arrays)
@@ -100,6 +109,11 @@ def chunk(array, size=1):
     Returns:
         list: New list containing chunks of `array`.
 
+    Example:
+
+        >>> chunk([1, 2, 3, 4, 5], 2)
+        [[1, 2], [3, 4], [5]]
+
     .. versionadded:: 1.1.0
     """
     chunks = int(ceil(len(array) / float(size)))
@@ -115,6 +129,11 @@ def compact(array):
     Returns:
         list: Compacted list.
 
+    Example:
+
+        >>> compact(['', 1, 0, True, False, None])
+        [1, True]
+
     .. versionadded:: 1.0.0
     """
     return [item for item in array if item]
@@ -129,6 +148,11 @@ def difference(array, *lists):
 
     Returns:
         list: Difference of the lists.
+
+    Example:
+
+        >>> difference([1, 2, 3], [1], [2])
+        [3]
 
     .. versionadded:: 1.0.0
     """
@@ -146,6 +170,11 @@ def drop(array, n):
 
     Returns:
         list: Dropped list.
+
+    Example:
+
+        >>> drop([1, 2, 3, 4], 2)
+        [3, 4]
 
     .. versionadded:: 1.0.0
 
@@ -165,6 +194,11 @@ def drop_right(array, n):
     Returns:
         list: Dropped list.
 
+    Example:
+
+        >>> drop_right([1, 2, 3, 4], 2)
+        [1, 2]
+
     .. versionadded:: 1.1.0
     """
     length = len(array)
@@ -182,6 +216,11 @@ def drop_right_while(array, callback=None):
 
     Returns:
         list: Dropped list.
+
+    Example:
+
+        >>> drop_right_while([1, 2, 3, 4], lambda x: x >= 3)
+        [1, 2]
 
     .. versionadded:: 1.1.0
     """
@@ -207,6 +246,11 @@ def drop_while(array, callback=None):
     Returns:
         list: Dropped list.
 
+    Example:
+
+        >>> drop_while([1, 2, 3, 4], lambda x: x < 3)
+        [3, 4]
+
     .. versionadded:: 1.1.0
     """
     n = 0
@@ -231,6 +275,13 @@ def find_index(array, callback=None):
     Returns:
         int: Index of found item or ``-1`` if not found.
 
+    Example:
+
+        >>> find_index([1, 2, 3, 4], lambda x: x >= 3)
+        2
+        >>> find_index([1, 2, 3, 4], lambda x: x > 4)
+        -1
+
     .. versionadded:: 1.0.0
     """
     search = (i for is_true, _, i, _ in itercallback(array, callback)
@@ -249,6 +300,13 @@ def find_last_index(array, callback=None):
     Returns:
         int: Index of found item or ``-1`` if not found.
 
+    Example:
+
+        >>> find_last_index([1, 2, 3, 4], lambda x: x >= 3)
+        3
+        >>> find_index([1, 2, 3, 4], lambda x: x > 4)
+        -1
+
     .. versionadded:: 1.0.0
     """
     search = (i for is_true, _, i, _ in itercallback(array,
@@ -266,6 +324,11 @@ def first(array):
 
     Returns:
         mixed: First element of list.
+
+    Example:
+
+        >>> first([1, 2, 3, 4])
+        1
 
     See Also:
         - :func:`first` (main definition)
@@ -291,6 +354,14 @@ def flatten(array, is_deep=False):
     Returns:
         list: Flattened list.
 
+    Example:
+
+        >>> flatten([[1], [2, [3]], [[4]]])
+        [1, 2, [3], [4]]
+        >>> flatten([[1], [2, [3]], [[4]]], True)
+        [1, 2, 3, 4]
+
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
@@ -310,6 +381,11 @@ def flatten_deep(array):
     Returns:
         list: Flattened list.
 
+    Example:
+
+        >>> flatten_deep([[1], [2, [3]], [[4]]])
+        [1, 2, 3, 4]
+
     .. versionadded:: 2.0.0
     """
     return flatten(array, is_deep=True)
@@ -326,6 +402,13 @@ def index_of(array, value, from_index=0):
     Returns:
         int: Index of found item or ``-1`` if not found.
 
+    Example:
+
+        >>> index_of([1, 2, 3, 4], 2)
+        1
+        >>> index_of([2, 1, 2, 3], 2, from_index=1)
+        2
+
     .. versionadded:: 1.0.0
     """
     try:
@@ -336,6 +419,17 @@ def index_of(array, value, from_index=0):
 
 def initial(array):
     """Return all but the last element of `array`.
+
+    Args:
+        array (list): List to process.
+
+    Returns:
+        list: Initial part of `array`.
+
+    Example:
+
+        >>> initial([1, 2, 3, 4])
+        [1, 2, 3]
 
     .. versionadded:: 1.0.0
     """
@@ -353,6 +447,12 @@ def intercalate(array, separator):
     Returns:
         list: Intercalated list.
 
+    Example:
+
+        >>> intercalate([1, [2], [3], 4], 'x')
+        [1, 'x', 2, 'x', 3, 'x', 4]
+
+
     .. versionadded:: 2.0.0
     """
     return flatten(intersperse(array, separator))
@@ -368,6 +468,11 @@ def interleave(*arrays):
     Retruns:
         list: Interleaved list.
 
+    Example:
+
+        >>> interleave([1, 2, 3], [4, 5, 6], [7, 8, 9])
+        [1, 4, 7, 2, 5, 8, 3, 6, 9]
+
     .. versionadded:: 2.0.0
     """
     return list(iterinterleave(*arrays))
@@ -381,6 +486,11 @@ def intersection(*arrays):
 
     Returns:
         list: Intersection of provided lists.
+
+    Example:
+
+        >>> intersection([1, 2, 3], [1, 2, 3, 4, 5])
+        [1, 2, 3]
 
     .. versionadded:: 1.0.0
     """
@@ -398,6 +508,11 @@ def intersperse(array, separator):
     Returns:
         list: Interspersed list.
 
+    Example:
+
+        >>> intersperse([1, [2], [3], 4], 'x')
+        [1, 'x', [2], 'x', [3], 'x', 4]
+
     .. versionadded:: 2.0.0
     """
     return list(iterintersperse(array, separator))
@@ -405,6 +520,17 @@ def intersperse(array, separator):
 
 def last(array):
     """Return the last element of `array`.
+
+    Args:
+        array (list): List to process.
+
+    Returns:
+        mixed: Last part of `array`.
+
+    Example:
+
+        >>> last([1, 2, 3, 4])
+        4
 
     .. versionadded:: 1.0.0
     """
@@ -421,6 +547,13 @@ def last_index_of(array, value, from_index=None):
 
     Returns:
         int: Index of found item or ``False`` if not found.
+
+    Example:
+
+        >>> last_index_of([1, 2, 2, 4], 2)
+        2
+        >>> last_index_of([1, 2, 2, 4], 2, from_index=1)
+        1
 
     .. versionadded:: 1.0.0
     """
@@ -453,6 +586,11 @@ def mapcat(array, callback=None):
     Returns:
         list: Mapped and concatenated list.
 
+    Example:
+
+        >>> mapcat(range(4), lambda x: range(x))
+        [0, 0, 1, 0, 1, 2]
+
     .. versionadded:: 2.0.0
     """
     return cat(*pyd.map_(array, callback))
@@ -472,6 +610,20 @@ def pop(array, index=-1):
     Warning:
         `array` is modified in place.
 
+    Example:
+
+        >>> array = [1, 2, 3, 4]
+        >>> item = pop(array)
+        >>> item
+        4
+        >>> array
+        [1, 2, 3]
+        >>> item = pop(array, index=0)
+        >>> item
+        1
+        >>> array
+        [2, 3]
+
     .. versionadded:: 2.2.0
     """
     return array.pop(index)
@@ -489,6 +641,11 @@ def pull(array, *values):
 
     Warning:
         `array` is modified in place.
+
+    Example:
+
+        >>> pull([1, 2, 2, 3, 3, 4], 2, 3)
+        [1, 4]
 
     .. versionadded:: 1.0.0
     """
@@ -514,6 +671,11 @@ def pull_at(array, *indexes):
     Warning:
         `array` is modified in place.
 
+    Example:
+
+        >>> pull_at([1, 2, 3, 4], 0, 2)
+        [2, 4]
+
     .. versionadded:: 1.1.0
     """
     indexes = flatten(indexes)
@@ -535,6 +697,16 @@ def push(array, *items):
 
     Warning:
         `array` is modified in place.
+
+    Example:
+
+        >>> array = [1, 2, 3]
+        >>> push(array, 4, 5, [6])
+        [1, 2, 3, 4, 5, [6]]
+
+    See Also:
+        - :func:`push` (main definition)
+        - :func:`append` (alias)
 
     .. versionadded:: 2.2.0
     """
@@ -559,6 +731,15 @@ def remove(array, callback=None):
     Warning:
         `array` is modified in place.
 
+    Example:
+
+        >>> array = [1, 2, 3, 4]
+        >>> items = remove(array, lambda x: x >= 3)
+        >>> items
+        [3, 4]
+        >>> array
+        [1, 2]
+
     .. versionadded:: 1.0.0
     """
     to_remove = [i for is_true, _, i, _ in itercallback(array, callback)
@@ -573,6 +754,7 @@ def remove(array, callback=None):
         else:
             new_array.append(item)
 
+    # Modify array in place.
     array[:] = new_array
 
     return removed
@@ -586,6 +768,11 @@ def rest(array):
 
     Returns:
         list: Rest of the list.
+
+    Example:
+
+        >>> rest([1, 2, 3, 4])
+        [2, 3, 4]
 
     See Also:
         - :func:`rest` (main definition)
@@ -608,6 +795,11 @@ def reverse(array):
     Returns:
         list|string: Reverse of object.
 
+    Example:
+
+        >>> reverse([1, 2, 3, 4])
+        [4, 3, 2, 1]
+
     .. versionadded:: 2.2.0
     """
     # NOTE: Using this method to reverse object since it works for both lists
@@ -627,6 +819,15 @@ def shift(array):
     Warning:
         `array` is modified in place.
 
+    Example:
+
+        >>> array = [1, 2, 3, 4]
+        >>> item = shift(array)
+        >>> item
+        1
+        >>> array
+        [2, 3, 4]
+
     .. versionadded:: 2.2.0
     """
     return pop(array, 0)
@@ -644,6 +845,15 @@ def slice_(array, start=0, end=None):
 
     Returns:
         list: Sliced list.
+
+    Example:
+
+        >>> slice_([1, 2, 3, 4])
+        [1]
+        >>> slice_([1, 2, 3, 4], 1)
+        [2]
+        >>> slice_([1, 2, 3, 4], 1, 3)
+        [2, 3]
 
     .. versionadded:: 1.1.0
     """
@@ -683,6 +893,19 @@ def sort(array, comparison=None, key=None, reverse=False):
     Warning:
         `array` is modified in place.
 
+    Example:
+
+        >>> sort([2, 1, 4, 3])
+        [1, 2, 3, 4]
+        >>> sort([2, 1, 4, 3], reverse=True)
+        [4, 3, 2, 1]
+        >>> sort([{'a': 2, 'b': 1},\
+                  {'a': 3, 'b': 2},\
+                  {'a': 0, 'b': 3}],\
+                  key=lambda item: item['a'])
+        [{'a': 0, 'b': 3}, {'a': 2, 'b': 1}, {'a': 3, 'b': 2}]
+
+
     .. versionadded:: 2.2.0
     """
     # pylint: disable=redefined-outer-name
@@ -698,7 +921,7 @@ def sort(array, comparison=None, key=None, reverse=False):
 
 
 def sorted_index(array, value, callback=None):
-    """Determine the smallest index at which the value should be inserted into
+    """Determine the smallest index at which `value` should be inserted into
     array in order to maintain the sort order of the sorted array. If callback
     is passed, it will be executed for value and each element in array to
     compute their sort ranking. The callback is invoked with one argument:
@@ -716,6 +939,11 @@ def sorted_index(array, value, callback=None):
 
     Returns:
         int: Smallest index.
+
+    Example:
+
+        >>> sorted_index([1, 2, 2, 3, 4], 2)
+        1
 
     .. versionadded:: 1.0.0
     """
@@ -740,6 +968,11 @@ def sorted_last_index(array, value, callback=None):
 
     Returns:
         int: Highest index.
+
+    Example:
+
+        >>> sorted_last_index([1, 2, 2, 3, 4], 2)
+        3
 
     .. versionadded:: 1.1.0
     """
@@ -770,6 +1003,24 @@ def splice(array, index, how_many=None, *items):
 
     Warning:
         `array` is modified in place if ``list``.
+
+    Example:
+
+        >>> array = [1, 2, 3, 4]
+        >>> splice(array, 1)
+        [2, 3, 4]
+        >>> array
+        [1]
+        >>> array = [1, 2, 3, 4]
+        >>> splice(array, 1, 2)
+        [2, 3]
+        >>> array
+        [1, 4]
+        >>> array = [1, 2, 3, 4]
+        >>> splice(array, 1, 2, 0, 0)
+        [2, 3]
+        >>> array
+        [1, 0, 0, 4]
 
     .. versionadded:: 2.2.0
 
@@ -806,6 +1057,11 @@ def split_at(array, index):
     Returns:
         list: Split list.
 
+    Example:
+
+        >>> split_at([1, 2, 3, 4], 2)
+        [[1, 2], [3, 4]]
+
     .. versionadded:: 2.0.0
     """
     return [take(array, index), drop(array, index)]
@@ -820,6 +1076,11 @@ def take(array, n):
 
     Returns:
         list: Taken list.
+
+    Example:
+
+        >>> take([1, 2, 3, 4], 2)
+        [1, 2]
 
     .. versionadded:: 1.0.0
 
@@ -839,6 +1100,11 @@ def take_right(array, n):
     Returns:
         list: Taken list.
 
+    Example:
+
+        >>> take_right([1, 2, 3, 4], 2)
+        [3, 4]
+
     .. versionadded:: 1.1.0
     """
     length = len(array)
@@ -856,6 +1122,11 @@ def take_right_while(array, callback=None):
 
     Returns:
         list: Dropped list.
+
+    Example:
+
+        >>> take_right_while([1, 2, 3, 4], lambda x: x >= 3)
+        [3, 4]
 
     .. versionadded:: 1.1.0
     """
@@ -881,6 +1152,11 @@ def take_while(array, callback=None):
     Returns:
         list: Taken list.
 
+    Example:
+
+        >>> take_while([1, 2, 3, 4], lambda x: x < 3)
+        [1, 2]
+
     .. versionadded:: 1.1.0
     """
     n = 0
@@ -901,6 +1177,11 @@ def union(*arrays):
 
     Returns:
         list: Unionized list.
+
+    Example:
+
+        >>> union([1, 2, 3], [2, 3, 4], [3, 4, 5])
+        [1, 2, 3, 4, 5]
 
     .. versionadded:: 1.0.0
     """
@@ -924,6 +1205,11 @@ def uniq(array, callback=None):
 
     Returns:
         list: Unique list.
+
+    Example:
+
+        >>> uniq([1, 2, 3, 1, 2, 3])
+        [1, 2, 3]
 
     See Also:
         - :func:`uniq` (main definition)
@@ -957,6 +1243,11 @@ def without(array, *values):
     Returns:
         list: Filtered list.
 
+    Example:
+
+        >>> without([1, 2, 3, 2, 4, 4], 2, 4)
+        [1, 3]
+
     .. versionadded:: 1.0.0
     """
     return [a for a in array if a not in values]
@@ -964,6 +1255,18 @@ def without(array, *values):
 
 def xor(array, *lists):
     """Creates a list that is the symmetric difference of the provided lists.
+
+    Args:
+        array (list): List to process.
+        *lists (list): Lists to xor with.
+
+    Returns:
+        list: XOR'd list.
+
+    Example:
+
+        >>> xor([1, 3, 4], [1, 2, 4], [2])
+        [3]
 
     .. versionadded:: 1.0.0
     """
@@ -982,6 +1285,11 @@ def zip_(*arrays):
 
     Returns:
         list: Zipped list.
+
+    Example:
+
+        >>> zip_([1, 2, 3], [4, 5, 6], [7, 8, 9])
+        [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
 
     .. versionadded:: 1.0.0
     """
@@ -1003,6 +1311,14 @@ def unshift(array, *items):
     Warning:
         `array` is modified in place.
 
+    Example:
+
+        >>> array = [1, 2, 3, 4]
+        >>> unshift(array, -1, -2)
+        [-1, -2, 1, 2, 3, 4]
+        >>> array
+        [-1, -2, 1, 2, 3, 4]
+
     .. versionadded:: 2.2.0
     """
     for item in reverse(items):
@@ -1022,6 +1338,11 @@ def unzip(array):
     Returns:
         list: Unzipped list.
 
+    Example:
+
+        >>> unzip([[1, 4, 7], [2, 5, 8], [3, 6, 9]])
+        [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
     .. versionadded:: 1.0.0
     """
     return zip_(*array)
@@ -1038,6 +1359,11 @@ def zip_object(keys, values=None):
 
     Returns:
         dict: Zipped dict.
+
+    Example:
+
+        >>> zip_object([1, 2, 3], [4, 5, 6])
+        {1: 4, 2: 5, 3: 6}
 
     See Also:
         - :func:`zip_object` (main definition)
