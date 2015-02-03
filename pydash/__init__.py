@@ -399,5 +399,5 @@ from .exceptions import (
 # "_" Instance
 #
 
-_ = _Dash()
-py_ = _
+py_ = _Dash()
+_ = py_
