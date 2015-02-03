@@ -2,6 +2,9 @@ Changelog
 =========
 
 
+- Fix ``remove`` so that array is modified after callback iteration.
+
+
 v2.4.1 (2015-01-11)
 -------------------
 

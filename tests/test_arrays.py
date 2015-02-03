@@ -300,7 +300,8 @@ def test_push_aliases(alias):
 
 
 @parametrize('case,filter_by,expected', [
-    ([1, 2, 3, 4, 5, 6], lambda x: x % 2 == 0, [2, 4, 6])
+    ([1, 2, 3, 4, 5, 6], lambda x: x % 2 == 0, [2, 4, 6]),
+    ([1, 2, 3, 4], lambda x: x >= 3, [3, 4]),
 ])
 def test_remove(case, filter_by, expected):
     original = list(case)
