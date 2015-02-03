@@ -88,6 +88,15 @@ def test_drop_right_while(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3, 2, 1, 5, 6, 5, 5, 5],), [2, 1, 5]),
+    ((['A', 'b', 'C', 'a', 'B', 'c'], lambda letter: letter.lower()),
+     ['a', 'B', 'c'])
+])
+def test_duplicates(case, expected):
+    assert _.duplicates(*case) == expected
+
+
+@parametrize('case,expected', [
     (([True, 1, None, 'yes'], bool), False),
     (([True, 1, None, 'yes'],), False),
     (([{'name': 'moe', 'age': 40},

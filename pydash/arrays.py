@@ -29,6 +29,7 @@ __all__ = (
     'drop_right',
     'drop_right_while',
     'drop_while',
+    'duplicates',
     'find_index',
     'find_last_index',
     'first',
@@ -261,6 +262,44 @@ def drop_while(array, callback=None):
             break
 
     return array[n:]
+
+
+def duplicates(array, callback=None):
+    """Creates a unique list of duplicate values from `array`. If callback is
+    passed, each element of array is passed through a callback before
+    duplicates are computed. The callback is invoked with three arguments:
+    ``(value, index, array)``. If a property name is passed for callback, the
+    created :func:`pydash.collections.pluck` style callback will return the
+    property value of the given element. If an object is passed for callback,
+    the created :func:`pydash.collections.where` style callback will return
+    ``True`` for elements that have the properties of the given object, else
+    ``False``.
+
+    Args:
+        array (list): List to process.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: List of duplicates.
+
+    Example:
+
+        >>> duplicates([0, 1, 3, 2, 3, 1])
+        [3, 1]
+
+    .. versionadded:: 3.0.0
+    """
+    if callback:
+        cbk = pyd.iteratee(callback)
+        computed = [cbk(item) for item in array]
+    else:
+        computed = array
+
+    # NOTE: Using array[i] instead of item since callback could have modified
+    # returned item values.
+    lst = uniq([array[i] for i, _ in iterduplicates(computed)])
+
+    return lst
 
 
 def find_index(array, callback=None):
@@ -1431,3 +1470,12 @@ def iterunique(array):
         if item not in seen:
             seen.append(item)
             yield (i, item)
+
+
+def iterduplicates(array):
+    seen = []
+    for i, item in enumerate(array):
+        if item in seen:
+            yield (i, item)
+        else:
+            seen.append(item)

@@ -28,6 +28,7 @@ from .arrays import (
     drop_right,
     drop_right_while,
     drop_while,
+    duplicates,
     find_index,
     find_last_index,
     first,

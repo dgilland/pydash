@@ -17,6 +17,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``clean``.
 - Add ``count_substr``.
 - Add ``decapitalize``.
+- Add ``duplicates``.
 - Add ``has_substr``.
 - Add ``human_case``.
 - Add ``insert_substr``.
