@@ -36,41 +36,41 @@ Only the main pydash module API is guaranteed to adhere to semver. It's possible
 
 .. _api-dash-instance:
 
-"_" Instance
+py\_ Instance
 ============
 
-There is a special ``_`` instance available from ``pydash`` that supports method calling and method chaining from a single object:
+There is a special ``py_`` instance available from ``pydash`` that supports method calling and method chaining from a single object:
 
 
 .. code-block:: python
 
-    from pydash import _
+    from pydash import py_
 
     # Method calling
-    _.initial([1, 2, 3, 4, 5]) == [1, 2, 3, 4]
+    py_.initial([1, 2, 3, 4, 5]) == [1, 2, 3, 4]
 
     # Method chaining
-    _([1, 2, 3, 4, 5]).initial().value() == [1, 2, 3, 4]
+    py_([1, 2, 3, 4, 5]).initial().value() == [1, 2, 3, 4]
 
     # Method aliasing to underscore suffixed methods that shadow builtin names
-    _.map is _.map_
-    _([1, 2, 3]).map(_.to_string).value() == _([1, 2, 3]).map_(_.to_string).value()
+    py_.map is py_.map_
+    py_([1, 2, 3]).map(_.to_string).value() == py_([1, 2, 3]).map_(_.to_string).value()
 
 
-The ``_`` instance is basically a combination of using ``pydash.<function>`` and ``pydash.chain``.
+The ``py_`` instance is basically a combination of using ``pydash.<function>`` and ``pydash.chain``.
 
-A full listing of aliased ``_`` methods:
+A full listing of aliased ``py_`` methods:
 
 - ``_.object`` is :func:`pydash.arrays.object_`
-- ``_.slice`` is :func:`pydash.arraysslice_`
-- ``_.zip`` is :func:`pydash.arrayszip_`
+- ``_.slice`` is :func:`pydash.arrays.slice_`
+- ``_.zip`` is :func:`pydash.arrays.zip_`
 - ``_.all`` is :func:`pydash.collections.all_`
 - ``_.any`` is :func:`pydash.collections.any_`
 - ``_.filter`` is :func:`pydash.collections.filter_`
-- ``_.map`` is :func:`pydash.collection.map_`
-- ``_.max`` is :func:`pydash.collection.max_`
-- ``_.min`` is :func:`pydash.collection.min_`
-- ``_.reduce`` is :func:`pydash.collection.reduce_`
+- ``_.map`` is :func:`pydash.collections.map_`
+- ``_.max`` is :func:`pydash.collections.max_`
+- ``_.min`` is :func:`pydash.collections.min_`
+- ``_.reduce`` is :func:`pydash.collections.reduce_`
 - ``_.pow`` is :func:`pydash.numerical.pow_`
 - ``_.round`` is :func:`pydash.numerical.round_`
 - ``_.sum`` is :func:`pydash.numerical.sum_`

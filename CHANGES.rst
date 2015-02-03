@@ -1,6 +1,10 @@
+.. _changelog:
+
 Changelog
 =========
 
+
+.. _changelog-v3.0.0:
 
 v3.0.0 (xxxx-xx-xx)
 -------------------
@@ -81,9 +85,9 @@ v3.0.0 (xxxx-xx-xx)
 - Make ``sort_by`` accept ``reverse`` parameter.
 - Make ``splice`` work with strings.
 - Make ``to_string`` convert ``None`` to empty string. (**breaking change**)
-- Move ``arrays.join`` to ``strings.join`` (**breaking change**).
-- Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
-- Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
+- Move ``arrays.join`` to ``strings.join`` (**possible breaking change**).
+- Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**possible breaking change**)
+- Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**possible breaking change**)
 - Reorder function arguments for ``after`` from ``(n, func)`` to ``(func, n)``. (**breaking change**)
 - Reorder function arguments for ``before`` from ``(n, func)`` to ``(func, n)``. (**breaking change**)
 - Reorder function arguments for ``times`` from ``(n, callback)`` to ``(callback, n)``. (**breaking change**)
@@ -176,6 +180,8 @@ v2.1.0 (2014-09-17)
 - Add ``variance``.
 - Add ``zscore``.
 
+
+.. _changelog-v2.0.0:
 
 v2.0.0 (2014-09-11)
 -------------------
@@ -295,6 +301,8 @@ v1.1.0 (2014-08-19)
 - Move ``range_`` from ``pydash.api.arrays`` to ``pydash.api.utilities``. (**possible breaking change**)
 
 
+.. _changelog-v1.0.0:
+
 v1.0.0 (2014-08-05)
 -------------------
 
@@ -380,6 +388,8 @@ v1.0.0 (2014-08-05)
 - Add ``wrap``.
 - Add ``xor``.
 
+
+.. _changelog-v0.0.0:
 
 v0.0.0 (2014-07-22)
 -------------------
