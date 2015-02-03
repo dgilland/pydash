@@ -561,10 +561,19 @@ def remove(array, callback=None):
 
     .. versionadded:: 1.0.0
     """
+    to_remove = [i for is_true, _, i, _ in itercallback(array, callback)
+                 if is_true]
+
     removed = []
-    for is_true, _, i, _ in itercallback(array, callback):
-        if is_true:
-            removed.append(array.pop(i))
+    new_array = []
+
+    for i, item in enumerate(array):
+        if i in to_remove:
+            removed.append(array[i])
+        else:
+            new_array.append(item)
+
+    array[:] = new_array
 
     return removed
 
