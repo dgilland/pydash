@@ -96,7 +96,7 @@ v3.0.0 (xxxx-xx-xx)
 - Support iteration over class instance properties for non-list, non-dict, and non-iterable objects.
 
 
-v2.4.2 (2015-01-03)
+v2.4.2 (2015-02-03)
 -------------------
 
 - Fix ``remove`` so that array is modified after callback iteration.
