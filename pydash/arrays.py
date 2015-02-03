@@ -899,12 +899,13 @@ def sort(array, comparison=None, key=None, reverse=False):
         [1, 2, 3, 4]
         >>> sort([2, 1, 4, 3], reverse=True)
         [4, 3, 2, 1]
-        >>> sort([{'a': 2, 'b': 1},\
-                  {'a': 3, 'b': 2},\
-                  {'a': 0, 'b': 3}],\
-                  key=lambda item: item['a'])
-        [{'a': 0, 'b': 3}, {'a': 2, 'b': 1}, {'a': 3, 'b': 2}]
-
+        >>> result = sort([{'a': 2, 'b': 1},\
+                           {'a': 3, 'b': 2},\
+                           {'a': 0, 'b': 3}],\
+                           key=lambda item: item['a'])
+        >>> assert result == [{'a': 0, 'b': 3},\
+                              {'a': 2, 'b': 1},\
+                              {'a': 3, 'b': 2}]
 
     .. versionadded:: 2.2.0
     """
@@ -1223,7 +1224,7 @@ def uniq(array, callback=None):
     else:
         computed = array
 
-    # NOTE: User array[i] instead of item since callback could have modified
+    # NOTE: Using array[i] instead of item since callback could have modified
     # returned item values.
     lst = [array[i] for i, _ in iterunique(computed)]
 
