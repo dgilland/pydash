@@ -337,7 +337,7 @@ def first(array):
 
     .. versionadded:: 1.0.0
     """
-    return get_item(array, 0)
+    return get_item(array, 0, default=None)
 
 
 head = first
@@ -534,7 +534,7 @@ def last(array):
 
     .. versionadded:: 1.0.0
     """
-    return get_item(array, -1)
+    return get_item(array, -1, default=None)
 
 
 def last_index_of(array, value, from_index=None):
