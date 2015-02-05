@@ -54,7 +54,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
 - Fix ``trunc`` and ``truncate`` so that they handle texts shorter than the max string length correctly.
-- Make the following functions work with empty strings and ``None``: (**breaking change**)
+- Make the following functions work with empty strings and ``None``: (**breaking change**) Thanks k7sleeper_!
 
   - ``camel_case``
   - ``capitalize``
@@ -111,10 +111,10 @@ v2.4.1 (2015-01-11)
 v2.4.0 (2015-01-07)
 -------------------
 
-- Add ``ensure_ends_with``.
-- Add ``ensure_starts_with``.
-- Add ``quote``.
-- Add ``surround``.
+- Add ``ensure_ends_with``. Thanks k7sleeper_!
+- Add ``ensure_starts_with``. Thanks k7sleeper_!
+- Add ``quote``. Thanks k7sleeper_!
+- Add ``surround``. Thanks k7sleeper_!
 
 
 v2.3.2 (2014-12-10)
@@ -448,3 +448,4 @@ v0.0.0 (2014-07-22)
 
 
 .. _nathancahill: https://github.com/nathancahill
+.. _k7sleeper: https://github.com/k7sleeper
