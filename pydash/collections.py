@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Functions that operate on lists and dicts.
 
+.. testsetup::
+
+    from pydash import *
+
 .. versionadded:: 1.0.0
 """
 
@@ -75,6 +79,13 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
     Returns:
         list: filtered list
 
+    Example:
+
+        >>> at([1, 2, 3, 4], 0, 2)
+        [1, 3]
+        >>> at({'a': 1, 'b': 2, 'c': 3, 'd': 4}, 'a', 'c')
+        [1, 3]
+
     .. versionadded:: 1.0.0
     """
     indexes = pyd.flatten_deep(indexes)
@@ -92,6 +103,15 @@ def contains(collection, target, from_index=0):
 
     Returns:
         bool: Whether `target` is in `collection`.
+
+    Example:
+
+        >>> contains([1, 2, 3, 4], 2)
+        True
+        >>> contains([1, 2, 3, 4], 2, from_index=2)
+        False
+        >>> contains({'a': 1, 'b': 2, 'c': 3, 'd': 4}, 2)
+        True
 
     See Also:
         - :func:`contains` (main definition)
@@ -122,6 +142,15 @@ def count_by(collection, callback=None):
     Returns:
         dict: Dict containing counts by key.
 
+    Example:
+
+        >>> result = count_by([1, 2, 1, 2, 3, 4])
+        >>> assert result == {1: 2, 2: 2, 3: 1, 4: 1}
+        >>> result = count_by(['a', 'A', 'B', 'b'], lambda x: x.lower())
+        >>> assert result == {'a': 2, 'b': 2}
+        >>> result = count_by({'a': 1, 'b': 1, 'c': 3, 'd': 3})
+        >>> assert result == {1: 2, 3: 2}
+
     .. versionadded:: 1.0.0
     """
     ret = {}
@@ -142,6 +171,15 @@ def deep_pluck(collection, path):
 
     Returns:
         list: plucked list
+
+    Example:
+
+        >>> deep_pluck([[[0, 1]], [[2, 3]], [[4, 5]]], '0.1')
+        [1, 3, 5]
+        >>> deep_pluck([{'a': {'b': 1}}, {'a': {'b': 2}}], 'a.b')
+        [1, 2]
+        >>> deep_pluck([{'a': {'b': [0, 1]}}, {'a': {'b': [2, 3]}}], 'a.b.1')
+        [1, 3]
 
     .. versionadded:: 2.2.0
     """
@@ -164,6 +202,21 @@ def every(collection, callback=None):
     Returns:
         bool: Whether all elements are truthy.
 
+    Example:
+
+        >>> every([1, True, 'hello'])
+        True
+        >>> every([1, False, 'hello'])
+        False
+        >>> every([{'a': 1}, {'a': True}, {'a': 'hello'}], 'a')
+        True
+        >>> every([{'a': 1}, {'a': False}, {'a': 'hello'}], 'a')
+        False
+        >>> every([{'a': 1}, {'a': 1}], {'a': 1})
+        True
+        >>> every([{'a': 1}, {'a': 2}], {'a': 1})
+        False
+
     See Also:
         - :func:`every` (main definition)
         - :func:`all_` (alias)
@@ -182,8 +235,8 @@ all_ = every
 
 
 def filter_(collection, callback=None):
-    """Iterates over elements of a collection, returning an list of all
-    elements the callback returns truthy for.
+    """Iterates over elements of a collection, returning a list of all elements
+    the callback returns truthy for.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -191,6 +244,13 @@ def filter_(collection, callback=None):
 
     Returns:
         list: Filtered list.
+
+    Example:
+
+        >>> results = filter_([{'a': 1}, {'b': 2}, {'a': 1, 'b': 3}], {'a': 1})
+        >>> assert results == [{'a': 1}, {'a': 1, 'b': 3}]
+        >>> filter_([1, 2, 3, 4], lambda x: x >= 3)
+        [3, 4]
 
     See Also:
         - :func:`select` (main definition)
@@ -216,6 +276,13 @@ def find(collection, callback=None):
 
     Returns:
         mixed: First element found or ``None``.
+
+    Example:
+
+        >>> find([1, 2, 3, 4], lambda x: x >= 3)
+        3
+        >>> find([{'a': 1}, {'b': 2}, {'a': 1, 'b': 2}], {'a': 1})
+        {'a': 1}
 
     See Also:
         - :func:`find` (main definition)
@@ -245,6 +312,14 @@ def find_last(collection, callback=None):
     Returns:
         mixed: Last element found or ``None``.
 
+    Example:
+
+        >>> find_last([1, 2, 3, 4], lambda x: x >= 3)
+        4
+        >>> results = find_last([{'a': 1}, {'b': 2}, {'a': 1, 'b': 2}],\
+                                 {'a': 1})
+        >>> assert results == {'a': 1, 'b': 2}
+
     .. versionadded:: 1.0.0
     """
     search = (collection[key]
@@ -265,6 +340,14 @@ def for_each(collection, callback=None):
 
     Returns:
         list|dict: `collection`
+
+    Example:
+
+        >>> results = {}
+        >>> def callback(x): results[x] = x ** 2
+        >>> each([1, 2, 3, 4], callback)
+        [1, 2, 3, 4]
+        >>> assert results == {1: 1, 2: 4, 3: 9, 4: 16}
 
     See Also:
         - :func:`for_each` (main definition)
@@ -291,6 +374,14 @@ def for_each_right(collection, callback):
 
     Returns:
         list|dict: `collection`
+
+    Example:
+
+        >>> results = {'total': 1}
+        >>> def callback(x): results['total'] = x * results['total']
+        >>> each_right([1, 2, 3, 4], callback)
+        [1, 2, 3, 4]
+        >>> assert results == {'total': 24}
 
     See Also:
         - :func:`for_each_right` (main definition)
@@ -320,6 +411,14 @@ def group_by(collection, callback=None):
     Returns:
         dict: Results of grouping by `callback`.
 
+    Example:
+
+        >>> results = group_by([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], 'a')
+        >>> assert results == {1: [{'a': 1, 'b': 2}], 3: [{'a': 3, 'b': 4}]}
+        >>> results = group_by([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], {'a': 1})
+        >>> assert results == {False: [{'a': 3, 'b': 4}],\
+                               True: [{'a': 1, 'b': 2}]}
+
     .. versionadded:: 1.0.0
     """
     ret = {}
@@ -344,6 +443,12 @@ def index_by(collection, callback=None):
     Returns:
         dict: Results of indexing by `callback`.
 
+    Example:
+
+        >>> results = index_by([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], 'a')
+        >>> assert results == {1: {'a': 1, 'b': 2}, 3: {'a': 3, 'b': 4}}
+
+
     .. versionadded:: 1.0.0
     """
     ret = {}
@@ -367,6 +472,20 @@ def invoke(collection, method_name, *args, **kargs):
 
     Returns:
         list: List of results of invoking method of each item.
+
+    Example:
+
+        >>> items = [[1, 2], [2, 3], [3, 4]]
+        >>> invoke(items, 'pop')
+        [2, 3, 4]
+        >>> items
+        [[1], [2], [3]]
+        >>> items = [[1, 2], [2, 3], [3, 4]]
+        >>> invoke(items, 'pop', 0)
+        [1, 2, 3]
+        >>> items
+        [[2], [3], [4]]
+
 
     .. versionadded:: 1.0.0
     """
@@ -397,6 +516,11 @@ def map_(collection, callback=None):
     Returns:
         list: Mapped list.
 
+    Example:
+
+        >>> map_([1, 2, 3, 4], str)
+        ['1', '2', '3', '4']
+
     See Also:
         - :func:`map_` (main definition)
         - :func:`collect` (alias)
@@ -419,6 +543,16 @@ def mapiter(collection, callback=None):
     Returns:
         generator: Each mapped item.
 
+    Example:
+
+        >>> gen = mapiter([1, 2, 3, 4], str)
+        >>> next(gen)
+        '1'
+        >>> next(gen)
+        '2'
+        >>> list(gen)
+        ['3', '4']
+
     .. versionadded:: 2.1.0
     """
     for result in itercallback(collection, callback):
@@ -434,6 +568,13 @@ def max_(collection, callback=None):
 
     Returns:
         mixed: Maximum value.
+
+    Example:
+
+        >>> max_([1, 2, 3, 4])
+        4
+        >>> max_([{'a': 1}, {'a': 2}, {'a': 3}], 'a')
+        {'a': 3}
 
     .. versionadded:: 1.0.0
     """
@@ -452,6 +593,13 @@ def min_(collection, callback=None):
 
     Returns:
         mixed: Minimum value.
+
+    Example:
+
+        >>> min_([1, 2, 3, 4])
+        1
+        >>> min_([{'a': 1}, {'a': 2}, {'a': 3}], 'a')
+        {'a': 1}
 
     .. versionadded:: 1.0.0
     """
@@ -481,6 +629,11 @@ def partition(collection, callback=None):
     Returns:
         list: List of grouped elements.
 
+    Example:
+
+        >>> partition([1, 2, 3, 4], lambda x: x >= 3)
+        [[3, 4], [1, 2]]
+
     .. versionadded:: 1.1.0
     """
     trues = []
@@ -506,6 +659,11 @@ def pluck(collection, key):
     Returns:
         list: plucked list
 
+    Example:
+
+        >>> pluck([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}], 'a')
+        [1, 3, 5]
+
     .. versionadded:: 1.0.0
     """
     return map_(collection, pyd.prop(key))
@@ -525,6 +683,11 @@ def reduce_(collection, callback=None, accumulator=None):
 
     Returns:
         mixed: Accumulator object containing results of reduction.
+
+    Example:
+
+        >>> reduce_([1, 2, 3, 4], lambda total, x: total * x)
+        24
 
     See Also:
         - :func:`reduce_` (main definition)
@@ -570,6 +733,11 @@ def reduce_right(collection, callback=None, accumulator=None):
     Returns:
         mixed: Accumulator object containing results of reduction.
 
+    Example:
+
+        >>> reduce_right([1, 2, 3, 4], lambda total, x: total ** x)
+        4096
+
     See Also:
         - :func:`reduce_right` (main definition)
         - :func:`foldr` (alias)
@@ -596,6 +764,11 @@ def reductions(collection, callback=None, accumulator=None, from_right=False):
 
     Returns:
         list: Results of each reduction operation.
+
+    Example:
+
+        >>> reductions([1, 2, 3, 4], lambda total, x: total * x)
+        [2, 6, 24]
 
     Note:
         The last element of the returned list would be the result of using
@@ -632,6 +805,11 @@ def reductions_right(collection, callback=None, accumulator=None):
     Returns:
         list: Results of each reduction operation.
 
+    Example:
+
+        >>> reductions_right([1, 2, 3, 4], lambda total, x: total ** x)
+        [64, 4096, 4096]
+
     Note:
         The last element of the returned list would be the result of using
         :func:`reduce_`.
@@ -652,6 +830,15 @@ def reject(collection, callback=None):
     Returns:
         list: Rejected elements of `collection`.
 
+    Example:
+
+        >>> reject([1, 2, 3, 4], lambda x: x >= 3)
+        [1, 2]
+        >>> reject([{'a': 0}, {'a': 1}, {'a': 2}], 'a')
+        [{'a': 0}]
+        >>> reject([{'a': 0}, {'a': 1}, {'a': 2}], {'a': 1})
+        [{'a': 0}, {'a': 2}]
+
     .. versionadded:: 1.0.0
     """
     return [value
@@ -670,6 +857,13 @@ def sample(collection, n=None):
         list|mixed: List of sampled collection value if `n` is provided, else
             single value from collection if `n` is ``None``.
 
+    Example:
+
+        >>> items = [1, 2, 3, 4, 5]
+        >>> results = sample(items, 2)
+        >>> assert len(results) == 2
+        >>> assert set(items).intersection(results) == set(results)
+
     .. versionadded:: 1.0.0
     """
     num = min(n or 1, len(collection))
@@ -686,6 +880,13 @@ def shuffle(collection):
 
     Returns:
         list: Shuffled list of values.
+
+    Example:
+
+        >>> items = [1, 2, 3, 4]
+        >>> results = shuffle(items)
+        >>> assert len(results) == len(items)
+        >>> assert set(results) == set(items)
 
     .. versionadded:: 1.0.0
     """
@@ -711,6 +912,11 @@ def size(collection):
     Returns:
         int: Collection length.
 
+    Example:
+
+        >>> size([1, 2, 3, 4])
+        4
+
     .. versionadded:: 1.0.0
     """
     return len(collection)
@@ -731,6 +937,17 @@ def some(collection, callback=None):
 
     Returns:
         bool: Whether any of the elements are truthy.
+
+    Example:
+
+        >>> some([False, True, 0])
+        True
+        >>> some([False, 0, None])
+        False
+        >>> some([1, 2, 3, 4], lambda x: x >= 3)
+        True
+        >>> some([1, 2, 3, 4], lambda x: x == 0)
+        False
 
     See Also:
         - :func:`some` (main definition)
@@ -762,6 +979,15 @@ def sort_by(collection, callback=None, reverse=False):
     Returns:
         list: Sorted list.
 
+    Example:
+
+        >>> sort_by({'a': 2, 'b': 3, 'c': 1})
+        [1, 2, 3]
+        >>> sort_by({'a': 2, 'b': 3, 'c': 1}, reverse=True)
+        [3, 2, 1]
+        >>> sort_by([{'a': 2}, {'a': 3}, {'a': 1}], 'a')
+        [{'a': 1}, {'a': 2}, {'a': 3}]
+
     .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
@@ -787,6 +1013,22 @@ def sort_by_all(collection, keys, reverse=False):
 
     Returns:
         list: Sorted list.
+
+    Example:
+
+        >>> items = [{'a': 2, 'b': 1}, {'a': 3, 'b': 2}, {'a': 1, 'b': 3}]
+        >>> results = sort_by_all(items, ['b', 'a'])
+        >>> assert results == [{'a': 2, 'b': 1},\
+                               {'a': 3, 'b': 2},\
+                               {'a': 1, 'b': 3}]
+        >>> results = sort_by_all(items, ['a', 'b'])
+        >>> assert results == [{'a': 1, 'b': 3},\
+                               {'a': 2, 'b': 1},\
+                               {'a': 3, 'b': 2}]
+        >>> results = sort_by_all(items, ['-a', 'b'])
+        >>> assert results == [{'a': 3, 'b': 2},\
+                               {'a': 2, 'b': 1},\
+                               {'a': 1, 'b': 3}]
 
     .. versionadded:: 3.0.0
     """
@@ -818,6 +1060,13 @@ def to_list(collection):
     Returns:
         list: Collection converted to list.
 
+    Example:
+
+        >>> results = to_list({'a': 1, 'b': 2, 'c': 3})
+        >>> assert set(results) == set([1, 2, 3])
+        >>> to_list((1, 2, 3, 4))
+        [1, 2, 3, 4]
+
     .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
@@ -838,6 +1087,11 @@ def where(collection, properties):
 
     Returns:
         list: filtered list.
+
+    Example:
+
+        >>> results = where([{'a': 1}, {'b': 2}, {'a': 1, 'b': 3}], {'a': 1})
+        >>> assert results == [{'a': 1}, {'a': 1, 'b': 3}]
 
     .. versionadded:: 1.0.0
     """
