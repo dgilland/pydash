@@ -94,6 +94,7 @@ def test_identity(case, expected):
 @parametrize('case,arg,expected', [
     ({'age': 36}, {'name': 'barney', 'age': 36}, True),
     ({'age': 36}, {'name': 'barney', 'age': 40}, False),
+    ({'a': {'b': 2}}, {'a': {'b': 2, 'c': 3}}, True),
 ])
 def test_matches(case, arg, expected):
     assert _.matches(case)(arg) is expected
@@ -194,7 +195,7 @@ def test_random_float(case, floating, minimum, maximum):
     ((0,), []),
 ])
 def test_range_(case, expected):
-    assert _.range_(*case) == expected
+    assert list(_.range_(*case)) == expected
 
 
 @parametrize('case,expected', [

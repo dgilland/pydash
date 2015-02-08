@@ -222,6 +222,7 @@ def matches(source):
         False
 
     .. versionadded:: 1.0.0
+
     .. versionchanged:: 3.0.0
         Use :func:`pydash.predicates.is_match` as matching function.
     """
@@ -438,8 +439,10 @@ def range_(*args):
     .. versionchanged:: 1.1.0
         Moved to :mod:`pydash.uilities`.
 
+    .. versionchanged:: 3.0.0
+        Return generator instead of list.
     """
-    return list(_range(*args))
+    return _range(*args)
 
 
 def result(obj, key, default=None):
