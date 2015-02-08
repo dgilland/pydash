@@ -222,8 +222,9 @@ def matches(source):
         False
 
     .. versionadded:: 1.0.0
+        Use :func:`pydash.predicates.is_match` as matching function.
     """
-    return lambda obj: all(item in obj.items() for item in source.items())
+    return lambda obj: pyd.is_match(obj, source)
 
 
 def memoize(func, resolver=None):
