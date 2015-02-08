@@ -272,9 +272,10 @@ class Once(object):
 
 class Partial(object):
     """Wrap a function in a partial context."""
-    def __init__(self, func, args, from_right=False):
+    def __init__(self, func, args, kargs=None, from_right=False):
         self.func = func
         self.args = args
+        self.kargs = kargs or {}
         self.from_right = from_right
 
     def __call__(self, *args, **kargs):
@@ -285,6 +286,8 @@ class Partial(object):
             args = list(args) + list(self.args)
         else:
             args = list(self.args) + list(args)
+
+        kargs = dict(self.kargs.items() + kargs.items())
 
         return self.func(*args, **kargs)
 
@@ -760,13 +763,14 @@ def once(func):
     return Once(func)
 
 
-def partial(func, *args):
+def partial(func, *args, **kargs):
     """Creates a function that, when called, invokes `func` with any additional
     partial arguments prepended to those provided to the new function.
 
     Args:
         func (function): Function to execute.
         *args (optional): Partial arguments to prepend to function call.
+        **kargs (optional): Partial keyword arguments to bind to function call.
 
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
@@ -784,16 +788,17 @@ def partial(func, *args):
 
     .. versionadded:: 1.0.0
     """
-    return Partial(func, args)
+    return Partial(func, args, kargs)
 
 
-def partial_right(func, *args):
+def partial_right(func, *args, **kargs):
     """This method is like :func:`partial` except that partial arguments are
     appended to those provided to the new function.
 
     Args:
         func (function): Function to execute.
         *args (optional): Partial arguments to append to function call.
+        **kargs (optional): Partial keyword arguments to bind to function call.
 
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
@@ -806,7 +811,7 @@ def partial_right(func, *args):
 
     .. versionadded:: 1.0.0
     """
-    return Partial(func, args, from_right=True)
+    return Partial(func, args, kargs, from_right=True)
 
 
 def rearg(func, *indexes):

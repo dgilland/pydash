@@ -246,11 +246,12 @@ def test_once(case, arglist, expected):
         _.once(case)(*args) == expected
 
 
-@parametrize('case,case_args,args,expected', [
-    (lambda a, b, c: a + b + c, ('a', 'b'), ('c',), 'abc')
+@parametrize('case,case_args,case_kargs,args,expected', [
+    (lambda a, b, c: a + b + c, ('a', 'b'), {}, ('c',), 'abc'),
+    (lambda a, b, c: a + b + c, ('a',), {'c': 'd'}, ('b',), 'abd'),
 ])
-def test_partial(case, case_args, args, expected):
-    assert _.partial(case, *case_args)(*args) == expected
+def test_partial(case, case_args, case_kargs, args, expected):
+    assert _.partial(case, *case_args, **case_kargs)(*args) == expected
 
 
 def test_partial_as_callback():
@@ -260,11 +261,12 @@ def test_partial_as_callback():
     _.map_(case, func) == expected
 
 
-@parametrize('case,case_args,args,expected', [
-    (lambda a, b, c: a + b + c, ('a', 'b'), ('c',), 'cab')
+@parametrize('case,case_args,case_kargs,args,expected', [
+    (lambda a, b, c: a + b + c, ('a', 'b'), {}, ('c',), 'cab'),
+    (lambda a, b, c: a + b + c, ('a',), {'c': 'd'}, ('b',), 'bad'),
 ])
-def test_partial_right(case, case_args, args, expected):
-    assert _.partial_right(case, *case_args)(*args) == expected
+def test_partial_right(case, case_args, case_kargs, args, expected):
+    assert _.partial_right(case, *case_args, **case_kargs)(*args) == expected
 
 
 @parametrize('case,args,kargs,expected', [
