@@ -222,6 +222,7 @@ def matches(source):
         False
 
     .. versionadded:: 1.0.0
+    .. versionchanged:: 3.0.0
         Use :func:`pydash.predicates.is_match` as matching function.
     """
     return lambda obj: pyd.is_match(obj, source)
@@ -293,8 +294,12 @@ def now():
         0
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 3.0.0
+        Use ``datetime`` module for calculating elapsed time.
     """
-    return int(time.time() * 1000)
+    epoch = datetime.utcfromtimestamp(0)
+    return int((datetime.utcnow() - epoch).total_seconds() * 1000)
 
 
 def property_(key):
