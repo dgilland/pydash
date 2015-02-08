@@ -61,6 +61,7 @@ __all__ = (
     'is_strictly_decreasing',
     'is_strictly_increasing',
     'is_string',
+    'is_tuple',
     'is_zero',
 )
 
@@ -948,6 +949,29 @@ def is_string(value):
     .. versionadded:: 1.0.0
     """
     return isinstance(value, string_types)
+
+
+def is_tuple(value):
+    """Checks if `value` is a tuple.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value` is a tuple.
+
+    Example:
+
+        >>> is_tuple(())
+        True
+        >>> is_tuple({})
+        False
+        >>> is_tuple([])
+        False
+
+    .. versionadded:: 3.0.0
+    """
+    return isinstance(value, tuple)
 
 
 def is_zero(value):

@@ -434,6 +434,15 @@ def test_is_string(case, expected):
 
 
 @parametrize('case,expected', [
+    ((), True),
+    ([], False),
+    ({}, False),
+])
+def test_is_tuple(case, expected):
+    assert _.is_tuple(case) == expected
+
+
+@parametrize('case,expected', [
     (0, True),
     (0.0, False),
     ('', False),

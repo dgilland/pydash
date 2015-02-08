@@ -289,6 +289,7 @@ from .predicates import (
     is_strictly_decreasing,
     is_strictly_increasing,
     is_string,
+    is_tuple,
     is_zero,
 )
 

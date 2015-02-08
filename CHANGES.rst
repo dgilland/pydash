@@ -28,6 +28,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``is_int`` as alias of ``is_integer``.
 - Add ``is_match``.
 - Add ``is_num`` as alias of ``is_number``.
+- Add ``is_tuple``.
 - Add ``join`` as alias of ``implode``.
 - Add ``lines``.
 - Add ``number_format``.
