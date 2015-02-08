@@ -42,6 +42,13 @@ def test_is_boolean(case, expected):
     assert _.is_boolean(case) == expected
 
 
+@parametrize('case', [
+    _.is_bool
+])
+def test_is_boolean_aliases(case):
+    assert _.is_boolean is case
+
+
 @parametrize('case,expected', [
     (list, True),
     (dict, True),
@@ -203,6 +210,7 @@ def test_is_increasing(case, expected):
 @parametrize('case,expected', [
     ([], True),
     ('', True),
+    ((), True),
     ({}, False),
     (1, False),
     (None, False),
@@ -232,6 +240,13 @@ def test_is_instance_of(case, expected):
 ])
 def test_is_integer(case, expected):
     assert _.is_integer(case) == expected
+
+
+@parametrize('case', [
+    _.is_int
+])
+def test_is_integer_aliases(case):
+    assert _.is_integer is case
 
 
 @parametrize('case,expected', [
@@ -320,6 +335,13 @@ def test_is_none(case, expected):
 ])
 def test_is_number(case, expected):
     assert _.is_number(case) == expected
+
+
+@parametrize('case', [
+    _.is_num
+])
+def test_is_number_aliases(case):
+    assert _.is_number is case
 
 
 @parametrize('case,expected', [

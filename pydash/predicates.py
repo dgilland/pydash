@@ -26,6 +26,7 @@ __all__ = (
     'is_associative',
     'is_blank',
     'is_boolean',
+    'is_bool',
     'is_builtin',
     'is_date',
     'is_decreasing',
@@ -40,6 +41,7 @@ __all__ = (
     'is_indexed',
     'is_instance_of',
     'is_integer',
+    'is_int',
     'is_json',
     'is_list',
     'is_match',
@@ -49,6 +51,7 @@ __all__ = (
     'is_negative',
     'is_none',
     'is_number',
+    'is_num',
     'is_object',
     'is_odd',
     'is_plain_object',
@@ -137,9 +140,19 @@ def is_boolean(value):
         >>> is_boolean(0)
         False
 
+    See Also:
+        - :func:`is_boolean` (main definition)
+        - :func:`is_bool` (alias)
+
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 3.0.0
+        Added ``is_bool`` as alias.
     """
     return isinstance(value, bool)
+
+
+is_bool = is_boolean
 
 
 def is_builtin(value):
@@ -522,9 +535,19 @@ def is_integer(value):
         >>> is_integer(True)
         False
 
+    See Also:
+        - :func:`is_integer` (main definition)
+        - :func:`is_int` (alias)
+
     .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Added ``is_int`` as alias.
     """
     return is_number(value) and isinstance(value, integer_types)
+
+
+is_int = is_integer
 
 
 def is_json(value):
@@ -750,9 +773,19 @@ def is_number(value):
         >>> is_number('a')
         False
 
+    See Also:
+        - :func:`is_number` (main definition)
+        - :func:`is_num` (alias)
+
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 3.0.0
+        Added ``is_num`` as alias.
     """
     return not is_boolean(value) and isinstance(value, number_types)
+
+
+is_num = is_number
 
 
 def is_object(value):
