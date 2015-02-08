@@ -471,7 +471,8 @@ def is_increasing(value):
 
 
 def is_indexed(value):
-    """Checks if `value` is integer indexed, i.e., ``list`` or ``str``.
+    """Checks if `value` is integer indexed, i.e., ``list``, ``str`` or
+    ``tuple``.
 
     Args:
         value (mixed): Value to check.
@@ -491,8 +492,11 @@ def is_indexed(value):
         False
 
     .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Return ``True`` for tuples.
     """
-    return is_list(value) or is_string(value)
+    return isinstance(value, (list, tuple, string_types))
 
 
 def is_instance_of(value, types):
