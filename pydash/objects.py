@@ -120,7 +120,7 @@ def assign(obj, *sources, **kargs):
 
         for key, value in iteritems(source):
             obj[key] = (value if callback is None
-                        else callback(obj.get(key), value))
+                        else call_callback(callback, obj.get(key), value))
 
     return obj
 
@@ -336,7 +336,7 @@ def deep_map_values(obj, callback=None, property_path=NoValue):
                                                pyd.flatten([properties, key])))
         return pyd.extend(obj, map_values(obj, deep_callback))
     else:
-        return callback(obj, properties)
+        return call_callback(callback, obj, properties)
 
 
 def deep_set(obj, path, value):

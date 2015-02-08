@@ -531,7 +531,7 @@ def test_to_string(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4, 5], lambda acc, value, key, obj: acc.append((key, value))),
+    (([1, 2, 3, 4, 5], lambda acc, value, key: acc.append((key, value))),
      [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)]),
     (([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fixtures.transform_callback0),
      [1, 9, 25]),
