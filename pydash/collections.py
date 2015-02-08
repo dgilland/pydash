@@ -653,11 +653,11 @@ def pluck(collection, key):
     collection.
 
     Args:
-        collection (list|dict): list of dicts
-        key (str): collection's key to pluck
+        collection (list): List of dicts.
+        key (str): Collection's key to pluck.
 
     Returns:
-        list: plucked list
+        list: Plucked list.
 
     Example:
 

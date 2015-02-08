@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Method chaining interface.
 
+.. testsetup::
+
+    from pydash.arrays import *
+
 .. versionadded:: 1.0.0
 """
 
@@ -181,6 +185,13 @@ def chain(value=NoValue):
     Returns:
         :class:`Chain`: Instance of :class:`Chain` initialized with `value`.
 
+    Example:
+
+        >>> chain([1, 2, 3, 4]).map(lambda x: x * 2).sum().value()
+        20
+        >>> chain().map(lambda x: x * 2).sum()([1, 2, 3, 4])
+        20
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
@@ -204,6 +215,15 @@ def tap(value, interceptor):
     Returns:
         mixed: `value` after `interceptor` call.
 
+    Example:
+
+        >>> data = []
+        >>> def log(value): data.append(value)
+        >>> chain([1, 2, 3, 4]).map(lambda x: x * 2).tap(log).value()
+        [2, 4, 6, 8]
+        >>> data
+        [[2, 4, 6, 8]]
+
     .. versionadded:: 1.0.0
     """
     interceptor(value)
@@ -220,6 +240,11 @@ def thru(value, interceptor):
 
     Returns:
         mixed: Results of ``interceptor(value)``.
+
+    Example:
+
+        >>> chain([1, 2, 3, 4]).thru(lambda x: x * 2).value()
+        [1, 2, 3, 4, 1, 2, 3, 4]
 
     .. versionadded:: 2.0.0
     """
