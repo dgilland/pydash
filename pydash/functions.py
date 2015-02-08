@@ -287,7 +287,7 @@ class Partial(object):
         else:
             args = list(self.args) + list(args)
 
-        kargs = dict(self.kargs.items() + kargs.items())
+        kargs = dict(list(self.kargs.items()) + list(kargs.items()))
 
         return self.func(*args, **kargs)
 

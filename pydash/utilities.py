@@ -8,7 +8,7 @@
 .. versionadded:: 1.0.0
 """
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 from datetime import datetime
 from random import uniform, randint
@@ -82,8 +82,8 @@ def constant(value):
     Example:
 
         >>> pi = constant(3.14)
-        >>> pi()
-        3.14
+        >>> pi() == 3.14
+        True
 
     .. versionadded:: 1.0.0
     """
@@ -288,19 +288,23 @@ def now():
     Returns:
         int: Milliseconds since Unix epoch.
 
-    Example:
-
-        >>> import time
-        >>> now() - int(time.time() * 1000)
-        0
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
         Use ``datetime`` module for calculating elapsed time.
     """
     epoch = datetime.utcfromtimestamp(0)
-    return int((datetime.utcnow() - epoch).total_seconds() * 1000)
+    delta = datetime.utcnow() - epoch
+
+    if hasattr(delta, 'total_seconds'):
+        seconds = delta.total_seconds()
+    else:  # pragma: no cover
+        # PY26
+        seconds = ((delta.microseconds
+                    + (delta.seconds + delta.days * 24 * 3600) * 10**6)
+                   / 10**6)
+
+    return int(seconds * 1000)
 
 
 def property_(key):

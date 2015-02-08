@@ -231,12 +231,10 @@ def round_(x, precision=0):
 
     Example:
 
-        >>> round_(3.275)
-        3.0
-        >>> round_(3.275, 1)
-        3.3
-        >>> round_(3.275, 2)
-        3.27
+        >>> round_(3.275) == 3.0
+        True
+        >>> round_(3.275, 1) == 3.3
+        True
 
     See Also:
         - :func:`round_` (main definition)
@@ -326,8 +324,8 @@ def std_deviation(array):
 
     Example:
 
-        >>> std_deviation([1, 18, 20, 4])
-        8.347903928532
+        >>> round(std_deviation([1, 18, 20, 4]), 2) == 8.35
+        True
 
     See Also:
         - :func:`std_deviation` (main definition)
@@ -401,8 +399,9 @@ def zscore(collection, callback=None):
 
     Example:
 
-        >>> zscore([1, 2, 3])
-        [-1.224744871391589, 0.0, 1.224744871391589]
+        >>> results = zscore([1, 2, 3])
+
+        # [-1.224744871391589, 0.0, 1.224744871391589]
 
     .. versionadded:: 2.1.0
     """

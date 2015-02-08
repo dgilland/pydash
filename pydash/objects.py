@@ -1025,8 +1025,6 @@ def to_number(obj, precision=0):
         1235.0
         >>> to_number('1234.5678', 4)
         1234.5678
-        >>> to_number('1234.5678', 2)
-        1234.57
         >>> to_number(1, 2)
         1.0
 
@@ -1060,14 +1058,14 @@ def to_string(obj):
 
     Example:
 
-        >>> to_string(1)
-        u'1'
-        >>> to_string(None)
-        ''
-        >>> to_string([1, 2, 3])
-        u'[1, 2, 3]'
-        >>> to_string('a')
-        'a'
+        >>> to_string(1) == '1'
+        True
+        >>> to_string(None) == ''
+        True
+        >>> to_string([1, 2, 3]) == '[1, 2, 3]'
+        True
+        >>> to_string('a') == 'a'
+        True
 
     .. versionadded:: 2.0.0
 
