@@ -643,8 +643,8 @@ def is_match(obj, source, callback=None):
     if equal is not None:
         pass
     elif (type(obj) is type(source) and
-          isinstance(obj, (list, dict)) and
-          isinstance(source, (list, dict))):
+          isinstance(obj, (list, dict, tuple)) and
+          isinstance(source, (list, dict, tuple))):
         # Walk a/b to determine equality.
         for key, value in iterator(source):
             if pyd.has(obj, key):
