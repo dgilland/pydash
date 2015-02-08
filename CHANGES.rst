@@ -88,6 +88,7 @@ v3.0.0 (xxxx-xx-xx)
 - Make ``chain`` support late passing of initial ``value`` argument.
 - Make ``is_indexed`` return ``True`` for tuples.
 - Make ``partial`` and ``partial_right`` accept keyword arguments.
+- Make ``pluck`` style callbacks support deep paths.
 - Make ``re_replace`` accept non-stirng arguments.
 - Make ``sort_by`` accept ``reverse`` parameter.
 - Make ``splice`` work with strings.

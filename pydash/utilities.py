@@ -133,7 +133,7 @@ def callback(func):
     if callable(func):
         cbk = func
     elif isinstance(func, string_types):
-        cbk = property_(func)
+        cbk = deep_prop(func)
     elif isinstance(func, dict):
         cbk = matches(func)
     else:
