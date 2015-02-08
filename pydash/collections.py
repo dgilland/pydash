@@ -1035,8 +1035,8 @@ def sort_by_all(collection, keys, reverse=False):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    comparers = [((pyd.prop(key[1:].strip()), -1) if key.startswith('-')
-                  else (pyd.prop(key.strip()), 1))
+    comparers = [((pyd.deep_prop(key[1:].strip()), -1) if key.startswith('-')
+                  else (pyd.deep_prop(key.strip()), 1))
                  for key in keys]
 
     def comparison(left, right):
