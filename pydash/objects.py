@@ -1161,7 +1161,11 @@ def update_path(obj, callback, keys, default=None):
 
     for key in pyd.initial(keys):
         set_item(target, key, clone_deep(default), allow_override=False)
-        target = target[key]
+
+        try:
+            target = target[key]
+        except TypeError:
+            target = target[int(key)]
 
     set_item(target, last_key, callback(get_item(target,
                                                  last_key,

@@ -163,6 +163,11 @@ def set_item(obj, key, value, allow_override=True):
         if allow_override or key not in obj:
             obj[key] = value
     elif isinstance(obj, list):
+        try:
+            key = int(key)
+        except ValueError:  # pragma: no cover
+            pass
+
         if key < len(obj):
             if allow_override:
                 obj[key] = value
