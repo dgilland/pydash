@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Predicate functions that return boolean evaluations of objects.
 
+.. testsetup::
+
+    from pydash.arrays import *
+
 .. versionadded:: 2.0.0
 """
 
@@ -71,13 +75,24 @@ def is_associative(value):
     Returns:
         bool: Whether `value` is associative.
 
+    Example:
+
+        >>> is_associative([])
+        True
+        >>> is_associative({})
+        True
+        >>> is_associative(1)
+        False
+        >>> is_associative(True)
+        False
+
     .. versionadded:: 2.0.0
     """
     return hasattr(value, '__getitem__')
 
 
 def is_blank(text):
-    """Checks if `text` contains only whitespace characters.
+    r"""Checks if `text` contains only whitespace characters.
 
     Args:
         text (str): String to test.
@@ -85,9 +100,23 @@ def is_blank(text):
     Returns:
         bool: Whether `text` is blank.
 
+    Example:
+
+        >>> is_blank('')
+        True
+        >>> is_blank(' \r\n ')
+        True
+        >>> is_blank(False)
+        False
+
     ..versionadded:: 3.0.0
     """
-    return bool(re.match(r'^(\s+)?$', text))
+    try:
+        ret = bool(re.match(r'^(\s+)?$', text))
+    except TypeError:
+        ret = False
+
+    return ret
 
 
 def is_boolean(value):
@@ -98,6 +127,15 @@ def is_boolean(value):
 
     Returns:
         bool: Whether `value` is a boolean.
+
+    Example:
+
+        >>> is_boolean(True)
+        True
+        >>> is_boolean(False)
+        True
+        >>> is_boolean(0)
+        False
 
     .. versionadded:: 1.0.0
     """
@@ -112,6 +150,15 @@ def is_builtin(value):
 
     Returns:
         bool: Whether `value` is a Python builtin function or method.
+
+    Example:
+
+        >>> is_builtin(1)
+        True
+        >>> is_builtin(list)
+        True
+        >>> is_builtin('foo')
+        False
 
     See Also:
         - :func:`is_builtin` (main definition)
@@ -135,6 +182,16 @@ def is_date(value):
     Returns:
         bool: Whether `value` is a date object.
 
+    Example:
+
+        >>> import datetime
+        >>> is_date(datetime.date.today())
+        True
+        >>> is_date(datetime.datetime.today())
+        True
+        >>> is_date('2014-01-01')
+        False
+
     Note:
         This will also return ``True`` for datetime objects.
 
@@ -144,13 +201,22 @@ def is_date(value):
 
 
 def is_decreasing(value):
-    """Check if `value` is monotonically increasing.
+    """Check if `value` is monotonically decreasing.
 
     Args:
         value (list): Value to check.
 
     Returns:
-        bool: Whether `value` is monotonically increasing.
+        bool: Whether `value` is monotonically decreasing.
+
+    Example:
+
+        >>> is_decreasing([5, 4, 4, 3])
+        True
+        >>> is_decreasing([5, 5, 5])
+        True
+        >>> is_decreasing([5, 4, 5])
+        False
 
     .. versionadded:: 2.0.0
     """
@@ -165,6 +231,13 @@ def is_dict(value):
 
     Returns:
         bool: Whether `value` is a ``dict``.
+
+    Example:
+
+        >>> is_dict({})
+        True
+        >>> is_dict([])
+        False
 
     See Also:
         - :func:`is_dict` (main definition)
@@ -191,6 +264,21 @@ def is_empty(value):
     Returns:
         bool: Whether `value` is empty.
 
+    Example:
+
+        >>> is_empty(0)
+        True
+        >>> is_empty(1)
+        True
+        >>> is_empty(True)
+        True
+        >>> is_empty('foo')
+        False
+        >>> is_empty(None)
+        True
+        >>> is_empty({})
+        True
+
     Note:
         Returns ``True`` for booleans and numbers.
 
@@ -214,6 +302,15 @@ def is_equal(value, other, callback=None):
 
     Returns:
         bool: Whether `value` and `other` are equal.
+
+    Example:
+
+        >>> is_equal([1, 2, 3], [1, 2, 3])
+        True
+        >>> is_equal('a', 'A')
+        False
+        >>> is_equal('a', 'A', lambda a, b: a.lower() == b.lower())
+        True
 
     .. versionadded:: 1.0.0
     """
@@ -253,6 +350,15 @@ def is_error(value):
     Returns:
         bool: Whether `value` is an exception.
 
+    Example:
+
+        >>> is_error(Exception())
+        True
+        >>> is_error(Exception)
+        False
+        >>> is_error(None)
+        False
+
     .. versionadded:: 1.1.0
     """
     return isinstance(value, Exception)
@@ -266,6 +372,15 @@ def is_even(value):
 
     Returns:
         bool: Whether `value` is even.
+
+    Example:
+
+        >>> is_even(2)
+        True
+        >>> is_even(3)
+        False
+        >>> is_even(False)
+        False
 
     .. versionadded:: 2.0.0
     """
@@ -281,6 +396,13 @@ def is_float(value):
     Returns:
         bool: Whether `value` is a float.
 
+    Example:
+
+        >>> is_float(1.0)
+        True
+        >>> is_float(1)
+        False
+
     .. versionadded:: 2.0.0
     """
     return isinstance(value, float)
@@ -294,6 +416,15 @@ def is_function(value):
 
     Returns:
         bool: Whether `value` is callable.
+
+    Example:
+
+        >>> is_function(list)
+        True
+        >>> is_function(lambda: True)
+        True
+        >>> is_function(1)
+        False
 
     .. versionadded:: 1.0.0
     """
@@ -309,6 +440,17 @@ def is_increasing(value):
     Returns:
         bool: Whether `value` is monotonically increasing.
 
+    Example:
+
+        >>> is_increasing([1, 3, 5])
+        True
+        >>> is_increasing([1, 1, 2, 3, 3])
+        True
+        >>> is_increasing([5, 5, 5])
+        True
+        >>> is_increasing([1, 2, 4, 3])
+        False
+
     .. versionadded:: 2.0.0
     """
     return is_monotone(value, operator.le)
@@ -322,6 +464,17 @@ def is_indexed(value):
 
     Returns:
         bool: Whether `value` is integer indexed.
+
+    Example:
+
+        >>> is_indexed('')
+        True
+        >>> is_indexed([])
+        True
+        >>> is_indexed(())
+        True
+        >>> is_indexed({})
+        False
 
     .. versionadded:: 2.0.0
     """
@@ -339,6 +492,13 @@ def is_instance_of(value, types):
     Returns:
         bool: Whether `value` is an instance of `types`.
 
+    Example:
+
+        >>> is_instance_of({}, dict)
+        True
+        >>> is_instance_of({}, list)
+        False
+
     .. versionadded:: 2.0.0
     """
     return isinstance(value, types)
@@ -353,6 +513,15 @@ def is_integer(value):
     Returns:
         bool: Whether `value` is a integer.
 
+    Example:
+
+        >>> is_integer(1)
+        True
+        >>> is_integer(1.0)
+        False
+        >>> is_integer(True)
+        False
+
     .. versionadded:: 2.0.0
     """
     return is_number(value) and isinstance(value, integer_types)
@@ -366,6 +535,17 @@ def is_json(value):
 
     Returns:
         bool: Whether `value` is JSON.
+
+    Example:
+
+        >>> is_json({})
+        False
+        >>> is_json('{}')
+        True
+        >>> is_json({"hello": 1, "world": 2})
+        False
+        >>> is_json('{"hello": 1, "world": 2}')
+        True
 
     .. versionadded:: 2.0.0
     """
@@ -384,6 +564,15 @@ def is_list(value):
 
     Returns:
         bool: Whether `value` is a list.
+
+    Example:
+
+        >>> is_list([])
+        True
+        >>> is_list({})
+        False
+        >>> is_list(())
+        False
 
     .. versionadded:: 1.0.0
     """
@@ -405,6 +594,17 @@ def is_match(obj, source, callback=None):
 
     Returns:
         bool: Whether `obj` is a match or not.
+
+
+    Example:
+
+        >>> is_match({'a': 1, 'b': 2}, {'b': 2})
+        True
+        >>> is_match({'a': 1, 'b': 2}, {'b': 3})
+        False
+        >>> is_match({'a': [{'b': [{'c': 3, 'd': 4}]}]},\
+                     {'a': [{'b': [{'d': 4}]}]})
+        True
 
     .. versionadded:: 3.0.0
     """
@@ -443,6 +643,13 @@ def is_monotone(value, op):
     Returns:
         bool: Whether `value` is monotone.
 
+    Example:
+
+        >>> is_monotone([1, 1, 2, 3], operator.le)
+        True
+        >>> is_monotone([1, 1, 2, 3], operator.lt)
+        False
+
     .. versionadded:: 2.0.0
     """
     if not is_list(value):
@@ -463,6 +670,15 @@ def is_nan(value):
     Returns:
         bool: Whether `value` is not a number.
 
+    Example:
+
+        >>> is_nan('a')
+        True
+        >>> is_nan(1)
+        False
+        >>> is_nan(1.0)
+        False
+
     .. versionadded:: 1.0.0
     """
     return not is_number(value)
@@ -477,6 +693,15 @@ def is_negative(value):
     Returns:
         bool: Whether `value` is negative.
 
+    Example:
+
+        >>> is_negative(-1)
+        True
+        >>> is_negative(0)
+        False
+        >>> is_negative(1)
+        False
+
     .. versionadded:: 2.0.0
     """
     return is_number(value) and value < 0
@@ -490,6 +715,13 @@ def is_none(value):
 
     Returns:
         bool: Whether `value` is ``None``.
+
+    Example:
+
+        >>> is_none(None)
+        True
+        >>> is_none(False)
+        False
 
     .. versionadded:: 1.0.0
     """
@@ -509,6 +741,15 @@ def is_number(value):
         Returns ``True`` for ``int``, ``long`` (PY2), ``float``, and
         ``decimal.Decimal``.
 
+    Example:
+
+        >>> is_number(1)
+        True
+        >>> is_number(1.0)
+        True
+        >>> is_number('a')
+        False
+
     .. versionadded:: 1.0.0
     """
     return not is_boolean(value) and isinstance(value, number_types)
@@ -522,6 +763,17 @@ def is_object(value):
 
     Returns:
         bool: Whether `value` is ``list`` or ``dict``.
+
+    Example:
+
+        >>> is_object([])
+        True
+        >>> is_object({})
+        True
+        >>> is_object(())
+        False
+        >>> is_object(1)
+        False
 
     .. versionadded:: 1.0.0
     """
@@ -537,6 +789,15 @@ def is_odd(value):
     Returns:
         bool: Whether `value` is odd.
 
+    Example:
+
+        >>> is_odd(3)
+        True
+        >>> is_odd(2)
+        False
+        >>> is_odd('a')
+        False
+
     .. versionadded:: 2.0.0
     """
     return is_number(value) and value % 2 != 0
@@ -551,6 +812,15 @@ def is_positive(value):
     Returns:
         bool: Whether `value` is positive.
 
+    Example:
+
+        >>> is_positive(1)
+        True
+        >>> is_positive(0)
+        False
+        >>> is_positive(-1)
+        False
+
     .. versionadded:: 2.0.0
     """
     return is_number(value) and value > 0
@@ -564,6 +834,13 @@ def is_reg_exp(value):
 
     Returns:
         bool: Whether `value` is a RegExp object.
+
+    Example:
+
+        >>> is_reg_exp(re.compile(''))
+        True
+        >>> is_reg_exp('')
+        False
 
     See Also:
         - :func:`is_reg_exp` (main definition)
@@ -586,6 +863,13 @@ def is_strictly_decreasing(value):
     Returns:
         bool: Whether `value` is strictly decreasing.
 
+    Example:
+
+        >>> is_strictly_decreasing([4, 3, 2, 1])
+        True
+        >>> is_strictly_decreasing([4, 4, 2, 1])
+        False
+
     .. versionadded:: 2.0.0
     """
     return is_monotone(value, operator.gt)
@@ -599,6 +883,13 @@ def is_strictly_increasing(value):
 
     Returns:
         bool: Whether `value` is strictly increasing.
+
+    Example:
+
+        >>> is_strictly_increasing([1, 2, 3, 4])
+        True
+        >>> is_strictly_increasing([1, 1, 3, 4])
+        False
 
     .. versionadded:: 2.0.0
     """
@@ -614,6 +905,13 @@ def is_string(value):
     Returns:
         bool: Whether `value` is a string.
 
+    Example:
+
+        >>> is_string('')
+        True
+        >>> is_string(1)
+        False
+
     .. versionadded:: 1.0.0
     """
     return isinstance(value, string_types)
@@ -627,6 +925,13 @@ def is_zero(value):
 
     Returns:
         bool: Whether `value` is ``0``.
+
+    Example:
+
+        >>> is_zero(0)
+        True
+        >>> is_zero(1)
+        False
 
     .. versionadded:: 2.0.0
     """

@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Functions that wrap other functions.
 
+.. testsetup::
+
+    from pydash import *
+
 .. versionadded:: 1.0.0
 """
 
@@ -353,6 +357,17 @@ def after(func, n):
     Returns:
         After: Function wrapped in an :class:`After` context.
 
+    Example:
+
+        >>> func = lambda a, b, c: (a, b, c)
+        >>> after_func = after(func, 3)
+        >>> after_func(1, 2, 3)
+        >>> after_func(1, 2, 3)
+        >>> after_func(1, 2, 3)
+        (1, 2, 3)
+        >>> after_func(4, 5, 6)
+        (4, 5, 6)
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
@@ -373,6 +388,15 @@ def ary(func, n):
     Returns:
         Ary: Function wrapped in an :class:`Ary` context.
 
+    Example:
+
+        >>> func = lambda a, b, c=0, d=5: (a, b, c, d)
+        >>> ary_func = ary(func, 2)
+        >>> ary_func(1, 2, 3, 4, 5, 6)
+        (1, 2, 0, 5)
+        >>> ary_func(1, 2, 3, 4, 5, 6, c=10, d=20)
+        (1, 2, 10, 20)
+
     .. versionadded:: 3.0.0
     """
     return Ary(func, n)
@@ -388,6 +412,17 @@ def before(func, n):
 
     Returns:
         Before: Function wrapped in an :class:`Before` context.
+
+    Example:
+
+        >>> func = lambda a, b, c: (a, b, c)
+        >>> before_func = before(func, 3)
+        >>> before_func(1, 2, 3)
+        (1, 2, 3)
+        >>> before_func(1, 2, 3)
+        (1, 2, 3)
+        >>> before_func(1, 2, 3)
+        >>> before_func(1, 2, 3)
 
     .. versionadded:: 1.1.0
 
@@ -408,15 +443,27 @@ def conjoin(*funcs):
     Returns:
         Conjoin: Function(s) wrapped in a :class:`Conjoin` context.
 
+    Example:
+
+        >>> conjoiner = conjoin(lambda x: isinstance(x, int), lambda x: x > 3)
+        >>> conjoiner([1, 2, 3])
+        False
+        >>> conjoiner([1.0, 2, 1])
+        False
+        >>> conjoiner([4.0, 5, 6])
+        False
+        >>> conjoiner([4, 5, 6])
+        True
+
     .. versionadded:: 2.0.0
     """
     return Conjoin(*funcs)
 
 
 def curry(func, arity=None):
-    """Creates a function which accepts one or more arguments of `func` that
-    when  invoked either executes `func` returning its result, if all `func`
-    arguments have been provided, or returns a function that accepts one or
+    """Creates a function that accepts one or more arguments of `func` that
+    when invoked either executes `func` returning its result (if all `func`
+    arguments have been provided) or returns a function that accepts one or
     more of the remaining `func` arguments, and so on.
 
     Args:
@@ -427,6 +474,18 @@ def curry(func, arity=None):
 
     Returns:
         Curry: Function wrapped in a :class:`Curry` context.
+
+    Example:
+
+        >>> func = lambda a, b, c: (a, b, c)
+        >>> currier = curry(func)
+        >>> currier = currier(1)
+        >>> assert isinstance(currier, Curry)
+        >>> currier = currier(2)
+        >>> assert isinstance(currier, Curry)
+        >>> currier = currier(3)
+        >>> currier
+        (1, 2, 3)
 
     .. versionadded:: 1.0.0
     """
@@ -445,6 +504,18 @@ def curry_right(func, arity=None):
 
     Returns:
         CurryRight: Function wrapped in a :class:`CurryRight` context.
+
+    Example:
+
+        >>> func = lambda a, b, c: (a, b, c)
+        >>> currier = curry_right(func)
+        >>> currier = currier(1)
+        >>> assert isinstance(currier, CurryRight)
+        >>> currier = currier(2)
+        >>> assert isinstance(currier, CurryRight)
+        >>> currier = currier(3)
+        >>> currier
+        (3, 2, 1)
 
     .. versionadded:: 1.1.0
     """
@@ -500,6 +571,17 @@ def disjoin(*funcs):
     Returns:
         Disjoin: Function(s) wrapped in a :class:`Disjoin` context.
 
+    Example:
+
+        >>> disjoiner = disjoin(lambda x: isinstance(x, float),\
+                                lambda x: isinstance(x, int))
+        >>> disjoiner([1, '2', '3'])
+        True
+        >>> disjoiner([1.0, '2', '3'])
+        True
+        >>> disjoiner(['1', '2', '3'])
+        False
+
     .. versionadded:: 2.0.0
     """
     return Disjoin(*funcs)
@@ -516,6 +598,15 @@ def flow(*funcs):
 
     Returns:
         Compose: Function(s) wrapped in a :class:`Compose` context.
+
+    Example:
+
+        >>> mult_5 = lambda x: x * 5
+        >>> div_10 = lambda x: x / 10.0
+        >>> pow_2 = lambda x: x ** 2
+        >>> ops = flow(sum, mult_5, div_10, pow_2)
+        >>> ops([1, 2, 3, 4])
+        25.0
 
     See Also:
         - :func:`flow` (main definition)
@@ -543,6 +634,15 @@ def flow_right(*funcs):
 
     Returns:
         Compose: Function(s) wrapped in a :class:`Compose` context.
+
+    Example:
+
+        >>> mult_5 = lambda x: x * 5
+        >>> div_10 = lambda x: x / 10.0
+        >>> pow_2 = lambda x: x ** 2
+        >>> ops = flow_right(mult_5, div_10, pow_2, sum)
+        >>> ops([1, 2, 3, 4])
+        50.0
 
     See Also:
         - :func:`flow_right` (main definition)
@@ -577,6 +677,14 @@ def iterated(func):
     Returns:
         Iterated: Function wrapped in a :class:`Iterated` context.
 
+    Example:
+
+        >>> doubler = iterated(lambda x: x * 2)
+        >>> doubler(4, 5)
+        128
+        >>> doubler(3, 9)
+        1536
+
     .. versionadded:: 2.0.0
     """
     return Iterated(func)
@@ -591,6 +699,15 @@ def juxtapose(*funcs):
 
     Returns:
         Juxtapose: Function wrapped in a :class:`Juxtapose` context.
+
+    Example:
+
+        >>> double = lambda x: x * 2
+        >>> triple = lambda x: x * 3
+        >>> quadruple = lambda x: x * 4
+        >>> juxtapose(double, triple, quadruple)(5)
+        [10, 15, 20]
+
 
     .. versionadded:: 2.0.0
     """
@@ -607,20 +724,36 @@ def negate(func):
     Returns:
         Negate: Function wrapped in a :class:`Negate` context.
 
+    Example:
+
+        >>> not_is_number = negate(lambda x: isinstance(x, (int, float)))
+        >>> not_is_number(1)
+        False
+        >>> not_is_number('1')
+        True
+
     .. versionadded:: 1.1.0
     """
     return Negate(func)
 
 
 def once(func):
-    """Creates a function that is restricted to execute func once. Repeat calls
-    to the function will return the value of the first call.
+    """Creates a function that is restricted to execute `func` once. Repeat
+    calls to the function will return the value of the first call.
 
     Args:
         func (function): Function to execute.
 
     Returns:
         Once: Function wrapped in a :class:`Once` context.
+
+    Example:
+
+        >>> oncer = once(lambda *args: args[0])
+        >>> oncer(5)
+        5
+        >>> oncer(6)
+        5
 
     .. versionadded:: 1.0.0
     """
@@ -638,6 +771,17 @@ def partial(func, *args):
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
 
+    Example:
+
+        >>> dropper = partial(lambda array, n: array[n:], [1, 2, 3, 4])
+        >>> dropper(2)
+        [3, 4]
+        >>> dropper(1)
+        [2, 3, 4]
+        >>> myrest = partial(lambda array, n: array[n:], n=1)
+        >>> myrest([1, 2, 3, 4])
+        [2, 3, 4]
+
     .. versionadded:: 1.0.0
     """
     return Partial(func, args)
@@ -654,6 +798,12 @@ def partial_right(func, *args):
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
 
+    Example:
+
+        >>> myrest = partial_right(lambda array, n: array[n:], 1)
+        >>> myrest([1, 2, 3, 4])
+        [2, 3, 4]
+
     .. versionadded:: 1.0.0
     """
     return Partial(func, args, from_right=True)
@@ -668,6 +818,14 @@ def rearg(func, *indexes):
     Args:
         func (function): Function to rearrange arguments for.
         *indexes (int): The arranged argument indexes.
+
+    Example:
+
+        >>> jumble = rearg(lambda *args: args, 1, 2, 3)
+        >>> jumble(1, 2, 3)
+        (2, 3, 1)
+        >>> jumble('a', 'b', 'c', 'd', 'e')
+        ('b', 'c', 'd', 'a', 'e')
 
     Returns:
         Rearg: Function wrapped in a :class:`Rearg` context.
@@ -704,6 +862,12 @@ def wrap(value, func):
 
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
+
+    Example:
+
+        >>> wrapper = wrap('hello', lambda *args: args)
+        >>> wrapper(1, 2)
+        ('hello', 1, 2)
 
     .. versionadded:: 1.0.0
     """

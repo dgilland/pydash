@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Functions that operate on lists, dicts, and other objects.
 
+.. testsetup::
+
+    from pydash import *
+
 .. versionadded:: 1.0.0
 """
 
@@ -84,6 +88,15 @@ def assign(obj, *sources, **kargs):
     Warning:
         `obj` is modified in place.
 
+    Example:
+
+        >>> obj = {}
+        >>> obj2 = assign(obj, {'a': 1}, {'b': 2}, {'c': 3})
+        >>> obj == {'a': 1, 'b': 2, 'c': 3}
+        True
+        >>> obj is obj2
+        True
+
     See Also:
         - :func:`assign` (main definition)
         - :func:`extend` (alias)
@@ -92,6 +105,9 @@ def assign(obj, *sources, **kargs):
 
     .. versionchanged:: 2.3.2
         Apply :func:`clone_deep` to each `source` before assigning to `obj`.
+
+    .. versionchanged:: 3.0.0
+        Allow callbacks to accept partial arguments.
     """
     sources = list(sources)
     callback = kargs.get('callback')
@@ -121,8 +137,13 @@ def callables(obj):
     Returns:
         list: All keys whose values are callable.
 
+    Example:
+
+        >>> callables({'a': 1, 'b': lambda: 2, 'c': lambda: 3})
+        ['b', 'c']
+
     See Also:
-        - :func:`functions` (main definition)
+        - :func:`callables` (main definition)
         - :func:`methods` (alias)
 
     .. versionadded:: 1.0.0
@@ -146,6 +167,22 @@ def clone(value, is_deep=False, callback=None):
         value (list|dict): Object to clone.
         is_deep (bool, optional): Whether to perform deep clone.
         callback (mixed, optional): Callback applied per iteration.
+
+    Example:
+
+        >>> x = {'a': 1, 'b': 2, 'c': {'d': 3}}
+        >>> y = clone(x)
+        >>> y == y
+        True
+        >>> x is y
+        False
+        >>> x['c'] is y['c']
+        True
+        >>> z = clone(x, is_deep=True)
+        >>> x == z
+        True
+        >>> x['c'] is z['c']
+        False
 
     Returns:
         list|dict: Cloned object.
@@ -180,6 +217,17 @@ def clone_deep(value, callback=None):
     Returns:
         list|dict: Cloned object.
 
+    Example:
+
+        >>> x = {'a': 1, 'b': 2, 'c': {'d': 3}}
+        >>> y = clone_deep(x)
+        >>> y == y
+        True
+        >>> x is y
+        False
+        >>> x['c'] is y['c']
+        False
+
     .. versionadded:: 1.0.0
     """
     return clone(value, is_deep=True, callback=callback)
@@ -197,6 +245,13 @@ def deep_get(obj, path):
     Returns:
         mixed: Value of `obj` at path.
 
+    Example:
+
+        >>> deep_get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
+        2
+        >>> deep_get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2') is None
+        True
+
     .. versionadded:: 2.2.0
     """
     return get_path(obj, path)
@@ -212,6 +267,13 @@ def deep_has(obj, path):
 
     Returns:
         bool: Whether `obj` has `path`.
+
+    Example:
+
+        >>> deep_has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
+        True
+        >>> deep_has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2')
+        False
 
     See Also:
         - :func:`deep_has` (main definition)
@@ -248,7 +310,20 @@ def deep_map_values(obj, callback=None, property_path=NoValue):
     Warning:
         `obj` is modified in place.
 
+    Example:
+
+        >>> x = {'a': 1, 'b': {'c': 2}}
+        >>> y = deep_map_values(x, lambda val: val * 2)
+        >>> y == {'a': 2, 'b': {'c': 4}}
+        True
+        >>> z = deep_map_values(x, lambda val, props: props)
+        >>> z == {'a': ['a'], 'b': {'c': ['b', 'c']}}
+        True
+
     .. versionadded: 2.2.0
+
+    .. versionchanged:: 3.0.0
+        Allow callbacks to accept partial arguments.
     """
     properties = path_keys(property_path)
 
@@ -274,6 +349,15 @@ def deep_set(obj, path, value):
     Returns:
         mixed: Modified `obj`.
 
+    Example:
+
+        >>> deep_set({}, 'a.b.c', 1)
+        {'a': {'b': {'c': 1}}}
+        >>> deep_set({}, 'a.0.c', 1)
+        {'a': {'0': {'c': 1}}}
+        >>> deep_set([1, 2], '2.0', 1)
+        [1, 2, [1]]
+
     .. versionadded:: 2.2.0
     """
     return set_path(obj, value, path_keys(path))
@@ -292,6 +376,15 @@ def defaults(obj, *sources):
 
     Warning:
         `obj` is modified in place.
+
+    Example:
+
+        >>> obj = {'a': 1}
+        >>> obj2 = defaults(obj, {'b': 2}, {'c': 3}, {'a': 4})
+        >>> obj is obj2
+        True
+        >>> obj == {'a': 1, 'b': 2, 'c': 3}
+        True
 
     .. versionadded:: 1.0.0
     """
@@ -313,6 +406,13 @@ def find_key(obj, callback=None):
 
     Returns:
         mixed: Found key or ``None``.
+
+    Example:
+
+        >>> find_key({'a': 1, 'b': 2, 'c': 3}, lambda x: x == 1)
+        'a'
+        >>> find_key([1, 2, 3, 4], lambda x: x == 1)
+        0
 
     See Also:
         - :func:`find_key` (main definition)
@@ -338,6 +438,16 @@ def for_in(obj, callback=None):
 
     Returns:
         list|dict: `obj`.
+
+    Example:
+
+        >>> obj = {}
+        >>> def callback(v, k): obj[k] = v
+        >>> results = for_in({'a': 1, 'b': 2, 'c': 3}, callback)
+        >>> results == {'a': 1, 'b': 2, 'c': 3}
+        True
+        >>> obj == {'a': 1, 'b': 2, 'c': 3}
+        True
 
     See Also:
         - :func:`for_in` (main definition)
@@ -365,6 +475,15 @@ def for_in_right(obj, callback=None):
     Returns:
         list|dict: `obj`.
 
+    Example:
+
+        >>> data = {'product': 1}
+        >>> def callback(v): data['product'] *= v
+        >>> for_in_right([1, 2, 3, 4], callback)
+        [1, 2, 3, 4]
+        >>> data['product'] == 24
+        True
+
     See Also:
         - :func:`for_in_right` (main definition)
         - :func:`for_own_right` (alias)
@@ -382,15 +501,26 @@ for_own_right = for_in_right
 
 def get_path(obj, path, default=None):
     """Get the value at any depth of a nested object based on the path
-    described by `path`. If path doesn't exist, ``None`` is returned.
+    described by `path`. If path doesn't exist, `default` is returned.
 
     Args:
         obj (list|dict): Object to process.
         path (str|list): List or ``.`` delimited string of path describing
             path.
 
+    Keyword Arguments:
+        default (mixed): Default value to return if path doesn't exist.
+            Defaults to ``None``.
+
     Returns:
         mixed: Value of `obj` at path.
+
+    Example:
+
+        >>> get_path({}, 'a.b.c') is None
+        True
+        >>> get_path({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1')
+        2
 
     .. versionadded:: 2.0.0
 
@@ -415,6 +545,15 @@ def has(obj, key):
     Returns:
         bool: Whether `obj` has `key`.
 
+    Example:
+
+        >>> has([1, 2, 3], 1)
+        True
+        >>> has({'a': 1, 'b': 2}, 'b')
+        True
+        >>> has({'a': 1, 'b': 2}, 'c')
+        False
+
     .. versionadded:: 1.0.0
     """
     return deep_has(obj, [key])
@@ -425,12 +564,21 @@ def invert(obj, multivalue=False):
     object.
 
     Args:
-        obj (dict): dict to invert
+        obj (dict): Dict to invert.
         multivalue (bool, optional): Whether to return inverted values as
             lists. Defaults to ``False``.
 
     Returns:
-        dict: Inverted dict
+        dict: Inverted dict.
+
+    Example:
+
+        >>> results = invert({'a': 1, 'b': 2, 'c': 3})
+        >>> results == {1: 'a', 2: 'b', 3: 'c'}
+        True
+        >>> results = invert({'a': 1, 'b': 2, 'c': 1}, multivalue=True)
+        >>> set(results[1]) == set(['a', 'c'])
+        True
 
     Note:
         Assumes `dict` values are hashable as `dict` keys.
@@ -458,6 +606,13 @@ def keys(obj):
 
     Returns:
         list: List of keys.
+
+    Example:
+
+        >>> keys([1, 2, 3])
+        [0, 1, 2]
+        >>> set(keys({'a': 1, 'b': 2, 'c': 3})) == set(['a', 'b', 'c'])
+        True
 
     See Also:
         - :func:`keys` (main definition)
@@ -491,6 +646,15 @@ def map_values(obj, callback=None):
     Returns:
         list|dict: Results of running `obj` through `callback`.
 
+    Example:
+
+        >>> results = map_values({'a': 1, 'b': 2, 'c': 3}, lambda x: x * 2)
+        >>> results == {'a': 2, 'b': 4, 'c': 6}
+        True
+        >>> results = map_values({'a': 1, 'b': {'d': 4}, 'c': 3}, {'d': 4})
+        >>> results == {'a': False, 'b': True, 'c': False}
+        True
+
     .. versionadded:: 1.0.0
     """
     return dict((key, result)
@@ -520,6 +684,15 @@ def merge(obj, *sources, **kargs):
 
     Warning:
         `obj` is modified in place.
+
+    Example:
+
+        >>> obj = {'a': 2}
+        >>> obj2 = merge(obj, {'a': 1}, {'b': 2, 'c': 3}, {'d': 4})
+        >>> obj2 == {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+        True
+        >>> obj is obj2
+        True
 
     .. versionadded:: 1.0.0
 
@@ -577,6 +750,13 @@ def omit(obj, callback=None, *properties):
     Returns:
         dict: Results of omitting properties.
 
+    Example:
+
+        >>> omit({'a': 1, 'b': 2, 'c': 3}, 'b', 'c') == {'a': 1}
+        True
+        >>> omit([1, 2, 3, 4], 0, 3) == {1: 2, 2: 3}
+        True
+
     .. versionadded:: 1.0.0
     """
     if not callable(callback):
@@ -598,6 +778,13 @@ def pairs(obj):
     Returns:
         list: Two dimensional list of object's key-value pairs.
 
+    Example:
+
+        >>> pairs([1, 2, 3, 4])
+        [[0, 1], [1, 2], [2, 3], [3, 4]]
+        >>> pairs({'a': 1})
+        [['a', 1]]
+
     .. versionadded:: 1.0.0
     """
     return [[key, value] for key, value in iterator(obj)]
@@ -605,7 +792,7 @@ def pairs(obj):
 
 def parse_int(value, radix=None):
     """Converts the given `value` into an integer of the specified `radix`. If
-    `radix` is falsey a radix of ``10`` is used unless the `value` is a
+    `radix` is falsey, a radix of ``10`` is used unless the `value` is a
     hexadecimal, in which case a radix of 16 is used.
 
     Args:
@@ -614,6 +801,15 @@ def parse_int(value, radix=None):
 
     Returns:
         mixed: Integer if parsable else ``None``.
+
+    Example:
+
+        >>> parse_int('5')
+        5
+        >>> parse_int('12', 8)
+        10
+        >>> parse_int('x') is None
+        True
 
     .. versionadded:: 1.0.0
     """
@@ -651,11 +847,16 @@ def pick(obj, callback=None, *properties):
     Args:
         obj (list|dict): Object to pick from.
         properties (str): Property values to pick.
-        callback (mixed, optional): Callback used to determine whic properties
+        callback (mixed, optional): Callback used to determine which properties
             to pick.
 
     Returns:
-        dict: Results of picking properties.
+        dict: Dict containg picked properties.
+
+    Example:
+
+        >>> pick({'a': 1, 'b': 2, 'c': 3}, 'a', 'b') == {'a': 1, 'b': 2}
+        True
 
     .. versionadded:: 1.0.0
     """
@@ -679,6 +880,12 @@ def rename_keys(obj, key_map):
     Returns:
         dict: Renamed `obj`.
 
+    Example:
+
+        >>> obj = rename_keys({'a': 1, 'b': 2, 'c': 3}, {'a': 'A', 'b': 'B'})
+        >>> obj == {'A': 1, 'B': 2, 'c': 3}
+        True
+
     .. versionadded:: 2.0.0
     """
     return dict((key_map.get(key, key), value)
@@ -694,11 +901,18 @@ def set_path(obj, value, keys, default=None):
         value (mixed): Value to set.
         keys (list): Target path to set value to.
         default (callable, optional): Callable that returns default value to
-            assign if path part is not set. Defaults to ``{}`` is `obj` is a
+            assign if path part is not set. Defaults to ``{}`` if `obj` is a
             ``dict`` or ``[]`` if `obj` is a ``list``.
 
     Returns:
         mixed: Modified `obj`.
+
+    Example:
+
+        >>> set_path({}, 1, ['a', 0], default=[])
+        {'a': [1]}
+        >>> set_path({}, 1, ['a', 'b']) == {'a': {'b': 1}}
+        True
 
     .. versionadded:: 2.0.0
     """
@@ -714,7 +928,7 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
     string value is provided that isn't recognized as having a common boolean
     conversion, then the returned value is ``None``. Non-string values of `obj`
     are converted using ``bool``. Optionally, `true_values` and `false_values`
-    can be overridden must each value must be a string.
+    can be overridden but each value must be a string.
 
     Args:
         obj (mixed): Object to convert.
@@ -727,6 +941,18 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
 
     Returns:
         bool: Boolean value of `obj`.
+
+    Example:
+
+        >>> to_boolean('true')
+        True
+        >>> to_boolean('1')
+        True
+        >>> to_boolean('false')
+        False
+        >>> to_boolean('0')
+        False
+        >>> assert to_boolean('a') is None
 
     .. versionadded:: 3.0.0
     """
@@ -761,6 +987,15 @@ def to_dict(obj):
     Returns:
         dict: Object converted to ``dict``.
 
+    Example:
+
+        >>> obj = {'a': 1, 'b': 2}
+        >>> obj2 = to_dict(obj)
+        >>> obj2 == obj
+        True
+        >>> obj2 is not obj
+        True
+
     .. versionadded:: 3.0.0
     """
     return dict(zip(pyd.keys(obj), pyd.values(obj)))
@@ -781,6 +1016,17 @@ def to_number(obj, precision=0):
 
     Returns:
         float: Converted number or ``None`` if can't be converted.
+
+    Example:
+
+        >>> to_number('1234.5678')
+        1235.0
+        >>> to_number('1234.5678', 4)
+        1234.5678
+        >>> to_number('1234.5678', 2)
+        1234.57
+        >>> to_number(1, 2)
+        1.0
 
     .. versionadded:: 3.0.0
     """
@@ -809,6 +1055,17 @@ def to_string(obj):
 
     Returns:
         str: String representation of `obj`.
+
+    Example:
+
+        >>> to_string(1)
+        u'1'
+        >>> to_string(None)
+        ''
+        >>> to_string([1, 2, 3])
+        u'[1, 2, 3]'
+        >>> to_string('a')
+        'a'
 
     .. versionadded:: 2.0.0
 
@@ -840,6 +1097,12 @@ def transform(obj, callback=None, accumulator=None):
 
     Returns:
         mixed: Accumulated object.
+
+    Example:
+
+        >>> transform([1, 2, 3, 4],\
+                      lambda acc, value, key: acc.append((key, value)))
+        [(0, 1), (1, 2), (2, 3), (3, 4)]
 
     .. versionadded:: 1.0.0
     """
@@ -874,6 +1137,13 @@ def update_path(obj, callback, keys, default=None):
     Returns:
         mixed: Updated `obj`.
 
+    Example:
+
+        >>> update_path({}, lambda value: value, ['a', 'b'])
+        {'a': {'b': None}}
+        >>> update_path([], lambda value: value, [0, 0])
+        [[None]]
+
     .. versionadded:: 2.0.0
     """
     # pylint: disable=redefined-outer-name
@@ -906,6 +1176,14 @@ def values(obj):
 
     Returns:
         list: List of values.
+
+    Example:
+
+        >>> results = values({'a': 1, 'b': 2, 'c': 3})
+        >>> set(results) == set([1, 2, 3])
+        True
+        >>> values([2, 4, 6, 8])
+        [2, 4, 6, 8]
 
     See Also:
         - :func:`values` (main definition)

@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Numerical/mathemetical related functions.
 
+.. testsetup::
+
+    from pydash import *
+
 .. versionadded:: 2.1.0
 """
 
@@ -50,6 +54,13 @@ def add(collection, callback=None):
     Returns:
         number: Result of summation.
 
+    Example:
+
+        >>> add([1, 2, 3, 4])
+        10
+        >>> add([1, 2, 3, 4], lambda x: x ** 2)
+        30
+
     See Also:
         - :func:`add` (main definition)
         - :func:`sum_` (alias)
@@ -73,6 +84,13 @@ def average(collection, callback=None):
 
     Returns:
         float: Result of mean.
+
+    Example:
+
+        >>> average([1, 2, 3, 4])
+        2.5
+        >>> average([1, 2, 3, 4], lambda x: x ** 2)
+        7.5
 
     See Also:
         - :func:`average` (main definition)
@@ -99,6 +117,13 @@ def median(collection, callback=None):
 
     Returns:
         float: Result of median.
+
+    Example:
+
+        >>> median([1, 2, 3, 4, 5])
+        3
+        >>> median([1, 2, 3, 4])
+        2.5
 
     .. versionadded:: 2.1.0
     """
@@ -127,6 +152,15 @@ def moving_average(array, size):
 
     Returns:
         list: Result of moving average.
+
+    Example:
+
+        >>> moving_average(range(10), 1)
+        [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
+        >>> moving_average(range(10), 5)
+        [2.0, 3.0, 4.0, 5.0, 6.0, 7.0]
+        >>> moving_average(range(10), 10)
+        [4.5]
 
     See Also:
         - :func:`moving_averge` (main definition)
@@ -159,6 +193,13 @@ def power(x, n):
     Returns:
         number: Result of calculation.
 
+    Example:
+
+        >>> power(5, 2)
+        25
+        >>> power(12.5, 3)
+        1953.125
+
     See Also:
         - :func:`power` (main definition)
         - :func:`pow_` (alias)
@@ -187,6 +228,15 @@ def round_(x, precision=0):
 
     Returns:
         int: Rounded number.
+
+    Example:
+
+        >>> round_(3.275)
+        3.0
+        >>> round_(3.275, 1)
+        3.3
+        >>> round_(3.275, 2)
+        3.27
 
     See Also:
         - :func:`round_` (main definition)
@@ -220,6 +270,17 @@ def scale(array, maximum=1):
     Returns:
         list: Scaled numbers.
 
+    Example:
+
+        >>> scale([1, 2, 3, 4])
+        [0.25, 0.5, 0.75, 1.0]
+        >>> scale([1, 2, 3, 4], 1)
+        [0.25, 0.5, 0.75, 1.0]
+        >>> scale([1, 2, 3, 4], 4)
+        [1.0, 2.0, 3.0, 4.0]
+        >>> scale([1, 2, 3, 4], 2)
+        [0.5, 1.0, 1.5, 2.0]
+
     .. versionadded:: 2.1.0
     """
     array_max = max(array)
@@ -235,6 +296,11 @@ def slope(point1, point2):
 
     Returns:
         float: Calculated slope.
+
+    Example:
+
+        >>> slope((1, 2), (4, 8))
+        2.0
 
     .. versionadded:: 2.1.0
     """
@@ -258,6 +324,11 @@ def std_deviation(array):
     Returns:
         float: Calculated standard deviation.
 
+    Example:
+
+        >>> std_deviation([1, 18, 20, 4])
+        8.347903928532
+
     See Also:
         - :func:`std_deviation` (main definition)
         - :func:`sigma` (alias)
@@ -279,6 +350,11 @@ def transpose(array):
     Returns:
         list: Transposed list.
 
+    Example:
+
+        >>> transpose([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+
     .. versionadded:: 2.1.0
     """
     trans = []
@@ -299,6 +375,11 @@ def variance(array):
     Returns:
         float: Calculated variance.
 
+    Example:
+
+        >>> variance([1, 18, 20, 4])
+        69.6875
+
     .. versionadded:: 2.1.0
     """
     ave = average(array)
@@ -317,6 +398,11 @@ def zscore(collection, callback=None):
 
     Returns:
         float: Calculated standard score.
+
+    Example:
+
+        >>> zscore([1, 2, 3])
+        [-1.224744871391589, 0.0, 1.224744871391589]
 
     .. versionadded:: 2.1.0
     """

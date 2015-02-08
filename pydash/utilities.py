@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 """Utility functions.
 
+.. testsetup::
+
+    from pydash import *
+
 .. versionadded:: 1.0.0
 """
 
 from __future__ import absolute_import
 
-import time
+from datetime import datetime
 from random import uniform, randint
 
 import pydash as pyd
@@ -51,6 +55,11 @@ def attempt(func, *args, **kargs):
     Returns:
         mixed: Returns the `func` result or error object.
 
+    Example:
+
+        >>> results = attempt(lambda x: x/0, 1)
+        >>> assert isinstance(results, ZeroDivisionError)
+
     .. versionadded:: 1.1.0
     """
     try:
@@ -70,6 +79,12 @@ def constant(value):
     Returns:
         function: Function that always returns `value`.
 
+    Example:
+
+        >>> pi = constant(3.14)
+        >>> pi()
+        3.14
+
     .. versionadded:: 1.0.0
     """
     return lambda: value
@@ -88,6 +103,24 @@ def callback(func):
     Returns:
         function: Callback function.
 
+    Example:
+
+        >>> get_data = callback('data')
+        >>> get_data({'data': [1, 2, 3]})
+        [1, 2, 3]
+        >>> is_active = callback({'active': True})
+        >>> is_active({'active': True})
+        True
+        >>> is_active({'active': 0})
+        False
+        >>> callback(lambda a, b: a + b)(1, 2)
+        3
+        >>> ident = callback(None)
+        >>> ident('a')
+        'a'
+        >>> ident(1, 2, 3)
+        1
+
     See Also:
         - :func:`callback` (main definition)
         - :func:`iteratee` (alias)
@@ -95,7 +128,7 @@ def callback(func):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
-        Rename ``create_callback()`` to :func:`iteratee`.
+        Renamed ``create_callback()`` to :func:`iteratee`.
     """
     if callable(func):
         cbk = func
@@ -122,9 +155,18 @@ def deep_property(path):
     Returns:
         function: Function that returns object's key value.
 
+    Example:
+
+        >>> deep_property('a.b.c')({'a': {'b': {'c': 1}}})
+        1
+        >>> deep_property('a.1.0.b')({'a': [5, [{'b': 1}]]})
+        1
+        >>> deep_property('a.1.0.b')({}) is None
+        True
+
     See Also:
-        - :func:`property_` (main definition)
-        - :func:`prop` (alias)
+        - :func:`deep_property` (main definition)
+        - :func:`deep_prop` (alias)
 
     .. versionadded:: 1.0.0
     """
@@ -143,6 +185,15 @@ def identity(*args):
     Returns:
         mixed: First argument or ``None``.
 
+    Example:
+
+        >>> identity(1)
+        1
+        >>> identity(1, 2, 3)
+        1
+        >>> identity() is None
+        True
+
     .. versionadded:: 1.0.0
     """
     return args[0] if args else None
@@ -160,6 +211,15 @@ def matches(source):
     Returns:
         function: Function that compares a ``dict`` to `source` and returns
             whether the two objects contain the same items.
+
+    Example:
+
+        >>> matches({'a': {'b': 2}})({'a': {'b': 2, 'c':3}})
+        True
+        >>> matches({'a': 1})({'b': 2, 'a': 1})
+        True
+        >>> matches({'a': 1})({'b': 2, 'a': 2})
+        False
 
     .. versionadded:: 1.0.0
     """
@@ -180,6 +240,18 @@ def memoize(func, resolver=None):
 
     Returns:
         function: Memoized function.
+
+    Example:
+
+        >>> ident = memoize(identity)
+        >>> ident(1)
+        1
+        >>> ident.cache['(1,){}'] == 1
+        True
+        >>> ident(1, 2, 3)
+        1
+        >>> ident.cache['(1, 2, 3){}'] == 1
+        1
 
     .. versionadded:: 1.0.0
     """
@@ -213,6 +285,12 @@ def now():
     Returns:
         int: Milliseconds since Unix epoch.
 
+    Example:
+
+        >>> import time
+        >>> now() - int(time.time() * 1000)
+        0
+
     .. versionadded:: 1.0.0
     """
     return int(time.time() * 1000)
@@ -227,6 +305,17 @@ def property_(key):
 
     Returns:
         function: Function that returns object's key value.
+
+    Example:
+
+        >>> get_data = prop('data')
+        >>> get_data({'data': 1})
+        1
+        >>> get_data({}) is None
+        True
+        >>> get_first = prop(0)
+        >>> get_first([1, 2, 3])
+        1
 
     See Also:
         - :func:`property_` (main definition)
@@ -249,6 +338,16 @@ def property_of(obj):
 
     Returns:
         function: Function that returns object's key value.
+
+    Example:
+
+        >>> getter = prop_of({'a': 1, 'b': 2, 'c': 3})
+        >>> getter('a')
+        1
+        >>> getter('b')
+        2
+        >>> getter('x') is None
+        True
 
     See Also:
         - :func:`property_of` (main definition)
@@ -276,6 +375,15 @@ def random(start=0, stop=1, floating=False):
 
     Returns:
         int|float: Random value.
+
+    Example:
+
+        >>> 0 <= random() <= 1
+        True
+        >>> 5 <= random(5, 10) <= 10
+        True
+        >>> isinstance(random(floating=True), float)
+        True
 
     .. versionadded:: 1.0.0
     """
@@ -310,10 +418,20 @@ def range_(*args):
     Returns:
         list: List of integers in range
 
+    Example:
+
+        >>> list(range_(5))
+        [0, 1, 2, 3, 4]
+        >>> list(range_(1, 4))
+        [1, 2, 3]
+        >>> list(range_(0, 6, 2))
+        [0, 2, 4]
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-        Moved to Utilities module.
+        Moved to :mod:`pydash.uilities`.
+
     """
     return list(_range(*args))
 
@@ -331,6 +449,17 @@ def result(obj, key, default=None):
 
     Returns:
         mixed: Result of ``obj[key]`` or ``None``.
+
+    Example:
+
+        >>> result({'a': 1, 'b': lambda: 2}, 'a')
+        1
+        >>> result({'a': 1, 'b': lambda: 2}, 'b')
+        2
+        >>> result({'a': 1, 'b': lambda: 2}, 'c') is None
+        True
+        >>> result({'a': 1, 'b': lambda: 2}, 'c', default=False)
+        False
 
     .. versionadded:: 1.0.0
 
@@ -359,6 +488,11 @@ def times(callback, n):
     Returns:
         list: A list of results from calling `callback`.
 
+    Example:
+
+        >>> times(lambda i: i, 5)
+        [0, 1, 2, 3, 4]
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
@@ -377,6 +511,15 @@ def unique_id(prefix=None):
 
     Returns:
         str: ID value.
+
+    Example:
+
+        >>> unique_id()
+        '1'
+        >>> unique_id('id_')
+        'id_2'
+        >>> unique_id()
+        '3'
 
     .. versionadded:: 1.0.0
     """
