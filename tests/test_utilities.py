@@ -219,6 +219,10 @@ def test_times(case, expected):
     assert _.times(*case) == expected
 
 
+def test_unique_id_setup():
+    _.utilities.ID_COUNTER = 0
+
+
 @parametrize('case,expected', [
     ((), '1'),
     (('foo',), 'foo2')
