@@ -57,6 +57,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``to_number``.
 - Add ``underscore_case`` as alias of ``snake_case``.
 - Add ``unquote``.
+- Fix ``deep_has`` to return ``False`` when ``ValueError`` raised during path checking.
 - Fix ``trunc`` and ``truncate`` so that they handle texts shorter than the max string length correctly.
 - Make the following functions work with empty strings and ``None``: (**breaking change**) Thanks k7sleeper_!
 

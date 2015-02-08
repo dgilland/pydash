@@ -279,13 +279,15 @@ def deep_has(obj, path):
         - :func:`deep_has` (main definition)
         - :func:`has_path` (alias)
 
-    .. versionchanged: 2.2.0
-        Made :func:`has_path` an alias.
+    .. versionadded:: 2.2.0
+
+    .. versionchanged:: 3.0.0
+        Return ``False`` on ``ValueError`` when checking path.
     """
     try:
         get_path(obj, path, default=NoValue)
         exists = True
-    except (KeyError, IndexError, TypeError):
+    except (KeyError, IndexError, TypeError, ValueError):
         exists = False
 
     return exists
