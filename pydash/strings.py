@@ -31,7 +31,6 @@ __all__ = (
     'chop',
     'chop_right',
     'chars',
-    'class_case',
     'clean',
     'count_substr',
     'deburr',
@@ -56,6 +55,7 @@ __all__ = (
     'pad',
     'pad_left',
     'pad_right',
+    'pascal_case',
     'predecessor',
     'prune',
     'quote',
@@ -268,20 +268,6 @@ def chop_right(text, step):
         chopped = [text[-(i + step):text_len - i]
                    for i in _range(0, text_len, step)][::-1]
     return chopped
-
-
-def class_case(text):
-    """Like :func:`camel_case` except the first letter is capitalized.
-
-    Args:
-        text (str): String to convert.
-
-    Returns:
-        str: String converted to class case.
-
-    .. versionadded:: 3.0.0
-    """
-    return capitalize(camel_case(text), lower_rest=False)
 
 
 def clean(text):
@@ -720,6 +706,34 @@ def pad_right(text, length, chars=' '):
     text = pyd.to_string(text)
     length = max((length, len(text)))
     return (text + repeat(chars, length))[:length]
+
+
+def pascal_case(text, strict=True):
+    """Like :func:`camel_case` except the first letter is capitalized.
+
+    Args:
+        text (str): String to convert.
+        strict (bool, optional): Whether to cast rest of string to lower case.
+            Defaults to ``True``.
+
+    Returns:
+        str: String converted to class case.
+
+    Example:
+
+        >>> pascal_case('FOO BAR_bAz')
+        'FooBarBaz'
+        >>> pascal_case('FOO BAR_bAz', False)
+        'FooBarBAz'
+
+    .. versionadded:: 3.0.0
+    """
+    text = pyd.to_string(text)
+
+    if strict:
+        text = text.lower()
+
+    return capitalize(camel_case(text), strict=False)
 
 
 def predecessor(char):

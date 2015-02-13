@@ -71,20 +71,6 @@ def test_chop_right(case, expected):
 
 
 @parametrize('case,expected', [
-    ('foo bar baz', 'FooBarBaz'),
-    ('foo  bar baz', 'FooBarBaz'),
-    ('foo__bar_baz', 'FooBarBaz'),
-    ('foo-_bar-_-baz', 'FooBarBaz'),
-    ('foo!bar,baz', 'FooBarBaz'),
-    ('--foo.bar;baz', 'FooBarBaz'),
-    ('', ''),
-    (None, ''),
-])
-def test_class_case(case, expected):
-    assert _.class_case(case) == expected
-
-
-@parametrize('case,expected', [
     ('  foo bar', 'foo bar'),
     ('  foo  bar', 'foo bar'),
     ('  foo  bar  ', 'foo bar'),
@@ -419,8 +405,22 @@ def test_pad_right(case, expected):
 
 
 @parametrize('case,expected', [
-    ('a', 'b'),
-    ('A', 'B'),
+    ('foo bar baz', 'FooBarBaz'),
+    ('foo  bar baz', 'FooBarBaz'),
+    ('foo__bar_baz', 'FooBarBaz'),
+    ('foo-_bar-_-baz', 'FooBarBaz'),
+    ('foo!bar,baz', 'FooBarBaz'),
+    ('--foo.bar;baz', 'FooBarBaz'),
+    ('', ''),
+    (None, ''),
+])
+def test_pascal_case(case, expected):
+    assert _.pascal_case(case) == expected
+
+
+@parametrize('case,expected', [
+    ('b', 'a'),
+    ('B', 'A'),
 ])
 def test_predecessor(case, expected):
     assert _.predecessor(case) == expected

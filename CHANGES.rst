@@ -13,7 +13,6 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``chars``.
 - Add ``chop``.
 - Add ``chop_right``.
-- Add ``class_case``.
 - Add ``clean``.
 - Add ``count_substr``.
 - Add ``decapitalize``.
@@ -32,6 +31,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``join`` as alias of ``implode``.
 - Add ``lines``.
 - Add ``number_format``.
+- Add ``pascal_case``.
 - Add ``predecessor``.
 - Add ``property_of``, ``prop_of``.
 - Add ``prune``.
