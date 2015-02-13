@@ -764,7 +764,10 @@ def omit(obj, callback=None, *properties):
     if not callable(callback):
         callback = callback if callback is not None else []
         properties = pyd.flatten_deep([callback, properties])
-        callback = lambda value, key, item: key in properties
+
+        # pylint: disable=missing-docstring,function-redefined
+        def callback(value, key, item):
+            return key in properties
 
     return dict((key, value) for key, value in iterator(obj)
                 if not call_callback(callback, value, key, obj))
@@ -865,7 +868,10 @@ def pick(obj, callback=None, *properties):
     if not callable(callback):
         callback = callback if callback is not None else []
         properties = pyd.flatten_deep([callback, properties])
-        callback = lambda value, key, item: key in properties
+
+        # pylint: disable=missing-docstring,function-redefined
+        def callback(value, key, item):
+            return key in properties
 
     return dict((key, value) for key, value in iterator(obj)
                 if call_callback(callback, value, key, obj))

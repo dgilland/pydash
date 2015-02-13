@@ -19,7 +19,8 @@ from functools import partial
 PY3 = sys.version_info[0] == 3
 PY26 = sys.version_info[0:2] == (2, 6)
 
-_identity = lambda x: x
+
+def _identity(x): return x
 
 
 if PY3:
@@ -32,15 +33,18 @@ if PY3:
     integer_types = (int,)
     number_types = (int, float, Decimal)
 
-    iterkeys = lambda d: iter(d.keys())
-    itervalues = lambda d: iter(d.values())
-    iteritems = lambda d: iter(d.items())
+    def iterkeys(d): return iter(d.keys())
+
+    def itervalues(d): return iter(d.values())
+
+    def iteritems(d): return iter(d.items())
 
     _range = range
 
     implements_to_string = _identity
     izip = zip
-    _cmp = lambda a, b: (a > b) - (a < b)
+
+    def _cmp(a, b): return (a > b) - (a < b)
 else:
     from HTMLParser import HTMLParser
     from itertools import izip
@@ -53,9 +57,11 @@ else:
     integer_types = (int, long)
     number_types = (int, long, float, Decimal)
 
-    iterkeys = lambda d: d.iterkeys()
-    itervalues = lambda d: d.itervalues()
-    iteritems = lambda d: d.iteritems()
+    def iterkeys(d): return d.iterkeys()
+
+    def itervalues(d): return d.itervalues()
+
+    def iteritems(d): return d.iteritems()
 
     _range = xrange
     _cmp = cmp
