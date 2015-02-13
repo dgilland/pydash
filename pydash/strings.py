@@ -797,7 +797,7 @@ def prune(text, length=0, omission='...'):
     text_len = len(text)
     omission_len = len(omission)
 
-    if text_len < (length + omission_len):
+    if text_len <= length:
         return text
 
     # Replace non-alphanumeric chars with whitespace.
