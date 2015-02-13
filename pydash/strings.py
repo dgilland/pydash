@@ -1379,9 +1379,10 @@ def unquote(text, quote_char='"'):
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
+    inner = text[1:-1]
 
-    if text[:1] == quote_char and text[-1] == quote_char:
-        text = text[1:-1]
+    if text == '{0}{1}{0}'.format(quote_char, inner):
+        text = inner
 
     return text
 
