@@ -47,9 +47,13 @@ def test_chaining_invalid_method():
     assert raised
 
 
-def test_chaining_value_alias():
-    chained = _.chain((1, 2))
-    assert chained.value() is chained.value_of()
+@parametrize('case', [
+    'value_of',
+    'run'
+])
+def test_chaining_value_alias(case):
+    chain = _.chain([])
+    assert chain.value == getattr(chain, case)
 
 
 def test_chaining_lazy():

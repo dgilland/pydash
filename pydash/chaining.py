@@ -44,6 +44,7 @@ class Chain(object):
         return self._value
 
     value_of = value
+    run = value
 
     def to_string(self):
         """Return current value as string.

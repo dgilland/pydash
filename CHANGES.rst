@@ -38,6 +38,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``re_replace``.
 - Add ``rearg``.
 - Add ``replace``.
+- Add ``run`` as alias of ``chain.value``.
 - Add ``separator_case``.
 - Add ``series_phrase``.
 - Add ``series_phrase_serial``.
