@@ -1402,7 +1402,7 @@ def url(*paths, **params):
 
     .. versionadded:: 2.2.0
     """
-    paths = pyd.map_(paths, pyd.to_string)
+    paths = pyd.chain(paths).flatten_deep().map(pyd.to_string).value()
     paths_list = []
     params_list = flatten_url_params(params)
 
