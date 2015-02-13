@@ -187,12 +187,12 @@ def camel_case(text):
     return text[:1].lower() + text[1:]
 
 
-def capitalize(text, lower_rest=True):
+def capitalize(text, strict=True):
     """Capitalizes the first character of `text`.
 
     Args:
         text (str): String to capitalize.
-        lower_rest (bool, optional): Whether to cast rest of string to lower
+        strict (bool, optional): Whether to cast rest of string to lower
             case. Defaults to ``True``.
 
     Returns:
@@ -201,10 +201,10 @@ def capitalize(text, lower_rest=True):
     .. versionadded:: 1.1.0
 
     .. versionchanged:: 3.0.0
-        Added `lower_rest` option.
+        Added `strict` option.
     """
     text = pyd.to_string(text)
-    return (text.capitalize() if lower_rest
+    return (text.capitalize() if strict
             else text[:1].upper() + text[1:])
 
 
