@@ -8,6 +8,7 @@
 .. versionadded:: 1.1.0
 """
 
+import math
 import re
 import unicodedata
 
@@ -646,24 +647,34 @@ def pad(text, length, chars=' '):
     Returns:
         str: Padded string.
 
+    Example:
+
+        >>> pad('abc', 5)
+        ' abc '
+        >>> pad('abc', 6, 'x')
+        'xabcxx'
+        >>> pad('abc', 5, '...')
+        '.abc.'
+
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: 3.0.0
+        Fix handling of multiple `chars` so that padded string isn't over
+        padded.
     """
     # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     text_len = len(text)
-    length = max((length, text_len))
 
-    padding = (length - text_len)
-    left_pad = padding // 2
-    right_pad = padding - left_pad
+    if text_len >= length:
+        return text
 
-    text = repeat(chars, left_pad) + text + repeat(chars, right_pad)
+    mid = (length - text_len) / 2.0
+    left_len = int(math.floor(mid))
+    right_len = int(math.ceil(mid))
+    chars = pad_right('', right_len, chars)
 
-    if len(text) > length:
-        # This handles cases when `chars` is more than one character.
-        text = text[left_pad:-right_pad]
-
-    return text
+    return chars[:left_len] + text + chars
 
 
 def pad_left(text, length, chars=' '):
@@ -678,6 +689,13 @@ def pad_left(text, length, chars=' '):
 
     Returns:
         str: Padded string.
+
+    Example:
+
+        >>> pad_left('abc', 5)
+        '  abc'
+        >>> pad_left('abc', 5, '.')
+        '..abc'
 
     .. versionadded:: 1.1.0
     """
@@ -699,6 +717,13 @@ def pad_right(text, length, chars=' '):
 
     Returns:
         str: Padded string.
+
+    Example:
+
+        >>> pad_right('abc', 5)
+        'abc  '
+        >>> pad_right('abc', 5, '.')
+        'abc..'
 
     .. versionadded:: 1.1.0
     """

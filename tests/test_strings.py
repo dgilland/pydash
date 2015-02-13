@@ -361,6 +361,7 @@ def test_number_format(case, expected):
 
 
 @parametrize('case,expected', [
+    (('abc', 5, '12'), '1abc1'),
     (('abc', 8), '  abc   '),
     (('abc', 8, '_-'), '_-abc_-_'),
     (('abc', 3), 'abc'),
