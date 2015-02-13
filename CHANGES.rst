@@ -99,9 +99,9 @@ v3.0.0 (xxxx-xx-xx)
 - Make ``sort_by`` accept ``reverse`` parameter.
 - Make ``splice`` work with strings.
 - Make ``to_string`` convert ``None`` to empty string. (**breaking change**)
-- Move ``arrays.join`` to ``strings.join`` (**possible breaking change**).
-- Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**possible breaking change**)
-- Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**possible breaking change**)
+- Move ``arrays.join`` to ``strings.join`` (**breaking change**).
+- Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
+- Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 - Reorder function arguments for ``after`` from ``(n, func)`` to ``(func, n)``. (**breaking change**)
 - Reorder function arguments for ``before`` from ``(n, func)`` to ``(func, n)``. (**breaking change**)
 - Reorder function arguments for ``times`` from ``(n, callback)`` to ``(callback, n)``. (**breaking change**)
@@ -259,20 +259,20 @@ v2.0.0 (2014-09-11)
 - Make ``invert`` accept ``multivalue`` argument.
 - Make ``result`` accept ``default`` argument.
 - Make ``slice_`` accept optional ``start`` and ``end`` arguments.
-- Move files in ``pydash/api/`` to ``pydash/``. (**possible breaking change**)
-- Move predicate functions from ``pydash.api.objects`` to ``pydash.api.predicates``. (**possible breaking change**)
+- Move files in ``pydash/api/`` to ``pydash/``. (**breaking change**)
+- Move predicate functions from ``pydash.api.objects`` to ``pydash.api.predicates``. (**breaking change**)
 - Rename ``create_callback`` to ``iteratee``. (**breaking change**)
 - Rename ``functions`` to ``callables`` in order to allow ``functions.py`` to exist at the root of the pydash module folder. (**breaking change**)
-- Rename *private* utility function ``_iter_callback`` to ``itercallback``. (**possible breaking change**)
-- Rename *private* utility function ``_iter_list_callback`` to ``iterlist_callback``. (**possible breaking change**)
-- Rename *private* utility function ``_iter_dict_callback`` to ``iterdict_callback``. (**possible breaking change**)
-- Rename *private* utility function ``_iterate`` to ``iterator``. (**possible breaking change**)
-- Rename *private* utility function ``_iter_dict`` to ``iterdict``. (**possible breaking change**)
-- Rename *private* utility function ``_iter_list`` to ``iterlist``. (**possible breaking change**)
-- Rename *private* utility function ``_iter_unique`` to ``iterunique``. (**possible breaking change**)
-- Rename *private* utility function ``_get_item`` to ``getitem``. (**possible breaking change**)
-- Rename *private* utility function ``_set_item`` to ``setitem``. (**possible breaking change**)
-- Rename *private* utility function ``_deprecated`` to ``deprecated``. (**possible breaking change**)
+- Rename *private* utility function ``_iter_callback`` to ``itercallback``. (**breaking change**)
+- Rename *private* utility function ``_iter_list_callback`` to ``iterlist_callback``. (**breaking change**)
+- Rename *private* utility function ``_iter_dict_callback`` to ``iterdict_callback``. (**breaking change**)
+- Rename *private* utility function ``_iterate`` to ``iterator``. (**breaking change**)
+- Rename *private* utility function ``_iter_dict`` to ``iterdict``. (**breaking change**)
+- Rename *private* utility function ``_iter_list`` to ``iterlist``. (**breaking change**)
+- Rename *private* utility function ``_iter_unique`` to ``iterunique``. (**breaking change**)
+- Rename *private* utility function ``_get_item`` to ``getitem``. (**breaking change**)
+- Rename *private* utility function ``_set_item`` to ``setitem``. (**breaking change**)
+- Rename *private* utility function ``_deprecated`` to ``deprecated``. (**breaking change**)
 - Undeprecate ``tail`` and make alias of ``rest``.
 
 
@@ -317,8 +317,8 @@ v1.1.0 (2014-08-19)
 - Deprecate ``tail``.
 - Modify ``drop`` to accept ``n`` argument and remove as alias of ``rest``.
 - Modify ``take`` to accept ``n`` argument and remove as alias of ``first``.
-- Move ``escape`` and ``unescape`` from ``pydash.api.utilities`` to ``pydash.api.strings``. (**possible breaking change**)
-- Move ``range_`` from ``pydash.api.arrays`` to ``pydash.api.utilities``. (**possible breaking change**)
+- Move ``escape`` and ``unescape`` from ``pydash.api.utilities`` to ``pydash.api.strings``. (**breaking change**)
+- Move ``range_`` from ``pydash.api.arrays`` to ``pydash.api.utilities``. (**breaking change**)
 
 
 .. _changelog-v1.0.0:
