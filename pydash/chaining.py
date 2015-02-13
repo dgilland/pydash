@@ -69,7 +69,7 @@ class Chain(object):
         Args:
             value (mixed): Value to plant as the initial chain value.
         """
-        # pylint: disable=no-member
+        # pylint: disable=no-member,maybe-no-member
         wrapper = self._value
         wrappers = []
 
@@ -175,7 +175,7 @@ class ChainWrapper(object):
         wrapper = self._generate()
 
         if isinstance(wrapper._value, ChainWrapper):
-            # pylint: disable=no-member
+            # pylint: disable=no-member,maybe-no-member
             wrapper._value = wrapper._value.unwrap(value)
         elif not isinstance(value, ChainWrapper) and value is not NoValue:
             # Override wrapper's initial value.
