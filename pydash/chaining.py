@@ -40,8 +40,7 @@ class Chain(object):
             - :meth:`value` (main definition)
             - :meth:`value_of` (alias)
         """
-        self._value = self(self._value)
-        return self._value
+        return self(self._value)
 
     value_of = value
     run = value
