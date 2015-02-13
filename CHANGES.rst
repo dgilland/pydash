@@ -14,6 +14,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``chop``.
 - Add ``chop_right``.
 - Add ``clean``.
+- Add ``commit`` method to ``chain`` that returns a new chain with the computed ``chain.value()`` as the initial value of the chain.
 - Add ``count_substr``.
 - Add ``decapitalize``.
 - Add ``duplicates``.

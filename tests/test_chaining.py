@@ -88,6 +88,14 @@ def test_chaining_late_value_reuse():
     assert square_sum([2]) == 4
 
 
+def test_chaining_commit():
+    chain = _.chain([1, 2, 3, 4]).power(2).sum()
+    committed = chain.commit()
+
+    assert chain is not committed
+    assert chain.value() == committed.value()
+
+
 def test_dash_instance_chaining():
     value = [1, 2, 3, 4]
     from__ = _._(value).without(2, 3).reject(lambda x: x > 1)

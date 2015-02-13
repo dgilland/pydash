@@ -8,7 +8,7 @@
 .. versionadded:: 1.0.0
 """
 
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import pydash as pyd
 from .helpers import NoValue
@@ -52,6 +52,15 @@ class Chain(object):
             str: Current value of chain operations casted to ``str``.
         """
         return self.module.to_string(self.value())
+
+    def commit(self):
+        """Executes the chained sequence and returns the wrapped result.
+
+        Returns:
+            Chain: New instance of :class:`Chain` with resolved value from
+                previous :class:`Class`.
+        """
+        return Chain(self.value())
 
     @classmethod
     def get_method(cls, name):
@@ -192,13 +201,31 @@ def chain(value=NoValue):
         >>> chain().map(lambda x: x * 2).sum()([1, 2, 3, 4])
         20
 
+        >>> def echo(item): print(item)
+        >>> summer = chain([1, 2, 3, 4]).each(echo).sum()
+        >>> committed = summer.commit()
+        1
+        2
+        3
+        4
+        >>> committed.value()
+        10
+        >>> summer.value()
+        1
+        2
+        3
+        4
+        10
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
         Made chaining lazy.
 
     .. versionchanged:: 3.0.0
-        Added support for late passing of `value`.
+        - Added support for late passing of `value`.
+        - Added :meth:`Chain.commit` for returning a new :class:`Chain`
+            instance initialized with the results from calling
+            :meth:`Chain.value`.
     """
     return Chain(value)
 
