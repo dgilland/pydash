@@ -89,6 +89,7 @@ v3.0.0 (xxxx-xx-xx)
 - Make ``capitalize`` accept ``lower_rest`` argument to control whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``chain`` support late passing of initial ``value`` argument.
 - Make ``chain`` not store computed ``value()`` (**breaking change**).
+- Make ``drop``, ``drop_right``, ``take``, and ``take_right`` have default ``n=1``.
 - Make ``is_indexed`` return ``True`` for tuples.
 - Make ``partial`` and ``partial_right`` accept keyword arguments.
 - Make ``pluck`` style callbacks support deep paths.

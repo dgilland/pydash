@@ -162,12 +162,12 @@ def difference(array, *lists):
             else array)
 
 
-def drop(array, n):
+def drop(array, n=1):
     """Creates a slice of `array` with `n` elements dropped from the beginning.
 
     Args:
         array (list): List to process.
-        n (int): Number of elements to drop.
+        n (int, optional): Number of elements to drop. Defaults to ``1``.
 
     Returns:
         list: Dropped list.
@@ -181,16 +181,19 @@ def drop(array, n):
 
     .. versionchanged:: 1.1.0
         Added ``n`` argument and removed as alias of :func:`rest`.
+
+    .. versionchanged:: 3.0.0
+        Made ``n`` default to ``1``.
     """
     return drop_while(array, lambda _, index: index < n)
 
 
-def drop_right(array, n):
+def drop_right(array, n=1):
     """Creates a slice of `array` with `n` elements dropped from the end.
 
     Args:
         array (list): List to process.
-        n (int): Number of elements to drop.
+        n (int, optional): Number of elements to drop. Defaults to ``1``.
 
     Returns:
         list: Dropped list.
@@ -201,6 +204,9 @@ def drop_right(array, n):
         [1, 2]
 
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: 3.0.0
+        Made ``n`` default to ``1``.
     """
     length = len(array)
     return drop_right_while(array, lambda _, index: (length - index) <= n)
@@ -1107,12 +1113,12 @@ def split_at(array, index):
     return [take(array, index), drop(array, index)]
 
 
-def take(array, n):
+def take(array, n=1):
     """Creates a slice of `array` with `n` elements taken from the beginning.
 
     Args:
         array (list): List to process.
-        n (int): Number of elements to take.
+        n (int, optional): Number of elements to take. Defaults to ``1``.
 
     Returns:
         list: Taken list.
@@ -1126,16 +1132,19 @@ def take(array, n):
 
     .. versionchanged:: 1.1.0
         Added ``n`` argument and removed as alias of :func:`first`.
+
+    .. versionchanged:: 3.0.0
+        Made ``n`` default to ``1``.
     """
     return take_while(array, lambda _, index: index < n)
 
 
-def take_right(array, n):
+def take_right(array, n=1):
     """Creates a slice of `array` with `n` elements taken from the end.
 
     Args:
         array (list): List to process.
-        n (int): Number of elements to take.
+        n (int, optional): Number of elements to take. Defaults to ``1``.
 
     Returns:
         list: Taken list.
@@ -1146,6 +1155,9 @@ def take_right(array, n):
         [3, 4]
 
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: 3.0.0
+        Made ``n`` default to ``1``.
     """
     length = len(array)
     return take_right_while(array, lambda _, index: (length - index) <= n)
