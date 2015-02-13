@@ -748,7 +748,7 @@ def predecessor(char):
     .. versionadded:: 3.0.0
     """
     char = pyd.to_string(char)
-    return chr(ord(char) + 1)
+    return chr(ord(char) - 1)
 
 
 def prune(text, length=0, omission='...'):
@@ -1169,7 +1169,7 @@ def successor(char):
     .. versionadded:: 3.0.0
     """
     char = pyd.to_string(char)
-    return chr(ord(char) - 1)
+    return chr(ord(char) + 1)
 
 
 def surround(text, wrapper):

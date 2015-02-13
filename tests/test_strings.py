@@ -723,8 +723,8 @@ def test_substr_right_end(case, expected):
 
 
 @parametrize('case,expected', [
-    ('b', 'a'),
-    ('B', 'A'),
+    ('a', 'b'),
+    ('A', 'B'),
 ])
 def test_successor(case, expected):
     assert _.successor(case) == expected
