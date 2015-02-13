@@ -33,6 +33,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``lines``.
 - Add ``number_format``.
 - Add ``pascal_case``.
+- Add ``plant`` method to ``chain`` that returns a cloned chain with a new initial value.
 - Add ``predecessor``.
 - Add ``property_of``, ``prop_of``.
 - Add ``prune``.

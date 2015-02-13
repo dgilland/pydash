@@ -88,6 +88,32 @@ def test_chaining_late_value_reuse():
     assert square_sum([2]) == 4
 
 
+def test_chaining_late_value_override():
+    square_sum = _.chain([1, 2, 3, 4]).power(2).sum()
+    assert square_sum([5, 6, 7, 8]) == 174
+
+
+def test_chaining_plant():
+    value = [1, 2, 3, 4]
+    square_sum1 = _.chain(value).power(2).sum()
+
+    def root_value(wrapper):
+        if isinstance(wrapper._value, _.chaining.ChainWrapper):
+            return root_value(wrapper._value)
+        return wrapper._value
+
+    assert root_value(square_sum1._value) == value
+
+    test_value = [5, 6, 7, 8]
+    square_sum2 = square_sum1.plant(test_value)
+
+    assert root_value(square_sum1._value) == value
+    assert root_value(square_sum2._value) == test_value
+
+    assert square_sum1.value() == 30
+    assert square_sum2.value() == 174
+
+
 def test_chaining_commit():
     chain = _.chain([1, 2, 3, 4]).power(2).sum()
     committed = chain.commit()

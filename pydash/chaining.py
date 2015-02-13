@@ -62,6 +62,32 @@ class Chain(object):
         """
         return Chain(self.value())
 
+    def plant(self, value):
+        """Return a clone of the chained sequence planting `value` as the
+        wrapped value.
+
+        Args:
+            value (mixed): Value to plant as the initial chain value.
+        """
+        # pylint: disable=no-member
+        wrapper = self._value
+        wrappers = []
+
+        if hasattr(wrapper, '_value'):
+            wrappers = [wrapper]
+
+            while isinstance(wrapper._value, ChainWrapper):
+                wrapper = wrapper._value
+                wrappers.insert(0, wrapper)
+
+        clone = Chain(value)
+
+        for wrap in wrappers:
+            clone = ChainWrapper(clone._value, wrap.method)(*wrap.args,
+                                                            **wrap.kargs)
+
+        return clone
+
     @classmethod
     def get_method(cls, name):
         """Return valid :attr:`module` method.
@@ -149,7 +175,11 @@ class ChainWrapper(object):
         wrapper = self._generate()
 
         if isinstance(wrapper._value, ChainWrapper):
+            # pylint: disable=no-member
             wrapper._value = wrapper._value.unwrap(value)
+        elif not isinstance(value, ChainWrapper) and value is not NoValue:
+            # Override wrapper's initial value.
+            wrapper._value = value
 
         if wrapper._value is not NoValue:
             value = wrapper._value
@@ -201,6 +231,13 @@ def chain(value=NoValue):
         >>> chain().map(lambda x: x * 2).sum()([1, 2, 3, 4])
         20
 
+        >>> summer = chain([1, 2, 3, 4]).sum()
+        >>> new_summer = summer.plant([1, 2])
+        >>> new_summer.value()
+        3
+        >>> summer.value()
+        10
+
         >>> def echo(item): print(item)
         >>> summer = chain([1, 2, 3, 4]).each(echo).sum()
         >>> committed = summer.commit()
@@ -216,6 +253,7 @@ def chain(value=NoValue):
         3
         4
         10
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
@@ -223,6 +261,7 @@ def chain(value=NoValue):
 
     .. versionchanged:: 3.0.0
         - Added support for late passing of `value`.
+        - Added :meth:`Chain.plant` for replacing initial chain value.
         - Added :meth:`Chain.commit` for returning a new :class:`Chain`
             instance initialized with the results from calling
             :meth:`Chain.value`.
