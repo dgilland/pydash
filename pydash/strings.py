@@ -182,6 +182,11 @@ def camel_case(text):
     Returns:
         str: String converted to camel case.
 
+    Example:
+
+        >>> camel_case('FOO BAR_bAz')
+        'fooBarBAz'
+
     .. versionadded:: 1.1.0
     """
     text = ''.join(word.title() for word in words(text))
@@ -198,6 +203,13 @@ def capitalize(text, strict=True):
 
     Returns:
         str: Capitalized string.
+
+    Example:
+
+        >>> capitalize('once upon a TIME')
+        'Once upon a time'
+        >>> capitalize('once upon a TIME', False)
+        'Once upon a TIME'
 
     .. versionadded:: 1.1.0
 
@@ -218,6 +230,11 @@ def chars(text):
     Returns:
         list: List of individual characters.
 
+    Example:
+
+        >>> chars('onetwo')
+        ['o', 'n', 'e', 't', 'w', 'o']
+
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
@@ -234,6 +251,11 @@ def chop(text, step):
     Returns:
         list: List of chopped characters.
               If `text` is `None` an empty list is returned.
+
+    Example:
+
+        >>> chop('abcdefg', 3)
+        ['abc', 'def', 'g']
 
     .. versionadded:: 3.0.0
     """
@@ -256,6 +278,11 @@ def chop_right(text, step):
 
     Returns:
         list: List of chopped characters.
+
+    Example:
+
+        >>> chop_right('abcdefg', 3)
+        ['a', 'bcd', 'efg']
 
     .. versionadded:: 3.0.0
     """
@@ -280,6 +307,11 @@ def clean(text):
     Returns:
         str: Cleaned string.
 
+    Example:
+
+        >>> clean('a  b   c    d')
+        'a b c d'
+
     ..versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
@@ -295,6 +327,11 @@ def count_substr(text, subtext):
 
     Returns:
         int: Number of occurrences of `subtext` in `text`.
+
+    Example:
+
+        >>> count_substr('aabbccddaabbccdd', 'bc')
+        2
 
     ..versionadded:: 3.0.0
     """
@@ -315,6 +352,13 @@ def deburr(text):
     Returns:
         str: Deburred string.
 
+    Example:
+
+        >>> deburr('déjà vu')
+        '...
+
+        # 'deja vu'
+
     .. versionadded:: 2.0.0
     """
     text = pyd.to_string(text)
@@ -333,6 +377,11 @@ def decapitalize(text):
     Returns:
         str: Decapitalized string.
 
+    Example:
+
+        >>> decapitalize('FOO BAR')
+        'fOO BAR'
+
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
@@ -350,6 +399,13 @@ def ends_with(text, target, position=None):
 
     Returns:
         bool: Whether `text` ends with `target`.
+
+    Example:
+
+        >>> ends_with('abc def', 'def')
+        True
+        >>> ends_with('abc def', 4)
+        False
 
     .. versionadded:: 1.1.0
     """
@@ -374,6 +430,13 @@ def ensure_ends_with(text, suffix):
     Returns:
         str: source string possibly extended by `suffix`.
 
+    Example:
+
+        >>> ensure_ends_with('foo bar', '!')
+        'foo bar!'
+        >>> ensure_ends_with('foo bar!', '!')
+        'foo bar!'
+
     .. versionadded:: 2.4.0
     """
     text = pyd.to_string(text)
@@ -393,6 +456,13 @@ def ensure_starts_with(text, prefix):
     Returns:
         str: source string possibly prefixed by `prefix`
 
+    Example:
+
+        >>> ensure_starts_with('foo bar', 'Oh my! ')
+        'Oh my! foo bar'
+        >>> ensure_starts_with('Oh my! foo bar', 'Oh my! ')
+        'Oh my! foo bar'
+
     .. versionadded:: 2.4.0
     """
     text = pyd.to_string(text)
@@ -401,8 +471,8 @@ def ensure_starts_with(text, prefix):
 
 
 def escape(text):
-    r"""Converts the characters ``&``, ``<``, ``>``, ``"``, ``'``, and ``\``` in
-    `text` to their corresponding HTML entities.
+    r"""Converts the characters ``&``, ``<``, ``>``, ``"``, ``'``, and ``\```
+    in `text` to their corresponding HTML entities.
 
     Args:
         text (str): String to escape.
@@ -410,10 +480,15 @@ def escape(text):
     Returns:
         str: HTML escaped string.
 
+    Example:
+
+        >>> escape('"1 > 2 && 3 < 4"')
+        '&quot;1 &gt; 2 &amp;&amp; 3 &lt; 4&quot;'
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-        Moved function to Strings module.
+        Moved function to :mod:`pydash.strings`.
     """
     text = pyd.to_string(text)
     # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
@@ -429,6 +504,11 @@ def escape_reg_exp(text):
 
     Returns:
         str: RegExp escaped string.
+
+    Example:
+
+        >>> escape_reg_exp('[()]')
+        '\\\\[\\\\(\\\\)\\\\]'
 
     See Also:
         - :func:`escape_reg_exp` (main definition)
@@ -453,6 +533,13 @@ def has_substr(text, subtext):
     Returns:
         bool: Whether `subtext` is found in `text`.
 
+    Example:
+
+        >>> has_substr('abcdef', 'bc')
+        True
+        >>> has_substr('abcdef', 'bb')
+        False
+
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
@@ -469,6 +556,13 @@ def human_case(text):
 
     Returns:
         str: String converted to human case.
+
+    Example:
+
+        >>> human_case('abc-def_hij lmn')
+        'Abc def hij lmn'
+        >>> human_case('user_id')
+        'User'
 
     .. versionadded:: 3.0.0
     """
@@ -491,6 +585,11 @@ def insert_substr(text, index, subtext):
     Returns:
         str: Modified string.
 
+    Example:
+
+        >>> insert_substr('abcdef', 3, '--')
+        'abc--def'
+
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
@@ -507,7 +606,16 @@ def join(array, separator=''):
             ``''``.
 
     Returns:
-        str: Joined string
+        str: Joined string.
+
+    Example:
+
+        >>> join(['a', 'b', 'c']) == 'abc'
+        True
+        >>> join([1, 2, 3, 4], '&') == '1&2&3&4'
+        True
+        >>> join('abcdef', '-') == 'a-b-c-d-e-f'
+        True
 
     See Also:
         - :func:`join` (main definition)
@@ -535,6 +643,17 @@ def js_match(text, reg_exp):
     Returns:
         list: List of matches.
 
+    Example:
+
+        >>> js_match('aaBBcc', '/bb/')
+        []
+        >>> js_match('aaBBcc', '/bb/i')
+        ['BB']
+        >>> js_match('aaBBccbb', '/bb/i')
+        ['BB']
+        >>> js_match('aaBBccbb', '/bb/gi')
+        ['BB', 'bb']
+
     .. versionadded:: 2.0.0
 
     .. versionchanged:: 3.0.0
@@ -556,6 +675,17 @@ def js_replace(text, reg_exp, repl):
     Returns:
         str: Modified string.
 
+    Example:
+
+        >>> js_replace('aaBBcc', '/bb/', 'X')
+        'aaBBcc'
+        >>> js_replace('aaBBcc', '/bb/i', 'X')
+        'aaXcc'
+        >>> js_replace('aaBBccbb', '/bb/i', 'X')
+        'aaXccbb'
+        >>> js_replace('aaBBccbb', '/bb/gi', 'X')
+        'aaXccX'
+
     .. versionadded:: 2.0.0
 
     .. versionchanged:: 3.0.0
@@ -576,19 +706,29 @@ def kebab_case(text):
     Returns:
         str: String converted to kebab case.
 
+    Example:
+
+        >>> kebab_case('a b c_d-e!f')
+        'a-b-c-d-e-f'
+
     .. versionadded:: 1.1.0
     """
     return separator_case(text, '-')
 
 
 def lines(text):
-    """Split lines in `text` into an array.
+    r"""Split lines in `text` into an array.
 
     Args:
         text (str): String to split.
 
     Returns:
         list: String split by lines.
+
+    Example:
+
+        >>> lines('a\nb\r\nc')
+        ['a', 'b', 'c']
 
     .. versionadded:: 3.0.0
     """
@@ -610,6 +750,13 @@ def number_format(number, scale=0, decimal_separator='.', order_separator=','):
 
     Returns:
         str: Formatted number as string.
+
+    Example:
+
+        >>> number_format(1234.5678)
+        '1,235'
+        >>> number_format(1234.5678, 2, ',', '.')
+        '1.234,57'
 
     .. versionadded:: 3.0.0
     """
@@ -770,6 +917,15 @@ def predecessor(char):
     Returns:
         str: Predecessor character.
 
+    Example:
+
+        >>> predecessor('c')
+        'b'
+        >>> predecessor('C')
+        'B'
+        >>> predecessor('3')
+        '2'
+
     .. versionadded:: 3.0.0
     """
     char = pyd.to_string(char)
@@ -790,6 +946,17 @@ def prune(text, length=0, omission='...'):
 
     Returns:
         str: Pruned string.
+
+    Example:
+
+        >>> prune('Fe fi fo fum', 5)
+        'Fe fi...'
+        >>> prune('Fe fi fo fum', 6)
+        'Fe fi...'
+        >>> prune('Fe fi fo fum', 7)
+        'Fe fi...'
+        >>> prune('Fe fi fo fum', 8, ',,,')
+        'Fe fi fo,,,'
 
     .. versionadded:: 3.0.0
     """
@@ -836,6 +1003,13 @@ def quote(text, quote_char='"'):
     Returns:
         str: the quoted string.
 
+    Example:
+
+        >>> quote('To be or not to be')
+        '"To be or not to be"'
+        >>> quote('To be or not to be', "'")
+        "'To be or not to be'"
+
     .. versionadded:: 2.4.0
     """
     return surround(text, quote_char)
@@ -858,14 +1032,28 @@ def re_replace(text, pattern, repl, ignore_case=False, count=0):
     Returns:
         str: Replaced string.
 
+    Example:
+
+        >>> re_replace('aabbcc', 'b', 'X')
+        'aaXXcc'
+        >>> re_replace('aabbcc', 'B', 'X', ignore_case=True)
+        'aaXXcc'
+        >>> re_replace('aabbcc', 'b', 'X', count=1)
+        'aaXbcc'
+        >>> re_replace('aabbcc', '[ab]', 'X')
+        'XXXXcc'
+
     .. versionadded:: 3.0.0
     """
-    return (
-        replace(
-            text, pattern, repl, ignore_case=ignore_case, count=count,
-            escape=False
-        ) if pattern is not None else pyd.to_string(text)
-    )
+    if pattern is None:
+        return pyd.to_string(text)
+
+    return replace(text,
+                   pattern,
+                   repl,
+                   ignore_case=ignore_case,
+                   count=count,
+                   escape=False)
 
 
 def repeat(text, n=0):
@@ -877,6 +1065,11 @@ def repeat(text, n=0):
 
     Returns:
         str: Repeated string.
+
+    Example:
+
+        >>> repeat('.', 5)
+        '.....'
 
     .. versionadded:: 1.1.0
     """
@@ -903,6 +1096,19 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
 
     Returns:
         str: Replaced string.
+
+    Example:
+
+        >>> replace('aabbcc', 'b', 'X')
+        'aaXXcc'
+        >>> replace('aabbcc', 'B', 'X', ignore_case=True)
+        'aaXXcc'
+        >>> replace('aabbcc', 'b', 'X', count=1)
+        'aaXbcc'
+        >>> replace('aabbcc', '[ab]', 'X')
+        'aabbcc'
+        >>> replace('aabbcc', '[ab]', 'X', escape=False)
+        'XXXXcc'
 
     .. versionadded:: 3.0.0
     """
@@ -937,6 +1143,11 @@ def separator_case(text, separator):
     Returns:
         str: Converted string.
 
+    Example:
+
+        >>> separator_case('a!!b___c.d', '-')
+        'a-b-c-d'
+
     .. versionadded:: 3.0.0
     """
     return separator.join(word.lower()
@@ -958,6 +1169,18 @@ def series_phrase(items, separator=', ', last_separator=' and ', serial=False):
 
     Returns:
         str: Joined string.
+
+    Example:
+
+        Example:
+
+            >>> series_phrase(['apples', 'bananas', 'peaches'])
+            'apples, bananas and peaches'
+            >>> series_phrase(['apples', 'bananas', 'peaches'], serial=True)
+            'apples, bananas, and peaches'
+            >>> series_phrase(['apples', 'bananas', 'peaches'], '; ', ', or ')
+            'apples; bananas, or peaches'
+
 
     .. versionadded:: 3.0.0
     """
@@ -989,6 +1212,11 @@ def series_phrase_serial(items, separator=', ', last_separator=' and '):
     Returns:
         str: Joined string.
 
+    Example:
+
+        >>> series_phrase_serial(['apples', 'bananas', 'peaches'])
+        'apples, bananas, and peaches'
+
     .. versionadded:: 3.0.0
     """
     return series_phrase(items, separator, last_separator, serial=True)
@@ -1009,6 +1237,13 @@ def slugify(text, separator='-'):
     Returns:
         str: Slugified string.
 
+    Example:
+
+        >>> slugify('This is a slug.') == 'this-is-a-slug'
+        True
+        >>> slugify('This is a slug.', '+') == 'this+is+a+slug'
+        True
+
     .. versionadded:: 3.0.0
     """
     normalized = (unicodedata.normalize('NFKD', text_type(pyd.to_string(text)))
@@ -1026,6 +1261,11 @@ def snake_case(text):
 
     Returns:
         str: String converted to snake case.
+
+    Example:
+
+        >>> snake_case('This is Snake Case!')
+        'this_is_snake_case'
 
     See Also:
         - :func:`snake_case` (main definition)
@@ -1051,6 +1291,13 @@ def split(text, separator=NoValue):
 
     Returns:
         list: Split string.
+
+    Example:
+
+        >>> split('one potato, two potatoes, three potatoes, four!')
+        ['one', 'potato,', 'two', 'potatoes,', 'three', 'potatoes,', 'four!']
+        >>> split('one potato, two potatoes, three potatoes, four!', ',')
+        ['one potato', ' two potatoes', ' three potatoes', ' four!']
 
     See Also:
         - :func:`split` (main definition)
@@ -1089,6 +1336,15 @@ def starts_with(text, target, position=0):
     Returns:
         bool: Whether `text` starts with `target`.
 
+    Example:
+
+        >>> starts_with('abcdef', 'a')
+        True
+        >>> starts_with('abcdef', 'b')
+        False
+        >>> starts_with('abcdef', 'a', 1)
+        False
+
     .. versionadded:: 1.1.0
     """
     text = pyd.to_string(text)
@@ -1104,6 +1360,11 @@ def strip_tags(text):
 
     Returns:
         str: String without HTML tags.
+
+    Example:
+
+        >>> strip_tags('<a href="#">Some link</a>')
+        'Some link'
 
     .. versionadded:: 3.0.0
     """
@@ -1121,6 +1382,11 @@ def substr_left(text, subtext):
 
     Returns:
         str: Substring to left of `subtext`.
+
+    Example:
+
+        >>> substr_left('abcdefcdg', 'cd')
+        'ab'
 
     .. versionadded:: 3.0.0
     """
@@ -1140,6 +1406,11 @@ def substr_left_end(text, subtext):
     Returns:
         str: Substring to left of `subtext`.
 
+    Example:
+
+        >>> substr_left_end('abcdefcdg', 'cd')
+        'abcdef'
+
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
@@ -1157,6 +1428,11 @@ def substr_right(text, subtext):
 
     Returns:
         str: Substring to right of `subtext`.
+
+    Example:
+
+        >>> substr_right('abcdefcdg', 'cd')
+        'efcdg'
 
     .. versionadded:: 3.0.0
     """
@@ -1176,6 +1452,11 @@ def substr_right_end(text, subtext):
     Returns:
         str: Substring to right of `subtext`.
 
+    Example:
+
+        >>> substr_right_end('abcdefcdg', 'cd')
+        'g'
+
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
@@ -1190,6 +1471,15 @@ def successor(char):
 
     Returns:
         str: Successor character.
+
+    Example:
+
+        >>> successor('b')
+        'c'
+        >>> successor('B')
+        'C'
+        >>> successor('2')
+        '3'
 
     .. versionadded:: 3.0.0
     """
@@ -1207,6 +1497,13 @@ def surround(text, wrapper):
     Returns:
         str: Surrounded string.
 
+    Example:
+
+        >>> surround('abc', '"')
+        '"abc"'
+        >>> surround('abc', '!')
+        '!abc!'
+
     .. versionadded:: 2.4.0
     """
     return '{1}{0}{1}'.format(pyd.to_string(text), pyd.to_string(wrapper))
@@ -1220,6 +1517,11 @@ def swap_case(text):
 
     Returns:
         str: String with swapped case.
+
+    Example:
+
+        >>> swap_case('aBcDeF')
+        'AbCdEf'
 
     .. versionadded:: 3.0.0
     """
@@ -1236,6 +1538,11 @@ def title_case(text):
     Returns:
         str: String converted to title case.
 
+    Example:
+
+        >>> title_case("bob's shop")
+        "Bob's Shop"
+
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
@@ -1244,7 +1551,7 @@ def title_case(text):
 
 
 def trim(text, chars=None):
-    """Removes leading and trailing whitespace or specified characters from
+    r"""Removes leading and trailing whitespace or specified characters from
     `text`.
 
     Args:
@@ -1254,6 +1561,11 @@ def trim(text, chars=None):
     Returns:
         str: Trimmed string.
 
+    Example:
+
+        >>> trim('  abc efg\r\n ')
+        'abc efg'
+
     .. versionadded:: 1.1.0
     """
     # pylint: disable=redefined-outer-name
@@ -1262,7 +1574,7 @@ def trim(text, chars=None):
 
 
 def trim_left(text, chars=None):
-    """Removes leading  whitespace or specified characters from `text`.
+    r"""Removes leading  whitespace or specified characters from `text`.
 
     Args:
         text (str): String to trim.
@@ -1270,6 +1582,11 @@ def trim_left(text, chars=None):
 
     Returns:
         str: Trimmed string.
+
+    Example:
+
+        >>> trim_left('  abc efg\r\n ')
+        'abc efg\r\n '
 
     .. versionadded:: 1.1.0
     """
@@ -1279,7 +1596,7 @@ def trim_left(text, chars=None):
 
 
 def trim_right(text, chars=None):
-    """Removes trailing whitespace or specified characters from `text`.
+    r"""Removes trailing whitespace or specified characters from `text`.
 
     Args:
         text (str): String to trim.
@@ -1287,6 +1604,11 @@ def trim_right(text, chars=None):
 
     Returns:
         str: Trimmed string.
+
+    Example:
+
+        >>> trim_right('  abc efg\r\n ')
+        '  abc efg'
 
     .. versionadded:: 1.1.0
     """
@@ -1308,6 +1630,17 @@ def truncate(text, length=30, omission='...', separator=None):
 
     Returns:
         str: Truncated string.
+
+    Example:
+
+        >>> truncate('hello world', 5)
+        'he...'
+        >>> truncate('hello world', 5, '..')
+        'hel..'
+        >>> truncate('hello world', 10)
+        'hello w...'
+        >>> truncate('hello world', 10, separator=' ')
+        'hello...'
 
     See Also:
         - :func:`truncate` (main definition)
@@ -1357,10 +1690,16 @@ def unescape(text):
     Returns:
         str: HTML unescaped string.
 
+    Example:
+
+        >>> results = unescape('&quot;1 &gt; 2 &amp;&amp; 3 &lt; 4&quot;')
+        >>> results == '"1 > 2 && 3 < 4"'
+        True
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-        Moved to Strings module.
+        Moved to :mod:`pydash.strings`.
     """
     text = pyd.to_string(text)
     return html_unescape(text)
@@ -1375,6 +1714,17 @@ def unquote(text, quote_char='"'):
 
     Returns:
         str: Unquoted string.
+
+    Example:
+
+        >>> unquote('"abc"')
+        'abc'
+        >>> unquote('"abc"', '#')
+        '"abc"'
+        >>> unquote('#abc', '#')
+        '#abc'
+        >>> unquote('#abc#', '#')
+        'abc'
 
     .. versionadded:: 3.0.0
     """
@@ -1399,6 +1749,15 @@ def url(*paths, **params):
 
     Returns:
         str: URL string.
+
+    Example:
+
+        >>> link = url('a', 'b', ['c', 'd'], '/', q='X', y='Z')
+        >>> path, params = link.split('?')
+        >>> path == 'a/b/c/d/'
+        True
+        >>> set(params.split('&')) == set(['q=X', 'y=Z'])
+        True
 
     .. versionadded:: 2.2.0
     """
@@ -1427,6 +1786,11 @@ def words(text):
 
     Returns:
         list: List of words.
+
+    Example:
+
+        >>> words('a b, c; d-e')
+        ['a', 'b', 'c', 'd', 'e']
 
     .. versionadded:: 2.0.0
     """
