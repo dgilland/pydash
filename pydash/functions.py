@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """Functions that wrap other functions.
 
-.. testsetup::
-
-    from pydash import *
-
 .. versionadded:: 1.0.0
 """
 

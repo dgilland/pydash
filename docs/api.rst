@@ -4,6 +4,14 @@
 API Reference
 *************
 
+.. testsetup::
+
+    import operator
+    import re
+    from pydash.functions import Curry, CurryRight
+    from pydash import *
+
+
 All public functions are available from the main module.
 
 

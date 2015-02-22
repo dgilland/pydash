@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """Utility functions.
 
-.. testsetup::
-
-    from pydash import *
-
 .. versionadded:: 1.0.0
 """
 

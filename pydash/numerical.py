@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """Numerical/mathemetical related functions.
 
-.. testsetup::
-
-    from pydash import *
-
 .. versionadded:: 2.1.0
 """
 

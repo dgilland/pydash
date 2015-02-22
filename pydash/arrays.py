@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """Functions that operate on lists.
 
-.. testsetup::
-
-    from pydash.arrays import *
-
 .. versionadded:: 1.0.0
 """
 

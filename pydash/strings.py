@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """String functions.
 
-.. testsetup::
-
-    from pydash import *
-
 .. versionadded:: 1.1.0
 """
 

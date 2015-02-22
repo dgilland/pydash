@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """Predicate functions that return boolean evaluations of objects.
 
-.. testsetup::
-
-    from pydash.arrays import *
-
 .. versionadded:: 2.0.0
 """
 
