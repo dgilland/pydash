@@ -140,12 +140,12 @@ def count_by(collection, callback=None):
 
     Example:
 
-        >>> result = count_by([1, 2, 1, 2, 3, 4])
-        >>> assert result == {1: 2, 2: 2, 3: 1, 4: 1}
-        >>> result = count_by(['a', 'A', 'B', 'b'], lambda x: x.lower())
-        >>> assert result == {'a': 2, 'b': 2}
-        >>> result = count_by({'a': 1, 'b': 1, 'c': 3, 'd': 3})
-        >>> assert result == {1: 2, 3: 2}
+        >>> results = count_by([1, 2, 1, 2, 3, 4])
+        >>> assert results == {1: 2, 2: 2, 3: 1, 4: 1}
+        >>> results = count_by(['a', 'A', 'B', 'b'], lambda x: x.lower())
+        >>> assert results == {'a': 2, 'b': 2}
+        >>> results = count_by({'a': 1, 'b': 1, 'c': 3, 'd': 3})
+        >>> assert results == {1: 2, 3: 2}
 
     .. versionadded:: 1.0.0
     """
@@ -340,8 +340,8 @@ def for_each(collection, callback=None):
     Example:
 
         >>> results = {}
-        >>> def callback(x): results[x] = x ** 2
-        >>> each([1, 2, 3, 4], callback)
+        >>> def cb(x): results[x] = x ** 2
+        >>> each([1, 2, 3, 4], cb)
         [1, 2, 3, 4]
         >>> assert results == {1: 1, 2: 4, 3: 9, 4: 16}
 
@@ -374,8 +374,8 @@ def for_each_right(collection, callback):
     Example:
 
         >>> results = {'total': 1}
-        >>> def callback(x): results['total'] = x * results['total']
-        >>> each_right([1, 2, 3, 4], callback)
+        >>> def cb(x): results['total'] = x * results['total']
+        >>> each_right([1, 2, 3, 4], cb)
         [1, 2, 3, 4]
         >>> assert results == {'total': 24}
 

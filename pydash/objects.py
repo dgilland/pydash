@@ -440,8 +440,8 @@ def for_in(obj, callback=None):
     Example:
 
         >>> obj = {}
-        >>> def callback(v, k): obj[k] = v
-        >>> results = for_in({'a': 1, 'b': 2, 'c': 3}, callback)
+        >>> def cb(v, k): obj[k] = v
+        >>> results = for_in({'a': 1, 'b': 2, 'c': 3}, cb)
         >>> results == {'a': 1, 'b': 2, 'c': 3}
         True
         >>> obj == {'a': 1, 'b': 2, 'c': 3}
@@ -476,8 +476,8 @@ def for_in_right(obj, callback=None):
     Example:
 
         >>> data = {'product': 1}
-        >>> def callback(v): data['product'] *= v
-        >>> for_in_right([1, 2, 3, 4], callback)
+        >>> def cb(v): data['product'] *= v
+        >>> for_in_right([1, 2, 3, 4], cb)
         [1, 2, 3, 4]
         >>> data['product'] == 24
         True

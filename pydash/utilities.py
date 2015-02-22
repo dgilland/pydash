@@ -250,7 +250,7 @@ def memoize(func, resolver=None):
         >>> ident(1, 2, 3)
         1
         >>> ident.cache['(1, 2, 3){}'] == 1
-        1
+        True
 
     .. versionadded:: 1.0.0
     """
