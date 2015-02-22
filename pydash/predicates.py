@@ -176,8 +176,8 @@ def is_builtin(value):
 
     .. versionadded:: 3.0.0
     """
-    return (value in builtins.__dict__.values()
-            or isinstance(value, BuiltinFunctionType))
+    return (value in builtins.__dict__.values() or
+            isinstance(value, BuiltinFunctionType))
 
 
 is_native = is_builtin
