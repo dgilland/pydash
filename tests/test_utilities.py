@@ -35,37 +35,6 @@ def test_constant(case):
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      ['fred', 'barney']),
-    ({'name': 'fred'},
-     [{'name': 'fred', 'age': 40},
-      {'name': 'barney', 'age': 36}],
-     [True, False]),
-    (lambda obj: obj['age'],
-     [{'name': 'fred', 'age': 40},
-      {'name': 'barney', 'age': 36}],
-     [40, 36]),
-    (None,
-     [{'name': 'fred', 'age': 40},
-      {'name': 'barney', 'age': 36}],
-     [{'name': 'fred', 'age': 40},
-      {'name': 'barney', 'age': 36}])
-])
-def test_callback(case, arg, expected):
-    getter = _.callback(case)
-    assert _.map_(arg, getter) == expected
-
-
-@parametrize('case', [
-    _.iteratee
-])
-def test_callback_aliases(case):
-    assert _.callback is case
-
-
-@parametrize('case,arg,expected', [
-    ('name',
-     [{'name': 'fred', 'age': 40},
-      {'name': 'barney', 'age': 36}],
-     ['fred', 'barney']),
     ('spouse.name',
      [{'name': 'fred', 'age': 40, 'spouse': {'name': 'wilma'}},
       {'name': 'barney', 'age': 36, 'spouse': {'name': 'betty'}}],
@@ -89,6 +58,37 @@ def test_deep_property_aliases(case):
 ])
 def test_identity(case, expected):
     assert _.identity(*case) == expected
+
+
+@parametrize('case,arg,expected', [
+    ('name',
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     ['fred', 'barney']),
+    ({'name': 'fred'},
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     [True, False]),
+    (lambda obj: obj['age'],
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     [40, 36]),
+    (None,
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}])
+])
+def test_iteratee(case, arg, expected):
+    getter = _.iteratee(case)
+    assert _.map_(arg, getter) == expected
+
+
+@parametrize('case', [
+    _.iteratee
+])
+def test_iteratee_aliases(case):
+    assert _.iteratee is case
 
 
 @parametrize('case,arg,expected', [

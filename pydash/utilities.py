@@ -90,61 +90,6 @@ def constant(value):
     return lambda: value
 
 
-def callback(func):
-    """Return a pydash style callback. If `func` is a property name the created
-    callback will return the property value for a given element. If `func` is
-    an object the created callback will return ``True`` for elements that
-    contain the equivalent object properties, otherwise it will return
-    ``False``.
-
-    Args:
-        func (mixed): Object to create callback function from.
-
-    Returns:
-        function: Callback function.
-
-    Example:
-
-        >>> get_data = callback('data')
-        >>> get_data({'data': [1, 2, 3]})
-        [1, 2, 3]
-        >>> is_active = callback({'active': True})
-        >>> is_active({'active': True})
-        True
-        >>> is_active({'active': 0})
-        False
-        >>> callback(lambda a, b: a + b)(1, 2)
-        3
-        >>> ident = callback(None)
-        >>> ident('a')
-        'a'
-        >>> ident(1, 2, 3)
-        1
-
-    See Also:
-        - :func:`callback` (main definition)
-        - :func:`iteratee` (alias)
-
-    .. versionadded:: 1.0.0
-
-    .. versionchanged:: 2.0.0
-        Renamed ``create_callback()`` to :func:`iteratee`.
-    """
-    if callable(func):
-        cbk = func
-    elif isinstance(func, string_types):
-        cbk = deep_prop(func)
-    elif isinstance(func, dict):
-        cbk = matches(func)
-    else:
-        cbk = identity
-
-    return cbk
-
-
-iteratee = callback
-
-
 def deep_property(path):
     """Creates a :func:`pydash.collections.pluck` style function, which returns
     the key value of a given object.
@@ -197,6 +142,61 @@ def identity(*args):
     .. versionadded:: 1.0.0
     """
     return args[0] if args else None
+
+
+def iteratee(func):
+    """Return a pydash style callback. If `func` is a property name the created
+    callback will return the property value for a given element. If `func` is
+    an object the created callback will return ``True`` for elements that
+    contain the equivalent object properties, otherwise it will return
+    ``False``.
+
+    Args:
+        func (mixed): Object to create callback function from.
+
+    Returns:
+        function: Callback function.
+
+    Example:
+
+        >>> get_data = iteratee('data')
+        >>> get_data({'data': [1, 2, 3]})
+        [1, 2, 3]
+        >>> is_active = iteratee({'active': True})
+        >>> is_active({'active': True})
+        True
+        >>> is_active({'active': 0})
+        False
+        >>> iteratee(lambda a, b: a + b)(1, 2)
+        3
+        >>> ident = iteratee(None)
+        >>> ident('a')
+        'a'
+        >>> ident(1, 2, 3)
+        1
+
+    See Also:
+        - :func:`iteratee` (main definition)
+        - :func:`callback` (alias)
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 2.0.0
+        Renamed ``create_callback()`` to :func:`iteratee`.
+    """
+    if callable(func):
+        cbk = func
+    elif isinstance(func, string_types):
+        cbk = deep_prop(func)
+    elif isinstance(func, dict):
+        cbk = matches(func)
+    else:
+        cbk = identity
+
+    return cbk
+
+
+callback = iteratee
 
 
 def matches(source):
