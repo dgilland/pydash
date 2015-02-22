@@ -62,7 +62,7 @@ v3.0.0 (xxxx-xx-xx)
 - Add ``unquote``.
 - Fix ``deep_has`` to return ``False`` when ``ValueError`` raised during path checking.
 - Fix ``pad`` so that it doesn't over pad beyond provided length.
-- Fix ``trunc`` and ``truncate`` so that they handle texts shorter than the max string length correctly.
+- Fix ``trunc``/``truncate`` so that they handle texts shorter than the max string length correctly.
 - Make the following functions work with empty strings and ``None``: (**breaking change**) Thanks k7sleeper_!
 
   - ``camel_case``
@@ -88,7 +88,7 @@ v3.0.0 (xxxx-xx-xx)
   - ``surround``
 
 - Make callback invocation have better support for builtin functions and methods. Previously, if one wanted to pass a builtin function or method as a callback, it had to be wrapped in a lambda which limited the number of arguments that would be passed it. For example, ``_.each([1, 2, 3], array.append)`` would fail and would need to be converted to ``_.each([1, 2, 3], lambda item: array.append(item)``. That is no longer the case as the non-wrapped method is now supported.
-- Make ``capitalize`` accept ``lower_rest`` argument to control whether to convert the rest of the string to lower case or not. Defaults to ``True``.
+- Make ``capitalize`` accept ``strict`` argument to control whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``chain`` support late passing of initial ``value`` argument.
 - Make ``chain`` not store computed ``value()`` (**breaking change**).
 - Make ``drop``, ``drop_right``, ``take``, and ``take_right`` have default ``n=1``.
