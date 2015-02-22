@@ -38,7 +38,7 @@ A final value is computed:
 Lazy Evaluation
 ===============
 
-Method chaining is lazy until ``.value()`` is called. After ``.value()`` is called, the computed value is stored so that execution only happens once:
+Method chaining is deferred (lazy) until ``.value()`` (or it's aliases ``.value_of`` or ``.run()``) is called:
 
 .. doctest::
 
@@ -61,11 +61,42 @@ Method chaining is lazy until ``.value()`` is called. After ``.value()`` is call
 
     >>> assert result == [1, 2, 3, 4]
 
-    >>> result = lazy.value()
+    >>> result = lazy.run()
+    1
+    2
+    3
+    4
 
-    # The computed value is returned without calling any of the methods again.
 
-    >>> assert result == [1, 2, 3, 4]
+Committing a Chain
+==================
+
+If one wishes to create a new chain object seeded with the computed value of another chain, then one can use the ``commit`` method:
+
+.. doctest::
+
+    >>> committed = lazy.commit()
+    1
+    2
+    3
+    4
+
+    >>> committed.value()
+    [1, 2, 3, 4]
+
+    >>> lazy.value()
+    1
+    2
+    3
+    4
+    [1, 2, 3, 4]
+
+
+Committing is equivalent to:
+
+.. code-block:: python
+
+    committed = py_(lazy.value())
 
 
 Late Value Passing
@@ -83,6 +114,23 @@ In :ref:`v3.0.0 <changelog-v3.0.0>` the concept of late value passing was introd
     >>> square_sum_square = square_sum.power(2)
     >>> assert square_sum_square([1, 2, 3]) == 196
     >>> assert square_sum_square([4, 5, 6]) == 5929
+
+
+Planting a Value
+================
+
+To replace the initial value of a chain, use the ``plant`` method which will return a cloned chained using the new initial value:
+
+.. doctest::
+
+    >>> chained = py_([1, 2, 3, 4]).power(2).sum()
+    >>> chained.run()
+    30
+    >>> rechained = chained.plant([5, 6, 7, 8])
+    >>> rechained.run()
+    174
+    >>> chained.run()
+    30
 
 
 Module Access
