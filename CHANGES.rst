@@ -95,7 +95,7 @@ v3.0.0 (2015-02-25)
 - Make ``is_indexed`` return ``True`` for tuples.
 - Make ``partial`` and ``partial_right`` accept keyword arguments.
 - Make ``pluck`` style callbacks support deep paths.
-- Make ``re_replace`` accept non-stirng arguments.
+- Make ``re_replace`` accept non-string arguments.
 - Make ``sort_by`` accept ``reverse`` parameter.
 - Make ``splice`` work with strings.
 - Make ``to_string`` convert ``None`` to empty string. (**breaking change**)
