@@ -6,7 +6,7 @@ Changelog
 
 .. _changelog-v3.0.0:
 
-v3.0.0 (xxxx-xx-xx)
+v3.0.0 (2015-02-25)
 -------------------
 
 - Add ``ary``.

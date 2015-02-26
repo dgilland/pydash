@@ -8,7 +8,7 @@ __summary__ = ('The kitchen sink of Python utility libraries '
                'Based on the Lo-Dash Javascript library.')
 __url__ = 'https://github.com/dgilland/pydash'
 
-__version__ = '3.0.0-dev'
+__version__ = '3.0.0'
 
 __install_requires__ = []
 
