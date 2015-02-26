@@ -4,7 +4,7 @@ pydash
 
 |version| |travis| |coveralls| |license|
 
-A utility library for doing "stuff" in a functional way. Based on the `Lo-Dash <http://lodash.com/>`_  Javascript library.
+The kitchen sink of Python utility libraries for doing "stuff" in a functional way. Based on the `Lo-Dash <http://lodash.com/>`_  Javascript library.
 
 
 Links
