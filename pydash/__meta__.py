@@ -3,7 +3,8 @@
 """
 
 __title__ = 'pydash'
-__summary__ = ('A utility library for doing "stuff" in a functional way. '
+__summary__ = ('The kitchen sink of Python utility libraries '
+               'for doing "stuff" in a functional way. '
                'Based on the Lo-Dash Javascript library.')
 __url__ = 'https://github.com/dgilland/pydash'
 
