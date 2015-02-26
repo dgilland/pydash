@@ -50,7 +50,7 @@ And some potential breaking changes:
 
 Some notable new features/functions:
 
-- 30 new string methods
+- 31 new string methods
 
     - :func:`pydash.strings.chars`
     - :func:`pydash.strings.chop`
@@ -64,6 +64,7 @@ Some notable new features/functions:
     - :func:`pydash.strings.insert_substr`
     - :func:`pydash.strings.lines`
     - :func:`pydash.strings.number_format`
+    - :func:`pydash.strings.pascal_case`
     - :func:`pydash.strings.predecessor`
     - :func:`pydash.strings.prune`
     - :func:`pydash.strings.re_replace`
@@ -83,11 +84,9 @@ Some notable new features/functions:
     - :func:`pydash.strings.title_case`
     - :func:`pydash.strings.unquote`
 
-- 3 new aliases:
+- 1 new array method
 
-    - :func:`pydash.predicates.is_dict` for :func:`pydash.predicates.is_plain_object`
-    - :func:`pydash.strings.truncate` for :func:`pydash.strings.trunc`
-    - :func:`pydash.strings.underscore_case` for :func:`pydash.strings.snake_case`
+    - :func:`pydash.arrays.duplicates`
 
 - 2 new function methods
 
@@ -105,18 +104,29 @@ Some notable new features/functions:
     - :func:`pydash.objects.to_number`
     - :func:`pydash.objects.to_plain_object`
 
-- 3 new predicate methods
+- 4 new predicate methods
 
     - :func:`pydash.predicates.is_blank`
     - :func:`pydash.predicates.is_builtin` and alias :func:`pydash.predicates.is_native`
     - :func:`pydash.predicates.is_match`
+    - :func:`pydash.predicates.is_tuple`
 
 - 1 new utility method
 
     - :func:`pydash.utilities.prop_of` and alias :func:`pydash.utilities.property_of`
 
+- 6 new aliases:
+
+    - :func:`pydash.predicates.is_bool` for :func:`pydash.predicates.is_boolean`
+    - :func:`pydash.predicates.is_dict` for :func:`pydash.predicates.is_plain_object`
+    - :func:`pydash.predicates.is_int` for :func:`pydash.predicates.is_integer`
+    - :func:`pydash.predicates.is_num` for :func:`pydash.predicates.is_number`
+    - :func:`pydash.strings.truncate` for :func:`pydash.strings.trunc`
+    - :func:`pydash.strings.underscore_case` for :func:`pydash.strings.snake_case`
+
 - Chaining can now accept the root ``value`` argument late.
-- Chains can be re-used with differnt starting values.
+- Chains can be re-used with differnt initial values via ``chain().plant``.
+- New chains can be created using the chain's computed value as the new chain's initial value via ``chain().commit``.
 - Support iteration over class instance properties for non-list, non-dict, and non-iterable objects.
 
 
