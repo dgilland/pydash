@@ -11,8 +11,8 @@ v3.1.0 (xxxx-xx-xx)
 - Add ``in_range``.
 - Add ``matches_property``.
 - Add ``start_case``.
-- Make callbacks support ``matches_property`` style as ``[key, value]``.
-- Make callbacks support shallow ``pluck`` style callbacks as ``[key]``.
+- Make callbacks support ``matches_property`` style as ``[key, value]`` or ``(key, value)``.
+- Make callbacks support shallow ``pluck`` style callbacks as ``[key]`` or ``(key,)``.
 
 
 .. _changelog-v3.0.0:
