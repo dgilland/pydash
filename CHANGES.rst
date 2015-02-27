@@ -90,16 +90,16 @@ v3.0.0 (2015-02-25)
 - Make callback invocation have better support for builtin functions and methods. Previously, if one wanted to pass a builtin function or method as a callback, it had to be wrapped in a lambda which limited the number of arguments that would be passed it. For example, ``_.each([1, 2, 3], array.append)`` would fail and would need to be converted to ``_.each([1, 2, 3], lambda item: array.append(item)``. That is no longer the case as the non-wrapped method is now supported.
 - Make ``capitalize`` accept ``strict`` argument to control whether to convert the rest of the string to lower case or not. Defaults to ``True``.
 - Make ``chain`` support late passing of initial ``value`` argument.
-- Make ``chain`` not store computed ``value()`` (**breaking change**).
+- Make ``chain`` not store computed ``value()``. (**breaking change**)
 - Make ``drop``, ``drop_right``, ``take``, and ``take_right`` have default ``n=1``.
 - Make ``is_indexed`` return ``True`` for tuples.
 - Make ``partial`` and ``partial_right`` accept keyword arguments.
-- Make ``pluck`` style callbacks support deep paths.
+- Make ``pluck`` style callbacks support deep paths. (**breaking change**)
 - Make ``re_replace`` accept non-string arguments.
 - Make ``sort_by`` accept ``reverse`` parameter.
 - Make ``splice`` work with strings.
 - Make ``to_string`` convert ``None`` to empty string. (**breaking change**)
-- Move ``arrays.join`` to ``strings.join`` (**breaking change**).
+- Move ``arrays.join`` to ``strings.join``. (**breaking change**)
 - Rename ``join``/``implode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 - Rename ``split``/``explode``'s second parameter from ``delimiter`` to ``separator``. (**breaking change**)
 - Reorder function arguments for ``after`` from ``(n, func)`` to ``(func, n)``. (**breaking change**)
