@@ -114,6 +114,20 @@ def test_every(case, expected):
     assert _.every(*case) == expected
 
 
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], 0), [0, 0, 0, 0, 0]),
+    (([1, 2, 3, 4, 5], 0, 2), [1, 2, 0, 0, 0]),
+    (([1, 2, 3, 4, 5], 0, 2, 3), [1, 2, 0, 4, 5]),
+    (([1, 2, 3, 4, 5], 0, 0, 5), [0, 0, 0, 0, 0]),
+    (([1, 2, 3, 4, 5], 0, 0, 8), [0, 0, 0, 0, 0]),
+    (([1, 2, 3, 4, 5], 0, 0, -1), [0, 0, 0, 0, 5]),
+])
+def test_fill(case, expected):
+    array = case[0]
+    assert _.fill(*case) == expected
+    assert array == expected
+
+
 @parametrize('case,filter_by,expected', [
     (['apple', 'banana', 'beet'], lambda item: item.startswith('b'), 1),
     ([{'name': 'apple',  'type': 'fruit'},

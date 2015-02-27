@@ -29,6 +29,7 @@ from .arrays import (
     drop_right_while,
     drop_while,
     duplicates,
+    fill,
     find_index,
     find_last_index,
     first,

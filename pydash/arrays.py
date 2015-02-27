@@ -26,6 +26,7 @@ __all__ = (
     'drop_right_while',
     'drop_while',
     'duplicates',
+    'fill',
     'find_index',
     'find_last_index',
     'first',
@@ -302,6 +303,42 @@ def duplicates(array, callback=None):
     lst = uniq([array[i] for i, _ in iterduplicates(computed)])
 
     return lst
+
+
+def fill(array, value, start=0, end=None):
+    """Fills elements of array with value from start up to, but not including, end.
+
+    Args:
+        array (list): List to fill.
+        value (mixed): Value to fill with.
+        start (int, optional): Index to start filling. Defaults to ``0``.
+        end (int, optional): Index to end filling. Defaults to ``len(array)``.
+
+    Returns:
+        list: Filled `array`.
+
+    Example:
+
+        >>> fill([1, 2, 3, 4, 5], 0)
+        [0, 0, 0, 0, 0]
+        >>> fill([1, 2, 3, 4, 5], 0, 1, 3)
+        [1, 0, 0, 4, 5]
+        >>> fill([1, 2, 3, 4, 5], 0, 0, 100)
+        [0, 0, 0, 0, 0]
+
+    Warning:
+        `array` is modified in place.
+
+    .. versionadded:: 3.1.0
+    """
+    if end is None:
+        end = len(array)
+    else:
+        end = min([end, len(array)])
+
+    # Use this style of assignment so that `array` is mutated.
+    array[:] = array[:start] + [value] * len(array[start:end]) + array[end:]
+    return array
 
 
 def find_index(array, callback=None):
