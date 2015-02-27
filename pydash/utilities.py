@@ -166,6 +166,10 @@ def iteratee(func):
         False
         >>> iteratee(['a', 5])({'a': 5})
         True
+        >>> iteratee(['a.b'])({'a.b': 5})
+        5
+        >>> iteratee('a.b')({'a': {'b': 5}})
+        5
         >>> iteratee(lambda a, b: a + b)(1, 2)
         3
         >>> ident = iteratee(None)
@@ -183,7 +187,12 @@ def iteratee(func):
     .. versionchanged:: 2.0.0
         Renamed ``create_callback()`` to :func:`iteratee`.
 
+    .. versionchanged:: 3.0.0
+        Made pluck style callback support deep property access.
+
     .. versionchanged:: 3.1.0
+        - Added support for shallow pluck style property access via single item
+        list/tuple.
         - Added support for matches property style callback via two item
         list/tuple.
     """
@@ -191,6 +200,8 @@ def iteratee(func):
         cbk = func
     elif isinstance(func, string_types):
         cbk = deep_prop(func)
+    elif isinstance(func, (list, tuple)) and len(func) == 1:
+        cbk = prop(func[0])
     elif isinstance(func, (list, tuple)) and len(func) > 1:
         cbk = matches_property(*func[:2])
     elif isinstance(func, dict):
