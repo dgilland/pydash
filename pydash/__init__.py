@@ -252,6 +252,7 @@ from .objects import (
 #
 
 from .predicates import (
+    in_range,
     is_associative,
     is_blank,
     is_boolean,

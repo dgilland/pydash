@@ -15,10 +15,17 @@ from types import BuiltinFunctionType
 
 import pydash as pyd
 from .helpers import iterator
-from ._compat import builtins, integer_types, number_types, string_types, izip
+from ._compat import (
+    builtins,
+    integer_types,
+    izip,
+    number_types,
+    string_types
+)
 
 
 __all__ = (
+    'in_range',
     'is_associative',
     'is_blank',
     'is_boolean',
@@ -63,6 +70,50 @@ __all__ = (
 
 
 RegExp = type(re.compile(''))
+
+
+def in_range(value, start=0, end=None):
+    """Checks if `value` is between `start` and up to but not including `end`.
+    If `end` is not specified it defaults to `start` with `start` becoming
+    ``0``.
+
+    Args:
+
+        value (int|float): Number to check.
+        start (int|float, optional): Start of range inclusive. Defaults to
+            ``0``.
+        end (int|float, optional): End of range exclusive. Defaults to `start`.
+
+    Returns:
+        bool: Whether `value` is in range.
+
+    Example:
+
+        >>> in_range(2, 4)
+        True
+        >>> in_range(4, 2)
+        False
+        >>> in_range(2, 1, 3)
+        True
+        >>> in_range(3, 1, 2)
+        False
+        >>> in_range(2.5, 3.5)
+        True
+        >>> in_range(3.5, 2.5)
+        False
+
+    .. versionadded:: 3.1.0
+    """
+    if not is_number(start):
+        start = 0
+
+    if end is None:
+        end = start
+        start = 0
+    elif not is_number(end):
+        end = 0
+
+    return start <= value < end
 
 
 def is_associative(value):

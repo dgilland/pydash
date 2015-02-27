@@ -8,6 +8,7 @@ v3.1.0 (xxxx-xx-xx)
 -------------------
 
 - Add ``fill``.
+- Add ``in_range``.
 
 
 .. _changelog-v3.0.0:

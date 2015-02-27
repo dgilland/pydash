@@ -12,6 +12,21 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
+    ((3, 2, 4), True),
+    ((4, 8), True),
+    ((4, 2), False),
+    ((2, 2), False),
+    ((1.2, 2), True),
+    ((5.2, 4), False),
+    (('', 5), False),
+    ((2, ''), False),
+    ((-1, -2, ''), True),
+])
+def test_in_range(case, expected):
+    assert _.in_range(*case) == expected
+
+
+@parametrize('case,expected', [
     ([], True),
     ({}, True),
     ('', True),
