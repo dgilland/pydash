@@ -379,6 +379,7 @@ from .utilities import (
     iteratee,
     identity,
     matches,
+    matches_property,
     memoize,
     noop,
     now,

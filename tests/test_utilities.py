@@ -77,7 +77,11 @@ def test_identity(case, expected):
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      [{'name': 'fred', 'age': 40},
-      {'name': 'barney', 'age': 36}])
+      {'name': 'barney', 'age': 36}]),
+    (['name', 'fred'],
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     [True, False]),
 ])
 def test_iteratee(case, arg, expected):
     getter = _.iteratee(case)
@@ -98,6 +102,16 @@ def test_iteratee_aliases(case):
 ])
 def test_matches(case, arg, expected):
     assert _.matches(case)(arg) is expected
+
+
+@parametrize('case,arg,expected', [
+    (('a', 1), {'a': 1, 'b': 2}, True),
+    (('a', 2), {'a': 1, 'b': 2}, False),
+    ((1, 2), [1, 2, 3], True),
+    ((1, 3), [1, 2, 3], False),
+])
+def test_matches_property(case, arg, expected):
+    assert _.matches_property(*case)(arg) is expected
 
 
 @parametrize('case,args,kargs,key', [

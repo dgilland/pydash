@@ -23,6 +23,7 @@ __all__ = (
     'identity',
     'iteratee',
     'matches',
+    'matches_property',
     'memoize',
     'noop',
     'now',
@@ -163,6 +164,8 @@ def iteratee(func):
         True
         >>> is_active({'active': 0})
         False
+        >>> iteratee(['a', 5])({'a': 5})
+        True
         >>> iteratee(lambda a, b: a + b)(1, 2)
         3
         >>> ident = iteratee(None)
@@ -179,11 +182,17 @@ def iteratee(func):
 
     .. versionchanged:: 2.0.0
         Renamed ``create_callback()`` to :func:`iteratee`.
+
+    .. versionchanged:: 3.1.0
+        - Added support for matches property style callback via two item
+        list/tuple.
     """
     if callable(func):
         cbk = func
     elif isinstance(func, string_types):
         cbk = deep_prop(func)
+    elif isinstance(func, (list, tuple)) and len(func) > 1:
+        cbk = matches_property(*func[:2])
     elif isinstance(func, dict):
         cbk = matches(func)
     else:
@@ -205,7 +214,7 @@ def matches(source):
         source (dict): Source object used for comparision.
 
     Returns:
-        function: Function that compares a ``dict`` to `source` and returns
+        function: Function that compares an object to `source` and returns
             whether the two objects contain the same items.
 
     Example:
@@ -223,6 +232,32 @@ def matches(source):
         Use :func:`pydash.predicates.is_match` as matching function.
     """
     return lambda obj: pyd.is_match(obj, source)
+
+
+def matches_property(key, value):
+    """Creates a function that compares the property value of `key` on a given
+    object to `value`.
+
+    Args:
+        key (str): Object key to match against.
+        value (mixed): Value to compare to.
+
+    Returns:
+        function: Function that compares `value` to an object's `key` and
+            returns whether they are equal.
+
+    Example:
+
+        >>> matches_property('a', 1)({'a': 1, 'b': 2})
+        True
+        >>> matches_property(0, 1)([1, 2, 3])
+        True
+        >>> matches_property('a', 2)({'a': 1, 'b': 2})
+        False
+
+    .. versionadded:: 3.1.0
+    """
+    return lambda obj: matches(value)(prop(key)(obj))
 
 
 def memoize(func, resolver=None):
