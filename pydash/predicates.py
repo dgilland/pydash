@@ -104,6 +104,9 @@ def in_range(value, start=0, end=None):
 
     .. versionadded:: 3.1.0
     """
+    if not is_number(value):
+        return False
+
     if not is_number(start):
         start = 0
 
