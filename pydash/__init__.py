@@ -343,6 +343,7 @@ from .strings import (
     slugify,
     snake_case,
     split,
+    start_case,
     starts_with,
     strip_tags,
     substr_left,

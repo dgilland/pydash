@@ -65,6 +65,7 @@ __all__ = (
     'slugify',
     'snake_case',
     'split',
+    'start_case',
     'starts_with',
     'strip_tags',
     'substr_left',
@@ -1318,6 +1319,26 @@ def split(text, separator=NoValue):
 
 
 explode = split
+
+
+def start_case(text):
+    """Convert `text` to start case.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to start case.
+
+    Example:
+
+        >>> start_case("fooBar")
+        'Foo Bar'
+
+    .. versionadded:: 3.1.0
+    """
+    text = pyd.to_string(text)
+    return ' '.join(word.capitalize() for word in words(text))
 
 
 def starts_with(text, target, position=0):

@@ -326,6 +326,7 @@ def test_js_replace(case, expected):
     ('foo!bar,baz', 'foo-bar-baz'),
     ('--foo.bar;baz', 'foo-bar-baz'),
     ('Foo Bar', 'foo-bar'),
+    ('fooBar', 'foo-bar'),
     (None, ''),
     (5, '5'),
     (5.6, '5-6'),
@@ -605,6 +606,7 @@ def test_slugify(case, expected):
     ('foo!bar,baz', 'foo_bar_baz'),
     ('--foo.bar;baz', 'foo_bar_baz'),
     ('FooBar', 'foo_bar'),
+    ('fooBar', 'foo_bar'),
     ('', ''),
     (None, ''),
     (5, '5'),
@@ -638,6 +640,19 @@ def test_split(case, expected):
 ])
 def test_split_aliases(case):
     assert _.split is case
+
+
+@parametrize('case,expected', [
+    ('foo bar baz', 'Foo Bar Baz'),
+    ('foo-bar-baz', 'Foo Bar Baz'),
+    ("Foo!#Bar's", 'Foo Bar S'),
+    ('fooBar', 'Foo Bar'),
+    ("", ""),
+    (None, ""),
+    (5, "5"),
+])
+def test_start_case(case, expected):
+    assert _.start_case(case) == expected
 
 
 @parametrize('case,expected', [
