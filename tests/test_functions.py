@@ -295,6 +295,14 @@ def test_rearg(case, args, kargs, expected):
     assert _.rearg(*case)(*args, **kargs) == expected
 
 
+@parametrize('case,args,expected', [
+    (lambda args: args, ['a', 'b', 'c'], ['a', 'b', 'c']),
+    (lambda args: ','.join(args), ['a', 'b', 'c'], 'a,b,c'),
+])
+def test_spread(case, args, expected):
+    assert _.spread(case)(args) == expected
+
+
 def test_throttle():
     def func(): return _.now()
 

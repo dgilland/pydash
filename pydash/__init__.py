@@ -167,6 +167,7 @@ from .functions import (
     pipe,
     pipe_right,
     rearg,
+    spread,
     throttle,
     wrap,
 )

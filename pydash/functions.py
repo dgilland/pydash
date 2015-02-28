@@ -35,6 +35,7 @@ __all__ = (
     'pipe',
     'pipe_right',
     'rearg',
+    'spread',
     'throttle',
     'wrap',
 )
@@ -321,6 +322,16 @@ class Rearg(object):
         reargs = [reargs[key] for key in sorted(reargs)] + rest
 
         return self.func(*reargs, **kargs)
+
+
+class Spread(object):
+    """Wrap a function in a spread context."""
+    def __init__(self, func):
+        self. func = func
+
+    def __call__(self, args):
+        """Return results from :attr:`func` using array of `args` provided."""
+        return self.func(args)
 
 
 class Throttle(object):
@@ -820,6 +831,9 @@ def rearg(func, *indexes):
         func (function): Function to rearrange arguments for.
         *indexes (int): The arranged argument indexes.
 
+    Returns:
+        Rearg: Function wrapped in a :class:`Rearg` context.
+
     Example:
 
         >>> jumble = rearg(lambda *args: args, 1, 2, 3)
@@ -828,11 +842,30 @@ def rearg(func, *indexes):
         >>> jumble('a', 'b', 'c', 'd', 'e')
         ('b', 'c', 'd', 'a', 'e')
 
-    Returns:
-        Rearg: Function wrapped in a :class:`Rearg` context.
     .. versionadded:: 3.0.0
     """
     return Rearg(func, *indexes)
+
+
+def spread(func):
+    """Creates a function that invokes `func` with the array of arguments
+    provided to the created function.
+
+    Args:
+        func (function): Function to spread.
+
+    Returns:
+        Spread: Function wrapped in a :class:`Spread` context.
+
+    Example:
+
+        >>> greet = spread(lambda people: 'Hello ' + ', '.join(people) + '!')
+        >>> greet(['Mike', 'Don', 'Leo'])
+        'Hello Mike, Don, Leo!'
+
+    .. versionadded:: 3.1.0
+    """
+    return Spread(func)
 
 
 def throttle(func, wait):
