@@ -15,9 +15,9 @@ Guide
     quickstart
     differences
     callbacks
+    deeppath
     chaining
     templating
-    versioning
     upgrading
 
 
@@ -39,6 +39,7 @@ Project Info
     :maxdepth: 1
 
     license
+    versioning
     changelog
     authors
     contributing
