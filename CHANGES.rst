@@ -4,7 +4,7 @@ Changelog
 =========
 
 
-v3.2.0 (xxxx-xx-xx)
+v3.2.0 (2015-03-03)
 -------------------
 
 - Add ``sort_by_order`` as alias of ``sort_by_all``.
