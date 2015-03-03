@@ -685,6 +685,10 @@ def is_match(obj, source, callback=None):
         True
 
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: 3.2.0
+        Don't compare `obj` and `source` using ``type``. Use ``isinstance``
+        exclusively.
     """
     # If callback provided, use it for comparision.
     equal = callback(obj, source) if callable(callback) else None
@@ -692,9 +696,9 @@ def is_match(obj, source, callback=None):
     # Return callback results if anything but None.
     if equal is not None:
         pass
-    elif (type(obj) is type(source) and
-          isinstance(obj, (list, dict, tuple)) and
-          isinstance(source, (list, dict, tuple))):
+    elif (isinstance(obj, dict) and isinstance(source, dict) or
+          isinstance(obj, list) and isinstance(source, list) or
+          isinstance(obj, tuple) and isinstance(source, tuple)):
         # Walk a/b to determine equality.
         for key, value in iterator(source):
             if pyd.has(obj, key):
