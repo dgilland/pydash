@@ -136,6 +136,7 @@ from .collections import (
     some,
     sort_by,
     sort_by_all,
+    sort_by_order,
     to_list,
     where,
 )

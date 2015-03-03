@@ -575,9 +575,38 @@ def test_sort_by(case, expected):
                     {'user': 'barney', 'age': 36},
                     {'user': 'fred', 'age': 30},
                     {'user': 'fred', 'age': 40}]))),
+    (([{'user': 'barney', 'age': 36},
+       {'user': 'fred', 'age': 40},
+       {'user': 'barney', 'age': 26},
+       {'user': 'fred', 'age': 30}],
+      ['user', 'age'],
+      [False, True],
+      True),
+     list(reversed([{'user': 'fred', 'age': 30},
+                    {'user': 'fred', 'age': 40},
+                    {'user': 'barney', 'age': 26},
+                    {'user': 'barney', 'age': 36}]))),
+    (([{'user': 'barney', 'age': 36},
+       {'user': 'fred', 'age': 40},
+       {'user': 'barney', 'age': 26},
+       {'user': 'fred', 'age': 30}],
+      ['user', 'age'],
+      [False],
+      True),
+     list(reversed([{'user': 'fred', 'age': 30},
+                    {'user': 'fred', 'age': 40},
+                    {'user': 'barney', 'age': 26},
+                    {'user': 'barney', 'age': 36}]))),
 ])
 def test_sort_by_all(case, expected):
     assert _.sort_by_all(*case) == expected
+
+
+@parametrize('case', [
+    _.sort_by_order
+])
+def test_sort_by_all_aliases(case):
+    assert _.sort_by_all is case
 
 
 @parametrize('case,expected', [

@@ -57,6 +57,7 @@ __all__ = (
     'some',
     'sort_by',
     'sort_by_all',
+    'sort_by_order',
     'to_list',
     'where',
 )
@@ -992,11 +993,12 @@ def sort_by(collection, callback=None, reverse=False):
     return sorted(collection, key=pyd.iteratee(callback), reverse=reverse)
 
 
-def sort_by_all(collection, keys, reverse=False):
+def sort_by_all(collection, keys, orders=None, reverse=False):
     """This method is like :func:`sort_by` except that it sorts by key names
     instead of an iteratee function. Keys can be sorted in descending order by
     prepending a ``"-"`` to the key name (e.g. ``"name"`` would become
-    ``"-name"``).
+    ``"-name"``) or by passing a list of boolean sort options via `orders`
+    where ``True`` is ascending and ``False`` is descending.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -1004,6 +1006,9 @@ def sort_by_all(collection, keys, reverse=False):
             in ascending order. To sort a key in descending order, prepend a
             ``"-"`` to the key name. For example, to sort the key value for
             ``"name"`` in descending order, use ``"-name"``.
+        orders (list, optional): List of boolean sort orders to apply for each
+            key. ``True`` corresponds to ascending order while ``False`` is
+            descending. Defaults to ``None``.
         reverse (bool, optional): Whether to reverse the sort. Defaults to
             ``False``.
 
@@ -1025,15 +1030,50 @@ def sort_by_all(collection, keys, reverse=False):
         >>> assert results == [{'a': 3, 'b': 2},\
                                {'a': 2, 'b': 1},\
                                {'a': 1, 'b': 3}]
+        >>> results = sort_by_all(items, ['a', 'b'], [False, True])
+        >>> assert results == [{'a': 3, 'b': 2},\
+                               {'a': 2, 'b': 1},\
+                               {'a': 1, 'b': 3}]
+
+    See Also:
+        - :func:`sort_by_all` (main definition)
+        - :func:`sort_by_order` (alias)
 
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: 3.2.0
+        Added `orders` argument.
+
+    .. verionchanged:: 3.2.0
+        Added :func:`sort_by_order` as alias.
     """
     if isinstance(collection, dict):
         collection = collection.values()
 
-    comparers = [((pyd.deep_prop(key[1:].strip()), -1) if key.startswith('-')
-                  else (pyd.deep_prop(key.strip()), 1))
-                 for key in keys]
+    # Maintain backwards compatibility.
+    if pyd.is_bool(orders):
+        reverse = orders
+        orders = None
+
+    comparers = []
+
+    if orders:
+        for i, key in enumerate(keys):
+            if pyd.has(orders, i):
+                order = 1 if orders[i] else -1
+            else:
+                order = 1
+
+            comparers.append((pyd.deep_prop(key), order))
+    else:
+        for key in keys:
+            if key.startswith('-'):
+                order = -1
+                key = key[1:]
+            else:
+                order = 1
+
+            comparers.append((pyd.deep_prop(key), order))
 
     def comparison(left, right):
         # pylint: disable=useless-else-on-loop,missing-docstring
@@ -1045,6 +1085,9 @@ def sort_by_all(collection, keys, reverse=False):
             return 0
 
     return sorted(collection, key=cmp_to_key(comparison), reverse=reverse)
+
+
+sort_by_order = sort_by_all
 
 
 def to_list(collection):
