@@ -9,6 +9,9 @@ v3.2.0 (xxxx-xx-xx)
 
 - Add ``sort_by_order`` as alias of ``sort_by_all``.
 - Make ``sort_by_all`` accept an ``orders`` argument for specifying the sort order of each key via boolean ``True`` (for ascending) and ``False`` (for descending).
+- Make ``words`` handle single character words better.
+
+
 v3.1.0 (2015-02-28)
 -------------------
 

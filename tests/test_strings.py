@@ -909,9 +909,27 @@ def test_url(case, expected):
     ('hello_world', ['hello', 'world']),
     ('hello!@#$%^&*()_+{}|:"<>?-=[]\;\,.\'/world', ['hello', 'world']),
     ('hello 12345 world', ['hello', '12345', 'world']),
+    ('enable 24h format', ['enable', '24', 'h', 'format']),
+    ('tooLegit2Quit', ['too', 'Legit', '2', 'Quit']),
+    ('xhr2Request', ['xhr', '2', 'Request']),
     (' ', []),
     ('', []),
     (None, []),
 ])
 def test_words(case, expected):
     assert _.words(case) == expected
+
+
+@parametrize('case,expected', [
+    ('enable 24h format', 'enable24HFormat'),
+])
+def test_word_cycle(case, expected):
+    actual = (_.chain(case)
+              .camel_case()
+              .kebab_case()
+              .snake_case()
+              .start_case()
+              .camel_case()
+              .value())
+
+    assert actual == expected

@@ -166,7 +166,10 @@ DEBURRED_LETTERS = {
 }
 
 # Use Javascript style regex to make Lo-Dash compatibility easier.
-RE_WORDS = '/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*)|[A-Z]?[a-z]+[0-9]*|[A-Z]+|[0-9]+/g'
+UPPER = '[A-Z\\xC0-\\xD6\\xD8-\\xDE]'
+LOWER = '[a-z\\xDf-\\xF6\\xF8-\\xFF]+'
+RE_WORDS = ('/{upper}+(?={upper}{lower})|{upper}?{lower}|{upper}+|[0-9]+/g'
+            .format(upper=UPPER, lower=LOWER))
 RE_LATIN1 = '/[\xC0-\xFF]/g'
 
 
@@ -1810,6 +1813,9 @@ def words(text):
         ['a', 'b', 'c', 'd', 'e']
 
     .. versionadded:: 2.0.0
+
+    .. verionchanged:: 3.2.0
+        Improved matching for one character words.
     """
     return js_match(text, RE_WORDS)
 
