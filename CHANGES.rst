@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Catch ``AttributeError`` in ``helpers.get_item`` and return default value if set.
+
+
 v3.2.1 (2015-04-29)
 -------------------
 

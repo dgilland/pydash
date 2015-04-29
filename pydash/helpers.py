@@ -123,8 +123,8 @@ def get_item(obj, key, default=NoValue):
         mixed: `obj[key]` or `default`.
 
     Raises:
-        KeyError|IndexError|TypeError: If `obj` is missing key or index and no
-            default value provided.
+        KeyError|IndexError|TypeError|AttributeError: If `obj` is missing key
+            or index and no default value provided.
     """
     try:
         try:
@@ -133,7 +133,7 @@ def get_item(obj, key, default=NoValue):
             # It's possible that a string integer is being used to access a
             # list index. Re-try object access using casted integer.
             ret = obj[int(key)]
-    except (KeyError, IndexError, TypeError):
+    except (KeyError, IndexError, TypeError, AttributeError):
         if default is not NoValue:
             ret = default
         else:  # pragma: no cover
