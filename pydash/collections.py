@@ -740,9 +740,13 @@ def reduce_right(collection, callback=None, accumulator=None):
         - :func:`foldr` (alias)
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 3.2.1
+        Fix bug where collection was not reversed correctly.
     """
     if not isinstance(collection, dict):
-        collection = sorted(collection, reverse=True)
+        collection = list(collection)[::-1]
+
     return reduce_(collection, callback, accumulator)
 
 

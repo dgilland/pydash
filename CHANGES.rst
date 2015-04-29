@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Fix bug in ``reduce_right`` where collection was not reversed correctly.
+
+
 v3.2.0 (2015-03-03)
 -------------------
 
