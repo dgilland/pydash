@@ -70,9 +70,11 @@ from .arrays import (
     unique,
     unshift,
     unzip,
+    unzip_with,
     without,
     xor,
     zip_,
+    zip_with,
     zip_object,
 )
 

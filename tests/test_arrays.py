@@ -546,7 +546,16 @@ def test_unshift(case, expected):
      [['moe', 'larry', 'curly'], [30, 40, 35], [True, False, True]])
 ])
 def test_unzip(case, expected):
-    _.unzip(case) == expected
+    assert _.unzip(case) == expected
+
+
+@parametrize('case,expected', [
+    (([],), []),
+    (([[1, 10, 100], [2, 20, 200]],), [[1, 2], [10, 20], [100, 200]]),
+    (([[2, 4, 6], [2, 2, 2]], _.power), [4, 16, 36]),
+])
+def test_unzip_with(case, expected):
+    assert _.unzip_with(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -565,6 +574,16 @@ def test_xor(case, expected):
 
 
 @parametrize('case,expected', [
+    ((['moe', 'larry', 'curly'],
+      [30, 40, 35],
+      [True, False, True]),
+     [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]])
+])
+def test_zip_(case, expected):
+    assert _.zip_(*case) == expected
+
+
+@parametrize('case,expected', [
     ((['moe', 'larry'], [30, 40]), {'moe': 30, 'larry': 40}),
     (([['moe', 30], ['larry', 40]],), {'moe': 30, 'larry': 40}),
 ])
@@ -580,10 +599,8 @@ def test_zip_object_aliases(alias):
 
 
 @parametrize('case,expected', [
-    ((['moe', 'larry', 'curly'],
-      [30, 40, 35],
-      [True, False, True]),
-     [['moe', 30, True], ['larry', 40, False], ['curly', 35, True]])
+    (([1, 2],), [[1], [2]]),
+    (([1, 2], [3, 4], _.add), [4, 6]),
 ])
-def test_zip_(case, expected):
-    assert _.zip_(*case) == expected
+def test_zip_with(case, expected):
+    assert _.zip_with(*case) == expected

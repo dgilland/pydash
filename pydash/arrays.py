@@ -64,12 +64,14 @@ __all__ = (
     'union',
     'uniq',
     'unique',
+    'unshift',
+    'unzip',
+    'unzip_with',
     'without',
     'xor',
     'zip_',
-    'unshift',
-    'unzip',
     'zip_object',
+    'zip_with'
 )
 
 
@@ -1318,6 +1320,91 @@ def uniq(array, callback=None):
 unique = uniq
 
 
+def unshift(array, *items):
+    """Insert the given elements at the beginning of `array` and return the
+    modified list.
+
+    Args:
+        array (list): List to modify.
+        items (mixed): Items to insert.
+
+    Returns:
+        list: Modified list.
+
+    Warning:
+        `array` is modified in place.
+
+    Example:
+
+        >>> array = [1, 2, 3, 4]
+        >>> unshift(array, -1, -2)
+        [-1, -2, 1, 2, 3, 4]
+        >>> array
+        [-1, -2, 1, 2, 3, 4]
+
+    .. versionadded:: 2.2.0
+    """
+    for item in reverse(items):
+        array.insert(0, item)
+
+    return array
+
+
+def unzip(array):
+    """The inverse of :func:`zip_`, this method splits groups of
+    elements into lists composed of elements from each group at their
+    corresponding indexes.
+
+    Args:
+        array (list): List to process.
+
+    Returns:
+        list: Unzipped list.
+
+    Example:
+
+        >>> unzip([[1, 4, 7], [2, 5, 8], [3, 6, 9]])
+        [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+    .. versionadded:: 1.0.0
+    """
+    return zip_(*array)
+
+
+def unzip_with(array, callback=None):
+    """This method is like :func:`unzip` except that it accepts a callback to
+    specify how regrouped values should be combined. The callback is invoked
+    with four arguments: ``(accumulator, value, index, group)``.
+
+    Args:
+        array (list): List to process.
+        callback (callable, optional): Function to combine regrouped values.
+
+    Returns:
+        list: Unzipped list.
+
+    Example:
+
+        >>> from pydash import add
+        >>> unzip_with([[1, 10, 100], [2, 20, 200]], add)
+        [3, 30, 300]
+
+    .. versionadded:: 3.3.0
+    """
+    if not array:
+        return []
+
+    result = unzip(array)
+
+    if callback is None:
+        return result
+
+    def _callback(group):
+        return pyd.reduce_(group, callback, None)
+
+    return pyd.map_(result, _callback)
+
+
 def without(array, *values):
     """Creates an array with all occurrences of the passed values removed.
 
@@ -1382,65 +1469,14 @@ def zip_(*arrays):
     return [list(item) for item in zip(*arrays)]
 
 
-def unshift(array, *items):
-    """Insert the given elements at the beginning of `array` and return the
-    modified list.
-
-    Args:
-        array (list): List to modify.
-        items (mixed): Items to insert.
-
-    Returns:
-        list: Modified list.
-
-    Warning:
-        `array` is modified in place.
-
-    Example:
-
-        >>> array = [1, 2, 3, 4]
-        >>> unshift(array, -1, -2)
-        [-1, -2, 1, 2, 3, 4]
-        >>> array
-        [-1, -2, 1, 2, 3, 4]
-
-    .. versionadded:: 2.2.0
-    """
-    for item in reverse(items):
-        array.insert(0, item)
-
-    return array
-
-
-def unzip(array):
-    """The inverse of :func:`zip_`, this method splits groups of
-    elements into lists composed of elements from each group at their
-    corresponding indexes.
-
-    Args:
-        array (list): List to process.
-
-    Returns:
-        list: Unzipped list.
-
-    Example:
-
-        >>> unzip([[1, 4, 7], [2, 5, 8], [3, 6, 9]])
-        [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-
-    .. versionadded:: 1.0.0
-    """
-    return zip_(*array)
-
-
 def zip_object(keys, values=None):
     """Creates a dict composed from lists of keys and values. Pass either a
     single two dimensional list, i.e. ``[[key1, value1], [key2, value2]]``, or
     two lists, one of keys and one of corresponding values.
 
     Args:
-        keys (list): either a list of keys or a list of ``[key, value]`` pairs
-        values (list, optional): list of values to zip
+        keys (list): Either a list of keys or a list of ``[key, value]`` pairs
+        values (list, optional): List of values to zip
 
     Returns:
         dict: Zipped dict.
@@ -1466,6 +1502,39 @@ def zip_object(keys, values=None):
 
 
 object_ = zip_object
+
+
+def zip_with(*arrays, **kargs):
+    """This method is like :func:`zip` except that it accepts a callback to
+    specify how grouped values should be combined. The callback is invoked with
+    four arguments: ``(accumulator, value, index, group)``.
+
+    Args:
+        *arrays (list): Lists to process.
+        callback (function): Function to combine grouped values.
+
+    Returns:
+        list: Zipped list of grouped elements.
+
+    Example:
+
+        >>> from pydash import add
+        >>> zip_with([1, 2], [10, 20], [100, 200], add)
+        [111, 222]
+        >>> zip_with([1, 2], [10, 20], [100, 200], callback=add)
+        [111, 222]
+
+    .. versionadded:: 3.3.0
+    """
+    if 'callback' in kargs:
+        callback = kargs['callback']
+    elif(len(arrays) > 1):
+        callback = arrays[-1]
+        arrays = arrays[:-1]
+    else:
+        callback = None
+
+    return unzip_with(arrays, callback)
 
 
 #
