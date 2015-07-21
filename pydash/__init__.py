@@ -215,7 +215,6 @@ from .objects import (
     callables,
     clone,
     clone_deep,
-    deep_defaults,
     deep_get,
     deep_has,
     deep_map_values,

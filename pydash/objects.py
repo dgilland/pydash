@@ -27,7 +27,6 @@ __all__ = (
     'callables',
     'clone',
     'clone_deep',
-    'deep_defaults',
     'deep_get',
     'deep_has',
     'deep_set',
@@ -338,9 +337,6 @@ def defaults_deep(obj, *sources):
         obj.setdefault(key, value)
 
     return merge(obj, *sources, _setter=setter)
-
-
-deep_defaults = defaults_deep
 
 
 def find_key(obj, callback=None):
