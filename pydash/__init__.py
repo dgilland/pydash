@@ -235,6 +235,7 @@ from .objects import (
     invert,
     keys,
     keys_in,
+    map_keys,
     map_values,
     merge,
     methods,

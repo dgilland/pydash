@@ -12,6 +12,7 @@ Changelog
 - Add ``is_iterable``.
 - Add ``lt``.
 - Add ``lte``.
+- Add ``map_keys``.
 - Add ``method``.
 - Add ``method_of``.
 - Add ``mod_args``.
