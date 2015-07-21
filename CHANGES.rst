@@ -4,6 +4,8 @@ Changelog
 =========
 
 
+- Add ``ceil``.
+- Add ``floor``.
 - Add ``mod_args``.
 - Add ``unzip_with``.
 - Add ``zip_with``.

@@ -17,7 +17,9 @@ __all__ = (
     'add',
     'average',
     'avg',
+    'ceil',
     'curve',
+    'floor',
     'mean',
     'median',
     'moving_average',
@@ -100,6 +102,54 @@ def average(collection, callback=None):
 
 avg = average
 mean = average
+
+
+def ceil(x, precision=0):
+    """Round number up to precision.
+
+    Args:
+        x (number): Number to round up.
+        precision (int, optional): Rounding precision. Defaults to ``0``.
+
+    Returns:
+        int: Number rounded up.
+
+    Example:
+
+        >>> ceil(3.275) == 4.0
+        True
+        >>> ceil(3.215, 1) == 3.3
+        True
+        >>> ceil(6.004, 2) == 6.01
+        True
+
+    .. versionadded:: 3.3.0
+    """
+    return rounder(math.ceil, x, precision)
+
+
+def floor(x, precision=0):
+    """Round number down to precision.
+
+    Args:
+        x (number): Number to round down.
+        precision (int, optional): Rounding precision. Defaults to ``0``.
+
+    Returns:
+        int: Number rounded down.
+
+    Example:
+
+        >>> floor(3.75) == 3.0
+        True
+        >>> floor(3.215, 1) == 3.2
+        True
+        >>> floor(0.046, 2) == 0.04
+        True
+
+    .. versionadded:: 3.3.0
+    """
+    return rounder(math.floor, x, precision)
 
 
 def median(collection, callback=None):
@@ -238,17 +288,7 @@ def round_(x, precision=0):
 
     .. versionadded:: 2.1.0
     """
-    rounder = pyd.partial_right(round, precision)
-
-    if pyd.is_number(x):
-        result = rounder(x)
-    elif pyd.is_list(x):
-        # pylint: disable=unnecessary-lambda
-        result = pyd.map_(x, lambda item: rounder(item))
-    else:
-        result = None
-
-    return result
+    return rounder(round, x, precision)
 
 
 curve = round_
@@ -408,3 +448,26 @@ def zscore(collection, callback=None):
     sig = sigma(array)
 
     return pyd.map_(array, lambda item: (item - ave) / sig)
+
+
+#
+# Utility methods not a part of the main API
+#
+
+def rounder(func, x, precision):
+    precision = pow(10, precision)
+
+    def rounder_func(item):
+        return func(item * precision) / precision
+
+    result = None
+
+    if pyd.is_number(x):
+        result = rounder_func(x)
+    elif pyd.is_iterable(x):
+        try:
+            result = pyd.map_(x, rounder_func)
+        except TypeError:
+            pass
+
+    return result
