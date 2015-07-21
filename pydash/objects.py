@@ -234,69 +234,6 @@ def clone_deep(value, callback=None):
     return clone(value, is_deep=True, callback=callback)
 
 
-def deep_get(obj, path):
-    """Get the value at any depth of a nested object based on the path
-    described by `path`. If path doesn't exist, ``None`` is returned.
-
-    Args:
-        obj (list|dict): Object to process.
-        keys (str|list): List or ``.`` delimited string of keys describing
-            path.
-
-    Returns:
-        mixed: Value of `obj` at path.
-
-    Example:
-
-        >>> deep_get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
-        2
-        >>> deep_get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2') is None
-        True
-
-    .. versionadded:: 2.2.0
-    """
-    return get(obj, path)
-
-
-def deep_has(obj, path):
-    """Checks if `path` exists as a key of `obj`.
-
-    Args:
-        obj (mixed): Object to test.
-        path (mixed): Path to test for. Can be a list of nested keys or a ``.``
-            delimited string of path describing the path.
-
-    Returns:
-        bool: Whether `obj` has `path`.
-
-    Example:
-
-        >>> deep_has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
-        True
-        >>> deep_has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2')
-        False
-
-    See Also:
-        - :func:`deep_has` (main definition)
-        - :func:`has_path` (alias)
-
-    .. versionadded:: 2.2.0
-
-    .. versionchanged:: 3.0.0
-        Return ``False`` on ``ValueError`` when checking path.
-    """
-    try:
-        get(obj, path, default=NoValue)
-        exists = True
-    except (KeyError, IndexError, TypeError, ValueError):
-        exists = False
-
-    return exists
-
-
-has_path = deep_has
-
-
 def deep_map_values(obj, callback=None, property_path=NoValue):
     """Map all non-object values in `obj` with return values from `callback`.
     The callback is invoked with two arguments: ``(obj_value, property_path)``
@@ -532,10 +469,15 @@ def get(obj, path, default=None):
         True
         >>> get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1')
         2
+        >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
+        2
+        >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2') is None
+        True
 
     See Also:
         - :func:`get` (main definition)
         - :func:`get_path` (alias)
+        - :func:`deep_get` (alias)
 
     .. versionadded:: 2.0.0
 
@@ -543,7 +485,9 @@ def get(obj, path, default=None):
         Support escaping "." delimiter in single string path key.
 
     .. versionchanged:: 3.3.0
-        Added :func:`get` as main definition and :func:`get_path` as alias.
+
+        - Added :func:`get` as main definition and :func:`get_path` as alias.
+        - Made :func:`deep_get` an alias.
     """
     for key in path_keys(path):
         obj = get_item(obj, key, default=default)
@@ -554,17 +498,19 @@ def get(obj, path, default=None):
 
 
 get_path = get
+deep_get = get
 
 
-def has(obj, key):
-    """Checks if `key` exists as a key of `obj`.
+def has(obj, path):
+    """Checks if `path` exists as a key of `obj`.
 
     Args:
         obj (mixed): Object to test.
-        key (mixed): Key to test for.
+        path (mixed): Path to test for. Can be a list of nested keys or a ``.``
+            delimited string of path describing the path.
 
     Returns:
-        bool: Whether `obj` has `key`.
+        bool: Whether `obj` has `path`.
 
     Example:
 
@@ -574,10 +520,37 @@ def has(obj, key):
         True
         >>> has({'a': 1, 'b': 2}, 'c')
         False
+        >>> has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
+        True
+        >>> has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2')
+        False
+
+    See Also:
+        - :func:`has` (main definition)
+        - :func:`deep_has` (alias)
+        - :func:`has_path` (alias)
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 3.0.0
+        Return ``False`` on ``ValueError`` when checking path.
+
+    .. verisionchanged:: 3.3.0
+
+        - Added :func:`deep_has` as alias.
+        - Added :func:`has_path` as alias.
     """
-    return deep_has(obj, [key])
+    try:
+        get(obj, path, default=NoValue)
+        exists = True
+    except (KeyError, IndexError, TypeError, ValueError):
+        exists = False
+
+    return exists
+
+
+deep_has = has
+has_path = has
 
 
 def invert(obj, multivalue=False):

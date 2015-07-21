@@ -77,55 +77,6 @@ def test_clone_deep(case, kargs):
 
 
 @parametrize('case,expected', [
-    (({'one': {'two': {'three': 4}}}, 'one.two'), {'three': 4}),
-    (({'one': {'two': {'three': 4}}}, 'one.two.three'), 4),
-    (({'one': {'two': {'three': 4}}}, ['one', 'two']), {'three': 4}),
-    (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), 4),
-    (({'one': {'two': {'three': 4}}}, 'one.four'), None),
-    (({'one': {'two': {'three': 4}}}, 'five'), None),
-    (({'one': ['two', {'three': [4, 5]}]}, ['one', 1, 'three', 1]), 5),
-    (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), 5),
-    (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), 5),
-    ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), 4),
-    (({'lev.el1': {r'lev\el2': {'level3': ['value']}}},
-      r'lev\.el1.lev\\el2.level3.[0]'),
-     'value')
-])
-def test_deep_get(case, expected):
-    assert _.deep_get(*case) == expected
-
-
-@parametrize('case,expected', [
-    (({'a': 1, 'b': 2, 'c': 3}, 'b'), True),
-    (([1, 2, 3], 0), True),
-    (([1, 2, 3], 1), True),
-    (([1, 2, 3], 3), False),
-    (({'one': {'two': {'three': 4}}}, 'one.two'), True),
-    (({'one': {'two': {'three': 4}}}, 'one.two.three'), True),
-    (({'one': {'two': {'three': 4}}}, ['one', 'two']), True),
-    (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), True),
-    (({'one': {'two': {'three': 4}}}, 'one.four'), False),
-    (({'one': {'two': {'three': 4}}}, 'five'), False),
-    (({'one': ['two', {'three': [4, 5]}]}, ['one', 1, 'three', 1]), True),
-    (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), True),
-    (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), True),
-    ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), True),
-    (({'lev.el1': {r'lev\el2': {'level3': ['value']}}},
-      r'lev\.el1.lev\\el2.level3.[0]'),
-     True)
-])
-def test_deep_has(case, expected):
-    assert _.deep_has(*case) == expected
-
-
-@parametrize('case', [
-    _.has_path,
-])
-def test_deep_has_aliases(case):
-    assert _.deep_has is case
-
-
-@parametrize('case,expected', [
     (({'level1': {
         'value': 'value 1',
         'level2': {
@@ -287,7 +238,7 @@ def test_for_in_right_aliases(case):
     ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), 4),
     (({'lev.el1': {'lev\\el2': {'level3': ['value']}}},
       'lev\\.el1.lev\\\\el2.level3.[0]'),
-     'value')
+     'value'),
 ])
 def test_get(case, expected):
     assert _.get(*case) == expected
@@ -295,6 +246,7 @@ def test_get(case, expected):
 
 @parametrize('case', [
     _.get_path,
+    _.deep_get,
 ])
 def test_get_aliases(case):
     assert _.get is case
@@ -305,9 +257,34 @@ def test_get_aliases(case):
     (([1, 2, 3], 0), True),
     (([1, 2, 3], 1), True),
     (([1, 2, 3], 3), False),
+    (({'a': 1, 'b': 2, 'c': 3}, 'b'), True),
+    (([1, 2, 3], 0), True),
+    (([1, 2, 3], 1), True),
+    (([1, 2, 3], 3), False),
+    (({'one': {'two': {'three': 4}}}, 'one.two'), True),
+    (({'one': {'two': {'three': 4}}}, 'one.two.three'), True),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two']), True),
+    (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), True),
+    (({'one': {'two': {'three': 4}}}, 'one.four'), False),
+    (({'one': {'two': {'three': 4}}}, 'five'), False),
+    (({'one': ['two', {'three': [4, 5]}]}, ['one', 1, 'three', 1]), True),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.[1].three.[1]'), True),
+    (({'one': ['two', {'three': [4, 5]}]}, 'one.1.three.1'), True),
+    ((['one', {'two': {'three': [4, 5]}}], '[1].two.three.[0]'), True),
+    (({'lev.el1': {r'lev\el2': {'level3': ['value']}}},
+      r'lev\.el1.lev\\el2.level3.[0]'),
+     True),
 ])
 def test_has(case, expected):
     assert _.has(*case) == expected
+
+
+@parametrize('case', [
+    _.deep_has,
+    _.has_path,
+])
+def test_has_aliases(case):
+    assert _.has is case
 
 
 @parametrize('case,expected', [
