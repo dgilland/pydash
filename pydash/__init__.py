@@ -388,6 +388,8 @@ from .utilities import (
     matches,
     matches_property,
     memoize,
+    method,
+    method_of,
     noop,
     now,
     prop,

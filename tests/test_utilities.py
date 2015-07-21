@@ -136,6 +136,23 @@ def test_memoize(case, args, kargs, key):
     assert memoized.cache[key] == expected
 
 
+@parametrize('case,args,kargs,expected', [
+    (('a.b',), ({'a': {'b': lambda x, y: x + y}}, 1, 2), {}, 3),
+    (('a.b',), ({'a': {'b': lambda x, y: x + y}}, 1,), {'y': 2}, 3),
+    (('a.b', 1), ({'a': {'b': lambda x, y: x + y}}, 2,), {}, 3),
+])
+def test_method(case, args, kargs, expected):
+    assert _.method(*case)(*args, **kargs) == expected
+
+
+@parametrize('case,args,kargs,expected', [
+    (({'a': {'b': lambda x, y: x + y}},), ('a.b', 1, 2), {}, 3),
+    (({'a': {'b': lambda x, y: x + y}},), ('a.b', 1,), {'y': 2}, 3),
+])
+def test_method_of(case, args, kargs, expected):
+    assert _.method_of(*case)(*args, **kargs) == expected
+
+
 @parametrize('case,expected', [
     ((), None),
     ((1, 2, 3), None)
