@@ -154,27 +154,6 @@ def test_deep_map_values(case, expected):
 
 
 @parametrize('case,expected', [
-    (({}, ['one', 'two', 'three', 'four'], 1),
-     {'one': {'two': {'three': {'four': 1}}}}),
-    (({}, 'one.two.three.four', 1),
-     {'one': {'two': {'three': {'four': 1}}}}),
-    (({'one': {'two': {}, 'three': {}}}, ['one', 'two', 'three', 'four'], 1),
-     {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
-    (({'one': {'two': {}, 'three': {}}}, 'one.two.three.four', 1),
-     {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
-    (({}, 'one', 1), {'one': 1}),
-    (([], [0, 0, 0], 1), [[[1]]]),
-    (([], '[0].[0].[0]', 1), [[[1]]]),
-    (([1, 2, [3, 4, [5, 6]]], [2, 2, 1], 7), [1, 2, [3, 4, [5, 7]]]),
-    (([1, 2, [3, 4, [5, 6]]], '[2].[2].[1]', 7), [1, 2, [3, 4, [5, 7]]]),
-    (([1, 2, [3, 4, [5, 6]]], [2, 2, 2], 7), [1, 2, [3, 4, [5, 6, 7]]]),
-    (([1, 2, [3, 4, [5, 6]]], '[2].[2].[2]', 7), [1, 2, [3, 4, [5, 6, 7]]]),
-])
-def test_deep_set(case, expected):
-    assert _.deep_set(*case) == expected
-
-
-@parametrize('case,expected', [
     (({'name': 'barney'}, {'name': 'fred', 'employer': 'slate'}),
      {'name': 'barney', 'employer': 'slate'}),
 ])
@@ -484,6 +463,34 @@ def test_pick(case, expected):
 ])
 def test_rename_keys(case, expected):
     assert _.rename_keys(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({}, ['one', 'two', 'three', 'four'], 1),
+     {'one': {'two': {'three': {'four': 1}}}}),
+    (({}, 'one.two.three.four', 1),
+     {'one': {'two': {'three': {'four': 1}}}}),
+    (({'one': {'two': {}, 'three': {}}}, ['one', 'two', 'three', 'four'], 1),
+     {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
+    (({'one': {'two': {}, 'three': {}}}, 'one.two.three.four', 1),
+     {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
+    (({}, 'one', 1), {'one': 1}),
+    (([], [0, 0, 0], 1), [[[1]]]),
+    (([], '[0].[0].[0]', 1), [[[1]]]),
+    (([1, 2, [3, 4, [5, 6]]], [2, 2, 1], 7), [1, 2, [3, 4, [5, 7]]]),
+    (([1, 2, [3, 4, [5, 6]]], '[2].[2].[1]', 7), [1, 2, [3, 4, [5, 7]]]),
+    (([1, 2, [3, 4, [5, 6]]], [2, 2, 2], 7), [1, 2, [3, 4, [5, 6, 7]]]),
+    (([1, 2, [3, 4, [5, 6]]], '[2].[2].[2]', 7), [1, 2, [3, 4, [5, 6, 7]]]),
+])
+def test_set_(case, expected):
+    assert _.set_(*case) == expected
+
+
+@parametrize('case', [
+    _.deep_set
+])
+def test_set_aliases(case):
+    assert _.set_ is case
 
 
 @parametrize('case,expected', [

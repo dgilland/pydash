@@ -245,6 +245,7 @@ from .objects import (
     parse_int,
     pick,
     rename_keys,
+    set_,
     set_path,
     to_boolean,
     to_dict,

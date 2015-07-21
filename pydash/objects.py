@@ -57,6 +57,7 @@ __all__ = (
     'parse_int',
     'pick',
     'rename_keys',
+    'set_',
     'set_path',
     'to_boolean',
     'to_dict',
@@ -337,32 +338,6 @@ def deep_map_values(obj, callback=None, property_path=NoValue):
         return pyd.extend(obj, map_values(obj, deep_callback))
     else:
         return call_callback(callback, obj, properties)
-
-
-def deep_set(obj, path, value):
-    """Sets the value of an object described by `path`. If any part of the
-    object path doesn't exist, it will be created.
-
-    Args:
-        obj (list|dict): Object to modify.
-        path (str | list): Target path to set value to.
-        value (mixed): Value to set.
-
-    Returns:
-        mixed: Modified `obj`.
-
-    Example:
-
-        >>> deep_set({}, 'a.b.c', 1)
-        {'a': {'b': {'c': 1}}}
-        >>> deep_set({}, 'a.0.c', 1)
-        {'a': {'0': {'c': 1}}}
-        >>> deep_set([1, 2], '2.0', 1)
-        [1, 2, [1]]
-
-    .. versionadded:: 2.2.0
-    """
-    return set_path(obj, value, path_keys(path))
 
 
 def defaults(obj, *sources):
@@ -979,6 +954,38 @@ def rename_keys(obj, key_map):
     """
     return dict((key_map.get(key, key), value)
                 for key, value in iteritems(obj))
+
+
+def set_(obj, path, value):
+    """Sets the value of an object described by `path`. If any part of the
+    object path doesn't exist, it will be created.
+
+    Args:
+        obj (list|dict): Object to modify.
+        path (str | list): Target path to set value to.
+        value (mixed): Value to set.
+
+    Returns:
+        mixed: Modified `obj`.
+
+    Example:
+
+        >>> set_({}, 'a.b.c', 1)
+        {'a': {'b': {'c': 1}}}
+        >>> set_({}, 'a.0.c', 1)
+        {'a': {'0': {'c': 1}}}
+        >>> set_([1, 2], '2.0', 1)
+        [1, 2, [1]]
+
+    .. versionadded:: 2.2.0
+
+    .. versionchanged:: 3.3.0
+        Added :func:`set_` as main definition and :func:`deep_set` as alias.
+    """
+    return set_path(obj, value, path_keys(path))
+
+
+deep_set = set_
 
 
 def set_path(obj, value, keys, default=None):
