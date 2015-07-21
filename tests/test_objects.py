@@ -183,6 +183,21 @@ def test_defaults(case, expected):
 
 
 @parametrize('case,expected', [
+    (({'user': {'name': 'barney'}}, {'user': {'name': 'fred', 'age': 36}}),
+     {'user': {'name': 'barney', 'age': 36}})
+])
+def test_defaults_deep(case, expected):
+    assert _.defaults_deep(*case) == expected
+
+
+@parametrize('case', [
+    _.deep_defaults
+])
+def test_defaults_deep_aliases(case):
+    assert _.defaults_deep is case
+
+
+@parametrize('case,expected', [
     ([1, 2, 3], {0: 1, 1: 2, 2: 3}),
     ({0: 1, 1: 2, 2: 3}, {0: 1, 1: 2, 2: 3}),
 ])

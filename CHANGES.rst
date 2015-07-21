@@ -5,6 +5,7 @@ Changelog
 
 
 - Add ``ceil``.
+- Add ``defaults_deep``, ``deep_defaults``.
 - Add ``floor``.
 - Add ``gt``.
 - Add ``gte``.

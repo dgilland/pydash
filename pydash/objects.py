@@ -27,11 +27,13 @@ __all__ = (
     'callables',
     'clone',
     'clone_deep',
+    'deep_defaults',
     'deep_get',
     'deep_has',
     'deep_set',
     'deep_map_values',
     'defaults',
+    'defaults_deep',
     'extend',
     'find_key',
     'find_last_key',
@@ -300,7 +302,7 @@ def deep_map_values(obj, callback=None, property_path=NoValue):
 
     Args:
         obj (list|dict): Object to map.
-        callback (callable): Callback applied to each value.
+        callback (function): Callback applied to each value.
 
     Returns:
         mixed: The modified object.
@@ -391,6 +393,40 @@ def defaults(obj, *sources):
             obj.setdefault(key, value)
 
     return obj
+
+
+def defaults_deep(obj, *sources):
+    """This method is like :func:`defaults` except that it recursively assigns
+    default properties.
+
+    Args:
+        obj (dict): Destination object whose properties will be modified.
+        sources (dict): Source objects to assign to `obj`.
+
+    Returns:
+        dict: Modified `obj`.
+
+    Warning:
+        `obj` is modified in place.
+
+    Example:
+
+        >>> obj = {'a': {'b': 1}}
+        >>> obj2 = defaults_deep(obj, {'a': {'b': 2, 'c': 3}})
+        >>> obj is obj2
+        True
+        >>> obj == {'a': {'b': 1, 'c': 3}}
+        True
+
+    .. versionadded:: 3.3.0
+    """
+    def setter(obj, key, value):
+        obj.setdefault(key, value)
+
+    return merge(obj, *sources, _setter=setter)
+
+
+deep_defaults = defaults_deep
 
 
 def find_key(obj, callback=None):
@@ -700,10 +736,14 @@ def merge(obj, *sources, **kargs):
     .. versionchanged:: 2.3.2
         Allow `callback` to be passed by reference if it is the last positional
         argument.
+
+    .. versionchanged:: 3.3.0
+        Added internal option for overriding the default setter for obj values.
     """
     sources = list(sources)
     _clone = kargs.get('_clone', True)
     callback = kargs.get('callback')
+    setter = kargs.get('_setter', set_item)
 
     if callback is None and callable(sources[-1]):
         callback = sources.pop()
@@ -723,11 +763,14 @@ def merge(obj, *sources, **kargs):
             if callback:
                 result = callback(obj_value, src_value)
             elif all_sequences or all_mappings:
-                result = merge(obj_value, src_value, _clone=False)
+                result = merge(obj_value,
+                               src_value,
+                               _clone=False,
+                               _setter=setter)
             else:
                 result = src_value
 
-            set_item(obj, key, result)
+            setter(obj, key, result)
 
     return obj
 
@@ -1129,7 +1172,7 @@ def update_path(obj, callback, keys, default=None):
 
     Args:
         obj (list|dict): Object to modify.
-        callback (callable): Function that returns updated value.
+        callback (function): Function that returns updated value.
         keys (list): A list of string keys that describe the object path to
             modify.
         default (mixed, optional): Default value to assign if path part is not
