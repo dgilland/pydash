@@ -9,6 +9,7 @@ from .fixtures import parametrize
     (([{'b': 4}, {'b': 5}, {'b': 6}], 'b'), 15),
     (([0, 14, 0.2],), 14.2),
     (({'one': {'a': 1}, 'two': {'a': 2}, 'three': {'a': 3}}, 'a'), 6),
+    ((5, 3), 8),
 ])
 def test_add(case, expected):
     assert _.add(*case) == expected

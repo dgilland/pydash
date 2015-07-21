@@ -44,10 +44,13 @@ INFINITY = float('inf')
 def add(collection, callback=None):
     """Sum each element in `collection`. If callback is passed, each element of
     `collection` is passed through a callback before the summation is computed.
+    If `collection` and `callback` are numbers, they are added together.
 
     Args:
-        collection (list|dict): Collection to process.
-        callback (mixed, optional): Callback applied per iteration.
+        collection (list|dict|number): Collection to process or first number to
+            add.
+        callback (mixed|number, optional): Callback applied per iteration or
+            second number to add.
 
     Returns:
         number: Result of summation.
@@ -58,14 +61,22 @@ def add(collection, callback=None):
         10
         >>> add([1, 2, 3, 4], lambda x: x ** 2)
         30
+        >>> add(1, 5)
+        6
 
     See Also:
         - :func:`add` (main definition)
         - :func:`sum_` (alias)
 
     .. versionadded:: 2.1.0
+
+    .. versionchanged:: 3.3.0
+        Support adding two numbers when passed as positional arguments.
     """
-    return sum(result[0] for result in itercallback(collection, callback))
+    if pyd.is_number(collection) and pyd.is_number(callback):
+        return collection + callback
+    else:
+        return sum(result[0] for result in itercallback(collection, callback))
 
 
 sum_ = add

@@ -9,6 +9,7 @@ Changelog
 - Add ``mod_args``.
 - Add ``unzip_with``.
 - Add ``zip_with``.
+- Make ``add`` support adding two numbers if passed in positionally.
 
 
 v3.2.2 (2015-04-29)
