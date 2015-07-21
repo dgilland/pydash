@@ -28,6 +28,7 @@ __all__ = (
     'flow_right',
     'iterated',
     'juxtapose',
+    'mod_args',
     'negate',
     'once',
     'partial',
@@ -239,6 +240,17 @@ class Juxtapose(object):
 
     def __call__(self, *objs):
         return pyd.map_(self.funcs, lambda func: func(*objs))
+
+
+class ModArgs(object):
+    """Wrap a function in a mod_args context."""
+    def __init__(self, func, *transforms):
+        self.func = func
+        self.transforms = pyd.flatten(transforms)
+
+    def __call__(self, *args):
+        args = (self.transforms[idx](args) for idx, args in enumerate(args))
+        return self.func(*args)
 
 
 class Negate(object):
@@ -722,6 +734,31 @@ def juxtapose(*funcs):
     .. versionadded:: 2.0.0
     """
     return Juxtapose(*funcs)
+
+
+def mod_args(func, *transforms):
+    """Creates a function that runs each argument through a corresponding
+    transform function.
+
+    Args:
+        func (function): Function to wrap.
+        *transforms (function): Functions to transform arguments, specified as
+            individual functions or lists of functions.
+
+    Returns:
+        ModArgs: Function wrapped in a :class:`ModArgs` context.
+
+    Example:
+
+        >>> squared = lambda x: x ** 2
+        >>> double = lambda x: x * 2
+        >>> modder = mod_args(lambda x, y: [x, y], squared, double)
+        >>> modder(5, 10)
+        [25, 20]
+
+    .. versionadded:: 3.3.0
+    """
+    return ModArgs(func, *transforms)
 
 
 def negate(func):

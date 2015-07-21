@@ -230,6 +230,20 @@ def test_juxtapose(funcs, args, expected):
     assert _.juxtapose(*funcs)(*args) == expected
 
 
+@parametrize('func,transforms,args,expected', [
+    (lambda a, b: [a, b],
+     [lambda x: x ** 2, lambda x: x * 2],
+     (5, 10),
+     [25, 20]),
+    (lambda a, b: [a, b],
+     ([lambda x: x ** 2, lambda x: x * 2],),
+     (5, 10),
+     [25, 20]),
+])
+def test_mod_args(func, transforms, args, expected):
+    assert _.mod_args(func, *transforms)(*args) == expected
+
+
 @parametrize('func,args', [
     (lambda item: item, (True,)),
     (lambda item: item, (False,)),
