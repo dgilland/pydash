@@ -6,6 +6,10 @@ Changelog
 
 - Add ``ceil``.
 - Add ``floor``.
+- Add ``gt``.
+- Add ``gte``.
+- Add ``lt``.
+- Add ``lte``.
 - Add ``method``.
 - Add ``method_of``.
 - Add ``mod_args``.

@@ -259,6 +259,10 @@ from .objects import (
 #
 
 from .predicates import (
+    gt,
+    gte,
+    lt,
+    lte,
     in_range,
     is_associative,
     is_blank,

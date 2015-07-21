@@ -25,6 +25,10 @@ from ._compat import (
 
 
 __all__ = (
+    'gt',
+    'gte',
+    'lt',
+    'lte',
     'in_range',
     'is_associative',
     'is_blank',
@@ -70,6 +74,102 @@ __all__ = (
 
 
 RegExp = type(re.compile(''))
+
+
+def gt(value, other):
+    """Checks if `value` is greater than `other`.
+
+    Args:
+        value (number): Value to compare.
+        other (number): Other value to compare.
+
+    Returns:
+        bool: Whether `value` is greater than `other`.
+
+    Example:
+
+        >>> gt(5, 3)
+        True
+        >>> gt(3, 5)
+        False
+        >>> gt(5, 5)
+        False
+
+    .. versionadded:: 3.3.0
+    """
+    return value > other
+
+
+def gte(value, other):
+    """Checks if `value` is greater than or equal to `other`.
+
+    Args:
+        value (number): Value to compare.
+        other (number): Other value to compare.
+
+    Returns:
+        bool: Whether `value` is greater than or equal to `other`.
+
+    Example:
+
+        >>> gte(5, 3)
+        True
+        >>> gte(3, 5)
+        False
+        >>> gte(5, 5)
+        True
+
+    .. versionadded:: 3.3.0
+    """
+    return value >= other
+
+
+def lt(value, other):
+    """Checks if `value` is less than `other`.
+
+    Args:
+        value (number): Value to compare.
+        other (number): Other value to compare.
+
+    Returns:
+        bool: Whether `value` is less than `other`.
+
+    Example:
+
+        >>> lt(5, 3)
+        False
+        >>> lt(3, 5)
+        True
+        >>> lt(5, 5)
+        False
+
+    .. versionadded:: 3.3.0
+    """
+    return value < other
+
+
+def lte(value, other):
+    """Checks if `value` is less than or equal to `other`.
+
+    Args:
+        value (number): Value to compare.
+        other (number): Other value to compare.
+
+    Returns:
+        bool: Whether `value` is less than or equal to `other`.
+
+    Example:
+
+        >>> lte(5, 3)
+        False
+        >>> lte(3, 5)
+        True
+        >>> lte(5, 5)
+        True
+
+    .. versionadded:: 3.3.0
+    """
+    return value <= other
 
 
 def in_range(value, start=0, end=None):
@@ -210,7 +310,7 @@ def is_builtin(value):
     """Checks if `value` is a Python builtin function or method.
 
     Args:
-        value (callable): Value to check.
+        value (function): Value to check.
 
     Returns:
         bool: Whether `value` is a Python builtin function or method.
@@ -579,7 +679,7 @@ def is_integer(value):
         value (mixed): Value to check.
 
     Returns:
-        bool: Whether `value` is a integer.
+        bool: Whether `value` is an integer.
 
     Example:
 

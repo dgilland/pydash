@@ -12,6 +12,50 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
+    ((2, 1), True),
+    ((2.5, 2.3), True),
+    ((1, 2), False),
+    ((2.3, 2.5), False),
+    ((1, 1), False),
+])
+def test_gt(case, expected):
+    assert _.gt(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((2, 1), True),
+    ((2.5, 2.3), True),
+    ((1, 2), False),
+    ((2.3, 2.5), False),
+    ((1, 1), True),
+])
+def test_gte(case, expected):
+    assert _.gte(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((2, 1), False),
+    ((2.5, 2.3), False),
+    ((1, 2), True),
+    ((2.3, 2.5), True),
+    ((1, 1), False),
+])
+def test_lt(case, expected):
+    assert _.lt(*case) == expected
+
+
+@parametrize('case,expected', [
+    ((2, 1), False),
+    ((2.5, 2.3), False),
+    ((1, 2), True),
+    ((2.3, 2.5), True),
+    ((1, 1), True),
+])
+def test_lte(case, expected):
+    assert _.lte(*case) == expected
+
+
+@parametrize('case,expected', [
     ((3, 2, 4), True),
     ((4, 8), True),
     ((4, 2), False),
