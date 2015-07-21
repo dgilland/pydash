@@ -41,6 +41,7 @@ __all__ = (
     'for_in_right',
     'for_own',
     'for_own_right',
+    'get',
     'get_path',
     'has',
     'has_path',
@@ -253,7 +254,7 @@ def deep_get(obj, path):
 
     .. versionadded:: 2.2.0
     """
-    return get_path(obj, path)
+    return get(obj, path)
 
 
 def deep_has(obj, path):
@@ -284,7 +285,7 @@ def deep_has(obj, path):
         Return ``False`` on ``ValueError`` when checking path.
     """
     try:
-        get_path(obj, path, default=NoValue)
+        get(obj, path, default=NoValue)
         exists = True
     except (KeyError, IndexError, TypeError, ValueError):
         exists = False
@@ -534,7 +535,7 @@ def for_in_right(obj, callback=None):
 for_own_right = for_in_right
 
 
-def get_path(obj, path, default=None):
+def get(obj, path, default=None):
     """Get the value at any depth of a nested object based on the path
     described by `path`. If path doesn't exist, `default` is returned.
 
@@ -552,15 +553,22 @@ def get_path(obj, path, default=None):
 
     Example:
 
-        >>> get_path({}, 'a.b.c') is None
+        >>> get({}, 'a.b.c') is None
         True
-        >>> get_path({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1')
+        >>> get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1')
         2
+
+    See Also:
+        - :func:`get` (main definition)
+        - :func:`get_path` (alias)
 
     .. versionadded:: 2.0.0
 
     .. versionchanged:: 2.2.0
         Support escaping "." delimiter in single string path key.
+
+    .. versionchanged:: 3.3.0
+        Added :func:`get` as main definition and :func:`get_path` as alias.
     """
     for key in path_keys(path):
         obj = get_item(obj, key, default=default)
@@ -568,6 +576,9 @@ def get_path(obj, path, default=None):
             break
 
     return obj
+
+
+get_path = get
 
 
 def has(obj, key):

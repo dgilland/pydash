@@ -310,8 +310,15 @@ def test_for_in_right_aliases(case):
       'lev\\.el1.lev\\\\el2.level3.[0]'),
      'value')
 ])
-def test_get_path(case, expected):
-    assert _.get_path(*case) == expected
+def test_get(case, expected):
+    assert _.get(*case) == expected
+
+
+@parametrize('case', [
+    _.get_path,
+])
+def test_get_aliases(case):
+    assert _.get is case
 
 
 @parametrize('case,expected', [

@@ -7,6 +7,7 @@ Changelog
 - Add ``ceil``.
 - Add ``defaults_deep``, ``deep_defaults``.
 - Add ``floor``.
+- Add ``get``.
 - Add ``gt``.
 - Add ``gte``.
 - Add ``is_iterable``.
@@ -19,6 +20,7 @@ Changelog
 - Add ``unzip_with``.
 - Add ``zip_with``.
 - Make ``add`` support adding two numbers if passed in positionally.
+- Make ``get`` main definition and ``get_path`` its alias.
 
 
 v3.2.2 (2015-04-29)

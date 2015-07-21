@@ -229,6 +229,7 @@ from .objects import (
     for_in_right,
     for_own,
     for_own_right,
+    get,
     get_path,
     has,
     has_path,
