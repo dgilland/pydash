@@ -309,6 +309,18 @@ def test_is_integer_aliases(case):
 
 
 @parametrize('case,expected', [
+    ([], True),
+    ({}, True),
+    ((), True),
+    ('a', True),
+    (5, False),
+    (None, False),
+])
+def test_is_iterable(case, expected):
+    assert _.is_iterable(case) == expected
+
+
+@parametrize('case,expected', [
     ('{"one": 1, "two": {"three": "3"}, "four": [4]}', True),
     ({"one": 1, "two": {"three": "3"}, "four": [4]}, False),
     ('', False),

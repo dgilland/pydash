@@ -283,6 +283,7 @@ from .predicates import (
     is_instance_of,
     is_integer,
     is_int,
+    is_iterable,
     is_json,
     is_list,
     is_match,

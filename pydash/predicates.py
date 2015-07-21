@@ -49,6 +49,7 @@ __all__ = (
     'is_instance_of',
     'is_integer',
     'is_int',
+    'is_iterable',
     'is_json',
     'is_list',
     'is_match',
@@ -703,6 +704,38 @@ def is_integer(value):
 
 
 is_int = is_integer
+
+
+def is_iterable(value):
+    """Checks if `value` is an iterable.
+
+    Args:
+        value (mixed): Value to check.
+
+    Returns:
+        bool: Whether `value is an iterable.
+
+    Example:
+
+        >>> is_iterable([])
+        True
+        >>> is_iterable({})
+        True
+        >>> is_iterable(())
+        True
+        >>> is_iterable(5)
+        False
+        >>> is_iterable(True)
+        False
+
+    .. versionadded:: 3.3.0
+    """
+    try:
+        iter(value)
+    except TypeError:
+        return False
+    else:
+        return True
 
 
 def is_json(value):

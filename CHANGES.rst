@@ -8,6 +8,7 @@ Changelog
 - Add ``floor``.
 - Add ``gt``.
 - Add ``gte``.
+- Add ``is_iterable``.
 - Add ``lt``.
 - Add ``lte``.
 - Add ``method``.
