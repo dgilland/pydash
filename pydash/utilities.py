@@ -114,7 +114,7 @@ def deep_property(path):
 
     .. versionadded:: 1.0.0
     """
-    return lambda obj: pyd.deep_get(obj, path)
+    return lambda obj: pyd.get(obj, path)
 
 
 deep_prop = deep_property
