@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v3.3.0 (2015-07-23)
+-------------------
+
 - Add ``ceil``.
 - Add ``defaults_deep``.
 - Add ``floor``.
