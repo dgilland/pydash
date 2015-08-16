@@ -834,9 +834,9 @@ def is_match(obj, source, callback=None):
           isinstance(obj, tuple) and isinstance(source, tuple)):
         # Walk a/b to determine equality.
         for key, value in iterator(source):
-            if pyd.has(obj, key):
+            try:
                 equal = is_match(obj[key], value, callback)
-            else:
+            except Exception:
                 equal = False
 
             if not equal:
