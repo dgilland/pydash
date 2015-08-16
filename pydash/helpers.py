@@ -36,10 +36,12 @@ def call_callback(callback, *args):
     try:
         argspec = inspect.getargspec(callback)
     except TypeError:
-        try:
-            argspec = inspect.getargspec(getattr(callback, '__call__', None))
-        except TypeError:  # pragma: no cover
-            pass
+        call = getattr(callback, '__call__', None)
+        if call:
+            try:
+                argspec = inspect.getargspec(call)
+            except TypeError:  # pragma: no cover
+                pass
     finally:
         if isinstance(callback, type):
             # Only pass single argument to type callbacks. This is for things
