@@ -12,6 +12,7 @@
 
 import sys
 import cgi
+from collections import Hashable
 from decimal import Decimal
 from functools import partial
 
@@ -74,7 +75,8 @@ else:
         return cls
 
 
-builtins = dict((value, key) for key, value in iteritems(_builtins.__dict__))
+builtins = dict((value, key) for key, value in iteritems(_builtins.__dict__)
+                if isinstance(value, Hashable))
 html_escape = partial(cgi.escape, quote=True)
 html_unescape = HTMLParser().unescape
 
