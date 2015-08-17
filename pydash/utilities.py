@@ -200,16 +200,22 @@ def iteratee(func):
     """
     if callable(func):
         cbk = func
-    elif isinstance(func, string_types):
-        cbk = deep_prop(func)
-    elif isinstance(func, (list, tuple)) and len(func) == 1:
-        cbk = prop(func[0])
-    elif isinstance(func, (list, tuple)) and len(func) > 1:
-        cbk = matches_property(*func[:2])
-    elif isinstance(func, dict):
-        cbk = matches(func)
     else:
-        cbk = identity
+        if isinstance(func, string_types):
+            cbk = deep_prop(func)
+        elif isinstance(func, (list, tuple)) and len(func) == 1:
+            cbk = prop(func[0])
+        elif isinstance(func, (list, tuple)) and len(func) > 1:
+            cbk = matches_property(*func[:2])
+        elif isinstance(func, dict):
+            cbk = matches(func)
+        else:
+            cbk = identity
+
+        # Optimize callback by specifying the exact number of arguments the
+        # callback takes so that arg inspection (costly process) can be
+        # skipped.
+        cbk._argcount = 1
 
     return cbk
 

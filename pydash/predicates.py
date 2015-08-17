@@ -838,7 +838,7 @@ def is_match(obj, source, callback=None):
         for key, value in iterator(source):
             try:
                 equal = is_match(obj[key], value, callback)
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 equal = False
 
             if not equal:

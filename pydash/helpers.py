@@ -31,6 +31,19 @@ def call_callback(callback, *args):
     arguments when calling it.
     """
     maxargs = len(args)
+    argcount = get_argcount(callback, maxargs)
+    argstop = min([maxargs, argcount])
+
+    return callback(*args[:argstop])
+
+
+def get_argcount(callback, maxargs):
+    """Return argument count of callback function."""
+    if hasattr(callback, '_argcount'):
+        # Optimization feature where argcount of callback is known and properly
+        # set by initator.
+        return callback._argcount
+
     argspec = None
 
     try:
@@ -58,9 +71,7 @@ def call_callback(callback, *args):
         else:  # pragma: no cover
             argcount = maxargs
 
-    argstop = min([maxargs, argcount])
-
-    return callback(*args[:argstop])
+    return argcount
 
 
 def guess_builtin_argcount(obj):
