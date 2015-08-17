@@ -27,11 +27,13 @@ if PY3:
     from html.parser import HTMLParser
     from urllib.parse import (
         urlencode, urlsplit, urlunsplit, parse_qs, parse_qsl)
-    import builtins
+    import builtins as _builtins
+
     text_type = str
     string_types = (str,)
     integer_types = (int,)
     number_types = (int, float, Decimal)
+    builtins = _builtins.__dict__.values()
 
     def iterkeys(d): return iter(d.keys())
 
@@ -50,7 +52,7 @@ else:
     from itertools import izip
     from urllib import urlencode
     from urlparse import urlsplit, urlunsplit, parse_qs, parse_qsl
-    import __builtin__ as builtins
+    import __builtin__ as _builtins
 
     text_type = unicode
     string_types = (str, unicode)
@@ -72,6 +74,7 @@ else:
         return cls
 
 
+builtins = dict((value, key) for key, value in iteritems(_builtins.__dict__))
 html_escape = partial(cgi.escape, quote=True)
 html_unescape = HTMLParser().unescape
 

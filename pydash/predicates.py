@@ -331,8 +331,10 @@ def is_builtin(value):
 
     .. versionadded:: 3.0.0
     """
-    return (value in builtins.__dict__.values() or
-            isinstance(value, BuiltinFunctionType))
+    try:
+        return isinstance(value, BuiltinFunctionType) or value in builtins
+    except TypeError:  # pragma: no cover
+        return False
 
 
 is_native = is_builtin
