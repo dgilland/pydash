@@ -10,6 +10,8 @@
     https://github.com/mitsuhiko/flask/blob/master/flask/_compat.py
 """
 
+from __future__ import absolute_import
+
 import sys
 import cgi
 from collections import Hashable
