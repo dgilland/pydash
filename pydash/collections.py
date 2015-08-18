@@ -10,7 +10,7 @@ import random
 
 import pydash as pyd
 
-from .helpers import itercallback, iterator, call_callback
+from .helpers import itercallback, iterator, call_callback, getargcount
 from ._compat import cmp_to_key, _cmp
 
 
@@ -707,8 +707,14 @@ def reduce_(collection, callback=None, accumulator=None):
     if callback is None:
         callback = pyd.identity
 
+    argcount = getargcount(callback, maxargs=3)
+
     for index, item in iterable:
-        result = call_callback(callback, result, item, index)
+        result = call_callback(callback,
+                               result,
+                               item,
+                               index,
+                               argcount=argcount)
 
     return result
 
@@ -782,8 +788,14 @@ def reductions(collection, callback=None, accumulator=None, from_right=False):
 
     results = []
 
+    argcount = getargcount(callback, maxargs=3)
+
     def interceptor(result, item, index):  # pylint: disable=missing-docstring
-        result = call_callback(callback, result, item, index)
+        result = call_callback(callback,
+                               result,
+                               item,
+                               index,
+                               argcount=argcount)
         results.append(result)
         return result
 

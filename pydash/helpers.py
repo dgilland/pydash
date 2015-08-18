@@ -32,13 +32,13 @@ def call_callback(callback, *args, **kargs):
     """
     maxargs = len(args)
     argcount = (kargs['argcount'] if 'argcount' in kargs
-                else get_argcount(callback, maxargs))
+                else getargcount(callback, maxargs))
     argstop = min([maxargs, argcount])
 
     return callback(*args[:argstop])
 
 
-def get_argcount(callback, maxargs):
+def getargcount(callback, maxargs):
     """Return argument count of callback function."""
     if hasattr(callback, '_argcount'):
         # Optimization feature where argcount of callback is known and properly
@@ -102,7 +102,7 @@ def itercallback(obj, callback=None, reverse=False):
         items = reversed(tuple(items))
 
     # Precompute argcount to avoid repeated calculations during callback loop.
-    argcount = get_argcount(cbk, maxargs=3)
+    argcount = getargcount(cbk, maxargs=3)
 
     for key, item in items:
         yield (call_callback(cbk, item, key, obj, argcount=argcount),

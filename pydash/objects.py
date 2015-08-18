@@ -17,7 +17,8 @@ from .helpers import (
     get_item,
     set_item,
     NoValue,
-    call_callback
+    call_callback,
+    getargcount
 )
 from ._compat import iteritems, text_type
 
@@ -115,12 +116,18 @@ def assign(obj, *sources, **kargs):
     if callback is None and callable(sources[-1]):
         callback = sources.pop()
 
+    argcount = (getargcount(callback, maxargs=2) if callback is not None
+                else None)
+
     for source in sources:
         source = clone_deep(source)
 
         for key, value in iteritems(source):
             obj[key] = (value if callback is None
-                        else call_callback(callback, obj.get(key), value))
+                        else call_callback(callback,
+                                           obj.get(key),
+                                           value,
+                                           argcount=argcount))
 
     return obj
 
@@ -794,8 +801,16 @@ def omit(obj, callback=None, *properties):
         def callback(value, key, item):
             return key in properties
 
+        argcount = 3
+    else:
+        argcount = getargcount(callback, maxargs=3)
+
     return dict((key, value) for key, value in iterator(obj)
-                if not call_callback(callback, value, key, obj))
+                if not call_callback(callback,
+                                     value,
+                                     key,
+                                     obj,
+                                     argcount=argcount))
 
 
 def pairs(obj):
@@ -898,8 +913,13 @@ def pick(obj, callback=None, *properties):
         def callback(value, key, item):
             return key in properties
 
+        argcount = 3
+    else:
+        argcount = getargcount(callback, maxargs=3)
+
+    # TODO: cache argcount
     return dict((key, value) for key, value in iterator(obj)
-                if call_callback(callback, value, key, obj))
+                if call_callback(callback, value, key, obj, argcount=argcount))
 
 
 def rename_keys(obj, key_map):
@@ -1175,8 +1195,15 @@ def transform(obj, callback=None, accumulator=None):
     if accumulator is None:
         accumulator = []
 
+    argcount = getargcount(callback, maxargs=4)
+
     walk = (None for key, item in iterator(obj)
-            if call_callback(callback, accumulator, item, key, obj) is False)
+            if call_callback(callback,
+                             accumulator,
+                             item,
+                             key,
+                             obj,
+                             argcount=argcount) is False)
     next(walk, None)
 
     return accumulator
