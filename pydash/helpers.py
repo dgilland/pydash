@@ -26,12 +26,13 @@ class _NoValue(object):
 NoValue = _NoValue()
 
 
-def call_callback(callback, *args):
+def call_callback(callback, *args, **kargs):
     """Inspect argspec of `callback` function and only pass the supported
     arguments when calling it.
     """
     maxargs = len(args)
-    argcount = get_argcount(callback, maxargs)
+    argcount = (kargs['argcount'] if 'argcount' in kargs
+                else get_argcount(callback, maxargs))
     argstop = min([maxargs, argcount])
 
     return callback(*args[:argstop])
@@ -100,8 +101,14 @@ def itercallback(obj, callback=None, reverse=False):
     if reverse:
         items = reversed(tuple(items))
 
+    # Precompute argcount to avoid repeated calculations during callback loop.
+    argcount = get_argcount(cbk, maxargs=3)
+
     for key, item in items:
-        yield (call_callback(cbk, item, key, obj), item, key, obj)
+        yield (call_callback(cbk, item, key, obj, argcount=argcount),
+               item,
+               key,
+               obj)
 
 
 def iterator(obj):
