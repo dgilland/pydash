@@ -214,7 +214,7 @@ def iteratee(func):
 
         # Optimize callback by specifying the exact number of arguments the
         # callback takes so that arg inspection (costly process) can be
-        # skipped.
+        # skipped in helpers.call_callback().
         cbk._argcount = 1
 
     return cbk
@@ -276,7 +276,8 @@ def matches_property(key, value):
 
     .. versionadded:: 3.1.0
     """
-    return lambda obj: matches(value)(prop(key)(obj))
+    prop_key = prop(key)
+    return lambda obj: matches(value)(prop_key(obj))
 
 
 def memoize(func, resolver=None):
