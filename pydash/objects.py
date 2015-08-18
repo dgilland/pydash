@@ -1277,7 +1277,7 @@ def path_keys(keys):
     list of keys.
     """
     # pylint: disable=redefined-outer-name
-    if pyd.is_string(keys):
+    if pyd.is_string(keys) and ('.' in keys or '[' in keys):
         # This matches "." as delimiter unless it is escaped by "//".
         re_dot_delim = re.compile(r'(?<!\\)(?:\\\\)*\.')
 
@@ -1290,7 +1290,7 @@ def path_keys(keys):
         keys = [int(key[1:-1]) if re_list_index.match(key)
                 else unescape_path_key(key)
                 for key in re_dot_delim.split(keys)]
-    elif pyd.is_number(keys):
+    elif pyd.is_string(keys) or pyd.is_number(keys):
         keys = [keys]
     elif keys is NoValue:
         keys = []
