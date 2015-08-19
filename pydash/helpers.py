@@ -26,7 +26,7 @@ class _NoValue(object):
 NoValue = _NoValue()
 
 
-def call_callback(callback, *args, **kargs):
+def callit(callback, *args, **kargs):
     """Inspect argspec of `callback` function and only pass the supported
     arguments when calling it.
     """
@@ -105,7 +105,7 @@ def itercallback(obj, callback=None, reverse=False):
     argcount = getargcount(cbk, maxargs=3)
 
     for key, item in items:
-        yield (call_callback(cbk, item, key, obj, argcount=argcount),
+        yield (callit(cbk, item, key, obj, argcount=argcount),
                item,
                key,
                obj)

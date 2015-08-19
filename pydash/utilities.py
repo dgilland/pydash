@@ -214,7 +214,7 @@ def iteratee(func):
 
         # Optimize callback by specifying the exact number of arguments the
         # callback takes so that arg inspection (costly process) can be
-        # skipped in helpers.call_callback().
+        # skipped in helpers.callit().
         cbk._argcount = 1
 
     return cbk
