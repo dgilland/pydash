@@ -790,7 +790,8 @@ def push(array, *items):
 
     .. versionadded:: 2.2.0
     """
-    pyd.each(items, array.append)
+    for item in items:
+        array.append(item)
     return array
 
 
