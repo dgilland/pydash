@@ -16,11 +16,6 @@ import sys
 import os
 
 
-# On_rtd is whether we are on readthedocs.org, this line of code grabbed from
-# docs.readthedocs.org.
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -40,7 +35,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
-    'sphinxcontrib.napoleon'
+    'sphinx.ext.napoleon'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -109,12 +104,13 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-if on_rtd:
-    html_theme = 'default'
-else:
-    import sphinx_rtd_theme
+
+# On_rtd is whether we are on readthedocs.org, this line of code grabbed from
+# docs.readthedocs.org.
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not on_rtd:
     html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 
 # Theme options are theme-specific and customize the look and feel of a theme
