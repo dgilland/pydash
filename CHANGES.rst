@@ -4,7 +4,7 @@ Changelog
 =========
 
 
-vx.x.x (xxxx-xx-xx)
+v3.4.0 (2015-09-22)
 -------------------
 
 - Optimize callback system for performance.
