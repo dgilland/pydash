@@ -4,6 +4,20 @@ Changelog
 =========
 
 
+vx.x.x (xxxx-xx-xx)
+-------------------
+
+- Optimize callback system for performance.
+
+  - Explicitly store arg count on callback for ``pydash`` generated callbacks where the arg count is known. This avoids the costly ``inspect.getargspec`` call.
+  - Eliminate usage of costly ``guess_builtin_argcount`` which parsed docstrings, and instead only ever pass a single argument to a builtin callback function.
+
+- Optimize ``get``/``set`` so that regex parsing is only done when special characters are contained in the path key whereas before, all string paths were parsed.
+- Optimize ``is_builtin`` by checking for ``BuiltinFunctionType`` instance and then using ``dict`` look up table instead of a ``list`` look up.
+- Optimize ``is_match`` by replacing call to ``has`` with a ``try/except`` block.
+- Optimize ``push``/``append`` by using a native loop instead of callback mapping.
+
+
 v3.3.0 (2015-07-23)
 -------------------
 
