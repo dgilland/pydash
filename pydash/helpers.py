@@ -47,50 +47,23 @@ def getargcount(callback, maxargs):
 
     argspec = None
 
-    try:
-        argspec = inspect.getargspec(callback)
-    except TypeError:
-        call = getattr(callback, '__call__', None)
-        if call:
-            try:
-                argspec = inspect.getargspec(call)
-            except TypeError:  # pragma: no cover
-                pass
-    finally:
-        if isinstance(callback, type):
-            # Only pass single argument to type callbacks. This is for things
-            # like int(), float(), str(), etc.
+    if isinstance(callback, type) or pyd.is_builtin(callback):
+        # Only pass single argument to type callbacks or builtins.
+        argcount = 1
+    else:
+        try:
+            argspec = inspect.getargspec(callback)
+
+            if argspec and not argspec.varargs:
+                # Use inspected arg count.
+                argcount = len(argspec.args)
+            else:
+                # Assume all args are handleable
+                argcount = maxargs
+        except TypeError:  # pragma: no cover
             argcount = 1
-        elif pyd.is_builtin(callback):
-            argcount = guess_builtin_argcount(callback) or maxargs
-        elif argspec and argspec.varargs:
-            # Callback supports variable arguments.
-            argcount = maxargs
-        elif argspec:
-            # Use inspected arg count.
-            argcount = len(argspec.args)
-        else:  # pragma: no cover
-            argcount = maxargs
 
     return argcount
-
-
-def guess_builtin_argcount(obj):
-    """Return guess as to how many arguments can be supplied to a builtin
-    function or method. This relies on the fact that the docstring for builtins
-    follows a predictable pattern.
-    """
-    try:
-        # Try to split the arguments between the first set of "(...)" which
-        # would correspond to argument list of the function.
-        count = len((re.search(r'\((.+)\)',
-                               obj.__doc__.split('\n')[0])
-                     .groups()[0]
-                     .split(',')))
-    except Exception:  # pragma: no cover pylint: disable=broad-except
-        count = None
-
-    return count
 
 
 def itercallback(obj, callback=None, reverse=False):
