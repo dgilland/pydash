@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+v3.4.1 (2015-11-03)
+-------------------
+
+- Fix Python 3.5, inspect, and  pytest compatibility issue with ``py_`` chaining object when doctest run on ``pydash.__init__.py``.
+
+
 v3.4.0 (2015-09-22)
 -------------------
 
