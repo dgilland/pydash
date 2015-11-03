@@ -98,6 +98,12 @@ class Chain(object):
             InvalidMethod: Raised if `name` is not a valid :attr:`module`
                 method.
         """
+        # Python 3.5 issue with pytest doctest call where inspect module tries
+        # to unwrap this class. If we don't return here, we get an
+        # InvalidMethod exception.
+        if name in ('__wrapped__',):  # pragma: no cover
+            return cls
+
         method = getattr(cls.module, name, None)
 
         if not callable(method) and not name.endswith('_'):
