@@ -647,6 +647,8 @@ def test_split_aliases(case):
     ('foo-bar-baz', 'Foo Bar Baz'),
     ("Foo!#Bar's", 'Foo Bar S'),
     ('fooBar', 'Foo Bar'),
+    ('___FOO-BAR___', 'FOO BAR'),
+    ('XMLHttp', 'XML Http'),
     ("", ""),
     (None, ""),
     (5, "5"),

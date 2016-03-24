@@ -1341,7 +1341,7 @@ def start_case(text):
     .. versionadded:: 3.1.0
     """
     text = pyd.to_string(text)
-    return ' '.join(word.capitalize() for word in words(text))
+    return ' '.join(capitalize(word, strict=False) for word in words(text))
 
 
 def starts_with(text, target, position=0):

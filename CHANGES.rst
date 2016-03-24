@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Fix bug in ``start_case`` where capitalized characters after the first character of a word where mistakenly cast to lower case.
+
+
 v3.4.1 (2015-11-03)
 -------------------
 
