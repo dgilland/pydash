@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Fix minor issue in deep path string parsing so that list indexing in paths can be specified as ``foo[0][1].bar`` instead of ``foo.[0].[1].bar``. Both formats are now supported.
+
+
 v3.4.2 (2016-03-24)
 -------------------
 

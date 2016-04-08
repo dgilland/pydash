@@ -71,6 +71,18 @@ __all__ = (
 )
 
 
+# These regexes are used in path_keys() to parse deep path strings.
+
+# This is used to split a deep path string into dict keys or list indexex.
+# This matches "." as delimiter (unless it is escaped by "//") and
+# "[<integer>]" as delimiter while keeping the "[<integer>]" as an item.
+RE_PATH_KEY_DELIM = re.compile(r'(?<!\\)(?:\\\\)*\.|(\[\d+\])')
+
+# Matches on path strings like "[<integer>]". This is used to test whether a
+# path string part is a list index.
+RE_PATH_LIST_INDEX = re.compile(r'^\[\d+\]$')
+
+
 def assign(obj, *sources, **kargs):
     """Assigns own enumerable properties of source object(s) to the destination
     object. If `callback` is supplied, it is invoked with two arguments:
@@ -1301,18 +1313,13 @@ def path_keys(keys):
     """
     # pylint: disable=redefined-outer-name
     if pyd.is_string(keys) and ('.' in keys or '[' in keys):
-        # This matches "." as delimiter unless it is escaped by "//".
-        re_dot_delim = re.compile(r'(?<!\\)(?:\\\\)*\.')
-
         # Since we can't tell whether a bare number is supposed to be dict key
         # or a list index, we support a special syntax where any string-integer
         # surrounded by brackets is treated as a list index and converted to an
         # integer.
-        re_list_index = re.compile(r'\[[\d\]]')
-
-        keys = [int(key[1:-1]) if re_list_index.match(key)
+        keys = [int(key[1:-1]) if RE_PATH_LIST_INDEX.match(key)
                 else unescape_path_key(key)
-                for key in re_dot_delim.split(keys)]
+                for key in filter(None, RE_PATH_KEY_DELIM.split(keys))]
     elif pyd.is_string(keys) or pyd.is_number(keys):
         keys = [keys]
     elif keys is NoValue:
