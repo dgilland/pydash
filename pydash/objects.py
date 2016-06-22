@@ -705,9 +705,8 @@ def merge(obj, *sources, **kargs):
     that don't resolve to undefined into the destination object. Subsequent
     sources will overwrite property assignments of previous sources. If a
     callback is provided it will be executed to produce the merged values of
-    the destination and source properties. If the callback returns undefined
-    merging will be handled by the method instead. The callback is invoked with
-    at least two arguments: ``(obj_value, *source_value)``.
+    the destination and source properties. The callback is invoked with at
+    least two arguments: ``(obj_value, *source_value)``.
 
     Args:
         obj (dict): Destination object to merge source(s) into.
