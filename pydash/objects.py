@@ -758,7 +758,7 @@ def merge(obj, *sources, **kargs):
     for source in sources:
         # Don't re-clone if we've already cloned before.
         if _clone:
-            source = clone_deep(source)
+            source = copy.deepcopy(source)
 
         for key, src_value in iterator(source):
             obj_value = get_item(obj, key, default=None)
