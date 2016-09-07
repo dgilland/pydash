@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Shallow copy each source in ``assign``/``extend`` instead of deep copying.
+
+
 v3.4.3 (2016-04-07)
 -------------------
 

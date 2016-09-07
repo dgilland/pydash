@@ -121,6 +121,9 @@ def assign(obj, *sources, **kargs):
 
     .. versionchanged:: 3.0.0
         Allow callbacks to accept partial arguments.
+
+    .. versionchanged:: 3.4.4
+        Shallow copy each `source` instead of deep copying.
     """
     sources = list(sources)
     callback = kargs.get('callback')
@@ -132,7 +135,7 @@ def assign(obj, *sources, **kargs):
                 else None)
 
     for source in sources:
-        source = clone_deep(source)
+        source = source.copy()
 
         for key, value in iteritems(source):
             obj[key] = (value if callback is None
