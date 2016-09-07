@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v3.4.4 (2016-09-06)
+-------------------
+
 - Shallow copy each source in ``assign``/``extend`` instead of deep copying.
 - Call ``copy.deepcopy`` in ``merge`` instead of the more resource intensive ``clone_deep``.
 
