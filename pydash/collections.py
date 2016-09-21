@@ -62,6 +62,8 @@ __all__ = (
     'where',
 )
 
+__default_param__ = object()
+
 
 def at(collection, *indexes):  # pylint: disable=invalid-name
     """Creates a list of elements from the specified indexes, or keys, of the
@@ -556,12 +558,13 @@ def mapiter(collection, callback=None):
         yield result[0]
 
 
-def max_(collection, callback=None):
+def max_(collection, callback=None, default=__default_param__):
     """Retrieves the maximum value of a `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
+        default: default value when collection is empty
 
     Returns:
         mixed: Maximum value.
@@ -572,16 +575,19 @@ def max_(collection, callback=None):
         4
         >>> max_([{'a': 1}, {'a': 2}, {'a': 3}], 'a')
         {'a': 3}
+        >>> max_([], default=-1)
+        -1
 
     .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
-
+    if not collection and default != __default_param__:
+        return default
     return max(collection, key=pyd.iteratee(callback))
 
 
-def min_(collection, callback=None):
+def min_(collection, callback=None, default=__default_param__):
     """Retrieves the minimum value of a `collection`.
 
     Args:
@@ -597,12 +603,15 @@ def min_(collection, callback=None):
         1
         >>> min_([{'a': 1}, {'a': 2}, {'a': 3}], 'a')
         {'a': 1}
+        >>> min_([], default=100)
+        100
 
     .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
-
+    if not collection and default != __default_param__:
+        return default
     return min(collection, key=pyd.iteratee(callback))
 
 
