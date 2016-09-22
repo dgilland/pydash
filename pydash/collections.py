@@ -569,11 +569,13 @@ class _iterator_with_default(object):
         self.default = NoValue
         return ret
 
-    def next(self):
+    def __next__(self):
         ret = next(self.iter, self.next_default())
         if ret is NoValue:
             raise StopIteration
         return ret
+
+    next = __next__
 
 
 def max_(collection, callback=None, default=NoValue):
