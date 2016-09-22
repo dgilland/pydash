@@ -10,7 +10,7 @@ import random
 
 import pydash as pyd
 
-from .helpers import itercallback, iterator, callit, getargcount
+from .helpers import itercallback, iterator, callit, getargcount, NoValue
 from ._compat import cmp_to_key, _cmp
 
 
@@ -61,8 +61,6 @@ __all__ = (
     'to_list',
     'where',
 )
-
-__default_param__ = object()
 
 
 def at(collection, *indexes):  # pylint: disable=invalid-name
@@ -558,7 +556,27 @@ def mapiter(collection, callback=None):
         yield result[0]
 
 
-def max_(collection, callback=None, default=__default_param__):
+class _iterator_with_default(object):
+    def __init__(self, collection, default):
+        self.iter = iter(collection)
+        self.default = default
+
+    def __iter__(self):
+        return self
+
+    def next_default(self):
+        ret = self.default
+        self.default = NoValue
+        return ret
+
+    def next(self):
+        ret = next(self.iter, self.next_default())
+        if ret is NoValue:
+            raise StopIteration
+        return ret
+
+
+def max_(collection, callback=None, default=NoValue):
     """Retrieves the maximum value of a `collection`.
 
     Args:
@@ -582,12 +600,12 @@ def max_(collection, callback=None, default=__default_param__):
     """
     if isinstance(collection, dict):
         collection = collection.values()
-    if not collection and default != __default_param__:
-        return default
-    return max(collection, key=pyd.iteratee(callback))
+
+    return max(_iterator_with_default(collection, default),
+               key=pyd.iteratee(callback))
 
 
-def min_(collection, callback=None, default=__default_param__):
+def min_(collection, callback=None, default=NoValue):
     """Retrieves the minimum value of a `collection`.
 
     Args:
@@ -610,9 +628,8 @@ def min_(collection, callback=None, default=__default_param__):
     """
     if isinstance(collection, dict):
         collection = collection.values()
-    if not collection and default != __default_param__:
-        return default
-    return min(collection, key=pyd.iteratee(callback))
+    return min(_iterator_with_default(collection, default),
+               key=pyd.iteratee(callback))
 
 
 def partition(collection, callback=None):

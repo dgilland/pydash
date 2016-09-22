@@ -228,6 +228,7 @@ def test_max_(case, expected):
 
 @parametrize('collection,default,expected', [
     ([], -1, -1),
+    ([1, 2, 3], -1, 3),
     ({}, -1, -1),
     ([], None, None),
     ({}, None, None)
@@ -252,6 +253,7 @@ def test_min_(case, expected):
 
 @parametrize('collection,default,expected', [
     ([], -1, -1),
+    ([1, 2, 3], -1, 1),
     ({}, -1, -1),
     ([], None, None),
     ({}, None, None)
