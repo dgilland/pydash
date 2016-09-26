@@ -10,7 +10,7 @@ import random
 
 import pydash as pyd
 
-from .helpers import itercallback, iterator, callit, getargcount
+from .helpers import itercallback, iterator, callit, getargcount, NoValue
 from ._compat import cmp_to_key, _cmp
 
 
@@ -556,12 +556,35 @@ def mapiter(collection, callback=None):
         yield result[0]
 
 
-def max_(collection, callback=None):
+class _iterator_with_default(object):
+    def __init__(self, collection, default):
+        self.iter = iter(collection)
+        self.default = default
+
+    def __iter__(self):
+        return self
+
+    def next_default(self):
+        ret = self.default
+        self.default = NoValue
+        return ret
+
+    def __next__(self):
+        ret = next(self.iter, self.next_default())
+        if ret is NoValue:
+            raise StopIteration
+        return ret
+
+    next = __next__
+
+
+def max_(collection, callback=None, default=NoValue):
     """Retrieves the maximum value of a `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
         callback (mixed, optional): Callback applied per iteration.
+        default: default value when collection is empty
 
     Returns:
         mixed: Maximum value.
@@ -572,16 +595,19 @@ def max_(collection, callback=None):
         4
         >>> max_([{'a': 1}, {'a': 2}, {'a': 3}], 'a')
         {'a': 3}
+        >>> max_([], default=-1)
+        -1
 
     .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return max(collection, key=pyd.iteratee(callback))
+    return max(_iterator_with_default(collection, default),
+               key=pyd.iteratee(callback))
 
 
-def min_(collection, callback=None):
+def min_(collection, callback=None, default=NoValue):
     """Retrieves the minimum value of a `collection`.
 
     Args:
@@ -597,13 +623,15 @@ def min_(collection, callback=None):
         1
         >>> min_([{'a': 1}, {'a': 2}, {'a': 3}], 'a')
         {'a': 1}
+        >>> min_([], default=100)
+        100
 
     .. versionadded:: 1.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
-
-    return min(collection, key=pyd.iteratee(callback))
+    return min(_iterator_with_default(collection, default),
+               key=pyd.iteratee(callback))
 
 
 def partition(collection, callback=None):
