@@ -1,15 +1,24 @@
+# Config file for automatic testing at travis-ci.org
 sudo: false
+
 language: python
+
 python:
   - "2.6"
   - "2.7"
   - "3.3"
   - "3.4"
   - "3.5"
+
+# command to install dependencies
 install:
   - make travisci-install
+
+# command to run tests
 script:
   - make travisci-test
+
+# tasks to execute after successful test
 after_success:
-  - pip install python-coveralls --use-mirrors
+  - pip install python-coveralls
   - coveralls

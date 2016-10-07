@@ -1,0 +1,12 @@
+coverage==4.2
+flake8==3.0.4
+invoke==0.13.0
+pylint==1.6.4
+pytest==3.0.3
+pytest-cov==2.3.1
+Sphinx==1.4.8
+sphinx-rtd-theme==0.1.9
+tox==2.3.1
+twine==1.8.1
+wheel==0.29.0
+-r requirements.txt
