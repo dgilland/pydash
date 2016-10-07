@@ -264,7 +264,7 @@ def is_blank(text):
         >>> is_blank(False)
         False
 
-    ..versionadded:: 3.0.0
+    .. versionadded:: 3.0.0
     """
     try:
         ret = bool(re.match(r'^(\s+)?$', text))
@@ -715,7 +715,7 @@ def is_iterable(value):
         value (mixed): Value to check.
 
     Returns:
-        bool: Whether `value is an iterable.
+        bool: Whether `value` is an iterable.
 
     Example:
 

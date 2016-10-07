@@ -553,7 +553,7 @@ def has(obj, path):
     .. versionchanged:: 3.0.0
         Return ``False`` on ``ValueError`` when checking path.
 
-    .. verisionchanged:: 3.3.0
+    .. versionchanged:: 3.3.0
 
         - Added :func:`deep_has` as alias.
         - Added :func:`has_path` as alias.
@@ -1107,7 +1107,7 @@ def to_number(obj, precision=0):
     Args:
         obj (str|int|float): Object to convert.
         precision (int, optional): Precision to round number to. Defaults to
-            ``0`.
+            ``0``.
 
     Returns:
         float: Converted number or ``None`` if can't be converted.

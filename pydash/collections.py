@@ -1080,7 +1080,7 @@ def sort_by_all(collection, keys, orders=None, reverse=False):
     .. versionchanged:: 3.2.0
         Added `orders` argument.
 
-    .. verionchanged:: 3.2.0
+    .. versionchanged:: 3.2.0
         Added :func:`sort_by_order` as alias.
     """
     if isinstance(collection, dict):

@@ -312,7 +312,7 @@ def clean(text):
         >>> clean('a  b   c    d')
         'a b c d'
 
-    ..versionadded:: 3.0.0
+    .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
     return ' '.join(pyd.compact(text.split()))
@@ -333,7 +333,7 @@ def count_substr(text, subtext):
         >>> count_substr('aabbccddaabbccdd', 'bc')
         2
 
-    ..versionadded:: 3.0.0
+    .. versionadded:: 3.0.0
     """
     if text is None or subtext is None:
         return 0
@@ -356,8 +356,8 @@ def deburr(text):
 
         >>> deburr('déjà vu')
         '...
-
-        # 'deja vu'
+        >>> 'deja vu'
+        'deja vu'
 
     .. versionadded:: 2.0.0
     """
@@ -1821,7 +1821,7 @@ def words(text, pattern=None):
     .. versionchanged:: 3.2.0
         Added `pattern` argument.
 
-    .. verionchanged:: 3.2.0
+    .. versionchanged:: 3.2.0
         Improved matching for one character words.
     """
     return js_match(text, pattern or RE_WORDS)

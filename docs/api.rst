@@ -45,7 +45,7 @@ Only the main pydash module API is guaranteed to adhere to semver. It's possible
 .. _api-dash-instance:
 
 py\_ Instance
-============
+=============
 
 There is a special ``py_`` instance available from ``pydash`` that supports method calling and method chaining from a single object:
 
