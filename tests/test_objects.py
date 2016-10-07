@@ -158,14 +158,14 @@ def test_invert_multivalue(case, expected):
     # NOTE: The expected is a list of values but find_key returns only a single
     # value. However, since dicts do not have an order, it's unknown what the
     # "first" returned value will be.
-    (({'barney':  {'age': 36, 'blocked': False},
-       'fred':    {'age': 40, 'blocked': True},
-       'pebbles': {'age': 1,  'blocked': False}},
+    (({'barney': {'age': 36, 'blocked': False},
+       'fred': {'age': 40, 'blocked': True},
+       'pebbles': {'age': 1, 'blocked': False}},
       lambda obj: obj['age'] < 40),
      ['pebbles', 'barney']),
-    (({'barney':  {'age': 36, 'blocked': False},
-       'fred':    {'age': 40, 'blocked': True},
-       'pebbles': {'age': 1,  'blocked': False}},),
+    (({'barney': {'age': 36, 'blocked': False},
+       'fred': {'age': 40, 'blocked': True},
+       'pebbles': {'age': 1, 'blocked': False}},),
      ['barney', 'fred', 'pebbles']),
     (([1, 2, 3],), [0])
 ])

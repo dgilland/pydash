@@ -130,9 +130,9 @@ def test_fill(case, expected):
 
 @parametrize('case,filter_by,expected', [
     (['apple', 'banana', 'beet'], lambda item: item.startswith('b'), 1),
-    ([{'name': 'apple',  'type': 'fruit'},
+    ([{'name': 'apple', 'type': 'fruit'},
       {'name': 'banana', 'type': 'fruit'},
-      {'name': 'beet',   'type': 'vegetable'}],
+      {'name': 'beet', 'type': 'vegetable'}],
      {'name': 'banana'},
      1),
     (['apple', 'banana', 'beet'], lambda: False, -1)
@@ -143,9 +143,9 @@ def test_find_index(case, filter_by, expected):
 
 @parametrize('case,filter_by,expected', [
     (['apple', 'banana', 'beet'], lambda item: item.startswith('b'), 2),
-    ([{'name': 'apple',  'type': 'fruit'},
+    ([{'name': 'apple', 'type': 'fruit'},
       {'name': 'banana', 'type': 'fruit'},
-      {'name': 'beet',   'type': 'vegetable'}],
+      {'name': 'beet', 'type': 'vegetable'}],
      {'type': 'fruit'},
      1),
     (['apple', 'banana', 'beet'], lambda: False, -1)
@@ -499,8 +499,8 @@ def test_take_right_while(case, expected):
     ([1, 2, 1.5, 3, 2.5], lambda num: math.floor(num), [1, 2, 3]),
     ([{'name': 'banana', 'type': 'fruit'},
       {'name': 'apple', 'type': 'fruit'},
-      {'name': 'beet',   'type': 'vegetable'},
-      {'name': 'beet',   'type': 'vegetable'},
+      {'name': 'beet', 'type': 'vegetable'},
+      {'name': 'beet', 'type': 'vegetable'},
       {'name': 'carrot', 'type': 'vegetable'},
       {'name': 'carrot', 'type': 'vegetable'}],
      {'type': 'vegetable'},

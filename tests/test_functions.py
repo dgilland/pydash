@@ -108,7 +108,8 @@ def test_curry_right(case, arglist, expected):
 
 
 def test_debounce():
-    def func(): return _.now()
+    def func():
+        return _.now()
 
     wait = 250
     debounced = _.debounce(func, wait)
@@ -131,7 +132,8 @@ def test_debounce():
 
 
 def test_debounce_max_wait():
-    def func(): return _.now()
+    def func():
+        return _.now()
 
     wait = 250
     max_wait = 300
@@ -318,7 +320,8 @@ def test_spread(case, args, expected):
 
 
 def test_throttle():
-    def func(): return _.now()
+    def func():
+        return _.now()
 
     wait = 250
     throttled = _.throttle(func, wait)

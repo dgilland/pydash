@@ -429,7 +429,8 @@ def variance(array):
     """
     ave = average(array)
 
-    def var(x): return power(x - ave, 2)  # pylint: disable=missing-docstring
+    def var(x):
+        return power(x - ave, 2)
 
     return pyd._(array).map_(var).average().value()
 

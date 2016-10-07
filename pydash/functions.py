@@ -122,9 +122,10 @@ class Conjoin(object):
 
     def __call__(self, obj):
         """Return result of conjoin `obj` with :attr:`funcs` predicates."""
-        return pyd.every(obj,
-                         lambda item: pyd.every(self.funcs,
-                                                lambda func: func(item)))
+        def callback(item):
+            return pyd.every(self.funcs, lambda func: func(item))
+
+        return pyd.every(obj, callback)
 
 
 class Curry(object):
@@ -203,9 +204,10 @@ class Disjoin(object):
 
     def __call__(self, obj):
         """Return result of disjoin `obj` with :attr:`funcs` predicates."""
-        return pyd.some(obj,
-                        lambda item: pyd.some(self.funcs,
-                                              lambda func: func(item)))
+        def callback(item):
+            return pyd.some(self.funcs, lambda func: func(item))
+
+        return pyd.some(obj, callback)
 
 
 class Iterated(object):
