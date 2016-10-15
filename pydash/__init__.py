@@ -198,6 +198,7 @@ from .numerical import (
     sigma,
     slope,
     std_deviation,
+    subtract,
     sum_,
     transpose,
     variance,
