@@ -350,6 +350,21 @@ def test_lines(case, expected):
 
 
 @parametrize('case,expected', [
+    ('fooBar', 'foo bar'),
+    ('--foo-Bar--', 'foo bar'),
+    ('*Foo*B_a*R', 'foo b a r'),
+    ('*Foo10_B*Ar', 'foo 10 b ar'),
+    ('/?*Foo10/;"B*Ar', 'foo 10 b ar'),
+    ('/?F@O__o10456?>.B?>";Ar', 'f o o 10456 b ar'),
+    ('FoO Bar', 'fo o bar'),
+    ('F\n\soO Bar', 'f so o bar'),
+    ('Foo1054665Bar', 'foo 1054665 bar')
+])
+def test_lower_case(case, expected):
+    assert _.lower_case(case) == expected
+
+
+@parametrize('case,expected', [
     ((1234,), '1,234'),
     ((1234567890,), '1,234,567,890'),
     ((1234, 2), '1,234.00'),
