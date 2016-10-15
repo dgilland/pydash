@@ -342,6 +342,7 @@ from .strings import (
     kebab_case,
     lines,
     lower_case,
+    lower_first,
     number_format,
     pad,
     pad_left,
@@ -379,6 +380,7 @@ from .strings import (
     unescape,
     unquote,
     upper_case,
+    upper_first,
     url,
     words,
 )

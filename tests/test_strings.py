@@ -365,6 +365,16 @@ def test_lower_case(case, expected):
 
 
 @parametrize('case,expected', [
+    ('Foobar', 'foobar'),
+    ('Foo Bar', 'foo Bar'),
+    ('1foobar', '1foobar'),
+    (';foobar', ';foobar')
+])
+def test_lower_first(case, expected):
+    assert _.lower_first(case) == expected
+
+
+@parametrize('case,expected', [
     ((1234,), '1,234'),
     ((1234567890,), '1,234,567,890'),
     ((1234, 2), '1,234.00'),
@@ -899,6 +909,16 @@ def test_unquote(case, expected):
 ])
 def test_upper_case(case, expected):
     assert _.upper_case(case) == expected
+
+
+@parametrize('case,expected', [
+    ('foobar', 'Foobar'),
+    ('Foobar', 'Foobar'),
+    ('1foobar', '1foobar'),
+    (';foobar', ';foobar')
+])
+def test_upper_first(case, expected):
+    assert _.upper_first(case) == expected
 
 
 @parametrize('case,expected', [

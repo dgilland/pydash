@@ -5,7 +5,9 @@ Changelog
 
 
 - Add ``lower_case``. Thanks bharadwajyarlagadda_!
+- Add ``lower_first``. Thanks bharadwajyarlagadda_!
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
+- Add ``upper_first``. Thanks bharadwajyarlagadda_!
 
 
 v3.4.4 (2016-09-06)
