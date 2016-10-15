@@ -5,10 +5,12 @@ Upgrading
 
 Some notable new features/functions:
 
-- 2 new string methods
+- 4 new string methods
 
     - :func:`pydash.strings.lower_case`.
+    - :func:`pydash.strings.lower_first`.
     - :func:`pydash.strings.upper_case`.
+    - :func:`pydash.strings.upper_first`.
 
 From v2.x.x to v3.0.0
 =====================
