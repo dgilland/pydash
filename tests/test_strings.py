@@ -887,6 +887,21 @@ def test_unquote(case, expected):
 
 
 @parametrize('case,expected', [
+    ('fooBar', 'FOO BAR'),
+    ('--foo-Bar--', 'FOO BAR'),
+    ('*Foo*B_a*R', 'FOO B A R'),
+    ('*Foo10_B*Ar', 'FOO 10 B AR'),
+    ('/?*Foo10/;"B*Ar', 'FOO 10 B AR'),
+    ('/?F@O__o10456?>.B?>";Ar', 'F O O 10456 B AR'),
+    ('FoO Bar', 'FO O BAR'),
+    ('F\n\soO Bar', 'F SO O BAR'),
+    ('Foo1054665Bar', 'FOO 1054665 BAR')
+])
+def test_upper_case(case, expected):
+    assert _.upper_case(case) == expected
+
+
+@parametrize('case,expected', [
     ({'args': [''], 'kargs': {}}, ''),
     ({'args': ['/'], 'kargs': {}}, '/'),
     ({'args': ['http://github.com'], 'kargs': {}}, 'http://github.com'),

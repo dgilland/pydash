@@ -378,6 +378,7 @@ from .strings import (
     underscore_case,
     unescape,
     unquote,
+    upper_case,
     url,
     words,
 )

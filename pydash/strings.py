@@ -1748,6 +1748,29 @@ def unescape(text):
     return html_unescape(text)
 
 
+def upper_case(text):
+    """Converts string to upper case, as space separated words.
+
+    Args:
+        text (str): String to be converted to uppercase.
+
+    Returns:
+        str: String converted to uppercase, as space separated words.
+
+    Example:
+
+        >>> upper_case('--foo-bar--')
+        'FOO BAR'
+        >>> upper_case('fooBar')
+        'FOO BAR'
+        >>> upper_case('/?*Foo10/;"B*Ar')
+        'FOO 10 B AR'
+
+    .. versionadded:: TODO
+    """
+    return ' '.join(words(text)).upper()
+
+
 def unquote(text, quote_char='"'):
     """Unquote `text` by removing `quote_char` if `text` begins and ends with
     it.
