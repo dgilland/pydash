@@ -341,6 +341,7 @@ from .strings import (
     js_replace,
     kebab_case,
     lines,
+    lower_case,
     number_format,
     pad,
     pad_left,

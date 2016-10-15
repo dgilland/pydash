@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Add ``lower_case``. Thanks bharadwajyarlagadda_!
+
+
 v3.4.4 (2016-09-06)
 -------------------
 
@@ -560,3 +563,4 @@ v0.0.0 (2014-07-22)
 
 .. _nathancahill: https://github.com/nathancahill
 .. _k7sleeper: https://github.com/k7sleeper
+.. _bharadwajyarlagadda: https://github.com/bharadwajyarlagadda

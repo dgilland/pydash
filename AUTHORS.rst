@@ -13,3 +13,4 @@ Contributors
 
 - Nathan Cahill, nathan@nathancahill.com, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, k7sleeper@gmail.com, `k7sleeper@github <https://github.com/k7sleeper>`_
+- Bharadwaj Yarlagadda, yarlagaddabharadwaj@gmail.com, `bharadwajyarlagadda@github <https://github.com/bharadwajyarlagadda>`_

@@ -736,6 +736,29 @@ def lines(text):
     return text.splitlines()
 
 
+def lower_case(text):
+    """Converts string to lower case as space separated words.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to lower case as space separated words.
+
+    Example:
+
+        >>> lower_case('fooBar')
+        'foo bar'
+        >>> lower_case('--foo-Bar--')
+        'foo bar'
+        >>> lower_case('/?*Foo10/;"B*Ar')
+        'foo 10 b ar'
+
+    .. versionadded:: TODO
+    """
+    return ' '.join(words(text)).lower()
+
+
 def number_format(number, scale=0, decimal_separator='.', order_separator=','):
     """Format a number to scale with custom decimal and order separators.
 

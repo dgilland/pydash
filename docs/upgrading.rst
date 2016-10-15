@@ -3,6 +3,11 @@
 Upgrading
 *********
 
+Some notable new features/functions:
+
+- 1 new string method
+
+    - :func:`pydash.strings.lower_case`
 
 From v2.x.x to v3.0.0
 =====================
