@@ -4,6 +4,10 @@ Changelog
 =========
 
 
+- Add optional ``default`` parameter to ``min_`` and ``max_`` functions that is used when provided iterable is empty.
+- Fix bug in ``is_match`` where comparison between an empty ``source`` argument returned ``None`` instead of ``True``.
+
+
 v3.4.4 (2016-09-06)
 -------------------
 
