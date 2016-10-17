@@ -7,6 +7,7 @@
 from __future__ import absolute_import, division
 
 import math
+import operator
 
 import pydash as pyd
 from .helpers import itercallback, iterator
@@ -32,6 +33,7 @@ __all__ = (
     'slope',
     'std_deviation',
     'sum_',
+    'subtract',
     'transpose',
     'variance',
     'zscore',
@@ -381,6 +383,53 @@ def std_deviation(array):
     .. versionadded:: 2.1.0
     """
     return math.sqrt(variance(array))
+
+
+def call_math_operator(value1, value2, op, default):
+    """Return the result of the math operation on the given values."""
+    if not value1:
+        value1 = default
+
+    if not value2:
+        value2 = default
+
+    if not pyd.is_number(value1):
+        try:
+            value1 = float(value1)
+        except Exception:
+            pass
+
+    if not pyd.is_number(value2):
+        try:
+            value2 = float(value2)
+        except Exception:
+            pass
+
+    return op(value1, value2)
+
+
+def subtract(minuend, subtrahend):
+    """Subtracts two numbers.
+
+    Args:
+        minuend (int/float): Value passed in by the user.
+        subtrahend (int/float): Value passed in by the user.
+
+    Returns:
+        int/float: Result of the difference from the given values.
+
+    Example:
+
+        >>> subtract(10, 5)
+        5
+        >>> subtract(-10, 4)
+        -14
+        >>> subtract(2, 0.5)
+        1.5
+
+    .. versionadded:: TODO
+    """
+    return call_math_operator(minuend, subtrahend, operator.sub, 0)
 
 
 sigma = std_deviation

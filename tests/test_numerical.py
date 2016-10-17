@@ -3,6 +3,8 @@
 import pydash as _
 from .fixtures import parametrize
 
+import pytest
+
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5],), 15),
@@ -154,6 +156,30 @@ def test_std_deviation(case, expected):
 ])
 def test_std_deviation_aliases(case):
     assert _.std_deviation is case
+
+
+@parametrize('minuend,subtrahend,expected', [
+    (10, 4, 6),
+    (-6, -4, -2),
+    (4, -10, 14),
+    (-10, 4, -14),
+    ('10', '5', 5),
+    (2, 0.5, 1.5),
+    (None, None, 0)
+])
+def test_subtract(minuend, subtrahend, expected):
+    assert _.subtract(minuend, subtrahend) == expected
+
+
+@parametrize('minuend,subtrahend', [
+    ('abs', 4),
+    (4, 'abc'),
+    ('abs', 'abc'),
+    ([1, 2, 3, 4], 4),
+])
+def test_subtract_exception(minuend, subtrahend):
+    with pytest.raises(TypeError):
+        _.subtract(minuend, subtrahend)
 
 
 @parametrize('case,expected', [
