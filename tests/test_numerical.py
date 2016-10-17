@@ -52,6 +52,17 @@ def test_ceil(case, expected):
     assert _.ceil(*case) == expected
 
 
+@parametrize('dividend,divisor,expected', [
+    (10, 5, 2.0),
+    (None, 1, 1.0),
+    (None, None, 1.0),
+    (1.5, 3, 0.5),
+    (-10, 2, -5.0)
+])
+def test_divide(dividend, divisor, expected):
+    assert _.divide(dividend, divisor) == expected
+
+
 @parametrize('case,expected', [
     ((4.006,), 4),
     ((0.046, 2), 0.04),
@@ -87,6 +98,17 @@ def test_moving_average(case, expected):
 ])
 def test_moving_average_aliases(case):
     assert _.moving_average is case
+
+
+@parametrize('multiplier,multiplicand,expected', [
+    (10, 5, 50),
+    (None, 1, 1),
+    (None, None, 1),
+    (1.5, 3, 4.5),
+    (-10, 2, -20)
+])
+def test_multiply(multiplier, multiplicand, expected):
+    assert _.multiply(multiplier, multiplicand) == expected
 
 
 @parametrize('case,expected', [
