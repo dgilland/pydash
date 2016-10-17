@@ -348,6 +348,10 @@ def test_is_list(case, expected):
       [2, 4],
       lambda a, b: None if isinstance(a, list) else b == a + a),
      True),
+    (({}, {}), True),
+    (({'a': 1}, {}), True),
+    (([], []), True),
+    (([1], []), True),
 ])
 def test_is_match(case, expected):
     assert _.is_match(*case) == expected

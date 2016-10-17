@@ -834,6 +834,10 @@ def is_match(obj, source, callback=None):
     elif (isinstance(obj, dict) and isinstance(source, dict) or
           isinstance(obj, list) and isinstance(source, list) or
           isinstance(obj, tuple) and isinstance(source, tuple)):
+        # Set equal to True if source is empty, otherwise, False and then allow
+        # deep comparison to determine equality.
+        equal = not source
+
         # Walk a/b to determine equality.
         for key, value in iterator(source):
             try:
