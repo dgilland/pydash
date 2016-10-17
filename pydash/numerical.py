@@ -20,11 +20,13 @@ __all__ = (
     'avg',
     'ceil',
     'curve',
+    'divide',
     'floor',
     'mean',
     'median',
     'moving_average',
     'moving_avg',
+    'multiply',
     'pow_',
     'power',
     'round_',
@@ -141,6 +143,32 @@ def ceil(x, precision=0):
     return rounder(math.ceil, x, precision)
 
 
+def divide(dividend, divisor):
+    """Divide two numbers.
+
+    Args:
+        dividend (int/float): The first number in a division.
+        divisor (int/float): The second number in a division.
+
+    Returns:
+        int/float: Returns the quotient.
+
+    Example:
+
+        >>> divide(20, 5)
+        4.0
+        >>> divide(1.5, 3)
+        0.5
+        >>> divide(None, None)
+        1.0
+        >>> divide(5, None)
+        5.0
+
+    .. versionadded:: TODO
+    """
+    return call_math_operator(dividend, divisor, operator.truediv, 1)
+
+
 def floor(x, precision=0):
     """Round number down to precision.
 
@@ -240,6 +268,32 @@ def moving_average(array, size):
 
 
 moving_avg = moving_average
+
+
+def multiply(multiplier, multiplicand):
+    """Multiply two numbers.
+
+    Args:
+        multiplier (int/float): The first number in a multiplication.
+        multiplicand (int/float): The second number in a multiplication.
+
+    Returns:
+        int/float: Returns the product.
+
+    Example:
+
+        >>> multiply(4, 5)
+        20
+        >>> multiply(10, 4)
+        40
+        >>> multiply(None, 10)
+        10
+        >>> multiply(None, None)
+        1
+
+    .. versionadded:: TODO
+    """
+    return call_math_operator(multiplier, multiplicand, operator.mul, 1)
 
 
 def power(x, n):
@@ -385,29 +439,6 @@ def std_deviation(array):
     return math.sqrt(variance(array))
 
 
-def call_math_operator(value1, value2, op, default):
-    """Return the result of the math operation on the given values."""
-    if not value1:
-        value1 = default
-
-    if not value2:
-        value2 = default
-
-    if not pyd.is_number(value1):
-        try:
-            value1 = float(value1)
-        except Exception:
-            pass
-
-    if not pyd.is_number(value2):
-        try:
-            value2 = float(value2)
-        except Exception:
-            pass
-
-    return op(value1, value2)
-
-
 def subtract(minuend, subtrahend):
     """Subtracts two numbers.
 
@@ -514,6 +545,29 @@ def zscore(collection, callback=None):
 #
 # Utility methods not a part of the main API
 #
+
+def call_math_operator(value1, value2, op, default):
+    """Return the result of the math operation on the given values."""
+    if not value1:
+        value1 = default
+
+    if not value2:
+        value2 = default
+
+    if not pyd.is_number(value1):
+        try:
+            value1 = float(value1)
+        except Exception:
+            pass
+
+    if not pyd.is_number(value2):
+        try:
+            value2 = float(value2)
+        except Exception:
+            pass
+
+    return op(value1, value2)
+
 
 def rounder(func, x, precision):
     precision = pow(10, precision)

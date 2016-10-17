@@ -12,8 +12,10 @@ Some notable new features/functions:
     - :func:`pydash.strings.upper_case`.
     - :func:`pydash.strings.upper_first`.
 
-- 1 new numerical method
+- 3 new numerical methods
 
+    - :func:`pydash.numerical.divide`.
+    - :func:`pydash.numerical.multiply`.
     - :func:`pydash.numerical.subtract`.
 
 From v2.x.x to v3.0.0

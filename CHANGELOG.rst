@@ -4,11 +4,13 @@ Changelog
 =========
 
 
+- Add ``divide``. Thanks bharadwajyarlagadda_!
 - Add ``lower_case``. Thanks bharadwajyarlagadda_!
 - Add ``lower_first``. Thanks bharadwajyarlagadda_!
+- Add ``multiply``. Thanks bharadwajyarlagadda_!
+- Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
-- Add ``subtract``. Thanks bharadwajyarlagadda_!
 
 
 v3.4.5 (2016-10-16)
