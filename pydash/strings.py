@@ -48,6 +48,8 @@ __all__ = (
     'js_replace',
     'kebab_case',
     'lines',
+    'lower_case',
+    'lower_first',
     'number_format',
     'pad',
     'pad_left',
@@ -84,6 +86,8 @@ __all__ = (
     'underscore_case',
     'unescape',
     'unquote',
+    'upper_case',
+    'upper_first',
     'url',
     'words',
 )
@@ -734,6 +738,54 @@ def lines(text):
     """
     text = pyd.to_string(text)
     return text.splitlines()
+
+
+def lower_case(text):
+    """Converts string to lower case as space separated words.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to lower case as space separated words.
+
+    Example:
+
+        >>> lower_case('fooBar')
+        'foo bar'
+        >>> lower_case('--foo-Bar--')
+        'foo bar'
+        >>> lower_case('/?*Foo10/;"B*Ar')
+        'foo 10 b ar'
+
+    .. versionadded:: TODO
+    """
+    return ' '.join(words(text)).lower()
+
+
+def lower_first(text):
+    """Converts the first character of string to lower case.
+
+    Args:
+        text (str): String passed in by the user.
+
+    Returns:
+        str: String in which the first character is converted to lower case.
+
+    Example:
+
+        >>> lower_first('FRED')
+        'fRED'
+        >>> lower_first('Foo Bar')
+        'foo Bar'
+        >>> lower_first('1foobar')
+        '1foobar'
+        >>> lower_first(';foobar')
+        ';foobar'
+
+    .. versionadded:: TODO
+    """
+    return text[:1].lower() + text[1:]
 
 
 def number_format(number, scale=0, decimal_separator='.', order_separator=','):
@@ -1723,6 +1775,54 @@ def unescape(text):
     """
     text = pyd.to_string(text)
     return html_unescape(text)
+
+
+def upper_case(text):
+    """Converts string to upper case, as space separated words.
+
+    Args:
+        text (str): String to be converted to uppercase.
+
+    Returns:
+        str: String converted to uppercase, as space separated words.
+
+    Example:
+
+        >>> upper_case('--foo-bar--')
+        'FOO BAR'
+        >>> upper_case('fooBar')
+        'FOO BAR'
+        >>> upper_case('/?*Foo10/;"B*Ar')
+        'FOO 10 B AR'
+
+    .. versionadded:: TODO
+    """
+    return ' '.join(words(text)).upper()
+
+
+def upper_first(text):
+    """Converts the first character of string to upper case.
+
+    Args:
+        text (str): String passed in by the user.
+
+    Returns:
+        str: String in which the first character is converted to upper case.
+
+    Example:
+
+        >>> upper_first('fred')
+        'Fred'
+        >>> upper_first('foo bar')
+        'Foo bar'
+        >>> upper_first('1foobar')
+        '1foobar'
+        >>> upper_first(';foobar')
+        ';foobar'
+
+    .. versionadded:: TODO
+    """
+    return text[:1].upper() + text[1:]
 
 
 def unquote(text, quote_char='"'):

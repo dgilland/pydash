@@ -350,6 +350,31 @@ def test_lines(case, expected):
 
 
 @parametrize('case,expected', [
+    ('fooBar', 'foo bar'),
+    ('--foo-Bar--', 'foo bar'),
+    ('*Foo*B_a*R', 'foo b a r'),
+    ('*Foo10_B*Ar', 'foo 10 b ar'),
+    ('/?*Foo10/;"B*Ar', 'foo 10 b ar'),
+    ('/?F@O__o10456?>.B?>";Ar', 'f o o 10456 b ar'),
+    ('FoO Bar', 'fo o bar'),
+    ('F\n\soO Bar', 'f so o bar'),
+    ('Foo1054665Bar', 'foo 1054665 bar')
+])
+def test_lower_case(case, expected):
+    assert _.lower_case(case) == expected
+
+
+@parametrize('case,expected', [
+    ('Foobar', 'foobar'),
+    ('Foo Bar', 'foo Bar'),
+    ('1foobar', '1foobar'),
+    (';foobar', ';foobar')
+])
+def test_lower_first(case, expected):
+    assert _.lower_first(case) == expected
+
+
+@parametrize('case,expected', [
     ((1234,), '1,234'),
     ((1234567890,), '1,234,567,890'),
     ((1234, 2), '1,234.00'),
@@ -869,6 +894,31 @@ def test_unescape(case, expected):
 ])
 def test_unquote(case, expected):
     assert _.unquote(*case) == expected
+
+
+@parametrize('case,expected', [
+    ('fooBar', 'FOO BAR'),
+    ('--foo-Bar--', 'FOO BAR'),
+    ('*Foo*B_a*R', 'FOO B A R'),
+    ('*Foo10_B*Ar', 'FOO 10 B AR'),
+    ('/?*Foo10/;"B*Ar', 'FOO 10 B AR'),
+    ('/?F@O__o10456?>.B?>";Ar', 'F O O 10456 B AR'),
+    ('FoO Bar', 'FO O BAR'),
+    ('F\n\soO Bar', 'F SO O BAR'),
+    ('Foo1054665Bar', 'FOO 1054665 BAR')
+])
+def test_upper_case(case, expected):
+    assert _.upper_case(case) == expected
+
+
+@parametrize('case,expected', [
+    ('foobar', 'Foobar'),
+    ('Foobar', 'Foobar'),
+    ('1foobar', '1foobar'),
+    (';foobar', ';foobar')
+])
+def test_upper_first(case, expected):
+    assert _.upper_first(case) == expected
 
 
 @parametrize('case,expected', [
