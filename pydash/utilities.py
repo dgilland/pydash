@@ -7,6 +7,7 @@
 from __future__ import absolute_import, division
 
 from datetime import datetime
+import math
 from random import uniform, randint
 
 import pydash as pyd
@@ -28,6 +29,7 @@ __all__ = (
     'method',
     'method_of',
     'noop',
+    'nth_arg',
     'now',
     'prop',
     'prop_of',
@@ -391,6 +393,38 @@ def noop(*args, **kargs):  # pylint: disable=unused-argument
     .. versionadded:: 1.0.0
     """
     pass
+
+
+def nth_arg(pos=0):
+    """Creates a function that gets the argument at index n. If n is negative,
+    the nth argument from the end is returned.
+
+    Args:
+        pos (int): The index of the argument to return.
+
+    Returns:
+        function: Returns the new pass-thru function.
+
+    Example:
+
+        >>> func = nth_arg(1)
+        >>> func(11, 22, 33, 44)
+        22
+        >>> func = nth_arg(-1)
+        >>> func(11, 22, 33, 44)
+        44
+
+    .. versionadded:: TODO
+    """
+    def _nth_arg(*args):
+        try:
+            position = math.ceil(float(pos))
+        except ValueError:
+            position = 0
+
+        return pyd.get(args, position)
+
+    return _nth_arg
 
 
 def now():

@@ -407,6 +407,7 @@ from .utilities import (
     method_of,
     noop,
     now,
+    nth_arg,
     prop,
     prop_of,
     property_,

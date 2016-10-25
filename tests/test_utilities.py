@@ -161,6 +161,22 @@ def test_noop(case, expected):
     assert _.noop(*case) == expected
 
 
+@parametrize('args,pos,expected', [
+    ([11, 22, 33, 44], 0, 11),
+    ([11, 22, 33, 44], -1, 44),
+    ([11, 22, 33, 44], -4, 11),
+    ([11, 22, 33, 44], -5, None),
+    ([11, 22, 33, 44], 4, None),
+    ([11, 22, 33], '1', 22),
+    ([11, 22, 33], 'xyz', 11),
+    ([11, 22, 33], 1.45, 33),
+    ([11, 22, 33], 1.51, 33)
+])
+def test_nth_arg(args, pos, expected):
+    func = _.nth_arg(pos)
+    assert func(*args) == expected
+
+
 def test_now():
     present = int(time.time() * 1000)
     # Add some leeway when comparing time.
