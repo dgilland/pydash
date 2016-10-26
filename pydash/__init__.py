@@ -414,6 +414,7 @@ from .utilities import (
     property_of,
     random,
     range_,
+    range_right,
     result,
     times,
     unique_id,

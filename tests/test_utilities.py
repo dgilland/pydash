@@ -254,6 +254,17 @@ def test_range_(case, expected):
 
 
 @parametrize('case,expected', [
+    ((10,), [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]),
+    ((1, 5), [4, 3, 2, 1]),
+    ((0, 20, 5), [15, 10, 5, 0]),
+    ((0, -4, -1), [-3, -2, -1, 0]),
+    ((0,), [])
+])
+def test_range_right(case, expected):
+    assert list(_.range_right(*case)) == expected
+
+
+@parametrize('case,expected', [
     (({'cheese': 'crumpets', 'stuff': lambda: 'nonsense'}, 'cheese'),
      'crumpets'),
     (({'cheese': 'crumpets', 'stuff': lambda: 'nonsense'}, 'stuff'),

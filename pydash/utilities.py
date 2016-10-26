@@ -37,6 +37,7 @@ __all__ = (
     'property_of',
     'random',
     'range_',
+    'range_right',
     'result',
     'times',
     'unique_id',
@@ -593,6 +594,34 @@ def range_(*args):
         Return generator instead of list.
     """
     return _range(*args)
+
+
+def range_right(*args):
+    """Similar to :func:`range_`, except that it populates the values in
+    descending order.
+
+    Args:
+        stop (int): Integer to stop at. Defaults to ``0``.
+        start (int, optional): Integer - 1 to start with.
+        step (int, optional): If positive the last element is the smallest
+            ``start - i * step``. If negative the last element is the largest
+            ``start + i * step``.
+
+    Returns:
+        list: List of integers.
+
+    Example:
+
+        >>> list(range_right(5))
+        [4, 3, 2, 1, 0]
+        >>> list(range_right(1, 4))
+        [3, 2, 1]
+        >>> list(range_right(0, 6, 2))
+        [4, 2, 0]
+
+    .. versionadded:: TODO
+    """
+    return reversed(_range(*args))
 
 
 def result(obj, key, default=None):
