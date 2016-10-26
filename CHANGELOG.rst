@@ -9,6 +9,7 @@ Changelog
 - Add ``lower_first``. Thanks bharadwajyarlagadda_!
 - Add ``multiply``. Thanks bharadwajyarlagadda_!
 - Add ``nth_arg``. Thanks bharadwajyarlagadda_!
+- Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
