@@ -285,6 +285,15 @@ def test_times(case, expected):
     assert _.times(*case) == expected
 
 
+@parametrize('case,expected', [
+    ('a.b.c', ['a', 'b', 'c']),
+    ('a[0].b.c', ['a', 0, 'b', 'c']),
+    ('a[0][1][2].b.c', ['a', 0, 1, 2, 'b', 'c'])
+])
+def test_to_path(case, expected):
+    assert _.to_path(case) == expected
+
+
 def test_unique_id_setup():
     _.utilities.ID_COUNTER = 0
 

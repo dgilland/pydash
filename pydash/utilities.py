@@ -12,6 +12,7 @@ from random import uniform, randint
 
 import pydash as pyd
 from .helpers import get_item
+from .objects import path_keys
 from ._compat import _range, string_types
 
 
@@ -40,6 +41,7 @@ __all__ = (
     'range_right',
     'result',
     'times',
+    'to_path',
     'unique_id',
 )
 
@@ -688,6 +690,29 @@ def times(callback, n):
     """
     # pylint: disable=redefined-outer-name
     return [callback(index) for index in _range(n)]
+
+
+def to_path(value):
+    """Converts values to a property path array.
+
+    Args:
+        value (mixed): Value to convert.
+
+    Returns:
+        list: Returns the new property path array.
+
+    Example:
+
+        >>> to_path('a.b.c')
+        ['a', 'b', 'c']
+        >>> to_path('a[0].b.c')
+        ['a', 0, 'b', 'c']
+        >>> to_path('a[0][1][2].b.c')
+        ['a', 0, 1, 2, 'b', 'c']
+
+    .. versionadded:: TODO
+    """
+    return path_keys(value)
 
 
 def unique_id(prefix=None):
