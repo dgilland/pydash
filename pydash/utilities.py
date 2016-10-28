@@ -6,13 +6,13 @@
 
 from __future__ import absolute_import, division
 
-from datetime import datetime
+import re
 import math
+from datetime import datetime
 from random import uniform, randint
 
 import pydash as pyd
-from .helpers import get_item
-from .objects import path_keys
+from .helpers import get_item, NoValue
 from ._compat import _range, string_types
 
 
@@ -44,6 +44,17 @@ __all__ = (
     'to_path',
     'unique_id',
 )
+
+# These regexes are used in to_path() to parse deep path strings.
+
+# This is used to split a deep path string into dict keys or list indexex.
+# This matches "." as delimiter (unless it is escaped by "//") and
+# "[<integer>]" as delimiter while keeping the "[<integer>]" as an item.
+RE_PATH_KEY_DELIM = re.compile(r'(?<!\\)(?:\\\\)*\.|(\[\d+\])')
+
+# Matches on path strings like "[<integer>]". This is used to test whether a
+# path string part is a list index.
+RE_PATH_LIST_INDEX = re.compile(r'^\[\d+\]$')
 
 
 ID_COUNTER = 0
@@ -712,7 +723,22 @@ def to_path(value):
 
     .. versionadded:: TODO
     """
-    return path_keys(value)
+    keys = value
+    # pylint: disable=redefined-outer-name
+    if pyd.is_string(keys) and ('.' in keys or '[' in keys):
+        # Since we can't tell whether a bare number is supposed to be dict key
+        # or a list index, we support a special syntax where any string-integer
+        # surrounded by brackets is treated as a list index and converted to an
+        # integer.
+        keys = [int(key[1:-1]) if RE_PATH_LIST_INDEX.match(key)
+                else unescape_path_key(key)
+                for key in filter(None, RE_PATH_KEY_DELIM.split(keys))]
+    elif pyd.is_string(keys) or pyd.is_number(keys):
+        keys = [keys]
+    elif keys is NoValue:
+        keys = []
+
+    return keys
 
 
 def unique_id(prefix=None):
@@ -742,3 +768,15 @@ def unique_id(prefix=None):
 
     return '{0}{1}'.format(pyd.to_string('' if prefix is None else prefix),
                            pyd.to_string(ID_COUNTER))
+
+
+#
+# Helper functions not a part of main API
+#
+
+
+def unescape_path_key(key):
+    """Unescape path key."""
+    key = pyd.js_replace(key, r'/\\\\/g', r'\\')
+    key = pyd.js_replace(key, r'/\\\./g', '.')
+    return key

@@ -21,6 +21,7 @@ from .helpers import (
     getargcount
 )
 from ._compat import iteritems, text_type
+from .utilities import to_path
 
 
 __all__ = (
@@ -69,18 +70,6 @@ __all__ = (
     'values',
     'values_in',
 )
-
-
-# These regexes are used in path_keys() to parse deep path strings.
-
-# This is used to split a deep path string into dict keys or list indexex.
-# This matches "." as delimiter (unless it is escaped by "//") and
-# "[<integer>]" as delimiter while keeping the "[<integer>]" as an item.
-RE_PATH_KEY_DELIM = re.compile(r'(?<!\\)(?:\\\\)*\.|(\[\d+\])')
-
-# Matches on path strings like "[<integer>]". This is used to test whether a
-# path string part is a list index.
-RE_PATH_LIST_INDEX = re.compile(r'^\[\d+\]$')
 
 
 def assign(obj, *sources, **kargs):
@@ -286,7 +275,7 @@ def deep_map_values(obj, callback=None, property_path=NoValue):
     .. versionchanged:: 3.0.0
         Allow callbacks to accept partial arguments.
     """
-    properties = path_keys(property_path)
+    properties = to_path(property_path)
 
     if pyd.is_object(obj):
         deep_callback = (
@@ -507,7 +496,7 @@ def get(obj, path, default=None):
         - Added :func:`get` as main definition and :func:`get_path` as alias.
         - Made :func:`deep_get` an alias.
     """
-    for key in path_keys(path):
+    for key in to_path(path):
         obj = get_item(obj, key, default=default)
         if obj is None:
             break
@@ -981,7 +970,7 @@ def set_(obj, path, value):
     .. versionchanged:: 3.3.0
         Added :func:`set_` as main definition and :func:`deep_set` as alias.
     """
-    return set_path(obj, value, path_keys(path))
+    return set_path(obj, value, to_path(path))
 
 
 deep_set = set_
@@ -1302,36 +1291,3 @@ def values(obj):
 
 
 values_in = values
-
-
-#
-# Helper functions not a part of main API
-#
-
-
-def path_keys(keys):
-    """Convert keys used to access an object's path into the standard form: a
-    list of keys.
-    """
-    # pylint: disable=redefined-outer-name
-    if pyd.is_string(keys) and ('.' in keys or '[' in keys):
-        # Since we can't tell whether a bare number is supposed to be dict key
-        # or a list index, we support a special syntax where any string-integer
-        # surrounded by brackets is treated as a list index and converted to an
-        # integer.
-        keys = [int(key[1:-1]) if RE_PATH_LIST_INDEX.match(key)
-                else unescape_path_key(key)
-                for key in filter(None, RE_PATH_KEY_DELIM.split(keys))]
-    elif pyd.is_string(keys) or pyd.is_number(keys):
-        keys = [keys]
-    elif keys is NoValue:
-        keys = []
-
-    return keys
-
-
-def unescape_path_key(key):
-    """Unescape path key."""
-    key = pyd.js_replace(key, r'/\\\\/g', r'\\')
-    key = pyd.js_replace(key, r'/\\\./g', '.')
-    return key
