@@ -18,10 +18,11 @@ Some notable new features/functions:
     - :func:`pydash.numerical.multiply`.
     - :func:`pydash.numerical.subtract`.
 
-- 2 new utility methods
+- 3 new utility methods
 
     - :func:`pydash.utilities.nth_arg`.
     - :func:`pydash.utilities.range_right`.
+    - :func:`pydash.utilities.to_path`.
 
 
 From v2.x.x to v3.0.0
