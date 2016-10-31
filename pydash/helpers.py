@@ -125,7 +125,12 @@ def get_item(obj, key, default=NoValue):
         except TypeError:
             # It's possible that a string integer is being used to access a
             # list index. Re-try object access using casted integer.
-            ret = obj[int(key)]
+            try:
+                key_as_int = int(key)
+                ret = obj[key_as_int]
+            except ValueError:
+                # key cannot be turned into integer
+                raise KeyError('get_item cannot use {} as integer'.format(key))
     except (KeyError, IndexError, TypeError, AttributeError):
         if default is not NoValue:
             ret = default
