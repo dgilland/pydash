@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v3.4.6 (2016-10-31)
+-------------------
+
 - Fix bug in ``get`` where casting a string key to integer resulted in an uncaught exception instead of the default value being returned instead. Thanks urbnjamesmi1_!
 
 
