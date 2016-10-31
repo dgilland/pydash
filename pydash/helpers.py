@@ -127,10 +127,12 @@ def get_item(obj, key, default=NoValue):
             # list index. Re-try object access using casted integer.
             try:
                 key_as_int = int(key)
-                ret = obj[key_as_int]
             except ValueError:
                 # key cannot be turned into integer
-                raise KeyError('get_item cannot use {} as integer'.format(key))
+                raise KeyError('get_item cannot use "{0}" as integer key'
+                               .format(key))
+
+            ret = obj[key_as_int]
     except (KeyError, IndexError, TypeError, AttributeError):
         if default is not NoValue:
             ret = default
