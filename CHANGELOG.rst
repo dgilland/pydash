@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Fix bug in ``get`` where casting a string key to integer resulted in an uncaught exception instead of the default value being returned instead. Thanks urbnjamesmi1_!
+
+
 v3.4.5 (2016-10-16)
 -------------------
 
@@ -567,3 +570,4 @@ v0.0.0 (2014-07-22)
 
 .. _nathancahill: https://github.com/nathancahill
 .. _k7sleeper: https://github.com/k7sleeper
+.. _urbnjamesmi1: https://github.com/urbnjamesmi1
