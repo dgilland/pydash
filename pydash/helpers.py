@@ -21,6 +21,12 @@ class _NoValue(object):
     pass
 
 
+class UsingDefault(Exception):
+    default_value = None
+
+    def __init__(self, default_value):
+        self.default_value = default_value
+
 #: Singleton object that differeniates between an explicit ``None`` value and
 #: an unset value.
 NoValue = _NoValue()
@@ -98,7 +104,7 @@ def iterator(obj):
         return iteritems(getattr(obj, '__dict__', {}))
 
 
-def get_item(obj, key, default=NoValue):
+def get_item(obj, key, default=NoValue, raise_if_default_used=False):
     """Safely get an item by `key` from a sequence or mapping object when
     `default` provided.
 
@@ -107,10 +113,12 @@ def get_item(obj, key, default=NoValue):
         key (mixed): Key or index identifying which item to retrieve.
 
     Keyword Args:
-        use_default (bool, optional): Whether to use `default` value when
-            `key` doesn't exist in `obj`.
         default (mixed, optional): Default value to return if `key` not
             found in `obj`.
+        raise_if_default_used (bool, optional): If True, will raise a
+            UsingDefault containing the default value to be used by the caller
+            instead of continuing evaluation with a return value that may or
+            may not be the default value.  This is False by default.
 
     Returns:
         mixed: `obj[key]` or `default`.
@@ -118,6 +126,8 @@ def get_item(obj, key, default=NoValue):
     Raises:
         KeyError|IndexError|TypeError|AttributeError: If `obj` is missing key
             or index and no default value provided.
+        UsingDefault: If raise_if_default_used is True and the default value
+            is going to be used.
     """
     try:
         try:
@@ -136,6 +146,9 @@ def get_item(obj, key, default=NoValue):
     except (KeyError, IndexError, TypeError, AttributeError):
         if default is not NoValue:
             ret = default
+
+            if raise_if_default_used:
+                raise UsingDefault(default)
         else:  # pragma: no cover
             raise
 

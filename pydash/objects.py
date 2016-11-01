@@ -18,7 +18,8 @@ from .helpers import (
     set_item,
     NoValue,
     callit,
-    getargcount
+    getargcount,
+    UsingDefault
 )
 from ._compat import iteritems, text_type
 from .utilities import to_path
@@ -496,10 +497,14 @@ def get(obj, path, default=None):
         - Added :func:`get` as main definition and :func:`get_path` as alias.
         - Made :func:`deep_get` an alias.
     """
-    for key in to_path(path):
-        obj = get_item(obj, key, default=default)
-        if obj is None:
-            break
+    try:
+        for key in to_path(path):
+            obj = get_item(obj, key, default=default,
+                           raise_if_default_used=True)
+            if obj is None:
+                break
+    except UsingDefault as ud:
+        return ud.default_value
 
     return obj
 
