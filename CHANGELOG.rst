@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v3.4.7 (2016-11-01)
+-------------------
+
 - Fix bug in ``get`` where an iterable default was iterated over instead of being returned when an object path wasn't found. Thanks urbnjamesmi1_!
 
 
