@@ -506,10 +506,27 @@ def get(obj, path, default=None):
 
         - Added :func:`get` as main definition and :func:`get_path` as alias.
         - Made :func:`deep_get` an alias.
+
+    .. versionchanged:: 3.4.7
+        Fixed bug where an iterable default was iterated over instead of being
+        returned when an object path wasn't found.
     """
+    if default is NoValue:
+        # When NoValue given for default, then this method will raise if path
+        # is not present in obj.
+        sentinel = default
+    else:
+        # When a returnable default is given, use a sentinel value to detect
+        # when get_item() returns a default value for a missing path so we can
+        # exit early from the loop and not mistakenly iterate over the default.
+        sentinel = object()
+
     for key in path_keys(path):
-        obj = get_item(obj, key, default=default)
-        if obj is None:
+        obj = get_item(obj, key, default=sentinel)
+
+        if obj is sentinel:
+            # Path doesn't exist so set return obj to the default.
+            obj = default
             break
 
     return obj
