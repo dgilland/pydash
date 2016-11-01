@@ -16,6 +16,12 @@ Changelog
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
 
 
+v3.4.7 (2016-11-01)
+-------------------
+
+- Fix bug in ``get`` where an iterable default was iterated over instead of being returned when an object path wasn't found. Thanks urbnjamesmi1_!
+
+
 v3.4.6 (2016-10-31)
 -------------------
 

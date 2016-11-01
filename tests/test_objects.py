@@ -225,6 +225,7 @@ def test_for_in_right_aliases(case):
     (({'one': {'two': {'three': 4}}}, ['one', 'two', 'three']), 4),
     (({'one': {'two': {'three': 4}}}, 'one.four'), None),
     (({'one': {'two': {'three': 4}}}, 'one.four.three', []), []),
+    (({'one': {'two': {'three': 4}}}, 'one.four.0.a', [{'a': 1}]), [{'a': 1}]),
     (({'one': {'two': {'three': [{'a': 1}]}}}, 'one.four.three.0.a', []), []),
     (({'one': {'two': {'three': 4}}}, 'one.four.three'), None),
     (({'one': {'two': {'three': [{'a': 1}]}}}, 'one.four.three.0.a'), None),
@@ -252,6 +253,8 @@ def test_for_in_right_aliases(case):
     (({'lev.el1': {'lev\\el2': {'level3': ['value']}}},
       'lev\\.el1.lev\\\\el2.level3.[0]'),
      'value'),
+    (({'one': ['hello', 'there']}, 'one.bad.hello', []), []),
+    (({'one': ['hello', None]}, 'one.1.hello'), None)
 ])
 def test_get(case, expected):
     assert _.get(*case) == expected
