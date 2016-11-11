@@ -614,14 +614,13 @@ def range_right(*args):
     descending order.
 
     Args:
-        stop (int): Integer to stop at. Defaults to ``0``.
-        start (int, optional): Integer - 1 to start with.
-        step (int, optional): If positive the last element is the smallest
-            ``start - i * step``. If negative the last element is the largest
-            ``start + i * step``.
+        start (int, optional): Integer to start with. Defaults to ``0``.
+        stop (int): Integer to stop at.
+        step (int, optional): The value to increment or decrement by. Defaults
+            to ``1`` if `start` < `stop` else ``-1``.
 
-    Returns:
-        list: List of integers.
+    Yields:
+        int: Next integer in range.
 
     Example:
 
@@ -634,7 +633,42 @@ def range_right(*args):
 
     .. versionadded:: TODO
     """
-    return reversed(_range(*args))
+    if len(args) >= 3:
+        args = args[:3]
+    elif len(args) == 2:
+        args = (args[0], args[1], None)
+    elif len(args) == 1:
+        args = (0, args[0], None)
+
+    if args and args[2] is None:
+        validate = args[:2]
+    else:
+        validate = args
+
+    for arg in validate:
+        if not isinstance(arg, int):  # pragma: no cover
+            raise TypeError("range_right cannot interpret '{0}' object as an "
+                            "integer".format(type(arg).__name__))
+
+    def gen():
+        if not args:
+            return
+
+        start, stop, step = args
+
+        if step is None:
+            step = 1 if start < stop else -1
+
+        length = int(max([math.ceil((stop - start) / (step or 1)), 0]))
+
+        start += (step * length) - step
+
+        while length:
+            yield start
+            start -= step
+            length -= 1
+
+    return gen()
 
 
 def result(obj, key, default=None):
