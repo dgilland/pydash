@@ -3,7 +3,15 @@
 Upgrading
 *********
 
+From v3.x.x to v4.0.0
+=====================
+
 Some notable new features/functions:
+
+- 2 new array methods
+
+    - :func:`pydash.arrays.intersection_by`
+    - :func:`pydash.arrays.intersection_with`
 
 - 4 new string methods
 

@@ -218,10 +218,42 @@ def test_interleave(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2])
+    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2]),
+    (([1, 2, 3], [4]), []),
+    (([1, 2, 3],), []),
+    (([], [101, 2, 1, 10], [2, 1]), []),
+    (([],), [])
 ])
 def test_intersection(case, expected):
     assert _.intersection(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], [101, 2, 1, 10], [2, 1], None), [1, 2]),
+    (([1, 2, 3], [4]), []),
+    (([1, 2, 3],), []),
+    (([], [101, 2, 1, 10], [2, 1]), []),
+    (([],), []),
+    (([1, 2, 3], [101, 2, 1, 10], [2, 1], lambda a: 1 if a < 10 else 0),
+     [1, 2, 3]),
+    (([{'a': 1}, {'a': 2}, {'a': 3}], [{'a': 2}], 'a'), [{'a': 2}])
+])
+def test_intersection_by(case, expected):
+    assert _.intersection_by(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], [101, 2, 1, 10], [2, 1], None), [1, 2]),
+    (([1, 2, 3], [4]), []),
+    (([1, 2, 3],), []),
+    (([], [101, 2, 1, 10], [2, 1]), []),
+    (([],), []),
+    ((['A', 'b', 'cC'], ['a', 'cc'], ['A', 'CC'],
+      lambda a, b: a.lower() == b.lower()),
+     ['A', 'cC'])
+])
+def test_intersection_with(case, expected):
+    assert _.intersection_with(*case) == expected
 
 
 @parametrize('case,expected', [

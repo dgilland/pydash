@@ -11,7 +11,7 @@ from math import ceil
 
 import pydash as pyd
 from .helpers import itercallback, get_item
-from ._compat import cmp_to_key
+from ._compat import cmp_to_key, string_types
 
 
 __all__ = (
@@ -38,6 +38,8 @@ __all__ = (
     'intercalate',
     'interleave',
     'intersection',
+    'intersection_by',
+    'intersection_with',
     'intersperse',
     'last',
     'last_index_of',
@@ -558,24 +560,135 @@ def interleave(*arrays):
     return list(iterinterleave(*arrays))
 
 
-def intersection(*arrays):
+def intersection(array, *others):
     """Computes the intersection of all the passed-in arrays.
 
     Args:
-        arrays (list): Lists to process.
+        array (list): The array to find the intersection of.
+        others (list): Lists to check for intersection with `array`.
 
     Returns:
         list: Intersection of provided lists.
 
     Example:
 
-        >>> intersection([1, 2, 3], [1, 2, 3, 4, 5])
-        [1, 2, 3]
+        >>> intersection([1, 2, 3], [1, 2, 3, 4, 5], [2, 3])
+        [2, 3]
 
     .. versionadded:: 1.0.0
-    """
 
-    return list(set(arrays[0]).intersection(*arrays))
+    .. versionchanged:: TODO
+        Support finding intersection of unhashable types.
+    """
+    return intersection_with(array, *others)
+
+
+def intersection_by(array, *others, **kargs):
+    """This method is like :func:`intersection` except that it accepts an
+    iteratee which is invoked for each element of each array to generate the
+    criterion by which they're compared. The order and references of result
+    values are determined by `array`. The iteratee is invoked with one
+    argument: ``(value)``.
+
+    Args:
+        array (list): The array to find the intersection of.
+        others (list): Lists to check for intersection with `array`.
+
+    Keyword Args:
+        callback (callable, optional): Function to transform the elements of
+            the arrays. Defaults to :func:`.identity`.
+
+    Returns:
+        list: Intersection of provided lists.
+
+    Example:
+
+        >>> intersection_by([1.2, 1.5, 1.7, 2.8], [0.9, 3.2], round)
+        [1.2, 2.8]
+
+    .. versionadded:: TODO
+    """
+    if not others:
+        return []
+
+    callback = kargs.get('callback')
+    last_other = others[-1]
+
+    # Check if last other is a potential iteratee.
+    if (callback is None and
+            (callable(last_other) or
+             isinstance(last_other, string_types) or
+             isinstance(last_other, dict) or
+             last_other is None)):
+        callback = last_other
+        others = others[:-1]
+
+    if not array or not others:
+        return []
+
+    callback = pyd.iteratee(callback)
+
+    # Sort by smallest list length to reduce to intersection faster.
+    others = sorted(others, key=lambda other: len(other))
+
+    for other in others:
+        array = list(iterintersection(array, other, iteratee=callback))
+        if not array:
+            break
+
+    return array
+
+
+def intersection_with(array, *others, **kargs):
+    """This method is like :func:`intersection` except that it accepts a
+    comparator which is invoked to compare the elements of all arrays. The
+    order and references of result values are determined by the first array.
+    The comparator is invoked with two arguments: ``(arr_val, oth_val)``.
+
+    Args:
+        array (list): The array to find the intersection of.
+        others (list): Lists to check for intersection with `array`.
+
+    Keyword Args:
+        callback (callable, optional): Function to compare the elements of the
+            arrays. Defaults to :func:`.is_equal`.
+
+    Returns:
+        list: Intersection of provided lists.
+
+    Example:
+
+        >>> array = ['apple', 'banana', 'pear']
+        >>> others = (['avocado', 'pumpkin'], ['peach'])
+        >>> comparator = lambda a, b: a[0] == b[0]
+        >>> intersection_with(array, *others, callback=comparator)
+        ['pear']
+
+    .. versionadded:: TODO
+    """
+    if not others:
+        return []
+
+    callback = kargs.get('callback')
+    last_other = others[-1]
+
+    # Check if last other is a comparator.
+    if callback is None and (callable(others[-1]) or last_other is None):
+        callback = others[-1]
+        others = others[:-1]
+
+    if not array or not others:
+        return []
+
+    # Sort by smallest list length to reduce to intersection faster.
+    others = sorted(others, key=lambda other: len(other))
+
+    for other in others:
+        array = list(iterintersection(array, other, comparator=callback))
+        if not array:
+            break
+
+    return array
 
 
 def intersperse(array, separator):
@@ -1579,7 +1692,7 @@ def iterintersperse(iterable, separator):
 
 
 def iterunique(array):
-    """Return iterator to find unique list."""
+    """Yield each unique item in array."""
     seen = []
     for i, item in enumerate(array):
         if item not in seen:
@@ -1588,9 +1701,31 @@ def iterunique(array):
 
 
 def iterduplicates(array):
+    """Yield duplictes found in `array`."""
     seen = []
     for i, item in enumerate(array):
         if item in seen:
             yield (i, item)
         else:
             seen.append(item)
+
+
+def iterintersection(array, other, comparator=None, iteratee=None):
+    """Yield intersecting values between `array` and `other` using `comparator`
+    to determine if they intersect.
+    """
+    if not array or not other:  # pragma: no cover
+        return
+
+    if comparator is None:
+        comparator = pyd.is_equal
+
+    if iteratee is None:
+        iteratee = pyd.identity
+
+    # NOTE: Maintain ordering of yielded values based on `array` ordering.
+    for item in array:
+        for value in other:
+            if comparator(iteratee(item), iteratee(value)):
+                yield item
+                break

@@ -40,6 +40,8 @@ from .arrays import (
     intercalate,
     interleave,
     intersection,
+    intersection_by,
+    intersection_with,
     intersperse,
     last,
     last_index_of,

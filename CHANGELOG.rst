@@ -5,6 +5,8 @@ Changelog
 
 
 - Add ``divide``. Thanks bharadwajyarlagadda_!
+- Add ``intersection_by``.
+- Add ``intersection_with``.
 - Add ``lower_case``. Thanks bharadwajyarlagadda_!
 - Add ``lower_first``. Thanks bharadwajyarlagadda_!
 - Add ``multiply``. Thanks bharadwajyarlagadda_!
@@ -14,6 +16,7 @@ Changelog
 - Add ``to_path``. Thanks bharadwajyarlagadda_!
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
+- Make ``intersection`` work with unhashable types.
 
 
 v3.4.7 (2016-11-01)
