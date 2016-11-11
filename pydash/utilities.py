@@ -575,19 +575,17 @@ def random(start=0, stop=1, floating=False):
 
 def range_(*args):
     """Creates a list of numbers (positive and/or negative) progressing from
-    start up to but not including end. If start is less than stop a zero-length
-    range is created unless a negative step is specified.
+    start up to but not including end. If `start` is less than `stop`,
+    a zero-length range is created unless a negative `step` is specified.
 
     Args:
-        stop (int): Integer - 1 to stop at. Defaults to ``1``.
         start (int, optional): Integer to start with. Defaults to ``0``.
-        step (int, optional): If positive the last element is the largest
-            ``start + i * step`` less than `stop`. If negative the last
-            element is the smallest ``start + i * step`` greater than `stop`.
-            Defaults to ``1``.
+        stop (int): Integer to stop at.
+        step (int, optional): The value to increment or decrement by. Defaults
+            to ``1``.
 
-    Returns:
-        list: List of integers in range
+    Yields:
+        int: Next integer in range.
 
     Example:
 
@@ -606,7 +604,21 @@ def range_(*args):
     .. versionchanged:: 3.0.0
         Return generator instead of list.
     """
-    return _range(*args)
+    args = args[:3]
+
+    for arg in args:
+        if not isinstance(arg, int):  # pragma: no cover
+            raise TypeError("range_ cannot interpret '{0}' object as an "
+                            "integer".format(type(arg).__name__))
+
+    def gen():
+        if not args:
+            return
+
+        for num in _range(*args):
+            yield num
+
+    return gen()
 
 
 def range_right(*args):
