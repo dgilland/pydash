@@ -595,6 +595,8 @@ def range_(*args):
         [1, 2, 3]
         >>> list(range_(0, 6, 2))
         [0, 2, 4]
+        >>> list(range_(4, 1))
+        [4, 3, 2]
 
     .. versionadded:: 1.0.0
 
@@ -603,22 +605,11 @@ def range_(*args):
 
     .. versionchanged:: 3.0.0
         Return generator instead of list.
+
+    .. versionchanged:: TODO
+        Support decrementing when start argument is greater than stop argument.
     """
-    args = args[:3]
-
-    for arg in args:
-        if not isinstance(arg, int):  # pragma: no cover
-            raise TypeError("range_ cannot interpret '{0}' object as an "
-                            "integer".format(type(arg).__name__))
-
-    def gen():
-        if not args:
-            return
-
-        for num in _range(*args):
-            yield num
-
-    return gen()
+    return base_range(*args)
 
 
 def range_right(*args):
@@ -645,42 +636,7 @@ def range_right(*args):
 
     .. versionadded:: TODO
     """
-    if len(args) >= 3:
-        args = args[:3]
-    elif len(args) == 2:
-        args = (args[0], args[1], None)
-    elif len(args) == 1:
-        args = (0, args[0], None)
-
-    if args and args[2] is None:
-        validate = args[:2]
-    else:
-        validate = args
-
-    for arg in validate:
-        if not isinstance(arg, int):  # pragma: no cover
-            raise TypeError("range_right cannot interpret '{0}' object as an "
-                            "integer".format(type(arg).__name__))
-
-    def gen():
-        if not args:
-            return
-
-        start, stop, step = args
-
-        if step is None:
-            step = 1 if start < stop else -1
-
-        length = int(max([math.ceil((stop - start) / (step or 1)), 0]))
-
-        start += (step * length) - step
-
-        while length:
-            yield start
-            start -= step
-            length -= 1
-
-    return gen()
+    return base_range(*args, from_right=True)
 
 
 def result(obj, key, default=None):
@@ -826,3 +782,46 @@ def unescape_path_key(key):
     key = pyd.js_replace(key, r'/\\\\/g', r'\\')
     key = pyd.js_replace(key, r'/\\\./g', '.')
     return key
+
+
+def base_range(*args, from_right=False):
+    """Yield range values."""
+    if len(args) >= 3:
+        args = args[:3]
+    elif len(args) == 2:
+        args = (args[0], args[1], None)
+    elif len(args) == 1:
+        args = (0, args[0], None)
+
+    if args and args[2] is None:
+        check_args = args[:2]
+    else:
+        check_args = args
+
+    for arg in check_args:
+        if not isinstance(arg, int):  # pragma: no cover
+            raise TypeError("range cannot interpret '{0}' object as an "
+                            "integer".format(type(arg).__name__))
+
+    def gen():
+        if not args:
+            return
+
+        start, stop, step = args
+
+        if step is None:
+            step = 1 if start < stop else -1
+
+        length = int(max([math.ceil((stop - start) / (step or 1)), 0]))
+
+        if from_right:
+            start += (step * length) - step
+            step *= -1
+
+        while length:
+            yield start
+
+            start += step
+            length -= 1
+
+    return gen()

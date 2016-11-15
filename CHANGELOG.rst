@@ -17,6 +17,7 @@ Changelog
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
 - Make ``intersection`` work with unhashable types.
+- Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.
 
 
 v3.4.7 (2016-11-01)
