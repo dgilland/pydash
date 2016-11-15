@@ -12,7 +12,7 @@ Types of Contributions
 Report Bugs
 +++++++++++
 
-Report bugs at https://github.com/dgilland/zulu.
+Report bugs at https://github.com/dgilland/pydash.
 
 If you are reporting a bug, please include:
 
@@ -36,13 +36,13 @@ Look through the GitHub issues for features. Anything tagged with "enhancement" 
 Write Documentation
 +++++++++++++++++++
 
-Zulu could always use more documentation, whether as part of the official zulu docs, in docstrings, or even on the web in blog posts, articles, and such.
+Pydash could always use more documentation, whether as part of the official pydash docs, in docstrings, or even on the web in blog posts, articles, and such.
 
 
 Submit Feedback
 +++++++++++++++
 
-The best way to send feedback is to file an issue at https://github.com/dgilland/zulu.
+The best way to send feedback is to file an issue at https://github.com/dgilland/pydash.
 
 If you are proposing a feature:
 
@@ -54,16 +54,16 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up ``zulu`` for local development.
+Ready to contribute? Here's how to set up ``pydash`` for local development.
 
-1. Fork the ``zulu`` repo on GitHub.
+1. Fork the ``pydash`` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/zulu.git
+    $ git clone git@github.com:your_name_here/pydash.git
 
 3. Install your local copy into a virtualenv. Assuming you have virtualenv installed, this is how you set up your fork for local development::
 
-    $ cd zulu
+    $ cd pydash
     $ pip install -r requirements-dev.txt
 
 4. Create a branch for local development::
@@ -94,4 +94,4 @@ Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated. Put your new functionality into a function with a docstring, and add the feature to the README.rst.
-3. The pull request should work for Python 2.7, 3.4, and 3.5. Check https://travis-ci.org/dgilland/zulu/pull_requests and make sure that the tests pass for all supported Python versions.
+3. The pull request should work for Python 2.7, 3.4, and 3.5. Check https://travis-ci.org/dgilland/pydash/pull_requests and make sure that the tests pass for all supported Python versions.
