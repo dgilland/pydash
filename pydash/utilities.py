@@ -784,8 +784,10 @@ def unescape_path_key(key):
     return key
 
 
-def base_range(*args, from_right=False):
+def base_range(*args, **kargs):
     """Yield range values."""
+    from_right = kargs.get('from_right', False)
+
     if len(args) >= 3:
         args = args[:3]
     elif len(args) == 2:
