@@ -65,6 +65,8 @@ __all__ = (
     'take_while',
     'union',
     'uniq',
+    'uniq_by',
+    'uniq_with',
     'unique',
     'unshift',
     'unzip',
@@ -1387,7 +1389,7 @@ def union(*arrays):
     return uniq(flatten(arrays))
 
 
-def uniq(array, callback=None):
+def uniq(array):
     """Creates a duplicate-value-free version of the array. If callback is
     passed, each element of array is passed through a callback before
     uniqueness is computed. The callback is invoked with three arguments:
@@ -1415,21 +1417,61 @@ def uniq(array, callback=None):
         - :func:`unique` (alias)
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed ``callback`` argument support in favor of only having
+        :func:`uniq_by` support it.
     """
-    if callback:
-        cbk = pyd.iteratee(callback)
-        computed = [cbk(item) for item in array]
-    else:
-        computed = array
-
-    # NOTE: Using array[i] instead of item since callback could have modified
-    # returned item values.
-    lst = [array[i] for i, _ in iterunique(computed)]
-
-    return lst
+    return uniq_by(array)
 
 
 unique = uniq
+
+
+def uniq_by(array, callback=None):
+    """This method is like :func:`uniq` except that it accepts iteratee which
+    is invoked for each element in array to generate the criterion by which
+    uniqueness is computed. The order of result values is determined by the
+    order they occur in the array. The iteratee is invoked with one argument:
+    ``(value)``.
+
+    Args:
+        array (list): List to process.
+        callback (mixed, optional): Function to transform the elements of the
+            arrays. Defaults to :func:`.identity`.
+
+    Returns:
+        list: Unique list.
+
+    Example:
+
+        >>> uniq_by([1, 2, 3, 1, 2, 3], lambda val: val % 2)
+        [1, 2]
+
+    .. versionadded:: TODO
+    """
+    return list(iterunique(array, iteratee=callback))
+
+
+def uniq_with(array, callback=None):
+    """This method is like _.uniq except that it accepts comparator which is invoked to compare elements of array. The order of result values is determined by the order they occur in the array.The comparator is invoked with two arguments: (arrVal, othVal).
+
+    Args:
+        array (list): List to process.
+        callback (callable, optional): Function to compare the elements of the
+            arrays. Defaults to :func:`.is_equal`.
+
+    Returns:
+        list: Unique list.
+
+    Example:
+
+        >>> uniq_with([1, 2, 3, 4, 5], lambda a, b: (a % 2) == (b % 2))
+        [1, 2]
+
+    .. versionadded:: TODO
+    """
+    return list(iterunique(array, comparator=callback))
 
 
 def unshift(array, *items):
@@ -1689,13 +1731,29 @@ def iterintersperse(iterable, separator):
         yield item
 
 
-def iterunique(array):
+def iterunique(array, comparator=None, iteratee=None):
     """Yield each unique item in array."""
+    if not array:  # pragma: no cover
+        return
+
+    if comparator is None:
+        comparator = pyd.is_equal
+
+    iteratee = pyd.iteratee(iteratee)
+
     seen = []
-    for i, item in enumerate(array):
-        if item not in seen:
-            seen.append(item)
-            yield (i, item)
+    for item in array:
+        cmp_item = iteratee(item)
+        new = True
+
+        for seen_item in seen:
+            if comparator(cmp_item, seen_item):
+                new = False
+                break
+
+        if new:
+            yield item
+            seen.append(cmp_item)
 
 
 def iterduplicates(array):

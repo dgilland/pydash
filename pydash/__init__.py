@@ -68,6 +68,8 @@ from .arrays import (
     take_while,
     union,
     uniq,
+    uniq_by,
+    uniq_with,
     unique,
     unshift,
     unzip,

@@ -14,10 +14,13 @@ Changelog
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``to_path``. Thanks bharadwajyarlagadda_!
+- Add ``uniq_by``.
+- Add ``uniq_with``.
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.
+- Remove ``callback`` argument from ``uniq``/``unique``. (**breaking change**)
 
 
 v3.4.7 (2016-11-01)

@@ -219,6 +219,7 @@ def test_interleave(case, expected):
 
 @parametrize('case,expected', [
     (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2]),
+    (([1, 1, 2, 2], [1, 1, 2, 2]), [1, 2]),
     (([1, 2, 3], [4]), []),
     (([1, 2, 3],), []),
     (([], [101, 2, 1, 10], [2, 1]), []),
@@ -235,7 +236,7 @@ def test_intersection(case, expected):
     (([], [101, 2, 1, 10], [2, 1]), []),
     (([],), []),
     (([1, 2, 3], [101, 2, 1, 10], [2, 1], lambda a: 1 if a < 10 else 0),
-     [1, 2, 3]),
+     [1]),
     (([{'a': 1}, {'a': 2}, {'a': 3}], [{'a': 2}], 'a'), [{'a': 2}])
 ])
 def test_intersection_by(case, expected):
@@ -525,9 +526,22 @@ def test_take_right_while(case, expected):
     assert _.take_right_while(*case) == expected
 
 
-@parametrize('case,filter_by,expected', [
-    ([1, 2, 1, 3, 1], None, [1, 2, 3]),
-    ([dict(a=1), dict(a=2), dict(a=1)], None, [dict(a=1), dict(a=2)]),
+@parametrize('case,expected', [
+    ([1, 2, 1, 3, 1], [1, 2, 3]),
+    ([dict(a=1), dict(a=2), dict(a=1)], [dict(a=1), dict(a=2)]),
+])
+def test_uniq(case, expected):
+    assert _.uniq(case) == expected
+
+
+@parametrize('alias', [
+    _.unique
+])
+def test_uniq_aliases(alias):
+    assert _.uniq is alias
+
+
+@parametrize('case,callback,expected', [
     ([1, 2, 1.5, 3, 2.5], lambda num: math.floor(num), [1, 2, 3]),
     ([{'name': 'banana', 'type': 'fruit'},
       {'name': 'apple', 'type': 'fruit'},
@@ -545,15 +559,16 @@ def test_take_right_while(case, expected):
      lambda letter: letter.lower(),
      ['A', 'b', 'C'])
 ])
-def test_uniq(case, filter_by, expected):
-    assert _.uniq(case, filter_by) == expected
+def test_uniq_by(case, callback, expected):
+    assert _.uniq_by(case, callback) == expected
 
 
-@parametrize('alias', [
-    _.unique
+@parametrize('case,callback,expected', [
+    ([1, 2, 3, 4, 5], lambda a, b: (a % 2) == (b % 2), [1, 2]),
+    ([5, 4, 3, 2, 1], lambda a, b: (a % 2) == (b % 2), [5, 4]),
 ])
-def test_uniq_aliases(alias):
-    assert _.uniq is alias
+def test_uniq_with(case, callback, expected):
+    assert _.uniq_with(case, callback) == expected
 
 
 @parametrize('case,expected', [
