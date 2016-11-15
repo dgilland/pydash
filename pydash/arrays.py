@@ -595,8 +595,8 @@ def intersection_by(array, *others, **kargs):
         others (list): Lists to check for intersection with `array`.
 
     Keyword Args:
-        callback (callable, optional): Function to transform the elements of
-            the arrays. Defaults to :func:`.identity`.
+        callback (mixed, optional): Function to transform the elements of the
+            arrays. Defaults to :func:`.identity`.
 
     Returns:
         list: Intersection of provided lists.
@@ -625,8 +625,6 @@ def intersection_by(array, *others, **kargs):
 
     if not array or not others:
         return []
-
-    callback = pyd.iteratee(callback)
 
     # Sort by smallest list length to reduce to intersection faster.
     others = sorted(others, key=lambda other: len(other))
@@ -1720,12 +1718,27 @@ def iterintersection(array, other, comparator=None, iteratee=None):
     if comparator is None:
         comparator = pyd.is_equal
 
-    if iteratee is None:
-        iteratee = pyd.identity
+    iteratee = pyd.iteratee(iteratee)
 
     # NOTE: Maintain ordering of yielded values based on `array` ordering.
+    seen = []
     for item in array:
+        cmp_item = iteratee(item)
+
+        if cmp_item in seen:
+            continue
+
+        seen.append(cmp_item)
+        seen_others = []
+
         for value in other:
-            if comparator(iteratee(item), iteratee(value)):
+            cmp_value = iteratee(value)
+
+            if cmp_value in seen_others:
+                continue
+
+            seen_others.append(cmp_value)
+
+            if comparator(cmp_item, cmp_value):
                 yield item
                 break
