@@ -10,7 +10,7 @@ import math
 import operator
 
 import pydash as pyd
-from .helpers import itercallback, iterator
+from .helpers import NoValue, iterator_with_default, itercallback, iterator
 from ._compat import _range
 
 
@@ -22,8 +22,12 @@ __all__ = (
     'curve',
     'divide',
     'floor',
+    'max_',
+    'max_by',
     'mean',
     'median',
+    'min_',
+    'min_by',
     'moving_average',
     'moving_avg',
     'multiply',
@@ -193,6 +197,60 @@ def floor(x, precision=0):
     return rounder(math.floor, x, precision)
 
 
+def max_(collection, default=NoValue):
+    """Retrieves the maximum value of a `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        default (mixed, optional): Value to return if `collection` is empty.
+
+    Returns:
+        mixed: Maximum value.
+
+    Example:
+
+        >>> max_([1, 2, 3, 4])
+        4
+        >>> max_([], default=-1)
+        -1
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Moved iteratee callback support to :func:`max_by`.
+    """
+    return max_by(collection, default=default)
+
+
+def max_by(collection, callback=None, default=NoValue):
+    """Retrieves the maximum value of a `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+        default (mixed, optional): Value to return if `collection` is empty.
+
+    Returns:
+        mixed: Maximum value.
+
+    Example:
+
+        >>> max_by([1.0, 1.5, 1.8], math.floor)
+        1.0
+        >>> max_by([{'a': 1}, {'a': 2}, {'a': 3}], 'a')
+        {'a': 3}
+        >>> max_by([], default=-1)
+        -1
+
+    .. versionadded:: TODO
+    """
+    if isinstance(collection, dict):
+        collection = collection.values()
+
+    return max(iterator_with_default(collection, default),
+               key=pyd.iteratee(callback))
+
+
 def median(collection, callback=None):
     """Calculate median of each element in `collection`. If callback is passed,
     each element of `collection` is passed through a callback before the
@@ -226,6 +284,59 @@ def median(collection, callback=None):
         result = (collection[left] + collection[right]) / 2
 
     return result
+
+
+def min_(collection, default=NoValue):
+    """Retrieves the minimum value of a `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        default (mixed, optional): Value to return if `collection` is empty.
+
+    Returns:
+        mixed: Minimum value.
+
+    Example:
+
+        >>> min_([1, 2, 3, 4])
+        1
+        >>> min_([], default=100)
+        100
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Moved iteratee callback support to :func:`min_by`.
+    """
+    return min_by(collection, default=default)
+
+
+def min_by(collection, callback=None, default=NoValue):
+    """Retrieves the minimum value of a `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+        default (mixed, optional): Value to return if `collection` is empty.
+
+    Returns:
+        mixed: Minimum value.
+
+    Example:
+
+        >>> min_by([1.8, 1.5, 1.0], math.floor)
+        1.8
+        >>> min_by([{'a': 1}, {'a': 2}, {'a': 3}], 'a')
+        {'a': 1}
+        >>> min_by([], default=100)
+        100
+
+    .. versionadded:: TODO
+    """
+    if isinstance(collection, dict):
+        collection = collection.values()
+    return min(iterator_with_default(collection, default),
+               key=pyd.iteratee(callback))
 
 
 def moving_average(array, size):

@@ -213,56 +213,6 @@ def test_mapiter(case, expectations):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3],), 3),
-    (({'a': 3, 'b': 2, 'c': 1},), 3),
-    ((['anaconda', 'bison', 'camel'], lambda x: len(x)), 'anaconda'),
-    (([{'name': 'barney', 'age': 36}, {'name': 'fred', 'age': 40}], 'age',),
-     {'name': 'fred', 'age': 40}),
-    (([{'name': 'barney', 'age': 36}, {'name': 'fred', 'age': 40}],
-      lambda chr: chr['age']),
-     {'name': 'fred', 'age': 40}),
-])
-def test_max_(case, expected):
-    assert _.max_(*case) == expected
-
-
-@parametrize('collection,default,expected', [
-    ([], -1, -1),
-    ([1, 2, 3], -1, 3),
-    ({}, -1, -1),
-    ([], None, None),
-    ({}, None, None)
-])
-def test_max_default(collection, default, expected):
-    assert _.max_(collection, default=default) == expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3],), 1),
-    (({'a': 3, 'b': 2, 'c': 1},), 1),
-    ((['anaconda', 'bison', 'cat'], lambda x: len(x)), 'cat'),
-    (([{'name': 'barney', 'age': 36}, {'name': 'fred', 'age': 40}], 'age',),
-     {'name': 'barney', 'age': 36}),
-    (([{'name': 'barney', 'age': 36}, {'name': 'fred', 'age': 40}],
-      lambda chr: chr['age']),
-     {'name': 'barney', 'age': 36}),
-])
-def test_min_(case, expected):
-    assert _.min_(*case) == expected
-
-
-@parametrize('collection,default,expected', [
-    ([], -1, -1),
-    ([1, 2, 3], -1, 1),
-    ({}, -1, -1),
-    ([], None, None),
-    ({}, None, None)
-])
-def test_min_default(collection, default, expected):
-    assert _.min_(collection, default=default) == expected
-
-
-@parametrize('case,expected', [
     (([1, 2, 3], lambda item: item % 2), [[1, 3], [2]]),
     (([1.2, 2.3, 3.4], lambda item: math.floor(item) % 2),
      [[1.2, 3.4], [2.3]]),

@@ -9,6 +9,8 @@ Changelog
 - Add ``intersection_with``.
 - Add ``lower_case``. Thanks bharadwajyarlagadda_!
 - Add ``lower_first``. Thanks bharadwajyarlagadda_!
+- Add ``max_by``.
+- Add ``min_by``.
 - Add ``multiply``. Thanks bharadwajyarlagadda_!
 - Add ``nth_arg``. Thanks bharadwajyarlagadda_!
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
@@ -20,7 +22,8 @@ Changelog
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.
-- Remove ``callback`` argument from ``uniq``/``unique``. (**breaking change**)
+- Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
+- Remove ``callback`` argument from ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
 
 
 v3.4.7 (2016-11-01)

@@ -178,6 +178,28 @@ def set_item(obj, key, value, allow_override=True):
             obj[key] = value
 
 
+class iterator_with_default(object):
+    def __init__(self, collection, default):
+        self.iter = iter(collection)
+        self.default = default
+
+    def __iter__(self):
+        return self
+
+    def next_default(self):
+        ret = self.default
+        self.default = NoValue
+        return ret
+
+    def __next__(self):
+        ret = next(self.iter, self.next_default())
+        if ret is NoValue:
+            raise StopIteration
+        return ret
+
+    next = __next__
+
+
 def deprecated(func):  # pragma: no cover
     """This is a decorator which can be used to mark functions as deprecated.
     It will result in a warning being emitted when the function is used.
