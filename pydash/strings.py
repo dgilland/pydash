@@ -10,6 +10,7 @@ import unicodedata
 
 import pydash as pyd
 from .helpers import NoValue
+from .objects import to_string
 from ._compat import (
     html_unescape,
     iteritems,
@@ -1644,7 +1645,7 @@ def to_lower(text):
 
     .. versionadded:: TODO
     """
-    return text.lower()
+    return to_string(text).lower()
 
 
 def to_upper(text):
@@ -1667,7 +1668,7 @@ def to_upper(text):
 
     .. versionadded:: TODO
     """
-    return text.upper()
+    return to_string(text).upper()
 
 
 def trim(text, chars=None):
