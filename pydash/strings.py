@@ -78,6 +78,8 @@ __all__ = (
     'surround',
     'swap_case',
     'title_case',
+    'to_lower',
+    'to_upper',
     'trim',
     'trim_left',
     'trim_right',
@@ -1620,6 +1622,52 @@ def title_case(text):
     text = pyd.to_string(text)
     # NOTE: Can't use text.title() since it doesn't handle apostrophes.
     return ' '.join(word.capitalize() for word in re.split(' ', text))
+
+
+def to_lower(text):
+    """Converts the given :attr:`text` to lower text.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to lower case.
+
+    Example:
+
+        >>> to_lower('--Foo-Bar--')
+        '--foo-bar--'
+        >>> to_lower('fooBar')
+        'foobar'
+        >>> to_lower('__FOO_BAR__')
+        '__foo_bar__'
+
+    .. versionadded:: TODO
+    """
+    return text.lower()
+
+
+def to_upper(text):
+    """Converts the given :attr:`text` to upper text.
+
+    Args:
+        text (str): String to convert.
+
+    Returns:
+        str: String converted to upper case.
+
+    Example:
+
+        >>> to_upper('--Foo-Bar--')
+        '--FOO-BAR--'
+        >>> to_upper('fooBar')
+        'FOOBAR'
+        >>> to_upper('__FOO_BAR__')
+        '__FOO_BAR__'
+
+    .. versionadded:: TODO
+    """
+    return text.upper()
 
 
 def trim(text, chars=None):

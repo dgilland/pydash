@@ -814,6 +814,24 @@ def test_title_case(case, expected):
 
 
 @parametrize('case,expected', [
+    ('--Foo-Bar--', '--foo-bar--'),
+    ('fooBar', 'foobar'),
+    ('__FOO_BAR__', '__foo_bar__')
+])
+def test_to_lower(case, expected):
+    assert _.to_lower(case) == expected
+
+
+@parametrize('case,expected', [
+    ('--Foo-Bar--', '--FOO-BAR--'),
+    ('fooBar', 'FOOBAR'),
+    ('__FOO_BAR__', '__FOO_BAR__')
+])
+def test_to_upper(case, expected):
+    assert _.to_upper(case) == expected
+
+
+@parametrize('case,expected', [
     (('  fred  ',), 'fred'),
     (('-_-fred-_-', '_-'), 'fred'),
     (('-_-fred-_-', None), '-_-fred-_-'),

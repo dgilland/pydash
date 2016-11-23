@@ -380,6 +380,8 @@ from .strings import (
     surround,
     swap_case,
     title_case,
+    to_lower,
+    to_upper,
     trim,
     trim_left,
     trim_right,
