@@ -25,6 +25,7 @@ from ._compat import (
 
 
 __all__ = (
+    'eq',
     'gt',
     'gte',
     'lt',
@@ -75,6 +76,32 @@ __all__ = (
 
 
 RegExp = type(re.compile(''))
+
+
+def eq(value, other):
+    """Checks if :attr:`value` is equal to :attr:`other`.
+
+    Args:
+        value (mixed): Value to compare.
+        other (mixed): Other value to compare.
+
+    Returns:
+        bool: Whether :attr:`value` is equal to :attr:`other`.
+
+    Example:
+
+        >>> eq(None, None)
+        True
+        >>> eq(None, '')
+        False
+        >>> eq('a', 'a')
+        True
+        >>> eq(1, str(1))
+        False
+
+    .. versionadded:: TODO
+    """
+    return value is other
 
 
 def gt(value, other):

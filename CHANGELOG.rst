@@ -4,6 +4,7 @@ Changelog
 =========
 
 
+- Add ``eq``. Thanks bharadwajyarlagadda_!
 - Add ``divide``. Thanks bharadwajyarlagadda_!
 - Add ``intersection_by``.
 - Add ``intersection_with``.
