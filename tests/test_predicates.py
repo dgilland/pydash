@@ -11,6 +11,16 @@ from . import fixtures
 from .fixtures import parametrize
 
 
+@parametrize('value,other,expected', [
+    ('a', 'a', True),
+    (None, None, True),
+    (None, '', False),
+    (1, str(1), False)
+])
+def test_eq(value, other, expected):
+    assert _.eq(value, other) == expected
+
+
 @parametrize('case,expected', [
     ((2, 1), True),
     ((2.5, 2.3), True),

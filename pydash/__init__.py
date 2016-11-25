@@ -271,6 +271,7 @@ from .objects import (
 #
 
 from .predicates import (
+    eq,
     gt,
     gte,
     lt,
