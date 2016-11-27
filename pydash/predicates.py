@@ -501,7 +501,11 @@ def is_equal(value, other):
         >>> is_equal('a', 'A')
         False
 
-    .. versionadded:: TODO
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed :attr:`callback` from :func:`is_equal` and added it in
+        :func:`is_equal_with`.
     """
     return is_equal_with(value, other, callback=None)
 
@@ -531,7 +535,7 @@ def is_equal_with(value, other, callback):
         >>> is_equal_with('a', 'A', lambda a, b: a.lower() == b.lower())
         True
 
-    .. versionadded:: 1.0.0
+    .. versionadded:: TODO
     """
     # If callback provided, use it for comparision.
     equal = callback(value, other) if callable(callback) else None
