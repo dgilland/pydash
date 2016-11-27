@@ -211,30 +211,13 @@ class Disjoin(object):
         return pyd.some(obj, callback)
 
 
-def flip(func):
-    """Creates a function that invokes the method with arguments reversed.
+class Flip(object):
+    """Wrap a function in a flip context."""
+    def __init__(self, func):
+        self.func = func
 
-    Args:
-        func (function): Function to flip arguments for.
-
-    Returns:
-        function: Returns the new flipped function.
-
-    Example:
-
-        >>> flipped = flip(lambda *args: args)
-        >>> flipped(1, 2, 3, 4)
-        (4, 3, 2, 1)
-        >>> flipped = flip(lambda *args: [i * 2 for i in args])
-        >>> flipped(1, 2, 3, 4)
-        [8, 6, 4, 2]
-
-    .. versionadded:: TODO
-    """
-    def _flip(*args, **kargs):
-        return func(*reversed(args), **kargs)
-
-    return _flip
+    def __call__(self, *args, **kargs):
+        return self.func(*reversed(args), **kargs)
 
 
 class Iterated(object):
@@ -636,6 +619,29 @@ def disjoin(*funcs):
     .. versionadded:: 2.0.0
     """
     return Disjoin(*funcs)
+
+
+def flip(func):
+    """Creates a function that invokes the method with arguments reversed.
+
+    Args:
+        func (function): Function to flip arguments for.
+
+    Returns:
+        function: Function wrapped in a :class:`Flip` context.
+
+    Example:
+
+        >>> flipped = flip(lambda *args: args)
+        >>> flipped(1, 2, 3, 4)
+        (4, 3, 2, 1)
+        >>> flipped = flip(lambda *args: [i * 2 for i in args])
+        >>> flipped(1, 2, 3, 4)
+        [8, 6, 4, 2]
+
+    .. versionadded:: TODO
+    """
+    return Flip(func)
 
 
 def flow(*funcs):
