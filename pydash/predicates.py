@@ -41,6 +41,7 @@ __all__ = (
     'is_dict',
     'is_empty',
     'is_equal',
+    'is_equal_with',
     'is_error',
     'is_even',
     'is_float',
@@ -533,6 +534,9 @@ def is_equal(value, other, callback=None):
         equal = value == other
 
     return equal
+
+
+is_equal_with = is_equal
 
 
 def is_error(value):
