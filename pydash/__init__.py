@@ -160,6 +160,7 @@ from .functions import (
     debounce,
     delay,
     disjoin,
+    flip,
     flow,
     flow_right,
     iterated,

@@ -24,6 +24,7 @@ __all__ = (
     'debounce',
     'delay',
     'disjoin',
+    'flip',
     'flow',
     'flow_right',
     'iterated',
@@ -208,6 +209,32 @@ class Disjoin(object):
             return pyd.some(self.funcs, lambda func: func(item))
 
         return pyd.some(obj, callback)
+
+
+def flip(func):
+    """Creates a function that invokes the method with arguments reversed.
+
+    Args:
+        func (function): Function to flip arguments for.
+
+    Returns:
+        function: Returns the new flipped function.
+
+    Example:
+
+        >>> flipped = flip(lambda args: args)
+        >>> flipped(1, 2, 3, 4)
+        (4, 3, 2, 1)
+        >>> flipped = flip(lambda args: [i * 2 for i in args])
+        >>> flipped(1, 2, 3, 4)
+        [8, 6, 4, 2]
+
+    .. versionadded:: TODO
+    """
+    def _flip(*args):
+        return func(args)[::-1]
+
+    return _flip
 
 
 class Iterated(object):
