@@ -226,6 +226,30 @@ def test_is_equal(case, expected):
 
 
 @parametrize('case,expected', [
+    ((1, 1), True),
+    ((1, 2), False),
+    (('1', '1'), True),
+    (('1', '2'), False),
+    (([1], {'a': 1}), False),
+    (([1], {'a': 1}, lambda a, b: True), True),
+    (({'a': 1}, {'a': 1}), True),
+    (({'a': 1}, {'b': 1}, lambda a, b: None if isinstance(a, dict) else True),
+     False),
+    (([1, 2, 3], [1, 2, 3]), True),
+    (([1, 2, 3], [1, 2]), False),
+    (([1, 2], [1, 2, 3]), False),
+    (([1, 2, 3], [1, 2], lambda a, b: None if isinstance(a, list) else True),
+     False),
+    (([1, 2], [1, 2, 3], lambda a, b: None if isinstance(a, list) else True),
+     False),
+    ((['hello', 'goodbye'], ['hi', 'goodbye'], fixtures.is_equal_callback0),
+     True)
+])
+def test_is_equal_with(case, expected):
+    assert _.is_equal_with(*case) == expected
+
+
+@parametrize('case,expected', [
     (Exception(), True),
     ({}, False),
     ([], False)

@@ -289,6 +289,7 @@ from .predicates import (
     is_dict,
     is_empty,
     is_equal,
+    is_equal_with,
     is_error,
     is_even,
     is_float,
