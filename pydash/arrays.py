@@ -44,6 +44,7 @@ __all__ = (
     'last',
     'last_index_of',
     'mapcat',
+    'nth',
     'object_',
     'pull',
     'pull_at',
@@ -787,6 +788,32 @@ def mapcat(array, callback=None):
     .. versionadded:: 2.0.0
     """
     return cat(*pyd.map_(array, callback))
+
+
+def nth(array, pos=0):
+    """Gets the element at index n of array.
+
+    Args:
+        array (list): List passed in by the user.
+        pos (int): Index of element to return.
+
+    Returns:
+        mixed: Returns the element at :attr:`pos`.
+
+    Example:
+
+        >>> nth([1, 2, 3], 0)
+        1
+        >>> nth([3, 4, 5, 6], 2)
+        5
+        >>> nth([11, 22, 33], -1)
+        33
+        >>> nth([11, 22, 33])
+        11
+
+    .. versionadded:: TODO
+    """
+    return pyd.get(array, pos)
 
 
 def pop(array, index=-1):

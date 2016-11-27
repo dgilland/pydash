@@ -46,6 +46,7 @@ from .arrays import (
     last,
     last_index_of,
     mapcat,
+    nth,
     object_,
     pop,
     pull,

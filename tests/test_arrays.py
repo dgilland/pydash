@@ -307,6 +307,15 @@ def test_mapcat(case, expected):
     assert _.mapcat(*case) == expected
 
 
+@parametrize('case,pos,expected', [
+    ([11, 22, 33], 2, 33),
+    ([11, 22, 33], 0, 11),
+    ([11, 22, 33], -1, 33)
+])
+def test_nth(case, pos, expected):
+    assert _.nth(case, pos) == expected
+
+
 @parametrize('case,expected,after', [
     (([1, 2, 3],), 3, [1, 2]),
     (([1, 2, 3], 0), 1, [2, 3]),
