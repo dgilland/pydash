@@ -511,6 +511,14 @@ def test_is_reg_exp_aliases(case):
 
 
 @parametrize('case,expected', [
+    (set(), True),
+    ([1, 2, 3], False)
+])
+def test_is_set(case, expected):
+    assert _.is_set(case) == expected
+
+
+@parametrize('case,expected', [
     ([1, 2, 3], False),
     ([3, 2, 1], True),
     ([1, 1, 2], False),

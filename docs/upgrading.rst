@@ -39,10 +39,11 @@ Some notable new features/functions:
     - :func:`pydash.utilities.range_right`.
     - :func:`pydash.utilities.to_path`.
 
-- 2 new predicate method
+- 3 new predicate method
 
     - :func:`pydash.predicates.eq`.
     - :func:`pydash.predicates.is_equal_with`.
+    - :func:`pydash.predicates.is_set`.
 
 
 From v2.x.x to v3.0.0

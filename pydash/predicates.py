@@ -68,6 +68,7 @@ __all__ = (
     'is_positive',
     'is_re',
     'is_reg_exp',
+    'is_set',
     'is_strictly_decreasing',
     'is_strictly_increasing',
     'is_string',
@@ -1114,6 +1115,27 @@ def is_reg_exp(value):
 
 
 is_re = is_reg_exp
+
+
+def is_set(value):
+    """Checks if the given value is a set object or not.
+
+    Args:
+        value (mixed): Value passed in by the user.
+
+    Returns:
+        bool: True if the given value is a set else False.
+
+    Example:
+
+        >>> is_set(set([1, 2]))
+        True
+        >>> is_set([1, 2, 3])
+        False
+
+    .. versionadded:: TODO
+    """
+    return isinstance(value, set)
 
 
 def is_strictly_decreasing(value):

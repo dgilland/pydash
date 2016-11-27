@@ -316,6 +316,7 @@ from .predicates import (
     is_positive,
     is_re,
     is_reg_exp,
+    is_set,
     is_strictly_decreasing,
     is_strictly_increasing,
     is_string,

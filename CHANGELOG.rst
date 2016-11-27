@@ -10,6 +10,7 @@ Changelog
 - Add ``intersection_by``.
 - Add ``intersection_with``.
 - Add ``is_equal_with``. Thanks bharadwajyarlagadda_!
+- Add ``is_set``. Thanks bharadwajyarlagadda_!
 - Add ``lower_case``. Thanks bharadwajyarlagadda_!
 - Add ``lower_first``. Thanks bharadwajyarlagadda_!
 - Add ``max_by``.
