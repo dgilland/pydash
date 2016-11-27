@@ -483,12 +483,35 @@ def is_empty(value):
     return any([is_boolean(value), is_number(value), not value])
 
 
-def is_equal(value, other, callback=None):
+def is_equal(value, other):
     """Performs a comparison between two values to determine if they are
-    equivalent to each other. If a callback is provided it will be executed to
-    compare values. If the callback returns ``None``, comparisons will be
-    handled by the method instead. The callback is invoked with two arguments:
-    ``(value, other)``.
+    equivalent to each other.
+
+    Args:
+        value (list|dict): Object to compare.
+        other (list|dict): Object to compare.
+
+    Returns:
+        bool: Whether `value` and `other` are equal.
+
+    Example:
+
+        >>> is_equal([1, 2, 3], [1, 2, 3])
+        True
+        >>> is_equal('a', 'A')
+        False
+
+    .. versionadded:: TODO
+    """
+    return is_equal_with(value, other, callback=None)
+
+
+def is_equal_with(value, other, callback):
+    """This method is like _.isEqual except that it accepts customizer which
+    is invoked to compare values. A callback is provided which will be
+    executed to compare values. If the callback returns ``None``, comparisons
+    will be handled by the method instead. The callback is invoked with two
+    arguments: ``(value, other)``.
 
     Args:
         value (list|dict): Object to compare.
@@ -501,11 +524,11 @@ def is_equal(value, other, callback=None):
 
     Example:
 
-        >>> is_equal([1, 2, 3], [1, 2, 3])
+        >>> is_equal_with([1, 2, 3], [1, 2, 3], None)
         True
-        >>> is_equal('a', 'A')
+        >>> is_equal_with('a', 'A', None)
         False
-        >>> is_equal('a', 'A', lambda a, b: a.lower() == b.lower())
+        >>> is_equal_with('a', 'A', lambda a, b: a.lower() == b.lower())
         True
 
     .. versionadded:: 1.0.0
@@ -524,7 +547,7 @@ def is_equal(value, other, callback=None):
         # Walk a/b to determine equality using callback.
         for key, value in iterator(value):
             if pyd.has(other, key):
-                equal = is_equal(value, other[key], callback)
+                equal = is_equal_with(value, other[key], callback)
             else:
                 equal = False
 
@@ -535,9 +558,6 @@ def is_equal(value, other, callback=None):
         equal = value == other
 
     return equal
-
-
-is_equal_with = is_equal
 
 
 def is_error(value):

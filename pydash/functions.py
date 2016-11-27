@@ -222,17 +222,17 @@ def flip(func):
 
     Example:
 
-        >>> flipped = flip(lambda args: args)
+        >>> flipped = flip(lambda *args: args)
         >>> flipped(1, 2, 3, 4)
         (4, 3, 2, 1)
-        >>> flipped = flip(lambda args: [i * 2 for i in args])
+        >>> flipped = flip(lambda *args: [i * 2 for i in args])
         >>> flipped(1, 2, 3, 4)
         [8, 6, 4, 2]
 
     .. versionadded:: TODO
     """
-    def _flip(*args):
-        return func(args)[::-1]
+    def _flip(*args, **kargs):
+        return func(*reversed(args), **kargs)
 
     return _flip
 
