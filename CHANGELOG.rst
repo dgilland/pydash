@@ -6,6 +6,7 @@ Changelog
 
 - Add ``eq``. Thanks bharadwajyarlagadda_!
 - Add ``divide``. Thanks bharadwajyarlagadda_!
+- Add ``flip``. Thanks bharadwajyarlagadda_!
 - Add ``intersection_by``.
 - Add ``intersection_with``.
 - Add ``lower_case``. Thanks bharadwajyarlagadda_!

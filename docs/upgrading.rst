@@ -13,6 +13,10 @@ Some notable new features/functions:
     - :func:`pydash.arrays.intersection_by`
     - :func:`pydash.arrays.intersection_with`
 
+- 1 new function method
+
+    - :func:`pydash.functions.flip`
+
 - 5 new string methods
 
     - :func:`pydash.strings.lower_case`.

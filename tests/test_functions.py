@@ -174,6 +174,15 @@ def test_disjoin(case, arg, expected):
 
 
 @parametrize('case,args,expected', [
+    (lambda args: args, (1, 2, 3), (3, 2, 1)),
+    (lambda args: [i * 2 for i in args], (1, 2, 3), [6, 4, 2])
+])
+def flip(case, args, expected):
+    func = _.flip(case)
+    assert func(args) == expected
+
+
+@parametrize('case,args,expected', [
     ((lambda x: '!!!' + x + '!!!', lambda x: 'Hi {0}'.format(x)),
      ('Bob',),
      'Hi !!!Bob!!!'),
