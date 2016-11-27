@@ -14,6 +14,7 @@ Changelog
 - Add ``max_by``.
 - Add ``min_by``.
 - Add ``multiply``. Thanks bharadwajyarlagadda_!
+- Add ``nth``. Thanks bharadwajyarlagadda_!
 - Add ``nth_arg``. Thanks bharadwajyarlagadda_!
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
