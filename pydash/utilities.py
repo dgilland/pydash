@@ -42,6 +42,7 @@ __all__ = (
     'range_right',
     'result',
     'stub_string',
+    'stub_true',
     'times',
     'to_path',
     'unique_id',
@@ -732,6 +733,22 @@ def stub_string():
     .. versionadded:: TODO
     """
     return ''
+
+
+def stub_true():
+    """Returns True.
+
+    Returns:
+        bool: True
+
+    Example:
+
+        >>> stub_true()
+        True
+
+    .. versionadded:: TODO
+    """
+    return True
 
 
 def times(callback, n):
