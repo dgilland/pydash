@@ -42,6 +42,7 @@ __all__ = (
     'range_right',
     'result',
     'stub_array',
+    'stub_dict',
     'stub_false',
     'stub_string',
     'stub_true',
@@ -735,6 +736,22 @@ def stub_array():
     .. versionadded:: TODO
     """
     return []
+
+
+def stub_dict():
+    """Returns empty dict.
+
+    Returns:
+        dict: Empty dict.
+
+    Example:
+
+        >>> stub_dict()
+        {}
+
+    .. versionadded:: TODO
+    """
+    return {}
 
 
 def stub_false():

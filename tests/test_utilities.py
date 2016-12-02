@@ -347,6 +347,14 @@ def test_stub_array(case, expected):
 
 
 @parametrize('case,expected', [
+    (_.times(_.stub_dict, 2), [{}, {}]),
+    (_.stub_dict(), {})
+])
+def test_stub_dict(case, expected):
+    assert case == expected
+
+
+@parametrize('case,expected', [
     (_.times(_.stub_false, 2), [False, False]),
     (_.stub_false(), False)
 ])
