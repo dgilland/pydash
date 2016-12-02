@@ -41,6 +41,7 @@ __all__ = (
     'range_',
     'range_right',
     'result',
+    'stub_false',
     'stub_string',
     'stub_true',
     'times',
@@ -717,6 +718,22 @@ def result(obj, key, default=None):
         ret = ret()
 
     return ret
+
+
+def stub_false():
+    """Returns False.
+
+    Returns:
+        bool: False
+
+    Example:
+
+        >>> stub_false()
+        False
+
+    .. versionadded:: TODO
+    """
+    return False
 
 
 def stub_string():
