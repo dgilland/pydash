@@ -18,6 +18,7 @@ from ._compat import _range, string_types
 
 __all__ = (
     'attempt',
+    'cond',
     'constant',
     'callback',
     'deep_property',
@@ -83,6 +84,42 @@ def attempt(func, *args, **kargs):
         ret = ex
 
     return ret
+
+
+def cond(*pairs):
+    """Creates a func that iterates over :attr:`pairs` and invokes the
+    corresponding function of the first predicate to return truthy.
+
+    Args:
+        pairs (list): A list of predicate-function pairs.
+
+    Returns:
+        function: Returns the new composite function.
+
+    Example:
+
+        >>> func = cond([matches({'a': 1}), constant('matches A')])
+        >>> func({'a': 1, 'b': 2})
+        'matches A'
+
+    .. versionadded:: TODO
+    """
+    for pair in pairs:
+        if len(pair) != 2:
+            raise ValueError('A pair of predicate-function pairs should be '
+                             'given')
+        elif not callable(pair[0]) or not callable(pair[1]):
+            raise TypeError('Predicate-function pair both should be functions')
+
+    def _cond(*args):
+        for pair in pairs:
+            predicate = pair[0]
+            callback = pair[1]
+
+            if predicate(*args):
+                return callback()
+
+    return _cond
 
 
 def constant(value):

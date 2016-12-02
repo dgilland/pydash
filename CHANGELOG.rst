@@ -5,6 +5,7 @@ Changelog
 
 
 - Add ``eq``. Thanks bharadwajyarlagadda_!
+- Add ``cond``. Thanks bharadwajyarlagadda_!
 - Add ``divide``. Thanks bharadwajyarlagadda_!
 - Add ``flat_map``.
 - Add ``flat_map_deep``.
