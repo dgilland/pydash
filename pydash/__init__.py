@@ -431,6 +431,7 @@ from .utilities import (
     range_right,
     result,
     stub_string,
+    stub_true,
     times,
     to_path,
     unique_id,

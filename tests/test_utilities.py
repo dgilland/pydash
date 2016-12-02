@@ -339,9 +339,18 @@ def test_result(case, expected):
 
 
 @parametrize('case,expected', [
-    (_.times(_.stub_string, 2), ['', ''])
+    (_.times(_.stub_string, 2), ['', '']),
+    (_.stub_string(), '')
 ])
 def test_stub_string(case, expected):
+    assert case == expected
+
+
+@parametrize('case,expected', [
+    (_.times(_.stub_true, 2), [True, True]),
+    (_.stub_true(), True)
+])
+def test_stub_true(case, expected):
     assert case == expected
 
 
