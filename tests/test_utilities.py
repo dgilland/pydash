@@ -4,6 +4,8 @@ import time
 
 import pydash as _
 
+import pytest
+
 from . import fixtures
 from .fixtures import parametrize
 
@@ -20,6 +22,33 @@ def test_attempt(case, expected):
 ])
 def test_attempt_exception(case, expected):
     assert isinstance(_.attempt(*case), expected)
+
+
+@parametrize('pairs,case,expected', [
+    (([_.matches({'b': 2}), _.constant('matches B')],
+      [_.matches({'a': 1}), _.constant('matches A')]),
+     {'a': 1, 'b': 2},
+     'matches B'),
+    (([_.matches({'a': 1}), _.constant('matches A')],
+      [_.matches({'b': 2}), _.constant('matches B')]),
+     {'a': 1, 'b': 2},
+     'matches A')
+])
+def test_cond(pairs, case, expected):
+    func = _.cond(*pairs)
+    assert func(case) == expected
+
+
+@parametrize('case,expected', [
+    ([_.matches({'b': 2})], ValueError),
+    ([_.matches({'b': 2}), _.matches({'a': 1}), _.constant('matches B')],
+     ValueError),
+    ([1, 2], TypeError),
+    ([_.matches({'b': 2}), 2], TypeError)
+])
+def test_cond_exception(case, expected):
+    with pytest.raises(expected):
+        _.cond(case)
 
 
 @parametrize('case', [

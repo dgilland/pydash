@@ -408,6 +408,7 @@ from .strings import (
 from .utilities import (
     attempt,
     callback,
+    cond,
     constant,
     deep_property,
     deep_prop,
