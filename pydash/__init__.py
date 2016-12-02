@@ -412,6 +412,7 @@ from .utilities import (
     constant,
     deep_property,
     deep_prop,
+    default_to,
     iteratee,
     identity,
     matches,

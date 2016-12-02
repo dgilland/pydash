@@ -23,6 +23,7 @@ __all__ = (
     'callback',
     'deep_property',
     'deep_prop',
+    'default_to',
     'identity',
     'iteratee',
     'matches',
@@ -176,6 +177,31 @@ def deep_property(path):
 
 
 deep_prop = deep_property
+
+
+def default_to(value, default_value):
+    """Checks :attr:`value` to determine whether a default value should be
+    returned in its place. The :attr:`default_value` is returned if value is
+    None.
+
+    Args:
+        value (mixed): Value passed in by the user.
+        default_value (mixed): Default value passed in by the user.
+
+    Returns:
+        mixed: Returns :attr:`value` if :attr:`value` is given otherwise
+            returns :attr:`default_value`.
+
+    Example:
+
+        >>> default_to(1, 10)
+        1
+        >>> default_to(None, 10)
+        10
+
+    .. versionadded:: TODO
+    """
+    return default_value if not value else value
 
 
 def identity(*args):
