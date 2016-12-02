@@ -430,6 +430,7 @@ from .utilities import (
     range_,
     range_right,
     result,
+    stub_string,
     times,
     to_path,
     unique_id,

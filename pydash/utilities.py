@@ -41,6 +41,7 @@ __all__ = (
     'range_',
     'range_right',
     'result',
+    'stub_string',
     'times',
     'to_path',
     'unique_id',
@@ -717,6 +718,22 @@ def result(obj, key, default=None):
     return ret
 
 
+def stub_string():
+    """Returns an empty string.
+
+    Returns:
+        str: Empty string
+
+    Example:
+
+        >>> stub_string()
+        ''
+
+    .. versionadded:: TODO
+    """
+    return ''
+
+
 def times(callback, n):
     """Executes the callback `n` times, returning a list of the results of each
     callback execution. The callback is invoked with one argument: ``(index)``.
@@ -739,7 +756,12 @@ def times(callback, n):
         Reordered arguments to make `callback` first.
     """
     # pylint: disable=redefined-outer-name
-    return [callback(index) for index in _range(n)]
+    try:
+        return [callback(index) for index in _range(n)]
+    except TypeError:
+        # When no positional arguments can be passed to callback, then just
+        # run the callback method n times.
+        return [callback() for index in _range(n)]
 
 
 def to_path(value):
