@@ -21,6 +21,7 @@ Changelog
 - Add ``nth_arg``. Thanks bharadwajyarlagadda_!
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
+- Add ``stub_array``. Thanks bharadwajyarlagadda_!
 - Add ``stub_false``. Thanks bharadwajyarlagadda_!
 - Add ``stub_string``. Thanks bharadwajyarlagadda_!
 - Add ``stub_true``. Thanks bharadwajyarlagadda_!

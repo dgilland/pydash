@@ -41,6 +41,7 @@ __all__ = (
     'range_',
     'range_right',
     'result',
+    'stub_array',
     'stub_false',
     'stub_string',
     'stub_true',
@@ -720,6 +721,22 @@ def result(obj, key, default=None):
     return ret
 
 
+def stub_array():
+    """Returns empty list.
+
+    Returns:
+        list: Empty list.
+
+    Example:
+
+        >>> stub_array()
+        []
+
+    .. versionadded:: TODO
+    """
+    return []
+
+
 def stub_false():
     """Returns False.
 
@@ -788,6 +805,10 @@ def times(callback, n):
 
     .. versionchanged:: 3.0.0
         Reordered arguments to make `callback` first.
+
+    .. versionchanged:: TODO
+        Added functionality for handling `callback` with zero positional
+        arguments.
     """
     # pylint: disable=redefined-outer-name
     try:
