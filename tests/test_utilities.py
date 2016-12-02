@@ -81,6 +81,16 @@ def test_deep_property_aliases(case):
 
 
 @parametrize('case,expected', [
+    (([1, 10]), 1),
+    (([None, 10]), 10),
+    (([[1, 2], [3, 4]]), [1, 2]),
+    (([None, [3, 4]]), [3, 4])
+])
+def test_default_to(case, expected):
+    assert _.default_to(*case) == expected
+
+
+@parametrize('case,expected', [
     ((1,), 1),
     ((1, 2), 1),
     ((), None)
