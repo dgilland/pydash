@@ -25,6 +25,7 @@ Changelog
 - Add ``nth_arg``. Thanks bharadwajyarlagadda_!
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
+- Add ``stub_string``. Thanks bharadwajyarlagadda_!
 - Add ``to_lower``. Thanks bharadwajyarlagadda_!
 - Add ``to_path``. Thanks bharadwajyarlagadda_!
 - Add ``to_upper``. Thanks bharadwajyarlagadda_!
