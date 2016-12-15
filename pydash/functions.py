@@ -976,6 +976,8 @@ def unary(func):
         (1, 1, 0, 5)
         >>> unary_func(1, 2, 3, 4, 5, 6, b=0, c=10, d=20)
         (1, 0, 10, 20)
+
+    .. versionadded:: TODO
     """
     return Ary(func, 1)
 
