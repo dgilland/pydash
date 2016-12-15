@@ -176,6 +176,7 @@ from .functions import (
     rearg,
     spread,
     throttle,
+    unary,
     wrap,
 )
 

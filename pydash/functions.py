@@ -39,6 +39,7 @@ __all__ = (
     'rearg',
     'spread',
     'throttle',
+    'unary',
     'wrap',
 )
 
@@ -955,6 +956,28 @@ def throttle(func, wait):
     .. versionadded:: 1.0.0
     """
     return Throttle(func, wait)
+
+
+def unary(func):
+    """Creates a function that accepts up to one argument, ignoring any
+    additional arguments.
+
+    Args:
+        func (function): Function to cap arguments for.
+
+    Returns:
+        Ary: Function wrapped in an :class:`Ary` context.
+
+    Example:
+
+        >>> func = lambda a, b=1, c=0, d=5: (a, b, c, d)
+        >>> unary_func = unary(func)
+        >>> unary_func(1, 2, 3, 4, 5, 6)
+        (1, 1, 0, 5)
+        >>> unary_func(1, 2, 3, 4, 5, 6, b=0, c=10, d=20)
+        (1, 0, 10, 20)
+    """
+    return Ary(func, 1)
 
 
 def wrap(value, func):

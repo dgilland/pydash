@@ -350,6 +350,14 @@ def test_throttle():
     assert throttled() > expected
 
 
+@parametrize('case,args,kargs,expected', [
+    (lambda a=0, b=0, c=0, d=0: a + b + c + d, (1, 2, 3, 4), {}, 1),
+    (lambda a=0, b=0, c=0, d=0: a + b + c + d, (1, 2, 3, 4), {'d': 10}, 11),
+])
+def test_unary(case, args, kargs, expected):
+    assert _.unary(case)(*args, **kargs) == expected
+
+
 @parametrize('case,args,expected', [
     ((lambda a: a.strip(), lambda func, text: '<p>{0}</p>'.format(func(text))),
      ('  hello world!  ',),
