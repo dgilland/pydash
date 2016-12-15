@@ -6,6 +6,8 @@ Changelog
 
 - Add ``eq``. Thanks bharadwajyarlagadda_!
 - Add ``divide``. Thanks bharadwajyarlagadda_!
+- Add ``flat_map``.
+- Add ``flat_map_deep``.
 - Add ``flip``. Thanks bharadwajyarlagadda_!
 - Add ``intersection_by``.
 - Add ``intersection_with``.

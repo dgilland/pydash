@@ -115,6 +115,8 @@ from .collections import (
     find,
     find_last,
     find_where,
+    flat_map,
+    flat_map_deep,
     foldl,
     foldr,
     for_each,

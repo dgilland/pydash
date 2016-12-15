@@ -30,6 +30,8 @@ __all__ = (
     'find',
     'find_last',
     'find_where',
+    'flat_map',
+    'flat_map_deep',
     'foldl',
     'foldr',
     'for_each',
@@ -323,6 +325,52 @@ def find_last(collection, callback=None):
                                                      reverse=True)
               if is_true)
     return next(search, None)
+
+
+def flat_map(collection, callback=None):
+    """Creates a flattened list of values by running each element in
+    collection thru `callback` and flattening the mapped results. The
+    `callback` is invoked with three arguments:
+    ``(value, index|key, collection)``.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: Flattened mapped list.
+
+    Example:
+
+        >>> duplicate = lambda n: [[n, n]]
+        >>> flat_map([1, 2], duplicate)
+        [[1, 1], [2, 2]]
+
+    .. versionadded:: TODO
+    """
+    return pyd.flatten(mapiter(collection, callback=callback))
+
+
+def flat_map_deep(collection, callback=None):
+    """This method is like :func:`flat_map` except that it recursively flattens
+    the mapped results.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: Deep-flattened mapped list.
+
+    Example:
+
+        >>> duplicate = lambda n: [[n, n]]
+        >>> flat_map_deep([1, 2], duplicate)
+        [1, 1, 2, 2]
+
+    .. versionadded:: TODO
+    """
+    return pyd.flatten_deep(mapiter(collection, callback=callback))
 
 
 def for_each(collection, callback=None):
