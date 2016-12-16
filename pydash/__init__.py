@@ -34,6 +34,7 @@ from .arrays import (
     first,
     flatten,
     flatten_deep,
+    flatten_depth,
     head,
     index_of,
     initial,

@@ -163,11 +163,10 @@ def test_first(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, ['2222'], [3, [[4]]]],), [1, '2222', 3, [[4]]]),
-    (([1, ['2222'], [3, [[4]]]], True), [1, '2222', 3, 4]),
+    ([1, ['2222'], [3, [[4]]]], [1, '2222', 3, [[4]]]),
 ])
 def test_flatten(case, expected):
-    assert _.flatten(*case) == expected
+    assert _.flatten(case) == expected
 
 
 @parametrize('case,expected', [
@@ -175,6 +174,16 @@ def test_flatten(case, expected):
 ])
 def test_flatten_deep(case, expected):
     assert _.flatten_deep(case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, ['2222'], [3, [[4]]]],), [1, '2222', 3, [[4]]]),
+    (([1, ['2222'], [3, [[4]]]], 1), [1, '2222', 3, [[4]]]),
+    (([1, ['2222'], [3, [[4]]]], 2), [1, '2222', 3, [4]]),
+    (([1, ['2222'], [3, [[4]]]], 3), [1, '2222', 3, 4]),
+])
+def test_flatten_depth(case, expected):
+    assert _.flatten_depth(*case) == expected
 
 
 @parametrize('case,value,from_index,expected', [

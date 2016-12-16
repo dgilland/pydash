@@ -32,6 +32,7 @@ __all__ = (
     'first',
     'flatten',
     'flatten_deep',
+    'flatten_depth',
     'head',
     'index_of',
     'initial',
@@ -428,13 +429,12 @@ def first(array):
 head = first
 
 
-def flatten(array, is_deep=False):
+def flatten(array):
     """Flattens a nested array. If `is_deep` is ``True`` the array is
     recursively flattened, otherwise it is only flattened a single level.
 
     Args:
-        array (list): List to process.
-        is_deep (bool, optional): Whether to recursively flatten `array`.
+        array (list): List to flatten.
 
     Returns:
         list: Flattened list.
@@ -443,8 +443,6 @@ def flatten(array, is_deep=False):
 
         >>> flatten([[1], [2, [3]], [[4]]])
         [1, 2, [3], [4]]
-        >>> flatten([[1], [2, [3]], [[4]]], True)
-        [1, 2, 3, 4]
 
 
     .. versionadded:: 1.0.0
@@ -452,8 +450,11 @@ def flatten(array, is_deep=False):
     .. versionchanged:: 2.0.0
         Removed ``callback`` option. Added ``is_deep`` option. Made it shallow
         by default.
+
+    .. versionchanged:: TODO
+        Remove ``is_deep`` option. Use :func:`flatten_deep` instead.
     """
-    return list(iterflatten(array, is_deep=is_deep))
+    return flatten_depth(array, depth=1)
 
 
 def flatten_deep(array):
@@ -461,7 +462,7 @@ def flatten_deep(array):
     ``flatten(array, is_deep=True)``.
 
     Args:
-        array (list): List to process.
+        array (list): List to flatten.
 
     Returns:
         list: Flattened list.
@@ -473,7 +474,33 @@ def flatten_deep(array):
 
     .. versionadded:: 2.0.0
     """
-    return flatten(array, is_deep=True)
+    return flatten_depth(array, depth=-1)
+
+
+def flatten_depth(array, depth=1):
+    """Recursively flatten `array` up to `depth` times.
+
+    Args:
+        array (list): List to flatten.
+        depth (int, optional): Depth to flatten to. Defaults to ``1``.
+
+    Returns:
+        list: Flattened list.
+
+    Example:
+
+        >>> flatten_depth([[[1], [2, [3]], [[4]]]], 1)
+        [[1], [2, [3]], [[4]]]
+        >>> flatten_depth([[[1], [2, [3]], [[4]]]], 2)
+        [1, 2, [3], [4]]
+        >>> flatten_depth([[[1], [2, [3]], [[4]]]], 3)
+        [1, 2, 3, 4]
+        >>> flatten_depth([[[1], [2, [3]], [[4]]]], 4)
+        [1, 2, 3, 4]
+
+    .. versionadded:: TODO
+    """
+    return list(iterflatten(array, depth=depth))
 
 
 def index_of(array, value, from_index=0):
@@ -1726,11 +1753,11 @@ def zip_with(*arrays, **kargs):
 #
 
 
-def iterflatten(array, is_deep=False, depth=0):
+def iterflatten(array, depth=-1):
     """Iteratively flatten a list shallowly or deeply."""
     for item in array:
-        if isinstance(item, (list, tuple)) and (is_deep or depth == 0):
-            for subitem in iterflatten(item, is_deep, depth + 1):
+        if isinstance(item, (list, tuple)) and depth != 0:
+            for subitem in iterflatten(item, depth - 1):
                 yield subitem
         else:
             yield item

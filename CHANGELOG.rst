@@ -8,6 +8,7 @@ Changelog
 - Add ``divide``. Thanks bharadwajyarlagadda_!
 - Add ``flat_map``.
 - Add ``flat_map_deep``.
+- Add ``flatten_depth``.
 - Add ``flip``. Thanks bharadwajyarlagadda_!
 - Add ``intersection_by``.
 - Add ``intersection_with``.
