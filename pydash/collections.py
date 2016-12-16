@@ -32,6 +32,7 @@ __all__ = (
     'find_where',
     'flat_map',
     'flat_map_deep',
+    'flat_map_depth',
     'foldl',
     'foldr',
     'for_each',
@@ -360,7 +361,7 @@ def flat_map_deep(collection, callback=None):
         callback (mixed, optional): Callback applied per iteration.
 
     Returns:
-        list: Deep-flattened mapped list.
+        list: Flattened mapped list.
 
     Example:
 
@@ -371,6 +372,31 @@ def flat_map_deep(collection, callback=None):
     .. versionadded:: TODO
     """
     return pyd.flatten_deep(mapiter(collection, callback=callback))
+
+
+def flat_map_depth(collection, callback=None, depth=1):
+    """This method is like :func:`flat_map` except that it recursively flattens
+    the mapped results up to `depth` times.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        list: Flattened mapped list.
+
+    Example:
+
+        >>> duplicate = lambda n: [[n, n]]
+        >>> flat_map_depth([1, 2], duplicate, 1)
+        [[1, 1], [2, 2]]
+        >>> flat_map_depth([1, 2], duplicate, 2)
+        [1, 1, 2, 2]
+
+    .. versionadded:: TODO
+    """
+    return pyd.flatten_depth(mapiter(collection, callback=callback),
+                             depth=depth)
 
 
 def for_each(collection, callback=None):

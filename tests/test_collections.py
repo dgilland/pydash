@@ -131,6 +131,17 @@ def test_flat_map_deep(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3], None), [1, 2, 3]),
+    (([[1], [2], [3]], None), [1, 2, 3]),
+    (([[[1]], [[2]], [[3]]], None), [[1], [2], [3]]),
+    (([[[1]], [[2]], [[3]]], None, 1), [[1], [2], [3]]),
+    (([[[1]], [[2]], [[3]]], None, 2), [1, 2, 3]),
+])
+def test_flat_map_depth(case, expected):
+    assert _.flat_map_depth(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3], fixtures.noop), [1, 2, 3]),
     (([1, 2, 3], lambda value: value < 2), [1, 2, 3]),
     (({'one': 1, 'two': 2, 'three': 3}, fixtures.noop),

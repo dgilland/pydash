@@ -118,6 +118,7 @@ from .collections import (
     find_where,
     flat_map,
     flat_map_deep,
+    flat_map_depth,
     foldl,
     foldr,
     for_each,
