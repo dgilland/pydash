@@ -39,7 +39,7 @@ Some notable new features/functions:
     - :func:`pydash.utilities.default_to`.
     - :func:`pydash.utilities.nth_arg`.
     - :func:`pydash.utilities.range_right`.
-    - :func:`pydash.utilities.stub_array`.
+    - :func:`pydash.utilities.stub_list`.
     - :func:`pydash.utilities.stub_dict`.
     - :func:`pydash.utilities.stub_false`.
     - :func:`pydash.utilities.stub_string`.

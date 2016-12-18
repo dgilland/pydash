@@ -436,7 +436,7 @@ from .utilities import (
     range_,
     range_right,
     result,
-    stub_array,
+    stub_list,
     stub_dict,
     stub_false,
     stub_string,
