@@ -12,7 +12,7 @@ from datetime import datetime
 from random import uniform, randint
 
 import pydash as pyd
-from .helpers import get_item, NoValue
+from .helpers import callit, getargcount, get_item, NoValue
 from ._compat import _range, string_types
 
 
@@ -42,7 +42,7 @@ __all__ = (
     'range_',
     'range_right',
     'result',
-    'stub_array',
+    'stub_list',
     'stub_dict',
     'stub_false',
     'stub_string',
@@ -93,8 +93,8 @@ def attempt(func, *args, **kargs):
 
 
 def cond(*pairs):
-    """Creates a func that iterates over :attr:`pairs` and invokes the
-    corresponding function of the first predicate to return truthy.
+    """Creates a func that iterates over `pairs` and invokes the corresponding
+    function of the first predicate to return truthy.
 
     Args:
         pairs (list): A list of predicate-function pairs.
@@ -111,16 +111,18 @@ def cond(*pairs):
     .. versionadded:: TODO
     """
     for pair in pairs:
-        if len(pair) != 2:
-            raise ValueError('A pair of predicate-function pairs should be '
-                             'given')
-        elif not callable(pair[0]) or not callable(pair[1]):
-            raise TypeError('Predicate-function pair both should be functions')
+        try:
+            assert len(pair) == 2
+        except Exception:
+            raise ValueError('Each predicate-function pair should contain '
+                             'exactly two elements')
 
-    def _cond(*args):
+        if not all(map(callable, pair)):
+            raise TypeError('Both predicate-function pair should be callable')
+
+    def _cond(*args, **kargs):
         for pair in pairs:
-            predicate = pair[0]
-            callback = pair[1]
+            predicate, callback = pair
 
             if predicate(*args):
                 return callback()
@@ -201,7 +203,7 @@ def default_to(value, default_value):
 
     .. versionadded:: TODO
     """
-    return default_value if not value else value
+    return default_value if value is None else value
 
 
 def identity(*args):
@@ -748,15 +750,15 @@ def result(obj, key, default=None):
     return ret
 
 
-def stub_array():
-    """Returns empty list.
+def stub_list():
+    """Returns empty "list".
 
     Returns:
         list: Empty list.
 
     Example:
 
-        >>> stub_array()
+        >>> stub_list()
         []
 
     .. versionadded:: TODO
@@ -765,7 +767,7 @@ def stub_array():
 
 
 def stub_dict():
-    """Returns empty dict.
+    """Returns empty "dict".
 
     Returns:
         dict: Empty dict.
@@ -781,7 +783,7 @@ def stub_dict():
 
 
 def stub_false():
-    """Returns False.
+    """Returns ``False``.
 
     Returns:
         bool: False
@@ -813,7 +815,7 @@ def stub_string():
 
 
 def stub_true():
-    """Returns True.
+    """Returns ``True``.
 
     Returns:
         bool: True
@@ -828,20 +830,20 @@ def stub_true():
     return True
 
 
-def times(callback, n):
+def times(n, callback=identity):
     """Executes the callback `n` times, returning a list of the results of each
     callback execution. The callback is invoked with one argument: ``(index)``.
 
     Args:
-        callback (function): Function to execute.
         n (int): Number of times to execute `callback`.
+        callback (function): Function to execute.
 
     Returns:
         list: A list of results from calling `callback`.
 
     Example:
 
-        >>> times(lambda i: i, 5)
+        >>> times(5, lambda i: i)
         [0, 1, 2, 3, 4]
 
     .. versionadded:: 1.0.0
@@ -853,13 +855,8 @@ def times(callback, n):
         Added functionality for handling `callback` with zero positional
         arguments.
     """
-    # pylint: disable=redefined-outer-name
-    try:
-        return [callback(index) for index in _range(n)]
-    except TypeError:
-        # When no positional arguments can be passed to callback, then just
-        # run the callback method n times.
-        return [callback() for index in _range(n)]
+    argcount = getargcount(callback, maxargs=1)
+    return [callit(callback, index, argcount=argcount) for index in _range(n)]
 
 
 def to_path(value):

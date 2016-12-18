@@ -349,15 +349,15 @@ def test_result(case, expected):
 
 
 @parametrize('case,expected', [
-    (_.times(_.stub_array, 2), [[], []]),
-    (_.stub_array(), [])
+    (_.times(2, _.stub_list), [[], []]),
+    (_.stub_list(), [])
 ])
-def test_stub_array(case, expected):
+def test_stub_list(case, expected):
     assert case == expected
 
 
 @parametrize('case,expected', [
-    (_.times(_.stub_dict, 2), [{}, {}]),
+    (_.times(2, _.stub_dict), [{}, {}]),
     (_.stub_dict(), {})
 ])
 def test_stub_dict(case, expected):
@@ -365,7 +365,7 @@ def test_stub_dict(case, expected):
 
 
 @parametrize('case,expected', [
-    (_.times(_.stub_false, 2), [False, False]),
+    (_.times(2, _.stub_false), [False, False]),
     (_.stub_false(), False)
 ])
 def test_stub_false(case, expected):
@@ -373,7 +373,7 @@ def test_stub_false(case, expected):
 
 
 @parametrize('case,expected', [
-    (_.times(_.stub_string, 2), ['', '']),
+    (_.times(2, _.stub_string), ['', '']),
     (_.stub_string(), '')
 ])
 def test_stub_string(case, expected):
@@ -381,7 +381,7 @@ def test_stub_string(case, expected):
 
 
 @parametrize('case,expected', [
-    (_.times(_.stub_true, 2), [True, True]),
+    (_.times(2, _.stub_true), [True, True]),
     (_.stub_true(), True)
 ])
 def test_stub_true(case, expected):
@@ -389,7 +389,7 @@ def test_stub_true(case, expected):
 
 
 @parametrize('case,expected', [
-    ((lambda i: i * i, 5), [0, 1, 4, 9, 16])
+    ((5, lambda i: i * i), [0, 1, 4, 9, 16])
 ])
 def test_times(case, expected):
     assert _.times(*case) == expected
