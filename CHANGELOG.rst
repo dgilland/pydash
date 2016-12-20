@@ -25,6 +25,7 @@ Changelog
 - Add ``nth``. Thanks bharadwajyarlagadda_!
 - Add ``nth_arg``. Thanks bharadwajyarlagadda_!
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
+- Add ``sample_size``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``stub_list``. Thanks bharadwajyarlagadda_!
 - Add ``stub_dict``. Thanks bharadwajyarlagadda_!

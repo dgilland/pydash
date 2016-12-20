@@ -389,9 +389,9 @@ def test_sample(case):
     ([1, 2, 3, 4, 5, 6], 3),
     ([1, 2, 3, 4, 5, 6], 4),
 ])
-def test_sample_list(case):
+def test_sample_size(case):
     collection, n = case
-    sample_n = _.sample(*case)
+    sample_n = _.sample_size(*case)
 
     assert isinstance(sample_n, list)
     assert len(sample_n) == min(n, len(collection))

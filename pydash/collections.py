@@ -52,6 +52,7 @@ __all__ = (
     'reductions_right',
     'reject',
     'sample',
+    'sample_size',
     'select',
     'shuffle',
     'size',
@@ -873,29 +874,51 @@ def reject(collection, callback=None):
             if not is_true]
 
 
-def sample(collection, n=None):
-    """Retrieves a random element or `n` random elements from a `collection`.
+def sample(collection):
+    """Retrieves a random element from a given `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+
+    Returns:
+        mixed: Random element from the given collection.
+
+    Example:
+
+        >>> items = [1, 2, 3, 4, 5]
+        >>> result = sample(items)
+        >>> assert result in items
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Moved the functionality to :func:`sample_size`. :func:`sample` would
+        just return a random element from the given collection.
+    """
+    return random.choice(collection)
+
+
+def sample_size(collection, n=None):
+    """Retrieves list of `n` random elements from a collection.
 
     Args:
         collection (list|dict): Collection to iterate over.
         n (int, optional): Number of random samples to return.
 
     Returns:
-        list|mixed: List of sampled collection value if `n` is provided, else
-            single value from collection if `n` is ``None``.
+        list: List of `n` sampled collection values.
 
-    Example:
+    Examples:
 
         >>> items = [1, 2, 3, 4, 5]
-        >>> results = sample(items, 2)
+        >>> results = sample_size(items, 2)
         >>> assert len(results) == 2
         >>> assert set(items).intersection(results) == set(results)
 
-    .. versionadded:: 1.0.0
+    .. versionadded:: TODO
     """
     num = min(n or 1, len(collection))
-    sampled = random.sample(collection, num)
-    return sampled[0] if n is None else sampled
+    return random.sample(collection, num)
 
 
 def shuffle(collection):

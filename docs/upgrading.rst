@@ -14,6 +14,10 @@ Some notable new features/functions:
     - :func:`pydash.arrays.intersection_with`
     - :func:`pydash.arrays.nth`
 
+- 1 new collection method
+
+    - :func:`pydash.collections.sample_size`
+
 - 1 new function method
 
     - :func:`pydash.functions.flip`
