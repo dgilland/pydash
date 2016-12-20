@@ -138,6 +138,7 @@ from .collections import (
     reductions_right,
     reject,
     sample,
+    sample_size,
     select,
     shuffle,
     size,
