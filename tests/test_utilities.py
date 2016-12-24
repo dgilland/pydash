@@ -6,7 +6,6 @@ import pydash as _
 
 import pytest
 
-from . import fixtures
 from .fixtures import parametrize
 
 
