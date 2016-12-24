@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import math
-import warnings
 
 import pydash as _
 from .fixtures import parametrize

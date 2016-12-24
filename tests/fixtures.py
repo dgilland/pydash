@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from copy import deepcopy
-
 import pytest
 
 from pydash._compat import iteritems

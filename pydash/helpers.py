@@ -7,7 +7,6 @@ from __future__ import absolute_import
 from collections import Iterable
 from functools import wraps
 import inspect
-import re
 import warnings
 
 import pydash as pyd
