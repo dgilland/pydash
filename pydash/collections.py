@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import
 
+from functools import partial
 import random
 
 import pydash as pyd
@@ -559,15 +560,14 @@ def invoke(collection, method_name, *args, **kargs):
 
     .. versionadded:: 1.0.0
     """
-    lst = []
+    if callable(method_name):
+        method = partial(method_name, *args, **kargs)
+    else:
+        def method(item):
+            return getattr(item, method_name)(*args, **kargs)
 
-    for item in collection:
-        if callable(method_name):
-            lst.append(method_name(item, *args, **kargs))
-        else:
-            lst.append(getattr(item, method_name)(*args, **kargs))
+    return [method(item) for item in collection]
 
-    return lst
 
 
 def map_(collection, callback=None):
