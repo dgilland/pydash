@@ -15,6 +15,7 @@ from __future__ import absolute_import
 
 import sys
 import cgi
+import inspect
 from collections import Hashable
 from decimal import Decimal
 from functools import partial
@@ -38,6 +39,7 @@ if PY3:
     integer_types = (int,)
     number_types = (int, float, Decimal)
     builtins = _builtins.__dict__.values()
+    getfullargspec = inspect.getfullargspec
 
     def iterkeys(d): return iter(d.keys())
 
@@ -62,6 +64,7 @@ else:
     string_types = (str, unicode)
     integer_types = (int, long)
     number_types = (int, long, float, Decimal)
+    getfullargspec = inspect.getargspec
 
     def iterkeys(d): return d.iterkeys()
 
