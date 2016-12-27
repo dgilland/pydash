@@ -6,11 +6,10 @@
 
 from __future__ import absolute_import
 
-import inspect
 import time
 
 import pydash as pyd
-from ._compat import _range
+from ._compat import _range, getfullargspec
 
 
 __all__ = (
@@ -132,7 +131,7 @@ class Curry(object):
     """Wrap a function in a curry context."""
     def __init__(self, func, arity, args=None, kargs=None):
         self.func = func
-        self.arity = (len(inspect.getargspec(func).args) if arity is None
+        self.arity = (len(getfullargspec(func).args) if arity is None
                       else arity)
         self.args = () if args is None else args
         self.kargs = {} if kargs is None else kargs

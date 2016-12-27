@@ -6,12 +6,10 @@ from __future__ import absolute_import
 
 from collections import Iterable
 from functools import wraps
-import inspect
-import re
 import warnings
 
 import pydash as pyd
-from ._compat import iteritems
+from ._compat import iteritems, getfullargspec
 
 
 class _NoValue(object):
@@ -52,7 +50,7 @@ def getargcount(callback, maxargs):
         argcount = 1
     else:
         try:
-            argspec = inspect.getargspec(callback)
+            argspec = getfullargspec(callback)
 
             if argspec and not argspec.varargs:
                 # Use inspected arg count.

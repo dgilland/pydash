@@ -3,9 +3,7 @@
 from copy import deepcopy
 
 import pytest
-
 from pydash._compat import iteritems
-
 
 # pytest.mark is a generator so create alias for convenience
 parametrize = pytest.mark.parametrize
