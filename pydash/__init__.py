@@ -128,6 +128,7 @@ from .collections import (
     index_by,
     inject,
     invoke,
+    invoke_map,
     map_,
     mapiter,
     partition,

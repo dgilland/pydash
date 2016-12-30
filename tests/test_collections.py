@@ -206,6 +206,17 @@ def test_invoke(case, expected):
     assert _.invoke(*case) == expected
 
 
+@parametrize('case,expected', [
+    (([{'a': {'b': 2}}, {'a': {'c': 3}}], 'a.items'),
+     [{'b': 2}.items(), {'c': 3}.items()]),
+    (([{'a': {'b': {'c': 2}}}, {'a': {'b': {'c': 3}}}], 'a.b.items'),
+     [{'c': 2}.items(), {'c': 3}.items()]),
+    (([1, 2, 3], lambda item, x: item ** x, 2), [2, 4, 8])
+])
+def test_invoke_map(case, expected):
+    assert _.invoke_map(*case) == expected
+
+
 @parametrize('case,expected,sort_results', [
     (([1, 2, 3],), [1, 2, 3], False),
     (([1.1, 2.1, 3.1], int), [1, 2, 3], False),

@@ -43,6 +43,7 @@ __all__ = (
     'index_by',
     'inject',
     'invoke',
+    'invoke_map',
     'map_',
     'mapiter',
     'partition',
@@ -565,6 +566,38 @@ def invoke(collection, method_name, *args, **kargs):
     else:
         def method(item):
             return getattr(item, method_name)(*args, **kargs)
+
+    return [method(item) for item in collection]
+
+
+def invoke_map(collection, path, *args, **kargs):
+    """Invokes the method at `path` of each element in `collection`, returning
+    an array of the results of each invoked method. Any additional arguments
+    are provided to each invoked method. If `path` is a function, it's invoked
+    for each element in `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        path (str|func): String path to method to invoke or callable to invoke
+            for each element in `collection`.
+
+    Returns:
+        list: List of results of invoking method of each item.
+
+    Example:
+
+        >>> items = [{'a': [{'b': 1}]}, {'a': [{'c': 2}]}]
+        >>> expected = [{'b': 1}.items(), {'c': 2}.items()]
+        >>> invoke_map(items, 'a[0].items') == expected
+        True
+
+    .. versionadded:: TODO
+    """
+    if callable(path):
+        method = partial(path, *args, **kargs)
+    else:
+        def method(item):
+            return pyd.get(item, path, default=pyd.noop)(*args, **kargs)
 
     return [method(item) for item in collection]
 
