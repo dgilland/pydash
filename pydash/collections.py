@@ -569,7 +569,6 @@ def invoke(collection, method_name, *args, **kargs):
     return [method(item) for item in collection]
 
 
-
 def map_(collection, callback=None):
     """Creates an array of values by running each element in the collection
     through the callback. The callback is invoked with three arguments:
