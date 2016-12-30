@@ -41,6 +41,7 @@ Changelog
 - Add ``uniq_with``.
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
+- Make ``get`` support attribute access within path.
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.
 - Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
