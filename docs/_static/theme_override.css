@@ -1,0 +1,6 @@
+
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+    /* Get ride of nowrap for table cells. */
+    white-space: normal;
+}
