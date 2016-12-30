@@ -6,6 +6,7 @@ from __future__ import absolute_import
 
 from collections import Iterable
 from functools import wraps
+from operator import attrgetter, itemgetter
 
 import warnings
 
@@ -112,31 +113,40 @@ def get_item(obj, key, default=NoValue):
             found in `obj`.
 
     Returns:
-        mixed: `obj[key]` or `default`.
+        mixed: `obj[key]`, `obj.key`, or `default`.
 
     Raises:
-        KeyError|IndexError|TypeError|AttributeError: If `obj` is missing key
-            or index and no default value provided.
+        KeyError: If `obj` is missing key, index, or attribute and no default
+            value provided.
     """
-    try:
-        try:
-            ret = obj[key]
-        except TypeError:
-            # It's possible that a string integer is being used to access a
-            # list index. Re-try object access using casted integer.
-            try:
-                key_as_int = int(key)
-            except ValueError:
-                # key cannot be turned into integer
-                raise KeyError('get_item cannot use "{0}" as integer key'
-                               .format(key))
+    # Build list of getters to try to retrieve key value from obj.
+    getters = [itemgetter(key)]
 
-            ret = obj[key_as_int]
-    except (KeyError, IndexError, TypeError, AttributeError):
-        if default is not NoValue:
-            ret = default
-        else:  # pragma: no cover
-            raise
+    try:
+        # Only add list index getter if key can be cast as integer.
+        getters.append(itemgetter(int(key)))
+    except Exception:
+        pass
+
+    try:
+        # Only add attribute getter if key is string.
+        getters.append(attrgetter(key))
+    except Exception:
+        pass
+
+    for getter in getters:
+        try:
+            ret = getter(obj)
+            break
+        except Exception:
+            pass
+    else:
+        # The for-loop didn't break which means we weren't able to find key.
+        if default is NoValue:
+            # Raise if there's no default provided.
+            raise KeyError('Object "{0}" does not have key "{1}"'
+                           .format(repr(obj), key))
+        ret = default
 
     return ret
 

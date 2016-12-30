@@ -499,6 +499,9 @@ def get(obj, path, default=None):
     .. versionchanged:: 3.4.7
         Fixed bug where an iterable default was iterated over instead of being
         returned when an object path wasn't found.
+
+    .. versionchanged:: TODO
+        Support attribute access on `obj` if item access fails.
     """
     if default is NoValue:
         # When NoValue given for default, then this method will raise if path

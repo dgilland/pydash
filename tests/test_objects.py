@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from collections import namedtuple
 import datetime as dt
 
 import pydash as _
@@ -254,7 +255,10 @@ def test_for_in_right_aliases(case):
       'lev\\.el1.lev\\\\el2.level3.[0]'),
      'value'),
     (({'one': ['hello', 'there']}, 'one.bad.hello', []), []),
-    (({'one': ['hello', None]}, 'one.1.hello'), None)
+    (({'one': ['hello', None]}, 'one.1.hello'), None),
+    ((namedtuple('a', ['a', 'b'])(1, 2), 'a'), 1),
+    ((namedtuple('a', ['a', 'b'])(1, 2), 0), 1),
+    ((namedtuple('a', ['a', 'b'])({'c': {'d': 1}}, 2), 'a.c.d'), 1),
 ])
 def test_get(case, expected):
     assert _.get(*case) == expected
