@@ -5,6 +5,7 @@ Changelog
 
 
 - Add ``eq``. Thanks bharadwajyarlagadda_!
+- Add ``clamp``.
 - Add ``cond``. Thanks bharadwajyarlagadda_!
 - Add ``default_to``. Thanks bharadwajyarlagadda_!
 - Add ``divide``. Thanks bharadwajyarlagadda_!

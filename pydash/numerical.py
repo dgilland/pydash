@@ -19,6 +19,7 @@ __all__ = (
     'average',
     'avg',
     'ceil',
+    'clamp',
     'curve',
     'divide',
     'floor',
@@ -145,6 +146,42 @@ def ceil(x, precision=0):
     .. versionadded:: 3.3.0
     """
     return rounder(math.ceil, x, precision)
+
+
+def clamp(x, lower, upper=None):
+    """Clamps number within the inclusive lower and upper bounds.
+
+    Args:
+        x (number): Number to clamp.
+        lower (number, optional): Lower bound.
+        upper (number): Upper bound
+
+    Returns:
+        number
+
+    Example:
+
+        >>> clamp(-10, -5, 5)
+        -5
+        >>> clamp(10, -5, 5)
+        5
+        >>> clamp(10, 5)
+        5
+        >>> clamp(-10, 5)
+        -10
+
+    .. versionadded:: TODO
+    """
+    if upper is None:
+        upper = lower
+        lower = x
+
+    if x < lower:
+        x = lower
+    elif x > upper:
+        x = upper
+
+    return x
 
 
 def divide(dividend, divisor):

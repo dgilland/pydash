@@ -52,6 +52,18 @@ def test_ceil(case, expected):
     assert _.ceil(*case) == expected
 
 
+@parametrize('case,expected', [
+    ((0, -1, 1), 0),
+    ((1, -1, 1), 1),
+    ((-1, -1, 1), -1),
+    ((1, 1), 1),
+    ((5, -1, 1), 1),
+    ((-5, -1, 1), -1),
+])
+def test_clamp(case, expected):
+    assert _.clamp(*case) == expected
+
+
 @parametrize('dividend,divisor,expected', [
     (10, 5, 2.0),
     (None, 1, 1.0),

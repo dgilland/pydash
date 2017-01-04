@@ -196,6 +196,7 @@ from .numerical import (
     average,
     avg,
     ceil,
+    clamp,
     curve,
     divide,
     floor,
