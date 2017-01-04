@@ -16,8 +16,6 @@ from ._compat import _range
 
 __all__ = (
     'add',
-    'average',
-    'avg',
     'ceil',
     'clamp',
     'curve',
@@ -26,11 +24,11 @@ __all__ = (
     'max_',
     'max_by',
     'mean',
+    'mean_by',
     'median',
     'min_',
     'min_by',
-    'moving_average',
-    'moving_avg',
+    'moving_mean',
     'multiply',
     'pow_',
     'power',
@@ -131,7 +129,31 @@ def sum_by(collection, callback=None):
     return sum(result[0] for result in itercallback(collection, callback))
 
 
-def average(collection, callback=None):
+def mean(collection):
+    """Calculate arithmetic mean of each element in `collection`.
+
+    Args:
+        collection (list|dict): Collection to process.
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        float: Result of mean.
+
+    Example:
+
+        >>> mean([1, 2, 3, 4])
+        2.5
+
+    .. versionadded:: 2.1.0
+
+    .. versionchanged:: TODO
+        Removed ``average`` and ``avg`` aliases. Moved callback functionality
+        to :func:`mean_by`.
+    """
+    return mean_by(collection)
+
+
+def mean_by(collection, callback=None):
     """Calculate arithmetic mean of each element in `collection`. If callback
     is passed, each element of `collection` is passed through a callback before
     the mean is computed.
@@ -145,23 +167,12 @@ def average(collection, callback=None):
 
     Example:
 
-        >>> average([1, 2, 3, 4])
-        2.5
-        >>> average([1, 2, 3, 4], lambda x: x ** 2)
+        >>> mean_by([1, 2, 3, 4], lambda x: x ** 2)
         7.5
 
-    See Also:
-        - :func:`average` (main definition)
-        - :func:`avg` (alias)
-        - :func:`mean` (alias)
-
-    .. versionadded:: 2.1.0
+    .. versionadded:: TODO
     """
     return sum_by(collection, callback) / pyd.size(collection)
-
-
-avg = average
-mean = average
 
 
 def ceil(x, precision=0):
@@ -416,10 +427,10 @@ def min_by(collection, callback=None, default=NoValue):
                key=pyd.iteratee(callback))
 
 
-def moving_average(array, size):
-    """Calculate moving average of each element of `array`. If callback is
-    passed, each element of `array` is passed through a callback before the
-    moving average is computed.
+def moving_mean(array, size):
+    """Calculate moving mean of each element of `array`. If callback is passed,
+    each element of `array` is passed through a callback before the moving mean
+    is computed.
 
     Args:
         array (list): List to process.
@@ -430,18 +441,18 @@ def moving_average(array, size):
 
     Example:
 
-        >>> moving_average(range(10), 1)
+        >>> moving_mean(range(10), 1)
         [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
-        >>> moving_average(range(10), 5)
+        >>> moving_mean(range(10), 5)
         [2.0, 3.0, 4.0, 5.0, 6.0, 7.0]
-        >>> moving_average(range(10), 10)
+        >>> moving_mean(range(10), 10)
         [4.5]
 
-    See Also:
-        - :func:`moving_averge` (main definition)
-        - :func:`moving_avg` (alias)
-
     .. versionadded:: 2.1.0
+
+    .. versionchanged:: TODO
+        Rename to ``moving_mean`` and remove ``moving_average`` and
+        ``moving_avg`` aliases.
     """
     result = []
     size = int(size)
@@ -450,12 +461,9 @@ def moving_average(array, size):
         window = array[i - size:i]
 
         if len(window) == size:
-            result.append(average(window))
+            result.append(mean(window))
 
     return result
-
-
-moving_avg = moving_average
 
 
 def multiply(multiplier, multiplicand):
@@ -695,12 +703,12 @@ def variance(array):
 
     .. versionadded:: 2.1.0
     """
-    ave = average(array)
+    avg = mean(array)
 
     def var(x):
-        return power(x - ave, 2)
+        return power(x - avg, 2)
 
-    return pyd._(array).map_(var).average().value()
+    return pyd._(array).map_(var).mean().value()
 
 
 def zscore(collection, callback=None):
@@ -724,10 +732,10 @@ def zscore(collection, callback=None):
     .. versionadded:: 2.1.0
     """
     array = pyd.map_(collection, callback)
-    ave = average(array)
+    avg = mean(array)
     sig = sigma(array)
 
-    return pyd.map_(array, lambda item: (item - ave) / sig)
+    return pyd.map_(array, lambda item: (item - avg) / sig)
 
 
 #

@@ -14,24 +14,6 @@ def test_add(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4, 5],), 3),
-    (([{'b': 4}, {'b': 5}, {'b': 6}], 'b'), 5),
-    (([0, 0.5, 1],), 0.5),
-    (({'one': {'a': 1}, 'two': {'a': 2}, 'three': {'a': 3}}, 'a'), 2),
-])
-def test_average(case, expected):
-    assert _.average(*case) == expected
-
-
-@parametrize('case', [
-    _.avg,
-    _.mean
-])
-def test_average_aliases(case):
-    assert _.average is case
-
-
-@parametrize('case,expected', [
     ((4.006,), 5),
     ((6.004, 2), 6.01),
     ((6040, -2), 6100),
@@ -108,6 +90,24 @@ def test_max_default(collection, default, expected):
 
 
 @parametrize('case,expected', [
+    ([1, 2, 3, 4, 5], 3),
+    ([0, 0.5, 1], 0.5),
+])
+def test_mean(case, expected):
+    assert _.mean(case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5],), 3),
+    (([{'b': 4}, {'b': 5}, {'b': 6}], 'b'), 5),
+    (([0, 0.5, 1],), 0.5),
+    (({'one': {'a': 1}, 'two': {'a': 2}, 'three': {'a': 3}}, 'a'), 2),
+])
+def test_mean_by(case, expected):
+    assert _.mean_by(*case) == expected
+
+
+@parametrize('case,expected', [
     (([0, 0, 0, 0, 5],), 0),
     (([0, 0, 1, 2, 5],), 1),
     (([0, 0, 1, 2],), 0.5),
@@ -156,15 +156,8 @@ def test_min_default(collection, default, expected):
     (([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 4),
      [2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5]),
 ])
-def test_moving_average(case, expected):
-    assert _.moving_average(*case) == expected
-
-
-@parametrize('case', [
-    _.moving_avg
-])
-def test_moving_average_aliases(case):
-    assert _.moving_average is case
+def test_moving_mean(case, expected):
+    assert _.moving_mean(*case) == expected
 
 
 @parametrize('multiplier,multiplicand,expected', [

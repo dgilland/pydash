@@ -193,8 +193,6 @@ from .functions import (
 
 from .numerical import (
     add,
-    average,
-    avg,
     ceil,
     clamp,
     curve,
@@ -203,11 +201,11 @@ from .numerical import (
     max_,
     max_by,
     mean,
+    mean_by,
     median,
     min_,
     min_by,
-    moving_average,
-    moving_avg,
+    moving_mean,
     multiply,
     pow_,
     power,

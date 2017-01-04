@@ -22,6 +22,7 @@ Changelog
 - Add ``lower_case``. Thanks bharadwajyarlagadda_!
 - Add ``lower_first``. Thanks bharadwajyarlagadda_!
 - Add ``max_by``.
+- Add ``mean_by``.
 - Add ``min_by``.
 - Add ``multiply``. Thanks bharadwajyarlagadda_!
 - Add ``nth``. Thanks bharadwajyarlagadda_!
@@ -50,6 +51,12 @@ Changelog
 - Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
 - Remove ``callback`` argument from ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
 - Remove callback support from ``sum_``. Moved to ``sum_by``. (**breaking change**)
+- Remove aliases: (**breaking change**)
+
+  - ``average`` and ``avg`` (use ``mean`` or ``mean_by``)
+  - ``moving_average`` and ``moving_avg`` (use ``moving_mean``)
+
+- Rename ``moving_average`` to ``moving_mean``. (**breaking change**)
 
 
 v3.4.7 (2016-11-01)
