@@ -218,6 +218,7 @@ from .numerical import (
     std_deviation,
     subtract,
     sum_,
+    sum_by,
     transpose,
     variance,
     zscore,

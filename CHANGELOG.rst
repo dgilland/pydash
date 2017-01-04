@@ -34,6 +34,7 @@ Changelog
 - Add ``stub_false``. Thanks bharadwajyarlagadda_!
 - Add ``stub_string``. Thanks bharadwajyarlagadda_!
 - Add ``stub_true``. Thanks bharadwajyarlagadda_!
+- Add ``sum_by``.
 - Add ``to_lower``. Thanks bharadwajyarlagadda_!
 - Add ``to_path``. Thanks bharadwajyarlagadda_!
 - Add ``to_upper``. Thanks bharadwajyarlagadda_!
@@ -42,6 +43,8 @@ Changelog
 - Add ``uniq_with``.
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
+- Make ``add`` only support two argument addition. (**breaking change**)
+- Remove callback support from ``sum_``. Callback support moved to ``sum_by``. (**breaking change**)
 - Make ``get`` support attribute access within path.
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.

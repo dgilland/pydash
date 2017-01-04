@@ -40,6 +40,7 @@ __all__ = (
     'slope',
     'std_deviation',
     'sum_',
+    'sum_by',
     'subtract',
     'transpose',
     'variance',
@@ -50,7 +51,33 @@ __all__ = (
 INFINITY = float('inf')
 
 
-def add(collection, callback=None):
+def add(a, b):
+    """Adds two numbers.
+
+    Args:
+        a (number): First number to add.
+        b (number): Second number to add.
+
+    Returns:
+        number
+
+    Example:
+
+        >>> add(10, 5)
+        15
+
+    .. versionadded:: 2.1.0
+
+    .. versionchanged:: 3.3.0
+        Support adding two numbers when passed as positional arguments.
+
+    .. versionchanged:: TODO
+        Only support two argument addition.
+    """
+    return a + b
+
+
+def sum_(collection):
     """Sum each element in `collection`. If callback is passed, each element of
     `collection` is passed through a callback before the summation is computed.
     If `collection` and `callback` are numbers, they are added together.
@@ -66,12 +93,8 @@ def add(collection, callback=None):
 
     Example:
 
-        >>> add([1, 2, 3, 4])
+        >>> sum_([1, 2, 3, 4])
         10
-        >>> add([1, 2, 3, 4], lambda x: x ** 2)
-        30
-        >>> add(1, 5)
-        6
 
     See Also:
         - :func:`add` (main definition)
@@ -81,14 +104,36 @@ def add(collection, callback=None):
 
     .. versionchanged:: 3.3.0
         Support adding two numbers when passed as positional arguments.
+
+    .. versionchanged:: TODO
+        Move callback support to :func:`sum_by`. Move two argument addition to
+        :func:`add`.
     """
-    if pyd.is_number(collection) and pyd.is_number(callback):
-        return collection + callback
-    else:
-        return sum(result[0] for result in itercallback(collection, callback))
+    return sum_by(collection)
 
 
-sum_ = add
+def sum_by(collection, callback=None):
+    """Sum each element in `collection`. If callback is passed, each element of
+    `collection` is passed through a callback before the summation is computed.
+    If `collection` and `callback` are numbers, they are added together.
+
+    Args:
+        collection (list|dict|number): Collection to process or first number to
+            add.
+        callback (mixed|number, optional): Callback applied per iteration or
+            second number to add.
+
+    Returns:
+        number: Result of summation.
+
+    Example:
+
+        >>> sum_by([1, 2, 3, 4], lambda x: x ** 2)
+        30
+
+    .. versionadded:: TODO
+    """
+    return sum(result[0] for result in itercallback(collection, callback))
 
 
 def average(collection, callback=None):
@@ -117,7 +162,7 @@ def average(collection, callback=None):
 
     .. versionadded:: 2.1.0
     """
-    return add(collection, callback) / pyd.size(collection)
+    return sum_by(collection, callback) / pyd.size(collection)
 
 
 avg = average

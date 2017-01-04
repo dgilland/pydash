@@ -7,21 +7,10 @@ import pytest
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4, 5],), 15),
-    (([{'b': 4}, {'b': 5}, {'b': 6}], 'b'), 15),
-    (([0, 14, 0.2],), 14.2),
-    (({'one': {'a': 1}, 'two': {'a': 2}, 'three': {'a': 3}}, 'a'), 6),
     ((5, 3), 8),
 ])
 def test_add(case, expected):
     assert _.add(*case) == expected
-
-
-@parametrize('case', [
-    _.sum_
-])
-def test_add_aliases(case):
-    assert _.add is case
 
 
 @parametrize('case,expected', [
@@ -280,6 +269,23 @@ def test_subtract(minuend, subtrahend, expected):
 def test_subtract_exception(minuend, subtrahend):
     with pytest.raises(TypeError):
         _.subtract(minuend, subtrahend)
+
+
+@parametrize('case,expected', [
+    ([1, 2, 3, 4, 5], 15),
+    ([0, 14, 0.2], 14.2),
+])
+def test_sum_(case, expected):
+    assert _.sum_(case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4, 5], lambda a: a * 2), 30),
+    (([{'b': 4}, {'b': 5}, {'b': 6}], 'b'), 15),
+    (({'one': {'a': 1}, 'two': {'a': 2}, 'three': {'a': 3}}, 'a'), 6),
+])
+def test_sum_by(case, expected):
+    assert _.sum_by(*case) == expected
 
 
 @parametrize('case,expected', [
