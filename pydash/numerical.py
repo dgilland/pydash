@@ -78,15 +78,11 @@ def add(a, b):
 
 
 def sum_(collection):
-    """Sum each element in `collection`. If callback is passed, each element of
-    `collection` is passed through a callback before the summation is computed.
-    If `collection` and `callback` are numbers, they are added together.
+    """Sum each element in `collection`.
 
     Args:
         collection (list|dict|number): Collection to process or first number to
             add.
-        callback (mixed|number, optional): Callback applied per iteration or
-            second number to add.
 
     Returns:
         number: Result of summation.
@@ -115,7 +111,6 @@ def sum_(collection):
 def sum_by(collection, callback=None):
     """Sum each element in `collection`. If callback is passed, each element of
     `collection` is passed through a callback before the summation is computed.
-    If `collection` and `callback` are numbers, they are added together.
 
     Args:
         collection (list|dict|number): Collection to process or first number to
