@@ -59,6 +59,12 @@ Changelog
 - Rename ``moving_average`` to ``moving_mean``. (**breaking change**)
 
 
+v3.4.8 (2017-01-05)
+-------------------
+
+- Make internal function inspection methods work with Python 3 annotations. Thanks tgriesser_!
+
+
 v3.4.7 (2016-11-01)
 -------------------
 
@@ -636,3 +642,4 @@ v0.0.0 (2014-07-22)
 .. _k7sleeper: https://github.com/k7sleeper
 .. _bharadwajyarlagadda: https://github.com/bharadwajyarlagadda
 .. _urbnjamesmi1: https://github.com/urbnjamesmi1
+.. _tgriesser: https://github.com/tgriesser
