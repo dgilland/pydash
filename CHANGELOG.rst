@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v3.4.8 (2017-01-05)
+-------------------
+
 - Make internal function inspection methods work with Python 3 annotations. Thanks tgriesser_!
 
 
