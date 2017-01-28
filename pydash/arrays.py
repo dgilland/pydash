@@ -503,6 +503,32 @@ def flatten_depth(array, depth=1):
     return list(iterflatten(array, depth=depth))
 
 
+def from_pairs(*pairs):
+    """Returns a key-value pair from the given list.
+
+    Args:
+        pairs (list): List of lists of values.
+
+    Returns:
+        dict: Key-value pairs based on the list of values given.
+
+    Example:
+
+        >>> mapping = from_pairs(['a', 1], ['b', 2])
+        >>> 'a' in mapping.keys() and 'b' in mapping.keys()
+        True
+        >>> 1 in mapping.values() and 2 in mapping.values()
+        True
+
+    .. versionadded:: TODO
+    """
+    for pair in pairs:
+        if len(pair) != 2:
+            raise ValueError('A pair should be length of 2')
+
+    return {pair[0]: pair[1] for pair in pairs}
+
+
 def index_of(array, value, from_index=0):
     """Gets the index at which the first occurrence of value is found.
 

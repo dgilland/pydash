@@ -8,8 +8,9 @@ From v3.x.x to v4.0.0
 
 Some notable new features/functions:
 
-- 3 new array methods
+- 4 new array methods
 
+    - :func:`pydash.arrays.from_pairs`
     - :func:`pydash.arrays.intersection_by`
     - :func:`pydash.arrays.intersection_with`
     - :func:`pydash.arrays.nth`

@@ -2,6 +2,8 @@
 
 import math
 
+import pytest
+
 import pydash as _
 from .fixtures import parametrize
 
@@ -183,6 +185,26 @@ def test_flatten_deep(case, expected):
 ])
 def test_flatten_depth(case, expected):
     assert _.flatten_depth(*case) == expected
+
+
+@parametrize('case,expected', [
+    ([['a', 1], ['b', 2]], {'a': 1, 'b': 2}),
+    ([['a', 1], ['b', 2], ['c', 3]], {'a': 1, 'b': 2, 'c': 3})
+])
+def test_from_pairs(case, expected):
+    assert _.from_pairs(*case) == expected
+
+
+@parametrize('case,error,error_msg', [
+    ([['a', 1, 2]], ValueError, 'pair should be length of 2'),
+    ([['a']], ValueError, 'pair should be length of 2'),
+    ([[]], ValueError, 'pair should be length of 2')
+])
+def test_from_pairs_error(case, error, error_msg):
+    with pytest.raises(error) as exc:
+        _.from_pairs(*case)
+
+    assert error_msg in str(exc)
 
 
 @parametrize('case,value,from_index,expected', [
