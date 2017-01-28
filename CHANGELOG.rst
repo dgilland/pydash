@@ -14,6 +14,7 @@ Changelog
 - Add ``flat_map_depth``.
 - Add ``flatten_depth``.
 - Add ``flip``. Thanks bharadwajyarlagadda_!
+- Add ``from_pairs``. Thanks bharadwajyarlagadda_!
 - Add ``intersection_by``.
 - Add ``intersection_with``.
 - Add ``invoke_map``.
