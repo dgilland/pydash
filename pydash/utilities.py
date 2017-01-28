@@ -34,6 +34,9 @@ __all__ = (
     'noop',
     'nth_arg',
     'now',
+    'over',
+    'over_every',
+    'over_some',
     'prop',
     'prop_of',
     'property_',
@@ -535,6 +538,77 @@ def now():
                    10**6)
 
     return int(seconds * 1000)
+
+
+def over(funcs):
+    """Creates a function that invokes all `funcs` with the given arguments.
+
+    Args:
+        funcs (list): List of functions to be invoked.
+
+    Returns:
+        function: Returns the new pass-thru function.
+
+    Example:
+
+        >>> func = over([max, min])
+        >>> func(1, 2, 3, 4)
+        [4, 1]
+
+    .. versionadded:: TODO
+    """
+    def _over(*args):
+        return [func(args) for func in funcs]
+
+    return _over
+
+
+def over_every(funcs):
+    """Creates a function that checks if all of the functions return truthy
+    when invoked with the given arguments.
+
+    Args:
+        funcs (list): List of functions to be invoked.
+
+    Returns:
+        function: Returns the new pass-thru function.
+
+    Example:
+
+        >>> func = over_every([bool, lambda x: x is not None])
+        >>> func(1)
+        True
+
+    .. versionadded:: TODO
+    """
+    def _over_every(*args):
+        return all(over(funcs)(*args))
+
+    return _over_every
+
+
+def over_some(funcs):
+    """Creates a function that checks if any of the functions return truthy
+    when invoked with the given arguments.
+
+    Args:
+        funcs (list): List of functions to be invoked.
+
+    Returns:
+        function: Returns the new pass-thru function.
+
+    Example:
+
+        >>> func = over_some([bool, lambda x: x is None])
+        >>> func(1)
+        True
+
+    .. versionadded:: TODO
+    """
+    def _over_some(*args):
+        return any(over(funcs)(*args))
+
+    return _over_some
 
 
 def property_(key):

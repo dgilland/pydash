@@ -37,11 +37,14 @@ Some notable new features/functions:
     - :func:`pydash.numerical.multiply`.
     - :func:`pydash.numerical.subtract`.
 
-- 10 new utility methods
+- 13 new utility methods
 
     - :func:`pydash.utilities.cond`.
     - :func:`pydash.utilities.default_to`.
     - :func:`pydash.utilities.nth_arg`.
+    - :func:`pydash.utilities.over`.
+    - :func:`pydash.utilities.over_every`.
+    - :func:`pydash.utilities.over_some`.
     - :func:`pydash.utilities.range_right`.
     - :func:`pydash.utilities.stub_list`.
     - :func:`pydash.utilities.stub_dict`.
