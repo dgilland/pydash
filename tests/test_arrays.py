@@ -192,19 +192,7 @@ def test_flatten_depth(case, expected):
     ([['a', 1], ['b', 2], ['c', 3]], {'a': 1, 'b': 2, 'c': 3})
 ])
 def test_from_pairs(case, expected):
-    assert _.from_pairs(*case) == expected
-
-
-@parametrize('case,error,error_msg', [
-    ([['a', 1, 2]], ValueError, 'pair should be length of 2'),
-    ([['a']], ValueError, 'pair should be length of 2'),
-    ([[]], ValueError, 'pair should be length of 2')
-])
-def test_from_pairs_error(case, error, error_msg):
-    with pytest.raises(error) as exc:
-        _.from_pairs(*case)
-
-    assert error_msg in str(exc)
+    assert _.from_pairs(case) == expected
 
 
 @parametrize('case,value,from_index,expected', [
@@ -620,25 +608,25 @@ def test_uniq_with(case, callback, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2, 3, 101, 10])
+    ([[1, 2, 3], [101, 2, 1, 10], [2, 1]], [1, 2, 3, 101, 10])
 ])
 def test_union(case, expected):
-    assert _.union(*case) == expected
+    assert _.union(case) == expected
 
 
 @parametrize('case,callback,expected', [
-    (([1, 2, 3], [2, 3, 4]), lambda x: x % 10, [1, 2, 3, 4]),
-    (([1, 2, 3], [2, 3, 4]), lambda x: x % 2, [1, 2])
+    ([[1, 2, 3], [2, 3, 4]], lambda x: x % 10, [1, 2, 3, 4]),
+    ([[1, 2, 3], [2, 3, 4]], lambda x: x % 2, [1, 2])
 ])
 def test_union_by(case, callback, expected):
-    assert _.union_by(*case, callback=callback) == expected
+    assert _.union_by(case, callback=callback) == expected
 
 
 @parametrize('case,expected', [
-    (([11, 22, 33], [22, 33, 44]), [11, 22, 33, 44])
+    ([[11, 22, 33], [22, 33, 44]], [11, 22, 33, 44])
 ])
 def test_union_with(case, expected):
-    assert _.union_with(*case) == expected
+    assert _.union_with(case) == expected
 
 
 @parametrize('case,expected', [

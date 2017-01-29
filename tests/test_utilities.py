@@ -239,7 +239,7 @@ def test_over_every(funcs, data, expected):
 @parametrize('funcs,data,expected', [
     ([lambda x: x is not None, bool], [1], True),
     ([lambda x: x is None, bool], [1], True),
-    ([lambda x: x is False, bool], [], False)
+    ([lambda x: x is False, lambda y: y == 2], [True], False)
 ])
 def test_over_some(funcs, data, expected):
     assert _.over_some(funcs)(*data) == expected
