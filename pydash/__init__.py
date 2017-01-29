@@ -71,6 +71,8 @@ from .arrays import (
     take_right_while,
     take_while,
     union,
+    union_by,
+    union_with,
     uniq,
     uniq_by,
     uniq_with,

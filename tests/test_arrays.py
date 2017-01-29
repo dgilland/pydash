@@ -626,6 +626,21 @@ def test_union(case, expected):
     assert _.union(*case) == expected
 
 
+@parametrize('case,callback,expected', [
+    (([1, 2, 3], [2, 3, 4]), lambda x: x % 10, [1, 2, 3, 4]),
+    (([1, 2, 3], [2, 3, 4]), lambda x: x % 2, [1, 2])
+])
+def test_union_by(case, callback, expected):
+    assert _.union_by(*case, callback=callback) == expected
+
+
+@parametrize('case,expected', [
+    (([11, 22, 33], [22, 33, 44]), [11, 22, 33, 44])
+])
+def test_union_with(case, expected):
+    assert _.union_with(*case) == expected
+
+
 @parametrize('case,expected', [
     (([1, 2, 3], 4), [4, 1, 2, 3]),
     (([1, 2, 3], 4, 5), [4, 5, 1, 2, 3]),

@@ -1489,7 +1489,57 @@ def union(*arrays):
 
     .. versionadded:: 1.0.0
     """
-    return uniq(flatten(arrays))
+    return union_by(*arrays)
+
+
+def union_by(*arrays, callback=None):
+    """This method is similar to :func:`union` except that it accepts iteratee
+    which is invoked for each element of each arrays to generate the criterion
+    by which uniqueness is computed.
+
+    Args:
+        arrays (list): Lists to unionize.
+        callback (function): Function to call on each element.
+
+    Returns:
+        list: Unionized list.
+
+    Example:
+
+        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 2)
+        [1, 2]
+        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 9)
+        [1, 2, 3, 4]
+
+    .. versionadded:: TODO
+    """
+    return list(iterunion(flatten(arrays), iteratee=callback))
+
+
+def union_with(*arrays, callback=None):
+    """This method is like :func:`union` except that it accepts comparator
+    which is invoked to compare elements of arrays. Result values are chosen
+    from the first array in which the value occurs.
+
+    Args:
+        arrays (list): Lists to unionize.
+        callback (callable, optional): Function to compare the elements of the
+            arrays. Defaults to :func:`.is_equal`.
+
+    Returns:
+        list: Unionized list.
+
+    Example:
+
+        >>> comparator = lambda a, b: (a % 2) == (b % 2)
+        >>> union_with([1, 2, 3], [2, 3, 4], callback=comparator)
+        [1, 2]
+        >>> union_with([1, 2, 3], [2, 3, 4])
+        [1, 2, 3, 4]
+
+    .. versionadded:: TODO
+    """
+    return list(iterunion(flatten(arrays), comparator=callback))
 
 
 def uniq(array):
@@ -1860,6 +1910,9 @@ def iterunique(array, comparator=None, iteratee=None):
         if new:
             yield item
             seen.append(cmp_item)
+
+
+iterunion = iterunique
 
 
 def iterduplicates(array):
