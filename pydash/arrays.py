@@ -33,6 +33,7 @@ __all__ = (
     'flatten',
     'flatten_deep',
     'flatten_depth',
+    'from_pairs',
     'head',
     'index_of',
     'initial',
