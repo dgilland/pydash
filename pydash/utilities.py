@@ -541,7 +541,8 @@ def now():
 
 
 def over(funcs):
-    """Creates a function that invokes all `funcs` with the given arguments.
+    """Creates a function that invokes all functions in `funcs` with the
+    arguments it receives and returns their results.
 
     Args:
         funcs (list): List of functions to be invoked.
@@ -558,14 +559,14 @@ def over(funcs):
     .. versionadded:: TODO
     """
     def _over(*args):
-        return [func(args) for func in funcs]
+        return [func(*args) for func in funcs]
 
     return _over
 
 
 def over_every(funcs):
-    """Creates a function that checks if all of the functions return truthy
-    when invoked with the given arguments.
+    """Creates a function that checks if all of the functions in `funcs` return
+    truthy when invoked with the arguments it receives.
 
     Args:
         funcs (list): List of functions to be invoked.
@@ -588,8 +589,8 @@ def over_every(funcs):
 
 
 def over_some(funcs):
-    """Creates a function that checks if any of the functions return truthy
-    when invoked with the given arguments.
+    """Creates a function that checks if any of the functions in `funcs` return
+    truthy when invoked with the arguments it receives.
 
     Args:
         funcs (list): List of functions to be invoked.

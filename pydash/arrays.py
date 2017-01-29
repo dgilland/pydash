@@ -505,30 +505,23 @@ def flatten_depth(array, depth=1):
     return list(iterflatten(array, depth=depth))
 
 
-def from_pairs(*pairs):
-    """Returns a key-value pair from the given list.
+def from_pairs(pairs):
+    """Returns a dict from the given list of pairs.
 
     Args:
-        pairs (list): List of lists of values.
+        pairs (list): List of key-value pairs.
 
     Returns:
-        dict: Key-value pairs based on the list of values given.
+        dict
 
     Example:
 
-        >>> mapping = from_pairs(['a', 1], ['b', 2])
-        >>> 'a' in mapping.keys() and 'b' in mapping.keys()
-        True
-        >>> 1 in mapping.values() and 2 in mapping.values()
-        True
+        >>> from_pairs([['a', 1]])
+        {'a': 1}
 
     .. versionadded:: TODO
     """
-    for pair in pairs:
-        if len(pair) != 2:
-            raise ValueError('A pair should be length of 2')
-
-    return {pair[0]: pair[1] for pair in pairs}
+    return dict(pairs)
 
 
 def index_of(array, value, from_index=0):
@@ -1280,7 +1273,7 @@ def sorted_uniq(array):
 
     .. versionadded:: TODO
     """
-    return sorted(set(array))
+    return sorted(uniq(array))
 
 
 def splice(array, index, how_many=None, *items):
@@ -1473,7 +1466,7 @@ def take_while(array, callback=None):
     return array[:n]
 
 
-def union(*arrays):
+def union(arrays):
     """Computes the union of the passed-in arrays.
 
     Args:
@@ -1484,39 +1477,39 @@ def union(*arrays):
 
     Example:
 
-        >>> union([1, 2, 3], [2, 3, 4], [3, 4, 5])
+        >>> union([[1, 2, 3], [2, 3, 4], [3, 4, 5]])
         [1, 2, 3, 4, 5]
 
     .. versionadded:: 1.0.0
     """
-    return union_by(*arrays)
+    return uniq(flatten(arrays))
 
 
-def union_by(*arrays, callback=None):
+def union_by(arrays, callback=None):
     """This method is similar to :func:`union` except that it accepts iteratee
     which is invoked for each element of each arrays to generate the criterion
     by which uniqueness is computed.
 
     Args:
         arrays (list): Lists to unionize.
-        callback (function): Function to call on each element.
+        callback (function): Function to invoke on each element.
 
     Returns:
         list: Unionized list.
 
     Example:
 
-        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 2)
+        >>> union_by([[1, 2, 3], [2, 3, 4]], callback=lambda x: x % 2)
         [1, 2]
-        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 9)
+        >>> union_by([[1, 2, 3], [2, 3, 4]], callback=lambda x: x % 9)
         [1, 2, 3, 4]
 
     .. versionadded:: TODO
     """
-    return list(iterunion(flatten(arrays), iteratee=callback))
+    return uniq_by(flatten(arrays), callback=callback)
 
 
-def union_with(*arrays, callback=None):
+def union_with(arrays, callback=None):
     """This method is like :func:`union` except that it accepts comparator
     which is invoked to compare elements of arrays. Result values are chosen
     from the first array in which the value occurs.
@@ -1532,14 +1525,14 @@ def union_with(*arrays, callback=None):
     Example:
 
         >>> comparator = lambda a, b: (a % 2) == (b % 2)
-        >>> union_with([1, 2, 3], [2, 3, 4], callback=comparator)
+        >>> union_with([[1, 2, 3], [2, 3, 4]], callback=comparator)
         [1, 2]
-        >>> union_with([1, 2, 3], [2, 3, 4])
+        >>> union_with([[1, 2, 3], [2, 3, 4]])
         [1, 2, 3, 4]
 
     .. versionadded:: TODO
     """
-    return list(iterunion(flatten(arrays), comparator=callback))
+    return uniq_with(flatten(arrays), callback=callback)
 
 
 def uniq(array):
@@ -1910,9 +1903,6 @@ def iterunique(array, comparator=None, iteratee=None):
         if new:
             yield item
             seen.append(cmp_item)
-
-
-iterunion = iterunique
 
 
 def iterduplicates(array):
