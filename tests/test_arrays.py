@@ -501,6 +501,14 @@ def test_sorted_last_index(case, expected):
     assert _.sorted_last_index(*case) == expected
 
 
+@parametrize('case,expected', [
+    ([2, 2, 1, 0.5, 4], [0.5, 1, 2, 4]),
+    ([4, -2, -2, 0.5, -1], [-2, -1, 0.5, 4])
+])
+def test_sorted_uniq(case, expected):
+    assert _.sorted_uniq(case) == expected
+
+
 @parametrize('case,expected,after', [
     (([1, 2, 3], 1, 0, 'splice'), [], [1, 'splice', 2, 3]),
     (([1, 2, 3], 1, 1, 'splice'), [2], [1, 'splice', 3]),

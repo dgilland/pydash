@@ -59,6 +59,7 @@ __all__ = (
     'sort',
     'sorted_index',
     'sorted_last_index',
+    'sorted_uniq',
     'splice',
     'split_at',
     'tail',
@@ -1259,6 +1260,27 @@ def sorted_last_index(array, value, callback=None):
         value = callback(value)
 
     return bisect_right(array, value)
+
+
+def sorted_uniq(array):
+    """Return sorted array with unique elements.
+
+    Args:
+        array (list): List of values to be sorted.
+
+    Returns:
+        list: List of unique elements in a sorted fashion.
+
+    Example:
+
+        >>> sorted_uniq([4, 2, 2, 5])
+        [2, 4, 5]
+        >>> sorted_uniq([-2, -2, 4, 1])
+        [-2, 1, 4]
+
+    .. versionadded:: TODO
+    """
+    return sorted(set(array))
 
 
 def splice(array, index, how_many=None, *items):
