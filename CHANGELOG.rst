@@ -45,6 +45,8 @@ Changelog
 - Add ``to_path``. Thanks bharadwajyarlagadda_!
 - Add ``to_upper``. Thanks bharadwajyarlagadda_!
 - Add ``unary``.
+- Add ``union_by``. Thanks bharadwajyarlagadda_!
+- Add ``union_with``. Thanks bharadwajyarlagadda_!
 - Add ``uniq_by``.
 - Add ``uniq_with``.
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
