@@ -68,6 +68,8 @@ __all__ = (
     'take_right_while',
     'take_while',
     'union',
+    'union_by',
+    'union_with',
     'uniq',
     'uniq_by',
     'uniq_with',
@@ -1466,7 +1468,7 @@ def take_while(array, callback=None):
     return array[:n]
 
 
-def union(arrays):
+def union(*arrays):
     """Computes the union of the passed-in arrays.
 
     Args:
@@ -1477,7 +1479,7 @@ def union(arrays):
 
     Example:
 
-        >>> union([[1, 2, 3], [2, 3, 4], [3, 4, 5]])
+        >>> union([1, 2, 3], [2, 3, 4], [3, 4, 5])
         [1, 2, 3, 4, 5]
 
     .. versionadded:: 1.0.0
@@ -1485,39 +1487,41 @@ def union(arrays):
     return uniq(flatten(arrays))
 
 
-def union_by(arrays, callback=None):
+def union_by(*arrays, **kargs):
     """This method is similar to :func:`union` except that it accepts iteratee
     which is invoked for each element of each arrays to generate the criterion
     by which uniqueness is computed.
 
     Args:
         arrays (list): Lists to unionize.
-        callback (function): Function to invoke on each element.
+        kargs (function): Keyword arguments which contain the function to
+            invoke on each element.
 
     Returns:
         list: Unionized list.
 
     Example:
 
-        >>> union_by([[1, 2, 3], [2, 3, 4]], callback=lambda x: x % 2)
+        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 2)
         [1, 2]
-        >>> union_by([[1, 2, 3], [2, 3, 4]], callback=lambda x: x % 9)
+        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 9)
         [1, 2, 3, 4]
 
     .. versionadded:: TODO
     """
-    return uniq_by(flatten(arrays), callback=callback)
+    return uniq_by(flatten(arrays), callback=kargs.get('callback'))
 
 
-def union_with(arrays, callback=None):
+def union_with(*arrays, **kargs):
     """This method is like :func:`union` except that it accepts comparator
     which is invoked to compare elements of arrays. Result values are chosen
     from the first array in which the value occurs.
 
     Args:
         arrays (list): Lists to unionize.
-        callback (callable, optional): Function to compare the elements of the
-            arrays. Defaults to :func:`.is_equal`.
+        kargs (callable, optional): Keyword arguments that contain the
+            function to compare the elements of the arrays. Defaults to
+            :func:`.is_equal`.
 
     Returns:
         list: Unionized list.
@@ -1525,14 +1529,14 @@ def union_with(arrays, callback=None):
     Example:
 
         >>> comparator = lambda a, b: (a % 2) == (b % 2)
-        >>> union_with([[1, 2, 3], [2, 3, 4]], callback=comparator)
+        >>> union_with([1, 2, 3], [2, 3, 4], callback=comparator)
         [1, 2]
-        >>> union_with([[1, 2, 3], [2, 3, 4]])
+        >>> union_with([1, 2, 3], [2, 3, 4])
         [1, 2, 3, 4]
 
     .. versionadded:: TODO
     """
-    return uniq_with(flatten(arrays), callback=callback)
+    return uniq_with(flatten(arrays), callback=kargs.get('callback'))
 
 
 def uniq(array):
