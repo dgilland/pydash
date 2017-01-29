@@ -33,6 +33,7 @@ Changelog
 - Add ``over_some``. Thanks bharadwajyarlagadda_!
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``sample_size``. Thanks bharadwajyarlagadda_!
+- Add ``sorted_uniq``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``stub_list``. Thanks bharadwajyarlagadda_!
 - Add ``stub_dict``. Thanks bharadwajyarlagadda_!
