@@ -608,7 +608,8 @@ def test_uniq_with(case, callback, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2, 3, 101, 10])
+    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2, 3, 101, 10]),
+    (([11, 22, 33],), [11, 22, 33])
 ])
 def test_union(case, expected):
     assert _.union(*case) == expected
@@ -616,14 +617,18 @@ def test_union(case, expected):
 
 @parametrize('case,callback,expected', [
     (([1, 2, 3], [2, 3, 4]), lambda x: x % 10, [1, 2, 3, 4]),
-    (([1, 2, 3], [2, 3, 4]), lambda x: x % 2, [1, 2])
+    (([1, 2, 3], [2, 3, 4]), lambda x: x % 2, [1, 2]),
+    (([1, 2, 3], [2, 3, 4], lambda x: x % 2), None, [1, 2]),
+    (([11, 22, 33],), None, [11, 22, 33])
 ])
 def test_union_by(case, callback, expected):
     assert _.union_by(*case, callback=callback) == expected
 
 
 @parametrize('case,expected', [
-    (([11, 22, 33], [22, 33, 44]), [11, 22, 33, 44])
+    (([11, 22, 33], [22, 33, 44]), [11, 22, 33, 44]),
+    (([11, 22, 33],), [11, 22, 33]),
+    (([1, 2, 3], [2, 3, 4], lambda a, b: (a % 2) == (b % 2)), [1, 2])
 ])
 def test_union_with(case, expected):
     assert _.union_with(*case) == expected
