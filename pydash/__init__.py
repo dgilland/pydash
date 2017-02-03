@@ -23,6 +23,8 @@ from .arrays import (
     compact,
     concat,
     difference,
+    difference_by,
+    difference_with,
     drop,
     drop_right,
     drop_right_while,

@@ -46,10 +46,34 @@ def test_compact(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 4], [2, 4], [3, 5, 6]), [1])
+    (([1, 2, 3, 4],), [1, 2, 3, 4]),
+    (([1, 2, 3, 4], []), [1, 2, 3, 4]),
+    (([1, 2, 3, 4], [2, 4], [3, 5, 6]), [1]),
+    (([1, 1, 1, 1], [2, 4], [3, 5, 6]), [1, 1, 1, 1])
 ])
 def test_difference(case, expected):
     assert _.difference(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4],), [1, 2, 3, 4]),
+    (([1, 2, 3, 4], []), [1, 2, 3, 4]),
+    (([{'a': 1}, {'a': 2, 'b': 2}], [{'a': 1}], 'a'), [{'a': 2, 'b': 2}]),
+])
+def test_difference_by(case, expected):
+    assert _.difference_by(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3, 4],), [1, 2, 3, 4]),
+    (([1, 2, 3, 4], []), [1, 2, 3, 4]),
+    (([{'a': 1}, {'a': 2, 'b': 2}],
+      [{'a': 1}],
+      lambda item, other: item['a'] == other['a']),
+     [{'a': 2, 'b': 2}]),
+])
+def test_difference_with(case, expected):
+    assert _.difference_with(*case) == expected
 
 
 @parametrize('case,expected', [

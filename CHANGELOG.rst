@@ -8,6 +8,8 @@ Changelog
 - Add ``clamp``.
 - Add ``cond``. Thanks bharadwajyarlagadda_!
 - Add ``default_to``. Thanks bharadwajyarlagadda_!
+- Add ``difference_by``.
+- Add ``difference_with``.
 - Add ``divide``. Thanks bharadwajyarlagadda_!
 - Add ``flat_map``.
 - Add ``flat_map_deep``.
@@ -45,6 +47,7 @@ Changelog
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
 - Make ``add`` only support two argument addition. (**breaking change**)
+- Make ``difference`` return duplicate values from first argument and maintain sort order. (**breaking change**)
 - Make ``get`` support attribute access within path.
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.

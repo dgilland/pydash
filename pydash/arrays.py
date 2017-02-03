@@ -21,6 +21,8 @@ __all__ = (
     'compact',
     'concat',
     'difference',
+    'difference_by',
+    'difference_with',
     'drop',
     'drop_right',
     'drop_right_while',
@@ -145,15 +147,15 @@ def compact(array):
     return [item for item in array if item]
 
 
-def difference(array, *lists):
-    """Creates a list of list elements not present in the other lists.
+def difference(array, *others):
+    """Creates a list of list elements not present in the other others.
 
     Args:
         array (list): List to process.
-        lists (list): Lists to check.
+        others (list): Lists to check.
 
     Returns:
-        list: Difference of the lists.
+        list: Difference between `others`.
 
     Example:
 
@@ -162,9 +164,101 @@ def difference(array, *lists):
 
     .. versionadded:: 1.0.0
     """
-    return (list(difference(set(array).difference(lists[0]),
-                            *lists[1:])) if lists
-            else array)
+    return difference_with(array, *others)
+
+
+def difference_by(array, *others, **kargs):
+    """This method is like :func:`difference` except that it accepts an
+    iteratee which is invoked for each element of each array to generate the
+    criterion by which they're compared. The order and references of result
+    values are determined by `array`. The iteratee is invoked with one
+    argument: ``(value)``.
+
+    Args:
+        array (list): The array to find the difference of.
+        others (list): Lists to check for difference with `array`.
+
+    Keyword Args:
+        callback (mixed, optional): Function to transform the elements of the
+            arrays. Defaults to :func:`.identity`.
+
+    Returns:
+        list: Difference between `others`.
+
+    Example:
+
+        >>> difference_by([1.2, 1.5, 1.7, 2.8], [0.9, 3.2], round)
+        [1.5, 1.7]
+
+    .. versionadded:: TODO
+    """
+    if not others:
+        return array
+
+    callback = kargs.get('callback')
+    last_other = others[-1]
+
+    # Check if last other is a potential iteratee.
+    if (callback is None and
+            (callable(last_other) or
+             isinstance(last_other, string_types) or
+             isinstance(last_other, dict) or
+             last_other is None)):
+        callback = last_other
+        others = others[:-1]
+
+    for other in others:
+        if not other:
+            continue
+        array = list(iterdifference(array, other, iteratee=callback))
+
+    return array
+
+
+def difference_with(array, *others, **kargs):
+    """This method is like :func:`difference` except that it accepts a
+    comparator which is invoked to compare the elements of all arrays. The
+    order and references of result values are determined by the first array.
+    The comparator is invoked with two arguments: ``(arr_val, oth_val)``.
+
+    Args:
+        array (list): The array to find the difference of.
+        others (list): Lists to check for difference with `array`.
+
+    Keyword Args:
+        callback (callable, optional): Function to compare the elements of the
+            arrays. Defaults to :func:`.is_equal`.
+
+    Returns:
+        list: Difference between `others`.
+
+    Example:
+
+        >>> array = ['apple', 'banana', 'pear']
+        >>> others = (['avocado', 'pumpkin'], ['peach'])
+        >>> comparator = lambda a, b: a[0] == b[0]
+        >>> difference_with(array, *others, callback=comparator)
+        ['banana']
+
+    .. versionadded:: TODO
+    """
+    if not others:
+        return array
+
+    callback = kargs.get('callback')
+    last_other = others[-1]
+
+    # Check if last other is a comparator.
+    if callback is None and (callable(others[-1]) or last_other is None):
+        callback = others[-1]
+        others = others[:-1]
+
+    for other in others:
+        if not other:
+            continue
+        array = list(iterdifference(array, other, comparator=callback))
+
+    return array
 
 
 def drop(array, n=1):
@@ -1857,3 +1951,36 @@ def iterintersection(array, other, comparator=None, iteratee=None):
             if comparator(cmp_item, cmp_value):
                 yield item
                 break
+
+
+def iterdifference(array, other, comparator=None, iteratee=None):
+    """Yield different values in `array` as compared to `other` using
+    `comparator` to determine if they are different.
+    """
+    if not array or not other:  # pragma: no cover
+        return
+
+    if comparator is None:
+        comparator = pyd.is_equal
+
+    iteratee = pyd.iteratee(iteratee)
+
+    def is_different(item, seen):
+        is_diff = True
+
+        if item not in seen:
+            for value in other:
+                if comparator(iteratee(item), iteratee(value)):
+                    is_diff = False
+                    break
+
+            if is_diff:
+                seen.append(item)
+        return is_diff
+
+    seen = []
+    not_seen = []
+
+    for item in array:
+        if item in not_seen or is_different(item, seen):
+            yield item
