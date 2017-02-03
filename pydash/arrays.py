@@ -1468,11 +1468,12 @@ def take_while(array, callback=None):
     return array[:n]
 
 
-def union(*arrays):
+def union(array, *others):
     """Computes the union of the passed-in arrays.
 
     Args:
-        arrays (list): Lists to unionize.
+        array (list): List to union with.
+        others (list): Lists to unionize with `array`.
 
     Returns:
         list: Unionized list.
@@ -1484,16 +1485,20 @@ def union(*arrays):
 
     .. versionadded:: 1.0.0
     """
-    return uniq(flatten(arrays))
+    if not others:
+        return array
+
+    return uniq(flatten([array] + list(others)))
 
 
-def union_by(*arrays, **kargs):
+def union_by(array, *others, **kargs):
     """This method is similar to :func:`union` except that it accepts iteratee
     which is invoked for each element of each arrays to generate the criterion
     by which uniqueness is computed.
 
     Args:
-        arrays (list): Lists to unionize.
+        array (list): List to unionize with.
+        others (list): Lists to unionize with `array`.
         kargs (function): Keyword arguments which contain the function to
             invoke on each element.
 
@@ -1509,16 +1514,32 @@ def union_by(*arrays, **kargs):
 
     .. versionadded:: TODO
     """
-    return uniq_by(flatten(arrays), callback=kargs.get('callback'))
+    if not others:
+        return array
+
+    callback = kargs.get('callback')
+    last_other = others[-1]
+
+    # Check if last other is a potential iteratee.
+    if (callback is None and
+            (callable(last_other) or
+             isinstance(last_other, string_types) or
+             isinstance(last_other, dict) or
+             last_other is None)):
+        callback = last_other
+        others = others[:-1]
+
+    return uniq_by(flatten([array] + list(others)), callback=callback)
 
 
-def union_with(*arrays, **kargs):
+def union_with(array, *others, **kargs):
     """This method is like :func:`union` except that it accepts comparator
     which is invoked to compare elements of arrays. Result values are chosen
     from the first array in which the value occurs.
 
     Args:
-        arrays (list): Lists to unionize.
+        array (list): List to unionize with.
+        others (list): Lists to unionize with `array`.
         kargs (callable, optional): Keyword arguments that contain the
             function to compare the elements of the arrays. Defaults to
             :func:`.is_equal`.
@@ -1536,7 +1557,18 @@ def union_with(*arrays, **kargs):
 
     .. versionadded:: TODO
     """
-    return uniq_with(flatten(arrays), callback=kargs.get('callback'))
+    if not others:
+        return array
+
+    callback = kargs.get('callback')
+    last_other = others[-1]
+
+    # Check if last other is a comparator.
+    if callback is None and (callable(last_other) or last_other is None):
+        callback = others[-1]
+        others = others[:-1]
+
+    return uniq_with(flatten([array] + list(others)), callback=callback)
 
 
 def uniq(array):
