@@ -16,6 +16,7 @@ Changelog
 - Add ``flat_map_depth``.
 - Add ``flatten_depth``.
 - Add ``flip``. Thanks bharadwajyarlagadda_!
+- Add ``from_pairs``. Thanks bharadwajyarlagadda_!
 - Add ``intersection_by``.
 - Add ``intersection_with``.
 - Add ``invoke_map``.
@@ -29,8 +30,12 @@ Changelog
 - Add ``multiply``. Thanks bharadwajyarlagadda_!
 - Add ``nth``. Thanks bharadwajyarlagadda_!
 - Add ``nth_arg``. Thanks bharadwajyarlagadda_!
+- Add ``over``. Thanks bharadwajyarlagadda_!
+- Add ``over_every``. Thanks bharadwajyarlagadda_!
+- Add ``over_some``. Thanks bharadwajyarlagadda_!
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``sample_size``. Thanks bharadwajyarlagadda_!
+- Add ``sorted_uniq``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``stub_list``. Thanks bharadwajyarlagadda_!
 - Add ``stub_dict``. Thanks bharadwajyarlagadda_!
@@ -42,6 +47,8 @@ Changelog
 - Add ``to_path``. Thanks bharadwajyarlagadda_!
 - Add ``to_upper``. Thanks bharadwajyarlagadda_!
 - Add ``unary``.
+- Add ``union_by``. Thanks bharadwajyarlagadda_!
+- Add ``union_with``. Thanks bharadwajyarlagadda_!
 - Add ``uniq_by``.
 - Add ``uniq_with``.
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!

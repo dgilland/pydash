@@ -8,11 +8,15 @@ From v3.x.x to v4.0.0
 
 Some notable new features/functions:
 
-- 3 new array methods
+- 7 new array methods
 
+    - :func:`pydash.arrays.from_pairs`
     - :func:`pydash.arrays.intersection_by`
     - :func:`pydash.arrays.intersection_with`
     - :func:`pydash.arrays.nth`
+    - :func:`pydash.arrays.sorted_uniq`
+    - :func:`pydash.arrays.union_by`
+    - :func:`pydash.arrays.union_with`
 
 - 1 new collection method
 
@@ -37,11 +41,14 @@ Some notable new features/functions:
     - :func:`pydash.numerical.multiply`.
     - :func:`pydash.numerical.subtract`.
 
-- 10 new utility methods
+- 13 new utility methods
 
     - :func:`pydash.utilities.cond`.
     - :func:`pydash.utilities.default_to`.
     - :func:`pydash.utilities.nth_arg`.
+    - :func:`pydash.utilities.over`.
+    - :func:`pydash.utilities.over_every`.
+    - :func:`pydash.utilities.over_some`.
     - :func:`pydash.utilities.range_right`.
     - :func:`pydash.utilities.stub_list`.
     - :func:`pydash.utilities.stub_dict`.

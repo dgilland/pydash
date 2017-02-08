@@ -2,6 +2,8 @@
 
 import math
 
+import pytest
+
 import pydash as _
 from .fixtures import parametrize
 
@@ -207,6 +209,14 @@ def test_flatten_deep(case, expected):
 ])
 def test_flatten_depth(case, expected):
     assert _.flatten_depth(*case) == expected
+
+
+@parametrize('case,expected', [
+    ([['a', 1], ['b', 2]], {'a': 1, 'b': 2}),
+    ([['a', 1], ['b', 2], ['c', 3]], {'a': 1, 'b': 2, 'c': 3})
+])
+def test_from_pairs(case, expected):
+    assert _.from_pairs(case) == expected
 
 
 @parametrize('case,value,from_index,expected', [
@@ -503,6 +513,14 @@ def test_sorted_last_index(case, expected):
     assert _.sorted_last_index(*case) == expected
 
 
+@parametrize('case,expected', [
+    ([2, 2, 1, 0.5, 4], [0.5, 1, 2, 4]),
+    ([4, -2, -2, 0.5, -1], [-2, -1, 0.5, 4])
+])
+def test_sorted_uniq(case, expected):
+    assert _.sorted_uniq(case) == expected
+
+
 @parametrize('case,expected,after', [
     (([1, 2, 3], 1, 0, 'splice'), [], [1, 'splice', 2, 3]),
     (([1, 2, 3], 1, 1, 'splice'), [2], [1, 'splice', 3]),
@@ -614,10 +632,30 @@ def test_uniq_with(case, callback, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2, 3, 101, 10])
+    (([1, 2, 3], [101, 2, 1, 10], [2, 1]), [1, 2, 3, 101, 10]),
+    (([11, 22, 33],), [11, 22, 33])
 ])
 def test_union(case, expected):
     assert _.union(*case) == expected
+
+
+@parametrize('case,callback,expected', [
+    (([1, 2, 3], [2, 3, 4]), lambda x: x % 10, [1, 2, 3, 4]),
+    (([1, 2, 3], [2, 3, 4]), lambda x: x % 2, [1, 2]),
+    (([1, 2, 3], [2, 3, 4], lambda x: x % 2), None, [1, 2]),
+    (([11, 22, 33],), None, [11, 22, 33])
+])
+def test_union_by(case, callback, expected):
+    assert _.union_by(*case, callback=callback) == expected
+
+
+@parametrize('case,expected', [
+    (([11, 22, 33], [22, 33, 44]), [11, 22, 33, 44]),
+    (([11, 22, 33],), [11, 22, 33]),
+    (([1, 2, 3], [2, 3, 4], lambda a, b: (a % 2) == (b % 2)), [1, 2])
+])
+def test_union_with(case, expected):
+    assert _.union_with(*case) == expected
 
 
 @parametrize('case,expected', [

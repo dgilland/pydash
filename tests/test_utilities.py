@@ -221,6 +221,30 @@ def test_now():
     assert (present - 1) <= _.now() <= (present + 1)
 
 
+@parametrize('funcs,data,expected', [
+    ([max, min], [1, 2, 3, 4], [4, 1])
+])
+def test_over(funcs, data, expected):
+    assert _.over(funcs)(*data) == expected
+
+
+@parametrize('funcs,data,expected', [
+    ([lambda x: x is not None, bool], [1], True),
+    ([lambda x: x is None, bool], [1], False)
+])
+def test_over_every(funcs, data, expected):
+    assert _.over_every(funcs)(*data) == expected
+
+
+@parametrize('funcs,data,expected', [
+    ([lambda x: x is not None, bool], [1], True),
+    ([lambda x: x is None, bool], [1], True),
+    ([lambda x: x is False, lambda y: y == 2], [True], False)
+])
+def test_over_some(funcs, data, expected):
+    assert _.over_some(funcs)(*data) == expected
+
+
 @parametrize('case,arg,expected', [
     ('name',
      [{'name': 'fred', 'age': 40},

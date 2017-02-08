@@ -35,6 +35,7 @@ __all__ = (
     'flatten',
     'flatten_deep',
     'flatten_depth',
+    'from_pairs',
     'head',
     'index_of',
     'initial',
@@ -60,6 +61,7 @@ __all__ = (
     'sort',
     'sorted_index',
     'sorted_last_index',
+    'sorted_uniq',
     'splice',
     'split_at',
     'tail',
@@ -68,6 +70,8 @@ __all__ = (
     'take_right_while',
     'take_while',
     'union',
+    'union_by',
+    'union_with',
     'uniq',
     'uniq_by',
     'uniq_with',
@@ -595,6 +599,25 @@ def flatten_depth(array, depth=1):
     .. versionadded:: TODO
     """
     return list(iterflatten(array, depth=depth))
+
+
+def from_pairs(pairs):
+    """Returns a dict from the given list of pairs.
+
+    Args:
+        pairs (list): List of key-value pairs.
+
+    Returns:
+        dict
+
+    Example:
+
+        >>> from_pairs([['a', 1]])
+        {'a': 1}
+
+    .. versionadded:: TODO
+    """
+    return dict(pairs)
 
 
 def index_of(array, value, from_index=0):
@@ -1328,6 +1351,27 @@ def sorted_last_index(array, value, callback=None):
     return bisect_right(array, value)
 
 
+def sorted_uniq(array):
+    """Return sorted array with unique elements.
+
+    Args:
+        array (list): List of values to be sorted.
+
+    Returns:
+        list: List of unique elements in a sorted fashion.
+
+    Example:
+
+        >>> sorted_uniq([4, 2, 2, 5])
+        [2, 4, 5]
+        >>> sorted_uniq([-2, -2, 4, 1])
+        [-2, 1, 4]
+
+    .. versionadded:: TODO
+    """
+    return sorted(uniq(array))
+
+
 def splice(array, index, how_many=None, *items):
     """Modify the contents of `array` by inserting elements starting at `index`
     and removing `how_many` number of elements after `index`.
@@ -1518,11 +1562,12 @@ def take_while(array, callback=None):
     return array[:n]
 
 
-def union(*arrays):
+def union(array, *others):
     """Computes the union of the passed-in arrays.
 
     Args:
-        arrays (list): Lists to unionize.
+        array (list): List to union with.
+        others (list): Lists to unionize with `array`.
 
     Returns:
         list: Unionized list.
@@ -1534,7 +1579,90 @@ def union(*arrays):
 
     .. versionadded:: 1.0.0
     """
-    return uniq(flatten(arrays))
+    if not others:
+        return array
+
+    return uniq(flatten([array] + list(others)))
+
+
+def union_by(array, *others, **kargs):
+    """This method is similar to :func:`union` except that it accepts iteratee
+    which is invoked for each element of each arrays to generate the criterion
+    by which uniqueness is computed.
+
+    Args:
+        array (list): List to unionize with.
+        others (list): Lists to unionize with `array`.
+        kargs (function): Keyword arguments which contain the function to
+            invoke on each element.
+
+    Returns:
+        list: Unionized list.
+
+    Example:
+
+        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 2)
+        [1, 2]
+        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 9)
+        [1, 2, 3, 4]
+
+    .. versionadded:: TODO
+    """
+    if not others:
+        return array
+
+    callback = kargs.get('callback')
+    last_other = others[-1]
+
+    # Check if last other is a potential iteratee.
+    if (callback is None and
+            (callable(last_other) or
+             isinstance(last_other, string_types) or
+             isinstance(last_other, dict) or
+             last_other is None)):
+        callback = last_other
+        others = others[:-1]
+
+    return uniq_by(flatten([array] + list(others)), callback=callback)
+
+
+def union_with(array, *others, **kargs):
+    """This method is like :func:`union` except that it accepts comparator
+    which is invoked to compare elements of arrays. Result values are chosen
+    from the first array in which the value occurs.
+
+    Args:
+        array (list): List to unionize with.
+        others (list): Lists to unionize with `array`.
+        kargs (callable, optional): Keyword arguments that contain the
+            function to compare the elements of the arrays. Defaults to
+            :func:`.is_equal`.
+
+    Returns:
+        list: Unionized list.
+
+    Example:
+
+        >>> comparator = lambda a, b: (a % 2) == (b % 2)
+        >>> union_with([1, 2, 3], [2, 3, 4], callback=comparator)
+        [1, 2]
+        >>> union_with([1, 2, 3], [2, 3, 4])
+        [1, 2, 3, 4]
+
+    .. versionadded:: TODO
+    """
+    if not others:
+        return array
+
+    callback = kargs.get('callback')
+    last_other = others[-1]
+
+    # Check if last other is a comparator.
+    if callback is None and (callable(last_other) or last_other is None):
+        callback = others[-1]
+        others = others[:-1]
+
+    return uniq_with(flatten([array] + list(others)), callback=callback)
 
 
 def uniq(array):
