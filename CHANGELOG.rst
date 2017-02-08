@@ -7,6 +7,8 @@ Changelog
 - Add ``eq``. Thanks bharadwajyarlagadda_!
 - Add ``clamp``.
 - Add ``cond``. Thanks bharadwajyarlagadda_!
+- Add ``conforms``.
+- Add ``conforms_to``.
 - Add ``default_to``. Thanks bharadwajyarlagadda_!
 - Add ``difference_by``.
 - Add ``difference_with``.

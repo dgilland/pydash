@@ -12,13 +12,15 @@ from datetime import datetime
 from random import uniform, randint
 
 import pydash as pyd
-from .helpers import callit, getargcount, get_item, NoValue
-from ._compat import _range, string_types
+from .helpers import callit, getargcount, get_item, iterator, NoValue
+from ._compat import _range, iteritems, string_types
 
 
 __all__ = (
     'attempt',
     'cond',
+    'conforms',
+    'conforms_to',
     'constant',
     'callback',
     'deep_property',
@@ -96,8 +98,8 @@ def attempt(func, *args, **kargs):
 
 
 def cond(*pairs):
-    """Creates a func that iterates over `pairs` and invokes the corresponding
-    function of the first predicate to return truthy.
+    """Creates a function that iterates over `pairs` and invokes the
+    corresponding function of the first predicate to return truthy.
 
     Args:
         pairs (list): A list of predicate-function pairs.
@@ -131,6 +133,65 @@ def cond(*pairs):
                 return callback()
 
     return _cond
+
+
+def conforms(source):
+    """Creates a function that invokes the predicate properties of `source`
+    with the corresponding property values of a given object, returning
+    ``True`` if all predicates return truthy, else ``False``.
+
+    Args:
+        source (dict|list): The object of property predicates to conform to.
+
+    Returns:
+        function: Returns the new spec function.
+
+    Example:
+
+        >>> func = conforms({'b': lambda n: n > 1})
+        >>> func({'b': 2})
+        True
+        >>> func({'b': 0})
+        False
+        >>> func = conforms([lambda n: n > 1, lambda n: n == 0])
+        >>> func([2, 0])
+        True
+        >>> func([0, 0])
+        False
+
+    .. versionadded:: TODO
+    """
+    def _conforms(obj):
+        for key, predicate in iterator(source):
+            if not pyd.has(obj, key) or not predicate(obj[key]):
+                return False
+        return True
+
+    return _conforms
+
+
+def conforms_to(obj, source):
+    """Checks if `obj` conforms to `source` by invoking the predicate
+    properties of `source` with the corresponding property values of `obj`.
+
+    Args:
+        obj (dict|list): The object to inspect.
+        source (dict|list): The object of property predicates to conform to.
+
+    Example:
+
+        >>> conforms_to({'b': 2}, {'b': lambda n: n > 1})
+        True
+        >>> conforms_to({'b': 0}, {'b': lambda n: n > 1})
+        False
+        >>> conforms_to([2, 0], [lambda n: n > 1, lambda n: n == 0])
+        True
+        >>> conforms_to([0, 0], [lambda n: n > 1, lambda n: n == 0])
+        False
+
+    .. versionadded:: TODO
+    """
+    return conforms(source)(obj)
 
 
 def constant(value):

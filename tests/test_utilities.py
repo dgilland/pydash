@@ -50,6 +50,67 @@ def test_cond_exception(case, expected):
         _.cond(case)
 
 
+@parametrize('source,case,expected', [
+    ({'a': lambda n: n == 0, 'b': lambda n: n < 0},
+     {'a': 0, 'b': -1},
+     True),
+    ({'a': lambda n: n == 0, 'b': lambda n: n < 0},
+     {'a': 1, 'b': -1},
+     False),
+    ({'a': lambda n: n == 0, 'b': lambda n: n < 0},
+     {'a': 0, 'b': 1},
+     False),
+    ({'b': lambda n: n > 1},
+     {'b': 2},
+     True),
+    ({'b': lambda n: n > 1},
+     {'b': 0},
+     False),
+    ([lambda n: n == 0, lambda n: n < 1],
+     [0, -1],
+     True),
+    ([lambda n: n == 0, lambda n: n < 1],
+     [1, -1],
+     False),
+    ([lambda n: n == 0, lambda n: n < 1],
+     [0, 1],
+     False),
+])
+def test_conforms(source, case, expected):
+    func = _.conforms(source)
+    assert func(case) == expected
+
+
+@parametrize('source,case,expected', [
+    ({'a': lambda n: n == 0, 'b': lambda n: n < 0},
+     {'a': 0, 'b': -1},
+     True),
+    ({'a': lambda n: n == 0, 'b': lambda n: n < 0},
+     {'a': 1, 'b': -1},
+     False),
+    ({'a': lambda n: n == 0, 'b': lambda n: n < 0},
+     {'a': 0, 'b': 1},
+     False),
+    ({'b': lambda n: n > 1},
+     {'b': 2},
+     True),
+    ({'b': lambda n: n > 1},
+     {'b': 0},
+     False),
+    ([lambda n: n == 0, lambda n: n < 1],
+     [0, -1],
+     True),
+    ([lambda n: n == 0, lambda n: n < 1],
+     [1, -1],
+     False),
+    ([lambda n: n == 0, lambda n: n < 1],
+     [0, 1],
+     False),
+])
+def test_conforms_to(source, case, expected):
+    assert _.conforms_to(case, source) == expected
+
+
 @parametrize('case', [
     'foo',
     'bar'

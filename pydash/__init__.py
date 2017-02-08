@@ -422,6 +422,8 @@ from .utilities import (
     attempt,
     callback,
     cond,
+    conforms,
+    conforms_to,
     constant,
     deep_property,
     deep_prop,
