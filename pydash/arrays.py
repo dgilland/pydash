@@ -51,6 +51,7 @@ __all__ = (
     'nth',
     'object_',
     'pull',
+    'pull_all',
     'pull_at',
     'push',
     'remove',
@@ -1012,6 +1013,30 @@ def pull(array, *values):
         [1, 4]
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        :func:`pull` method now calls :func:`pull_all` method for the desired
+        functionality.
+    """
+    return pull_all(array, values)
+
+
+def pull_all(array, values):
+    """Removes all provided values from the given array.
+
+    Args:
+        array (list): Array to modify.
+        values (list): Values to remove.
+
+    Returns:
+        list: Modified `array`.
+
+    Example:
+
+        >>> pull_all([1, 2, 2, 3, 3, 4], [2, 3])
+        [1, 4]
+
+    .. versionadded:: TODO
     """
     for value in values:
         while array.count(value) > 0:
