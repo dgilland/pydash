@@ -506,6 +506,15 @@ def test_sorted_index(case, expected):
     assert _.sorted_index(*case) == expected
 
 
+@parametrize('array,value,expected', [
+    ([10, 10, 4, 2, 3], 10, 3),
+    ([10, 10, 4, 2, 3], 2, 0),
+    ([10, 10, 4, 2, 3], 11, -1),
+])
+def test_sorted_index_of(array, value, expected):
+    assert _.sorted_index_of(array, value) == expected
+
+
 @parametrize('case,expected', [
     (([4, 4, 5, 5, 6, 6], 5), 4),
     (([20, 30, 40, 40, 50], 40), 4),

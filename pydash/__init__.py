@@ -64,6 +64,7 @@ from .arrays import (
     slice_,
     sort,
     sorted_index,
+    sorted_index_of,
     sorted_last_index,
     sorted_uniq,
     splice,
