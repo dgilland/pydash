@@ -61,6 +61,7 @@ __all__ = (
     'slice_',
     'sort',
     'sorted_index',
+    'sorted_index_of',
     'sorted_last_index',
     'sorted_uniq',
     'splice',
@@ -1345,6 +1346,31 @@ def sorted_index(array, value, callback=None):
         value = callback(value)
 
     return bisect_left(array, value)
+
+
+def sorted_index_of(array, value):
+    """Returns the index of the matched `value` from the sorted `array`, else
+    -1.
+
+    Args:
+        array (list): Array to inspect.
+        value (mixed): Value to search for.
+
+    Returns:
+        int: Returns the index of the first matched value, else -1.
+
+    Example:
+
+        >>> sorted_index_of([10, 5, 7, 3], 3)
+        0
+        >>> sorted_index_of([10, 10, 5, 7, 3], 10)
+        3
+        >>> sorted_index_of([10, 5, 7, 3], 11)
+        -1
+
+    .. versionadded:: TODO
+    """
+    return sorted(array).index(value) if value in array else -1
 
 
 def sorted_last_index(array, value, callback=None):

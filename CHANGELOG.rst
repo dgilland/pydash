@@ -38,6 +38,7 @@ Changelog
 - Add ``pull_all``. Thanks bharadwajyarlagadda_!
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``sample_size``. Thanks bharadwajyarlagadda_!
+- Add ``sorted_index_of``. Thanks bharadwajyarlagadda_!
 - Add ``sorted_uniq``. Thanks bharadwajyarlagadda_!
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``stub_list``. Thanks bharadwajyarlagadda_!
