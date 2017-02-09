@@ -377,6 +377,13 @@ def test_pull(case, values, expected):
     assert _.pull(case, *values) == expected
 
 
+@parametrize('case,values,expected', [
+    ([1, 2, 3, 1, 2, 3], [2, 3], [1, 1])
+])
+def test_pull_all(case, values, expected):
+    assert _.pull_all(case, values) == expected
+
+
 @parametrize('case,expected', [
     (([1, 2, 3, 1, 2, 3], [2, 3]), [1, 2, 2, 3]),
     (([1, 2, 3, 1, 2, 3], [3, 2]), [1, 2, 2, 3]),
