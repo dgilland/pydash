@@ -507,8 +507,7 @@ def test_sorted_index(case, expected):
 
 
 @parametrize('array,value,expected', [
-    ([10, 10, 4, 2, 3], 10, 3),
-    ([10, 10, 4, 2, 3], 2, 0),
+    ([2, 3, 4, 10, 10], 10, 3),
     ([10, 10, 4, 2, 3], 11, -1),
 ])
 def test_sorted_index_of(array, value, expected):

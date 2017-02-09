@@ -1361,16 +1361,19 @@ def sorted_index_of(array, value):
 
     Example:
 
-        >>> sorted_index_of([10, 5, 7, 3], 3)
+        >>> sorted_index_of([3, 5, 7, 10], 3)
         0
         >>> sorted_index_of([10, 10, 5, 7, 3], 10)
-        3
-        >>> sorted_index_of([10, 5, 7, 3], 11)
         -1
 
     .. versionadded:: TODO
     """
-    return sorted(array).index(value) if value in array else -1
+    index = sorted_index(array, value)
+
+    if index < len(array) and array[index] == value:
+        return index
+    else:
+        return -1
 
 
 def sorted_last_index(array, value, callback=None):
