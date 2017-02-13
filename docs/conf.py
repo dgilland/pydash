@@ -58,8 +58,9 @@ master_doc = 'index'
 
 # General information about the project.
 project = project_module.__package__
+project_description = project_module.__description__
 author = project_module.__author__
-copyright = u'2014, ' + author
+copyright = '2014, {0}'.format(author)
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -269,8 +270,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, project_module.__package__, project + ' Documentation',
-     [author], 1)
+    (master_doc, project, project + ' Documentation', [author], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -283,8 +283,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, project_module.__package__, project + ' Documentation',
-   author, project_module.__package__, project_module.__description__,
+  (master_doc, project, project + ' Documentation',
+   author, project, project_description,
    'Miscellaneous'),
 ]
 
