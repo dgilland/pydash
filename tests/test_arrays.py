@@ -384,6 +384,14 @@ def test_pull_all(case, values, expected):
     assert _.pull_all(case, values) == expected
 
 
+@parametrize('case,values,callback,expected', [
+    ([1, 2, 3, 1, 2, 3], [2, 3], None, [1, 1]),
+    ([1, 2, 3, 1, 2, 3], [2, 3], lambda item: item + 2, [1, 1])
+])
+def test_pull_all_by(case, values, callback, expected):
+    assert _.pull_all_by(case, values, callback) == expected
+
+
 @parametrize('case,expected', [
     (([1, 2, 3, 1, 2, 3], [2, 3]), [1, 2, 2, 3]),
     (([1, 2, 3, 1, 2, 3], [3, 2]), [1, 2, 2, 3]),

@@ -55,6 +55,7 @@ from .arrays import (
     pop,
     pull,
     pull_all,
+    pull_all_by,
     pull_at,
     push,
     remove,

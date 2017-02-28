@@ -36,6 +36,7 @@ Changelog
 - Add ``over_every``. Thanks bharadwajyarlagadda_!
 - Add ``over_some``. Thanks bharadwajyarlagadda_!
 - Add ``pull_all``. Thanks bharadwajyarlagadda_!
+- Add ``pull_all_by``.
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``sample_size``. Thanks bharadwajyarlagadda_!
 - Add ``sorted_index_of``. Thanks bharadwajyarlagadda_!

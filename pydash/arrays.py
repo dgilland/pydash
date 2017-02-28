@@ -52,6 +52,7 @@ __all__ = (
     'object_',
     'pull',
     'pull_all',
+    'pull_all_by',
     'pull_at',
     'push',
     'remove',
@@ -1044,6 +1045,45 @@ def pull_all(array, values):
             array.remove(value)
 
     return array
+
+
+def pull_all_by(array, values, callback=None):
+    """This method is like :func:`pull_all` except that it accepts iteratee
+    which is invoked for each element of array and values to generate the
+    criterion by which they're compared. The iteratee is invoked with one
+    argument: ``(value)``.
+
+    Args:
+        array (list): Array to modify.
+        values (list): Values to remove.
+        callback (mixed, optional): Function to transform the elements of the
+            arrays. Defaults to :func:`.identity`.
+
+    Returns:
+        list: Modified `array`.
+
+    Example:
+
+        >>> array = [{'x': 1}, {'x': 2}, {'x': 3}, {'x': 1}]
+        >>> pull_all_by(array, [{'x': 1}, {'x': 3}], 'x')
+        [{'x': 2}]
+
+    .. versionadded:: TODO
+    """
+    if callback:
+        iteratee = pyd.iteratee(callback)
+        array_by = [iteratee(item) for item in array]
+        values_by = [iteratee(value) for value in values]
+    else:
+        array_by = array
+        values_by = values
+
+    values = [array[idx]
+              for value in values_by
+              for idx, item in enumerate(array_by)
+              if item == value]
+
+    return pull_all(array, values)
 
 
 def pull_at(array, *indexes):
