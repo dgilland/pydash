@@ -1969,9 +1969,12 @@ def xor(array, *lists):
 
     .. versionadded:: 1.0.0
     """
-    return (list(xor(set(array).symmetric_difference(lists[0]),
-                     *lists[1:])) if lists
-            else array)
+    if lists:
+        return xor(uniq(difference(array + lists[0],
+                                   intersection(array, lists[0]))),
+                   *lists[1:])
+    else:
+        return array[:]
 
 
 def zip_(*arrays):
