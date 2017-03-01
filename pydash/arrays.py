@@ -1072,19 +1072,8 @@ def pull_all_by(array, values, callback=None):
 
     .. versionadded:: TODO
     """
-    if callback:
-        iteratee = pyd.iteratee(callback)
-        array_by = [iteratee(item) for item in array]
-        values_by = [iteratee(value) for value in values]
-    else:
-        array_by = array
-        values_by = values
-
-    values = [array[idx]
-              for value in values_by
-              for idx, item in enumerate(array_by)
-              if item == value]
-
+    values = difference(array,
+                        difference_by(array, values, callback=callback))
     return pull_all(array, values)
 
 
