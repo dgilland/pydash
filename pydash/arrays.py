@@ -1044,10 +1044,8 @@ def pull_all(array, values):
 
     .. versionadded:: TODO
     """
-    for value in values:
-        while array.count(value) > 0:
-            array.remove(value)
-
+    # Use this style of assignment so that `array` is mutated.
+    array[:] = without(array, *values)
     return array
 
 
