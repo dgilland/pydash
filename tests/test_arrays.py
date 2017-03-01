@@ -378,7 +378,9 @@ def test_pull(case, values, expected):
 
 
 @parametrize('case,values,expected', [
-    ([1, 2, 3, 1, 2, 3], [2, 3], [1, 1])
+    ([1, 2, 3, 1, 2, 3], [2, 3], [1, 1]),
+    ([1, 2, 3, 1, 2, 3], [1, 2, 3], []),
+    ([1, 2, 3, 1, 2, 3], [1, 2, 3, 1, 2, 3], []),
 ])
 def test_pull_all(case, values, expected):
     assert _.pull_all(case, values) == expected
@@ -390,6 +392,15 @@ def test_pull_all(case, values, expected):
 ])
 def test_pull_all_by(case, values, callback, expected):
     assert _.pull_all_by(case, values, callback) == expected
+
+
+@parametrize('case,values,callback,expected', [
+    ([1, 2, 3, 1, 2, 3], [2, 3], None, [1, 1]),
+    ([1, 2, 3, 1, 2, 3], [2, 3], lambda a, b: a == b, [1, 1]),
+    ([1, 2, 3, 1, 2, 3], [2, 3], lambda a, b: a != b, [])
+])
+def test_pull_all_with(case, values, callback, expected):
+    assert _.pull_all_with(case, values, callback) == expected
 
 
 @parametrize('case,expected', [

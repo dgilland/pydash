@@ -53,6 +53,7 @@ __all__ = (
     'pull',
     'pull_all',
     'pull_all_by',
+    'pull_all_with',
     'pull_at',
     'push',
     'remove',
@@ -1074,6 +1075,38 @@ def pull_all_by(array, values, callback=None):
     """
     values = difference(array,
                         difference_by(array, values, callback=callback))
+    return pull_all(array, values)
+
+
+def pull_all_with(array, values, callback=None):
+    """This method is like :func:`pull_all` except that it accepts comparator
+    which is invoked to compare elements of array to values. The comparator is
+    invoked with two arguments: ``(arr_val, oth_val)``.
+
+    Args:
+        array (list): Array to modify.
+        values (list): Values to remove.
+        callback (callable, optional): Function to compare the elements of the
+            arrays. Defaults to :func:`.is_equal`.
+
+    Returns:
+        list: Modified `array`.
+
+    Example:
+
+        >>> array = [{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]
+        >>> res = pull_all_with(array, [{'x': 3, 'y': 4}], lambda a, b: a == b)
+        >>> res == [{'x': 1, 'y': 2}, {'x': 5, 'y': 6}]
+        True
+        >>> array = [{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]
+        >>> res = pull_all_with(array, [{'x': 3, 'y': 4}], lambda a, b: a != b)
+        >>> res == [{'x': 3, 'y': 4}]
+        True
+
+    .. versionadded:: TODO
+    """
+    values = difference(array,
+                        difference_with(array, values, callback=callback))
     return pull_all(array, values)
 
 
