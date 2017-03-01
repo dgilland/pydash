@@ -155,7 +155,7 @@ def compact(array):
 
 
 def difference(array, *others):
-    """Creates a list of list elements not present in the other others.
+    """Creates a list of list elements not present in others.
 
     Args:
         array (list): List to process.
@@ -199,6 +199,8 @@ def difference_by(array, *others, **kargs):
 
     .. versionadded:: TODO
     """
+    array = array[:]
+
     if not others:
         return array
 
@@ -249,6 +251,8 @@ def difference_with(array, *others, **kargs):
 
     .. versionadded:: TODO
     """
+    array = array[:]
+
     if not others:
         return array
 
@@ -1674,7 +1678,7 @@ def union(array, *others):
     .. versionadded:: 1.0.0
     """
     if not others:
-        return array
+        return array[:]
 
     return uniq(flatten([array] + list(others)))
 
@@ -1703,7 +1707,7 @@ def union_by(array, *others, **kargs):
     .. versionadded:: TODO
     """
     if not others:
-        return array
+        return array[:]
 
     callback = kargs.get('callback')
     last_other = others[-1]
@@ -1746,7 +1750,7 @@ def union_with(array, *others, **kargs):
     .. versionadded:: TODO
     """
     if not others:
-        return array
+        return array[:]
 
     callback = kargs.get('callback')
     last_other = others[-1]
@@ -1949,7 +1953,7 @@ def without(array, *values):
 
     .. versionadded:: 1.0.0
     """
-    return [a for a in array if a not in values]
+    return [item for item in array if item not in values]
 
 
 def xor(array, *lists):
