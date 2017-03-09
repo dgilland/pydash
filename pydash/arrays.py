@@ -69,6 +69,7 @@ __all__ = (
     'sorted_last_index_by',
     'sorted_last_index_of',
     'sorted_uniq',
+    'sorted_uniq_by',
     'splice',
     'split_at',
     'tail',
@@ -1555,6 +1556,31 @@ def sorted_uniq(array):
     .. versionadded:: TODO
     """
     return sorted(uniq(array))
+
+
+def sorted_uniq_by(array, callback=None):
+    """This method is like :func:`sorted_uniq` except that it accepts iteratee
+    which is invoked for each element in array to generate the criterion by
+    which uniqueness is computed. The order of result values is determined by
+    the order they occur in the array. The iteratee is invoked with one
+    argument: ``(value)``.
+
+    Args:
+        array (list): List of values to be sorted.
+        callback (mixed, optional): Function to transform the elements of the
+            arrays. Defaults to :func:`.identity`.
+
+    Returns:
+        list: Unique list.
+
+    Example:
+
+        >>> sorted_uniq_by([3, 2, 1, 3, 2, 1], lambda val: val % 2)
+        [2, 3]
+
+    .. versionadded:: TODO
+    """
+    return sorted(uniq_by(array, callback=callback))
 
 
 def splice(array, index, how_many=None, *items):

@@ -575,6 +575,16 @@ def test_sorted_uniq(case, expected):
     assert _.sorted_uniq(case) == expected
 
 
+@parametrize('case,callback,expected', [
+    ([2.5, 3, 1, 2, 1.5], lambda num: math.floor(num), [1, 2.5, 3]),
+    (['A', 'b', 'C', 'a', 'B', 'c'],
+     lambda letter: letter.lower(),
+     ['A', 'C', 'b'])
+])
+def test_sorted_uniq_by(case, callback, expected):
+    assert _.sorted_uniq_by(case, callback) == expected
+
+
 @parametrize('case,expected,after', [
     (([1, 2, 3], 1, 0, 'splice'), [], [1, 'splice', 2, 3]),
     (([1, 2, 3], 1, 1, 'splice'), [2], [1, 'splice', 3]),

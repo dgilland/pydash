@@ -45,6 +45,7 @@ Changelog
 - Add ``sorted_last_index_by``.
 - Add ``sorted_last_index_of``.
 - Add ``sorted_uniq``. Thanks bharadwajyarlagadda_!
+- Add ``sorted_uniq_by``.
 - Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``stub_list``. Thanks bharadwajyarlagadda_!
 - Add ``stub_dict``. Thanks bharadwajyarlagadda_!

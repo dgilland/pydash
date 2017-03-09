@@ -72,6 +72,7 @@ from .arrays import (
     sorted_last_index_by,
     sorted_last_index_of,
     sorted_uniq,
+    sorted_uniq_by,
     splice,
     split_at,
     tail,
