@@ -10,7 +10,7 @@ from bisect import bisect_left, bisect_right
 from math import ceil
 
 import pydash as pyd
-from .helpers import itercallback, get_item
+from .helpers import parse_callback, itercallback, get_item
 from ._compat import cmp_to_key, string_types
 
 
@@ -205,17 +205,8 @@ def difference_by(array, *others, **kargs):
     if not others:
         return array
 
-    callback = kargs.get('callback')
-    last_other = others[-1]
-
     # Check if last other is a potential iteratee.
-    if (callback is None and
-            (callable(last_other) or
-             isinstance(last_other, string_types) or
-             isinstance(last_other, dict) or
-             last_other is None)):
-        callback = last_other
-        others = others[:-1]
+    others, callback = parse_callback(*others, **kargs)
 
     for other in others:
         if not other:
@@ -261,8 +252,8 @@ def difference_with(array, *others, **kargs):
     last_other = others[-1]
 
     # Check if last other is a comparator.
-    if callback is None and (callable(others[-1]) or last_other is None):
-        callback = others[-1]
+    if callback is None and (callable(last_other) or last_other is None):
+        callback = last_other
         others = others[:-1]
 
     for other in others:
@@ -766,17 +757,8 @@ def intersection_by(array, *others, **kargs):
     if not others:
         return []
 
-    callback = kargs.get('callback')
-    last_other = others[-1]
-
     # Check if last other is a potential iteratee.
-    if (callback is None and
-            (callable(last_other) or
-             isinstance(last_other, string_types) or
-             isinstance(last_other, dict) or
-             last_other is None)):
-        callback = last_other
-        others = others[:-1]
+    others, callback = parse_callback(*others, **kargs)
 
     if not array or not others:
         return []
@@ -826,8 +808,8 @@ def intersection_with(array, *others, **kargs):
     last_other = others[-1]
 
     # Check if last other is a comparator.
-    if callback is None and (callable(others[-1]) or last_other is None):
-        callback = others[-1]
+    if callback is None and (callable(last_other) or last_other is None):
+        callback = last_other
         others = others[:-1]
 
     if not array or not others:
@@ -1729,17 +1711,8 @@ def union_by(array, *others, **kargs):
     if not others:
         return array[:]
 
-    callback = kargs.get('callback')
-    last_other = others[-1]
-
     # Check if last other is a potential iteratee.
-    if (callback is None and
-            (callable(last_other) or
-             isinstance(last_other, string_types) or
-             isinstance(last_other, dict) or
-             last_other is None)):
-        callback = last_other
-        others = others[:-1]
+    others, callback = parse_callback(*others, **kargs)
 
     return uniq_by(flatten([array] + list(others)), callback=callback)
 

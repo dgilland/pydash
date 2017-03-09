@@ -10,7 +10,7 @@ from operator import attrgetter, itemgetter
 import warnings
 
 import pydash as pyd
-from ._compat import iteritems, getfullargspec
+from ._compat import iteritems, getfullargspec, string_types
 
 
 class _NoValue(object):
@@ -185,8 +185,29 @@ def set_item(obj, key, value, allow_override=True):
             # Trigger exception by assigning to invalid index.
             obj[key] = value
 
+    return obj
+
+
+def parse_callback(*args, **kargs):
+    """Try to find callback function passed in either as a keyword argument or
+    as the last positional argument in `args`.
+    """
+    callback = kargs.get('callback')
+    last_arg = args[-1]
+
+    if (callback is None and
+            (callable(last_arg) or
+             isinstance(last_arg, string_types) or
+             isinstance(last_arg, dict) or
+             last_arg is None)):
+        callback = last_arg
+        args = args[:-1]
+
+    return (args, callback)
+
 
 class iterator_with_default(object):
+    """A wrapper around an iterator object that provides a default."""
     def __init__(self, collection, default):
         self.iter = iter(collection)
         self.default = default
