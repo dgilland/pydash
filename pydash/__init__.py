@@ -92,6 +92,8 @@ from .arrays import (
     unzip_with,
     without,
     xor,
+    xor_by,
+    xor_with,
     zip_,
     zip_with,
     zip_object,

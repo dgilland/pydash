@@ -761,7 +761,21 @@ def test_without(case, expected):
     (([1, 2, 5], [2, 3, 5], [3, 4, 5]), [1, 4, 5])
 ])
 def test_xor(case, expected):
-    assert set(_.xor(*case)) == set(expected)
+    assert _.xor(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], [5, 4], lambda val: val % 3), [3])
+])
+def test_xor_by(case, expected):
+    assert _.xor_by(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], [5, 4], lambda a, b: a <= b), [5, 4])
+])
+def test_xor_with(case, expected):
+    assert _.xor_with(*case) == expected
 
 
 @parametrize('case,expected', [

@@ -89,6 +89,8 @@ __all__ = (
     'unzip_with',
     'without',
     'xor',
+    'xor_by',
+    'xor_with',
     'zip_',
     'zip_object',
     'zip_with'
@@ -2077,12 +2079,85 @@ def xor(array, *lists):
 
     .. versionadded:: 1.0.0
     """
-    if lists:
-        return xor(uniq(difference(array + lists[0],
-                                   intersection(array, lists[0]))),
-                   *lists[1:])
-    else:
+    return xor_by(array, *lists)
+
+
+def xor_by(array, *lists, **kargs):
+    """This method is like :func:`xor` except that it accepts iteratee which is
+    invoked for each element of each arrays to generate the criterion by which
+    by which they're compared. The order of result values is determined by the
+    order they occur in the arrays. The iteratee is invoked with one argument:
+    ``(value)``.
+
+    Args:
+        array (list): List to process.
+        *lists (list): Lists to xor with.
+
+    Keyword Args:
+        callback (mixed, optional): Function to transform the elements of the
+            arrays. Defaults to :func:`.identity`.
+
+    Returns:
+        list: XOR'd list.
+
+    Example:
+
+        >>> xor_by([2.1, 1.2], [2.3, 3.4], round)
+        [1.2, 3.4]
+        >>> xor_by([{'x': 1}], [{'x': 2}, {'x': 1}], 'x')
+        [{'x': 2}]
+
+    .. versionadded:: TODO
+    """
+    if not lists:
         return array[:]
+
+    lists, callback = parse_callback(*lists, **kargs)
+
+    return xor(uniq(difference_by(array + lists[0],
+                                  intersection_by(array, lists[0],
+                                                  callback=callback),
+                                  callback=callback)),
+               *lists[1:])
+
+
+def xor_with(array, *lists, **kargs):
+    """This method is like :func:`xor` except that it accepts comparator which
+    is invoked to compare elements of arrays. The order of result values is
+    determined by the order they occur in the arrays. The comparator is invoked
+    with two arguments: ``(arr_val, oth_val)``.
+
+    Args:
+        array (list): List to process.
+        *lists (list): Lists to xor with.
+
+    Keyword Args:
+        callback (callable, optional): Function to compare the elements of the
+            arrays. Defaults to :func:`.is_equal`.
+
+    Returns:
+        list: XOR'd list.
+
+    Example:
+
+        >>> objects = [{'x': 1, 'y': 2}, {'x': 2, 'y': 1}]
+        >>> others = [{'x': 1, 'y': 1}, {'x': 1, 'y': 2}]
+        >>> expected = [{'y': 1, 'x': 2}, {'y': 1, 'x': 1}]
+        >>> xor_with(objects, others, lambda a, b: a == b) == expected
+        True
+
+    .. versionadded:: TODO
+    """
+    if not lists:
+        return array[:]
+
+    lists, callback = parse_callback(*lists, **kargs)
+
+    return xor_with(uniq(difference_with(array + lists[0],
+                                         intersection_with(array, lists[0],
+                                                           callback=callback),
+                                         callback=callback)),
+                    *lists[1:])
 
 
 def zip_(*arrays):

@@ -63,6 +63,8 @@ Changelog
 - Add ``uniq_with``.
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
+- Add ``xor_by``.
+- Add ``xor_with``.
 - Make ``add`` only support two argument addition. (**breaking change**)
 - Make ``difference`` return duplicate values from first argument and maintain sort order. (**breaking change**)
 - Make ``get`` support attribute access within path.
