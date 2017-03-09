@@ -63,8 +63,11 @@ __all__ = (
     'slice_',
     'sort',
     'sorted_index',
+    'sorted_index_by',
     'sorted_index_of',
     'sorted_last_index',
+    'sorted_last_index_by',
+    'sorted_last_index_of',
     'sorted_uniq',
     'splice',
     'split_at',
@@ -1358,25 +1361,17 @@ def sort(array, comparison=None, key=None, reverse=False):
     return array
 
 
-def sorted_index(array, value, callback=None):
-    """Determine the smallest index at which `value` should be inserted into
-    array in order to maintain the sort order of the sorted array. If callback
-    is passed, it will be executed for value and each element in array to
-    compute their sort ranking. The callback is invoked with one argument:
-    ``(value)``. If a property name is passed for callback, the created
-    :func:`pydash.collections.pluck` style callback will return the
-    property value of the given element. If an object is passed for callback,
-    the created :func:`pydash.collections.where` style callback will return
-    ``True`` for elements that have the properties of the given object, else
-    ``False``.
+def sorted_index(array, value):
+    """Uses a binary search to determine the lowest index at which `value`
+    should be inserted into `array` in order to maintain its sort order.
 
     Args:
         array (list): List to inspect.
         value (mixed): Value to evaluate.
-        callback (mixed, optional): Callback to determine sort key.
 
     Returns:
-        int: Smallest index.
+        int: Returns the index at which `value` should be inserted into
+            `array`.
 
     Example:
 
@@ -1384,6 +1379,38 @@ def sorted_index(array, value, callback=None):
         1
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Move callback support to :func:`sorted_index_by`.
+    """
+    return sorted_index_by(array, value)
+
+
+def sorted_index_by(array, value, callback=None):
+    """This method is like :func:`sorted_index` except that it accepts
+    iteratee which is invoked for `value` and each element of `array` to
+    compute their sort ranking. The iteratee is invoked with one argument:
+    ``(value)``.
+
+    Args:
+        array (list): List to inspect.
+        value (mixed): Value to evaluate.
+        callback (mixed, optional): The iteratee invoked per element. Defaults
+            to :func:`.identity`.
+
+    Returns:
+        int: Returns the index at which `value` should be inserted into
+            `array`.
+
+    Example:
+
+        >>> array = [{'x': 4}, {'x': 5}]
+        >>> sorted_index_by(array, {'x': 4}, lambda o: o['x'])
+        0
+        >>> sorted_index_by(array, {'x': 4}, 'x')
+        0
+
+    .. versionadded:: TODO
     """
     if callback:
         # Generate array of sorted keys computed using callback.
@@ -1396,14 +1423,14 @@ def sorted_index(array, value, callback=None):
 
 def sorted_index_of(array, value):
     """Returns the index of the matched `value` from the sorted `array`, else
-    -1.
+    ``-1``.
 
     Args:
         array (list): Array to inspect.
         value (mixed): Value to search for.
 
     Returns:
-        int: Returns the index of the first matched value, else -1.
+        int: Returns the index of the first matched value, else ``-1``.
 
     Example:
 
@@ -1424,16 +1451,16 @@ def sorted_index_of(array, value):
 
 def sorted_last_index(array, value, callback=None):
     """This method is like :func:`sorted_index` except that it returns the
-    highest index at which a value should be inserted into a given sorted array
-    in order to maintain the sort order of the array.
+    highest index at which `value` should be inserted into `array` in order to
+    maintain its sort order.
 
     Args:
         array (list): List to inspect.
         value (mixed): Value to evaluate.
-        callback (mixed, optional): Callback to determine sort key.
 
     Returns:
-        int: Highest index.
+        int: Returns the index at which `value` should be inserted into
+            `array`.
 
     Example:
 
@@ -1441,6 +1468,36 @@ def sorted_last_index(array, value, callback=None):
         3
 
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: TODO
+        Move callback support to :func:`sorted_last_index_by`.
+    """
+    return sorted_last_index_by(array, value)
+
+
+def sorted_last_index_by(array, value, callback=None):
+    """This method is like :func:`sorted_last_index` except that it accepts
+    iteratee which is invoked for `value` and each element of `array` to
+    compute their sort ranking. The iteratee is invoked with one argument:
+    ``(value)``.
+
+    Args:
+        array (list): List to inspect.
+        value (mixed): Value to evaluate.
+        callback (mixed, optional): The iteratee invoked per element. Defaults
+            to :func:`.identity`.
+
+    Returns:
+        int: Returns the index at which `value` should be inserted into
+            `array`.
+
+    Example:
+
+        >>> array = [{'x': 4}, {'x': 5}]
+        >>> sorted_last_index_by(array, {'x': 4}, lambda o: o['x'])
+        1
+        >>> sorted_last_index_by(array, {'x': 4}, 'x')
+        1
     """
     if callback:
         # Generate array of sorted keys computed using callback.
@@ -1449,6 +1506,34 @@ def sorted_last_index(array, value, callback=None):
         value = callback(value)
 
     return bisect_right(array, value)
+
+
+def sorted_last_index_of(array, value):
+    """This method is like :func:`last_index_of` except that it performs a
+    binary search on a sorted `array`.
+
+    Args:
+        array (list): Array to inspect.
+        value (mixed): Value to search for.
+
+    Returns:
+        int: Returns the index of the matched value, else ``-1``.
+
+    Example:
+
+        >>> sorted_last_index_of([4, 5, 5, 5, 6], 5)
+        3
+        >>> sorted_last_index_of([6, 5, 5, 5, 4], 6)
+        -1
+
+    .. versionadded:: TODO
+    """
+    index = sorted_last_index(array, value) - 1
+
+    if index < len(array) and array[index] == value:
+        return index
+    else:
+        return -1
 
 
 def sorted_uniq(array):

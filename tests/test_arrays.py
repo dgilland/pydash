@@ -515,14 +515,20 @@ def test_sort_comparison_key_exception():
     (([20, 30, 40, 40, 50], 40), 2),
     (([20, 30, 50], 40), 2),
     (([20, 30, 50], 10), 0),
+])
+def test_sorted_index(case, expected):
+    assert _.sorted_index(*case) == expected
+
+
+@parametrize('case,expected', [
     (([{'x': 20}, {'x': 30}, {'x': 50}], {'x': 40}, 'x'), 2),
     ((['twenty', 'thirty', 'fifty'],
       'fourty',
       lambda x: {'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50}[x]),
      2)
 ])
-def test_sorted_index(case, expected):
-    assert _.sorted_index(*case) == expected
+def test_sorted_index_by(case, expected):
+    assert _.sorted_index_by(*case) == expected
 
 
 @parametrize('array,value,expected', [
@@ -537,14 +543,28 @@ def test_sorted_index_of(array, value, expected):
     (([4, 4, 5, 5, 6, 6], 5), 4),
     (([20, 30, 40, 40, 50], 40), 4),
     (([20, 30, 50], 10), 0),
+])
+def test_sorted_last_index(case, expected):
+    assert _.sorted_last_index(*case) == expected
+
+
+@parametrize('case,expected', [
     (([{'x': 20}, {'x': 30}, {'x': 50}], {'x': 40}, 'x'), 2),
     ((['twenty', 'thirty', 'fifty'],
       'fourty',
       lambda x: {'twenty': 20, 'thirty': 30, 'fourty': 40, 'fifty': 50}[x]),
      2)
 ])
-def test_sorted_last_index(case, expected):
-    assert _.sorted_last_index(*case) == expected
+def test_sorted_last_index_by(case, expected):
+    assert _.sorted_last_index_by(*case) == expected
+
+
+@parametrize('array,value,expected', [
+    ([2, 3, 4, 10, 10], 10, 4),
+    ([10, 10, 4, 2, 3], 11, -1),
+])
+def test_sorted_last_index_of(array, value, expected):
+    assert _.sorted_last_index_of(array, value) == expected
 
 
 @parametrize('case,expected', [
