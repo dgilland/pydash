@@ -14,7 +14,7 @@ import re
 from types import BuiltinFunctionType
 
 import pydash as pyd
-from .helpers import iterator
+from .helpers import NoValue, callit, iterator
 from ._compat import (
     builtins,
     integer_types,
@@ -55,6 +55,7 @@ __all__ = (
     'is_json',
     'is_list',
     'is_match',
+    'is_match_with',
     'is_monotone',
     'is_nan',
     'is_native',
@@ -848,22 +849,16 @@ def is_list(value):
     return isinstance(value, list)
 
 
-def is_match(obj, source, callback=None):
-    """Performs a comparison between `obj` and `source` to determine if `obj`
-    contains equivalent property values as `source`. If a callback is provided
-    it will be executed to compare values. If the callback returns ``None``,
-    comparisons will be handled by the method instead. The callback is invoked
-    with two arguments: ``(obj, source)``.
+def is_match(obj, source):
+    """Performs a partial deep comparison between `obj` and `source` to
+    determine if `obj` contains equivalent property values.
 
     Args:
         obj (list|dict): Object to compare.
         source (list|dict): Object of property values to match.
-        callback (mixed, optional): Callback used to compare values from `obj`
-            and `source`.
 
     Returns:
         bool: Whether `obj` is a match or not.
-
 
     Example:
 
@@ -880,16 +875,57 @@ def is_match(obj, source, callback=None):
     .. versionchanged:: 3.2.0
         Don't compare `obj` and `source` using ``type``. Use ``isinstance``
         exclusively.
-    """
-    # If callback provided, use it for comparision.
-    equal = callback(obj, source) if callable(callback) else None
 
-    # Return callback results if anything but None.
-    if equal is not None:
-        pass
-    elif (isinstance(obj, dict) and isinstance(source, dict) or
-          isinstance(obj, list) and isinstance(source, list) or
-          isinstance(obj, tuple) and isinstance(source, tuple)):
+    .. versionchanged:: TODO
+        Move `callback` argument to :func:`is_match_with`.
+    """
+    return is_match_with(obj, source)
+
+
+def is_match_with(obj, source, callback=None,
+                  _key=NoValue, _obj=NoValue, _source=NoValue):
+    """This method is like :func:`is_match` except that it accepts customizer
+    which is invoked to compare values. If customizer returns ``None``,
+    comparisons are handled by the method instead. The customizer is invoked
+    with five arguments: ``(obj_value, src_value, index|key, obj, source)``.
+
+    Args:
+        obj (list|dict): Object to compare.
+        source (list|dict): Object of property values to match.
+        callback (mixed, optional): Callback used to compare values from `obj`
+            and `source`.
+
+    Returns:
+        bool: Whether `obj` is a match or not.
+
+    Example:
+
+        >>> is_greeting = lambda val: val in ('hello', 'hi')
+        >>> customizer = lambda ov, sv: is_greeting(ov) and is_greeting(sv)
+        >>> obj = {'greeting': 'hello'}
+        >>> src = {'greeting': 'hi'}
+        >>> is_match_with(obj, src, customizer)
+        True
+
+    .. versionadded:: TODO
+    """
+    if _obj is NoValue:
+        _obj = obj
+
+    if _source is NoValue:
+        _source = source
+
+    if not callable(callback):
+        def cbk(obj_value, src_value):
+            return obj_value == src_value
+
+        cbk._argcount = 2
+    else:
+        cbk = callback
+
+    if (isinstance(obj, dict) and isinstance(source, dict) or
+            isinstance(obj, list) and isinstance(source, list) or
+            isinstance(obj, tuple) and isinstance(source, tuple)):
         # Set equal to True if source is empty, otherwise, False and then allow
         # deep comparison to determine equality.
         equal = not source
@@ -897,15 +933,15 @@ def is_match(obj, source, callback=None):
         # Walk a/b to determine equality.
         for key, value in iterator(source):
             try:
-                equal = is_match(obj[key], value, callback)
+                equal = is_match_with(obj[key], value, cbk,
+                                      _key=key, _obj=_obj, _source=_source)
             except Exception:  # pylint: disable=broad-except
                 equal = False
 
             if not equal:
                 break
     else:
-        # Use basic == comparision.
-        equal = obj == source
+        equal = callit(cbk, obj, source, _key, _obj, _source)
 
     return equal
 

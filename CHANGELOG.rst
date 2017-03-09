@@ -23,6 +23,7 @@ Changelog
 - Add ``intersection_with``.
 - Add ``invoke_map``.
 - Add ``is_equal_with``. Thanks bharadwajyarlagadda_!
+- Add ``is_match_with``.
 - Add ``is_set``. Thanks bharadwajyarlagadda_!
 - Add ``lower_case``. Thanks bharadwajyarlagadda_!
 - Add ``lower_first``. Thanks bharadwajyarlagadda_!
@@ -74,6 +75,7 @@ Changelog
 - Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
 - Remove ``callback`` argument from ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
 - Remove callback support from ``sum_``. Moved to ``sum_by``. (**breaking change**)
+- Remove callback support from ``is_match``. Moved to ``is_match_with``. (**breaking change**)
 - Remove aliases: (**breaking change**)
 
   - ``average`` and ``avg`` (use ``mean`` or ``mean_by``)
