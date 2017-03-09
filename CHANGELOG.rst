@@ -72,10 +72,12 @@ Changelog
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.
 - Make ``xor`` maintain sort order of supplied arguments.
-- Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
+- Remove ``callback`` argument from ``is_match``. Moved to ``is_match_with``. (**breaking change**)
 - Remove ``callback`` argument from ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
-- Remove callback support from ``sum_``. Moved to ``sum_by``. (**breaking change**)
-- Remove callback support from ``is_match``. Moved to ``is_match_with``. (**breaking change**)
+- Remove ``callback`` argument from ``sorted_index``. Moved to ``sorted_index_by``. (**breaking change**)
+- Remove ``callback`` argument from ``sum_``. Moved to ``sum_by``. (**breaking change**)
+- Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
+
 - Remove aliases: (**breaking change**)
 
   - ``average`` and ``avg`` (use ``mean`` or ``mean_by``)
