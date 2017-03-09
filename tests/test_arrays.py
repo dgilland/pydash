@@ -804,6 +804,14 @@ def test_zip_object_aliases(alias):
 
 
 @parametrize('case,expected', [
+    ((['a.b.c', 'a.b.d'], [1, 2]), {'a': {'b': {'c': 1, 'd': 2}}}),
+    ((['a.b[0].c', 'a.b[1].d'], [1, 2]), {'a': {'b': [{'c': 1}, {'d': 2}]}})
+])
+def test_zip_object_deep(case, expected):
+    assert _.zip_object_deep(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2],), [[1], [2]]),
     (([1, 2], [3, 4], _.add), [4, 6]),
 ])

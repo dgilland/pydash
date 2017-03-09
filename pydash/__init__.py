@@ -97,6 +97,7 @@ from .arrays import (
     zip_,
     zip_with,
     zip_object,
+    zip_object_deep
 )
 
 

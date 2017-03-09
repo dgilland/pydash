@@ -93,6 +93,7 @@ __all__ = (
     'xor_with',
     'zip_',
     'zip_object',
+    'zip_object_deep',
     'zip_with'
 )
 
@@ -2188,8 +2189,8 @@ def zip_object(keys, values=None):
     two lists, one of keys and one of corresponding values.
 
     Args:
-        keys (list): Either a list of keys or a list of ``[key, value]`` pairs
-        values (list, optional): List of values to zip
+        keys (list): Either a list of keys or a list of ``[key, value]`` pairs.
+        values (list, optional): List of values to zip.
 
     Returns:
         dict: Zipped dict.
@@ -2207,14 +2208,41 @@ def zip_object(keys, values=None):
     """
 
     if values is None:
-        zipped = keys
-    else:
-        zipped = zip(keys, values)
+        keys, values = unzip(keys)
 
-    return dict(zipped)
+    return dict(zip(keys, values))
 
 
 object_ = zip_object
+
+
+def zip_object_deep(keys, values=None):
+    """This method is like :func:`zip_object` except that it supports property
+    paths.
+
+    Args:
+        keys (list): Either a list of keys or a list of ``[key, value]`` pairs.
+        values (list, optional): List of values to zip.
+
+    Returns:
+        dict: Zipped dict.
+
+    Example:
+
+        >>> expected = {'a': {'b': {'c': 1, 'd': 2}}}
+        >>> zip_object_deep(['a.b.c', 'a.b.d'], [1, 2]) == expected
+        True
+
+    .. versionadded:: TODO
+    """
+    if values is None:  # pragma: no cover
+        keys, values = unzip(keys)
+
+    obj = {}
+    for idx, key in enumerate(keys):
+        obj = pyd.set_(obj, key, pyd.get(values, idx))
+
+    return obj
 
 
 def zip_with(*arrays, **kargs):
@@ -2224,6 +2252,8 @@ def zip_with(*arrays, **kargs):
 
     Args:
         *arrays (list): Lists to process.
+
+    Keyword Args:
         callback (function): Function to combine grouped values.
 
     Returns:

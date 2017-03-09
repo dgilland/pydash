@@ -66,6 +66,7 @@ Changelog
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
 - Add ``xor_by``.
 - Add ``xor_with``.
+- Add ``zip_object_deep``.
 - Make ``add`` only support two argument addition. (**breaking change**)
 - Make ``difference`` return duplicate values from first argument and maintain sort order. (**breaking change**)
 - Make ``get`` support attribute access within path.
