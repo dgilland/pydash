@@ -6,10 +6,11 @@
 
 from __future__ import absolute_import, division
 
-import re
-import math
+from collections import namedtuple
 from datetime import datetime
+import math
 from random import uniform, randint
+import re
 
 import pydash as pyd
 from .helpers import callit, getargcount, get_item, iterator, NoValue
@@ -70,6 +71,8 @@ RE_PATH_LIST_INDEX = re.compile(r'^\[\d+\]$')
 
 
 ID_COUNTER = 0
+
+PathToken = namedtuple('PathToken', ['key', 'default_factory'])
 
 
 def attempt(func, *args, **kargs):
@@ -1015,22 +1018,14 @@ def to_path(value):
 
     .. versionadded:: TODO
     """
-    keys = value
-    # pylint: disable=redefined-outer-name
-    if pyd.is_string(keys) and ('.' in keys or '[' in keys):
-        # Since we can't tell whether a bare number is supposed to be dict key
-        # or a list index, we support a special syntax where any string-integer
-        # surrounded by brackets is treated as a list index and converted to an
-        # integer.
-        keys = [int(key[1:-1]) if RE_PATH_LIST_INDEX.match(key)
-                else unescape_path_key(key)
-                for key in filter(None, RE_PATH_KEY_DELIM.split(keys))]
-    elif pyd.is_string(keys) or pyd.is_number(keys):
-        keys = [keys]
-    elif keys is NoValue:
-        keys = []
-
-    return keys
+    tokens = to_path_tokens(value)
+    if isinstance(tokens, list):
+        path = [token.key if isinstance(token, PathToken)
+                else token
+                for token in to_path_tokens(value)]
+    else:  # pragma: no cover
+        path = tokens
+    return path
 
 
 def unique_id(prefix=None):
@@ -1065,6 +1060,27 @@ def unique_id(prefix=None):
 #
 # Helper functions not a part of main API
 #
+
+
+def to_path_tokens(value):
+    """Parse `value` into :class:`PathToken` objects."""
+    if pyd.is_string(value) and ('.' in value or '[' in value):
+        # Since we can't tell whether a bare number is supposed to be dict key
+        # or a list index, we support a special syntax where any string-integer
+        # surrounded by brackets is treated as a list index and converted to an
+        # integer.
+        keys = [PathToken(int(key[1:-1]), default_factory=list)
+                if RE_PATH_LIST_INDEX.match(key)
+                else PathToken(unescape_path_key(key), default_factory=dict)
+                for key in filter(None, RE_PATH_KEY_DELIM.split(value))]
+    elif pyd.is_string(value) or pyd.is_number(value):
+        keys = [PathToken(value, default_factory=dict)]
+    elif value is NoValue:
+        keys = []
+    else:
+        keys = value
+
+    return keys
 
 
 def unescape_path_key(key):

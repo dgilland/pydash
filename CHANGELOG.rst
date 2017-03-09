@@ -71,6 +71,7 @@ Changelog
 - Make ``get`` support attribute access within path.
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.
+- Make ``set_`` support mixed ``list``/``dict`` defaults within a single object based on whether key or index path substrings used.
 - Make ``xor`` maintain sort order of supplied arguments.
 - Remove ``callback`` argument from ``is_match``. Moved to ``is_match_with``. (**breaking change**)
 - Remove ``callback`` argument from ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)

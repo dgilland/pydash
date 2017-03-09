@@ -21,7 +21,7 @@ from .helpers import (
     getargcount
 )
 from ._compat import iteritems, text_type
-from .utilities import to_path
+from .utilities import PathToken, to_path, to_path_tokens
 
 
 __all__ = (
@@ -982,7 +982,7 @@ def set_(obj, path, value):
         {'a': {'b': {'c': 1}}}
         >>> set_({}, 'a.0.c', 1)
         {'a': {'0': {'c': 1}}}
-        >>> set_([1, 2], '2.0', 1)
+        >>> set_([1, 2], '[2][0]', 1)
         [1, 2, [1]]
 
     .. versionadded:: 2.2.0
@@ -990,7 +990,7 @@ def set_(obj, path, value):
     .. versionchanged:: 3.3.0
         Added :func:`set_` as main definition and :func:`deep_set` as alias.
     """
-    return set_path(obj, value, to_path(path))
+    return set_path(obj, value, to_path_tokens(path))
 
 
 deep_set = set_
@@ -1257,21 +1257,39 @@ def update_path(obj, callback, keys, default=None):
     """
     # pylint: disable=redefined-outer-name
     if default is None:
-        default = {} if isinstance(obj, dict) else []
+        default = dict if isinstance(obj, dict) else list
+
+    def default_factory():
+        if callable(default):
+            return default()
+        return clone_deep(default)
 
     if not pyd.is_list(keys):
         keys = [keys]
 
     last_key = pyd.last(keys)
+
+    if isinstance(last_key, PathToken):
+        last_key = last_key.key
+
     obj = clone_deep(obj)
     target = obj
 
-    for key in pyd.initial(keys):
-        set_item(target, key, clone_deep(default), allow_override=False)
+    for idx, token in enumerate(pyd.initial(keys)):
+        if isinstance(token, PathToken):
+            key = token.key
+            _default_factory = pyd.get(keys,
+                                       [idx + 1, 'default_factory'],
+                                       default=default_factory)
+        else:
+            key = token
+            _default_factory = default_factory
+
+        set_item(target, key, _default_factory(), allow_override=False)
 
         try:
             target = target[key]
-        except TypeError:
+        except TypeError:  # pragma: no cover
             target = target[int(key)]
 
     set_item(target, last_key, callback(get_item(target,
