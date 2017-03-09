@@ -507,7 +507,6 @@ def test_set_aliases(case):
 def test_set_path(case, expected):
     result = _.set_path(*case)
     assert result == expected
-    assert result is not case[0]
 
 
 @parametrize('case,expected', [
@@ -588,7 +587,6 @@ def test_transform(case, expected):
 def test_update_path(case, expected):
     result = _.update_path(*case)
     assert result == expected
-    assert result is not case[0]
 
 
 @parametrize('case,expected', [

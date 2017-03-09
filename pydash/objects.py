@@ -976,6 +976,9 @@ def set_(obj, path, value):
     Returns:
         mixed: Modified `obj`.
 
+    Warning:
+        `obj` is modified in place.
+
     Example:
 
         >>> set_({}, 'a.b.c', 1)
@@ -984,11 +987,19 @@ def set_(obj, path, value):
         {'a': {'0': {'c': 1}}}
         >>> set_([1, 2], '[2][0]', 1)
         [1, 2, [1]]
+        >>> set_({}, 'a.b[0].c', 1)
+        {'a': {'b': [{'c': 1}]}}
 
     .. versionadded:: 2.2.0
 
     .. versionchanged:: 3.3.0
         Added :func:`set_` as main definition and :func:`deep_set` as alias.
+
+    .. versionchanged:: TODO
+
+        - Modify `obj` in place.
+        - Support creating default path values as ``list`` or ``dict`` based on
+          whether key or index substrings are used.
     """
     return set_path(obj, value, to_path_tokens(path))
 
@@ -1010,6 +1021,9 @@ def set_path(obj, value, keys, default=None):
 
     Returns:
         mixed: Modified `obj`.
+
+    Warning:
+        `obj` is modified in place.
 
     Example:
 
@@ -1246,6 +1260,9 @@ def update_path(obj, callback, keys, default=None):
     Returns:
         mixed: Updated `obj`.
 
+    Warning:
+        `obj` is modified in place.
+
     Example:
 
         >>> update_path({}, lambda value: value, ['a', 'b'])
@@ -1262,7 +1279,7 @@ def update_path(obj, callback, keys, default=None):
     def default_factory():
         if callable(default):
             return default()
-        return clone_deep(default)
+        return clone(default)
 
     if not pyd.is_list(keys):
         keys = [keys]
@@ -1272,7 +1289,6 @@ def update_path(obj, callback, keys, default=None):
     if isinstance(last_key, PathToken):
         last_key = last_key.key
 
-    obj = clone_deep(obj)
     target = obj
 
     for idx, token in enumerate(pyd.initial(keys)):
