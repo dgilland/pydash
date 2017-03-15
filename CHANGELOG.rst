@@ -33,9 +33,11 @@ Changelog
 - Add ``multiply``. Thanks bharadwajyarlagadda_!
 - Add ``nth``. Thanks bharadwajyarlagadda_!
 - Add ``nth_arg``. Thanks bharadwajyarlagadda_!
+- Add ``omit_by``.
 - Add ``over``. Thanks bharadwajyarlagadda_!
 - Add ``over_every``. Thanks bharadwajyarlagadda_!
 - Add ``over_some``. Thanks bharadwajyarlagadda_!
+- Add ``pick_by``.
 - Add ``pull_all``. Thanks bharadwajyarlagadda_!
 - Add ``pull_all_by``.
 - Add ``pull_all_with``.
@@ -77,6 +79,8 @@ Changelog
 - Make ``xor`` maintain sort order of supplied arguments.
 - Remove ``callback`` argument from ``is_match``. Moved to ``is_match_with``. (**breaking change**)
 - Remove ``callback`` argument from ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
+- Remove ``callback`` argument from ``omit``. Moved to ``omit_by``. (**breaking change**)
+- Remove ``callback`` argument from ``pick``. Moved to ``pick_by``. (**breaking change**)
 - Remove ``callback`` argument from ``sorted_index``. Moved to ``sorted_index_by``. (**breaking change**)
 - Remove ``callback`` argument from ``sum_``. Moved to ``sum_by``. (**breaking change**)
 - Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)

@@ -54,9 +54,11 @@ __all__ = (
     'merge',
     'methods',
     'omit',
+    'omit_by',
     'pairs',
     'parse_int',
     'pick',
+    'pick_by',
     'rename_keys',
     'set_',
     'set_path',
@@ -791,18 +793,13 @@ def merge(obj, *sources, **kargs):
     return obj
 
 
-def omit(obj, callback=None, *properties):
-    """Creates a shallow clone of object excluding the specified properties.
-    Property names may be specified as individual arguments or as lists of
-    property names. If a callback is provided it will be executed for each
-    property of object omitting the properties the callback returns truthy for.
-    The callback is invoked with three arguments: ``(value, key, object)``.
+def omit(obj, *properties):
+    """The opposite of :func:`pick`. This method creates an object composed of
+    the property paths of `obj` that are not omitted.
 
     Args:
         obj (mixed): Object to process.
         properties (str): Property values to omit.
-        callback (mixed, optional): Callback used to determine whic properties
-            to omit.
 
     Returns:
         dict: Results of omitting properties.
@@ -811,25 +808,51 @@ def omit(obj, callback=None, *properties):
 
         >>> omit({'a': 1, 'b': 2, 'c': 3}, 'b', 'c') == {'a': 1}
         True
+        >>> omit({ 'a': 1, 'b': 2, 'c': 3 }, ['a', 'c']) == {'b': 2}
+        True
         >>> omit([1, 2, 3, 4], 0, 3) == {1: 2, 2: 3}
         True
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Moved callback argument to :func:`omit_by`.
+    """
+    return omit_by(obj, pyd.flatten(properties))
+
+
+def omit_by(obj, callback=None):
+    """The opposite of :func:`pick_by`. This method creates an object composed
+    of the string keyed properties of object that predicate doesn't return
+    truthy for. The predicate is invoked with two arguments: ``(value, key)``.
+
+    Args:
+        obj (mixed): Object to process.
+        callback (mixed, optional): Callback used to determine which properties
+            to omit.
+
+    Returns:
+        dict: Results of omitting properties.
+
+    Example:
+
+        >>> omit_by({'a': 1, 'b': '2', 'c': 3}, lambda v: isinstance(v, int))
+        {'b': '2'}
+
+    .. versionadded:: TODO
     """
     if not callable(callback):
-        callback = callback if callback is not None else []
-        properties = pyd.flatten_deep([callback, properties])
+        keys = callback if callback is not None else []
 
-        # pylint: disable=missing-docstring,function-redefined
-        def callback(value, key, item):
-            return key in properties
+        def callback(value, key):  # pylint: disable=function-redefined
+            return key in keys
 
-        argcount = 3
+        argcount = 2
     else:
-        argcount = getargcount(callback, maxargs=3)
+        argcount = getargcount(callback, maxargs=2)
 
     return dict((key, value) for key, value in iterator(obj)
-                if not callit(callback, value, key, obj, argcount=argcount))
+                if not callit(callback, value, key, argcount=argcount))
 
 
 def pairs(obj):
@@ -901,18 +924,12 @@ def parse_int(value, radix=None):
     return parsed
 
 
-def pick(obj, callback=None, *properties):
-    """Creates a shallow clone of object composed of the specified properties.
-    Property names may be specified as individual arguments or as lists of
-    property names. If a callback is provided it will be executed for each
-    property of object picking the properties the callback returns truthy for.
-    The callback is invoked with three arguments: ``(value, key, object)``.
+def pick(obj, *properties):
+    """Creates an object composed of the picked object properties.
 
     Args:
         obj (list|dict): Object to pick from.
         properties (str): Property values to pick.
-        callback (mixed, optional): Callback used to determine which properties
-            to pick.
 
     Returns:
         dict: Dict containg picked properties.
@@ -923,22 +940,45 @@ def pick(obj, callback=None, *properties):
         True
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Moved callback argument to :func:`pick_by`.
+    """
+    return pick_by(obj, pyd.flatten(properties))
+
+
+def pick_by(obj, callback=None):
+    """Creates an object composed of the object properties predicate returns
+    truthy for. The predicate is invoked with two arguments: ``(value, key)``.
+
+    Args:
+        obj (list|dict): Object to pick from.
+        callback (mixed, optional): Callback used to determine which properties
+            to pick.
+
+    Returns:
+        dict: Dict containg picked properties.
+
+    Example:
+
+        >>> obj = {'a': 1, 'b': '2', 'c': 3 }
+        >>> pick_by(obj, lambda v: isinstance(v, int)) == {'a': 1, 'c': 3}
+        True
+
+    .. versionadded:: TODO
     """
     if not callable(callback):
-        callback = callback if callback is not None else []
-        properties = pyd.flatten_deep([callback, properties])
+        keys = callback if callback is not None else []
 
-        # pylint: disable=missing-docstring,function-redefined
-        def callback(value, key, item):
-            return key in properties
+        def callback(value, key):  # pylint: disable=function-redefined
+            return key in keys
 
-        argcount = 3
+        argcount = 2
     else:
-        argcount = getargcount(callback, maxargs=3)
+        argcount = getargcount(callback, maxargs=2)
 
-    # TODO: cache argcount
     return dict((key, value) for key, value in iterator(obj)
-                if callit(callback, value, key, obj, argcount=argcount))
+                if callit(callback, value, key, argcount=argcount))
 
 
 def rename_keys(obj, key_map):

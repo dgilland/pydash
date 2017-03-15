@@ -402,14 +402,23 @@ def test_merge_no_link_list():
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), {'c': 3}),
     (({'a': 1, 'b': 2, 'c': 3}, ['a', 'b']), {'c': 3}),
     (({'a': 1, 'b': 2, 'c': 3}, ['a'], ['b']), {'c': 3}),
-    (({'a': 1, 'b': 2, 'c': 3}, lambda value, key: key in ['a']),
-     {'b': 2, 'c': 3}),
     (([1, 2, 3],), {0: 1, 1: 2, 2: 3}),
     (([1, 2, 3], 0), {1: 2, 2: 3}),
     (([1, 2, 3], 0, 1), {2: 3})
 ])
 def test_omit(case, expected):
     assert _.omit(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({'a': 1, 'b': 2, 'c': 3}, ['a', 'b']), {'c': 3}),
+    (({'a': 1, 'b': 2, 'c': 3}, lambda value, key: key == 'a'),
+     {'b': 2, 'c': 3}),
+    (([1, 2, 3],), {0: 1, 1: 2, 2: 3}),
+    (([1, 2, 3], [0]), {1: 2, 2: 3}),
+])
+def test_omit_by(case, expected):
+    assert _.omit_by(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -441,18 +450,28 @@ def test_parse_int(case, expected):
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), {'a': 1, 'b': 2}),
     (({'a': 1, 'b': 2, 'c': 3}, ['a', 'b']), {'a': 1, 'b': 2}),
     (({'a': 1, 'b': 2, 'c': 3}, ['a'], ['b']), {'a': 1, 'b': 2}),
-    (({'a': 1, 'b': 2, 'c': 3}, lambda value, key: key in ['a']),
-     {'a': 1}),
     (([1, 2, 3],), {}),
     (([1, 2, 3], 0), {0: 1}),
-    (([1, 2, 3], 0, 1), {0: 1, 1: 2}),
     ((fixtures.Object(a=1, b=2, c=3), 'a'), {'a': 1}),
-    ((fixtures.Object(a=1, b=2, c=3), 'a', 'b'), {'a': 1, 'b': 2}),
     ((fixtures.ItemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
     ((fixtures.IteritemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
 ])
 def test_pick(case, expected):
     assert _.pick(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({'a': 1, 'b': 2, 'c': 3}, ['a', 'b']), {'a': 1, 'b': 2}),
+    (({'a': 1, 'b': 2, 'c': 3}, lambda value, key: key in ['a']),
+     {'a': 1}),
+    (([1, 2, 3],), {}),
+    (([1, 2, 3], [0]), {0: 1}),
+    ((fixtures.Object(a=1, b=2, c=3), 'a'), {'a': 1}),
+    ((fixtures.ItemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
+    ((fixtures.IteritemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
+])
+def test_pick_by(case, expected):
+    assert _.pick_by(*case) == expected
 
 
 @parametrize('case,expected', [
