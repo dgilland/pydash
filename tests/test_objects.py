@@ -145,12 +145,14 @@ def test_invert(case, expected):
 
 
 @parametrize('case,expected', [
-    ([1, 2, 3], {1: [0], 2: [1], 3: [2]}),
-    ({'first': 'fred', 'second': 'barney', 'third': 'fred'},
+    (([1, 2, 3],), {1: [0], 2: [1], 3: [2]}),
+    (({'first': 'fred', 'second': 'barney', 'third': 'fred'},),
      {'fred': ['first', 'third'], 'barney': ['second']}),
+    (({'a': 1, 'b': 2}, lambda val: val * 2),
+     {2: ['a'], 4: ['b']})
 ])
-def test_invert_multivalue(case, expected):
-    result = _.invert(case, multivalue=True)
+def test_invert_by(case, expected):
+    result = _.invert_by(*case)
     for key in result:
         assert set(result[key]) == set(expected[key])
 

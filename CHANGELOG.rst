@@ -21,6 +21,7 @@ Changelog
 - Add ``from_pairs``. Thanks bharadwajyarlagadda_!
 - Add ``intersection_by``.
 - Add ``intersection_with``.
+- Add ``invert_by``.
 - Add ``invoke_map``.
 - Add ``is_equal_with``. Thanks bharadwajyarlagadda_!
 - Add ``is_match_with``.
@@ -84,6 +85,7 @@ Changelog
 - Remove ``callback`` argument from ``sorted_index``. Moved to ``sorted_index_by``. (**breaking change**)
 - Remove ``callback`` argument from ``sum_``. Moved to ``sum_by``. (**breaking change**)
 - Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
+- Remove ``multivalue`` argument from ``invert``. Feature moved to ``invert_by``. (**breaking change**)
 
 - Remove aliases: (**breaking change**)
 

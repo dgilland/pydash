@@ -47,6 +47,7 @@ __all__ = (
     'has',
     'has_path',
     'invert',
+    'invert_by',
     'keys',
     'keys_in',
     'map_keys',
@@ -582,7 +583,7 @@ deep_has = has
 has_path = has
 
 
-def invert(obj, multivalue=False):
+def invert(obj):
     """Creates an object composed of the inverted keys and values of the given
     object.
 
@@ -596,27 +597,61 @@ def invert(obj, multivalue=False):
 
     Example:
 
-        >>> results = invert({'a': 1, 'b': 2, 'c': 3})
-        >>> results == {1: 'a', 2: 'b', 3: 'c'}
-        True
-        >>> results = invert({'a': 1, 'b': 2, 'c': 1}, multivalue=True)
-        >>> set(results[1]) == set(['a', 'c'])
+        >>> result = invert({'a': 1, 'b': 2, 'c': 3})
+        >>> result == {1: 'a', 2: 'b', 3: 'c'}
         True
 
     Note:
-        Assumes `dict` values are hashable as `dict` keys.
+        Assumes `obj` values are hashable as ``dict`` keys.
 
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
         Added ``multivalue`` argument.
+
+    .. versionchanged:: TODO
+        Moved ``multivalue=True`` functionality to :func:`invert_by`.
     """
+    return dict((value, key) for key, value in iterator(obj))
+
+
+def invert_by(obj, callback=None):
+    """This method is like :func:`invert` except that the inverted object is
+    generated from the results of running each element of object thru iteratee.
+    The corresponding inverted value of each inverted key is a list of keys
+    responsible for generating the inverted value. The iteratee is invoked with
+    one argument: ``(value)``.
+
+    Args:
+        obj (dict): Object to invert.
+
+    Returns:
+        dict: Inverted dict.
+
+    Example:
+
+        >>> obj = {'a': 1, 'b': 2, 'c': 1}
+        >>> result = invert_by(obj)  # {1: ['a', 'c'], 2: ['b']}
+        >>> set(result[1]) == set(['a', 'c'])
+        True
+        >>> set(result[2]) == set(['b'])
+        True
+        >>> result2 = invert_by(obj, lambda value: 'group' + str(value))
+        >>> result2['group1'] == result[1]
+        True
+        >>> result2['group2'] == result[2]
+        True
+
+    Note:
+        Assumes `obj` values are hashable as ``dict`` keys.
+
+    .. versionadded:: TODO
+    """
+    callback = pyd.iteratee(callback)
     result = {}
+
     for key, value in iterator(obj):
-        if multivalue:
-            result.setdefault(value, []).append(key)
-        else:
-            result[value] = key
+        result.setdefault(callback(value), []).append(key)
 
     return result
 

@@ -267,6 +267,7 @@ from .objects import (
     has,
     has_path,
     invert,
+    invert_by,
     keys,
     keys_in,
     map_keys,
