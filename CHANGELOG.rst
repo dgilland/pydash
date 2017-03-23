@@ -4,7 +4,7 @@ Changelog
 =========
 
 
-- Add ``eq``. Thanks bharadwajyarlagadda_!
+- Add ``assign_with``.
 - Add ``clamp``.
 - Add ``cond``. Thanks bharadwajyarlagadda_!
 - Add ``conforms``.
@@ -13,6 +13,7 @@ Changelog
 - Add ``difference_by``.
 - Add ``difference_with``.
 - Add ``divide``. Thanks bharadwajyarlagadda_!
+- Add ``eq``. Thanks bharadwajyarlagadda_!
 - Add ``flat_map``.
 - Add ``flat_map_deep``.
 - Add ``flat_map_depth``.
@@ -78,6 +79,7 @@ Changelog
 - Make ``set_`` support mixed ``list``/``dict`` defaults within a single object based on whether key or index path substrings used. (**breaking change**)
 - Make ``set_`` modify object in place. (**breaking change**)
 - Make ``xor`` maintain sort order of supplied arguments.
+- Remove ``callback`` argument from ``assign``. Moved to ``assign_with``. (**breaking change**)
 - Remove ``callback`` argument from ``is_match``. Moved to ``is_match_with``. (**breaking change**)
 - Remove ``callback`` argument from ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
 - Remove ``callback`` argument from ``omit``. Moved to ``omit_by``. (**breaking change**)

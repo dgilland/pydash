@@ -246,6 +246,7 @@ from .numerical import (
 
 from .objects import (
     assign,
+    assign_with,
     callables,
     clone,
     clone_deep,

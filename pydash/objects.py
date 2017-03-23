@@ -26,6 +26,7 @@ from .utilities import PathToken, to_path, to_path_tokens
 
 __all__ = (
     'assign',
+    'assign_with',
     'callables',
     'clone',
     'clone_deep',
@@ -75,17 +76,12 @@ __all__ = (
 )
 
 
-def assign(obj, *sources, **kargs):
-    """Assigns own enumerable properties of source object(s) to the destination
-    object. If `callback` is supplied, it is invoked with two arguments:
-    ``(obj_value, source_value)``.
+def assign(obj, *sources):
+    """Assigns properties of source object(s) to the destination object.
 
     Args:
         obj (dict): Destination object whose properties will be modified.
         sources (dict): Source objects to assign to `obj`.
-
-    Keyword Args:
-        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
         dict: Modified `obj`.
@@ -116,6 +112,43 @@ def assign(obj, *sources, **kargs):
 
     .. versionchanged:: 3.4.4
         Shallow copy each `source` instead of deep copying.
+
+    .. versionchanged:: TODO
+        Moved `callback` argument to :func:`assign_with`.
+    """
+    return assign_with(obj, *sources)
+
+
+extend = assign
+
+
+def assign_with(obj, *sources, **kargs):
+    """This method is like :func:`assign` except that it accepts customizer
+    which is invoked to produce the assigned values. If customizer returns
+    ``None``, assignment is handled by the method instead. The customizer is
+    invoked with five arguments: ``(obj_value, src_value, key, obj, source)``.
+
+    Args:
+        obj (dict): Destination object whose properties will be modified.
+        sources (dict): Source objects to assign to `obj`.
+
+    Keyword Args:
+        callback (mixed, optional): Callback applied per iteration.
+
+    Returns:
+        dict: Modified `obj`.
+
+    Warning:
+        `obj` is modified in place.
+
+    Example:
+
+        >>> customizer = lambda o, s: s if o is None else o
+        >>> result = assign({'a': 1}, {'b': 2}, {'a': 3}, customizer)
+        >>> result == {'a': 1, 'b': 2}
+        True
+
+    .. versionadded:: TODO
     """
     sources = list(sources)
     callback = kargs.get('callback')
@@ -123,23 +156,29 @@ def assign(obj, *sources, **kargs):
     if callback is None and callable(sources[-1]):
         callback = sources.pop()
 
-    argcount = (getargcount(callback, maxargs=2) if callback is not None
-                else None)
+    if callback is not None:
+        argcount = getargcount(callback, maxargs=5)
+    else:
+        argcount = None
 
     for source in sources:
         source = source.copy()
 
         for key, value in iteritems(source):
-            obj[key] = (value if callback is None
-                        else callit(callback,
-                                    obj.get(key),
-                                    value,
-                                    argcount=argcount))
+            if callback:
+                val = callit(callback,
+                             obj.get(key),
+                             value,
+                             key,
+                             obj,
+                             source,
+                             argcount=argcount)
+                if val is not None:
+                    value = val
+
+            obj[key] = value
 
     return obj
-
-
-extend = assign
 
 
 def callables(obj):

@@ -17,8 +17,6 @@ today = dt.date.today()
      {'name': 'fred', 'employer': 'slate'}),
     (({'name': 'fred'}, {'employer': 'slate'}, {'employer': 'medium'}),
      {'name': 'fred', 'employer': 'medium'}),
-    (({'name': 'fred'}, {'age': 26}, lambda obj, src: src + 1),
-     {'name': 'fred', 'age': 27}),
 ])
 def test_assign(case, expected):
     assert _.assign(*case) == expected
@@ -29,6 +27,14 @@ def test_assign(case, expected):
 ])
 def test_assign_aliases(case):
     assert _.assign is case
+
+
+@parametrize('case,expected', [
+    (({'name': 'fred'}, {'age': 26}, lambda obj, src: src + 1),
+     {'name': 'fred', 'age': 27}),
+])
+def test_assign_with(case, expected):
+    assert _.assign_with(*case) == expected
 
 
 @parametrize('case,expected', [
