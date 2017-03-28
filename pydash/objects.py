@@ -1291,8 +1291,7 @@ def transform(obj, callback=None, accumulator=None):
 
     Example:
 
-        >>> transform([1, 2, 3, 4],\
-                      lambda acc, value, key: acc.append((key, value)))
+        >>> transform([1, 2, 3, 4], lambda acc, v, k: acc.append((k, v)))
         [(0, 1), (1, 2), (2, 3), (3, 4)]
 
     .. versionadded:: 1.0.0
