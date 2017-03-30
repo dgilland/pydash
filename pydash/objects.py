@@ -354,8 +354,8 @@ def deep_map_values(obj, callback=None, property_path=NoValue):
 
 
 def defaults(obj, *sources):
-    """Assigns own enumerable properties of source object(s) to the destination
-    object for all destination properties that resolve to undefined.
+    """Assigns properties of source object(s) to the destination object for all
+    destination properties that resolve to undefined.
 
     Args:
         obj (dict): Destination object whose properties will be modified.
@@ -813,12 +813,12 @@ def map_values(obj, callback=None):
 
 
 def merge(obj, *sources, **kargs):
-    """Recursively merges own enumerable properties of the source object(s)
-    that don't resolve to undefined into the destination object. Subsequent
-    sources will overwrite property assignments of previous sources. If a
-    callback is provided it will be executed to produce the merged values of
-    the destination and source properties. The callback is invoked with at
-    least two arguments: ``(obj_value, *source_value)``.
+    """Recursively merges properties of the source object(s) into the
+    destination object. Subsequent sources will overwrite property assignments
+    of previous sources. If a callback is provided it will be executed to
+    produce the merged values of the destination and source properties. The
+    callback is invoked with at least two arguments:
+    ``(obj_value, *source_value)``.
 
     Args:
         obj (dict): Destination object to merge source(s) into.
@@ -864,6 +864,12 @@ def merge(obj, *sources, **kargs):
     if callback is None and callable(sources[-1]):
         callback = sources.pop()
 
+    if callable(callback):
+        argcount = getargcount(callback, maxargs=2)
+        cbk = partial(callit, callback, argcount=argcount)
+    else:
+        cbk = None
+
     for source in sources:
         # Don't re-clone if we've already cloned before.
         if _clone:
@@ -876,8 +882,13 @@ def merge(obj, *sources, **kargs):
             all_mappings = all([isinstance(src_value, dict),
                                 isinstance(obj_value, dict)])
 
-            if callback:
-                result = callback(obj_value, src_value)
+            if cbk:
+                _result = cbk(obj_value, src_value)
+            else:
+                _result = None
+
+            if _result is not None:
+                result = _result
             elif all_sequences or all_mappings:
                 result = merge(obj_value,
                                src_value,

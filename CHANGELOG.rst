@@ -81,6 +81,7 @@ Changelog
 - Make ``set_`` support mixed ``list``/``dict`` defaults within a single object based on whether key or index path substrings used. (**breaking change**)
 - Make ``set_`` modify object in place. (**breaking change**)
 - Make ``xor`` maintain sort order of supplied arguments.
+- Only use ``merge`` callback result if result is not ``None``. Previously, result from callback (if provided) was used unconditionally. (**breaking change**)
 - Remove ``callback`` argument from
 
   - ``assign``. Moved to ``assign_with``. (**breaking change**)
