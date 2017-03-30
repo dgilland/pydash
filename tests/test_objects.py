@@ -592,6 +592,23 @@ def test_to_boolean(case, expected):
 
 
 @parametrize('case,expected', [
+    (1.4, 1),
+    (1.9, 1),
+    ('1.4', 1),
+    ('1.9', 1),
+    ('foo', 0),
+    (None, 0),
+    (True, 1),
+    (False, 0),
+    ({}, 0),
+    ([], 0),
+    ((), 0),
+])
+def test_to_integer(case, expected):
+    assert _.to_integer(case) == expected
+
+
+@parametrize('case,expected', [
     (('2.556',), 3.0),
     (('2.556', 1), 2.6),
     (('999.999', -1), 990.0),

@@ -70,6 +70,7 @@ __all__ = (
     'set_path',
     'to_boolean',
     'to_dict',
+    'to_integer',
     'to_number',
     'to_plain_object',
     'to_string',
@@ -1305,6 +1306,36 @@ def to_dict(obj):
 
 
 to_plain_object = to_dict
+
+
+def to_integer(obj):
+    """Converts `obj` to an integer.
+
+    Args:
+        obj (str|int|float): Object to convert.
+
+    Returns:
+        int: Converted integer or ``0`` if it can't be converted.
+
+    Example:
+
+        >>> to_integer(3.2)
+        3
+        >>> to_integer('3.2')
+        3
+        >>> to_integer('3.9')
+        3
+        >>> to_integer('invalid')
+        0
+
+    .. versionadded:: TODO
+    """
+    try:
+        num = int(float(obj))
+    except (ValueError, TypeError):
+        num = 0
+
+    return num
 
 
 def to_number(obj, precision=0):

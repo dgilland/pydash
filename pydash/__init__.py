@@ -289,6 +289,7 @@ from .objects import (
     set_path,
     to_boolean,
     to_dict,
+    to_integer,
     to_number,
     to_plain_object,
     to_string,
