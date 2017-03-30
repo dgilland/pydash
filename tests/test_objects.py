@@ -399,10 +399,6 @@ def test_map_values(case, expected):
       {'foo': {'barney': [5], 'fred': 7}}),
      {'characters': {'barney': {'age': 36}, 'fred': {'score': 7}},
       'foo': {'barney': [5], 'fred': 7}}),
-    (({'fruits': ['apple'], 'vegetables': ['beet']},
-      {'fruits': ['banana'], 'vegetables': ['carrot']},
-      lambda a, b: a + b if isinstance(a, list) else b),
-     {'fruits': ['apple', 'banana'], 'vegetables': ['beet', 'carrot']}),
     (({'foo': {'bar': 1}}, {'foo': {}}),
      {'foo': {'bar': 1}})
 ])
@@ -426,6 +422,16 @@ def test_merge_no_link_list():
     result['foo'][0]['bar'] = True
 
     assert case == {'foo': [{}]}
+
+
+@parametrize('case,expected', [
+    (({'fruits': ['apple'], 'vegetables': ['beet']},
+      {'fruits': ['banana'], 'vegetables': ['carrot']},
+      lambda a, b: a + b if isinstance(a, list) else b),
+     {'fruits': ['apple', 'banana'], 'vegetables': ['beet', 'carrot']}),
+])
+def test_merge_with(case, expected):
+    assert _.merge_with(*case) == expected
 
 
 @parametrize('case,expected', [

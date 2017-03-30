@@ -33,6 +33,7 @@ Changelog
 - Add ``lower_first``. Thanks bharadwajyarlagadda_!
 - Add ``max_by``.
 - Add ``mean_by``.
+- Add ``merge_with``.
 - Add ``min_by``.
 - Add ``multiply``. Thanks bharadwajyarlagadda_!
 - Add ``nth``. Thanks bharadwajyarlagadda_!
@@ -82,17 +83,17 @@ Changelog
 - Make ``set_`` modify object in place. (**breaking change**)
 - Make ``xor`` maintain sort order of supplied arguments.
 - Only use ``merge`` callback result if result is not ``None``. Previously, result from callback (if provided) was used unconditionally. (**breaking change**)
-- Remove ``callback`` argument from
+- Remove ``callback`` argument from: (**breaking change**)
 
-  - ``assign``. Moved to ``assign_with``. (**breaking change**)
-  - ``clone`` and ``clone_deep``. Moved to ``clone_with`` and ``clone_deep_with``. (**breaking change**)
-  - ``is_match``. Moved to ``is_match_with``. (**breaking change**)
-  - ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
-  - ``omit``. Moved to ``omit_by``. (**breaking change**)
-  - ``pick``. Moved to ``pick_by``. (**breaking change**)
-  - ``sorted_index``. Moved to ``sorted_index_by``. (**breaking change**)
-  - ``sum_``. Moved to ``sum_by``. (**breaking change**)
-  - ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
+  - ``assign``. Moved to ``assign_with``.
+  - ``clone`` and ``clone_deep``. Moved to ``clone_with`` and ``clone_deep_with``.
+  - ``is_match``. Moved to ``is_match_with``.
+  - ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``.
+  - ``omit``. Moved to ``omit_by``.
+  - ``pick``. Moved to ``pick_by``.
+  - ``sorted_index``. Moved to ``sorted_index_by``.
+  - ``sum_``. Moved to ``sum_by``.
+  - ``uniq``/``unique``. Moved to ``uniq_by``.
 
 - Remove ``multivalue`` argument from ``invert``. Feature moved to ``invert_by``. (**breaking change**)
 

@@ -13,13 +13,13 @@ import re
 
 import pydash as pyd
 from .helpers import (
-    iterator,
-    itercallback,
-    get_item,
-    set_item,
     NoValue,
     callit,
-    getargcount
+    iterator,
+    itercallback,
+    getargcount,
+    get_item,
+    set_item
 )
 from ._compat import iteritems, text_type
 from .utilities import PathToken, to_path, to_path_tokens
@@ -57,6 +57,7 @@ __all__ = (
     'map_keys',
     'map_values',
     'merge',
+    'merge_with',
     'methods',
     'omit',
     'omit_by',
@@ -413,7 +414,7 @@ def defaults_deep(obj, *sources):
     def setter(obj, key, value):
         obj.setdefault(key, value)
 
-    return merge(obj, *sources, _setter=setter)
+    return merge_with(obj, *sources, _setter=setter)
 
 
 def find_key(obj, callback=None):
@@ -812,7 +813,7 @@ def map_values(obj, callback=None):
                 for result, _, key, _ in itercallback(obj, callback))
 
 
-def merge(obj, *sources, **kargs):
+def merge(obj, *sources):
     """Recursively merges properties of the source object(s) into the
     destination object. Subsequent sources will overwrite property assignments
     of previous sources. If a callback is provided it will be executed to
@@ -824,10 +825,6 @@ def merge(obj, *sources, **kargs):
         obj (dict): Destination object to merge source(s) into.
         sources (dict): Source objects to merge from. subsequent sources
             overwrite previous ones.
-
-    Keyword Args:
-        callback (function, optional): Callback function to handle merging
-            (must be passed in as keyword argument).
 
     Returns:
         dict: Merged object.
@@ -855,6 +852,45 @@ def merge(obj, *sources, **kargs):
 
     .. versionchanged:: 3.3.0
         Added internal option for overriding the default setter for obj values.
+
+    .. versionchanged:: TODO
+        Moved callback argument to :func:`merge_with`.
+    """
+    return merge_with(obj, *sources)
+
+
+def merge_with(obj, *sources, **kargs):
+    """This method is like :func:`merge` except that it accepts customizer
+    which is invoked to produce the merged values of the destination and source
+    properties. If customizer returns ``None``, merging is handled by this
+    method instead. The customizer is invoked with five arguments:
+    ``(obj_value, src_value, key, obj, source)``.
+
+    Args:
+        obj (dict): Destination object to merge source(s) into.
+        sources (dict): Source objects to merge from. subsequent sources
+            overwrite previous ones.
+
+    Keyword Args:
+        callback (function, optional): Callback function to handle merging
+            (must be passed in as keyword argument).
+
+    Returns:
+        dict: Merged object.
+
+    Warning:
+        `obj` is modified in place.
+
+    Example:
+
+        >>> cbk = lambda obj_val, src_val: obj_val + src_val
+        >>> obj1 = {'a': [1], 'b': [2]}
+        >>> obj2 = {'a': [3], 'b': [4]}
+        >>> res = merge_with(obj1, obj2, cbk)
+        >>> obj1 == {'a': [1, 3], 'b': [2, 4]}
+        True
+
+    .. versionadded:: TODO
     """
     sources = list(sources)
     _clone = kargs.get('_clone', True)
@@ -865,7 +901,7 @@ def merge(obj, *sources, **kargs):
         callback = sources.pop()
 
     if callable(callback):
-        argcount = getargcount(callback, maxargs=2)
+        argcount = getargcount(callback, maxargs=5)
         cbk = partial(callit, callback, argcount=argcount)
     else:
         cbk = None
@@ -883,17 +919,17 @@ def merge(obj, *sources, **kargs):
                                 isinstance(obj_value, dict)])
 
             if cbk:
-                _result = cbk(obj_value, src_value)
+                _result = cbk(obj_value, src_value, key, obj, source)
             else:
                 _result = None
 
             if _result is not None:
                 result = _result
             elif all_sequences or all_mappings:
-                result = merge(obj_value,
-                               src_value,
-                               _clone=False,
-                               _setter=setter)
+                result = merge_with(obj_value,
+                                    src_value,
+                                    _clone=False,
+                                    _setter=setter)
             else:
                 result = src_value
 

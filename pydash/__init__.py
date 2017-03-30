@@ -276,6 +276,7 @@ from .objects import (
     map_keys,
     map_values,
     merge,
+    merge_with,
     methods,
     omit,
     omit_by,
