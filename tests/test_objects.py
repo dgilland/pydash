@@ -52,35 +52,58 @@ def test_callables_aliases(case):
     assert _.callables is case
 
 
-@parametrize('case,args', [
-    ({'a': {'d': 1}, 'b': {'c': 2}}, ()),
-    ({'a': {'d': 1}, 'b': {'c': 2}}, (False, lambda v: v)),
-    ([{'a': {'d': 1}, 'b': {'c': 2}}], ())
+@parametrize('case', [
+    {'a': {'d': 1}, 'b': {'c': 2}},
+    [{'a': {'d': 1}, 'b': {'c': 2}}],
 ])
-def test_clone(case, args):
-    actual = _.clone(case, *args)
+def test_clone(case):
+    result = _.clone(case)
 
-    assert actual is not case
+    assert result is not case
 
-    for key, value in _.helpers.iterator(actual):
+    for key, value in _.helpers.iterator(result):
         assert value is case[key]
 
 
-@parametrize('case,kargs', [
-    ({'a': {'d': 1}, 'b': {'c': 2}}, {}),
-    ({'a': {'d': 1}, 'b': {'c': 2}}, {'callback': lambda v: v}),
-    ([{'a': {'d': 1}, 'b': {'c': 2}}], {})
+@parametrize('case,callback,expected', [
+    ({'a': {'d': 1}, 'b': {'c': 2}},
+     lambda v: v,
+     {'a': {'d': 1}, 'b': {'c': 2}}),
+    ({'a': 1, 'b': 2, 'c': {'d': 3}},
+     lambda v, k: v + 2 if isinstance(v, int) and k else None,
+     {'a': 3, 'b': 4, 'c': {'d': 3}}),
 ])
-def test_clone_deep(case, kargs):
-    kargs['is_deep'] = True
-    actuals = [_.clone(case, **kargs),
-               _.clone_deep(case, callback=kargs.get('callback'))]
+def test_clone_with(case, callback, expected):
+    result = _.clone_with(case, callback)
 
-    for actual in actuals:
-        assert actual is not case
+    assert result == expected
 
-        for key, value in _.helpers.iterator(actual):
-            assert value is not case[key]
+
+@parametrize('case', [
+    {'a': {'d': 1}, 'b': {'c': 2}},
+    {'a': {'d': 1}, 'b': {'c': 2}},
+    [{'a': {'d': 1}, 'b': {'c': 2}}],
+])
+def test_clone_deep(case):
+    result = _.clone_deep(case)
+
+    assert result is not case
+
+    for key, value in _.helpers.iterator(result):
+        assert value is not case[key]
+
+
+@parametrize('case,callback,expected', [
+    ({'a': {'d': 1}, 'b': {'c': 2}}, lambda v: v,
+     {'a': {'d': 1}, 'b': {'c': 2}}),
+    ({'a': 1, 'b': 2, 'c': {'d': 3}},
+     lambda v, k: v + 2 if isinstance(v, int) and k else None,
+     {'a': 3, 'b': 4, 'c': {'d': 5}}),
+])
+def test_clone_deep_with(case, callback, expected):
+    result = _.clone_deep_with(case, callback)
+
+    assert result == expected
 
 
 @parametrize('case,expected', [

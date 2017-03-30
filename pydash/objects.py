@@ -7,6 +7,7 @@
 from __future__ import absolute_import
 
 import copy
+from functools import partial
 import math
 import re
 
@@ -30,6 +31,8 @@ __all__ = (
     'callables',
     'clone',
     'clone_deep',
+    'clone_deep_with',
+    'clone_with',
     'deep_get',
     'deep_has',
     'deep_set',
@@ -210,16 +213,11 @@ def callables(obj):
 methods = callables
 
 
-def clone(value, is_deep=False, callback=None):
-    """Creates a clone of `value`. If `is_deep` is ``True`` nested valueects
-    will also be cloned, otherwise they will be assigned by reference. If a
-    callback is provided it will be executed to produce the cloned values. The
-    callback is invoked with one argument: ``(value)``.
+def clone(value):
+    """Creates a clone of `value`.
 
     Args:
         value (list|dict): Object to clone.
-        is_deep (bool, optional): Whether to perform deep clone.
-        callback (mixed, optional): Callback applied per iteration.
 
     Example:
 
@@ -231,34 +229,43 @@ def clone(value, is_deep=False, callback=None):
         False
         >>> x['c'] is y['c']
         True
-        >>> z = clone(x, is_deep=True)
-        >>> x == z
-        True
-        >>> x['c'] is z['c']
-        False
 
     Returns:
         list|dict: Cloned object.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Move 'callback' parameter to :func:`clone_with`.
     """
-    if callback is None:
-        callback = pyd.identity
-
-    copier = copy.deepcopy if is_deep else copy.copy
-    value = copier(value)
-
-    obj = [(key, callback(val)) for key, val in iterator(value)]
-
-    if isinstance(value, list):
-        obj = [val for _, val in obj]
-    else:
-        obj = dict(obj)
-
-    return obj
+    return base_clone(value)
 
 
-def clone_deep(value, callback=None):
+def clone_with(value, callback=None):
+    """This method is like :func:`clone` except that it accepts customizer
+    which is invoked to produce the cloned value. If customizer returns
+    ``None``, cloning is handled by the method instead. The customizer is
+    invoked with up to three arguments: ``(value, index|key, object)``.
+
+    Args:
+        value (list|dict): Object to clone.
+        callback (callable, optional): Function to customize cloning.
+
+    Returns:
+        list|dict: Cloned object.
+
+    Example:
+
+        >>> x = {'a': 1, 'b': 2, 'c': {'d': 3}}
+        >>> cbk = lambda v, k: v + 2 if isinstance(v, int) and k else None
+        >>> y = clone_with(x, cbk)
+        >>> y == {'a': 3, 'b': 4, 'c': {'d': 3}}
+        True
+    """
+    return base_clone(value, callback=callback)
+
+
+def clone_deep(value):
     """Creates a deep clone of `value`. If a callback is provided it will be
     executed to produce the cloned values. The callback is invoked with one
     argument: ``(value)``.
@@ -282,8 +289,25 @@ def clone_deep(value, callback=None):
         False
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Move 'callback' parameter to :func:`clone_deep_with`.
     """
-    return clone(value, is_deep=True, callback=callback)
+    return base_clone(value, is_deep=True)
+
+
+def clone_deep_with(value, callback=None):
+    """This method is like :func:`clone_with` except that it recursively clones
+    `value`.
+
+    Args:
+        value (list|dict): Object to clone.
+        callback (callable, optional): Function to customize cloning.
+
+    Returns:
+        list|dict: Cloned object.
+    """
+    return base_clone(value, is_deep=True, callback=callback)
 
 
 def deep_map_values(obj, callback=None, property_path=NoValue):
@@ -1458,3 +1482,47 @@ def values(obj):
 
 
 values_in = values
+
+
+#
+# Utility methods not a part of the main API
+#
+
+
+def base_clone(value, is_deep=False, callback=None, key=None, obj=None,
+               _clone=True):
+    """Base clone function that supports deep clone and customizer callback."""
+    clone_by = copy.deepcopy if is_deep else copy.copy
+    result = None
+
+    if callable(callback) and _clone:
+        argcount = getargcount(callback, maxargs=4)
+        cbk = partial(callit, callback, argcount=argcount)
+    elif not _clone:
+        cbk = callback
+    else:
+        cbk = None
+
+    if cbk:
+        result = cbk(value, key, value)
+
+    if result is not None:
+        return result
+
+    if _clone:
+        result = clone_by(value)
+    else:
+        result = value
+
+    if cbk:
+        for key, subvalue in iterator(value):
+            if is_deep:
+                val = base_clone(subvalue, is_deep, cbk, key, value,
+                                 _clone=False)
+            else:
+                val = cbk(subvalue, key, value)
+
+            if val is not None:
+                result[key] = val
+
+    return result

@@ -250,6 +250,8 @@ from .objects import (
     callables,
     clone,
     clone_deep,
+    clone_deep_with,
+    clone_with,
     deep_get,
     deep_has,
     deep_map_values,

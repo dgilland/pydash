@@ -6,6 +6,8 @@ Changelog
 
 - Add ``assign_with``.
 - Add ``clamp``.
+- Add ``clone_deep_with``.
+- Add ``clone_with``.
 - Add ``cond``. Thanks bharadwajyarlagadda_!
 - Add ``conforms``.
 - Add ``conforms_to``.
@@ -79,14 +81,18 @@ Changelog
 - Make ``set_`` support mixed ``list``/``dict`` defaults within a single object based on whether key or index path substrings used. (**breaking change**)
 - Make ``set_`` modify object in place. (**breaking change**)
 - Make ``xor`` maintain sort order of supplied arguments.
-- Remove ``callback`` argument from ``assign``. Moved to ``assign_with``. (**breaking change**)
-- Remove ``callback`` argument from ``is_match``. Moved to ``is_match_with``. (**breaking change**)
-- Remove ``callback`` argument from ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
-- Remove ``callback`` argument from ``omit``. Moved to ``omit_by``. (**breaking change**)
-- Remove ``callback`` argument from ``pick``. Moved to ``pick_by``. (**breaking change**)
-- Remove ``callback`` argument from ``sorted_index``. Moved to ``sorted_index_by``. (**breaking change**)
-- Remove ``callback`` argument from ``sum_``. Moved to ``sum_by``. (**breaking change**)
-- Remove ``callback`` argument from ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
+- Remove ``callback`` argument from
+
+  - ``assign``. Moved to ``assign_with``. (**breaking change**)
+  - ``clone`` and ``clone_deep``. Moved to ``clone_with`` and ``clone_deep_with``. (**breaking change**)
+  - ``is_match``. Moved to ``is_match_with``. (**breaking change**)
+  - ``max_`` and ``min_``. Moved to ``max_by`` and ``min_by``. (**breaking change**)
+  - ``omit``. Moved to ``omit_by``. (**breaking change**)
+  - ``pick``. Moved to ``pick_by``. (**breaking change**)
+  - ``sorted_index``. Moved to ``sorted_index_by``. (**breaking change**)
+  - ``sum_``. Moved to ``sum_by``. (**breaking change**)
+  - ``uniq``/``unique``. Moved to ``uniq_by``. (**breaking change**)
+
 - Remove ``multivalue`` argument from ``invert``. Feature moved to ``invert_by``. (**breaking change**)
 
 - Remove aliases: (**breaking change**)
