@@ -130,14 +130,14 @@ def get_item(obj, key, default=NoValue):
     try:
         # Only add attribute getter if key is string.
         getters.append(attrgetter(key))
-    except Exception:
+    except Exception:  # pragma: no cover
         pass
 
     for getter in getters:
         try:
             ret = getter(obj)
             break
-        except Exception:
+        except Exception:  # pragma: no cover
             pass
     else:
         # The for-loop didn't break which means we weren't able to find key.
