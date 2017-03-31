@@ -97,7 +97,7 @@ def iterator(obj):
         return iteritems(getattr(obj, '__dict__', {}))
 
 
-def get_item(obj, key, default=NoValue):
+def base_get(obj, key, default=NoValue):
     """Safely get an item by `key` from a sequence or mapping object when
     `default` provided.
 
@@ -150,7 +150,7 @@ def get_item(obj, key, default=NoValue):
     return ret
 
 
-def set_item(obj, key, value, allow_override=True):
+def base_set(obj, key, value, allow_override=True):
     """Set an object's `key` to `value`. If `obj` is a ``list`` and the
     `key` is the next available index position, append to list; otherwise,
     raise ``IndexError``.

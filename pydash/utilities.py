@@ -14,7 +14,7 @@ from random import uniform, randint
 import re
 
 import pydash as pyd
-from .helpers import callit, getargcount, get_item, iterator, NoValue
+from .helpers import callit, getargcount, base_get, iterator, NoValue
 from ._compat import _range, iteritems, string_types
 
 
@@ -707,7 +707,7 @@ def property_(key):
 
     .. versionadded:: 1.0.0
     """
-    return lambda obj: get_item(obj, key, default=None)
+    return lambda obj: base_get(obj, key, default=None)
 
 
 prop = property_
@@ -885,7 +885,7 @@ def result(obj, key, default=None):
     if not obj:
         return default
 
-    ret = get_item(obj, key, default=default)
+    ret = base_get(obj, key, default=default)
 
     if callable(ret):
         ret = ret()

@@ -10,7 +10,7 @@ from bisect import bisect_left, bisect_right
 from math import ceil
 
 import pydash as pyd
-from .helpers import parse_callback, itercallback, get_item
+from .helpers import parse_callback, itercallback, base_get
 from ._compat import cmp_to_key, string_types
 
 
@@ -527,7 +527,7 @@ def first(array):
 
     .. versionadded:: 1.0.0
     """
-    return get_item(array, 0, default=None)
+    return base_get(array, 0, default=None)
 
 
 head = first
@@ -869,7 +869,7 @@ def last(array):
 
     .. versionadded:: 1.0.0
     """
-    return get_item(array, -1, default=None)
+    return base_get(array, -1, default=None)
 
 
 def last_index_of(array, value, from_index=None):

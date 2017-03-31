@@ -18,8 +18,8 @@ from .helpers import (
     iterator,
     itercallback,
     getargcount,
-    get_item,
-    set_item
+    base_get,
+    base_set
 )
 from ._compat import iteritems, text_type
 from .utilities import PathToken, to_path, to_path_tokens
@@ -578,12 +578,12 @@ def get(obj, path, default=None):
         sentinel = default
     else:
         # When a returnable default is given, use a sentinel value to detect
-        # when get_item() returns a default value for a missing path so we can
+        # when base_get() returns a default value for a missing path so we can
         # exit early from the loop and not mistakenly iterate over the default.
         sentinel = object()
 
     for key in to_path(path):
-        obj = get_item(obj, key, default=sentinel)
+        obj = base_get(obj, key, default=sentinel)
 
         if obj is sentinel:
             # Path doesn't exist so set return obj to the default.
@@ -897,7 +897,7 @@ def merge_with(obj, *sources, **kargs):
     sources = list(sources)
     _clone = kargs.get('_clone', True)
     callback = kargs.get('callback')
-    setter = kargs.get('_setter', set_item)
+    setter = kargs.get('_setter', base_set)
 
     if callback is None and callable(sources[-1]):
         callback = sources.pop()
@@ -914,7 +914,7 @@ def merge_with(obj, *sources, **kargs):
             source = copy.deepcopy(source)
 
         for key, src_value in iterator(source):
-            obj_value = get_item(obj, key, default=None)
+            obj_value = base_get(obj, key, default=None)
             all_sequences = all([isinstance(src_value, list),
                                  isinstance(obj_value, list)])
             all_mappings = all([isinstance(src_value, dict),
@@ -1548,7 +1548,7 @@ def update_with(obj, path, updater, customizer=None):
             key = token
             default_factory = default_type
 
-        obj_val = get_item(target, key, default=None)
+        obj_val = base_get(target, key, default=None)
         path_obj = None
 
         if call_customizer:
@@ -1557,15 +1557,15 @@ def update_with(obj, path, updater, customizer=None):
         if path_obj is None:
             path_obj = default_factory()
 
-        set_item(target, key, path_obj, allow_override=False)
+        base_set(target, key, path_obj, allow_override=False)
 
         try:
             target = target[key]
         except TypeError:  # pragma: no cover
             target = target[int(key)]
 
-    value = get_item(target, last_key, default=None)
-    set_item(target, last_key, callit(updater, value))
+    value = base_get(target, last_key, default=None)
+    base_set(target, last_key, callit(updater, value))
 
     return obj
 
