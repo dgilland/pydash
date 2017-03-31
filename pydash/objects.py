@@ -67,7 +67,7 @@ __all__ = (
     'pick_by',
     'rename_keys',
     'set_',
-    'set_path',
+    'set_with',
     'to_boolean',
     'to_dict',
     'to_integer',
@@ -75,7 +75,8 @@ __all__ = (
     'to_plain_object',
     'to_string',
     'transform',
-    'update_path',
+    'update',
+    'update_with',
     'values',
     'values_in',
 )
@@ -1187,23 +1188,24 @@ def set_(obj, path, value):
         - Support creating default path values as ``list`` or ``dict`` based on
           whether key or index substrings are used.
     """
-    return set_path(obj, value, to_path_tokens(path))
+    return set_with(obj, path, value)
 
 
 deep_set = set_
 
 
-def set_path(obj, value, keys, default=None):
-    """Sets the value of an object described by `keys`. If any part of the
-    object path doesn't exist, it will be created with `default`.
+def set_with(obj, path, value, customizer=None):
+    """This method is like :func:`set_` except that it accepts customizer which
+    is invoked to produce the objects of path. If customizer returns undefined
+    path creation is handled by the method instead. The customizer is invoked
+    with three arguments: ``(nested_value, key, nested_object)``.
 
     Args:
         obj (list|dict): Object to modify.
+        path (str | list): Target path to set value to.
         value (mixed): Value to set.
-        keys (list): Target path to set value to.
-        default (callable, optional): Callable that returns default value to
-            assign if path part is not set. Defaults to ``{}`` if `obj` is a
-            ``dict`` or ``[]`` if `obj` is a ``list``.
+        customizer (function, optional): The function to customize assigned
+            values.
 
     Returns:
         mixed: Modified `obj`.
@@ -1213,15 +1215,12 @@ def set_path(obj, value, keys, default=None):
 
     Example:
 
-        >>> set_path({}, 1, ['a', 0], default=[])
-        {'a': [1]}
-        >>> set_path({}, 1, ['a', 'b']) == {'a': {'b': 1}}
-        True
+        >>> set_with({}, '[0][1]', 'a', lambda: {})
+        {0: {1: 'a'}}
 
-    .. versionadded:: 2.0.0
+    .. versionadded:: TODO
     """
-    # pylint: disable=redefined-outer-name
-    return update_path(obj, lambda *_: value, keys, default=default)
+    return update_with(obj, path, value, customizer=customizer)
 
 
 def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
@@ -1331,6 +1330,8 @@ def to_integer(obj):
     .. versionadded:: TODO
     """
     try:
+        # Convert to float first to handle converting floats as string since
+        # int('1.1') would fail but this wouldn't.
         num = int(float(obj))
     except (ValueError, TypeError):
         num = 0
@@ -1457,20 +1458,16 @@ def transform(obj, callback=None, accumulator=None):
     return accumulator
 
 
-def update_path(obj, callback, keys, default=None):
-    """Update the value of an object described by `keys` using `callback`. If
-    any part of the object path doesn't exist, it will be created with
-    `default`. The callback is invoked with the last key value of `obj`:
-    ``(value)``
+def update(obj, path, updater):
+    """This method is like :func:`set_` except that accepts updater to produce
+    the value to set. Use :func:`update_with` to customize path creation. The
+    updater is invoked with one argument: ``(value)``.
 
     Args:
         obj (list|dict): Object to modify.
-        callback (function): Function that returns updated value.
-        keys (list): A list of string keys that describe the object path to
-            modify.
-        default (mixed, optional): Default value to assign if path part is not
-            set. Defaults to ``{}`` if `obj` is a ``dict`` or ``[]`` if `obj`
-            is a ``list``.
+        path (str|list): A string or list of keys that describe the object path
+            to modify.
+        updater (function): Function that returns updated value.
 
     Returns:
         mixed: Updated `obj`.
@@ -1480,52 +1477,95 @@ def update_path(obj, callback, keys, default=None):
 
     Example:
 
-        >>> update_path({}, lambda value: value, ['a', 'b'])
+        >>> update({}, ['a', 'b'], lambda value: value)
         {'a': {'b': None}}
-        >>> update_path([], lambda value: value, [0, 0])
-        [[None]]
+        >>> update([], [0, 0], lambda value: 1)
+        [[1]]
 
-    .. versionadded:: 2.0.0
+    .. versionadded:: TODO
     """
-    # pylint: disable=redefined-outer-name
-    if default is None:
-        default = dict if isinstance(obj, dict) else list
+    return update_with(obj, path, updater)
 
-    def default_factory():
-        if callable(default):
-            return default()
-        return clone(default)
 
-    if not pyd.is_list(keys):
-        keys = [keys]
+def update_with(obj, path, updater, customizer=None):
+    """This method is like :func:`update` except that it accepts customizer
+    which is invoked to produce the objects of path. If customizer returns
+    ``None``, path creation is handled by the method instead. The customizer is
+    invoked with three arguments: ``(nested_value, key, nested_object)``.
 
-    last_key = pyd.last(keys)
+    Args:
+        obj (list|dict): Object to modify.
+        path (str|list): A string or list of keys that describe the object path
+            to modify.
+        updater (function): Function that returns updated value.
+        customizer (function, optional): The function to customize assigned
+            values.
+
+    Returns:
+        mixed: Updated `obj`.
+
+    Warning:
+        `obj` is modified in place.
+
+    Example:
+
+        >>> update_with({}, '[0][1]', lambda: 'a', lambda: {})
+        {0: {1: 'a'}}
+
+    .. versionadded:: TODO
+    """
+    if not callable(updater):
+        updater = pyd.constant(updater)
+
+    if customizer is not None and not callable(customizer):
+        call_customizer = partial(callit, clone, customizer, argcount=1)
+    elif customizer:
+        call_customizer = partial(callit, customizer,
+                                  argcount=getargcount(customizer, maxargs=3))
+    else:
+        call_customizer = None
+
+    default_type = dict if isinstance(obj, dict) else list
+    tokens = to_path_tokens(path)
+
+    if not pyd.is_list(tokens):  # pragma: no cover
+        tokens = [tokens]
+
+    last_key = pyd.last(tokens)
 
     if isinstance(last_key, PathToken):
         last_key = last_key.key
 
     target = obj
 
-    for idx, token in enumerate(pyd.initial(keys)):
+    for idx, token in enumerate(pyd.initial(tokens)):
         if isinstance(token, PathToken):
             key = token.key
-            _default_factory = pyd.get(keys,
-                                       [idx + 1, 'default_factory'],
-                                       default=default_factory)
+            default_factory = pyd.get(tokens,
+                                      [idx + 1, 'default_factory'],
+                                      default=default_type)
         else:
             key = token
-            _default_factory = default_factory
+            default_factory = default_type
 
-        set_item(target, key, _default_factory(), allow_override=False)
+        obj_val = get_item(target, key, default=None)
+        path_obj = None
+
+        if call_customizer:
+            path_obj = call_customizer(obj_val, key, target)
+
+        if path_obj is None:
+            path_obj = default_factory()
+
+        set_item(target, key, path_obj, allow_override=False)
 
         try:
             target = target[key]
         except TypeError:  # pragma: no cover
             target = target[int(key)]
 
-    set_item(target, last_key, callback(get_item(target,
-                                                 last_key,
-                                                 default=None)))
+    value = get_item(target, last_key, default=None)
+    set_item(target, last_key, callit(updater, value))
 
     return obj
 

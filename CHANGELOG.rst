@@ -48,18 +48,19 @@ Changelog
 - Add ``pull_all_with``.
 - Add ``range_right``. Thanks bharadwajyarlagadda_!
 - Add ``sample_size``. Thanks bharadwajyarlagadda_!
+- Add ``set_with``.
 - Add ``sorted_index_by``.
 - Add ``sorted_index_of``. Thanks bharadwajyarlagadda_!
 - Add ``sorted_last_index_by``.
 - Add ``sorted_last_index_of``.
 - Add ``sorted_uniq``. Thanks bharadwajyarlagadda_!
 - Add ``sorted_uniq_by``.
-- Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``stub_list``. Thanks bharadwajyarlagadda_!
 - Add ``stub_dict``. Thanks bharadwajyarlagadda_!
 - Add ``stub_false``. Thanks bharadwajyarlagadda_!
 - Add ``stub_string``. Thanks bharadwajyarlagadda_!
 - Add ``stub_true``. Thanks bharadwajyarlagadda_!
+- Add ``subtract``. Thanks bharadwajyarlagadda_!
 - Add ``sum_by``.
 - Add ``to_integer``.
 - Add ``to_lower``. Thanks bharadwajyarlagadda_!
@@ -70,6 +71,8 @@ Changelog
 - Add ``union_with``. Thanks bharadwajyarlagadda_!
 - Add ``uniq_by``.
 - Add ``uniq_with``.
+- Add ``update``.
+- Add ``update_with``.
 - Add ``upper_case``. Thanks bharadwajyarlagadda_!
 - Add ``upper_first``. Thanks bharadwajyarlagadda_!
 - Add ``xor_by``.
@@ -85,6 +88,11 @@ Changelog
 - Make ``set_`` modify object in place. (**breaking change**)
 - Make ``xor`` maintain sort order of supplied arguments.
 - Only use ``merge`` callback result if result is not ``None``. Previously, result from callback (if provided) was used unconditionally. (**breaking change**)
+- Remove functions: (**breaking change**)
+
+  - ``update_path``: Use ``update`` or ``update_with``.
+  - ``set_path``: Use ``set_`` or ``set_with``.
+
 - Remove ``callback`` argument from: (**breaking change**)
 
   - ``assign``. Moved to ``assign_with``.

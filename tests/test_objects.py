@@ -543,26 +543,18 @@ def test_set_(case, expected):
     assert _.set_(*case) == expected
 
 
+@parametrize('case,expected', [
+    (({}, '[0][1]', 'a', lambda: {}), {0: {1: 'a'}}),
+])
+def test_set_with(case, expected):
+    assert _.set_with(*case) == expected
+
+
 @parametrize('case', [
     _.deep_set
 ])
 def test_set_aliases(case):
     assert _.set_ is case
-
-
-@parametrize('case,expected', [
-    (({}, 1, ['one', 'two', 'three', 'four']),
-     {'one': {'two': {'three': {'four': 1}}}}),
-    (({'one': {'two': {}, 'three': {}}}, 1, ['one', 'two', 'three', 'four']),
-     {'one': {'two': {'three': {'four': 1}}, 'three': {}}}),
-    (({}, 1, 'one'), {'one': 1}),
-    (([], 1, [0, 0, 0]), [[[1]]]),
-    (([1, 2, [3, 4, [5, 6]]], 7, [2, 2, 1]), [1, 2, [3, 4, [5, 7]]]),
-    (([1, 2, [3, 4, [5, 6]]], 7, [2, 2, 2]), [1, 2, [3, 4, [5, 6, 7]]])
-])
-def test_set_path(case, expected):
-    result = _.set_path(*case)
-    assert result == expected
 
 
 @parametrize('case,expected', [
@@ -645,21 +637,28 @@ def test_transform(case, expected):
 
 @parametrize('case,expected', [
     (({'rome': 'Republic'},
-      lambda value: 'Empire' if value == 'Republic' else value,
-      ['rome']),
+      ['rome'],
+      lambda value: 'Empire' if value == 'Republic' else value),
      {'rome': 'Empire'}),
     (({},
-      lambda value: 'Empire' if value == 'Republic' else value,
-      ['rome']),
+      ['rome'],
+      lambda value: 'Empire' if value == 'Republic' else value),
      {'rome': None}),
     (({'earth': {'rome': 'Republic'}},
-      lambda value: 'Empire' if value == 'Republic' else value,
-      ['earth', 'rome']),
+      ['earth', 'rome'],
+      lambda value: 'Empire' if value == 'Republic' else value),
      {'earth': {'rome': 'Empire'}}),
 ])
-def test_update_path(case, expected):
-    result = _.update_path(*case)
-    assert result == expected
+def test_update(case, expected):
+    assert _.update(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({}, '[0][1]', _.constant('a'), lambda *_: {}), {0: {1: 'a'}}),
+    (({}, '[0][1]', _.constant('a'), {}), {0: {1: 'a'}}),
+])
+def test_update_with(case, expected):
+    assert _.update_with(*case) == expected
 
 
 @parametrize('case,expected', [

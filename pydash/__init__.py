@@ -286,7 +286,7 @@ from .objects import (
     pick_by,
     rename_keys,
     set_,
-    set_path,
+    set_with,
     to_boolean,
     to_dict,
     to_integer,
@@ -294,7 +294,8 @@ from .objects import (
     to_plain_object,
     to_string,
     transform,
-    update_path,
+    update,
+    update_with,
     values,
     values_in,
 )

@@ -682,7 +682,7 @@ def transpose(array):
 
     for y, row in iterator(array):
         for x, col in iterator(row):
-            trans = pyd.set_path(trans, col, [x, y])
+            trans = pyd.set_(trans, [x, y], col)
 
     return trans
 
