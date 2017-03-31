@@ -76,6 +76,7 @@ Changelog
 - Add ``xor_with``.
 - Add ``zip_object_deep``.
 - Make ``add`` only support two argument addition. (**breaking change**)
+- Make function returned by ``constant`` ignore arguments when called.
 - Make ``difference`` return duplicate values from first argument and maintain sort order. (**breaking change**)
 - Make ``get`` support attribute access within path.
 - Make ``intersection`` work with unhashable types.
