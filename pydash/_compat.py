@@ -21,39 +21,13 @@ from decimal import Decimal
 from functools import partial
 
 
-PY3 = sys.version_info[0] == 3
-PY26 = sys.version_info[0:2] == (2, 6)
+PY2 = sys.version_info[0] == 2
 
 
 def _identity(x): return x
 
 
-if PY3:
-    from html.parser import HTMLParser
-    from urllib.parse import (
-        urlencode, urlsplit, urlunsplit, parse_qs, parse_qsl)
-    import builtins as _builtins
-
-    text_type = str
-    string_types = (str,)
-    integer_types = (int,)
-    number_types = (int, float, Decimal)
-    builtins = _builtins.__dict__.values()
-    getfullargspec = inspect.getfullargspec
-
-    def iterkeys(d): return iter(d.keys())
-
-    def itervalues(d): return iter(d.values())
-
-    def iteritems(d): return iter(d.items())
-
-    _range = range
-
-    implements_to_string = _identity
-    izip = zip
-
-    def _cmp(a, b): return (a > b) - (a < b)
-else:
+if PY2:
     from HTMLParser import HTMLParser
     from itertools import izip
     from urllib import urlencode
@@ -79,6 +53,31 @@ else:
         cls.__unicode__ = cls.__str__
         cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
         return cls
+else:
+    from html.parser import HTMLParser
+    from urllib.parse import (
+        urlencode, urlsplit, urlunsplit, parse_qs, parse_qsl)
+    import builtins as _builtins
+
+    text_type = str
+    string_types = (str,)
+    integer_types = (int,)
+    number_types = (int, float, Decimal)
+    builtins = _builtins.__dict__.values()
+    getfullargspec = inspect.getfullargspec
+
+    def iterkeys(d): return iter(d.keys())
+
+    def itervalues(d): return iter(d.values())
+
+    def iteritems(d): return iter(d.items())
+
+    _range = range
+
+    implements_to_string = _identity
+    izip = zip
+
+    def _cmp(a, b): return (a > b) - (a < b)
 
 
 builtins = dict((value, key) for key, value in iteritems(_builtins.__dict__)
