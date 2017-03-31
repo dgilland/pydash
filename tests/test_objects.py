@@ -661,6 +661,19 @@ def test_update_with(case, expected):
     assert _.update_with(*case) == expected
 
 
+@parametrize('obj,path,expected,new_obj', [
+    ({'a': [{'b': {'c': 7}}]}, 'a.0.b.c', True, {'a': [{'b': {}}]}),
+    ([1, 2, 3], '1', True, [1, 3]),
+    ([1, 2, 3], 1, True, [1, 3]),
+    ([1, [2, 3]], [1, 1], True, [1, [2]]),
+    ([1, 2, 3], '[0][0]', False, [1, 2, 3]),
+    ([1, 2, 3], '[0][0][0]', False, [1, 2, 3]),
+])
+def test_unset(obj, path, expected, new_obj):
+    assert _.unset(obj, path) == expected
+    assert obj == new_obj
+
+
 @parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, [1, 2, 3]),
     ([1, 2, 3], [1, 2, 3])

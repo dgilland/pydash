@@ -75,6 +75,7 @@ __all__ = (
     'to_plain_object',
     'to_string',
     'transform',
+    'unset',
     'update',
     'update_with',
     'values',
@@ -1568,6 +1569,74 @@ def update_with(obj, path, updater, customizer=None):
     base_set(target, last_key, callit(updater, value))
 
     return obj
+
+
+def unset(obj, path):
+    """Removes the property at `path` of `obj`.
+
+    Args:
+        obj (mixed): The object to modify.
+        path (mixed): The path of the property to unset.
+
+    Returns:
+        bool: Whether the property was deleted.
+
+    Warning:
+        `obj` is modified in place.
+
+    Example:
+
+        >>> obj = {'a': [{'b': {'c': 7}}]}
+        >>> unset(obj, 'a[0].b.c')
+        True
+        >>> obj
+        {'a': [{'b': {}}]}
+        >>> unset(obj, 'a[0].b.c')
+        False
+    """
+    tokens = to_path_tokens(path)
+
+    if not pyd.is_list(tokens):  # pragma: no cover
+        tokens = [tokens]
+
+    last_key = pyd.last(tokens)
+
+    if isinstance(last_key, PathToken):
+        last_key = last_key.key
+
+    target = obj
+
+    for idx, token in enumerate(pyd.initial(tokens)):
+        if isinstance(token, PathToken):
+            key = token.key
+        else:
+            key = token
+
+        try:
+            try:
+                target = target[key]
+            except TypeError:
+                target = target[int(key)]
+        except Exception:
+            target = NoValue
+
+        if target is NoValue:
+            break
+
+    did_unset = False
+
+    if target is not NoValue:
+        try:
+            try:
+                target.pop(last_key)
+                did_unset = True
+            except TypeError:
+                target.pop(int(last_key))
+                did_unset = True
+        except Exception:
+            pass
+
+    return did_unset
 
 
 def values(obj):

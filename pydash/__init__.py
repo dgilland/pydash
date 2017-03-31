@@ -294,6 +294,7 @@ from .objects import (
     to_plain_object,
     to_string,
     transform,
+    unset,
     update,
     update_with,
     values,
