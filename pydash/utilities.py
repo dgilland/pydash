@@ -995,8 +995,10 @@ def times(n, callback=identity):
         Reordered arguments to make `callback` first.
 
     .. versionchanged:: TODO
-        Added functionality for handling `callback` with zero positional
-        arguments.
+
+        - Re-reordered arguments to make `callback` last argument.
+        - Added functionality for handling `callback` with zero positional
+          arguments.
     """
     argcount = getargcount(callback, maxargs=1)
     return [callit(callback, index, argcount=argcount) for index in _range(n)]

@@ -918,8 +918,8 @@ def sample(collection):
     Example:
 
         >>> items = [1, 2, 3, 4, 5]
-        >>> result = sample(items)
-        >>> assert result in items
+        >>> results = sample(items)
+        >>> assert results in items
 
     .. versionadded:: 1.0.0
 

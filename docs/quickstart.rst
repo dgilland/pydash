@@ -32,7 +32,7 @@ The first is by using the module directly or importing from it:
     {'name': 'moe'}
 
     # Utilities
-    >>> pydash.times(lambda index: index, 3)
+    >>> pydash.times(3, lambda index: index)
     [0, 1, 2]
 
     # Chaining

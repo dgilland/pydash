@@ -6,6 +6,7 @@ API Reference
 
 .. testsetup::
 
+    import math
     import operator
     import re
     from pydash.functions import Curry, CurryRight

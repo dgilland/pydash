@@ -145,7 +145,7 @@ Another feature of the ``py_`` object, is that it provides module access to ``py
     >>> from pydash import py_
 
     >>> assert py_.add is pydash.add
-    >>> py_.add([1, 2, 3]) == pydash.add([1, 2, 3])
+    >>> py_.add(1, 2) == pydash.add(1, 2)
     True
 
 

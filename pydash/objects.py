@@ -150,8 +150,8 @@ def assign_with(obj, *sources, **kargs):
     Example:
 
         >>> customizer = lambda o, s: s if o is None else o
-        >>> result = assign({'a': 1}, {'b': 2}, {'a': 3}, customizer)
-        >>> result == {'a': 1, 'b': 2}
+        >>> results = assign({'a': 1}, {'b': 2}, {'a': 3}, customizer)
+        >>> results == {'a': 1, 'b': 2}
         True
 
     .. versionadded:: TODO
@@ -663,8 +663,8 @@ def invert(obj):
 
     Example:
 
-        >>> result = invert({'a': 1, 'b': 2, 'c': 3})
-        >>> result == {1: 'a', 2: 'b', 3: 'c'}
+        >>> results = invert({'a': 1, 'b': 2, 'c': 3})
+        >>> results == {1: 'a', 2: 'b', 3: 'c'}
         True
 
     Note:
@@ -697,15 +697,15 @@ def invert_by(obj, callback=None):
     Example:
 
         >>> obj = {'a': 1, 'b': 2, 'c': 1}
-        >>> result = invert_by(obj)  # {1: ['a', 'c'], 2: ['b']}
-        >>> set(result[1]) == set(['a', 'c'])
+        >>> results = invert_by(obj)  # {1: ['a', 'c'], 2: ['b']}
+        >>> set(results[1]) == set(['a', 'c'])
         True
-        >>> set(result[2]) == set(['b'])
+        >>> set(results[2]) == set(['b'])
         True
-        >>> result2 = invert_by(obj, lambda value: 'group' + str(value))
-        >>> result2['group1'] == result[1]
+        >>> results2 = invert_by(obj, lambda value: 'group' + str(value))
+        >>> results2['group1'] == results[1]
         True
-        >>> result2['group2'] == result[2]
+        >>> results2['group2'] == results[2]
         True
 
     Note:
