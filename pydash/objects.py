@@ -1574,6 +1574,10 @@ def update_with(obj, path, updater, customizer=None):
 def unset(obj, path):
     """Removes the property at `path` of `obj`.
 
+    Note:
+        Only ``list``, ``dict``, or objects with a ``pop()`` method can be
+        unset by this function.
+
     Args:
         obj (mixed): The object to modify.
         path (mixed): The path of the property to unset.
