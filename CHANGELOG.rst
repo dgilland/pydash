@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
 - Add ``assign_with``.
 - Add ``clamp``.
 - Add ``clone_deep_with``.
@@ -79,20 +82,38 @@ Changelog
 - Add ``xor_by``.
 - Add ``xor_with``.
 - Add ``zip_object_deep``.
-- Make ``add`` only support two argument addition. (**breaking change**)
-- Make function returned by ``constant`` ignore arguments when called.
-- Make ``difference`` return duplicate values from first argument and maintain sort order. (**breaking change**)
+- Make function returned by ``constant`` ignore extra arguments when called.
 - Make ``get`` support attribute access within path.
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.
+- Make ``xor`` maintain sort order of supplied arguments.
+
+Bug Fixes
++++++++++
+
+- None
+
+Backwards-Incompatibilities
++++++++++++++++++++++++++++
+
+- Make ``add`` only support two argument addition. (**breaking change**)
+- Make ``difference`` return duplicate values from first argument and maintain sort order. (**breaking change**)
 - Make ``set_`` support mixed ``list``/``dict`` defaults within a single object based on whether key or index path substrings used. (**breaking change**)
 - Make ``set_`` modify object in place. (**breaking change**)
-- Make ``xor`` maintain sort order of supplied arguments.
 - Only use ``merge`` callback result if result is not ``None``. Previously, result from callback (if provided) was used unconditionally. (**breaking change**)
 - Remove functions: (**breaking change**)
 
   - ``update_path``: Use ``update`` or ``update_with``.
   - ``set_path``: Use ``set_`` or ``set_with``.
+
+- Remove aliases: (**breaking change**)
+
+  - ``average`` and ``avg`` (use ``mean`` or ``mean_by``)
+  - ``moving_average`` and ``moving_avg`` (use ``moving_mean``)
+
+- Rename functions: (**breaking change**)
+
+  - ``moving_average`` to ``moving_mean``
 
 - Remove ``callback`` argument from: (**breaking change**)
 
@@ -107,13 +128,6 @@ Changelog
   - ``uniq``/``unique``. Moved to ``uniq_by``.
 
 - Remove ``multivalue`` argument from ``invert``. Feature moved to ``invert_by``. (**breaking change**)
-
-- Remove aliases: (**breaking change**)
-
-  - ``average`` and ``avg`` (use ``mean`` or ``mean_by``)
-  - ``moving_average`` and ``moving_avg`` (use ``moving_mean``)
-
-- Rename ``moving_average`` to ``moving_mean``. (**breaking change**)
 
 
 v3.4.8 (2017-01-05)
