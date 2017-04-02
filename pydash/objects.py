@@ -450,7 +450,32 @@ def find_key(obj, callback=None):
             return key
 
 
-find_last_key = find_key
+def find_last_key(obj, callback=None):
+    """This method is like :func:`find_key` except that it iterates over
+    elements of a collection in the opposite order.
+
+    Args:
+        obj (list|dict): Object to search.
+        callback (mixed): Callback applied per iteration.
+
+    Returns:
+        mixed: Found key or ``None``.
+
+    Example:
+
+        >>> find_last_key({'a': 1, 'b': 2, 'c': 3}, lambda x: x == 1)
+        'a'
+        >>> find_last_key([1, 2, 3, 1], lambda x: x == 1)
+        3
+
+    .. versionchanged: TODO
+        Made into its own function instead of an alias of ``find_key`` with
+        proper reverse find implementation.
+    """
+    reversed_obj = reversed(list(itercallback(obj, callback)))
+    for result, _, key, _ in reversed_obj:
+        if result:
+            return key
 
 
 def for_in(obj, callback=None):

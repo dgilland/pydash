@@ -205,11 +205,23 @@ def test_find_key(case, expected):
     assert _.find_key(*case) in expected
 
 
-@parametrize('case', [
-    _.find_last_key
+@parametrize('case,expected', [
+    # NOTE: The expected is a list of values but find_last_key returns only a
+    # single value. However, since dicts do not have an order, it's unknown
+    # what the "first" returned value will be.
+    (({'barney': {'age': 36, 'blocked': False},
+       'fred': {'age': 40, 'blocked': True},
+       'pebbles': {'age': 1, 'blocked': False}},
+      lambda obj: obj['age'] < 40),
+     ['pebbles', 'barney']),
+    (({'barney': {'age': 36, 'blocked': False},
+       'fred': {'age': 40, 'blocked': True},
+       'pebbles': {'age': 1, 'blocked': False}},),
+     ['barney', 'fred', 'pebbles']),
+    (([1, 2, 3],), [2])
 ])
-def test_find_key_aliases(case):
-    assert _.find_key is case
+def test_find_last_key(case, expected):
+    assert _.find_last_key(*case) in expected
 
 
 @parametrize('case,expected', [

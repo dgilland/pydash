@@ -91,7 +91,7 @@ New Features
 Bug Fixes
 +++++++++
 
-- None
+- Fix ``find_last_key`` so that it iterates over object in reverse.
 
 Backwards-Incompatibilities
 +++++++++++++++++++++++++++
