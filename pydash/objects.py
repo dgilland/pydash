@@ -52,6 +52,7 @@ __all__ = (
     'has_path',
     'invert',
     'invert_by',
+    'invoke',
     'keys',
     'keys_in',
     'map_keys',
@@ -746,6 +747,31 @@ def invert_by(obj, callback=None):
         result.setdefault(callback(value), []).append(key)
 
     return result
+
+
+def invoke(obj, path, *args, **kargs):
+    """Invokes the method at path of object.
+
+    Args:
+        obj (dict): The object to query.
+        path (list|str): The path of the method to invoke.
+        args (optional): Arguments to pass to method call.
+        kargs (optional): Keyword arguments to pass to method call.
+
+    Returns:
+        mixed: Result of the invoked method.
+
+    Example:
+
+        >>> obj = {'a': [{'b': {'c': [1, 2, 3, 4]}}]}
+        >>> invoke(obj, 'a[0].b.c.pop', 1)
+        2
+        >>> obj
+        {'a': [{'b': {'c': [1, 3, 4]}}]}
+
+    .. versionadded:: 1.0.0
+    """
+    return get(obj, path, default=pyd.noop)(*args, **kargs)
 
 
 def keys(obj):

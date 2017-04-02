@@ -42,7 +42,6 @@ __all__ = (
     'include',
     'index_by',
     'inject',
-    'invoke',
     'invoke_map',
     'map_',
     'mapiter',
@@ -532,47 +531,9 @@ def index_by(collection, callback=None):
     return ret
 
 
-def invoke(collection, method_name, *args, **kargs):
-    """Invokes the method named by `method_name` on each element in the
-    `collection` returning a list of the results of each invoked method.
-
-    Args:
-        collection (list|dict): Collection to iterate over.
-        method_name (str): Name of method to invoke.
-        args (optional): Arguments to pass to method call.
-        kargs (optional): Keyword arguments to pass to method call.
-
-    Returns:
-        list: List of results of invoking method of each item.
-
-    Example:
-
-        >>> items = [[1, 2], [2, 3], [3, 4]]
-        >>> invoke(items, 'pop')
-        [2, 3, 4]
-        >>> items
-        [[1], [2], [3]]
-        >>> items = [[1, 2], [2, 3], [3, 4]]
-        >>> invoke(items, 'pop', 0)
-        [1, 2, 3]
-        >>> items
-        [[2], [3], [4]]
-
-
-    .. versionadded:: 1.0.0
-    """
-    if callable(method_name):
-        method = partial(method_name, *args, **kargs)
-    else:
-        def method(item):
-            return getattr(item, method_name)(*args, **kargs)
-
-    return [method(item) for item in collection]
-
-
 def invoke_map(collection, path, *args, **kargs):
     """Invokes the method at `path` of each element in `collection`, returning
-    an array of the results of each invoked method. Any additional arguments
+    a list of the results of each invoked method. Any additional arguments
     are provided to each invoked method. If `path` is a function, it's invoked
     for each element in `collection`.
 
@@ -580,6 +541,8 @@ def invoke_map(collection, path, *args, **kargs):
         collection (list|dict): Collection to iterate over.
         path (str|func): String path to method to invoke or callable to invoke
             for each element in `collection`.
+        args (optional): Arguments to pass to method call.
+        kargs (optional): Keyword arguments to pass to method call.
 
     Returns:
         list: List of results of invoking method of each item.

@@ -98,6 +98,7 @@ Backwards-Incompatibilities
 
 - Make ``add`` only support two argument addition. (**breaking change**)
 - Make ``difference`` return duplicate values from first argument and maintain sort order. (**breaking change**)
+- Make ``invoke`` work on objects instead of collections. Use ``invoke_map`` for collections. (**breaking change**)
 - Make ``set_`` support mixed ``list``/``dict`` defaults within a single object based on whether key or index path substrings used. (**breaking change**)
 - Make ``set_`` modify object in place. (**breaking change**)
 - Only use ``merge`` callback result if result is not ``None``. Previously, result from callback (if provided) was used unconditionally. (**breaking change**)
