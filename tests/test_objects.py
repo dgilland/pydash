@@ -139,7 +139,7 @@ def test_invert_by(case, expected):
 
 @parametrize('case,expected', [
     (({'a': 1, 'b': 2}, 'get', 'a'), 1),
-    (({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.copy'), [1, 2, 3, 4]),
+    (({'a': {'b': {'c': [1, 2, 3, 3]}}}, 'a.b.c.count', 3), 2),
 ])
 def test_invoke(case, expected):
     assert _.invoke(*case) == expected
