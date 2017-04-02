@@ -47,15 +47,6 @@ def test_chaining_invalid_method():
     assert raised
 
 
-@parametrize('case', [
-    'value_of',
-    'run'
-])
-def test_chaining_value_alias(case):
-    chain = _.chain([])
-    assert chain.value == getattr(chain, case)
-
-
 def test_chaining_lazy():
     tracker = {'called': False}
 

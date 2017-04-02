@@ -206,21 +206,6 @@ def test_flow_right(case, args, expected):
     assert _.flow_right(*case)(*args) == expected
 
 
-@parametrize('case', [
-    _.pipe
-])
-def test_flow_aliases(case):
-    assert _.flow is case
-
-
-@parametrize('case', [
-    _.compose,
-    _.pipe_right
-])
-def test_flow_right_aliases(case):
-    assert _.flow_right is case
-
-
 @parametrize('func,args,expected', [
     (lambda x: x + x, (2, 0), 2),
     (lambda x: x + x, (2, 1), 4),
@@ -241,20 +226,6 @@ def test_juxtapose(funcs, args, expected):
     assert _.juxtapose(*funcs)(*args) == expected
 
 
-@parametrize('func,transforms,args,expected', [
-    (lambda a, b: [a, b],
-     [lambda x: x ** 2, lambda x: x * 2],
-     (5, 10),
-     [25, 20]),
-    (lambda a, b: [a, b],
-     ([lambda x: x ** 2, lambda x: x * 2],),
-     (5, 10),
-     [25, 20]),
-])
-def test_mod_args(func, transforms, args, expected):
-    assert _.mod_args(func, *transforms)(*args) == expected
-
-
 @parametrize('func,args', [
     (lambda item: item, (True,)),
     (lambda item: item, (False,)),
@@ -269,6 +240,20 @@ def test_negate(func, args):
 def test_once(case, arglist, expected):
     for args in arglist:
         _.once(case)(*args) == expected
+
+
+@parametrize('func,transforms,args,expected', [
+    (lambda a, b: [a, b],
+     [lambda x: x ** 2, lambda x: x * 2],
+     (5, 10),
+     [25, 20]),
+    (lambda a, b: [a, b],
+     ([lambda x: x ** 2, lambda x: x * 2],),
+     (5, 10),
+     [25, 20]),
+])
+def test_over_args(func, transforms, args, expected):
+    assert _.over_args(func, *transforms)(*args) == expected
 
 
 @parametrize('case,case_args,case_kargs,args,expected', [

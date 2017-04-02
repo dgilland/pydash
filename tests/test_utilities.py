@@ -119,27 +119,6 @@ def test_constant(case):
     assert _.constant(case)() == case
 
 
-@parametrize('case,arg,expected', [
-    ('name',
-     [{'name': 'fred', 'age': 40},
-      {'name': 'barney', 'age': 36}],
-     ['fred', 'barney']),
-    ('spouse.name',
-     [{'name': 'fred', 'age': 40, 'spouse': {'name': 'wilma'}},
-      {'name': 'barney', 'age': 36, 'spouse': {'name': 'betty'}}],
-     ['wilma', 'betty'])
-])
-def test_deep_property(case, arg, expected):
-    assert _.map_(arg, _.deep_property(case)) == expected
-
-
-@parametrize('case', [
-    _.deep_prop
-])
-def test_deep_property_aliases(case):
-    assert _.deep_property is case
-
-
 @parametrize('case,expected', [
     (([1, 10]), 1),
     (([None, 10]), 10),
@@ -193,13 +172,6 @@ def test_identity(case, expected):
 def test_iteratee(case, arg, expected):
     getter = _.iteratee(case)
     assert _.map_(arg, getter) == expected
-
-
-@parametrize('case', [
-    _.iteratee
-])
-def test_iteratee_aliases(case):
-    assert _.iteratee is case
 
 
 @parametrize('case,arg,expected', [
@@ -316,11 +288,18 @@ def test_property_(case, arg, expected):
     assert _.map_(arg, _.property_(case)) == expected
 
 
-@parametrize('case', [
-    _.prop
+@parametrize('case,arg,expected', [
+    ('name',
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36}],
+     ['fred', 'barney']),
+    ('spouse.name',
+     [{'name': 'fred', 'age': 40, 'spouse': {'name': 'wilma'}},
+      {'name': 'barney', 'age': 36, 'spouse': {'name': 'betty'}}],
+     ['wilma', 'betty'])
 ])
-def test_property_aliases(case):
-    assert _.property_ is case
+def test_property_deep(case, arg, expected):
+    assert _.map_(arg, _.property_deep(case)) == expected
 
 
 @parametrize('case,arg,expected', [
@@ -328,13 +307,6 @@ def test_property_aliases(case):
 ])
 def test_property_of(case, arg, expected):
     assert _.map_(arg, _.property_of(case)) == expected
-
-
-@parametrize('case', [
-    _.prop_of
-])
-def test_property_of_aliases(case):
-    assert _.property_of is case
 
 
 @parametrize('case,minimum,maximum', [

@@ -16,37 +16,26 @@ from ._compat import cmp_to_key, _cmp
 
 
 __all__ = (
-    'all_',
-    'any_',
     'at',
-    'collect',
-    'contains',
     'count_by',
     'deep_pluck',
-    'detect',
-    'each',
-    'each_right',
     'every',
     'filter_',
     'find',
     'find_last',
-    'find_where',
     'flat_map',
     'flat_map_deep',
     'flat_map_depth',
-    'foldl',
-    'foldr',
     'for_each',
     'for_each_right',
     'group_by',
-    'include',
-    'index_by',
-    'inject',
+    'includes',
     'invoke_map',
+    'key_by',
     'map_',
     'mapiter',
+    'order_by',
     'partition',
-    'pluck',
     'reduce_',
     'reduce_right',
     'reductions',
@@ -54,19 +43,15 @@ __all__ = (
     'reject',
     'sample',
     'sample_size',
-    'select',
     'shuffle',
     'size',
     'some',
     'sort_by',
-    'sort_by_all',
-    'sort_by_order',
     'to_list',
-    'where',
 )
 
 
-def at(collection, *indexes):  # pylint: disable=invalid-name
+def at(collection, *indexes):
     """Creates a list of elements from the specified indexes, or keys, of the
     collection. Indexes may be specified as individual arguments or as arrays
     of indexes.
@@ -90,45 +75,6 @@ def at(collection, *indexes):  # pylint: disable=invalid-name
     """
     indexes = pyd.flatten_deep(indexes)
     return [collection[i] for i in indexes]
-
-
-def contains(collection, target, from_index=0):
-    """Checks if a given value is present in a collection. If `from_index` is
-    negative, it is used as the offset from the end of the collection.
-
-    Args:
-        collection (list|dict): Collection to iterate over.
-        target (mixed): Target value to compare to.
-        from_index (int, optional): Offset to start search from.
-
-    Returns:
-        bool: Whether `target` is in `collection`.
-
-    Example:
-
-        >>> contains([1, 2, 3, 4], 2)
-        True
-        >>> contains([1, 2, 3, 4], 2, from_index=2)
-        False
-        >>> contains({'a': 1, 'b': 2, 'c': 3, 'd': 4}, 2)
-        True
-
-    See Also:
-        - :func:`contains` (main definition)
-        - :func:`include` (alias)
-
-    .. versionadded:: 1.0.0
-    """
-    if isinstance(collection, dict):
-        collection = collection.values()
-    else:
-        # only makes sense to do this if `collection` is not a dict
-        collection = collection[from_index:]
-
-    return target in collection
-
-
-include = contains
 
 
 def count_by(collection, callback=None):
@@ -183,7 +129,7 @@ def deep_pluck(collection, path):
 
     .. versionadded:: 2.2.0
     """
-    return map_(collection, pyd.deep_property(path))
+    return map_(collection, pyd.property_deep(path))
 
 
 def every(collection, callback=None):
@@ -217,11 +163,10 @@ def every(collection, callback=None):
         >>> every([{'a': 1}, {'a': 2}], {'a': 1})
         False
 
-    See Also:
-        - :func:`every` (main definition)
-        - :func:`all_` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged: TOOD
+        Removed alias ``all_``.
     """
 
     if callback:
@@ -229,9 +174,6 @@ def every(collection, callback=None):
         collection = [cbk(item) for item in collection]
 
     return all(collection)
-
-
-all_ = every
 
 
 def filter_(collection, callback=None):
@@ -252,18 +194,14 @@ def filter_(collection, callback=None):
         >>> filter_([1, 2, 3, 4], lambda x: x >= 3)
         [3, 4]
 
-    See Also:
-        - :func:`select` (main definition)
-        - :func:`filter_` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``select``.
     """
     return [value
             for is_true, value, _, _ in itercallback(collection, callback)
             if is_true]
-
-
-select = filter_
 
 
 def find(collection, callback=None):
@@ -284,21 +222,15 @@ def find(collection, callback=None):
         >>> find([{'a': 1}, {'b': 2}, {'a': 1, 'b': 2}], {'a': 1})
         {'a': 1}
 
-    See Also:
-        - :func:`find` (main definition)
-        - :func:`detect` (alias)
-        - :func:`find_where` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed aliases ``detect`` and ``find_where``.
     """
     search = (collection[key]
               for is_true, _, key, _ in itercallback(collection, callback)
               if is_true)
     return next(search, None)
-
-
-detect = find
-find_where = find
 
 
 def find_last(collection, callback=None):
@@ -416,23 +348,19 @@ def for_each(collection, callback=None):
 
         >>> results = {}
         >>> def cb(x): results[x] = x ** 2
-        >>> each([1, 2, 3, 4], cb)
+        >>> for_each([1, 2, 3, 4], cb)
         [1, 2, 3, 4]
         >>> assert results == {1: 1, 2: 4, 3: 9, 4: 16}
 
-    See Also:
-        - :func:`for_each` (main definition)
-        - :func:`each` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged: TODO
+        Removed alias ``each``.
     """
     next((None for ret, _, _, _ in itercallback(collection, callback)
           if ret is False),
          None)
     return collection
-
-
-each = for_each
 
 
 def for_each_right(collection, callback):
@@ -450,15 +378,14 @@ def for_each_right(collection, callback):
 
         >>> results = {'total': 1}
         >>> def cb(x): results['total'] = x * results['total']
-        >>> each_right([1, 2, 3, 4], cb)
+        >>> for_each_right([1, 2, 3, 4], cb)
         [1, 2, 3, 4]
         >>> assert results == {'total': 24}
 
-    See Also:
-        - :func:`for_each_right` (main definition)
-        - :func:`each_right` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``each_right``.
     """
     next((None for ret, _, _, _ in itercallback(collection,
                                                 callback,
@@ -466,9 +393,6 @@ def for_each_right(collection, callback):
           if ret is False),
          None)
     return collection
-
-
-each_right = for_each_right
 
 
 def group_by(collection, callback=None):
@@ -503,7 +427,44 @@ def group_by(collection, callback=None):
     return ret
 
 
-def index_by(collection, callback=None):
+def includes(collection, target, from_index=0):
+    """Checks if a given value is present in a collection. If `from_index` is
+    negative, it is used as the offset from the end of the collection.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        target (mixed): Target value to compare to.
+        from_index (int, optional): Offset to start search from.
+
+    Returns:
+        bool: Whether `target` is in `collection`.
+
+    Example:
+
+        >>> includes([1, 2, 3, 4], 2)
+        True
+        >>> includes([1, 2, 3, 4], 2, from_index=2)
+        False
+        >>> includes({'a': 1, 'b': 2, 'c': 3, 'd': 4}, 2)
+        True
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+
+        - Renamed from ``contains`` to ``includes``.
+        - Removed alias ``include``.
+    """
+    if isinstance(collection, dict):
+        collection = collection.values()
+    else:
+        # only makes sense to do this if `collection` is not a dict
+        collection = collection[from_index:]
+
+    return target in collection
+
+
+def key_by(collection, callback=None):
     """Creates an object composed of keys generated from the results of running
     each element of the collection through the given callback.
 
@@ -516,11 +477,14 @@ def index_by(collection, callback=None):
 
     Example:
 
-        >>> results = index_by([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], 'a')
+        >>> results = key_by([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], 'a')
         >>> assert results == {1: {'a': 1, 'b': 2}, 3: {'a': 3, 'b': 4}}
 
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Renamed from ``index_by`` to ``key_by``.
     """
     ret = {}
     cbk = pyd.iteratee(callback)
@@ -585,17 +549,15 @@ def map_(collection, callback=None):
 
         >>> map_([1, 2, 3, 4], str)
         ['1', '2', '3', '4']
-
-    See Also:
-        - :func:`map_` (main definition)
-        - :func:`collect` (alias)
+        >>> map_([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}], 'a')
+        [1, 3, 5]
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``collect``.
     """
     return list(mapiter(collection, callback))
-
-
-collect = map_
 
 
 def mapiter(collection, callback=None):
@@ -622,6 +584,100 @@ def mapiter(collection, callback=None):
     """
     for result in itercallback(collection, callback):
         yield result[0]
+
+
+def order_by(collection, keys, orders=None, reverse=False):
+    """This method is like :func:`sort_by` except that it sorts by key names
+    instead of an iteratee function. Keys can be sorted in descending order by
+    prepending a ``"-"`` to the key name (e.g. ``"name"`` would become
+    ``"-name"``) or by passing a list of boolean sort options via `orders`
+    where ``True`` is ascending and ``False`` is descending.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        keys (list): List of keys to sort by. By default, keys will be sorted
+            in ascending order. To sort a key in descending order, prepend a
+            ``"-"`` to the key name. For example, to sort the key value for
+            ``"name"`` in descending order, use ``"-name"``.
+        orders (list, optional): List of boolean sort orders to apply for each
+            key. ``True`` corresponds to ascending order while ``False`` is
+            descending. Defaults to ``None``.
+        reverse (bool, optional): Whether to reverse the sort. Defaults to
+            ``False``.
+
+    Returns:
+        list: Sorted list.
+
+    Example:
+
+        >>> items = [{'a': 2, 'b': 1}, {'a': 3, 'b': 2}, {'a': 1, 'b': 3}]
+        >>> results = order_by(items, ['b', 'a'])
+        >>> assert results == [{'a': 2, 'b': 1},\
+                               {'a': 3, 'b': 2},\
+                               {'a': 1, 'b': 3}]
+        >>> results = order_by(items, ['a', 'b'])
+        >>> assert results == [{'a': 1, 'b': 3},\
+                               {'a': 2, 'b': 1},\
+                               {'a': 3, 'b': 2}]
+        >>> results = order_by(items, ['-a', 'b'])
+        >>> assert results == [{'a': 3, 'b': 2},\
+                               {'a': 2, 'b': 1},\
+                               {'a': 1, 'b': 3}]
+        >>> results = order_by(items, ['a', 'b'], [False, True])
+        >>> assert results == [{'a': 3, 'b': 2},\
+                               {'a': 2, 'b': 1},\
+                               {'a': 1, 'b': 3}]
+
+    .. versionadded:: 3.0.0
+
+    .. versionchanged:: 3.2.0
+        Added `orders` argument.
+
+    .. versionchanged:: 3.2.0
+        Added :func:`sort_by_order` as alias.
+
+    .. versionchanged:: TODO
+        Renamed from ``order_by`` to ``order_by`` and removed alias
+        ``sort_by_order``.
+    """
+    if isinstance(collection, dict):
+        collection = collection.values()
+
+    # Maintain backwards compatibility.
+    if pyd.is_boolean(orders):
+        reverse = orders
+        orders = None
+
+    comparers = []
+
+    if orders:
+        for i, key in enumerate(keys):
+            if pyd.has(orders, i):
+                order = 1 if orders[i] else -1
+            else:
+                order = 1
+
+            comparers.append((pyd.property_deep(key), order))
+    else:
+        for key in keys:
+            if key.startswith('-'):
+                order = -1
+                key = key[1:]
+            else:
+                order = 1
+
+            comparers.append((pyd.property_deep(key), order))
+
+    def comparison(left, right):
+        # pylint: disable=useless-else-on-loop,missing-docstring
+        for func, mult in comparers:
+            result = _cmp(func(left), func(right))
+            if result:
+                return mult * result
+        else:
+            return 0
+
+    return sorted(collection, key=cmp_to_key(comparison), reverse=reverse)
 
 
 def partition(collection, callback=None):
@@ -663,27 +719,6 @@ def partition(collection, callback=None):
     return [trues, falses]
 
 
-def pluck(collection, key):
-    """Retrieves the value of a specified property from all elements in the
-    collection.
-
-    Args:
-        collection (list): List of dicts.
-        key (str): Collection's key to pluck.
-
-    Returns:
-        list: Plucked list.
-
-    Example:
-
-        >>> pluck([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}], 'a')
-        [1, 3, 5]
-
-    .. versionadded:: 1.0.0
-    """
-    return map_(collection, pyd.prop(key))
-
-
 def reduce_(collection, callback=None, accumulator=None):
     """Reduces a collection to a value which is the accumulated result of
     running each element in the collection through the callback, where each
@@ -704,12 +739,10 @@ def reduce_(collection, callback=None, accumulator=None):
         >>> reduce_([1, 2, 3, 4], lambda total, x: total * x)
         24
 
-    See Also:
-        - :func:`reduce_` (main definition)
-        - :func:`foldl` (alias)
-        - :func:`inject` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed aliases ``foldl`` and ``inject``.
     """
     iterable = iterator(collection)
 
@@ -733,10 +766,6 @@ def reduce_(collection, callback=None, accumulator=None):
     return result
 
 
-foldl = reduce_
-inject = reduce_
-
-
 def reduce_right(collection, callback=None, accumulator=None):
     """This method is like :func:`reduce_` except that it iterates over
     elements of a `collection` from right to left.
@@ -755,22 +784,18 @@ def reduce_right(collection, callback=None, accumulator=None):
         >>> reduce_right([1, 2, 3, 4], lambda total, x: total ** x)
         4096
 
-    See Also:
-        - :func:`reduce_right` (main definition)
-        - :func:`foldr` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.2.1
         Fix bug where collection was not reversed correctly.
+
+    .. versionchanged:: TODO
+        Removed alias ``foldr``.
     """
     if not isinstance(collection, dict):
         collection = list(collection)[::-1]
 
     return reduce_(collection, callback, accumulator)
-
-
-foldr = reduce_right
 
 
 def reductions(collection, callback=None, accumulator=None, from_right=False):
@@ -804,7 +829,7 @@ def reductions(collection, callback=None, accumulator=None, from_right=False):
 
     argcount = getargcount(callback, maxargs=3)
 
-    def interceptor(result, item, index):  # pylint: disable=missing-docstring
+    def interceptor(result, item, index):
         result = callit(callback, result, item, index, argcount=argcount)
         results.append(result)
         return result
@@ -971,7 +996,7 @@ def some(collection, callback=None):
     """Checks if the callback returns a truthy value for any element of a
     collection. The callback is invoked with three arguments:
     ``(value, index|key, collection)``. If a property name is passed for
-    callback, the created :func:`pluck` style callback will return the property
+    callback, the created :func:`map_` style callback will return the property
     value of the given element. If an object is passed for callback, the
     created :func:`where` style callback will return ``True`` for elements that
     have the properties of the given object, else ``False``.
@@ -994,11 +1019,10 @@ def some(collection, callback=None):
         >>> some([1, 2, 3, 4], lambda x: x == 0)
         False
 
-    See Also:
-        - :func:`some` (main definition)
-        - :func:`any_` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged: TODO
+        Removed alias ``any_``.
     """
 
     if callback:
@@ -1006,9 +1030,6 @@ def some(collection, callback=None):
         collection = [cbk(item) for item in collection]
 
     return any(collection)
-
-
-any_ = some
 
 
 def sort_by(collection, callback=None, reverse=False):
@@ -1041,103 +1062,6 @@ def sort_by(collection, callback=None, reverse=False):
     return sorted(collection, key=pyd.iteratee(callback), reverse=reverse)
 
 
-def sort_by_all(collection, keys, orders=None, reverse=False):
-    """This method is like :func:`sort_by` except that it sorts by key names
-    instead of an iteratee function. Keys can be sorted in descending order by
-    prepending a ``"-"`` to the key name (e.g. ``"name"`` would become
-    ``"-name"``) or by passing a list of boolean sort options via `orders`
-    where ``True`` is ascending and ``False`` is descending.
-
-    Args:
-        collection (list|dict): Collection to iterate over.
-        keys (list): List of keys to sort by. By default, keys will be sorted
-            in ascending order. To sort a key in descending order, prepend a
-            ``"-"`` to the key name. For example, to sort the key value for
-            ``"name"`` in descending order, use ``"-name"``.
-        orders (list, optional): List of boolean sort orders to apply for each
-            key. ``True`` corresponds to ascending order while ``False`` is
-            descending. Defaults to ``None``.
-        reverse (bool, optional): Whether to reverse the sort. Defaults to
-            ``False``.
-
-    Returns:
-        list: Sorted list.
-
-    Example:
-
-        >>> items = [{'a': 2, 'b': 1}, {'a': 3, 'b': 2}, {'a': 1, 'b': 3}]
-        >>> results = sort_by_all(items, ['b', 'a'])
-        >>> assert results == [{'a': 2, 'b': 1},\
-                               {'a': 3, 'b': 2},\
-                               {'a': 1, 'b': 3}]
-        >>> results = sort_by_all(items, ['a', 'b'])
-        >>> assert results == [{'a': 1, 'b': 3},\
-                               {'a': 2, 'b': 1},\
-                               {'a': 3, 'b': 2}]
-        >>> results = sort_by_all(items, ['-a', 'b'])
-        >>> assert results == [{'a': 3, 'b': 2},\
-                               {'a': 2, 'b': 1},\
-                               {'a': 1, 'b': 3}]
-        >>> results = sort_by_all(items, ['a', 'b'], [False, True])
-        >>> assert results == [{'a': 3, 'b': 2},\
-                               {'a': 2, 'b': 1},\
-                               {'a': 1, 'b': 3}]
-
-    See Also:
-        - :func:`sort_by_all` (main definition)
-        - :func:`sort_by_order` (alias)
-
-    .. versionadded:: 3.0.0
-
-    .. versionchanged:: 3.2.0
-        Added `orders` argument.
-
-    .. versionchanged:: 3.2.0
-        Added :func:`sort_by_order` as alias.
-    """
-    if isinstance(collection, dict):
-        collection = collection.values()
-
-    # Maintain backwards compatibility.
-    if pyd.is_bool(orders):
-        reverse = orders
-        orders = None
-
-    comparers = []
-
-    if orders:
-        for i, key in enumerate(keys):
-            if pyd.has(orders, i):
-                order = 1 if orders[i] else -1
-            else:
-                order = 1
-
-            comparers.append((pyd.deep_prop(key), order))
-    else:
-        for key in keys:
-            if key.startswith('-'):
-                order = -1
-                key = key[1:]
-            else:
-                order = 1
-
-            comparers.append((pyd.deep_prop(key), order))
-
-    def comparison(left, right):
-        # pylint: disable=useless-else-on-loop,missing-docstring
-        for func, mult in comparers:
-            result = _cmp(func(left), func(right))
-            if result:
-                return mult * result
-        else:
-            return 0
-
-    return sorted(collection, key=cmp_to_key(comparison), reverse=reverse)
-
-
-sort_by_order = sort_by_all
-
-
 def to_list(collection):
     """Converts the collection to a list.
 
@@ -1162,24 +1086,3 @@ def to_list(collection):
         ret = list(collection)
 
     return ret
-
-
-def where(collection, properties):
-    """Examines each element in a collection, returning an array of all
-    elements that have the given properties.
-
-    Args:
-        collection (list|dict): Collection to iterate over.
-        properties (dict): property values to filter by
-
-    Returns:
-        list: filtered list.
-
-    Example:
-
-        >>> results = where([{'a': 1}, {'b': 2}, {'a': 1, 'b': 3}], {'a': 1})
-        >>> assert results == [{'a': 1}, {'a': 1, 'b': 3}]
-
-    .. versionadded:: 1.0.0
-    """
-    return filter_(collection, pyd.matches(properties))

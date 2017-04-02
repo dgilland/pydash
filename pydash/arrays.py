@@ -15,8 +15,6 @@ from ._compat import cmp_to_key, string_types
 
 
 __all__ = (
-    'append',
-    'cat',
     'chunk',
     'compact',
     'concat',
@@ -31,7 +29,6 @@ __all__ = (
     'fill',
     'find_index',
     'find_last_index',
-    'first',
     'flatten',
     'flatten_deep',
     'flatten_depth',
@@ -49,7 +46,6 @@ __all__ = (
     'last_index_of',
     'mapcat',
     'nth',
-    'object_',
     'pull',
     'pull_all',
     'pull_all_by',
@@ -57,7 +53,6 @@ __all__ = (
     'pull_at',
     'push',
     'remove',
-    'rest',
     'reverse',
     'shift',
     'slice_',
@@ -83,7 +78,6 @@ __all__ = (
     'uniq',
     'uniq_by',
     'uniq_with',
-    'unique',
     'unshift',
     'unzip',
     'unzip_with',
@@ -96,28 +90,6 @@ __all__ = (
     'zip_object_deep',
     'zip_with'
 )
-
-
-def cat(*arrays):
-    """Concatenates zero or more lists into one.
-
-    Args:
-        arrays (list): Lists to concatenate.
-
-    Returns:
-        list: Concatenated list.
-
-    Example:
-
-        >>> cat([1, 2], [3, 4], [[5], [6]])
-        [1, 2, 3, 4, [5], [6]]
-
-    .. versionadded:: 2.0.0
-    """
-    return flatten(arrays)
-
-
-concat = cat
 
 
 def chunk(array, size=1):
@@ -160,6 +132,28 @@ def compact(array):
     .. versionadded:: 1.0.0
     """
     return [item for item in array if item]
+
+
+def concat(*arrays):
+    """Concatenates zero or more lists into one.
+
+    Args:
+        arrays (list): Lists to concatenate.
+
+    Returns:
+        list: Concatenated list.
+
+    Example:
+
+        >>> concat([1, 2], [3, 4], [[5], [6]])
+        [1, 2, 3, 4, [5], [6]]
+
+    .. versionadded:: 2.0.0
+
+    .. versionchanged:: TODO
+        Renamed from ``cat`` to ``concat``.
+    """
+    return flatten(arrays)
 
 
 def difference(array, *others):
@@ -506,33 +500,6 @@ def find_last_index(array, callback=None):
     return next(search, -1)
 
 
-def first(array):
-    """Return the first element of `array`.
-
-    Args:
-        array (list): List to process.
-
-    Returns:
-        mixed: First element of list.
-
-    Example:
-
-        >>> first([1, 2, 3, 4])
-        1
-
-    See Also:
-        - :func:`first` (main definition)
-        - :func:`head` (alias)
-        - :func:`take` (alias)
-
-    .. versionadded:: 1.0.0
-    """
-    return base_get(array, 0, default=None)
-
-
-head = first
-
-
 def flatten(array):
     """Flattens a nested array. If `is_deep` is ``True`` the array is
     recursively flattened, otherwise it is only flattened a single level.
@@ -624,6 +591,28 @@ def from_pairs(pairs):
     .. versionadded:: TODO
     """
     return dict(pairs)
+
+
+def head(array):
+    """Return the first element of `array`.
+
+    Args:
+        array (list): List to process.
+
+    Returns:
+        mixed: First element of list.
+
+    Example:
+
+        >>> head([1, 2, 3, 4])
+        1
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged::
+        Renamed from ``first`` to ``head``.
+    """
+    return base_get(array, 0, default=None)
 
 
 def index_of(array, value, from_index=0):
@@ -928,7 +917,7 @@ def mapcat(array, callback=None):
 
     .. versionadded:: 2.0.0
     """
-    return cat(*pyd.map_(array, callback))
+    return concat(*pyd.map_(array, callback))
 
 
 def nth(array, pos=0):
@@ -1147,18 +1136,14 @@ def push(array, *items):
         >>> push(array, 4, 5, [6])
         [1, 2, 3, 4, 5, [6]]
 
-    See Also:
-        - :func:`push` (main definition)
-        - :func:`append` (alias)
-
     .. versionadded:: 2.2.0
+
+    .. versionchanged:: TODO
+        Removed alias ``append``.
     """
     for item in items:
         array.append(item)
     return array
-
-
-append = push
 
 
 def remove(array, callback=None):
@@ -1202,32 +1187,6 @@ def remove(array, callback=None):
     array[:] = new_array
 
     return removed
-
-
-def rest(array):
-    """Return all but the first element of `array`.
-
-    Args:
-        array (list): List to process.
-
-    Returns:
-        list: Rest of the list.
-
-    Example:
-
-        >>> rest([1, 2, 3, 4])
-        [2, 3, 4]
-
-    See Also:
-        - :func:`rest` (main definition)
-        - :func:`tail` (alias)
-
-    .. versionadded:: 1.0.0
-    """
-    return array[1:]
-
-
-tail = rest
 
 
 def reverse(array):
@@ -1668,6 +1627,28 @@ def split_at(array, index):
     return [take(array, index), drop(array, index)]
 
 
+def tail(array):
+    """Return all but the first element of `array`.
+
+    Args:
+        array (list): List to process.
+
+    Returns:
+        list: Rest of the list.
+
+    Example:
+
+        >>> tail([1, 2, 3, 4])
+        [2, 3, 4]
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Renamed from ``rest`` to ``tail``.
+    """
+    return array[1:]
+
+
 def take(array, n=1):
     """Creates a slice of `array` with `n` elements taken from the beginning.
 
@@ -1893,20 +1874,16 @@ def uniq(array):
         >>> uniq([1, 2, 3, 1, 2, 3])
         [1, 2, 3]
 
-    See Also:
-        - :func:`uniq` (main definition)
-        - :func:`unique` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Removed ``callback`` argument support in favor of only having
-        :func:`uniq_by` support it.
+
+        - Removed ``callback`` argument support in favor of only having
+          :func:`uniq_by` support it.
+        - Removed alias ``unique``.
+
     """
     return uniq_by(array)
-
-
-unique = uniq
 
 
 def uniq_by(array, callback=None):
@@ -2200,20 +2177,16 @@ def zip_object(keys, values=None):
         >>> zip_object([1, 2, 3], [4, 5, 6])
         {1: 4, 2: 5, 3: 6}
 
-    See Also:
-        - :func:`zip_object` (main definition)
-        - :func:`object_` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``object_``.
     """
 
     if values is None:
         keys, values = unzip(keys)
 
     return dict(zip(keys, values))
-
-
-object_ = zip_object
 
 
 def zip_object_deep(keys, values=None):

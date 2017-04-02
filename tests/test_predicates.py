@@ -111,13 +111,6 @@ def test_is_boolean(case, expected):
     assert _.is_boolean(case) == expected
 
 
-@parametrize('case', [
-    _.is_bool
-])
-def test_is_boolean_aliases(case):
-    assert _.is_boolean is case
-
-
 @parametrize('case,expected', [
     (list, True),
     (dict, True),
@@ -133,13 +126,6 @@ def test_is_boolean_aliases(case):
 ])
 def test_is_builtin(case, expected):
     assert _.is_builtin(case) == expected
-
-
-@parametrize('case', [
-    _.is_native
-])
-def test_is_builtin_aliases(case):
-    assert _.is_builtin is case
 
 
 @parametrize('case,expected', [
@@ -174,13 +160,6 @@ def test_is_decreasing(case, expected):
 ])
 def test_is_dict(case, expected):
     assert _.is_dict(case) == expected
-
-
-@parametrize('case', [
-    _.is_plain_object
-])
-def test_is_dict_aliases(case):
-    assert _.is_dict is case
 
 
 @parametrize('case,expected', [
@@ -330,13 +309,6 @@ def test_is_integer(case, expected):
     assert _.is_integer(case) == expected
 
 
-@parametrize('case', [
-    _.is_int
-])
-def test_is_integer_aliases(case):
-    assert _.is_integer is case
-
-
 @parametrize('case,expected', [
     ([], True),
     ({}, True),
@@ -455,13 +427,6 @@ def test_is_number(case, expected):
     assert _.is_number(case) == expected
 
 
-@parametrize('case', [
-    _.is_num
-])
-def test_is_number_aliases(case):
-    assert _.is_number is case
-
-
 @parametrize('case,expected', [
     ({}, True),
     ([], True),
@@ -510,13 +475,6 @@ def test_is_positive(case, expected):
 ])
 def test_is_reg_exp(case, expected):
     assert _.is_reg_exp(case) == expected
-
-
-@parametrize('case', [
-    _.is_re
-])
-def test_is_reg_exp_aliases(case):
-    assert _.is_reg_exp is case
 
 
 @parametrize('case,expected', [

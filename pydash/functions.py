@@ -16,7 +16,6 @@ __all__ = (
     'after',
     'ary',
     'before',
-    'compose',
     'conjoin',
     'curry',
     'curry_right',
@@ -28,13 +27,11 @@ __all__ = (
     'flow_right',
     'iterated',
     'juxtapose',
-    'mod_args',
     'negate',
     'once',
+    'over_args',
     'partial',
     'partial_right',
-    'pipe',
-    'pipe_right',
     'rearg',
     'spread',
     'throttle',
@@ -95,8 +92,8 @@ class Before(After):
             return self.func(*args, **kargs)
 
 
-class Compose(object):
-    """Wrap a function in a compose context."""
+class Flow(object):
+    """Wrap a function in a flow context."""
     def __init__(self, *funcs, **kargs):
         self.funcs = funcs
         self.from_right = kargs.get('from_right', True)
@@ -254,8 +251,8 @@ class Juxtapose(object):
         return pyd.map_(self.funcs, lambda func: func(*objs))
 
 
-class ModArgs(object):
-    """Wrap a function in a mod_args context."""
+class OverArgs(object):
+    """Wrap a function in a over_args context."""
     def __init__(self, func, *transforms):
         self.func = func
         self.transforms = pyd.flatten(transforms)
@@ -654,7 +651,7 @@ def flow(*funcs):
         *funcs (function): Function(s) to compose.
 
     Returns:
-        Compose: Function(s) wrapped in a :class:`Compose` context.
+        Flow: Function(s) wrapped in a :class:`Flow` context.
 
     Example:
 
@@ -665,19 +662,15 @@ def flow(*funcs):
         >>> ops([1, 2, 3, 4])
         25.0
 
-    See Also:
-        - :func:`flow` (main definition)
-        - :func:`pipe` (alias)
-
     .. versionadded:: 2.0.0
 
     .. versionchanged:: 2.3.1
         Added :func:`pipe` as alias.
+
+    .. versionchanged:: TODO
+        Removed alias ``pipe``.
     """
-    return Compose(*funcs, from_right=False)
-
-
-pipe = flow
+    return Flow(*funcs, from_right=False)
 
 
 def flow_right(*funcs):
@@ -690,7 +683,7 @@ def flow_right(*funcs):
         *funcs (function): Function(s) to compose.
 
     Returns:
-        Compose: Function(s) wrapped in a :class:`Compose` context.
+        Flow: Function(s) wrapped in a :class:`Flow` context.
 
     Example:
 
@@ -701,11 +694,6 @@ def flow_right(*funcs):
         >>> ops([1, 2, 3, 4])
         50.0
 
-    See Also:
-        - :func:`flow_right` (main definition)
-        - :func:`compose` (alias)
-        - :func:`pipe_right` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
@@ -713,12 +701,11 @@ def flow_right(*funcs):
 
     .. versionchanged:: 2.3.1
         Added :func:`pipe_right` as alias.
+
+    .. versionchanged: TODO
+        Removed aliases ``pipe_right`` and ``compose``.
     """
-    return Compose(*funcs, from_right=True)
-
-
-compose = flow_right
-pipe_right = flow_right
+    return Flow(*funcs, from_right=True)
 
 
 def iterated(func):
@@ -771,31 +758,6 @@ def juxtapose(*funcs):
     return Juxtapose(*funcs)
 
 
-def mod_args(func, *transforms):
-    """Creates a function that runs each argument through a corresponding
-    transform function.
-
-    Args:
-        func (function): Function to wrap.
-        *transforms (function): Functions to transform arguments, specified as
-            individual functions or lists of functions.
-
-    Returns:
-        ModArgs: Function wrapped in a :class:`ModArgs` context.
-
-    Example:
-
-        >>> squared = lambda x: x ** 2
-        >>> double = lambda x: x * 2
-        >>> modder = mod_args(lambda x, y: [x, y], squared, double)
-        >>> modder(5, 10)
-        [25, 20]
-
-    .. versionadded:: 3.3.0
-    """
-    return ModArgs(func, *transforms)
-
-
 def negate(func):
     """Creates a function that negates the result of the predicate `func`. The
     `func` function is executed with the arguments of the created function.
@@ -840,6 +802,34 @@ def once(func):
     .. versionadded:: 1.0.0
     """
     return Once(func)
+
+
+def over_args(func, *transforms):
+    """Creates a function that runs each argument through a corresponding
+    transform function.
+
+    Args:
+        func (function): Function to wrap.
+        *transforms (function): Functions to transform arguments, specified as
+            individual functions or lists of functions.
+
+    Returns:
+        OverArgs: Function wrapped in a :class:`OverArgs` context.
+
+    Example:
+
+        >>> squared = lambda x: x ** 2
+        >>> double = lambda x: x * 2
+        >>> modder = over_args(lambda x, y: [x, y], squared, double)
+        >>> modder(5, 10)
+        [25, 20]
+
+    .. versionadded:: 3.3.0
+
+    .. versionchanged:: TODO
+        Renamed from ``mod_args`` to ``over_args``.
+    """
+    return OverArgs(func, *transforms)
 
 
 def partial(func, *args, **kargs):

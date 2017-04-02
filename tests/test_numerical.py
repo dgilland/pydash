@@ -181,13 +181,6 @@ def test_power(case, expected):
     assert _.power(*case) == expected
 
 
-@parametrize('case', [
-    _.pow_
-])
-def test_power_aliases(case):
-    assert _.power is case
-
-
 @parametrize('case,expected', [
     ((2.51,), 3),
     ((2.499,), 2),
@@ -197,13 +190,6 @@ def test_power_aliases(case):
 ])
 def test_round_(case, expected):
     assert _.round_(*case) == expected
-
-
-@parametrize('case', [
-    _.curve
-])
-def test_round_aliases(case):
-    assert _.round_ is case
 
 
 @parametrize('case,expected', [
@@ -231,13 +217,6 @@ def test_slope(case, expected):
 ])
 def test_std_deviation(case, expected):
     assert _.std_deviation(case) == expected
-
-
-@parametrize('case', [
-    _.sigma
-])
-def test_std_deviation_aliases(case):
-    assert _.std_deviation is case
 
 
 @parametrize('minuend,subtrahend,expected', [

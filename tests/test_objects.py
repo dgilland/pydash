@@ -22,13 +22,6 @@ def test_assign(case, expected):
     assert _.assign(*case) == expected
 
 
-@parametrize('case', [
-    _.extend
-])
-def test_assign_aliases(case):
-    assert _.assign is case
-
-
 @parametrize('case,expected', [
     (({'name': 'fred'}, {'age': 26}, lambda obj, src: src + 1),
      {'name': 'fred', 'age': 27}),
@@ -43,13 +36,6 @@ def test_assign_with(case, expected):
 ])
 def test_callables(case, expected):
     assert _.callables(*case) == expected
-
-
-@parametrize('case', [
-    _.methods,
-])
-def test_callables_aliases(case):
-    assert _.callables is case
 
 
 @parametrize('case', [
@@ -107,34 +93,6 @@ def test_clone_deep_with(case, callback, expected):
 
 
 @parametrize('case,expected', [
-    (({'level1': {
-        'value': 'value 1',
-        'level2': {
-            'value': 'value 2',
-            'level3': {
-                'value': 'value 3'
-            }
-        }}},
-      lambda value, property_path: '.'.join(property_path) + '==' + value),
-     {'level1': {
-         'value': 'level1.value==value 1',
-         'level2': {
-             'value': 'level1.level2.value==value 2',
-             'level3': {
-                 'value': 'level1.level2.level3.value==value 3'
-             }
-         }}}),
-    (([['value 1', [['value 2', ['value 3']]]]],
-      lambda value, property_path: (_.join(property_path, '.') +
-                                    '==' +
-                                    value)),
-     [['0.0==value 1', [['0.1.0.0==value 2', ['0.1.0.1.0==value 3']]]]]),
-])
-def test_deep_map_values(case, expected):
-    assert _.deep_map_values(*case) == expected
-
-
-@parametrize('case,expected', [
     (({'name': 'barney'}, {'name': 'fred', 'employer': 'slate'}),
      {'name': 'barney', 'employer': 'slate'}),
 ])
@@ -156,13 +114,6 @@ def test_defaults_deep(case, expected):
 ])
 def test_to_dict(case, expected):
     assert _.to_dict(case) == expected
-
-
-@parametrize('case', [
-    _.to_plain_object
-])
-def test_to_dict_aliases(case):
-    assert _.to_dict is case
 
 
 @parametrize('case,expected', [
@@ -244,13 +195,6 @@ def test_for_in(case, expected):
     assert _.for_in(*case) in expected
 
 
-@parametrize('case', [
-    _.for_own
-])
-def test_for_in_aliases(case):
-    assert _.for_in is case
-
-
 @parametrize('case,expected', [
     (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback0),
      ({'name': 'fredfred', 'employer': 'slateslate'},)),
@@ -261,13 +205,6 @@ def test_for_in_aliases(case):
 ])
 def test_for_in_right(case, expected):
     assert _.for_in_right(*case) in expected
-
-
-@parametrize('case', [
-    _.for_own_right,
-])
-def test_for_in_right_aliases(case):
-    assert _.for_in_right is case
 
 
 @parametrize('case,expected', [
@@ -315,14 +252,6 @@ def test_get(case, expected):
     assert _.get(*case) == expected
 
 
-@parametrize('case', [
-    _.get_path,
-    _.deep_get,
-])
-def test_get_aliases(case):
-    assert _.get is case
-
-
 @parametrize('case,expected', [
     (({'a': 1, 'b': 2, 'c': 3}, 'b'), True),
     (([1, 2, 3], 0), True),
@@ -352,27 +281,12 @@ def test_has(case, expected):
     assert _.has(*case) == expected
 
 
-@parametrize('case', [
-    _.deep_has,
-    _.has_path,
-])
-def test_has_aliases(case):
-    assert _.has is case
-
-
 @parametrize('case,expected', [
     ({'a': 1, 'b': 2, 'c': 3}, ['a', 'b', 'c']),
     ([1, 2, 3], [0, 1, 2])
 ])
 def test_keys(case, expected):
     assert set(_.keys(case)) == set(expected)
-
-
-@parametrize('case', [
-    _.keys_in
-])
-def test_keys_aliases(case):
-    assert _.keys is case
 
 
 @parametrize('case,expected', [
@@ -385,6 +299,34 @@ def test_keys_aliases(case):
 ])
 def test_map_values(case, expected):
     assert _.map_values(*case) == expected
+
+
+@parametrize('case,expected', [
+    (({'level1': {
+        'value': 'value 1',
+        'level2': {
+            'value': 'value 2',
+            'level3': {
+                'value': 'value 3'
+            }
+        }}},
+      lambda value, property_path: '.'.join(property_path) + '==' + value),
+     {'level1': {
+         'value': 'level1.value==value 1',
+         'level2': {
+             'value': 'level1.level2.value==value 2',
+             'level3': {
+                 'value': 'level1.level2.level3.value==value 3'
+             }
+         }}}),
+    (([['value 1', [['value 2', ['value 3']]]]],
+      lambda value, property_path: (_.join(property_path, '.') +
+                                    '==' +
+                                    value)),
+     [['0.0==value 1', [['0.1.0.0==value 2', ['0.1.0.1.0==value 3']]]]]),
+])
+def test_map_values_deep(case, expected):
+    assert _.map_values_deep(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -479,14 +421,6 @@ def test_omit_by(case, expected):
 
 
 @parametrize('case,expected', [
-    ({'a': 1, 'b': 2, 'c': 3}, [['a', 1], ['b', 2], ['c', 3]]),
-    ([1, 2, 3], [[0, 1], [1, 2], [2, 3]])
-])
-def test_pairs(case, expected):
-    assert dict(_.pairs(case)) == dict(expected)
-
-
-@parametrize('case,expected', [
     ((1,), 1),
     ((1.0,), 1),
     (('1',), 1),
@@ -570,13 +504,6 @@ def test_set_with(case, expected):
     assert _.set_with(*case) == expected
 
 
-@parametrize('case', [
-    _.deep_set
-])
-def test_set_aliases(case):
-    assert _.set_ is case
-
-
 @parametrize('case,expected', [
     (('1',), True),
     (('0',), False),
@@ -628,6 +555,14 @@ def test_to_integer(case, expected):
 ])
 def test_to_number(case, expected):
     assert _.to_number(*case) == expected
+
+
+@parametrize('case,expected', [
+    ({'a': 1, 'b': 2, 'c': 3}, [['a', 1], ['b', 2], ['c', 3]]),
+    ([1, 2, 3], [[0, 1], [1, 2], [2, 3]])
+])
+def test_to_pairs(case, expected):
+    assert dict(_.to_pairs(case)) == dict(expected)
 
 
 @parametrize('case,expected', [
@@ -700,10 +635,3 @@ def test_unset(obj, path, expected, new_obj):
 ])
 def test_values(case, expected):
     assert set(_.values(case)) == set(expected)
-
-
-@parametrize('case', [
-    _.values_in
-])
-def test_values_aliases(case):
-    assert _.values is case

@@ -33,36 +33,25 @@ __all__ = (
     'clone_deep',
     'clone_deep_with',
     'clone_with',
-    'deep_get',
-    'deep_has',
-    'deep_set',
-    'deep_map_values',
     'defaults',
     'defaults_deep',
-    'extend',
     'find_key',
     'find_last_key',
     'for_in',
     'for_in_right',
-    'for_own',
-    'for_own_right',
     'get',
-    'get_path',
     'has',
-    'has_path',
     'invert',
     'invert_by',
     'invoke',
     'keys',
-    'keys_in',
     'map_keys',
     'map_values',
+    'map_values_deep',
     'merge',
     'merge_with',
-    'methods',
     'omit',
     'omit_by',
-    'pairs',
     'parse_int',
     'pick',
     'pick_by',
@@ -73,14 +62,13 @@ __all__ = (
     'to_dict',
     'to_integer',
     'to_number',
-    'to_plain_object',
+    'to_pairs',
     'to_string',
     'transform',
     'unset',
     'update',
     'update_with',
     'values',
-    'values_in',
 )
 
 
@@ -106,10 +94,6 @@ def assign(obj, *sources):
         >>> obj is obj2
         True
 
-    See Also:
-        - :func:`assign` (main definition)
-        - :func:`extend` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.3.2
@@ -122,12 +106,11 @@ def assign(obj, *sources):
         Shallow copy each `source` instead of deep copying.
 
     .. versionchanged:: TODO
-        Moved `callback` argument to :func:`assign_with`.
+
+        - Moved `callback` argument to :func:`assign_with`.
+        - Removed alias ``extend``.
     """
     return assign_with(obj, *sources)
-
-
-extend = assign
 
 
 def assign_with(obj, *sources, **kargs):
@@ -203,19 +186,15 @@ def callables(obj):
         >>> callables({'a': 1, 'b': lambda: 2, 'c': lambda: 3})
         ['b', 'c']
 
-    See Also:
-        - :func:`callables` (main definition)
-        - :func:`methods` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
         Renamed ``functions`` to ``callables``.
+
+    .. versionchanged: TODO
+        Removed alias ``methods``.
     """
     return sorted(key for key, value in iterator(obj) if callable(value))
-
-
-methods = callables
 
 
 def clone(value):
@@ -315,49 +294,6 @@ def clone_deep_with(value, callback=None):
     return base_clone(value, is_deep=True, callback=callback)
 
 
-def deep_map_values(obj, callback=None, property_path=NoValue):
-    """Map all non-object values in `obj` with return values from `callback`.
-    The callback is invoked with two arguments: ``(obj_value, property_path)``
-    where ``property_path`` contains the list of path keys corresponding to the
-    path of ``obj_value``.
-
-    Args:
-        obj (list|dict): Object to map.
-        callback (function): Callback applied to each value.
-
-    Returns:
-        mixed: The modified object.
-
-    Warning:
-        `obj` is modified in place.
-
-    Example:
-
-        >>> x = {'a': 1, 'b': {'c': 2}}
-        >>> y = deep_map_values(x, lambda val: val * 2)
-        >>> y == {'a': 2, 'b': {'c': 4}}
-        True
-        >>> z = deep_map_values(x, lambda val, props: props)
-        >>> z == {'a': ['a'], 'b': {'c': ['b', 'c']}}
-        True
-
-    .. versionadded: 2.2.0
-
-    .. versionchanged:: 3.0.0
-        Allow callbacks to accept partial arguments.
-    """
-    properties = to_path(property_path)
-
-    if pyd.is_object(obj):
-        deep_callback = (
-            lambda value, key: deep_map_values(value,
-                                               callback,
-                                               pyd.flatten([properties, key])))
-        return pyd.extend(obj, map_values(obj, deep_callback))
-    else:
-        return callit(callback, obj, properties)
-
-
 def defaults(obj, *sources):
     """Assigns properties of source object(s) to the destination object for all
     destination properties that resolve to undefined.
@@ -440,10 +376,6 @@ def find_key(obj, callback=None):
         >>> find_key([1, 2, 3, 4], lambda x: x == 1)
         0
 
-    See Also:
-        - :func:`find_key` (main definition)
-        - :func:`find_last_key` (alias)
-
     .. versionadded:: 1.0.0
     """
     for result, _, key, _ in itercallback(obj, callback):
@@ -500,19 +432,15 @@ def for_in(obj, callback=None):
         >>> obj == {'a': 1, 'b': 2, 'c': 3}
         True
 
-    See Also:
-        - :func:`for_in` (main definition)
-        - :func:`for_own` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``for_own``.
     """
     walk = (None for ret, _, _, _ in itercallback(obj, callback)
             if ret is False)
     next(walk, None)
     return obj
-
-
-for_own = for_in
 
 
 def for_in_right(obj, callback=None):
@@ -535,19 +463,15 @@ def for_in_right(obj, callback=None):
         >>> data['product'] == 24
         True
 
-    See Also:
-        - :func:`for_in_right` (main definition)
-        - :func:`for_own_right` (alias)
-
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``for_own_right``.
     """
     walk = (None for ret, _, _, _ in itercallback(obj, callback, reverse=True)
             if ret is False)
     next(walk, None)
     return obj
-
-
-for_own_right = for_in_right
 
 
 def get(obj, path, default=None):
@@ -577,11 +501,6 @@ def get(obj, path, default=None):
         >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2') is None
         True
 
-    See Also:
-        - :func:`get` (main definition)
-        - :func:`get_path` (alias)
-        - :func:`deep_get` (alias)
-
     .. versionadded:: 2.0.0
 
     .. versionchanged:: 2.2.0
@@ -597,7 +516,9 @@ def get(obj, path, default=None):
         returned when an object path wasn't found.
 
     .. versionchanged:: TODO
-        Support attribute access on `obj` if item access fails.
+
+        - Support attribute access on `obj` if item access fails.
+        - Removed aliases ``get_path`` and ``deep_get``.
     """
     if default is NoValue:
         # When NoValue given for default, then this method will raise if path
@@ -618,10 +539,6 @@ def get(obj, path, default=None):
             break
 
     return obj
-
-
-get_path = get
-deep_get = get
 
 
 def has(obj, path):
@@ -648,11 +565,6 @@ def has(obj, path):
         >>> has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2')
         False
 
-    See Also:
-        - :func:`has` (main definition)
-        - :func:`deep_has` (alias)
-        - :func:`has_path` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
@@ -662,6 +574,9 @@ def has(obj, path):
 
         - Added :func:`deep_has` as alias.
         - Added :func:`has_path` as alias.
+
+    .. versionchanged:: TODO
+        Removed aliases ``deep_has`` and ``has_path``.
     """
     try:
         get(obj, path, default=NoValue)
@@ -670,10 +585,6 @@ def has(obj, path):
         exists = False
 
     return exists
-
-
-deep_has = has
-has_path = has
 
 
 def invert(obj):
@@ -790,19 +701,15 @@ def keys(obj):
         >>> set(keys({'a': 1, 'b': 2, 'c': 3})) == set(['a', 'b', 'c'])
         True
 
-    See Also:
-        - :func:`keys` (main definition)
-        - :func:`keys_in` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-        Added :func:`keys_in` as alias.
+        Added ``keys_in`` as alias.
+
+    .. versionchanged:: TODO
+        Removed alias ``keys_in``.
     """
     return [key for key, _ in iterator(obj)]
-
-
-keys_in = keys
 
 
 def map_keys(obj, callback=None):
@@ -865,6 +772,52 @@ def map_values(obj, callback=None):
     """
     return dict((key, result)
                 for result, _, key, _ in itercallback(obj, callback))
+
+
+def map_values_deep(obj, callback=None, property_path=NoValue):
+    """Map all non-object values in `obj` with return values from `callback`.
+    The callback is invoked with two arguments: ``(obj_value, property_path)``
+    where ``property_path`` contains the list of path keys corresponding to the
+    path of ``obj_value``.
+
+    Args:
+        obj (list|dict): Object to map.
+        callback (function): Callback applied to each value.
+
+    Returns:
+        mixed: The modified object.
+
+    Warning:
+        `obj` is modified in place.
+
+    Example:
+
+        >>> x = {'a': 1, 'b': {'c': 2}}
+        >>> y = map_values_deep(x, lambda val: val * 2)
+        >>> y == {'a': 2, 'b': {'c': 4}}
+        True
+        >>> z = map_values_deep(x, lambda val, props: props)
+        >>> z == {'a': ['a'], 'b': {'c': ['b', 'c']}}
+        True
+
+    .. versionadded: 2.2.0
+
+    .. versionchanged:: 3.0.0
+        Allow callbacks to accept partial arguments.
+
+    .. versionchanged:: TODO
+        Renamed from ``deep_map_values`` to ``map_values_deep``.
+    """
+    properties = to_path(property_path)
+
+    if pyd.is_object(obj):
+        deep_callback = (
+            lambda value, key: map_values_deep(value,
+                                               callback,
+                                               pyd.flatten([properties, key])))
+        return assign(obj, map_values(obj, deep_callback))
+    else:
+        return callit(callback, obj, properties)
 
 
 def merge(obj, *sources):
@@ -1054,28 +1007,6 @@ def omit_by(obj, callback=None):
                 if not callit(callback, value, key, argcount=argcount))
 
 
-def pairs(obj):
-    """Creates a two dimensional list of an object's key-value pairs, i.e.
-    ``[[key1, value1], [key2, value2]]``.
-
-    Args:
-        obj (mixed): Object to process.
-
-    Returns:
-        list: Two dimensional list of object's key-value pairs.
-
-    Example:
-
-        >>> pairs([1, 2, 3, 4])
-        [[0, 1], [1, 2], [2, 3], [3, 4]]
-        >>> pairs({'a': 1})
-        [['a', 1]]
-
-    .. versionadded:: 1.0.0
-    """
-    return [[key, value] for key, value in iterator(obj)]
-
-
 def parse_int(value, radix=None):
     """Converts the given `value` into an integer of the specified `radix`. If
     `radix` is falsey, a radix of ``10`` is used unless the `value` is a
@@ -1239,11 +1170,9 @@ def set_(obj, path, value):
         - Modify `obj` in place.
         - Support creating default path values as ``list`` or ``dict`` based on
           whether key or index substrings are used.
+        - Remove alias ``deep_set``.
     """
     return set_with(obj, path, value)
-
-
-deep_set = set_
 
 
 def set_with(obj, path, value, customizer=None):
@@ -1314,7 +1243,7 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
     if pyd.is_string(obj):
         obj = obj.strip()
 
-        def boolean_match(text, vals):  # pylint: disable=missing-docstring
+        def boolean_match(text, vals):
             if text.lower() in [val.lower() for val in vals]:
                 return True
             else:
@@ -1352,11 +1281,11 @@ def to_dict(obj):
         True
 
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``to_plain_object``.
     """
     return dict(zip(pyd.keys(obj), pyd.values(obj)))
-
-
-to_plain_object = to_dict
 
 
 def to_integer(obj):
@@ -1430,6 +1359,31 @@ def to_number(obj, precision=0):
         num = None
 
     return num
+
+
+def to_pairs(obj):
+    """Creates a two dimensional list of an object's key-value pairs, i.e.
+    ``[[key1, value1], [key2, value2]]``.
+
+    Args:
+        obj (mixed): Object to process.
+
+    Returns:
+        list: Two dimensional list of object's key-value pairs.
+
+    Example:
+
+        >>> to_pairs([1, 2, 3, 4])
+        [[0, 1], [1, 2], [2, 3], [3, 4]]
+        >>> to_pairs({'a': 1})
+        [['a', 1]]
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Renamed from ``pairs`` to ``to_pairs``.
+    """
+    return [[key, value] for key, value in iterator(obj)]
 
 
 def to_string(obj):
@@ -1711,19 +1665,15 @@ def values(obj):
         >>> values([2, 4, 6, 8])
         [2, 4, 6, 8]
 
-    See Also:
-        - :func:`values` (main definition)
-        - :func:`values_in` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 1.1.0
-        Added :func:`values_in` as alias.
+        Added ``values_in`` as alias.
+
+    .. versionchanged: TODO
+        Removed alias ``values_in``.
     """
     return [value for _, value in iterator(obj)]
-
-
-values_in = values
 
 
 #

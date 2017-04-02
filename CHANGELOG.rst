@@ -104,17 +104,77 @@ Backwards-Incompatibilities
 - Only use ``merge`` callback result if result is not ``None``. Previously, result from callback (if provided) was used unconditionally. (**breaking change**)
 - Remove functions: (**breaking change**)
 
-  - ``update_path``: Use ``update`` or ``update_with``.
-  - ``set_path``: Use ``set_`` or ``set_with``.
+  - ``update_path`` (use ``update`` or ``update_with``)
+  - ``set_path`` (use ``set_`` or ``set_with``)
 
 - Remove aliases: (**breaking change**)
 
+  - ``all_`` (use ``every``)
+  - ``any_`` (use ``some``)
+  - ``append`` (use ``push``)
   - ``average`` and ``avg`` (use ``mean`` or ``mean_by``)
+  - ``callback`` (use ``iteratee``)
+  - ``cat`` (use ``concat``)
+  - ``collect`` (use ``map_``)
+  - ``contains`` (use ``includes``)
+  - ``curve`` (use ``round_``)
+  - ``deep_get`` and ``get_path`` (use ``get``)
+  - ``deep_has`` and ``has_path`` (use ``has``)
+  - ``deep_prop`` (use ``property_deep``)
+  - ``deep_set`` (use ``set_``)
+  - ``detect`` and ``find_where`` (use ``find``)
+  - ``each`` (use ``for_each``)
+  - ``each_right`` (use ``for_each_right``)
+  - ``escape_re`` (use ``escape_reg_exp``)
+  - ``explode`` (use ``split``)
+  - ``extend`` (use ``assign``)
+  - ``first`` (use ``head``)
+  - ``foldl`` (use ``reduce``)
+  - ``foldr`` (use ``reduce_right``)
+  - ``for_own`` (use ``for_each``)
+  - ``for_own_right`` (use ``for_each_right``)
+  - ``implode`` (use ``join``)
+  - ``is_bool`` (use ``is_boolean``)
+  - ``is_int`` (use ``is_integer``)
+  - ``is_native`` (use ``is_builtin``)
+  - ``is_num`` (use ``is_number``)
+  - ``is_plain_object`` (use ``is_dict``)
+  - ``is_re`` (use ``is_reg_exp``)
+  - ``js_match`` (use ``reg_exp_js_match``)
+  - ``js_replace`` (use ``reg_exp_js_replace``)
+  - ``keys_in`` (use ``keys``)
   - ``moving_average`` and ``moving_avg`` (use ``moving_mean``)
+  - ``object_`` (use ``zip_object``)
+  - ``pad_left`` (use ``pad_start``)
+  - ``pad_right`` (use ``pad_end``)
+  - ``pipe`` (use ``flow``)
+  - ``pipe_right`` and ``compose`` (use ``flow_right``)
+  - ``prop`` (use ``property_``)
+  - ``prop_of`` (use ``property_of``)
+  - ``pluck`` (use ``map_``)
+  - ``pow_`` (use ``power``)
+  - ``re_replace`` (use ``reg_exp_replace``)
+  - ``rest`` (use ``tail``)
+  - ``select`` (use ``filter_``)
+  - ``sigma`` (use ``std_deviation``)
+  - ``sort_by_all`` and ``sort_by_order`` (use ``order_by``)
+  - ``trim_left`` (use ``trim_start``)
+  - ``trim_right`` (use ``trim_right``)
+  - ``trunc`` (use ``truncate``)
+  - ``underscore_case`` (use ``snake_case``)
+  - ``unique`` (use ``uniq``)
+  - ``values_in`` (use ``values``)
+  - ``where`` (use ``filter_``)
 
 - Rename functions: (**breaking change**)
 
+  - ``deep_map_values`` to ``map_values_deep``
+  - ``deep_property`` to ``property_deep``
+  - ``include`` to ``includes``
+  - ``index_by`` to ``key_by``
+  - ``mod_args`` to ``over_args``
   - ``moving_average`` to ``moving_mean``
+  - ``pairs`` to ``to_pairs``
 
 - Remove ``callback`` argument from: (**breaking change**)
 

@@ -18,7 +18,6 @@ __all__ = (
     'add',
     'ceil',
     'clamp',
-    'curve',
     'divide',
     'floor',
     'max_',
@@ -30,11 +29,9 @@ __all__ = (
     'min_by',
     'moving_mean',
     'multiply',
-    'pow_',
     'power',
     'round_',
     'scale',
-    'sigma',
     'slope',
     'std_deviation',
     'sum_',
@@ -89,10 +86,6 @@ def sum_(collection):
 
         >>> sum_([1, 2, 3, 4])
         10
-
-    See Also:
-        - :func:`add` (main definition)
-        - :func:`sum_` (alias)
 
     .. versionadded:: 2.1.0
 
@@ -509,11 +502,10 @@ def power(x, n):
         >>> power(12.5, 3)
         1953.125
 
-    See Also:
-        - :func:`power` (main definition)
-        - :func:`pow_` (alias)
-
     .. versionadded:: 2.1.0
+
+    .. versionchanged: TODO
+        Removed alias ``pow_``.
     """
     if pyd.is_number(x):
         result = pow(x, n)
@@ -523,9 +515,6 @@ def power(x, n):
         result = None
 
     return result
-
-
-pow_ = power
 
 
 def round_(x, precision=0):
@@ -545,16 +534,12 @@ def round_(x, precision=0):
         >>> round_(3.275, 1) == 3.3
         True
 
-    See Also:
-        - :func:`round_` (main definition)
-        - :func:`curve` (alias)
-
     .. versionadded:: 2.1.0
+
+    .. versionchanged: TODO
+        Remove alias ``curve``.
     """
     return rounder(round, x, precision)
-
-
-curve = round_
 
 
 def scale(array, maximum=1):
@@ -626,11 +611,10 @@ def std_deviation(array):
         >>> round(std_deviation([1, 18, 20, 4]), 2) == 8.35
         True
 
-    See Also:
-        - :func:`std_deviation` (main definition)
-        - :func:`sigma` (alias)
-
     .. versionadded:: 2.1.0
+
+    .. verisonchanged:: TODO
+        Remove alias ``sigma``.
     """
     return math.sqrt(variance(array))
 
@@ -657,9 +641,6 @@ def subtract(minuend, subtrahend):
     .. versionadded:: TODO
     """
     return call_math_operator(minuend, subtrahend, operator.sub, 0)
-
-
-sigma = std_deviation
 
 
 def transpose(array):
@@ -733,7 +714,7 @@ def zscore(collection, callback=None):
     """
     array = pyd.map_(collection, callback)
     avg = mean(array)
-    sig = sigma(array)
+    sig = std_deviation(array)
 
     return pyd.map_(array, lambda item: (item - avg) / sig)
 

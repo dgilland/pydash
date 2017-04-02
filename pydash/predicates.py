@@ -34,7 +34,6 @@ __all__ = (
     'is_associative',
     'is_blank',
     'is_boolean',
-    'is_bool',
     'is_builtin',
     'is_date',
     'is_decreasing',
@@ -50,7 +49,6 @@ __all__ = (
     'is_indexed',
     'is_instance_of',
     'is_integer',
-    'is_int',
     'is_iterable',
     'is_json',
     'is_list',
@@ -58,16 +56,12 @@ __all__ = (
     'is_match_with',
     'is_monotone',
     'is_nan',
-    'is_native',
     'is_negative',
     'is_none',
     'is_number',
-    'is_num',
     'is_object',
     'is_odd',
-    'is_plain_object',
     'is_positive',
-    'is_re',
     'is_reg_exp',
     'is_set',
     'is_strictly_decreasing',
@@ -322,19 +316,15 @@ def is_boolean(value):
         >>> is_boolean(0)
         False
 
-    See Also:
-        - :func:`is_boolean` (main definition)
-        - :func:`is_bool` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
         Added ``is_bool`` as alias.
+
+    .. versionchanged:: TODO
+        Removed alias ``is_bool``.
     """
     return isinstance(value, bool)
-
-
-is_bool = is_boolean
 
 
 def is_builtin(value):
@@ -355,19 +345,15 @@ def is_builtin(value):
         >>> is_builtin('foo')
         False
 
-    See Also:
-        - :func:`is_builtin` (main definition)
-        - :func:`is_native` (alias)
-
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``is_native``.
     """
     try:
         return isinstance(value, BuiltinFunctionType) or value in builtins
     except TypeError:  # pragma: no cover
         return False
-
-
-is_native = is_builtin
 
 
 def is_date(value):
@@ -436,20 +422,16 @@ def is_dict(value):
         >>> is_dict([])
         False
 
-    See Also:
-        - :func:`is_dict` (main definition)
-        - :func:`is_plain_object` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
-        Added :func:`is_dict` as main definition and made
-        :func:`is_plain_object` an alias.
+        Added :func:`is_dict` as main definition and made `is_plain_object`` an
+        alias.
+
+    .. versionchanged:: TODO
+        Removed alias ``is_plain_object``.
     """
     return isinstance(value, dict)
-
-
-is_plain_object = is_dict
 
 
 def is_empty(value):
@@ -750,19 +732,15 @@ def is_integer(value):
         >>> is_integer(True)
         False
 
-    See Also:
-        - :func:`is_integer` (main definition)
-        - :func:`is_int` (alias)
-
     .. versionadded:: 2.0.0
 
     .. versionchanged:: 3.0.0
         Added ``is_int`` as alias.
+
+    .. versionchanged:: TODO
+        Removed alias ``is_int``.
     """
     return is_number(value) and isinstance(value, integer_types)
-
-
-is_int = is_integer
 
 
 def is_iterable(value):
@@ -1063,19 +1041,15 @@ def is_number(value):
         >>> is_number('a')
         False
 
-    See Also:
-        - :func:`is_number` (main definition)
-        - :func:`is_num` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
         Added ``is_num`` as alias.
+
+    .. versionchanged:: TODO
+        Removed alias ``is_num``.
     """
     return not is_boolean(value) and isinstance(value, number_types)
-
-
-is_num = is_number
 
 
 def is_object(value):
@@ -1165,16 +1139,12 @@ def is_reg_exp(value):
         >>> is_reg_exp('')
         False
 
-    See Also:
-        - :func:`is_reg_exp` (main definition)
-        - :func:`is_re` (alias)
-
     .. versionadded:: 1.1.0
+
+    .. versionchanged: TODO
+        Removed alias ``is_re``.
     """
     return isinstance(value, RegExp)
-
-
-is_re = is_reg_exp
 
 
 def is_set(value):

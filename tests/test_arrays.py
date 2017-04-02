@@ -9,25 +9,6 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
-    ((), []),
-    (([],), []),
-    (([1, 2, 3],), [1, 2, 3]),
-    (([1, 2, 3], [4, 5, 6]), [1, 2, 3, 4, 5, 6]),
-    (([1, 2, 3], [4, 5, 6], [7]), [1, 2, 3, 4, 5, 6, 7]),
-    ((1, [2], 3, 4), [1, 2, 3, 4]),
-])
-def test_cat(case, expected):
-    assert _.cat(*case) == expected
-
-
-@parametrize('alias', [
-    _.concat
-])
-def test_cat_aliases(alias):
-    _.cat is alias
-
-
-@parametrize('case,expected', [
     (([1, 2, 3, 4, 5],), [[1], [2], [3], [4], [5]]),
     (([1, 2, 3, 4, 5], 2), [[1, 2], [3, 4], [5]]),
     (([1, 2, 3, 4, 5], 3), [[1, 2, 3], [4, 5]]),
@@ -45,6 +26,18 @@ def test_chunk(case, expected):
 ])
 def test_compact(case, expected):
     assert _.compact(case) == expected
+
+
+@parametrize('case,expected', [
+    ((), []),
+    (([],), []),
+    (([1, 2, 3],), [1, 2, 3]),
+    (([1, 2, 3], [4, 5, 6]), [1, 2, 3, 4, 5, 6]),
+    (([1, 2, 3], [4, 5, 6], [7]), [1, 2, 3, 4, 5, 6, 7]),
+    ((1, [2], 3, 4), [1, 2, 3, 4]),
+])
+def test_concat(case, expected):
+    assert _.concat(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -124,22 +117,6 @@ def test_duplicates(case, expected):
 
 
 @parametrize('case,expected', [
-    (([True, 1, None, 'yes'], bool), False),
-    (([True, 1, None, 'yes'],), False),
-    (([{'name': 'moe', 'age': 40},
-       {'name': 'larry', 'age': 50}],
-      'age'),
-     True),
-    (([{'name': 'moe', 'age': 40},
-       {'name': 'larry', 'age': 50}],
-      {'age': 50}),
-     False)
-])
-def test_every(case, expected):
-    assert _.every(*case) == expected
-
-
-@parametrize('case,expected', [
     (([1, 2, 3, 4, 5], 0), [0, 0, 0, 0, 0]),
     (([1, 2, 3, 4, 5], 0, 2), [1, 2, 0, 0, 0]),
     (([1, 2, 3, 4, 5], 0, 2, 3), [1, 2, 0, 4, 5]),
@@ -180,14 +157,6 @@ def test_find_last_index(case, filter_by, expected):
 
 
 @parametrize('case,expected', [
-    ([1, 2, 3], 1),
-    ([], None)
-])
-def test_first(case, expected):
-    assert _.first(case) == expected
-
-
-@parametrize('case,expected', [
     ([1, ['2222'], [3, [[4]]]], [1, '2222', 3, [[4]]]),
 ])
 def test_flatten(case, expected):
@@ -217,6 +186,14 @@ def test_flatten_depth(case, expected):
 ])
 def test_from_pairs(case, expected):
     assert _.from_pairs(case) == expected
+
+
+@parametrize('case,expected', [
+    ([1, 2, 3], 1),
+    ([], None)
+])
+def test_head(case, expected):
+    assert _.head(case) == expected
 
 
 @parametrize('case,value,from_index,expected', [
@@ -421,13 +398,6 @@ def test_push(case, expected):
     assert _.push(*case) == expected
 
 
-@parametrize('alias', [
-    _.append
-])
-def test_push_aliases(alias):
-    _.push is alias
-
-
 @parametrize('case,filter_by,expected', [
     ([1, 2, 3, 4, 5, 6], lambda x: x % 2 == 0, [2, 4, 6]),
     ([1, 2, 3, 4], lambda x: x >= 3, [3, 4]),
@@ -437,21 +407,6 @@ def test_remove(case, filter_by, expected):
     assert _.remove(case, filter_by) == expected
     assert set(case).intersection(expected) == set([])
     assert set(original) == set(case + expected)
-
-
-@parametrize('case,expected', [
-    ([1, 2, 3], [2, 3]),
-    ([], [])
-])
-def test_rest(case, expected):
-    assert _.rest(case) == expected
-
-
-@parametrize('alias', [
-    _.tail
-])
-def test_rest_aliases(alias):
-    _.rest is alias
 
 
 @parametrize('case,expected', [
@@ -615,6 +570,14 @@ def test_split_at(case, expected):
 
 
 @parametrize('case,expected', [
+    ([1, 2, 3], [2, 3]),
+    ([], [])
+])
+def test_tail(case, expected):
+    assert _.tail(case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3, 4, 5],), [1]),
     (([1, 2, 3, 4, 5], 1), [1]),
     (([1, 2, 3, 4, 5], 2), [1, 2]),
@@ -656,13 +619,6 @@ def test_take_right_while(case, expected):
 ])
 def test_uniq(case, expected):
     assert _.uniq(case) == expected
-
-
-@parametrize('alias', [
-    _.unique
-])
-def test_uniq_aliases(alias):
-    assert _.uniq is alias
 
 
 @parametrize('case,callback,expected', [
@@ -794,13 +750,6 @@ def test_zip_(case, expected):
 ])
 def test_zip_object(case, expected):
     assert _.zip_object(*case) == expected
-
-
-@parametrize('alias', [
-    _.object_
-])
-def test_zip_object_aliases(alias):
-    _.zip_object is alias
 
 
 @parametrize('case,expected', [

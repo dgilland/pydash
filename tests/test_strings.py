@@ -183,13 +183,6 @@ def test_escape_reg_exp(case, expected):
     assert _.escape_reg_exp(case) == expected
 
 
-@parametrize('case', [
-    _.escape_re
-])
-def test_escape_reg_exp_aliases(case):
-    assert _.escape_reg_exp is case
-
-
 @parametrize('text,prefix,expected', [
     ('Hello world!', 'Hello', 'Hello world!'),
     (' world!', 'Hello', 'Hello world!'),
@@ -288,37 +281,6 @@ def test_join(case, expected):
     assert _.join(*case) == expected
 
 
-@parametrize('case', [
-    _.implode
-])
-def test_join_aliases(case):
-    assert _.join is case
-
-
-@parametrize('case,expected', [
-    (('Hello World', '/[A-Z]/'), ['H']),
-    (('Hello World', '/[A-Z]/g'), ['H', 'W']),
-    (('hello world', '/[A-Z]/i'), ['h']),
-    (('hello world', '/[A-Z]/gi'),
-     ['h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd']),
-    (('12345', '/[A-Z]/'), [])
-])
-def test_js_match(case, expected):
-    assert _.js_match(*case) == expected
-
-
-@parametrize('case,expected', [
-    (('Hello World', '/[A-Z]/', '!'), '!ello World'),
-    (('Hello World', '/[A-Z]/g', '!'), '!ello !orld'),
-    (('hello world', '/[A-Z]/i', '!'), '!ello world'),
-    (('hello world', '/[A-Z]/gi', '!'), '!!!!! !!!!!'),
-    (('hello world', '/[A-Z]/gi', ''), ' '),
-    (('hello world', '/[A-Z]/gi', None), ' '),
-])
-def test_js_replace(case, expected):
-    assert _.js_replace(*case) == expected
-
-
 @parametrize('case,expected', [
     ('foo  bar baz', 'foo-bar-baz'),
     ('foo__bar_baz', 'foo-bar-baz'),
@@ -411,8 +373,8 @@ def test_pad(case, expected):
     (('', 8, '12'), '12121212'),
     ((None, 8, '12'), '12121212'),
 ])
-def test_pad_left(case, expected):
-    assert _.pad_left(*case) == expected
+def test_pad_start(case, expected):
+    assert _.pad_start(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -427,8 +389,8 @@ def test_pad_left(case, expected):
     (('', 8, '12'), '12121212'),
     ((None, 8, '12'), '12121212'),
 ])
-def test_pad_right(case, expected):
-    assert _.pad_right(*case) == expected
+def test_pad_end(case, expected):
+    assert _.pad_end(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -493,6 +455,30 @@ def test_quote(case, expected):
 
 
 @parametrize('case,expected', [
+    (('Hello World', '/[A-Z]/'), ['H']),
+    (('Hello World', '/[A-Z]/g'), ['H', 'W']),
+    (('hello world', '/[A-Z]/i'), ['h']),
+    (('hello world', '/[A-Z]/gi'),
+     ['h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd']),
+    (('12345', '/[A-Z]/'), [])
+])
+def test_reg_exp_js_match(case, expected):
+    assert _.reg_exp_js_match(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('Hello World', '/[A-Z]/', '!'), '!ello World'),
+    (('Hello World', '/[A-Z]/g', '!'), '!ello !orld'),
+    (('hello world', '/[A-Z]/i', '!'), '!ello world'),
+    (('hello world', '/[A-Z]/gi', '!'), '!!!!! !!!!!'),
+    (('hello world', '/[A-Z]/gi', ''), ' '),
+    (('hello world', '/[A-Z]/gi', None), ' '),
+])
+def test_reg_exp_js_replace(case, expected):
+    assert _.reg_exp_js_replace(*case) == expected
+
+
+@parametrize('case,expected', [
     (('foo', 'o', 'a'), 'faa'),
     (('foo', 'o', 'a', False, 1), 'fao'),
     (('fOO', 'o', 'a'), 'fOO'),
@@ -511,8 +497,8 @@ def test_quote(case, expected):
     (('foo', None, 'a'), 'foo'),
     ((54.7, 5, 6), '64.7'),
 ])
-def test_re_replace(case, expected):
-    assert _.re_replace(*case) == expected
+def test_reg_exp_replace(case, expected):
+    assert _.reg_exp_replace(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -640,13 +626,6 @@ def test_snake_case(case, expected):
     assert _.snake_case(case) == expected
 
 
-@parametrize('case', [
-    _.underscore_case,
-])
-def test_snake_case_aliases(case):
-    assert _.snake_case is case
-
-
 @parametrize('case,expected', [
     (('string1 string2',), ['string1', 'string2']),
     (('string', ''), ['s', 't', 'r', 'i', 'n', 'g']),
@@ -658,13 +637,6 @@ def test_snake_case_aliases(case):
 ])
 def test_split(case, expected):
     assert _.split(*case) == expected
-
-
-@parametrize('case', [
-    _.explode
-])
-def test_split_aliases(case):
-    assert _.split is case
 
 
 @parametrize('case,expected', [
@@ -849,8 +821,8 @@ def test_trim(case, expected):
     ((None,), ''),
     ((None, None), ''),
 ])
-def test_trim_left(case, expected):
-    assert _.trim_left(*case) == expected
+def test_trim_start(case, expected):
+    assert _.trim_start(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -860,8 +832,8 @@ def test_trim_left(case, expected):
     ((None,), ''),
     ((None, None), ''),
 ])
-def test_trim_right(case, expected):
-    assert _.trim_right(*case) == expected
+def test_trim_end(case, expected):
+    assert _.trim_end(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -882,13 +854,6 @@ def test_trim_right(case, expected):
 ])
 def test_truncate(case, expected):
     assert _.truncate(*case) == expected
-
-
-@parametrize('case', [
-    _.trunc
-])
-def test_truncate_aliases(case):
-    assert _.truncate is case
 
 
 @parametrize('case,expected', [

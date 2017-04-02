@@ -31,15 +31,8 @@ class Chain(object):
 
         Returns:
             mixed: Current value of chain operations.
-
-        See Also:
-            - :meth:`value` (main definition)
-            - :meth:`value_of` (alias)
         """
         return self(self._value)
-
-    value_of = value
-    run = value
 
     def to_string(self):
         """Return current value as string.
@@ -241,7 +234,7 @@ def chain(value=NoValue):
         10
 
         >>> def echo(item): print(item)
-        >>> summer = chain([1, 2, 3, 4]).each(echo).sum()
+        >>> summer = chain([1, 2, 3, 4]).for_each(echo).sum()
         >>> committed = summer.commit()
         1
         2

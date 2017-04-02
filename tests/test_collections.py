@@ -18,23 +18,6 @@ def test_at(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], 1), True),
-    (([1, 2, 3], 1, 2), False),
-    (({'name': 'fred', 'age': 40}, 'fred'), True),
-    (('pebbles', 'eb'), True)
-])
-def test_contains(case, expected):
-    assert _.contains(*case) == expected
-
-
-@parametrize('case', [
-    _.include
-])
-def test_contains_aliases(case):
-    assert _.contains is case
-
-
-@parametrize('case,expected', [
     (([4.3, 6.1, 6.4], lambda num: int(math.floor(num))), {4: 1, 6: 2}),
     (([{'one': 1}, {'one': 1}, {'two': 2}, {'one': 1}], {'one': 1}),
      {True: 3, False: 1}),
@@ -61,6 +44,22 @@ def test_deep_pluck(case, expected):
 
 
 @parametrize('case,expected', [
+    (([True, 1, None, 'yes'], bool), False),
+    (([True, 1, None, 'yes'],), False),
+    (([{'name': 'moe', 'age': 40},
+       {'name': 'larry', 'age': 50}],
+      'age'),
+     True),
+    (([{'name': 'moe', 'age': 40},
+       {'name': 'larry', 'age': 50}],
+      {'age': 50}),
+     False)
+])
+def test_every(case, expected):
+    assert _.every(*case) == expected
+
+
+@parametrize('case,expected', [
     (([0, True, False, None, 1, 2, 3],), [True, 1, 2, 3]),
     (([1, 2, 3, 4, 5, 6], lambda num: num % 2 == 0), [2, 4, 6]),
     (([{'name': 'barney', 'age': 36, 'blocked': False},
@@ -71,6 +70,8 @@ def test_deep_pluck(case, expected):
        {'name': 'fred', 'age': 40, 'blocked': True}],
       {'age': 36}),
      [{'name': 'barney', 'age': 36, 'blocked': False}]),
+    (([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}], {'age': 40}),
+     [{'name': 'moe', 'age': 40}])
 ])
 def test_filter_(case, expected):
     assert _.filter_(*case) == expected
@@ -151,13 +152,6 @@ def test_for_each(case, expected):
     assert _.for_each(*case) == expected
 
 
-@parametrize('case', [
-    _.each
-])
-def test_for_each_aliases(case):
-    assert _.for_each is case
-
-
 @parametrize('case,expected', [
     (([1, 2, 3], fixtures.noop), [1, 2, 3]),
     (([1, 2, 3], lambda value: value < 2), [1, 2, 3]),
@@ -166,13 +160,6 @@ def test_for_each_aliases(case):
 ])
 def test_for_each_right(case, expected):
     assert _.for_each_right(*case) == expected
-
-
-@parametrize('case', [
-    _.each_right
-])
-def test_for_each_right_aliases(case):
-    assert _.for_each_right is case
 
 
 @parametrize('case,expected', [
@@ -185,12 +172,13 @@ def test_group_by(case, expected):
 
 
 @parametrize('case,expected', [
-    (([{'dir': 'left', 'code': 97}, {'dir': 'right', 'code': 100}], 'dir'),
-     {'left': {'dir': 'left', 'code': 97},
-      'right': {'dir': 'right', 'code': 100}}),
+    (([1, 2, 3], 1), True),
+    (([1, 2, 3], 1, 2), False),
+    (({'name': 'fred', 'age': 40}, 'fred'), True),
+    (('pebbles', 'eb'), True)
 ])
-def test_index_by(case, expected):
-    assert _.index_by(*case) == expected
+def test_includes(case, expected):
+    assert _.includes(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -202,6 +190,15 @@ def test_index_by(case, expected):
 ])
 def test_invoke_map(case, expected):
     assert _.invoke_map(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([{'dir': 'left', 'code': 97}, {'dir': 'right', 'code': 100}], 'dir'),
+     {'left': {'dir': 'left', 'code': 97},
+      'right': {'dir': 'right', 'code': 100}}),
+])
+def test_key_by(case, expected):
+    assert _.key_by(*case) == expected
 
 
 @parametrize('case,expected,sort_results', [
@@ -227,13 +224,6 @@ def test_map_(case, expected, sort_results):
     assert actual == expected
 
 
-@parametrize('case', [
-    _.collect
-])
-def test_map_aliases(case):
-    assert _.map_ is case
-
-
 @parametrize('case,expectations', [
     (([1, 2, 3], lambda num: num * 3), (3, 6, 9)),
 ])
@@ -241,227 +231,6 @@ def test_mapiter(case, expectations):
     mapper = _.mapiter(*case)
     for expected in expectations:
         assert next(mapper) == expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3], lambda item: item % 2), [[1, 3], [2]]),
-    (([1.2, 2.3, 3.4], lambda item: math.floor(item) % 2),
-     [[1.2, 3.4], [2.3]]),
-    (([{'name': 'barney', 'age': 36},
-       {'name': 'fred', 'age': 40, 'blocked': True},
-       {'name': 'pebbles', 'age': 1}],
-      {'age': 1}),
-     [[{'name': 'pebbles', 'age': 1}],
-      [{'name': 'barney', 'age': 36},
-       {'name': 'fred', 'age': 40, 'blocked': True}]]),
-    (([{'name': 'barney', 'age': 36},
-       {'name': 'fred', 'age': 40, 'blocked': True},
-       {'name': 'pebbles', 'age': 1}],
-      'blocked'),
-     [[{'name': 'fred', 'age': 40, 'blocked': True}],
-      [{'name': 'barney', 'age': 36},
-       {'name': 'pebbles', 'age': 1}]]),
-])
-def test_partition(case, expected):
-    assert _.partition(*case) == expected
-
-
-@parametrize('case,filter_by,expected', [
-    ([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
-     'name',
-     ['moe', 'larry'])
-])
-def test_pluck(case, filter_by, expected):
-    assert _.pluck(case, filter_by) == expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3], None), 1),
-    (([1, 2, 3], fixtures.reduce_callback0), 6),
-    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
-     {'a': 3, 'b': 6, 'c': 9})
-])
-def test_reduce_(case, expected):
-    assert _.reduce_(*case) == expected
-
-
-@parametrize('case,exception', [
-    (([],), TypeError)
-])
-def test_reduce_raise(case, exception):
-    raised = False
-
-    try:
-        _.reduce_(*case)
-    except exception:
-        raised = True
-
-    assert raised
-
-
-@parametrize('case', [
-    _.foldl,
-    _.inject
-])
-def test_reduce_aliases(case):
-    assert _.reduce_ is case
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3], None), 3),
-    (([1, 2, 3], fixtures.reduce_callback0), 6),
-    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_callback0),
-     [4, 5, 2, 3, 0, 1]),
-    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
-     {'a': 3, 'b': 6, 'c': 9})
-])
-def test_reduce_right(case, expected):
-    assert _.reduce_right(*case) == expected
-
-
-@parametrize('case,exception', [
-    (([],), TypeError)
-])
-def test_reduce_right_exception(case, exception):
-    raised = False
-
-    try:
-        _.reduce_right(*case)
-    except exception:
-        raised = True
-
-    assert raised
-
-
-@parametrize('case', [
-    _.foldr
-])
-def test_reduce_right_aliases(case):
-    assert _.reduce_right is case
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3], None), [1, 1]),
-    (([1, 2, 3], fixtures.reduce_callback0), [3, 6]),
-    (([1, 2, 3, 4, 5], fixtures.reduce_callback0, 0), [1, 3, 6, 10, 15])
-])
-def test_reductions(case, expected):
-    assert _.reductions(*case) == expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3], None), [3, 3]),
-    (([1, 2, 3], fixtures.reduce_callback0), [5, 6]),
-    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_callback0),
-     [[4, 5, 2, 3], [4, 5, 2, 3, 0, 1]]),
-])
-def test_reductions_right(case, expected):
-    assert _.reductions_right(*case) == expected
-
-
-@parametrize('case,expected', [
-    (([0, True, False, None, 1, 2, 3],), [0, False, None]),
-    (([1, 2, 3, 4, 5, 6], lambda num: num % 2 == 0), [1, 3, 5]),
-    (([{'name': 'barney', 'age': 36, 'blocked': False},
-       {'name': 'fred', 'age': 40, 'blocked': True}],
-      'blocked'),
-     [{'name': 'barney', 'age': 36, 'blocked': False}]),
-    (([{'name': 'barney', 'age': 36, 'blocked': False},
-       {'name': 'fred', 'age': 40, 'blocked': True}],
-      {'age': 36}),
-     [{'name': 'fred', 'age': 40, 'blocked': True}]),
-])
-def test_reject(case, expected):
-    assert _.reject(*case) == expected
-
-
-@parametrize('case', [
-    [1, 2, 3, 4, 5, 6],
-])
-def test_sample(case):
-    assert _.sample(case) in case
-
-
-@parametrize('case', [
-    ([1, 2, 3, 4, 5, 6], 2),
-    ([1, 2, 3, 4, 5, 6], 3),
-    ([1, 2, 3, 4, 5, 6], 4),
-])
-def test_sample_size(case):
-    collection, n = case
-    sample_n = _.sample_size(*case)
-
-    assert isinstance(sample_n, list)
-    assert len(sample_n) == min(n, len(collection))
-    assert set(sample_n).issubset(collection)
-
-
-@parametrize('case', [
-    [1, 2, 3, 4, 5, 6],
-    {'one': 1, 'two': 2, 'three': 3}
-])
-def test_shuffle(case):
-    shuffled = _.shuffle(case)
-
-    assert len(shuffled) == len(case)
-
-    if isinstance(case, dict):
-        assert set(shuffled) == set(case.values())
-    else:
-        assert set(shuffled) == set(case)
-
-
-@parametrize('case', [
-    [1, 2, 3, 4, 5],
-    {'1': 1, '2': 2, '3': 3}
-])
-def test_size(case):
-    assert _.size(case) == len(case)
-
-
-@parametrize('case,expected', [
-    (([None, 0, 'yes', False], bool), True),
-    (([None, 0, 'yes', False],), True),
-    (([{'name': 'apple', 'organic': False, 'type': 'fruit'},
-       {'name': 'carrot', 'organic': True, 'type': 'vegetable'}],
-      'organic'),
-     True),
-    (([{'name': 'apple', 'organic': False, 'type': 'fruit'},
-       {'name': 'carrot', 'organic': True, 'type': 'vegetable'}],
-      {'type': 'meat'}),
-     False)
-])
-def test_some(case, expected):
-    assert _.some(*case) == expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3], lambda x: math.sin(x)), [3, 1, 2]),
-    (([{'name': 'barney', 'age': 36},
-       {'name': 'fred', 'age': 40},
-       {'name': 'barney', 'age': 26},
-       {'name': 'fred', 'age': 30}],
-      'age'),
-     [{'name': 'barney', 'age': 26},
-      {'name': 'fred', 'age': 30},
-      {'name': 'barney', 'age': 36},
-      {'name': 'fred', 'age': 40}]),
-    (({'a': 1, 'b': 2, 'c': 3}, lambda x: math.sin(x)), [3, 1, 2]),
-    (([1, 2, 3], lambda x: math.sin(x), True), [2, 1, 3]),
-    (([{'name': 'barney', 'age': 36},
-       {'name': 'fred', 'age': 40},
-       {'name': 'barney', 'age': 26},
-       {'name': 'fred', 'age': 30}],
-      'age',
-      True),
-     [{'name': 'fred', 'age': 40},
-      {'name': 'barney', 'age': 36},
-      {'name': 'fred', 'age': 30},
-      {'name': 'barney', 'age': 26}]),
-    (({'a': 1, 'b': 2, 'c': 3}, lambda x: math.sin(x), True), [2, 1, 3]),
-])
-def test_sort_by(case, expected):
-    assert _.sort_by(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -602,15 +371,205 @@ def test_sort_by(case, expected):
                     {'user': 'barney', 'age': 26},
                     {'user': 'barney', 'age': 36}]))),
 ])
-def test_sort_by_all(case, expected):
-    assert _.sort_by_all(*case) == expected
+def test_order_by(case, expected):
+    assert _.order_by(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], lambda item: item % 2), [[1, 3], [2]]),
+    (([1.2, 2.3, 3.4], lambda item: math.floor(item) % 2),
+     [[1.2, 3.4], [2.3]]),
+    (([{'name': 'barney', 'age': 36},
+       {'name': 'fred', 'age': 40, 'blocked': True},
+       {'name': 'pebbles', 'age': 1}],
+      {'age': 1}),
+     [[{'name': 'pebbles', 'age': 1}],
+      [{'name': 'barney', 'age': 36},
+       {'name': 'fred', 'age': 40, 'blocked': True}]]),
+    (([{'name': 'barney', 'age': 36},
+       {'name': 'fred', 'age': 40, 'blocked': True},
+       {'name': 'pebbles', 'age': 1}],
+      'blocked'),
+     [[{'name': 'fred', 'age': 40, 'blocked': True}],
+      [{'name': 'barney', 'age': 36},
+       {'name': 'pebbles', 'age': 1}]]),
+])
+def test_partition(case, expected):
+    assert _.partition(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], None), 1),
+    (([1, 2, 3], fixtures.reduce_callback0), 6),
+    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
+     {'a': 3, 'b': 6, 'c': 9})
+])
+def test_reduce_(case, expected):
+    assert _.reduce_(*case) == expected
+
+
+@parametrize('case,exception', [
+    (([],), TypeError)
+])
+def test_reduce_raise(case, exception):
+    raised = False
+
+    try:
+        _.reduce_(*case)
+    except exception:
+        raised = True
+
+    assert raised
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], None), 3),
+    (([1, 2, 3], fixtures.reduce_callback0), 6),
+    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_callback0),
+     [4, 5, 2, 3, 0, 1]),
+    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
+     {'a': 3, 'b': 6, 'c': 9})
+])
+def test_reduce_right(case, expected):
+    assert _.reduce_right(*case) == expected
+
+
+@parametrize('case,exception', [
+    (([],), TypeError)
+])
+def test_reduce_right_exception(case, exception):
+    raised = False
+
+    try:
+        _.reduce_right(*case)
+    except exception:
+        raised = True
+
+    assert raised
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], None), [1, 1]),
+    (([1, 2, 3], fixtures.reduce_callback0), [3, 6]),
+    (([1, 2, 3, 4, 5], fixtures.reduce_callback0, 0), [1, 3, 6, 10, 15])
+])
+def test_reductions(case, expected):
+    assert _.reductions(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], None), [3, 3]),
+    (([1, 2, 3], fixtures.reduce_callback0), [5, 6]),
+    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_callback0),
+     [[4, 5, 2, 3], [4, 5, 2, 3, 0, 1]]),
+])
+def test_reductions_right(case, expected):
+    assert _.reductions_right(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([0, True, False, None, 1, 2, 3],), [0, False, None]),
+    (([1, 2, 3, 4, 5, 6], lambda num: num % 2 == 0), [1, 3, 5]),
+    (([{'name': 'barney', 'age': 36, 'blocked': False},
+       {'name': 'fred', 'age': 40, 'blocked': True}],
+      'blocked'),
+     [{'name': 'barney', 'age': 36, 'blocked': False}]),
+    (([{'name': 'barney', 'age': 36, 'blocked': False},
+       {'name': 'fred', 'age': 40, 'blocked': True}],
+      {'age': 36}),
+     [{'name': 'fred', 'age': 40, 'blocked': True}]),
+])
+def test_reject(case, expected):
+    assert _.reject(*case) == expected
 
 
 @parametrize('case', [
-    _.sort_by_order
+    [1, 2, 3, 4, 5, 6],
 ])
-def test_sort_by_all_aliases(case):
-    assert _.sort_by_all is case
+def test_sample(case):
+    assert _.sample(case) in case
+
+
+@parametrize('case', [
+    ([1, 2, 3, 4, 5, 6], 2),
+    ([1, 2, 3, 4, 5, 6], 3),
+    ([1, 2, 3, 4, 5, 6], 4),
+])
+def test_sample_size(case):
+    collection, n = case
+    sample_n = _.sample_size(*case)
+
+    assert isinstance(sample_n, list)
+    assert len(sample_n) == min(n, len(collection))
+    assert set(sample_n).issubset(collection)
+
+
+@parametrize('case', [
+    [1, 2, 3, 4, 5, 6],
+    {'one': 1, 'two': 2, 'three': 3}
+])
+def test_shuffle(case):
+    shuffled = _.shuffle(case)
+
+    assert len(shuffled) == len(case)
+
+    if isinstance(case, dict):
+        assert set(shuffled) == set(case.values())
+    else:
+        assert set(shuffled) == set(case)
+
+
+@parametrize('case', [
+    [1, 2, 3, 4, 5],
+    {'1': 1, '2': 2, '3': 3}
+])
+def test_size(case):
+    assert _.size(case) == len(case)
+
+
+@parametrize('case,expected', [
+    (([None, 0, 'yes', False], bool), True),
+    (([None, 0, 'yes', False],), True),
+    (([{'name': 'apple', 'organic': False, 'type': 'fruit'},
+       {'name': 'carrot', 'organic': True, 'type': 'vegetable'}],
+      'organic'),
+     True),
+    (([{'name': 'apple', 'organic': False, 'type': 'fruit'},
+       {'name': 'carrot', 'organic': True, 'type': 'vegetable'}],
+      {'type': 'meat'}),
+     False)
+])
+def test_some(case, expected):
+    assert _.some(*case) == expected
+
+
+@parametrize('case,expected', [
+    (([1, 2, 3], lambda x: math.sin(x)), [3, 1, 2]),
+    (([{'name': 'barney', 'age': 36},
+       {'name': 'fred', 'age': 40},
+       {'name': 'barney', 'age': 26},
+       {'name': 'fred', 'age': 30}],
+      'age'),
+     [{'name': 'barney', 'age': 26},
+      {'name': 'fred', 'age': 30},
+      {'name': 'barney', 'age': 36},
+      {'name': 'fred', 'age': 40}]),
+    (({'a': 1, 'b': 2, 'c': 3}, lambda x: math.sin(x)), [3, 1, 2]),
+    (([1, 2, 3], lambda x: math.sin(x), True), [2, 1, 3]),
+    (([{'name': 'barney', 'age': 36},
+       {'name': 'fred', 'age': 40},
+       {'name': 'barney', 'age': 26},
+       {'name': 'fred', 'age': 30}],
+      'age',
+      True),
+     [{'name': 'fred', 'age': 40},
+      {'name': 'barney', 'age': 36},
+      {'name': 'fred', 'age': 30},
+      {'name': 'barney', 'age': 26}]),
+    (({'a': 1, 'b': 2, 'c': 3}, lambda x: math.sin(x), True), [2, 1, 3]),
+])
+def test_sort_by(case, expected):
+    assert _.sort_by(*case) == expected
 
 
 @parametrize('case,expected', [
@@ -619,12 +578,3 @@ def test_sort_by_all_aliases(case):
 ])
 def test_to_list(case, expected):
     assert set(_.to_list(case)) == set(expected)
-
-
-@parametrize('case,filter_by,expected,', [
-    ([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
-     {'age': 40},
-     [{'name': 'moe', 'age': 40}])
-])
-def test_where(case, filter_by, expected):
-    assert _.where(case, filter_by) == expected

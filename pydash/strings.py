@@ -38,28 +38,25 @@ __all__ = (
     'ensure_starts_with',
     'escape',
     'escape_reg_exp',
-    'escape_re',
-    'explode',
     'has_substr',
     'human_case',
-    'implode',
     'insert_substr',
     'join',
-    'js_match',
-    'js_replace',
     'kebab_case',
     'lines',
     'lower_case',
     'lower_first',
     'number_format',
     'pad',
-    'pad_left',
-    'pad_right',
+    'pad_end',
+    'pad_start',
     'pascal_case',
     'predecessor',
     'prune',
     'quote',
-    're_replace',
+    'reg_exp_js_match',
+    'reg_exp_js_replace',
+    'reg_exp_replace',
     'repeat',
     'replace',
     'separator_case',
@@ -82,11 +79,9 @@ __all__ = (
     'to_lower',
     'to_upper',
     'trim',
-    'trim_left',
-    'trim_right',
-    'trunc',
+    'trim_end',
+    'trim_start',
     'truncate',
-    'underscore_case',
     'unescape',
     'unquote',
     'upper_case',
@@ -369,10 +364,10 @@ def deburr(text):
     .. versionadded:: 2.0.0
     """
     text = pyd.to_string(text)
-    return js_replace(text,
-                      RE_LATIN1,
-                      lambda match: DEBURRED_LETTERS.get(match.group(),
-                                                         match.group()))
+    return reg_exp_js_replace(
+        text,
+        RE_LATIN1,
+        lambda match: DEBURRED_LETTERS.get(match.group(), match.group()))
 
 
 def decapitalize(text):
@@ -517,17 +512,13 @@ def escape_reg_exp(text):
         >>> escape_reg_exp('[()]')
         '\\\\[\\\\(\\\\)\\\\]'
 
-    See Also:
-        - :func:`escape_reg_exp` (main definition)
-        - :func:`escape_re` (alias)
-
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: TODO
+        Removed alias ``escape_re``
     """
     text = pyd.to_string(text)
     return re.escape(text)
-
-
-escape_re = escape_reg_exp
 
 
 def has_substr(text, subtext):
@@ -575,7 +566,7 @@ def human_case(text):
     """
     return (pyd.chain(text)
             .snake_case()
-            .re_replace('_id$', '')
+            .reg_exp_replace('_id$', '')
             .replace('_', ' ')
             .capitalize()
             .value())
@@ -624,84 +615,12 @@ def join(array, separator=''):
         >>> join('abcdef', '-') == 'a-b-c-d-e-f'
         True
 
-    See Also:
-        - :func:`join` (main definition)
-        - :func:`implode` (alias)
-
     .. versionadded:: 2.0.0
 
-    .. versionchanged:: 3.0.0
-        Modified :func:`implode` to have :func:`join` as main definition and
-        :func:`implode` as alias.
+    .. versionchanged:: TODO
+        Removed alias ``implode``.
     """
     return pyd.to_string(separator).join(pyd.map_(array or (), pyd.to_string))
-
-
-implode = join
-
-
-def js_match(text, reg_exp):
-    """Return list of matches using Javascript style regular expression.
-
-    Args:
-        text (str): String to evaluate.
-        reg_exp (str): Javascript style regular expression.
-
-    Returns:
-        list: List of matches.
-
-    Example:
-
-        >>> js_match('aaBBcc', '/bb/')
-        []
-        >>> js_match('aaBBcc', '/bb/i')
-        ['BB']
-        >>> js_match('aaBBccbb', '/bb/i')
-        ['BB']
-        >>> js_match('aaBBccbb', '/bb/gi')
-        ['BB', 'bb']
-
-    .. versionadded:: 2.0.0
-
-    .. versionchanged:: 3.0.0
-        Reordered arguments to make `text` first.
-    """
-    text = pyd.to_string(text)
-    return js_to_py_re_find(reg_exp)(text)
-
-
-def js_replace(text, reg_exp, repl):
-    """Replace `text` with `repl` using Javascript style regular expression to
-    find matches.
-
-    Args:
-        text (str): String to evaluate.
-        reg_exp (str): Javascript style regular expression.
-        repl (str): Replacement string.
-
-    Returns:
-        str: Modified string.
-
-    Example:
-
-        >>> js_replace('aaBBcc', '/bb/', 'X')
-        'aaBBcc'
-        >>> js_replace('aaBBcc', '/bb/i', 'X')
-        'aaXcc'
-        >>> js_replace('aaBBccbb', '/bb/i', 'X')
-        'aaXccbb'
-        >>> js_replace('aaBBccbb', '/bb/gi', 'X')
-        'aaXccX'
-
-    .. versionadded:: 2.0.0
-
-    .. versionchanged:: 3.0.0
-        Reordered arguments to make `text` first.
-    """
-    text = pyd.to_string(text)
-    if not pyd.is_function(repl):
-        repl = pyd.to_string(repl)
-    return js_to_py_re_replace(reg_exp)(text, repl)
 
 
 def kebab_case(text):
@@ -874,40 +793,12 @@ def pad(text, length, chars=' '):
     mid = (length - text_len) / 2.0
     left_len = int(math.floor(mid))
     right_len = int(math.ceil(mid))
-    chars = pad_right('', right_len, chars)
+    chars = pad_end('', right_len, chars)
 
     return chars[:left_len] + text + chars
 
 
-def pad_left(text, length, chars=' '):
-    """Pads `text` on the left side if it is shorter than the given padding
-    length. The `chars` string may be truncated if the number of padding
-    characters can't be evenly divided by the padding length.
-
-    Args:
-        text (str): String to pad.
-        length (int): Amount to pad.
-        chars (str, optional): Characters to pad with. Defaults to ``" "``.
-
-    Returns:
-        str: Padded string.
-
-    Example:
-
-        >>> pad_left('abc', 5)
-        '  abc'
-        >>> pad_left('abc', 5, '.')
-        '..abc'
-
-    .. versionadded:: 1.1.0
-    """
-    # pylint: disable=redefined-outer-name
-    text = pyd.to_string(text)
-    length = max((length, len(text)))
-    return (repeat(chars, length) + text)[-length:]
-
-
-def pad_right(text, length, chars=' '):
+def pad_end(text, length, chars=' '):
     """Pads `text` on the right side if it is shorter than the given padding
     length. The `chars` string may be truncated if the number of padding
     characters can't be evenly divided by the padding length.
@@ -922,17 +813,51 @@ def pad_right(text, length, chars=' '):
 
     Example:
 
-        >>> pad_right('abc', 5)
+        >>> pad_end('abc', 5)
         'abc  '
-        >>> pad_right('abc', 5, '.')
+        >>> pad_end('abc', 5, '.')
         'abc..'
 
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: TODO
+        Renamed from ``pad_right`` to ``pad_end``.
     """
     # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     length = max((length, len(text)))
     return (text + repeat(chars, length))[:length]
+
+
+def pad_start(text, length, chars=' '):
+    """Pads `text` on the left side if it is shorter than the given padding
+    length. The `chars` string may be truncated if the number of padding
+    characters can't be evenly divided by the padding length.
+
+    Args:
+        text (str): String to pad.
+        length (int): Amount to pad.
+        chars (str, optional): Characters to pad with. Defaults to ``" "``.
+
+    Returns:
+        str: Padded string.
+
+    Example:
+
+        >>> pad_start('abc', 5)
+        '  abc'
+        >>> pad_start('abc', 5, '.')
+        '..abc'
+
+    .. versionadded:: 1.1.0
+
+    .. versionchanged:: TODO
+        Renamed from ``pad_left`` to ``pad_start``.
+    """
+    # pylint: disable=redefined-outer-name
+    text = pyd.to_string(text)
+    length = max((length, len(text)))
+    return (repeat(chars, length) + text)[-length:]
 
 
 def pascal_case(text, strict=True):
@@ -1023,16 +948,16 @@ def prune(text, length=0, omission='...'):
         return text
 
     # Replace non-alphanumeric chars with whitespace.
-    def repl(match):  # pylint: disable=missing-docstring
+    def repl(match):
         char = match.group(0)
         return ' ' if char.upper() == char.lower() else char
 
-    subtext = re_replace(text[:length + 1], r'.(?=\W*\w*$)', repl)
+    subtext = reg_exp_replace(text[:length + 1], r'.(?=\W*\w*$)', repl)
 
     if re.match(r'\w\w', subtext[-2:]):
         # Last two characters are alphanumeric. Remove last "word" from end of
         # string so that we prune to the next whole word.
-        subtext = re_replace(subtext, r'\s*\S+$', '')
+        subtext = reg_exp_replace(subtext, r'\s*\S+$', '')
     else:
         # Last character (at least) is whitespace. So remove that character as
         # well as any other whitespace.
@@ -1070,7 +995,77 @@ def quote(text, quote_char='"'):
     return surround(text, quote_char)
 
 
-def re_replace(text, pattern, repl, ignore_case=False, count=0):
+def reg_exp_js_match(text, reg_exp):
+    """Return list of matches using Javascript style regular expression.
+
+    Args:
+        text (str): String to evaluate.
+        reg_exp (str): Javascript style regular expression.
+
+    Returns:
+        list: List of matches.
+
+    Example:
+
+        >>> reg_exp_js_match('aaBBcc', '/bb/')
+        []
+        >>> reg_exp_js_match('aaBBcc', '/bb/i')
+        ['BB']
+        >>> reg_exp_js_match('aaBBccbb', '/bb/i')
+        ['BB']
+        >>> reg_exp_js_match('aaBBccbb', '/bb/gi')
+        ['BB', 'bb']
+
+    .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Reordered arguments to make `text` first.
+
+    .. versionchanged:: TODO
+        Renamed from ``js_match`` to ``reg_exp_js_match``.
+    """
+    text = pyd.to_string(text)
+    return js_to_py_re_find(reg_exp)(text)
+
+
+def reg_exp_js_replace(text, reg_exp, repl):
+    """Replace `text` with `repl` using Javascript style regular expression to
+    find matches.
+
+    Args:
+        text (str): String to evaluate.
+        reg_exp (str): Javascript style regular expression.
+        repl (str): Replacement string.
+
+    Returns:
+        str: Modified string.
+
+    Example:
+
+        >>> reg_exp_js_replace('aaBBcc', '/bb/', 'X')
+        'aaBBcc'
+        >>> reg_exp_js_replace('aaBBcc', '/bb/i', 'X')
+        'aaXcc'
+        >>> reg_exp_js_replace('aaBBccbb', '/bb/i', 'X')
+        'aaXccbb'
+        >>> reg_exp_js_replace('aaBBccbb', '/bb/gi', 'X')
+        'aaXccX'
+
+    .. versionadded:: 2.0.0
+
+    .. versionchanged:: 3.0.0
+        Reordered arguments to make `text` first.
+
+    .. versionchanged:: TODO
+        Renamed from ``js_replace`` to ``reg_exp_js_replace``.
+    """
+    text = pyd.to_string(text)
+    if not pyd.is_function(repl):
+        repl = pyd.to_string(repl)
+    return js_to_py_reg_exp_replace(reg_exp)(text, repl)
+
+
+def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
     """Replace occurrences of regex `pattern` with `repl` in `text`.
     Optionally, ignore case when replacing. Optionally, set `count` to limit
     number of replacements.
@@ -1089,16 +1084,19 @@ def re_replace(text, pattern, repl, ignore_case=False, count=0):
 
     Example:
 
-        >>> re_replace('aabbcc', 'b', 'X')
+        >>> reg_exp_replace('aabbcc', 'b', 'X')
         'aaXXcc'
-        >>> re_replace('aabbcc', 'B', 'X', ignore_case=True)
+        >>> reg_exp_replace('aabbcc', 'B', 'X', ignore_case=True)
         'aaXXcc'
-        >>> re_replace('aabbcc', 'b', 'X', count=1)
+        >>> reg_exp_replace('aabbcc', 'b', 'X', count=1)
         'aaXbcc'
-        >>> re_replace('aabbcc', '[ab]', 'X')
+        >>> reg_exp_replace('aabbcc', '[ab]', 'X')
         'XXXXcc'
 
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: TODO
+        Renamed from ``re_replace`` to ``reg_exp_replace``.
     """
     if pattern is None:
         return pyd.to_string(text)
@@ -1322,16 +1320,12 @@ def snake_case(text):
         >>> snake_case('This is Snake Case!')
         'this_is_snake_case'
 
-    See Also:
-        - :func:`snake_case` (main definition)
-        - :func:`underscore_case` (alias)
-
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: TODO
+        Removed alias ``underscore_case``.
     """
     return separator_case(text, '_')
-
-
-underscore_case = snake_case
 
 
 def split(text, separator=NoValue):
@@ -1354,15 +1348,14 @@ def split(text, separator=NoValue):
         >>> split('one potato, two potatoes, three potatoes, four!', ',')
         ['one potato', ' two potatoes', ' three potatoes', ' four!']
 
-    See Also:
-        - :func:`split` (main definition)
-        - :func:`explode` (alias)
-
     .. versionadded:: 2.0.0
 
     .. versionchanged:: 3.0.0
         Changed `separator` default to ``NoValue`` and supported splitting on
         whitespace by default.
+
+    .. versionchanged:: TODO
+        Removed alias ``explode``.
     """
     text = pyd.to_string(text)
 
@@ -1374,9 +1367,6 @@ def split(text, separator=NoValue):
         ret = chars(text)
 
     return ret
-
-
-explode = split
 
 
 def start_case(text):
@@ -1443,7 +1433,7 @@ def strip_tags(text):
 
     .. versionadded:: 3.0.0
     """
-    return re_replace(text, r'<\/?[^>]+>', '')
+    return reg_exp_replace(text, r'<\/?[^>]+>', '')
 
 
 def substr_left(text, subtext):
@@ -1694,29 +1684,7 @@ def trim(text, chars=None):
     return text.strip(chars)
 
 
-def trim_left(text, chars=None):
-    r"""Removes leading  whitespace or specified characters from `text`.
-
-    Args:
-        text (str): String to trim.
-        chars (str, optional): Specific characters to remove.
-
-    Returns:
-        str: Trimmed string.
-
-    Example:
-
-        >>> trim_left('  abc efg\r\n ')
-        'abc efg\r\n '
-
-    .. versionadded:: 1.1.0
-    """
-    # pylint: disable=redefined-outer-name
-    text = pyd.to_string(text)
-    return text.lstrip(chars)
-
-
-def trim_right(text, chars=None):
+def trim_end(text, chars=None):
     r"""Removes trailing whitespace or specified characters from `text`.
 
     Args:
@@ -1728,14 +1696,40 @@ def trim_right(text, chars=None):
 
     Example:
 
-        >>> trim_right('  abc efg\r\n ')
+        >>> trim_end('  abc efg\r\n ')
         '  abc efg'
 
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: TODO
+        Renamed from ``trim_right`` to ``trim_end``.
     """
-    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
     return text.rstrip(chars)
+
+
+def trim_start(text, chars=None):
+    r"""Removes leading  whitespace or specified characters from `text`.
+
+    Args:
+        text (str): String to trim.
+        chars (str, optional): Specific characters to remove.
+
+    Returns:
+        str: Trimmed string.
+
+    Example:
+
+        >>> trim_start('  abc efg\r\n ')
+        'abc efg\r\n '
+
+    .. versionadded:: 1.1.0
+
+    .. versionchanged:: TODO
+        Renamed from ``trim_left`` to ``trim_start``.
+    """
+    text = pyd.to_string(text)
+    return text.lstrip(chars)
 
 
 def truncate(text, length=30, omission='...', separator=None):
@@ -1763,15 +1757,10 @@ def truncate(text, length=30, omission='...', separator=None):
         >>> truncate('hello world', 10, separator=' ')
         'hello...'
 
-    See Also:
-        - :func:`truncate` (main definition)
-        - :func:`trunc` (alias)
-
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: 3.0.0
-        Made :func:`truncate` main function definition and added :func:`trunc`
-        as alias.
+    .. versionchanged:: TODO
+        Removed alias ``trunc``.
     """
     text = pyd.to_string(text)
 
@@ -1786,7 +1775,7 @@ def truncate(text, length=30, omission='...', separator=None):
 
     if pyd.is_string(separator):
         trunc_len = text.rfind(separator)
-    elif pyd.is_re(separator):
+    elif pyd.is_reg_exp(separator):
         last = None
         for match in separator.finditer(text):
             last = match
@@ -1795,9 +1784,6 @@ def truncate(text, length=30, omission='...', separator=None):
             trunc_len = last.start()
 
     return text[:trunc_len] + omission
-
-
-trunc = truncate
 
 
 def unescape(text):
@@ -1973,7 +1959,7 @@ def words(text, pattern=None):
     .. versionchanged:: 3.2.0
         Improved matching for one character words.
     """
-    return js_match(text, pattern or RE_WORDS)
+    return reg_exp_js_match(text, pattern or RE_WORDS)
 
 
 #
@@ -1988,7 +1974,7 @@ def js_to_py_re_find(reg_exp):
     pattern, options = reg_exp[1:].rsplit('/', 1)
     flags = re.I if 'i' in options else 0
 
-    def find(text):  # pylint: disable=missing-docstring
+    def find(text):
         if 'g' in options:
             results = re.findall(pattern, text, flags=flags)
         else:
@@ -2004,7 +1990,7 @@ def js_to_py_re_find(reg_exp):
     return find
 
 
-def js_to_py_re_replace(reg_exp):
+def js_to_py_reg_exp_replace(reg_exp):
     """Return Python regular expression substitution function based on
     Javascript style regexp.
     """
@@ -2012,12 +1998,12 @@ def js_to_py_re_replace(reg_exp):
     count = 0 if 'g' in options else 1
     ignore_case = 'i' in options
 
-    def _replace(text, repl):  # pylint: disable=missing-docstring
-        return re_replace(text,
-                          pattern,
-                          repl,
-                          ignore_case=ignore_case,
-                          count=count)
+    def _replace(text, repl):
+        return reg_exp_replace(text,
+                               pattern,
+                               repl,
+                               ignore_case=ignore_case,
+                               count=count)
 
     return _replace
 

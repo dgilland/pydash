@@ -24,9 +24,6 @@ __all__ = (
     'conforms',
     'conforms_to',
     'constant',
-    'callback',
-    'deep_property',
-    'deep_prop',
     'default_to',
     'identity',
     'iteratee',
@@ -41,9 +38,8 @@ __all__ = (
     'over',
     'over_every',
     'over_some',
-    'prop',
-    'prop_of',
     'property_',
+    'property_deep',
     'property_of',
     'random',
     'range_',
@@ -221,37 +217,6 @@ def constant(value):
     return partial(identity, value)
 
 
-def deep_property(path):
-    """Creates a :func:`pydash.collections.pluck` style function, which returns
-    the key value of a given object.
-
-    Args:
-        key (mixed): Key value to fetch from object.
-
-    Returns:
-        function: Function that returns object's key value.
-
-    Example:
-
-        >>> deep_property('a.b.c')({'a': {'b': {'c': 1}}})
-        1
-        >>> deep_property('a.1.0.b')({'a': [5, [{'b': 1}]]})
-        1
-        >>> deep_property('a.1.0.b')({}) is None
-        True
-
-    See Also:
-        - :func:`deep_property` (main definition)
-        - :func:`deep_prop` (alias)
-
-    .. versionadded:: 1.0.0
-    """
-    return lambda obj: pyd.get(obj, path)
-
-
-deep_prop = deep_property
-
-
 def default_to(value, default_value):
     """Checks :attr:`value` to determine whether a default value should be
     returned in its place. The :attr:`default_value` is returned if value is
@@ -337,10 +302,6 @@ def iteratee(func):
         >>> ident(1, 2, 3)
         1
 
-    See Also:
-        - :func:`iteratee` (main definition)
-        - :func:`callback` (alias)
-
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
@@ -354,14 +315,17 @@ def iteratee(func):
         list/tuple.
         - Added support for matches property style callback via two item
         list/tuple.
+
+    .. versionchanged:: TODO
+        Removed alias ``callback``.
     """
     if callable(func):
         cbk = func
     else:
         if isinstance(func, string_types):
-            cbk = deep_prop(func)
+            cbk = property_deep(func)
         elif isinstance(func, (list, tuple)) and len(func) == 1:
-            cbk = prop(func[0])
+            cbk = property_(func[0])
         elif isinstance(func, (list, tuple)) and len(func) > 1:
             cbk = matches_property(*func[:2])
         elif isinstance(func, dict):
@@ -375,9 +339,6 @@ def iteratee(func):
         cbk._argcount = 1
 
     return cbk
-
-
-callback = iteratee
 
 
 def matches(source):
@@ -433,7 +394,7 @@ def matches_property(key, value):
 
     .. versionadded:: 3.1.0
     """
-    prop_key = prop(key)
+    prop_key = property_(key)
     return lambda obj: matches(value)(prop_key(obj))
 
 
@@ -466,7 +427,7 @@ def memoize(func, resolver=None):
 
     .. versionadded:: 1.0.0
     """
-    def memoized(*args, **kargs):  # pylint: disable=missing-docstring
+    def memoized(*args, **kargs):
         if resolver:
             key = resolver(*args, **kargs)
         else:
@@ -692,25 +653,46 @@ def property_(key):
 
     Example:
 
-        >>> get_data = prop('data')
+        >>> get_data = property_('data')
         >>> get_data({'data': 1})
         1
         >>> get_data({}) is None
         True
-        >>> get_first = prop(0)
+        >>> get_first = property_(0)
         >>> get_first([1, 2, 3])
         1
-
-    See Also:
-        - :func:`property_` (main definition)
-        - :func:`prop` (alias)
 
     .. versionadded:: 1.0.0
     """
     return lambda obj: base_get(obj, key, default=None)
 
 
-prop = property_
+def property_deep(path):
+    """Creates a :func:`pydash.collections.pluck` style function, which returns
+    the key value of a given object.
+
+    Args:
+        key (mixed): Key value to fetch from object.
+
+    Returns:
+        function: Function that returns object's key value.
+
+    Example:
+
+        >>> property_deep('a.b.c')({'a': {'b': {'c': 1}}})
+        1
+        >>> property_deep('a.1.0.b')({'a': [5, [{'b': 1}]]})
+        1
+        >>> property_deep('a.1.0.b')({}) is None
+        True
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: TODO
+        Renamed from ``property_deeperty`` to ``property_deep`` and removed
+        alias ``property_deep``.
+    """
+    return lambda obj: pyd.get(obj, path)
 
 
 def property_of(obj):
@@ -725,7 +707,7 @@ def property_of(obj):
 
     Example:
 
-        >>> getter = prop_of({'a': 1, 'b': 2, 'c': 3})
+        >>> getter = property_of({'a': 1, 'b': 2, 'c': 3})
         >>> getter('a')
         1
         >>> getter('b')
@@ -733,16 +715,12 @@ def property_of(obj):
         >>> getter('x') is None
         True
 
-    See Also:
-        - :func:`property_of` (main definition)
-        - :func:`prop_of` (alias)
-
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: TODO
+        Removed alias ``prop_of``.
     """
     return lambda key: property_(key)(obj)
-
-
-prop_of = property_of
 
 
 def random(start=0, stop=1, floating=False):
@@ -1091,8 +1069,8 @@ def to_path_tokens(value):
 
 def unescape_path_key(key):
     """Unescape path key."""
-    key = pyd.js_replace(key, r'/\\\\/g', r'\\')
-    key = pyd.js_replace(key, r'/\\\./g', '.')
+    key = pyd.reg_exp_js_replace(key, r'/\\\\/g', r'\\')
+    key = pyd.reg_exp_js_replace(key, r'/\\\./g', '.')
     return key
 
 

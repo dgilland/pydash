@@ -234,7 +234,7 @@ def deprecated(func):  # pragma: no cover
     It will result in a warning being emitted when the function is used.
     """
     @wraps(func)
-    def wrapper(*args, **kargs):  # pylint: disable=missing-docstring
+    def wrapper(*args, **kargs):
         warnings.warn('Call to deprecated function {0}.'.format(func.__name__),
                       category=DeprecationWarning,
                       stacklevel=3)
