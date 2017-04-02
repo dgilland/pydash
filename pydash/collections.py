@@ -33,7 +33,6 @@ __all__ = (
     'invoke_map',
     'key_by',
     'map_',
-    'mapiter',
     'order_by',
     'partition',
     'reduce_',
@@ -557,33 +556,7 @@ def map_(collection, callback=None):
     .. versionchanged:: TODO
         Removed alias ``collect``.
     """
-    return list(mapiter(collection, callback))
-
-
-def mapiter(collection, callback=None):
-    """Like :func:`map_` except returns a generator.
-
-    Args:
-        collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
-
-    Returns:
-        generator: Each mapped item.
-
-    Example:
-
-        >>> gen = mapiter([1, 2, 3, 4], str)
-        >>> next(gen)
-        '1'
-        >>> next(gen)
-        '2'
-        >>> list(gen)
-        ['3', '4']
-
-    .. versionadded:: 2.1.0
-    """
-    for result in itercallback(collection, callback):
-        yield result[0]
+    return list(itermap(collection, callback))
 
 
 def order_by(collection, keys, orders=None, reverse=False):
@@ -1086,3 +1059,14 @@ def to_list(collection):
         ret = list(collection)
 
     return ret
+
+
+#
+# Utility methods not a part of the main API
+#
+
+
+def itermap(collection, callback=None):
+    """Generative mapper."""
+    for result in iteriteratee(collection, callback):
+        yield result[0]

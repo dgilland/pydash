@@ -104,6 +104,7 @@ Backwards-Incompatibilities
 - Only use ``merge`` callback result if result is not ``None``. Previously, result from callback (if provided) was used unconditionally. (**breaking change**)
 - Remove functions: (**breaking change**)
 
+  - ``mapiter`` (no alternative)
   - ``update_path`` (use ``update`` or ``update_with``)
   - ``set_path`` (use ``set_`` or ``set_with``)
 

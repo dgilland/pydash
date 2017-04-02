@@ -129,7 +129,6 @@ from .collections import (
     invoke_map,
     key_by,
     map_,
-    mapiter,
     order_by,
     partition,
     reduce_,

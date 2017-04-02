@@ -224,15 +224,6 @@ def test_map_(case, expected, sort_results):
     assert actual == expected
 
 
-@parametrize('case,expectations', [
-    (([1, 2, 3], lambda num: num * 3), (3, 6, 9)),
-])
-def test_mapiter(case, expectations):
-    mapper = _.mapiter(*case)
-    for expected in expectations:
-        assert next(mapper) == expected
-
-
 @parametrize('case,expected', [
     (([{'user': 'barney', 'age': 36},
        {'user': 'fred', 'age': 40},
