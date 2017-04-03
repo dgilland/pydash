@@ -38,7 +38,7 @@ A final value is computed:
 Lazy Evaluation
 ===============
 
-Method chaining is deferred (lazy) until ``.value()`` (or it's aliases ``.value_of`` or ``.run()``) is called:
+Method chaining is deferred (lazy) until ``.value()`` is called:
 
 .. doctest::
 
@@ -47,7 +47,7 @@ Method chaining is deferred (lazy) until ``.value()`` (or it's aliases ``.value_
 
     >>> def echo(value): print(value)
 
-    >>> lazy = py_([1, 2, 3, 4]).each(echo)
+    >>> lazy = py_([1, 2, 3, 4]).for_each(echo)
 
     # None of the methods have been called yet.
 
@@ -61,7 +61,7 @@ Method chaining is deferred (lazy) until ``.value()`` (or it's aliases ``.value_
 
     >>> assert result == [1, 2, 3, 4]
 
-    >>> result = lazy.run()
+    >>> result = lazy.value()
     1
     2
     3
@@ -124,12 +124,12 @@ To replace the initial value of a chain, use the ``plant`` method which will ret
 .. doctest::
 
     >>> chained = py_([1, 2, 3, 4]).power(2).sum()
-    >>> chained.run()
+    >>> chained.value()
     30
     >>> rechained = chained.plant([5, 6, 7, 8])
-    >>> rechained.run()
+    >>> rechained.value()
     174
-    >>> chained.run()
+    >>> chained.value()
     30
 
 

@@ -79,7 +79,7 @@ The deep property style callback is specified as a deep property ``string`` of t
     ...     {'name': 'Donatello', 'location': {'city': 'Florence'}},
     ...     {'name': 'Leonardo', 'location': {'city': 'Amboise'}}
     ... ]
-    >>> pydash.collect(users, 'location.city')
+    >>> pydash.map_(users, 'location.city')
     ['Rome', 'Florence', 'Amboise']
 
 
@@ -115,5 +115,5 @@ The matches style callback is specified as a ``dict`` object and returns ``True`
     ...     {'name': 'Donatello', 'location': {'city': 'Florence'}},
     ...     {'name': 'Leonardo', 'location': {'city': 'Amboise'}}
     ... ]
-    >>> pydash.collect(users, {'location': {'city': 'Florence'}})
+    >>> pydash.map_(users, {'location': {'city': 'Florence'}})
     [False, True, False]

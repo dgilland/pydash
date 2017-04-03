@@ -19,7 +19,7 @@ The first is by using the module directly or importing from it:
     [1, 2, 3, 4, 5, 6, 7]
 
     # Collections
-    >>> pydash.pluck([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}], 'name')
+    >>> pydash.map_([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}], 'name')
     ['moe', 'larry']
 
     # Functions

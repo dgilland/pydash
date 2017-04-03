@@ -16,20 +16,12 @@ Examples:
 .. doctest::
 
     >>> data = {'a': {'b': {'c': [0, 0, {'d': [0, {1: 2}]}]}}}
-    >>> pydash.deep_get(data, 'a.b.c.2.d.1.[1]')
+    >>> pydash.get(data, 'a.b.c.2.d.1.[1]')
     2
 
     >>> data = {'a': {'b.c.d': 2}}
-    >>> pydash.deep_get(data, r'a.b\.c\.d')
+    >>> pydash.get(data, r'a.b\.c\.d')
     2
 
 
-Functions that support deep path strings include:
-
-- :func:`pydash.collections.deep_pluck`
-- :func:`pydash.objects.deep_get`
-- :func:`pydash.objects.deep_has`
-- :func:`pydash.objects.deep_set`
-- :func:`pydash.utilities.deep_property`/:func:`pydash.utilities.deep_prop`
-
-Pydash's callback system also supports the deep property style callback using deep path strings.
+Pydash's callback system supports the deep property style callback using deep path strings.
