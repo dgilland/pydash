@@ -18,7 +18,6 @@ from ._compat import cmp_to_key, _cmp
 __all__ = (
     'at',
     'count_by',
-    'deep_pluck',
     'every',
     'filter_',
     'find',
@@ -105,30 +104,6 @@ def count_by(collection, callback=None):
         ret[result[0]] += 1
 
     return ret
-
-
-def deep_pluck(collection, path):
-    """Like pluck but works with deep paths.
-
-    Args:
-        collection (list|dict): list of dicts
-        path (str|list): collection's path to pluck
-
-    Returns:
-        list: plucked list
-
-    Example:
-
-        >>> deep_pluck([[[0, 1]], [[2, 3]], [[4, 5]]], '0.1')
-        [1, 3, 5]
-        >>> deep_pluck([{'a': {'b': 1}}, {'a': {'b': 2}}], 'a.b')
-        [1, 2]
-        >>> deep_pluck([{'a': {'b': [0, 1]}}, {'a': {'b': [2, 3]}}], 'a.b.1')
-        [1, 3]
-
-    .. versionadded:: 2.2.0
-    """
-    return map_(collection, pyd.property_deep(path))
 
 
 def every(collection, callback=None):

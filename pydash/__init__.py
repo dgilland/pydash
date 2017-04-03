@@ -114,7 +114,6 @@ from .chaining import (
 from .collections import (
     at,
     count_by,
-    deep_pluck,
     every,
     filter_,
     find,

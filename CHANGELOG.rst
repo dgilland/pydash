@@ -105,6 +105,7 @@ Backwards-Incompatibilities
 - Remove functions: (**breaking change**)
 
   - ``mapiter`` (no alternative)
+  - ``pluck`` and ``deep_pluck`` (use ``map_``)
   - ``update_path`` (use ``update`` or ``update_with``)
   - ``set_path`` (use ``set_`` or ``set_with``)
 
@@ -152,7 +153,6 @@ Backwards-Incompatibilities
   - ``pipe_right`` and ``compose`` (use ``flow_right``)
   - ``prop`` (use ``property_``)
   - ``prop_of`` (use ``property_of``)
-  - ``pluck`` (use ``map_``)
   - ``pow_`` (use ``power``)
   - ``re_replace`` (use ``reg_exp_replace``)
   - ``rest`` (use ``tail``)

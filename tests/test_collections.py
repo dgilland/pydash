@@ -30,20 +30,6 @@ def test_count_by(case, expected):
 
 
 @parametrize('case,expected', [
-    (([{'level1': {'level2': {'level3': {'value': 1}}}},
-       {'level1': {'level2': {'level3': {'value': 2}}}},
-       {'level1': {'level2': {'level3': {'value': 3}}}},
-       {'level1': {'level2': {'level3': {'value': 4}}}},
-       {'level1': {'level2': {}}},
-        {}],
-      'level1.level2.level3.value'),
-     [1, 2, 3, 4, None, None])
-])
-def test_deep_pluck(case, expected):
-    assert _.deep_pluck(*case) == expected
-
-
-@parametrize('case,expected', [
     (([True, 1, None, 'yes'], bool), False),
     (([True, 1, None, 'yes'],), False),
     (([{'name': 'moe', 'age': 40},
@@ -213,6 +199,15 @@ def test_key_by(case, expected):
        {'name': 'larry', 'age': 50}],
       'name'),
      ['moe', 'larry'],
+     False),
+    (([{'level1': {'level2': {'level3': {'value': 1}}}},
+       {'level1': {'level2': {'level3': {'value': 2}}}},
+       {'level1': {'level2': {'level3': {'value': 3}}}},
+       {'level1': {'level2': {'level3': {'value': 4}}}},
+       {'level1': {'level2': {}}},
+        {}],
+      'level1.level2.level3.value'),
+     [1, 2, 3, 4, None, None],
      False)
 ])
 def test_map_(case, expected, sort_results):
