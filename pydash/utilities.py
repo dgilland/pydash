@@ -322,6 +322,9 @@ def iteratee(func):
     if callable(func):
         cbk = func
     else:
+        if isinstance(func, int):
+            func = str(func)
+
         if isinstance(func, string_types):
             cbk = property_deep(func)
         elif isinstance(func, (list, tuple)) and len(func) == 1:

@@ -205,10 +205,11 @@ def test_key_by(case, expected):
        {'level1': {'level2': {'level3': {'value': 3}}}},
        {'level1': {'level2': {'level3': {'value': 4}}}},
        {'level1': {'level2': {}}},
-        {}],
+       {}],
       'level1.level2.level3.value'),
      [1, 2, 3, 4, None, None],
-     False)
+     False),
+    (([[0, 1], [2, 3], [4, 5]], 1), [1, 3, 5], False)
 ])
 def test_map_(case, expected, sort_results):
     actual = _.map_(*case)

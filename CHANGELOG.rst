@@ -89,6 +89,7 @@ New Features
 - Add ``zip_object_deep``.
 - Make function returned by ``constant`` ignore extra arguments when called.
 - Make ``get`` support attribute access within path.
+- Make ``iteratee`` treat an integer argument as a string path (i.e. ``iteratee(1)`` is equivalent to ``iteratee('1')`` for creating a path accessor function).
 - Make ``intersection`` work with unhashable types.
 - Make ``range_`` support decrementing when ``start`` argument is greater than ``stop`` argument.
 - Make ``xor`` maintain sort order of supplied arguments.
