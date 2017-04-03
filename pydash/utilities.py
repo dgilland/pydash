@@ -127,10 +127,10 @@ def cond(*pairs):
 
     def _cond(*args, **kargs):
         for pair in pairs:
-            predicate, callback = pair
+            predicate, iteratee = pair
 
             if predicate(*args):
-                return callback()
+                return iteratee()
 
     return _cond
 
@@ -266,17 +266,17 @@ def identity(*args):
 
 
 def iteratee(func):
-    """Return a pydash style callback. If `func` is a property name the created
-    callback will return the property value for a given element. If `func` is
-    an object the created callback will return ``True`` for elements that
+    """Return a pydash style iteratee. If `func` is a property name the created
+    iteratee will return the property value for a given element. If `func` is
+    an object the created iteratee will return ``True`` for elements that
     contain the equivalent object properties, otherwise it will return
     ``False``.
 
     Args:
-        func (mixed): Object to create callback function from.
+        func (mixed): Object to create iteratee function from.
 
     Returns:
-        function: Callback function.
+        function: Iteratee function.
 
     Example:
 
@@ -305,19 +305,19 @@ def iteratee(func):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
-        Renamed ``create_callback()`` to :func:`iteratee`.
+        Renamed ``create_iteratee()`` to :func:`iteratee`.
 
     .. versionchanged:: 3.0.0
-        Made pluck style callback support deep property access.
+        Made pluck style iteratee support deep property access.
 
     .. versionchanged:: 3.1.0
         - Added support for shallow pluck style property access via single item
         list/tuple.
-        - Added support for matches property style callback via two item
+        - Added support for matches property style iteratee via two item
         list/tuple.
 
     .. versionchanged:: TODO
-        Removed alias ``callback``.
+        Removed alias ``iteratee``.
     """
     if callable(func):
         cbk = func
@@ -333,8 +333,8 @@ def iteratee(func):
         else:
             cbk = identity
 
-        # Optimize callback by specifying the exact number of arguments the
-        # callback takes so that arg inspection (costly process) can be
+        # Optimize iteratee by specifying the exact number of arguments the
+        # iteratee takes so that arg inspection (costly process) can be
         # skipped in helpers.callit().
         cbk._argcount = 1
 
@@ -951,16 +951,16 @@ def stub_true():
     return True
 
 
-def times(n, callback=identity):
-    """Executes the callback `n` times, returning a list of the results of each
-    callback execution. The callback is invoked with one argument: ``(index)``.
+def times(n, iteratee=identity):
+    """Executes the iteratee `n` times, returning a list of the results of each
+    iteratee execution. The iteratee is invoked with one argument: ``(index)``.
 
     Args:
-        n (int): Number of times to execute `callback`.
-        callback (function): Function to execute.
+        n (int): Number of times to execute `iteratee`.
+        iteratee (function): Function to execute.
 
     Returns:
-        list: A list of results from calling `callback`.
+        list: A list of results from calling `iteratee`.
 
     Example:
 
@@ -970,16 +970,16 @@ def times(n, callback=identity):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
-        Reordered arguments to make `callback` first.
+        Reordered arguments to make `iteratee` first.
 
     .. versionchanged:: TODO
 
-        - Re-reordered arguments to make `callback` last argument.
-        - Added functionality for handling `callback` with zero positional
+        - Re-reordered arguments to make `iteratee` last argument.
+        - Added functionality for handling `iteratee` with zero positional
           arguments.
     """
-    argcount = getargcount(callback, maxargs=1)
-    return [callit(callback, index, argcount=argcount) for index in _range(n)]
+    argcount = getargcount(iteratee, maxargs=1)
+    return [callit(iteratee, index, argcount=argcount) for index in _range(n)]
 
 
 def to_path(value):

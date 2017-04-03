@@ -10,7 +10,7 @@ from bisect import bisect_left, bisect_right
 from math import ceil
 
 import pydash as pyd
-from .helpers import parse_callback, itercallback, base_get
+from .helpers import parse_iteratee, iteriteratee, base_get
 from ._compat import cmp_to_key, string_types
 
 
@@ -188,7 +188,7 @@ def difference_by(array, *others, **kargs):
         others (list): Lists to check for difference with `array`.
 
     Keyword Args:
-        callback (mixed, optional): Function to transform the elements of the
+        iteratee (mixed, optional): Function to transform the elements of the
             arrays. Defaults to :func:`.identity`.
 
     Returns:
@@ -207,12 +207,12 @@ def difference_by(array, *others, **kargs):
         return array
 
     # Check if last other is a potential iteratee.
-    others, callback = parse_callback(*others, **kargs)
+    iteratee, others = parse_iteratee('iteratee', *others, **kargs)
 
     for other in others:
         if not other:
             continue
-        array = list(iterdifference(array, other, iteratee=callback))
+        array = list(iterdifference(array, other, iteratee=iteratee))
 
     return array
 
@@ -228,8 +228,8 @@ def difference_with(array, *others, **kargs):
         others (list): Lists to check for difference with `array`.
 
     Keyword Args:
-        callback (callable, optional): Function to compare the elements of the
-            arrays. Defaults to :func:`.is_equal`.
+        comparator (callable, optional): Function to compare the elements of
+            the arrays. Defaults to :func:`.is_equal`.
 
     Returns:
         list: Difference between `others`.
@@ -239,7 +239,7 @@ def difference_with(array, *others, **kargs):
         >>> array = ['apple', 'banana', 'pear']
         >>> others = (['avocado', 'pumpkin'], ['peach'])
         >>> comparator = lambda a, b: a[0] == b[0]
-        >>> difference_with(array, *others, callback=comparator)
+        >>> difference_with(array, *others, comparator=comparator)
         ['banana']
 
     .. versionadded:: TODO
@@ -249,18 +249,18 @@ def difference_with(array, *others, **kargs):
     if not others:
         return array
 
-    callback = kargs.get('callback')
+    comparator = kargs.get('comparator')
     last_other = others[-1]
 
     # Check if last other is a comparator.
-    if callback is None and (callable(last_other) or last_other is None):
-        callback = last_other
+    if comparator is None and (callable(last_other) or last_other is None):
+        comparator = last_other
         others = others[:-1]
 
     for other in others:
         if not other:
             continue
-        array = list(iterdifference(array, other, comparator=callback))
+        array = list(iterdifference(array, other, comparator=comparator))
 
     return array
 
@@ -315,14 +315,14 @@ def drop_right(array, n=1):
     return drop_right_while(array, lambda _, index: (length - index) <= n)
 
 
-def drop_right_while(array, callback=None):
+def drop_right_while(array, predicate=None):
     """Creates a slice of `array` excluding elements dropped from the end.
-    Elements are dropped until the `callback` returns falsey. The `callback` is
-    invoked with three arguments: ``(value, index, array)``.
+    Elements are dropped until the `predicate` returns falsey. The `predicate`
+    is invoked with three arguments: ``(value, index, array)``.
 
     Args:
         array (list): List to process.
-        callback (mixed): Callback called per iteration
+        predicate (mixed): Predicate called per iteration
 
     Returns:
         list: Dropped list.
@@ -335,7 +335,7 @@ def drop_right_while(array, callback=None):
     .. versionadded:: 1.1.0
     """
     n = len(array)
-    for is_true, _, _, _ in itercallback(array, callback, reverse=True):
+    for is_true, _, _, _ in iteriteratee(array, predicate, reverse=True):
         if is_true:
             n -= 1
         else:
@@ -344,14 +344,14 @@ def drop_right_while(array, callback=None):
     return array[:n]
 
 
-def drop_while(array, callback=None):
+def drop_while(array, predicate=None):
     """Creates a slice of `array` excluding elements dropped from the
-    beginning. Elements are dropped until the `callback` returns falsey. The
-    `callback` is invoked with three arguments: ``(value, index, array)``.
+    beginning. Elements are dropped until the `predicate` returns falsey. The
+    `predicate` is invoked with three arguments: ``(value, index, array)``.
 
     Args:
         array (list): List to process.
-        callback (mixed): Callback called per iteration
+        predicate (mixed): Predicate called per iteration
 
     Returns:
         list: Dropped list.
@@ -364,7 +364,7 @@ def drop_while(array, callback=None):
     .. versionadded:: 1.1.0
     """
     n = 0
-    for is_true, _, _, _ in itercallback(array, callback):
+    for is_true, _, _, _ in iteriteratee(array, predicate):
         if is_true:
             n += 1
         else:
@@ -373,20 +373,20 @@ def drop_while(array, callback=None):
     return array[n:]
 
 
-def duplicates(array, callback=None):
-    """Creates a unique list of duplicate values from `array`. If callback is
-    passed, each element of array is passed through a callback before
-    duplicates are computed. The callback is invoked with three arguments:
-    ``(value, index, array)``. If a property name is passed for callback, the
-    created :func:`pydash.collections.pluck` style callback will return the
-    property value of the given element. If an object is passed for callback,
-    the created :func:`pydash.collections.where` style callback will return
+def duplicates(array, iteratee=None):
+    """Creates a unique list of duplicate values from `array`. If iteratee is
+    passed, each element of array is passed through a iteratee before
+    duplicates are computed. The iteratee is invoked with three arguments:
+    ``(value, index, array)``. If a property name is passed for iteratee, the
+    created :func:`pydash.collections.pluck` style iteratee will return the
+    property value of the given element. If an object is passed for iteratee,
+    the created :func:`pydash.collections.where` style iteratee will return
     ``True`` for elements that have the properties of the given object, else
     ``False``.
 
     Args:
         array (list): List to process.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         list: List of duplicates.
@@ -398,13 +398,13 @@ def duplicates(array, callback=None):
 
     .. versionadded:: 3.0.0
     """
-    if callback:
-        cbk = pyd.iteratee(callback)
+    if iteratee:
+        cbk = pyd.iteratee(iteratee)
         computed = [cbk(item) for item in array]
     else:
         computed = array
 
-    # NOTE: Using array[i] instead of item since callback could have modified
+    # NOTE: Using array[i] instead of item since iteratee could have modified
     # returned item values.
     lst = uniq([array[i] for i, _ in iterduplicates(computed)])
 
@@ -447,14 +447,14 @@ def fill(array, value, start=0, end=None):
     return array
 
 
-def find_index(array, callback=None):
+def find_index(array, predicate=None):
     """This method is similar to :func:`pydash.collections.find`, except
-    that it returns the index of the element that passes the callback check,
+    that it returns the index of the element that passes the predicate check,
     instead of the element itself.
 
     Args:
         array (list): List to process.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         int: Index of found item or ``-1`` if not found.
@@ -468,18 +468,18 @@ def find_index(array, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    search = (i for is_true, _, i, _ in itercallback(array, callback)
+    search = (i for is_true, _, i, _ in iteriteratee(array, predicate)
               if is_true)
     return next(search, -1)
 
 
-def find_last_index(array, callback=None):
+def find_last_index(array, predicate=None):
     """This method is similar to :func:`find_index`, except that it iterates
     over elements from right to left.
 
     Args:
         array (list): List to process.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         int: Index of found item or ``-1`` if not found.
@@ -493,8 +493,8 @@ def find_last_index(array, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    search = (i for is_true, _, i, _ in itercallback(array,
-                                                     callback,
+    search = (i for is_true, _, i, _ in iteriteratee(array,
+                                                     predicate,
                                                      reverse=True)
               if is_true)
     return next(search, -1)
@@ -519,7 +519,7 @@ def flatten(array):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
-        Removed ``callback`` option. Added ``is_deep`` option. Made it shallow
+        Removed ``iteratee`` option. Added ``is_deep`` option. Made it shallow
         by default.
 
     .. versionchanged:: TODO
@@ -737,7 +737,7 @@ def intersection_by(array, *others, **kargs):
         others (list): Lists to check for intersection with `array`.
 
     Keyword Args:
-        callback (mixed, optional): Function to transform the elements of the
+        iteratee (mixed, optional): Function to transform the elements of the
             arrays. Defaults to :func:`.identity`.
 
     Returns:
@@ -754,7 +754,7 @@ def intersection_by(array, *others, **kargs):
         return []
 
     # Check if last other is a potential iteratee.
-    others, callback = parse_callback(*others, **kargs)
+    iteratee, others = parse_iteratee('iteratee', *others, **kargs)
 
     if not array or not others:
         return []
@@ -763,7 +763,7 @@ def intersection_by(array, *others, **kargs):
     others = sorted(others, key=lambda other: len(other))
 
     for other in others:
-        array = list(iterintersection(array, other, iteratee=callback))
+        array = list(iterintersection(array, other, iteratee=iteratee))
         if not array:
             break
 
@@ -781,8 +781,8 @@ def intersection_with(array, *others, **kargs):
         others (list): Lists to check for intersection with `array`.
 
     Keyword Args:
-        callback (callable, optional): Function to compare the elements of the
-            arrays. Defaults to :func:`.is_equal`.
+        comparator (callable, optional): Function to compare the elements of
+            the arrays. Defaults to :func:`.is_equal`.
 
     Returns:
         list: Intersection of provided lists.
@@ -792,7 +792,7 @@ def intersection_with(array, *others, **kargs):
         >>> array = ['apple', 'banana', 'pear']
         >>> others = (['avocado', 'pumpkin'], ['peach'])
         >>> comparator = lambda a, b: a[0] == b[0]
-        >>> intersection_with(array, *others, callback=comparator)
+        >>> intersection_with(array, *others, comparator=comparator)
         ['pear']
 
     .. versionadded:: TODO
@@ -800,13 +800,7 @@ def intersection_with(array, *others, **kargs):
     if not others:
         return []
 
-    callback = kargs.get('callback')
-    last_other = others[-1]
-
-    # Check if last other is a comparator.
-    if callback is None and (callable(last_other) or last_other is None):
-        callback = last_other
-        others = others[:-1]
+    comparator, others = parse_iteratee('comparator', *others, **kargs)
 
     if not array or not others:
         return []
@@ -815,7 +809,7 @@ def intersection_with(array, *others, **kargs):
     others = sorted(others, key=lambda other: len(other))
 
     for other in others:
-        array = list(iterintersection(array, other, comparator=callback))
+        array = list(iterintersection(array, other, comparator=comparator))
         if not array:
             break
 
@@ -899,13 +893,13 @@ def last_index_of(array, value, from_index=None):
     return -1
 
 
-def mapcat(array, callback=None):
-    """Map a callback to each element of a list and concatenate the results
+def mapcat(array, iteratee=None):
+    """Map a iteratee to each element of a list and concatenate the results
     into a single list using :func:`cat`.
 
     Args:
         array (list): List to map and concatenate.
-        callback (mixed): Callback to apply to each element.
+        iteratee (mixed): Iteratee to apply to each element.
 
     Returns:
         list: Mapped and concatenated list.
@@ -917,7 +911,7 @@ def mapcat(array, callback=None):
 
     .. versionadded:: 2.0.0
     """
-    return concat(*pyd.map_(array, callback))
+    return concat(*pyd.map_(array, iteratee))
 
 
 def nth(array, pos=0):
@@ -1028,7 +1022,7 @@ def pull_all(array, values):
     return array
 
 
-def pull_all_by(array, values, callback=None):
+def pull_all_by(array, values, iteratee=None):
     """This method is like :func:`pull_all` except that it accepts iteratee
     which is invoked for each element of array and values to generate the
     criterion by which they're compared. The iteratee is invoked with one
@@ -1037,7 +1031,7 @@ def pull_all_by(array, values, callback=None):
     Args:
         array (list): Array to modify.
         values (list): Values to remove.
-        callback (mixed, optional): Function to transform the elements of the
+        iteratee (mixed, optional): Function to transform the elements of the
             arrays. Defaults to :func:`.identity`.
 
     Returns:
@@ -1052,11 +1046,11 @@ def pull_all_by(array, values, callback=None):
     .. versionadded:: TODO
     """
     values = difference(array,
-                        difference_by(array, values, callback=callback))
+                        difference_by(array, values, iteratee=iteratee))
     return pull_all(array, values)
 
 
-def pull_all_with(array, values, callback=None):
+def pull_all_with(array, values, comparator=None):
     """This method is like :func:`pull_all` except that it accepts comparator
     which is invoked to compare elements of array to values. The comparator is
     invoked with two arguments: ``(arr_val, oth_val)``.
@@ -1064,7 +1058,7 @@ def pull_all_with(array, values, callback=None):
     Args:
         array (list): Array to modify.
         values (list): Values to remove.
-        callback (callable, optional): Function to compare the elements of the
+        comparator (callable, optional): Function to compare the elements of the
             arrays. Defaults to :func:`.is_equal`.
 
     Returns:
@@ -1084,7 +1078,7 @@ def pull_all_with(array, values, callback=None):
     .. versionadded:: TODO
     """
     values = difference(array,
-                        difference_with(array, values, callback=callback))
+                        difference_with(array, values, comparator=comparator))
     return pull_all(array, values)
 
 
@@ -1146,13 +1140,13 @@ def push(array, *items):
     return array
 
 
-def remove(array, callback=None):
-    """Removes all elements from a list that the callback returns truthy for
+def remove(array, predicate=None):
+    """Removes all elements from a list that the predicate returns truthy for
     and returns an array of removed elements.
 
     Args:
         array (list): List to remove elements from.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         list: Removed elements of `array`.
@@ -1171,7 +1165,7 @@ def remove(array, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    to_remove = [i for is_true, _, i, _ in itercallback(array, callback)
+    to_remove = [i for is_true, _, i, _ in iteriteratee(array, predicate)
                  if is_true]
 
     removed = []
@@ -1266,27 +1260,27 @@ def slice_(array, start=0, end=None):
     return array[start:end]
 
 
-def sort(array, comparison=None, key=None, reverse=False):
-    """Sort `array` using optional `comparison`, `key`, and `reverse` options
+def sort(array, comparator=None, key=None, reverse=False):
+    """Sort `array` using optional `comparator`, `key`, and `reverse` options
     and return sorted `array`.
 
     Note:
-        Python 3 removed the option to pass a custom comparison function and
-        instead only allows a key function. Therefore, if a comparison
+        Python 3 removed the option to pass a custom comparator function and
+        instead only allows a key function. Therefore, if a comparator
         function is passed in, it will be converted to a key function
         automatically using ``functools.cmp_to_key``.
 
     Args:
         array (list): List to sort.
-        comparison (callable, optional): A custom comparison function used to
+        comparator (callable, optional): A custom comparator function used to
             sort the list. Function should accept two arguments and return a
             negative, zero, or position number depending on whether the first
             argument is considered smaller than, equal to, or larger than the
             second argument. Defaults to ``None``. This argument is mutually
             exclusive with `key`.
-        key (callback, optional): A function of one argument used to extract a
-            a comparison key from each list element. Defaults to ``None``. This
-            argument is mutually exclusive with `comparison`.
+        key (iteratee, optional): A function of one argument used to extract a
+            a comparator key from each list element. Defaults to ``None``. This
+            argument is mutually exclusive with `comparator`.
         reverse (bool, optional): Whether to reverse the sort. Defaults to
             ``False``.
 
@@ -1312,13 +1306,12 @@ def sort(array, comparison=None, key=None, reverse=False):
 
     .. versionadded:: 2.2.0
     """
-    # pylint: disable=redefined-outer-name
-    if comparison and key:
-        raise Exception(
-            'The "comparison" and "key" arguments are mutually exclusive')
+    if comparator and key:
+        raise ValueError(
+            'The "comparator" and "key" arguments are mutually exclusive')
 
-    if comparison:
-        key = cmp_to_key(comparison)
+    if comparator:
+        key = cmp_to_key(comparator)
 
     array.sort(key=key, reverse=reverse)
     return array
@@ -1344,12 +1337,12 @@ def sorted_index(array, value):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Move callback support to :func:`sorted_index_by`.
+        Move iteratee support to :func:`sorted_index_by`.
     """
     return sorted_index_by(array, value)
 
 
-def sorted_index_by(array, value, callback=None):
+def sorted_index_by(array, value, iteratee=None):
     """This method is like :func:`sorted_index` except that it accepts
     iteratee which is invoked for `value` and each element of `array` to
     compute their sort ranking. The iteratee is invoked with one argument:
@@ -1358,7 +1351,7 @@ def sorted_index_by(array, value, callback=None):
     Args:
         array (list): List to inspect.
         value (mixed): Value to evaluate.
-        callback (mixed, optional): The iteratee invoked per element. Defaults
+        iteratee (mixed, optional): The iteratee invoked per element. Defaults
             to :func:`.identity`.
 
     Returns:
@@ -1375,11 +1368,11 @@ def sorted_index_by(array, value, callback=None):
 
     .. versionadded:: TODO
     """
-    if callback:
-        # Generate array of sorted keys computed using callback.
-        callback = pyd.iteratee(callback)
-        array = sorted(callback(item) for item in array)
-        value = callback(value)
+    if iteratee:
+        # Generate array of sorted keys computed using iteratee.
+        iteratee = pyd.iteratee(iteratee)
+        array = sorted(iteratee(item) for item in array)
+        value = iteratee(value)
 
     return bisect_left(array, value)
 
@@ -1412,7 +1405,7 @@ def sorted_index_of(array, value):
         return -1
 
 
-def sorted_last_index(array, value, callback=None):
+def sorted_last_index(array, value):
     """This method is like :func:`sorted_index` except that it returns the
     highest index at which `value` should be inserted into `array` in order to
     maintain its sort order.
@@ -1433,12 +1426,12 @@ def sorted_last_index(array, value, callback=None):
     .. versionadded:: 1.1.0
 
     .. versionchanged:: TODO
-        Move callback support to :func:`sorted_last_index_by`.
+        Move iteratee support to :func:`sorted_last_index_by`.
     """
     return sorted_last_index_by(array, value)
 
 
-def sorted_last_index_by(array, value, callback=None):
+def sorted_last_index_by(array, value, iteratee=None):
     """This method is like :func:`sorted_last_index` except that it accepts
     iteratee which is invoked for `value` and each element of `array` to
     compute their sort ranking. The iteratee is invoked with one argument:
@@ -1447,7 +1440,7 @@ def sorted_last_index_by(array, value, callback=None):
     Args:
         array (list): List to inspect.
         value (mixed): Value to evaluate.
-        callback (mixed, optional): The iteratee invoked per element. Defaults
+        iteratee (mixed, optional): The iteratee invoked per element. Defaults
             to :func:`.identity`.
 
     Returns:
@@ -1462,11 +1455,11 @@ def sorted_last_index_by(array, value, callback=None):
         >>> sorted_last_index_by(array, {'x': 4}, 'x')
         1
     """
-    if callback:
-        # Generate array of sorted keys computed using callback.
-        callback = pyd.iteratee(callback)
-        array = sorted(callback(item) for item in array)
-        value = callback(value)
+    if iteratee:
+        # Generate array of sorted keys computed using iteratee.
+        iteratee = pyd.iteratee(iteratee)
+        array = sorted(iteratee(item) for item in array)
+        value = iteratee(value)
 
     return bisect_right(array, value)
 
@@ -1520,7 +1513,7 @@ def sorted_uniq(array):
     return sorted(uniq(array))
 
 
-def sorted_uniq_by(array, callback=None):
+def sorted_uniq_by(array, iteratee=None):
     """This method is like :func:`sorted_uniq` except that it accepts iteratee
     which is invoked for each element in array to generate the criterion by
     which uniqueness is computed. The order of result values is determined by
@@ -1529,7 +1522,7 @@ def sorted_uniq_by(array, callback=None):
 
     Args:
         array (list): List of values to be sorted.
-        callback (mixed, optional): Function to transform the elements of the
+        iteratee (mixed, optional): Function to transform the elements of the
             arrays. Defaults to :func:`.identity`.
 
     Returns:
@@ -1542,20 +1535,20 @@ def sorted_uniq_by(array, callback=None):
 
     .. versionadded:: TODO
     """
-    return sorted(uniq_by(array, callback=callback))
+    return sorted(uniq_by(array, iteratee=iteratee))
 
 
-def splice(array, index, how_many=None, *items):
-    """Modify the contents of `array` by inserting elements starting at `index`
-    and removing `how_many` number of elements after `index`.
+def splice(array, start, count=None, *items):
+    """Modify the contents of `array` by inserting elements starting at index
+    `start` and removing `count` number of elements after.
 
     Args:
         array (list|str): List to splice.
-        index (int): Index to splice at.
-        how_many (int, optional): Number of items to remove starting at
-            `index`. If ``None`` then all items after `index` are removed.
+        start (int): Start to splice at.
+        count (int, optional): Number of items to remove starting at
+            `start`. If ``None`` then all items after `start` are removed.
             Defaults to ``None``.
-        items (mixed): Elements to insert starting at `index`. Each item is
+        items (mixed): Elements to insert starting at `start`. Each item is
             inserted in the order given.
 
     Returns:
@@ -1587,19 +1580,19 @@ def splice(array, index, how_many=None, *items):
     .. versionchanged:: 3.0.0
         Support string splicing.
     """
-    if how_many is None:
-        how_many = len(array) - index
+    if count is None:
+        count = len(array) - start
 
     is_string = pyd.is_string(array)
 
     if is_string:
         array = list(array)
 
-    removed = array[index:index + how_many]
-    del array[index:index + how_many]
+    removed = array[start:start + count]
+    del array[start:start + count]
 
     for item in reverse(items):
-        array.insert(index, item)
+        array.insert(start, item)
 
     if is_string:
         return ''.join(array)
@@ -1699,14 +1692,14 @@ def take_right(array, n=1):
     return take_right_while(array, lambda _, index: (length - index) <= n)
 
 
-def take_right_while(array, callback=None):
+def take_right_while(array, predicate=None):
     """Creates a slice of `array` with elements taken from the end. Elements
-    are taken until the `callback` returns falsey. The `callback` is
+    are taken until the `predicate` returns falsey. The `predicate` is
     invoked with three arguments: ``(value, index, array)``.
 
     Args:
         array (list): List to process.
-        callback (mixed): Callback called per iteration
+        predicate (mixed): Predicate called per iteration
 
     Returns:
         list: Dropped list.
@@ -1719,7 +1712,7 @@ def take_right_while(array, callback=None):
     .. versionadded:: 1.1.0
     """
     n = len(array)
-    for is_true, _, _, _ in itercallback(array, callback, reverse=True):
+    for is_true, _, _, _ in iteriteratee(array, predicate, reverse=True):
         if is_true:
             n -= 1
         else:
@@ -1728,14 +1721,14 @@ def take_right_while(array, callback=None):
     return array[n:]
 
 
-def take_while(array, callback=None):
+def take_while(array, predicate=None):
     """Creates a slice of `array` with elements taken from the beginning.
-    Elements are taken until the `callback` returns falsey. The
-    `callback` is invoked with three arguments: ``(value, index, array)``.
+    Elements are taken until the `predicate` returns falsey. The
+    `predicate` is invoked with three arguments: ``(value, index, array)``.
 
     Args:
         array (list): List to process.
-        callback (mixed): Callback called per iteration
+        predicate (mixed): Predicate called per iteration
 
     Returns:
         list: Taken list.
@@ -1748,7 +1741,7 @@ def take_while(array, callback=None):
     .. versionadded:: 1.1.0
     """
     n = 0
-    for is_true, _, _, _ in itercallback(array, callback):
+    for is_true, _, _, _ in iteriteratee(array, predicate):
         if is_true:
             n += 1
         else:
@@ -1788,17 +1781,18 @@ def union_by(array, *others, **kargs):
     Args:
         array (list): List to unionize with.
         others (list): Lists to unionize with `array`.
-        kargs (function): Keyword arguments which contain the function to
-            invoke on each element.
+
+    Keyword Args:
+        iteratee (function): Function to invoke on each element.
 
     Returns:
         list: Unionized list.
 
     Example:
 
-        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 2)
+        >>> union_by([1, 2, 3], [2, 3, 4], iteratee=lambda x: x % 2)
         [1, 2]
-        >>> union_by([1, 2, 3], [2, 3, 4], callback=lambda x: x % 9)
+        >>> union_by([1, 2, 3], [2, 3, 4], iteratee=lambda x: x % 9)
         [1, 2, 3, 4]
 
     .. versionadded:: TODO
@@ -1806,10 +1800,9 @@ def union_by(array, *others, **kargs):
     if not others:
         return array[:]
 
-    # Check if last other is a potential iteratee.
-    others, callback = parse_callback(*others, **kargs)
+    iteratee, others = parse_iteratee('iteratee', *others, **kargs)
 
-    return uniq_by(flatten([array] + list(others)), callback=callback)
+    return uniq_by(flatten([array] + list(others)), iteratee=iteratee)
 
 
 def union_with(array, *others, **kargs):
@@ -1820,9 +1813,10 @@ def union_with(array, *others, **kargs):
     Args:
         array (list): List to unionize with.
         others (list): Lists to unionize with `array`.
-        kargs (callable, optional): Keyword arguments that contain the
-            function to compare the elements of the arrays. Defaults to
-            :func:`.is_equal`.
+
+    Keyword Args:
+        comparator (callable, optional): Function to compare the elements of
+            the arrays. Defaults to :func:`.is_equal`.
 
     Returns:
         list: Unionized list.
@@ -1830,7 +1824,7 @@ def union_with(array, *others, **kargs):
     Example:
 
         >>> comparator = lambda a, b: (a % 2) == (b % 2)
-        >>> union_with([1, 2, 3], [2, 3, 4], callback=comparator)
+        >>> union_with([1, 2, 3], [2, 3, 4], comparator=comparator)
         [1, 2]
         >>> union_with([1, 2, 3], [2, 3, 4])
         [1, 2, 3, 4]
@@ -1840,31 +1834,24 @@ def union_with(array, *others, **kargs):
     if not others:
         return array[:]
 
-    callback = kargs.get('callback')
-    last_other = others[-1]
+    comparator, others = parse_iteratee('comparator', *others, **kargs)
 
-    # Check if last other is a comparator.
-    if callback is None and (callable(last_other) or last_other is None):
-        callback = others[-1]
-        others = others[:-1]
-
-    return uniq_with(flatten([array] + list(others)), callback=callback)
+    return uniq_with(flatten([array] + list(others)), comparator=comparator)
 
 
 def uniq(array):
-    """Creates a duplicate-value-free version of the array. If callback is
-    passed, each element of array is passed through a callback before
-    uniqueness is computed. The callback is invoked with three arguments:
-    ``(value, index, array)``. If a property name is passed for callback, the
-    created :func:`pydash.collections.pluck` style callback will return the
-    property value of the given element. If an object is passed for callback,
-    the created :func:`pydash.collections.where` style callback will return
+    """Creates a duplicate-value-free version of the array. If iteratee is
+    passed, each element of array is passed through a iteratee before
+    uniqueness is computed. The iteratee is invoked with three arguments:
+    ``(value, index, array)``. If a property name is passed for iteratee, the
+    created :func:`pydash.collections.pluck` style iteratee will return the
+    property value of the given element. If an object is passed for iteratee,
+    the created :func:`pydash.collections.where` style iteratee will return
     ``True`` for elements that have the properties of the given object, else
     ``False``.
 
     Args:
         array (list): List to process.
-        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
         list: Unique list.
@@ -1878,7 +1865,7 @@ def uniq(array):
 
     .. versionchanged:: TODO
 
-        - Removed ``callback`` argument support in favor of only having
+        - Removed ``iteratee`` argument support in favor of only having
           :func:`uniq_by` support it.
         - Removed alias ``unique``.
 
@@ -1886,7 +1873,7 @@ def uniq(array):
     return uniq_by(array)
 
 
-def uniq_by(array, callback=None):
+def uniq_by(array, iteratee=None):
     """This method is like :func:`uniq` except that it accepts iteratee which
     is invoked for each element in array to generate the criterion by which
     uniqueness is computed. The order of result values is determined by the
@@ -1895,7 +1882,7 @@ def uniq_by(array, callback=None):
 
     Args:
         array (list): List to process.
-        callback (mixed, optional): Function to transform the elements of the
+        iteratee (mixed, optional): Function to transform the elements of the
             arrays. Defaults to :func:`.identity`.
 
     Returns:
@@ -1908,10 +1895,10 @@ def uniq_by(array, callback=None):
 
     .. versionadded:: TODO
     """
-    return list(iterunique(array, iteratee=callback))
+    return list(iterunique(array, iteratee=iteratee))
 
 
-def uniq_with(array, callback=None):
+def uniq_with(array, comparator=None):
     """This method is like _.uniq except that it accepts comparator which is
     invoked to compare elements of array. The order of result values is
     determined by the order they occur in the array.The comparator is invoked
@@ -1919,7 +1906,7 @@ def uniq_with(array, callback=None):
 
     Args:
         array (list): List to process.
-        callback (callable, optional): Function to compare the elements of the
+        comparator (callable, optional): Function to compare the elements of the
             arrays. Defaults to :func:`.is_equal`.
 
     Returns:
@@ -1932,7 +1919,7 @@ def uniq_with(array, callback=None):
 
     .. versionadded:: TODO
     """
-    return list(iterunique(array, comparator=callback))
+    return list(iterunique(array, comparator=comparator))
 
 
 def unshift(array, *items):
@@ -1986,14 +1973,14 @@ def unzip(array):
     return zip_(*array)
 
 
-def unzip_with(array, callback=None):
-    """This method is like :func:`unzip` except that it accepts a callback to
-    specify how regrouped values should be combined. The callback is invoked
+def unzip_with(array, iteratee=None):
+    """This method is like :func:`unzip` except that it accepts a iteratee to
+    specify how regrouped values should be combined. The iteratee is invoked
     with four arguments: ``(accumulator, value, index, group)``.
 
     Args:
         array (list): List to process.
-        callback (callable, optional): Function to combine regrouped values.
+        iteratee (callable, optional): Function to combine regrouped values.
 
     Returns:
         list: Unzipped list.
@@ -2011,13 +1998,13 @@ def unzip_with(array, callback=None):
 
     result = unzip(array)
 
-    if callback is None:
+    if iteratee is None:
         return result
 
-    def _callback(group):
-        return pyd.reduce_(group, callback, None)
+    def cbk(group):
+        return pyd.reduce_(group, iteratee)
 
-    return pyd.map_(result, _callback)
+    return pyd.map_(result, cbk)
 
 
 def without(array, *values):
@@ -2072,7 +2059,7 @@ def xor_by(array, *lists, **kargs):
         *lists (list): Lists to xor with.
 
     Keyword Args:
-        callback (mixed, optional): Function to transform the elements of the
+        iteratee (mixed, optional): Function to transform the elements of the
             arrays. Defaults to :func:`.identity`.
 
     Returns:
@@ -2090,12 +2077,12 @@ def xor_by(array, *lists, **kargs):
     if not lists:
         return array[:]
 
-    lists, callback = parse_callback(*lists, **kargs)
+    iteratee, lists = parse_iteratee('iteratee', *lists, **kargs)
 
     return xor(uniq(difference_by(array + lists[0],
                                   intersection_by(array, lists[0],
-                                                  callback=callback),
-                                  callback=callback)),
+                                                  iteratee=iteratee),
+                                  iteratee=iteratee)),
                *lists[1:])
 
 
@@ -2110,8 +2097,8 @@ def xor_with(array, *lists, **kargs):
         *lists (list): Lists to xor with.
 
     Keyword Args:
-        callback (callable, optional): Function to compare the elements of the
-            arrays. Defaults to :func:`.is_equal`.
+        comparator (callable, optional): Function to compare the elements of
+            the arrays. Defaults to :func:`.is_equal`.
 
     Returns:
         list: XOR'd list.
@@ -2129,12 +2116,12 @@ def xor_with(array, *lists, **kargs):
     if not lists:
         return array[:]
 
-    lists, callback = parse_callback(*lists, **kargs)
+    comp, lists = parse_iteratee('comparator', *lists, **kargs)
 
     return xor_with(uniq(difference_with(array + lists[0],
                                          intersection_with(array, lists[0],
-                                                           callback=callback),
-                                         callback=callback)),
+                                                           comparator=comp),
+                                         comparator=comp)),
                     *lists[1:])
 
 
@@ -2219,15 +2206,15 @@ def zip_object_deep(keys, values=None):
 
 
 def zip_with(*arrays, **kargs):
-    """This method is like :func:`zip` except that it accepts a callback to
-    specify how grouped values should be combined. The callback is invoked with
+    """This method is like :func:`zip` except that it accepts a iteratee to
+    specify how grouped values should be combined. The iteratee is invoked with
     four arguments: ``(accumulator, value, index, group)``.
 
     Args:
         *arrays (list): Lists to process.
 
     Keyword Args:
-        callback (function): Function to combine grouped values.
+        iteratee (function): Function to combine grouped values.
 
     Returns:
         list: Zipped list of grouped elements.
@@ -2237,20 +2224,20 @@ def zip_with(*arrays, **kargs):
         >>> from pydash import add
         >>> zip_with([1, 2], [10, 20], [100, 200], add)
         [111, 222]
-        >>> zip_with([1, 2], [10, 20], [100, 200], callback=add)
+        >>> zip_with([1, 2], [10, 20], [100, 200], iteratee=add)
         [111, 222]
 
     .. versionadded:: 3.3.0
     """
-    if 'callback' in kargs:
-        callback = kargs['callback']
+    if 'iteratee' in kargs:
+        iteratee = kargs['iteratee']
     elif(len(arrays) > 1):
-        callback = arrays[-1]
+        iteratee = arrays[-1]
         arrays = arrays[:-1]
     else:
-        callback = None
+        iteratee = None
 
-    return unzip_with(arrays, callback)
+    return unzip_with(arrays, iteratee)
 
 
 #

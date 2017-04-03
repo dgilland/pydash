@@ -17,5 +17,5 @@ else:
 
 
 @pytest.mark.skipif(PY2, reason='test requires Python 3 annotations')
-def test_annotated_callback():
+def test_annotated_iteratee():
     assert _.map_([1, 2], typed_function) == [2, 3]

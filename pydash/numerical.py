@@ -10,7 +10,7 @@ import math
 import operator
 
 import pydash as pyd
-from .helpers import NoValue, iterator_with_default, itercallback, iterator
+from .helpers import NoValue, iterator_with_default, iteriteratee, iterator
 from ._compat import _range
 
 
@@ -93,20 +93,20 @@ def sum_(collection):
         Support adding two numbers when passed as positional arguments.
 
     .. versionchanged:: TODO
-        Move callback support to :func:`sum_by`. Move two argument addition to
+        Move iteratee support to :func:`sum_by`. Move two argument addition to
         :func:`add`.
     """
     return sum_by(collection)
 
 
-def sum_by(collection, callback=None):
-    """Sum each element in `collection`. If callback is passed, each element of
-    `collection` is passed through a callback before the summation is computed.
+def sum_by(collection, iteratee=None):
+    """Sum each element in `collection`. If iteratee is passed, each element of
+    `collection` is passed through a iteratee before the summation is computed.
 
     Args:
         collection (list|dict|number): Collection to process or first number to
             add.
-        callback (mixed|number, optional): Callback applied per iteration or
+        iteratee (mixed|number, optional): Iteratee applied per iteration or
             second number to add.
 
     Returns:
@@ -119,7 +119,7 @@ def sum_by(collection, callback=None):
 
     .. versionadded:: TODO
     """
-    return sum(result[0] for result in itercallback(collection, callback))
+    return sum(result[0] for result in iteriteratee(collection, iteratee))
 
 
 def mean(collection):
@@ -127,7 +127,6 @@ def mean(collection):
 
     Args:
         collection (list|dict): Collection to process.
-        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
         float: Result of mean.
@@ -140,20 +139,20 @@ def mean(collection):
     .. versionadded:: 2.1.0
 
     .. versionchanged:: TODO
-        Removed ``average`` and ``avg`` aliases. Moved callback functionality
+        Removed ``average`` and ``avg`` aliases. Moved iteratee functionality
         to :func:`mean_by`.
     """
     return mean_by(collection)
 
 
-def mean_by(collection, callback=None):
-    """Calculate arithmetic mean of each element in `collection`. If callback
-    is passed, each element of `collection` is passed through a callback before
+def mean_by(collection, iteratee=None):
+    """Calculate arithmetic mean of each element in `collection`. If iteratee
+    is passed, each element of `collection` is passed through a iteratee before
     the mean is computed.
 
     Args:
         collection (list|dict): Collection to process.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         float: Result of mean.
@@ -165,7 +164,7 @@ def mean_by(collection, callback=None):
 
     .. versionadded:: TODO
     """
-    return sum_by(collection, callback) / pyd.size(collection)
+    return sum_by(collection, iteratee) / pyd.size(collection)
 
 
 def ceil(x, precision=0):
@@ -298,17 +297,17 @@ def max_(collection, default=NoValue):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Moved iteratee callback support to :func:`max_by`.
+        Moved iteratee iteratee support to :func:`max_by`.
     """
     return max_by(collection, default=default)
 
 
-def max_by(collection, callback=None, default=NoValue):
+def max_by(collection, iteratee=None, default=NoValue):
     """Retrieves the maximum value of a `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
         default (mixed, optional): Value to return if `collection` is empty.
 
     Returns:
@@ -329,17 +328,17 @@ def max_by(collection, callback=None, default=NoValue):
         collection = collection.values()
 
     return max(iterator_with_default(collection, default),
-               key=pyd.iteratee(callback))
+               key=pyd.iteratee(iteratee))
 
 
-def median(collection, callback=None):
-    """Calculate median of each element in `collection`. If callback is passed,
-    each element of `collection` is passed through a callback before the
+def median(collection, iteratee=None):
+    """Calculate median of each element in `collection`. If iteratee is passed,
+    each element of `collection` is passed through a iteratee before the
     median is computed.
 
     Args:
         collection (list|dict): Collection to process.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         float: Result of median.
@@ -355,7 +354,7 @@ def median(collection, callback=None):
     """
     length = len(collection)
     middle = (length + 1) / 2
-    collection = [ret[0] for ret in itercallback(sorted(collection), callback)]
+    collection = [ret[0] for ret in iteriteratee(sorted(collection), iteratee)]
 
     if pyd.is_odd(length):
         result = collection[int(middle - 1)]
@@ -387,17 +386,17 @@ def min_(collection, default=NoValue):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Moved iteratee callback support to :func:`min_by`.
+        Moved iteratee iteratee support to :func:`min_by`.
     """
     return min_by(collection, default=default)
 
 
-def min_by(collection, callback=None, default=NoValue):
+def min_by(collection, iteratee=None, default=NoValue):
     """Retrieves the minimum value of a `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
         default (mixed, optional): Value to return if `collection` is empty.
 
     Returns:
@@ -417,13 +416,11 @@ def min_by(collection, callback=None, default=NoValue):
     if isinstance(collection, dict):
         collection = collection.values()
     return min(iterator_with_default(collection, default),
-               key=pyd.iteratee(callback))
+               key=pyd.iteratee(iteratee))
 
 
 def moving_mean(array, size):
-    """Calculate moving mean of each element of `array`. If callback is passed,
-    each element of `array` is passed through a callback before the moving mean
-    is computed.
+    """Calculate moving mean of each element of `array`.
 
     Args:
         array (list): List to process.
@@ -692,14 +689,14 @@ def variance(array):
     return pyd._(array).map_(var).mean().value()
 
 
-def zscore(collection, callback=None):
-    """Calculate the standard score assuming normal distribution. If callback
-    is passed, each element of `collection` is passed through a callback before
+def zscore(collection, iteratee=None):
+    """Calculate the standard score assuming normal distribution. If iteratee
+    is passed, each element of `collection` is passed through a iteratee before
     the standard score is computed.
 
     Args:
         collection (list|dict): Collection to process.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         float: Calculated standard score.
@@ -712,7 +709,7 @@ def zscore(collection, callback=None):
 
     .. versionadded:: 2.1.0
     """
-    array = pyd.map_(collection, callback)
+    array = pyd.map_(collection, iteratee)
     avg = mean(array)
     sig = std_deviation(array)
 

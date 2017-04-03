@@ -487,23 +487,23 @@ def is_equal(value, other):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Removed :attr:`callback` from :func:`is_equal` and added it in
+        Removed :attr:`iteratee` from :func:`is_equal` and added it in
         :func:`is_equal_with`.
     """
-    return is_equal_with(value, other, callback=None)
+    return is_equal_with(value, other, customizer=None)
 
 
-def is_equal_with(value, other, callback):
+def is_equal_with(value, other, customizer):
     """This method is like _.isEqual except that it accepts customizer which
-    is invoked to compare values. A callback is provided which will be
-    executed to compare values. If the callback returns ``None``, comparisons
-    will be handled by the method instead. The callback is invoked with two
+    is invoked to compare values. A customizer is provided which will be
+    executed to compare values. If the customizer returns ``None``, comparisons
+    will be handled by the method instead. The customizer is invoked with two
     arguments: ``(value, other)``.
 
     Args:
         value (list|dict): Object to compare.
         other (list|dict): Object to compare.
-        callback (mixed, optional): Callback used to compare values from
+        customizer (mixed, optional): Customizer used to compare values from
             `value` and `other`.
 
     Returns:
@@ -520,21 +520,21 @@ def is_equal_with(value, other, callback):
 
     .. versionadded:: TODO
     """
-    # If callback provided, use it for comparision.
-    equal = callback(value, other) if callable(callback) else None
+    # If customizer provided, use it for comparision.
+    equal = customizer(value, other) if callable(customizer) else None
 
-    # Return callback results if anything but None.
+    # Return customizer results if anything but None.
     if equal is not None:
         pass
-    elif (callable(callback) and
+    elif (callable(customizer) and
           type(value) is type(other) and
           isinstance(value, (list, dict)) and
           isinstance(other, (list, dict)) and
           len(value) == len(other)):
-        # Walk a/b to determine equality using callback.
+        # Walk a/b to determine equality using customizer.
         for key, value in iterator(value):
             if pyd.has(other, key):
-                equal = is_equal_with(value, other[key], callback)
+                equal = is_equal_with(value, other[key], customizer)
             else:
                 equal = False
 
@@ -855,12 +855,12 @@ def is_match(obj, source):
         exclusively.
 
     .. versionchanged:: TODO
-        Move `callback` argument to :func:`is_match_with`.
+        Move `iteratee` argument to :func:`is_match_with`.
     """
     return is_match_with(obj, source)
 
 
-def is_match_with(obj, source, callback=None,
+def is_match_with(obj, source, customizer=None,
                   _key=NoValue, _obj=NoValue, _source=NoValue):
     """This method is like :func:`is_match` except that it accepts customizer
     which is invoked to compare values. If customizer returns ``None``,
@@ -870,7 +870,7 @@ def is_match_with(obj, source, callback=None,
     Args:
         obj (list|dict): Object to compare.
         source (list|dict): Object of property values to match.
-        callback (mixed, optional): Callback used to compare values from `obj`
+        customizer (mixed, optional): Customizer used to compare values from `obj`
             and `source`.
 
     Returns:
@@ -893,13 +893,13 @@ def is_match_with(obj, source, callback=None,
     if _source is NoValue:
         _source = source
 
-    if not callable(callback):
+    if not callable(customizer):
         def cbk(obj_value, src_value):
             return obj_value == src_value
 
         cbk._argcount = 2
     else:
-        cbk = callback
+        cbk = customizer
 
     if (isinstance(obj, dict) and isinstance(source, dict) or
             isinstance(obj, list) and isinstance(source, list) or

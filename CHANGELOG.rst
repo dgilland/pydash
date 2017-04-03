@@ -189,6 +189,54 @@ Backwards-Incompatibilities
   - ``sum_``. Moved to ``sum_by``.
   - ``uniq``/``unique``. Moved to ``uniq_by``.
 
+- Renamed ``callback`` argument to ``predicate``: (**breaking change**)
+
+  - ``drop_right_while``
+  - ``drop_while``
+  - ``every``
+  - ``filter_``
+  - ``find``
+  - ``find_key``
+  - ``find_last``
+  - ``find_index``
+  - ``find_last_index``
+  - ``find_last_key``
+  - ``partition``
+  - ``reject``
+  - ``remove``
+  - ``some``
+  - ``take_right_while``
+  - ``take_while``
+
+- Renamed ``callback`` argument to ``iteratee``: (**breaking change**)
+
+  - ``count_by``
+  - ``duplicates``
+  - ``for_each``
+  - ``for_each_right``
+  - ``for_in``
+  - ``for_in_right``
+  - ``group_by``
+  - ``key_by``
+  - ``map_``
+  - ``map_keys``
+  - ``map_values``
+  - ``map_values_deep``
+  - ``mapcat``
+  - ``median``
+  - ``reduce_``
+  - ``reduce_right``
+  - ``reductions``
+  - ``reductions_right``
+  - ``sort_by``
+  - ``times``
+  - ``transform``
+  - ``unzip_with``
+  - ``zip_with``
+  - ``zscore``
+
+- Rename ``comparison`` argument in ``sort`` to ``comparator``.
+- Rename ``index`` and ``how_many`` arguments in ``splice`` to ``start`` and ``count``.
 - Remove ``multivalue`` argument from ``invert``. Feature moved to ``invert_by``. (**breaking change**)
 
 

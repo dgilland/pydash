@@ -363,21 +363,21 @@ def test_pull_all(case, values, expected):
     assert _.pull_all(case, values) == expected
 
 
-@parametrize('case,values,callback,expected', [
+@parametrize('case,values,iteratee,expected', [
     ([1, 2, 3, 1, 2, 3], [2, 3], None, [1, 1]),
     ([1, 2, 3, 1, 2, 3], [2, 3], lambda item: item + 2, [1, 1])
 ])
-def test_pull_all_by(case, values, callback, expected):
-    assert _.pull_all_by(case, values, callback) == expected
+def test_pull_all_by(case, values, iteratee, expected):
+    assert _.pull_all_by(case, values, iteratee) == expected
 
 
-@parametrize('case,values,callback,expected', [
+@parametrize('case,values,iteratee,expected', [
     ([1, 2, 3, 1, 2, 3], [2, 3], None, [1, 1]),
     ([1, 2, 3, 1, 2, 3], [2, 3], lambda a, b: a == b, [1, 1]),
     ([1, 2, 3, 1, 2, 3], [2, 3], lambda a, b: a != b, [])
 ])
-def test_pull_all_with(case, values, callback, expected):
-    assert _.pull_all_with(case, values, callback) == expected
+def test_pull_all_with(case, values, iteratee, expected):
+    assert _.pull_all_with(case, values, iteratee) == expected
 
 
 @parametrize('case,expected', [
@@ -455,14 +455,9 @@ def test_sort(case, expected):
     assert array == expected
 
 
-def test_sort_comparison_key_exception():
-    raised = False
-    try:
-        _.sort([], comparison=lambda: None, key=lambda: None)
-    except Exception:
-        raised = True
-
-    assert raised
+def test_sort_comparator_key_exception():
+    with pytest.raises(ValueError):
+        _.sort([], comparator=lambda: None, key=lambda: None)
 
 
 @parametrize('case,expected', [
@@ -530,14 +525,14 @@ def test_sorted_uniq(case, expected):
     assert _.sorted_uniq(case) == expected
 
 
-@parametrize('case,callback,expected', [
+@parametrize('case,iteratee,expected', [
     ([2.5, 3, 1, 2, 1.5], lambda num: math.floor(num), [1, 2.5, 3]),
     (['A', 'b', 'C', 'a', 'B', 'c'],
      lambda letter: letter.lower(),
      ['A', 'C', 'b'])
 ])
-def test_sorted_uniq_by(case, callback, expected):
-    assert _.sorted_uniq_by(case, callback) == expected
+def test_sorted_uniq_by(case, iteratee, expected):
+    assert _.sorted_uniq_by(case, iteratee) == expected
 
 
 @parametrize('case,expected,after', [
@@ -621,7 +616,7 @@ def test_uniq(case, expected):
     assert _.uniq(case) == expected
 
 
-@parametrize('case,callback,expected', [
+@parametrize('case,iteratee,expected', [
     ([1, 2, 1.5, 3, 2.5], lambda num: math.floor(num), [1, 2, 3]),
     ([{'name': 'banana', 'type': 'fruit'},
       {'name': 'apple', 'type': 'fruit'},
@@ -639,16 +634,16 @@ def test_uniq(case, expected):
      lambda letter: letter.lower(),
      ['A', 'b', 'C'])
 ])
-def test_uniq_by(case, callback, expected):
-    assert _.uniq_by(case, callback) == expected
+def test_uniq_by(case, iteratee, expected):
+    assert _.uniq_by(case, iteratee) == expected
 
 
-@parametrize('case,callback,expected', [
+@parametrize('case,iteratee,expected', [
     ([1, 2, 3, 4, 5], lambda a, b: (a % 2) == (b % 2), [1, 2]),
     ([5, 4, 3, 2, 1], lambda a, b: (a % 2) == (b % 2), [5, 4]),
 ])
-def test_uniq_with(case, callback, expected):
-    assert _.uniq_with(case, callback) == expected
+def test_uniq_with(case, iteratee, expected):
+    assert _.uniq_with(case, iteratee) == expected
 
 
 @parametrize('case,expected', [
@@ -659,14 +654,14 @@ def test_union(case, expected):
     assert _.union(*case) == expected
 
 
-@parametrize('case,callback,expected', [
+@parametrize('case,iteratee,expected', [
     (([1, 2, 3], [2, 3, 4]), lambda x: x % 10, [1, 2, 3, 4]),
     (([1, 2, 3], [2, 3, 4]), lambda x: x % 2, [1, 2]),
     (([1, 2, 3], [2, 3, 4], lambda x: x % 2), None, [1, 2]),
     (([11, 22, 33],), None, [11, 22, 33])
 ])
-def test_union_by(case, callback, expected):
-    assert _.union_by(*case, callback=callback) == expected
+def test_union_by(case, iteratee, expected):
+    assert _.union_by(*case, iteratee=iteratee) == expected
 
 
 @parametrize('case,expected', [

@@ -25,33 +25,33 @@ class _NoValue(object):
 NoValue = _NoValue()
 
 
-def callit(callback, *args, **kargs):
-    """Inspect argspec of `callback` function and only pass the supported
+def callit(iteratee, *args, **kargs):
+    """Inspect argspec of `iteratee` function and only pass the supported
     arguments when calling it.
     """
     maxargs = len(args)
     argcount = (kargs['argcount'] if 'argcount' in kargs
-                else getargcount(callback, maxargs))
+                else getargcount(iteratee, maxargs))
     argstop = min([maxargs, argcount])
 
-    return callback(*args[:argstop])
+    return iteratee(*args[:argstop])
 
 
-def getargcount(callback, maxargs):
-    """Return argument count of callback function."""
-    if hasattr(callback, '_argcount'):
-        # Optimization feature where argcount of callback is known and properly
+def getargcount(iteratee, maxargs):
+    """Return argument count of iteratee function."""
+    if hasattr(iteratee, '_argcount'):
+        # Optimization feature where argcount of iteratee is known and properly
         # set by initator.
-        return callback._argcount
+        return iteratee._argcount
 
     argspec = None
 
-    if isinstance(callback, type) or pyd.is_builtin(callback):
-        # Only pass single argument to type callbacks or builtins.
+    if isinstance(iteratee, type) or pyd.is_builtin(iteratee):
+        # Only pass single argument to type iteratees or builtins.
         argcount = 1
     else:
         try:
-            argspec = getfullargspec(callback)
+            argspec = getfullargspec(iteratee)
 
             if argspec and not argspec.varargs:
                 # Use inspected arg count.
@@ -65,15 +65,15 @@ def getargcount(callback, maxargs):
     return argcount
 
 
-def itercallback(obj, callback=None, reverse=False):
-    """Return iterative callback based on collection type."""
-    cbk = pyd.iteratee(callback)
+def iteriteratee(obj, iteratee=None, reverse=False):
+    """Return iterative iteratee based on collection type."""
+    cbk = pyd.iteratee(iteratee)
     items = iterator(obj)
 
     if reverse:
         items = reversed(tuple(items))
 
-    # Precompute argcount to avoid repeated calculations during callback loop.
+    # Precompute argcount to avoid repeated calculations during iteratee loop.
     argcount = getargcount(cbk, maxargs=3)
 
     for key, item in items:
@@ -188,22 +188,22 @@ def base_set(obj, key, value, allow_override=True):
     return obj
 
 
-def parse_callback(*args, **kargs):
-    """Try to find callback function passed in either as a keyword argument or
+def parse_iteratee(iteratee_keyword, *args, **kargs):
+    """Try to find iteratee function passed in either as a keyword argument or
     as the last positional argument in `args`.
     """
-    callback = kargs.get('callback')
+    iteratee = kargs.get(iteratee_keyword)
     last_arg = args[-1]
 
-    if (callback is None and
+    if (iteratee is None and
             (callable(last_arg) or
              isinstance(last_arg, string_types) or
              isinstance(last_arg, dict) or
              last_arg is None)):
-        callback = last_arg
+        iteratee = last_arg
         args = args[:-1]
 
-    return (args, callback)
+    return (iteratee, args)
 
 
 class iterator_with_default(object):

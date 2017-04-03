@@ -51,7 +51,7 @@ def test_clone(case):
         assert value is case[key]
 
 
-@parametrize('case,callback,expected', [
+@parametrize('case,iteratee,expected', [
     ({'a': {'d': 1}, 'b': {'c': 2}},
      lambda v: v,
      {'a': {'d': 1}, 'b': {'c': 2}}),
@@ -59,8 +59,8 @@ def test_clone(case):
      lambda v, k: v + 2 if isinstance(v, int) and k else None,
      {'a': 3, 'b': 4, 'c': {'d': 3}}),
 ])
-def test_clone_with(case, callback, expected):
-    result = _.clone_with(case, callback)
+def test_clone_with(case, iteratee, expected):
+    result = _.clone_with(case, iteratee)
 
     assert result == expected
 
@@ -79,15 +79,15 @@ def test_clone_deep(case):
         assert value is not case[key]
 
 
-@parametrize('case,callback,expected', [
+@parametrize('case,iteratee,expected', [
     ({'a': {'d': 1}, 'b': {'c': 2}}, lambda v: v,
      {'a': {'d': 1}, 'b': {'c': 2}}),
     ({'a': 1, 'b': 2, 'c': {'d': 3}},
      lambda v, k: v + 2 if isinstance(v, int) and k else None,
      {'a': 3, 'b': 4, 'c': {'d': 5}}),
 ])
-def test_clone_deep_with(case, callback, expected):
-    result = _.clone_deep_with(case, callback)
+def test_clone_deep_with(case, iteratee, expected):
+    result = _.clone_deep_with(case, iteratee)
 
     assert result == expected
 
@@ -184,24 +184,24 @@ def test_find_last_key(case, expected):
 
 
 @parametrize('case,expected', [
-    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback0),
+    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_iteratee0),
      ({'name': 'fredfred', 'employer': 'slateslate'},)),
-    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback1),
+    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_iteratee1),
      ({'name': 'fredfred', 'employer': 'slate'},
       {'name': 'fred', 'employer': 'slateslate'})),
-    (([1, 2, 3], fixtures.for_in_callback2), ([False, True, 3],))
+    (([1, 2, 3], fixtures.for_in_iteratee2), ([False, True, 3],))
 ])
 def test_for_in(case, expected):
     assert _.for_in(*case) in expected
 
 
 @parametrize('case,expected', [
-    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback0),
+    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_iteratee0),
      ({'name': 'fredfred', 'employer': 'slateslate'},)),
-    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_callback1),
+    (({'name': 'fred', 'employer': 'slate'}, fixtures.for_in_iteratee1),
      ({'name': 'fredfred', 'employer': 'slate'},
       {'name': 'fred', 'employer': 'slateslate'})),
-    (([1, 2, 3], fixtures.for_in_callback2), ([1, True, 'index:2'],))
+    (([1, 2, 3], fixtures.for_in_iteratee2), ([1, True, 'index:2'],))
 ])
 def test_for_in_right(case, expected):
     assert _.for_in_right(*case) in expected
@@ -582,7 +582,7 @@ def test_to_string(case, expected):
 @parametrize('case,expected', [
     (([1, 2, 3, 4, 5], lambda acc, value, key: acc.append((key, value))),
      [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)]),
-    (([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fixtures.transform_callback0),
+    (([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fixtures.transform_iteratee0),
      [1, 9, 25]),
     (([1, 2, 3, 4, 5],), [])
 ])

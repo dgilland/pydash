@@ -264,7 +264,7 @@ def test_partial(case, case_args, case_kargs, args, expected):
     assert _.partial(case, *case_args, **case_kargs)(*args) == expected
 
 
-def test_partial_as_callback():
+def test_partial_as_iteratee():
     func = _.partial(lambda offset, value, *args: value + offset, 5)
     case = [1, 2, 3]
     expected = [6, 7, 8]

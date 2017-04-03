@@ -11,7 +11,7 @@ import random
 
 import pydash as pyd
 
-from .helpers import itercallback, iterator, callit, getargcount, NoValue
+from .helpers import iteriteratee, iterator, callit, getargcount, NoValue
 from ._compat import cmp_to_key, _cmp
 
 
@@ -75,13 +75,13 @@ def at(collection, *indexes):
     return [collection[i] for i in indexes]
 
 
-def count_by(collection, callback=None):
+def count_by(collection, iteratee=None):
     """Creates an object composed of keys generated from the results of running
-    each element of `collection` through the callback.
+    each element of `collection` through the iteratee.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         dict: Dict containing counts by key.
@@ -99,25 +99,25 @@ def count_by(collection, callback=None):
     """
     ret = {}
 
-    for result in itercallback(collection, callback):
+    for result in iteriteratee(collection, iteratee):
         ret.setdefault(result[0], 0)
         ret[result[0]] += 1
 
     return ret
 
 
-def every(collection, callback=None):
-    """Checks if the callback returns a truthy value for all elements of a
-    collection. The callback is invoked with three arguments:
+def every(collection, predicate=None):
+    """Checks if the predicate returns a truthy value for all elements of a
+    collection. The predicate is invoked with three arguments:
     ``(value, index|key, collection)``. If a property name is passed for
-    callback, the created :func:`pluck` style callback will return the property
-    value of the given element. If an object is passed for callback, the
-    created :func:`where` style callback will return ``True`` for elements that
+    predicate, the created :func:`pluck` style predicate will return the property
+    value of the given element. If an object is passed for predicate, the
+    created :func:`where` style predicate will return ``True`` for elements that
     have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         bool: Whether all elements are truthy.
@@ -142,21 +142,20 @@ def every(collection, callback=None):
     .. versionchanged: TOOD
         Removed alias ``all_``.
     """
-
-    if callback:
-        cbk = pyd.iteratee(callback)
+    if predicate:
+        cbk = pyd.iteratee(predicate)
         collection = [cbk(item) for item in collection]
 
     return all(collection)
 
 
-def filter_(collection, callback=None):
+def filter_(collection, predicate=None):
     """Iterates over elements of a collection, returning a list of all elements
-    the callback returns truthy for.
+    the predicate returns truthy for.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         list: Filtered list.
@@ -174,17 +173,17 @@ def filter_(collection, callback=None):
         Removed alias ``select``.
     """
     return [value
-            for is_true, value, _, _ in itercallback(collection, callback)
+            for is_true, value, _, _ in iteriteratee(collection, predicate)
             if is_true]
 
 
-def find(collection, callback=None):
+def find(collection, predicate=None):
     """Iterates over elements of a collection, returning the first element that
-    the callback returns truthy for.
+    the predicate returns truthy for.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         mixed: First element found or ``None``.
@@ -202,18 +201,18 @@ def find(collection, callback=None):
         Removed aliases ``detect`` and ``find_where``.
     """
     search = (collection[key]
-              for is_true, _, key, _ in itercallback(collection, callback)
+              for is_true, _, key, _ in iteriteratee(collection, predicate)
               if is_true)
     return next(search, None)
 
 
-def find_last(collection, callback=None):
+def find_last(collection, predicate=None):
     """This method is like :func:`find` except that it iterates over elements
     of a `collection` from right to left.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         mixed: Last element found or ``None``.
@@ -229,22 +228,22 @@ def find_last(collection, callback=None):
     .. versionadded:: 1.0.0
     """
     search = (collection[key]
-              for is_true, _, key, _ in itercallback(collection,
-                                                     callback,
+              for is_true, _, key, _ in iteriteratee(collection,
+                                                     predicate,
                                                      reverse=True)
               if is_true)
     return next(search, None)
 
 
-def flat_map(collection, callback=None):
+def flat_map(collection, iteratee=None):
     """Creates a flattened list of values by running each element in
-    collection thru `callback` and flattening the mapped results. The
-    `callback` is invoked with three arguments:
+    collection thru `iteratee` and flattening the mapped results. The
+    `iteratee` is invoked with three arguments:
     ``(value, index|key, collection)``.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         list: Flattened mapped list.
@@ -257,16 +256,16 @@ def flat_map(collection, callback=None):
 
     .. versionadded:: TODO
     """
-    return pyd.flatten(mapiter(collection, callback=callback))
+    return pyd.flatten(itermap(collection, iteratee=iteratee))
 
 
-def flat_map_deep(collection, callback=None):
+def flat_map_deep(collection, iteratee=None):
     """This method is like :func:`flat_map` except that it recursively flattens
     the mapped results.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         list: Flattened mapped list.
@@ -279,16 +278,16 @@ def flat_map_deep(collection, callback=None):
 
     .. versionadded:: TODO
     """
-    return pyd.flatten_deep(mapiter(collection, callback=callback))
+    return pyd.flatten_deep(itermap(collection, iteratee=iteratee))
 
 
-def flat_map_depth(collection, callback=None, depth=1):
+def flat_map_depth(collection, iteratee=None, depth=1):
     """This method is like :func:`flat_map` except that it recursively flattens
     the mapped results up to `depth` times.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         list: Flattened mapped list.
@@ -303,17 +302,17 @@ def flat_map_depth(collection, callback=None, depth=1):
 
     .. versionadded:: TODO
     """
-    return pyd.flatten_depth(mapiter(collection, callback=callback),
+    return pyd.flatten_depth(itermap(collection, iteratee=iteratee),
                              depth=depth)
 
 
-def for_each(collection, callback=None):
-    """Iterates over elements of a collection, executing the callback for each
+def for_each(collection, iteratee=None):
+    """Iterates over elements of a collection, executing the iteratee for each
     element.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         list|dict: `collection`
@@ -331,19 +330,19 @@ def for_each(collection, callback=None):
     .. versionchanged: TODO
         Removed alias ``each``.
     """
-    next((None for ret, _, _, _ in itercallback(collection, callback)
+    next((None for ret, _, _, _ in iteriteratee(collection, iteratee)
           if ret is False),
          None)
     return collection
 
 
-def for_each_right(collection, callback):
+def for_each_right(collection, iteratee):
     """This method is like :func:`for_each` except that it iterates over
     elements of a `collection` from right to left.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         list|dict: `collection`
@@ -361,24 +360,24 @@ def for_each_right(collection, callback):
     .. versionchanged:: TODO
         Removed alias ``each_right``.
     """
-    next((None for ret, _, _, _ in itercallback(collection,
-                                                callback,
+    next((None for ret, _, _, _ in iteriteratee(collection,
+                                                iteratee,
                                                 reverse=True)
           if ret is False),
          None)
     return collection
 
 
-def group_by(collection, callback=None):
+def group_by(collection, iteratee=None):
     """Creates an object composed of keys generated from the results of running
-    each element of a `collection` through the callback.
+    each element of a `collection` through the iteratee.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
-        dict: Results of grouping by `callback`.
+        dict: Results of grouping by `iteratee`.
 
     Example:
 
@@ -391,7 +390,7 @@ def group_by(collection, callback=None):
     .. versionadded:: 1.0.0
     """
     ret = {}
-    cbk = pyd.iteratee(callback)
+    cbk = pyd.iteratee(iteratee)
 
     for value in collection:
         key = cbk(value)
@@ -438,16 +437,16 @@ def includes(collection, target, from_index=0):
     return target in collection
 
 
-def key_by(collection, callback=None):
+def key_by(collection, iteratee=None):
     """Creates an object composed of keys generated from the results of running
-    each element of the collection through the given callback.
+    each element of the collection through the given iteratee.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
-        dict: Results of indexing by `callback`.
+        dict: Results of indexing by `iteratee`.
 
     Example:
 
@@ -461,7 +460,7 @@ def key_by(collection, callback=None):
         Renamed from ``index_by`` to ``key_by``.
     """
     ret = {}
-    cbk = pyd.iteratee(callback)
+    cbk = pyd.iteratee(iteratee)
 
     for value in collection:
         ret[cbk(value)] = value
@@ -503,18 +502,18 @@ def invoke_map(collection, path, *args, **kargs):
     return [method(item) for item in collection]
 
 
-def map_(collection, callback=None):
+def map_(collection, iteratee=None):
     """Creates an array of values by running each element in the collection
-    through the callback. The callback is invoked with three arguments:
+    through the iteratee. The iteratee is invoked with three arguments:
     ``(value, index|key, collection)``. If a property name is passed for
-    callback, the created :func:`pluck` style callback will return the property
-    value of the given element. If an object is passed for callback, the
-    created :func:`where` style callback will return ``True`` for elements that
+    iteratee, the created :func:`pluck` style iteratee will return the property
+    value of the given element. If an object is passed for iteratee, the
+    created :func:`where` style iteratee will return ``True`` for elements that
     have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
     Returns:
         list: Mapped list.
@@ -525,13 +524,19 @@ def map_(collection, callback=None):
         ['1', '2', '3', '4']
         >>> map_([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}], 'a')
         [1, 3, 5]
+        >>> map_([[[0, 1]], [[2, 3]], [[4, 5]]], '0.1')
+        [1, 3, 5]
+        >>> map_([{'a': {'b': 1}}, {'a': {'b': 2}}], 'a.b')
+        [1, 2]
+        >>> map_([{'a': {'b': [0, 1]}}, {'a': {'b': [2, 3]}}], 'a.b[1]')
+        [1, 3]
 
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
         Removed alias ``collect``.
     """
-    return list(itermap(collection, callback))
+    return list(itermap(collection, iteratee))
 
 
 def order_by(collection, keys, orders=None, reverse=False):
@@ -628,22 +633,22 @@ def order_by(collection, keys, orders=None, reverse=False):
     return sorted(collection, key=cmp_to_key(comparison), reverse=reverse)
 
 
-def partition(collection, callback=None):
+def partition(collection, predicate=None):
     """Creates an array of elements split into two groups, the first of which
-    contains elements the `callback` returns truthy for, while the second of
-    which contains elements the `callback` returns falsey for. The `callback`
+    contains elements the `predicate` returns truthy for, while the second of
+    which contains elements the `predicate` returns falsey for. The `predicate`
     is invoked with three arguments: ``(value, index|key, collection)``.
 
-    If a property name is provided for `callback` the created :func:`pluck`
-    style callback returns the property value of the given element.
+    If a property name is provided for `predicate` the created :func:`pluck`
+    style predicate returns the property value of the given element.
 
-    If an object is provided for `callback` the created :func:`where` style
-    callback returns ``True`` for elements that have the properties of the
+    If an object is provided for `predicate` the created :func:`where` style
+    predicate returns ``True`` for elements that have the properties of the
     given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         list: List of grouped elements.
@@ -658,7 +663,7 @@ def partition(collection, callback=None):
     trues = []
     falses = []
 
-    for is_true, value, _, _ in itercallback(collection, callback):
+    for is_true, value, _, _ in iteriteratee(collection, predicate):
         if is_true:
             trues.append(value)
         else:
@@ -667,15 +672,15 @@ def partition(collection, callback=None):
     return [trues, falses]
 
 
-def reduce_(collection, callback=None, accumulator=None):
+def reduce_(collection, iteratee=None, accumulator=None):
     """Reduces a collection to a value which is the accumulated result of
-    running each element in the collection through the callback, where each
-    successive callback execution consumes the return value of the previous
+    running each element in the collection through the iteratee, where each
+    successive iteratee execution consumes the return value of the previous
     execution.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
         accumulator (mixed, optional): Initial value of aggregator. Default is
             to use the result of the first iteration.
 
@@ -703,24 +708,24 @@ def reduce_(collection, callback=None, accumulator=None):
 
     result = accumulator
 
-    if callback is None:
-        callback = pyd.identity
+    if iteratee is None:
+        iteratee = pyd.identity
 
-    argcount = getargcount(callback, maxargs=3)
+    argcount = getargcount(iteratee, maxargs=3)
 
     for index, item in iterable:
-        result = callit(callback, result, item, index, argcount=argcount)
+        result = callit(iteratee, result, item, index, argcount=argcount)
 
     return result
 
 
-def reduce_right(collection, callback=None, accumulator=None):
+def reduce_right(collection, iteratee=None, accumulator=None):
     """This method is like :func:`reduce_` except that it iterates over
     elements of a `collection` from right to left.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
         accumulator (mixed, optional): Initial value of aggregator. Default is
             to use the result of the first iteration.
 
@@ -743,16 +748,16 @@ def reduce_right(collection, callback=None, accumulator=None):
     if not isinstance(collection, dict):
         collection = list(collection)[::-1]
 
-    return reduce_(collection, callback, accumulator)
+    return reduce_(collection, iteratee, accumulator)
 
 
-def reductions(collection, callback=None, accumulator=None, from_right=False):
+def reductions(collection, iteratee=None, accumulator=None, from_right=False):
     """This function is like :func:`reduce_` except that it returns a list of
     every intermediate value in the reduction operation.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
         accumulator (mixed, optional): Initial value of aggregator. Default is
             to use the result of the first iteration.
 
@@ -770,15 +775,15 @@ def reductions(collection, callback=None, accumulator=None, from_right=False):
 
     .. versionadded:: 2.0.0
     """
-    if callback is None:
-        callback = pyd.identity
+    if iteratee is None:
+        iteratee = pyd.identity
 
     results = []
 
-    argcount = getargcount(callback, maxargs=3)
+    argcount = getargcount(iteratee, maxargs=3)
 
     def interceptor(result, item, index):
-        result = callit(callback, result, item, index, argcount=argcount)
+        result = callit(iteratee, result, item, index, argcount=argcount)
         results.append(result)
         return result
 
@@ -788,13 +793,13 @@ def reductions(collection, callback=None, accumulator=None, from_right=False):
     return results
 
 
-def reductions_right(collection, callback=None, accumulator=None):
+def reductions_right(collection, iteratee=None, accumulator=None):
     """This method is like :func:`reductions` except that it iterates over
     elements of a `collection` from right to left.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
         accumulator (mixed, optional): Initial value of aggregator. Default is
             to use the result of the first iteration.
 
@@ -812,16 +817,16 @@ def reductions_right(collection, callback=None, accumulator=None):
 
     .. versionadded:: 2.0.0
     """
-    return reductions(collection, callback, accumulator, from_right=True)
+    return reductions(collection, iteratee, accumulator, from_right=True)
 
 
-def reject(collection, callback=None):
+def reject(collection, predicate=None):
     """The opposite of :func:`filter_` this method returns the elements of a
-    collection that the callback does **not** return truthy for.
+    collection that the predicate does **not** return truthy for.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         list: Rejected elements of `collection`.
@@ -838,7 +843,7 @@ def reject(collection, callback=None):
     .. versionadded:: 1.0.0
     """
     return [value
-            for is_true, value, _, _ in itercallback(collection, callback)
+            for is_true, value, _, _ in iteriteratee(collection, predicate)
             if not is_true]
 
 
@@ -940,18 +945,18 @@ def size(collection):
     return len(collection)
 
 
-def some(collection, callback=None):
-    """Checks if the callback returns a truthy value for any element of a
-    collection. The callback is invoked with three arguments:
+def some(collection, predicate=None):
+    """Checks if the predicate returns a truthy value for any element of a
+    collection. The predicate is invoked with three arguments:
     ``(value, index|key, collection)``. If a property name is passed for
-    callback, the created :func:`map_` style callback will return the property
-    value of the given element. If an object is passed for callback, the
-    created :func:`where` style callback will return ``True`` for elements that
+    predicate, the created :func:`map_` style predicate will return the property
+    value of the given element. If an object is passed for predicate, the
+    created :func:`where` style predicate will return ``True`` for elements that
     have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callbacked (mixed, optional): Callback applied per iteration.
+        predicateed (mixed, optional): Predicate applied per iteration.
 
     Returns:
         bool: Whether any of the elements are truthy.
@@ -973,20 +978,20 @@ def some(collection, callback=None):
         Removed alias ``any_``.
     """
 
-    if callback:
-        cbk = pyd.iteratee(callback)
+    if predicate:
+        cbk = pyd.iteratee(predicate)
         collection = [cbk(item) for item in collection]
 
     return any(collection)
 
 
-def sort_by(collection, callback=None, reverse=False):
+def sort_by(collection, iteratee=None, reverse=False):
     """Creates a list of elements, sorted in ascending order by the results of
-    running each element in a `collection` through the callback.
+    running each element in a `collection` through the iteratee.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        callback (mixed, optional): Callback applied per iteration.
+        iteratee (mixed, optional): Iteratee applied per iteration.
         reverse (bool, optional): Whether to reverse the sort. Defaults to
             ``False``.
 
@@ -1007,7 +1012,7 @@ def sort_by(collection, callback=None, reverse=False):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return sorted(collection, key=pyd.iteratee(callback), reverse=reverse)
+    return sorted(collection, key=pyd.iteratee(iteratee), reverse=reverse)
 
 
 def to_list(collection):
@@ -1041,7 +1046,7 @@ def to_list(collection):
 #
 
 
-def itermap(collection, callback=None):
+def itermap(collection, iteratee=None):
     """Generative mapper."""
-    for result in iteriteratee(collection, callback):
+    for result in iteriteratee(collection, iteratee):
         yield result[0]

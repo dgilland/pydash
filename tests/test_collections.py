@@ -386,8 +386,8 @@ def test_partition(case, expected):
 
 @parametrize('case,expected', [
     (([1, 2, 3], None), 1),
-    (([1, 2, 3], fixtures.reduce_callback0), 6),
-    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
+    (([1, 2, 3], fixtures.reduce_iteratee0), 6),
+    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_iteratee1, {}),
      {'a': 3, 'b': 6, 'c': 9})
 ])
 def test_reduce_(case, expected):
@@ -410,10 +410,10 @@ def test_reduce_raise(case, exception):
 
 @parametrize('case,expected', [
     (([1, 2, 3], None), 3),
-    (([1, 2, 3], fixtures.reduce_callback0), 6),
-    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_callback0),
+    (([1, 2, 3], fixtures.reduce_iteratee0), 6),
+    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_iteratee0),
      [4, 5, 2, 3, 0, 1]),
-    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_callback1, {}),
+    (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_iteratee1, {}),
      {'a': 3, 'b': 6, 'c': 9})
 ])
 def test_reduce_right(case, expected):
@@ -436,8 +436,8 @@ def test_reduce_right_exception(case, exception):
 
 @parametrize('case,expected', [
     (([1, 2, 3], None), [1, 1]),
-    (([1, 2, 3], fixtures.reduce_callback0), [3, 6]),
-    (([1, 2, 3, 4, 5], fixtures.reduce_callback0, 0), [1, 3, 6, 10, 15])
+    (([1, 2, 3], fixtures.reduce_iteratee0), [3, 6]),
+    (([1, 2, 3, 4, 5], fixtures.reduce_iteratee0, 0), [1, 3, 6, 10, 15])
 ])
 def test_reductions(case, expected):
     assert _.reductions(*case) == expected
@@ -445,8 +445,8 @@ def test_reductions(case, expected):
 
 @parametrize('case,expected', [
     (([1, 2, 3], None), [3, 3]),
-    (([1, 2, 3], fixtures.reduce_callback0), [5, 6]),
-    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_callback0),
+    (([1, 2, 3], fixtures.reduce_iteratee0), [5, 6]),
+    (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_iteratee0),
      [[4, 5, 2, 3], [4, 5, 2, 3, 0, 1]]),
 ])
 def test_reductions_right(case, expected):

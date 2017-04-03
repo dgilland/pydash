@@ -16,7 +16,7 @@ from .helpers import (
     NoValue,
     callit,
     iterator,
-    itercallback,
+    iteriteratee,
     getargcount,
     base_get,
     base_set
@@ -100,14 +100,14 @@ def assign(obj, *sources):
         Apply :func:`clone_deep` to each `source` before assigning to `obj`.
 
     .. versionchanged:: 3.0.0
-        Allow callbacks to accept partial arguments.
+        Allow iteratees to accept partial arguments.
 
     .. versionchanged:: 3.4.4
         Shallow copy each `source` instead of deep copying.
 
     .. versionchanged:: TODO
 
-        - Moved `callback` argument to :func:`assign_with`.
+        - Moved `iteratee` argument to :func:`assign_with`.
         - Removed alias ``extend``.
     """
     return assign_with(obj, *sources)
@@ -124,7 +124,7 @@ def assign_with(obj, *sources, **kargs):
         sources (dict): Source objects to assign to `obj`.
 
     Keyword Args:
-        callback (mixed, optional): Callback applied per iteration.
+        customizer (mixed, optional): Customizer applied per iteration.
 
     Returns:
         dict: Modified `obj`.
@@ -142,13 +142,13 @@ def assign_with(obj, *sources, **kargs):
     .. versionadded:: TODO
     """
     sources = list(sources)
-    callback = kargs.get('callback')
+    customizer = kargs.get('customizer')
 
-    if callback is None and callable(sources[-1]):
-        callback = sources.pop()
+    if customizer is None and callable(sources[-1]):
+        customizer = sources.pop()
 
-    if callback is not None:
-        argcount = getargcount(callback, maxargs=5)
+    if customizer is not None:
+        argcount = getargcount(customizer, maxargs=5)
     else:
         argcount = None
 
@@ -156,8 +156,8 @@ def assign_with(obj, *sources, **kargs):
         source = source.copy()
 
         for key, value in iteritems(source):
-            if callback:
-                val = callit(callback,
+            if customizer:
+                val = callit(customizer,
                              obj.get(key),
                              value,
                              key,
@@ -220,12 +220,12 @@ def clone(value):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Move 'callback' parameter to :func:`clone_with`.
+        Move 'iteratee' parameter to :func:`clone_with`.
     """
     return base_clone(value)
 
 
-def clone_with(value, callback=None):
+def clone_with(value, customizer=None):
     """This method is like :func:`clone` except that it accepts customizer
     which is invoked to produce the cloned value. If customizer returns
     ``None``, cloning is handled by the method instead. The customizer is
@@ -233,7 +233,7 @@ def clone_with(value, callback=None):
 
     Args:
         value (list|dict): Object to clone.
-        callback (callable, optional): Function to customize cloning.
+        customizer (callable, optional): Function to customize cloning.
 
     Returns:
         list|dict: Cloned object.
@@ -246,17 +246,15 @@ def clone_with(value, callback=None):
         >>> y == {'a': 3, 'b': 4, 'c': {'d': 3}}
         True
     """
-    return base_clone(value, callback=callback)
+    return base_clone(value, customizer=customizer)
 
 
 def clone_deep(value):
-    """Creates a deep clone of `value`. If a callback is provided it will be
-    executed to produce the cloned values. The callback is invoked with one
-    argument: ``(value)``.
+    """Creates a deep clone of `value`. If a iteratee is provided it will be
+    executed to produce the cloned values.
 
     Args:
         value (list|dict): Object to clone.
-        callback (mixed, optional): Callback applied per iteration.
 
     Returns:
         list|dict: Cloned object.
@@ -275,23 +273,23 @@ def clone_deep(value):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Move 'callback' parameter to :func:`clone_deep_with`.
+        Move 'iteratee' parameter to :func:`clone_deep_with`.
     """
     return base_clone(value, is_deep=True)
 
 
-def clone_deep_with(value, callback=None):
+def clone_deep_with(value, customizer=None):
     """This method is like :func:`clone_with` except that it recursively clones
     `value`.
 
     Args:
         value (list|dict): Object to clone.
-        callback (callable, optional): Function to customize cloning.
+        customizer (callable, optional): Function to customize cloning.
 
     Returns:
         list|dict: Cloned object.
     """
-    return base_clone(value, is_deep=True, callback=callback)
+    return base_clone(value, is_deep=True, customizer=customizer)
 
 
 def defaults(obj, *sources):
@@ -357,14 +355,14 @@ def defaults_deep(obj, *sources):
     return merge_with(obj, *sources, _setter=setter)
 
 
-def find_key(obj, callback=None):
+def find_key(obj, predicate=None):
     """This method is like :func:`pydash.arrays.find_index` except that it
-    returns the key of the first element that passes the callback check,
+    returns the key of the first element that passes the predicate check,
     instead of the element itself.
 
     Args:
         obj (list|dict): Object to search.
-        callback (mixed): Callback applied per iteration.
+        predicate (mixed): Predicate applied per iteration.
 
     Returns:
         mixed: Found key or ``None``.
@@ -378,18 +376,18 @@ def find_key(obj, callback=None):
 
     .. versionadded:: 1.0.0
     """
-    for result, _, key, _ in itercallback(obj, callback):
+    for result, _, key, _ in iteriteratee(obj, predicate):
         if result:
             return key
 
 
-def find_last_key(obj, callback=None):
+def find_last_key(obj, predicate=None):
     """This method is like :func:`find_key` except that it iterates over
     elements of a collection in the opposite order.
 
     Args:
         obj (list|dict): Object to search.
-        callback (mixed): Callback applied per iteration.
+        predicate (mixed): Predicate applied per iteration.
 
     Returns:
         mixed: Found key or ``None``.
@@ -405,19 +403,19 @@ def find_last_key(obj, callback=None):
         Made into its own function instead of an alias of ``find_key`` with
         proper reverse find implementation.
     """
-    reversed_obj = reversed(list(itercallback(obj, callback)))
+    reversed_obj = reversed(list(iteriteratee(obj, predicate)))
     for result, _, key, _ in reversed_obj:
         if result:
             return key
 
 
-def for_in(obj, callback=None):
+def for_in(obj, iteratee=None):
     """Iterates over own and inherited enumerable properties of `obj`,
-    executing `callback` for each property.
+    executing `iteratee` for each property.
 
     Args:
         obj (list|dict): Object to process.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
 
     Returns:
         list|dict: `obj`.
@@ -437,19 +435,19 @@ def for_in(obj, callback=None):
     .. versionchanged:: TODO
         Removed alias ``for_own``.
     """
-    walk = (None for ret, _, _, _ in itercallback(obj, callback)
+    walk = (None for ret, _, _, _ in iteriteratee(obj, iteratee)
             if ret is False)
     next(walk, None)
     return obj
 
 
-def for_in_right(obj, callback=None):
+def for_in_right(obj, iteratee=None):
     """This function is like :func:`for_in` except it iterates over the
     properties in reverse order.
 
     Args:
         obj (list|dict): Object to process.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
 
     Returns:
         list|dict: `obj`.
@@ -468,7 +466,7 @@ def for_in_right(obj, callback=None):
     .. versionchanged:: TODO
         Removed alias ``for_own_right``.
     """
-    walk = (None for ret, _, _, _ in itercallback(obj, callback, reverse=True)
+    walk = (None for ret, _, _, _ in iteriteratee(obj, iteratee, reverse=True)
             if ret is False)
     next(walk, None)
     return obj
@@ -619,7 +617,7 @@ def invert(obj):
     return dict((value, key) for key, value in iterator(obj))
 
 
-def invert_by(obj, callback=None):
+def invert_by(obj, iteratee=None):
     """This method is like :func:`invert` except that the inverted object is
     generated from the results of running each element of object thru iteratee.
     The corresponding inverted value of each inverted key is a list of keys
@@ -651,7 +649,7 @@ def invert_by(obj, callback=None):
 
     .. versionadded:: TODO
     """
-    callback = pyd.iteratee(callback)
+    callback = pyd.iteratee(iteratee)
     result = {}
 
     for key, value in iterator(obj):
@@ -712,22 +710,22 @@ def keys(obj):
     return [key for key, _ in iterator(obj)]
 
 
-def map_keys(obj, callback=None):
+def map_keys(obj, iteratee=None):
     """Creates an object with the same values as `obj` and keys generated by
-    running each property of `obj` through the `callback`. The callback is
+    running each property of `obj` through the `iteratee`. The iteratee is
     invoked with three arguments: ``(value, key, object)``. If a property name
-    is provided for `callback` the created :func:`pydash.collections.pluck`
-    style callback will return the property value of the given element. If an
-    object is provided for callback the created
-    :func:`pydash.collections.where` style callback will return ``True``
+    is provided for `iteratee` the created :func:`pydash.collections.pluck`
+    style iteratee will return the property value of the given element. If an
+    object is provided for iteratee the created
+    :func:`pydash.collections.where` style iteratee will return ``True``
     for elements that have the properties of the given object, else ``False``.
 
     Args:
         obj (list|dict): Object to map.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
 
     Returns:
-        list|dict: Results of running `obj` through `callback`.
+        list|dict: Results of running `obj` through `iteratee`.
 
     Example:
 
@@ -739,25 +737,25 @@ def map_keys(obj, callback=None):
     .. versionadded:: 3.3.0
     """
     return dict((result, value)
-                for result, value, _, _ in itercallback(obj, callback))
+                for result, value, _, _ in iteriteratee(obj, iteratee))
 
 
-def map_values(obj, callback=None):
+def map_values(obj, iteratee=None):
     """Creates an object with the same keys as `obj` and values generated by
-    running each property of `obj` through the `callback`. The callback is
+    running each property of `obj` through the `iteratee`. The iteratee is
     invoked with three arguments: ``(value, key, object)``. If a property name
-    is provided for `callback` the created :func:`pydash.collections.pluck`
-    style callback will return the property value of the given element. If an
-    object is provided for callback the created
-    :func:`pydash.collections.where` style callback will return ``True``
+    is provided for `iteratee` the created :func:`pydash.collections.pluck`
+    style iteratee will return the property value of the given element. If an
+    object is provided for iteratee the created
+    :func:`pydash.collections.where` style iteratee will return ``True``
     for elements that have the properties of the given object, else ``False``.
 
     Args:
         obj (list|dict): Object to map.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
 
     Returns:
-        list|dict: Results of running `obj` through `callback`.
+        list|dict: Results of running `obj` through `iteratee`.
 
     Example:
 
@@ -771,18 +769,18 @@ def map_values(obj, callback=None):
     .. versionadded:: 1.0.0
     """
     return dict((key, result)
-                for result, _, key, _ in itercallback(obj, callback))
+                for result, _, key, _ in iteriteratee(obj, iteratee))
 
 
-def map_values_deep(obj, callback=None, property_path=NoValue):
-    """Map all non-object values in `obj` with return values from `callback`.
-    The callback is invoked with two arguments: ``(obj_value, property_path)``
+def map_values_deep(obj, iteratee=None, property_path=NoValue):
+    """Map all non-object values in `obj` with return values from `iteratee`.
+    The iteratee is invoked with two arguments: ``(obj_value, property_path)``
     where ``property_path`` contains the list of path keys corresponding to the
     path of ``obj_value``.
 
     Args:
         obj (list|dict): Object to map.
-        callback (function): Callback applied to each value.
+        iteratee (function): Iteratee applied to each value.
 
     Returns:
         mixed: The modified object.
@@ -803,7 +801,7 @@ def map_values_deep(obj, callback=None, property_path=NoValue):
     .. versionadded: 2.2.0
 
     .. versionchanged:: 3.0.0
-        Allow callbacks to accept partial arguments.
+        Allow iteratees to accept partial arguments.
 
     .. versionchanged:: TODO
         Renamed from ``deep_map_values`` to ``map_values_deep``.
@@ -811,22 +809,19 @@ def map_values_deep(obj, callback=None, property_path=NoValue):
     properties = to_path(property_path)
 
     if pyd.is_object(obj):
-        deep_callback = (
+        deep_iteratee = (
             lambda value, key: map_values_deep(value,
-                                               callback,
+                                               iteratee,
                                                pyd.flatten([properties, key])))
-        return assign(obj, map_values(obj, deep_callback))
+        return assign(obj, map_values(obj, deep_iteratee))
     else:
-        return callit(callback, obj, properties)
+        return callit(iteratee, obj, properties)
 
 
 def merge(obj, *sources):
     """Recursively merges properties of the source object(s) into the
     destination object. Subsequent sources will overwrite property assignments
-    of previous sources. If a callback is provided it will be executed to
-    produce the merged values of the destination and source properties. The
-    callback is invoked with at least two arguments:
-    ``(obj_value, *source_value)``.
+    of previous sources.
 
     Args:
         obj (dict): Destination object to merge source(s) into.
@@ -854,14 +849,14 @@ def merge(obj, *sources):
         Apply :func:`clone_deep` to each `source` before assigning to `obj`.
 
     .. versionchanged:: 2.3.2
-        Allow `callback` to be passed by reference if it is the last positional
+        Allow `iteratee` to be passed by reference if it is the last positional
         argument.
 
     .. versionchanged:: 3.3.0
         Added internal option for overriding the default setter for obj values.
 
     .. versionchanged:: TODO
-        Moved callback argument to :func:`merge_with`.
+        Moved iteratee argument to :func:`merge_with`.
     """
     return merge_with(obj, *sources)
 
@@ -879,7 +874,7 @@ def merge_with(obj, *sources, **kargs):
             overwrite previous ones.
 
     Keyword Args:
-        callback (function, optional): Callback function to handle merging
+        iteratee (function, optional): Iteratee function to handle merging
             (must be passed in as keyword argument).
 
     Returns:
@@ -901,15 +896,15 @@ def merge_with(obj, *sources, **kargs):
     """
     sources = list(sources)
     _clone = kargs.get('_clone', True)
-    callback = kargs.get('callback')
+    iteratee = kargs.get('iteratee')
     setter = kargs.get('_setter', base_set)
 
-    if callback is None and callable(sources[-1]):
-        callback = sources.pop()
+    if iteratee is None and callable(sources[-1]):
+        iteratee = sources.pop()
 
-    if callable(callback):
-        argcount = getargcount(callback, maxargs=5)
-        cbk = partial(callit, callback, argcount=argcount)
+    if callable(iteratee):
+        argcount = getargcount(iteratee, maxargs=5)
+        cbk = partial(callit, iteratee, argcount=argcount)
     else:
         cbk = None
 
@@ -968,19 +963,19 @@ def omit(obj, *properties):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Moved callback argument to :func:`omit_by`.
+        Moved iteratee argument to :func:`omit_by`.
     """
     return omit_by(obj, pyd.flatten(properties))
 
 
-def omit_by(obj, callback=None):
+def omit_by(obj, iteratee=None):
     """The opposite of :func:`pick_by`. This method creates an object composed
     of the string keyed properties of object that predicate doesn't return
     truthy for. The predicate is invoked with two arguments: ``(value, key)``.
 
     Args:
         obj (mixed): Object to process.
-        callback (mixed, optional): Callback used to determine which properties
+        iteratee (mixed, optional): Iteratee used to determine which properties
             to omit.
 
     Returns:
@@ -993,18 +988,18 @@ def omit_by(obj, callback=None):
 
     .. versionadded:: TODO
     """
-    if not callable(callback):
-        keys = callback if callback is not None else []
+    if not callable(iteratee):
+        keys = iteratee if iteratee is not None else []
 
-        def callback(value, key):  # pylint: disable=function-redefined
+        def iteratee(value, key):  # pylint: disable=function-redefined
             return key in keys
 
         argcount = 2
     else:
-        argcount = getargcount(callback, maxargs=2)
+        argcount = getargcount(iteratee, maxargs=2)
 
     return dict((key, value) for key, value in iterator(obj)
-                if not callit(callback, value, key, argcount=argcount))
+                if not callit(iteratee, value, key, argcount=argcount))
 
 
 def parse_int(value, radix=None):
@@ -1072,18 +1067,18 @@ def pick(obj, *properties):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: TODO
-        Moved callback argument to :func:`pick_by`.
+        Moved iteratee argument to :func:`pick_by`.
     """
     return pick_by(obj, pyd.flatten(properties))
 
 
-def pick_by(obj, callback=None):
+def pick_by(obj, iteratee=None):
     """Creates an object composed of the object properties predicate returns
     truthy for. The predicate is invoked with two arguments: ``(value, key)``.
 
     Args:
         obj (list|dict): Object to pick from.
-        callback (mixed, optional): Callback used to determine which properties
+        iteratee (mixed, optional): Iteratee used to determine which properties
             to pick.
 
     Returns:
@@ -1097,18 +1092,18 @@ def pick_by(obj, callback=None):
 
     .. versionadded:: TODO
     """
-    if not callable(callback):
-        keys = callback if callback is not None else []
+    if not callable(iteratee):
+        keys = iteratee if iteratee is not None else []
 
-        def callback(value, key):  # pylint: disable=function-redefined
+        def iteratee(value, key):  # pylint: disable=function-redefined
             return key in keys
 
         argcount = 2
     else:
-        argcount = getargcount(callback, maxargs=2)
+        argcount = getargcount(iteratee, maxargs=2)
 
     return dict((key, value) for key, value in iterator(obj)
-                if callit(callback, value, key, argcount=argcount))
+                if callit(iteratee, value, key, argcount=argcount))
 
 
 def rename_keys(obj, key_map):
@@ -1420,17 +1415,17 @@ def to_string(obj):
     return res
 
 
-def transform(obj, callback=None, accumulator=None):
+def transform(obj, iteratee=None, accumulator=None):
     """An alernative to :func:`pydash.collections.reduce`, this method
     transforms `obj` to a new accumulator object which is the result of running
-    each of its properties through a callback, with each callback execution
-    potentially mutating the accumulator object. The callback is invoked with
-    four arguments: ``(accumulator, value, key, object)``. Callbacks may exit
+    each of its properties through a iteratee, with each iteratee execution
+    potentially mutating the accumulator object. The iteratee is invoked with
+    four arguments: ``(accumulator, value, key, object)``. Iteratees may exit
     iteration early by explicitly returning ``False``.
 
     Args:
         obj (list|dict): Object to process.
-        callback (mixed): Callback applied per iteration.
+        iteratee (mixed): Iteratee applied per iteration.
         accumulator (mixed, optional): Accumulated object. Defaults to
             ``list``.
 
@@ -1444,16 +1439,16 @@ def transform(obj, callback=None, accumulator=None):
 
     .. versionadded:: 1.0.0
     """
-    if callback is None:
-        callback = pyd.identity
+    if iteratee is None:
+        iteratee = pyd.identity
 
     if accumulator is None:
         accumulator = []
 
-    argcount = getargcount(callback, maxargs=4)
+    argcount = getargcount(iteratee, maxargs=4)
 
     walk = (None for key, item in iterator(obj)
-            if callit(callback,
+            if callit(iteratee,
                       accumulator,
                       item,
                       key,
@@ -1681,17 +1676,17 @@ def values(obj):
 #
 
 
-def base_clone(value, is_deep=False, callback=None, key=None, obj=None,
+def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
                _clone=True):
-    """Base clone function that supports deep clone and customizer callback."""
+    """Base clone function that supports deep clone and customizer customizer."""
     clone_by = copy.deepcopy if is_deep else copy.copy
     result = None
 
-    if callable(callback) and _clone:
-        argcount = getargcount(callback, maxargs=4)
-        cbk = partial(callit, callback, argcount=argcount)
+    if callable(customizer) and _clone:
+        argcount = getargcount(customizer, maxargs=4)
+        cbk = partial(callit, customizer, argcount=argcount)
     elif not _clone:
-        cbk = callback
+        cbk = customizer
     else:
         cbk = None
 
