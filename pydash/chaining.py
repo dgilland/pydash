@@ -255,11 +255,12 @@ def chain(value=NoValue):
         Made chaining lazy.
 
     .. versionchanged:: 3.0.0
+
         - Added support for late passing of `value`.
         - Added :meth:`Chain.plant` for replacing initial chain value.
         - Added :meth:`Chain.commit` for returning a new :class:`Chain`
-            instance initialized with the results from calling
-            :meth:`Chain.value`.
+          instance initialized with the results from calling
+          :meth:`Chain.value`.
     """
     return Chain(value)
 

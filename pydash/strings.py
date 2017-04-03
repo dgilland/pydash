@@ -514,7 +514,7 @@ def escape_reg_exp(text):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``escape_re``
     """
     text = pyd.to_string(text)
@@ -617,7 +617,7 @@ def join(array, separator=''):
 
     .. versionadded:: 2.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``implode``.
     """
     return pyd.to_string(separator).join(pyd.map_(array or (), pyd.to_string))
@@ -680,7 +680,7 @@ def lower_case(text):
         >>> lower_case('/?*Foo10/;"B*Ar')
         'foo 10 b ar'
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return ' '.join(words(text)).lower()
 
@@ -705,7 +705,7 @@ def lower_first(text):
         >>> lower_first(';foobar')
         ';foobar'
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return text[:1].lower() + text[1:]
 
@@ -820,7 +820,7 @@ def pad_end(text, length, chars=' '):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``pad_right`` to ``pad_end``.
     """
     # pylint: disable=redefined-outer-name
@@ -851,7 +851,7 @@ def pad_start(text, length, chars=' '):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``pad_left`` to ``pad_start``.
     """
     # pylint: disable=redefined-outer-name
@@ -1021,7 +1021,7 @@ def reg_exp_js_match(text, reg_exp):
     .. versionchanged:: 3.0.0
         Reordered arguments to make `text` first.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``js_match`` to ``reg_exp_js_match``.
     """
     text = pyd.to_string(text)
@@ -1056,7 +1056,7 @@ def reg_exp_js_replace(text, reg_exp, repl):
     .. versionchanged:: 3.0.0
         Reordered arguments to make `text` first.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``js_replace`` to ``reg_exp_js_replace``.
     """
     text = pyd.to_string(text)
@@ -1095,7 +1095,7 @@ def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
 
     .. versionadded:: 3.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``re_replace`` to ``reg_exp_replace``.
     """
     if pattern is None:
@@ -1322,7 +1322,7 @@ def snake_case(text):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``underscore_case``.
     """
     return separator_case(text, '_')
@@ -1354,7 +1354,7 @@ def split(text, separator=NoValue):
         Changed `separator` default to ``NoValue`` and supported splitting on
         whitespace by default.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``explode``.
     """
     text = pyd.to_string(text)
@@ -1633,7 +1633,7 @@ def to_lower(text):
         >>> to_lower('__FOO_BAR__')
         '__foo_bar__'
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return to_string(text).lower()
 
@@ -1656,7 +1656,7 @@ def to_upper(text):
         >>> to_upper('__FOO_BAR__')
         '__FOO_BAR__'
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return to_string(text).upper()
 
@@ -1701,7 +1701,7 @@ def trim_end(text, chars=None):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``trim_right`` to ``trim_end``.
     """
     text = pyd.to_string(text)
@@ -1725,7 +1725,7 @@ def trim_start(text, chars=None):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``trim_left`` to ``trim_start``.
     """
     text = pyd.to_string(text)
@@ -1759,7 +1759,7 @@ def truncate(text, length=30, omission='...', separator=None):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``trunc``.
     """
     text = pyd.to_string(text)
@@ -1830,7 +1830,7 @@ def upper_case(text):
         >>> upper_case('/?*Foo10/;"B*Ar')
         'FOO 10 B AR'
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return ' '.join(words(text)).upper()
 
@@ -1855,7 +1855,7 @@ def upper_first(text):
         >>> upper_first(';foobar')
         ';foobar'
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return text[:1].upper() + text[1:]
 

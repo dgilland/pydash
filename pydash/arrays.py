@@ -150,7 +150,7 @@ def concat(*arrays):
 
     .. versionadded:: 2.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``cat`` to ``concat``.
     """
     return flatten(arrays)
@@ -199,7 +199,7 @@ def difference_by(array, *others, **kargs):
         >>> difference_by([1.2, 1.5, 1.7, 2.8], [0.9, 3.2], round)
         [1.5, 1.7]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     array = array[:]
 
@@ -242,7 +242,7 @@ def difference_with(array, *others, **kargs):
         >>> difference_with(array, *others, comparator=comparator)
         ['banana']
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     array = array[:]
 
@@ -519,11 +519,11 @@ def flatten(array):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 2.0.0
-        Removed ``iteratee`` option. Added ``is_deep`` option. Made it shallow
+        Removed `callback` option. Added ``is_deep`` option. Made it shallow
         by default.
 
-    .. versionchanged:: TODO
-        Remove ``is_deep`` option. Use :func:`flatten_deep` instead.
+    .. versionchanged:: 4.0.0
+        Removed ``is_deep`` option. Use :func:`flatten_deep` instead.
     """
     return flatten_depth(array, depth=1)
 
@@ -569,7 +569,7 @@ def flatten_depth(array, depth=1):
         >>> flatten_depth([[[1], [2, [3]], [[4]]]], 4)
         [1, 2, 3, 4]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return list(iterflatten(array, depth=depth))
 
@@ -588,7 +588,7 @@ def from_pairs(pairs):
         >>> from_pairs([['a', 1]])
         {'a': 1}
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return dict(pairs)
 
@@ -719,7 +719,7 @@ def intersection(array, *others):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Support finding intersection of unhashable types.
     """
     return intersection_with(array, *others)
@@ -748,7 +748,7 @@ def intersection_by(array, *others, **kargs):
         >>> intersection_by([1.2, 1.5, 1.7, 2.8], [0.9, 3.2], round)
         [1.2, 2.8]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not others:
         return []
@@ -795,7 +795,7 @@ def intersection_with(array, *others, **kargs):
         >>> intersection_with(array, *others, comparator=comparator)
         ['pear']
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not others:
         return []
@@ -935,7 +935,7 @@ def nth(array, pos=0):
         >>> nth([11, 22, 33])
         11
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return pyd.get(array, pos)
 
@@ -993,7 +993,7 @@ def pull(array, *values):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         :func:`pull` method now calls :func:`pull_all` method for the desired
         functionality.
     """
@@ -1015,7 +1015,7 @@ def pull_all(array, values):
         >>> pull_all([1, 2, 2, 3, 3, 4], [2, 3])
         [1, 4]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     # Use this style of assignment so that `array` is mutated.
     array[:] = without(array, *values)
@@ -1043,7 +1043,7 @@ def pull_all_by(array, values, iteratee=None):
         >>> pull_all_by(array, [{'x': 1}, {'x': 3}], 'x')
         [{'x': 2}]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     values = difference(array,
                         difference_by(array, values, iteratee=iteratee))
@@ -1058,8 +1058,8 @@ def pull_all_with(array, values, comparator=None):
     Args:
         array (list): Array to modify.
         values (list): Values to remove.
-        comparator (callable, optional): Function to compare the elements of the
-            arrays. Defaults to :func:`.is_equal`.
+        comparator (callable, optional): Function to compare the elements of
+            the arrays. Defaults to :func:`.is_equal`.
 
     Returns:
         list: Modified `array`.
@@ -1075,7 +1075,7 @@ def pull_all_with(array, values, comparator=None):
         >>> res == [{'x': 3, 'y': 4}]
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     values = difference(array,
                         difference_with(array, values, comparator=comparator))
@@ -1132,7 +1132,7 @@ def push(array, *items):
 
     .. versionadded:: 2.2.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``append``.
     """
     for item in items:
@@ -1336,7 +1336,7 @@ def sorted_index(array, value):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Move iteratee support to :func:`sorted_index_by`.
     """
     return sorted_index_by(array, value)
@@ -1366,7 +1366,7 @@ def sorted_index_by(array, value, iteratee=None):
         >>> sorted_index_by(array, {'x': 4}, 'x')
         0
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if iteratee:
         # Generate array of sorted keys computed using iteratee.
@@ -1395,7 +1395,7 @@ def sorted_index_of(array, value):
         >>> sorted_index_of([10, 10, 5, 7, 3], 10)
         -1
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     index = sorted_index(array, value)
 
@@ -1425,7 +1425,7 @@ def sorted_last_index(array, value):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Move iteratee support to :func:`sorted_last_index_by`.
     """
     return sorted_last_index_by(array, value)
@@ -1482,7 +1482,7 @@ def sorted_last_index_of(array, value):
         >>> sorted_last_index_of([6, 5, 5, 5, 4], 6)
         -1
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     index = sorted_last_index(array, value) - 1
 
@@ -1508,7 +1508,7 @@ def sorted_uniq(array):
         >>> sorted_uniq([-2, -2, 4, 1])
         [-2, 1, 4]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return sorted(uniq(array))
 
@@ -1533,7 +1533,7 @@ def sorted_uniq_by(array, iteratee=None):
         >>> sorted_uniq_by([3, 2, 1, 3, 2, 1], lambda val: val % 2)
         [2, 3]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return sorted(uniq_by(array, iteratee=iteratee))
 
@@ -1636,7 +1636,7 @@ def tail(array):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``rest`` to ``tail``.
     """
     return array[1:]
@@ -1795,7 +1795,7 @@ def union_by(array, *others, **kargs):
         >>> union_by([1, 2, 3], [2, 3, 4], iteratee=lambda x: x % 9)
         [1, 2, 3, 4]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not others:
         return array[:]
@@ -1829,7 +1829,7 @@ def union_with(array, *others, **kargs):
         >>> union_with([1, 2, 3], [2, 3, 4])
         [1, 2, 3, 4]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not others:
         return array[:]
@@ -1863,10 +1863,9 @@ def uniq(array):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
 
-        - Removed ``iteratee`` argument support in favor of only having
-          :func:`uniq_by` support it.
+        - Moved `iteratee` argument to :func:`uniq_by`.
         - Removed alias ``unique``.
 
     """
@@ -1893,7 +1892,7 @@ def uniq_by(array, iteratee=None):
         >>> uniq_by([1, 2, 3, 1, 2, 3], lambda val: val % 2)
         [1, 2]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return list(iterunique(array, iteratee=iteratee))
 
@@ -1906,8 +1905,8 @@ def uniq_with(array, comparator=None):
 
     Args:
         array (list): List to process.
-        comparator (callable, optional): Function to compare the elements of the
-            arrays. Defaults to :func:`.is_equal`.
+        comparator (callable, optional): Function to compare the elements of
+            the arrays. Defaults to :func:`.is_equal`.
 
     Returns:
         list: Unique list.
@@ -1917,7 +1916,7 @@ def uniq_with(array, comparator=None):
         >>> uniq_with([1, 2, 3, 4, 5], lambda a, b: (a % 2) == (b % 2))
         [1, 2]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return list(iterunique(array, comparator=comparator))
 
@@ -2072,7 +2071,7 @@ def xor_by(array, *lists, **kargs):
         >>> xor_by([{'x': 1}], [{'x': 2}, {'x': 1}], 'x')
         [{'x': 2}]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not lists:
         return array[:]
@@ -2111,7 +2110,7 @@ def xor_with(array, *lists, **kargs):
         >>> xor_with(objects, others, lambda a, b: a == b) == expected
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not lists:
         return array[:]
@@ -2166,7 +2165,7 @@ def zip_object(keys, values=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``object_``.
     """
 
@@ -2193,7 +2192,7 @@ def zip_object_deep(keys, values=None):
         >>> zip_object_deep(['a.b.c', 'a.b.d'], [1, 2]) == expected
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if values is None:  # pragma: no cover
         keys, values = unzip(keys)

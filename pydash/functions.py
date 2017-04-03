@@ -636,7 +636,7 @@ def flip(func):
         >>> flipped(1, 2, 3, 4)
         [8, 6, 4, 2]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return Flip(func)
 
@@ -667,7 +667,7 @@ def flow(*funcs):
     .. versionchanged:: 2.3.1
         Added :func:`pipe` as alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``pipe``.
     """
     return Flow(*funcs, from_right=False)
@@ -702,7 +702,7 @@ def flow_right(*funcs):
     .. versionchanged:: 2.3.1
         Added :func:`pipe_right` as alias.
 
-    .. versionchanged: TODO
+    .. versionchanged:: 4.0.0
         Removed aliases ``pipe_right`` and ``compose``.
     """
     return Flow(*funcs, from_right=True)
@@ -826,7 +826,7 @@ def over_args(func, *transforms):
 
     .. versionadded:: 3.3.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``mod_args`` to ``over_args``.
     """
     return OverArgs(func, *transforms)
@@ -966,7 +966,7 @@ def unary(func):
         >>> unary_func(1, 2, 3, 4, 5, 6, b=0, c=10, d=20)
         (1, 0, 10, 20)
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return Ary(func, 1)
 

@@ -110,10 +110,10 @@ def every(collection, predicate=None):
     """Checks if the predicate returns a truthy value for all elements of a
     collection. The predicate is invoked with three arguments:
     ``(value, index|key, collection)``. If a property name is passed for
-    predicate, the created :func:`pluck` style predicate will return the property
-    value of the given element. If an object is passed for predicate, the
-    created :func:`where` style predicate will return ``True`` for elements that
-    have the properties of the given object, else ``False``.
+    predicate, the created :func:`pluck` style predicate will return the
+    property value of the given element. If an object is passed for predicate,
+    the created :func:`where` style predicate will return ``True`` for elements
+    that have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -169,7 +169,7 @@ def filter_(collection, predicate=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``select``.
     """
     return [value
@@ -197,7 +197,7 @@ def find(collection, predicate=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed aliases ``detect`` and ``find_where``.
     """
     search = (collection[key]
@@ -254,7 +254,7 @@ def flat_map(collection, iteratee=None):
         >>> flat_map([1, 2], duplicate)
         [[1, 1], [2, 2]]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return pyd.flatten(itermap(collection, iteratee=iteratee))
 
@@ -276,7 +276,7 @@ def flat_map_deep(collection, iteratee=None):
         >>> flat_map_deep([1, 2], duplicate)
         [1, 1, 2, 2]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return pyd.flatten_deep(itermap(collection, iteratee=iteratee))
 
@@ -300,7 +300,7 @@ def flat_map_depth(collection, iteratee=None, depth=1):
         >>> flat_map_depth([1, 2], duplicate, 2)
         [1, 1, 2, 2]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return pyd.flatten_depth(itermap(collection, iteratee=iteratee),
                              depth=depth)
@@ -327,7 +327,7 @@ def for_each(collection, iteratee=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``each``.
     """
     next((None for ret, _, _, _ in iteriteratee(collection, iteratee)
@@ -357,7 +357,7 @@ def for_each_right(collection, iteratee):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``each_right``.
     """
     next((None for ret, _, _, _ in iteriteratee(collection,
@@ -423,10 +423,9 @@ def includes(collection, target, from_index=0):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
-
-        - Renamed from ``contains`` to ``includes``.
-        - Removed alias ``include``.
+    .. versionchanged:: 4.0.0
+        Renamed from ``contains`` to ``includes`` and removed alias
+        ``include``.
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -456,7 +455,7 @@ def key_by(collection, iteratee=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``index_by`` to ``key_by``.
     """
     ret = {}
@@ -491,7 +490,7 @@ def invoke_map(collection, path, *args, **kargs):
         >>> invoke_map(items, 'a[0].items') == expected
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if callable(path):
         method = partial(path, *args, **kargs)
@@ -533,7 +532,7 @@ def map_(collection, iteratee=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``collect``.
     """
     return list(itermap(collection, iteratee))
@@ -589,7 +588,7 @@ def order_by(collection, keys, orders=None, reverse=False):
     .. versionchanged:: 3.2.0
         Added :func:`sort_by_order` as alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``order_by`` to ``order_by`` and removed alias
         ``sort_by_order``.
     """
@@ -694,7 +693,7 @@ def reduce_(collection, iteratee=None, accumulator=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed aliases ``foldl`` and ``inject``.
     """
     iterable = iterator(collection)
@@ -742,7 +741,7 @@ def reduce_right(collection, iteratee=None, accumulator=None):
     .. versionchanged:: 3.2.1
         Fix bug where collection was not reversed correctly.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``foldr``.
     """
     if not isinstance(collection, dict):
@@ -864,9 +863,9 @@ def sample(collection):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
-        Moved the functionality to :func:`sample_size`. :func:`sample` would
-        just return a random element from the given collection.
+    .. versionchanged:: 4.0.0
+        Moved multiple samples functionality to :func:`sample_size`. This
+        function now only returns a single random sample.
     """
     return random.choice(collection)
 
@@ -888,7 +887,7 @@ def sample_size(collection, n=None):
         >>> assert len(results) == 2
         >>> assert set(items).intersection(results) == set(results)
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     num = min(n or 1, len(collection))
     return random.sample(collection, num)
@@ -949,10 +948,10 @@ def some(collection, predicate=None):
     """Checks if the predicate returns a truthy value for any element of a
     collection. The predicate is invoked with three arguments:
     ``(value, index|key, collection)``. If a property name is passed for
-    predicate, the created :func:`map_` style predicate will return the property
-    value of the given element. If an object is passed for predicate, the
-    created :func:`where` style predicate will return ``True`` for elements that
-    have the properties of the given object, else ``False``.
+    predicate, the created :func:`map_` style predicate will return the
+    property value of the given element. If an object is passed for predicate,
+    the created :func:`where` style predicate will return ``True`` for elements
+    that have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -974,7 +973,7 @@ def some(collection, predicate=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``any_``.
     """
 

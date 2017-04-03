@@ -66,7 +66,7 @@ def add(a, b):
     .. versionchanged:: 3.3.0
         Support adding two numbers when passed as positional arguments.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Only support two argument addition.
     """
     return a + b
@@ -92,7 +92,7 @@ def sum_(collection):
     .. versionchanged:: 3.3.0
         Support adding two numbers when passed as positional arguments.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Move iteratee support to :func:`sum_by`. Move two argument addition to
         :func:`add`.
     """
@@ -117,7 +117,7 @@ def sum_by(collection, iteratee=None):
         >>> sum_by([1, 2, 3, 4], lambda x: x ** 2)
         30
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return sum(result[0] for result in iteriteratee(collection, iteratee))
 
@@ -138,9 +138,10 @@ def mean(collection):
 
     .. versionadded:: 2.1.0
 
-    .. versionchanged:: TODO
-        Removed ``average`` and ``avg`` aliases. Moved iteratee functionality
-        to :func:`mean_by`.
+    .. versionchanged:: 4.0.0
+
+        - Removed ``average`` and ``avg`` aliases.
+        - Moved iteratee functionality to :func:`mean_by`.
     """
     return mean_by(collection)
 
@@ -162,7 +163,7 @@ def mean_by(collection, iteratee=None):
         >>> mean_by([1, 2, 3, 4], lambda x: x ** 2)
         7.5
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return sum_by(collection, iteratee) / pyd.size(collection)
 
@@ -213,7 +214,7 @@ def clamp(x, lower, upper=None):
         >>> clamp(-10, 5)
         -10
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if upper is None:
         upper = lower
@@ -248,7 +249,7 @@ def divide(dividend, divisor):
         >>> divide(5, None)
         5.0
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return call_math_operator(dividend, divisor, operator.truediv, 1)
 
@@ -296,7 +297,7 @@ def max_(collection, default=NoValue):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Moved iteratee iteratee support to :func:`max_by`.
     """
     return max_by(collection, default=default)
@@ -322,7 +323,7 @@ def max_by(collection, iteratee=None, default=NoValue):
         >>> max_by([], default=-1)
         -1
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -385,7 +386,7 @@ def min_(collection, default=NoValue):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Moved iteratee iteratee support to :func:`min_by`.
     """
     return min_by(collection, default=default)
@@ -411,7 +412,7 @@ def min_by(collection, iteratee=None, default=NoValue):
         >>> min_by([], default=100)
         100
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if isinstance(collection, dict):
         collection = collection.values()
@@ -440,7 +441,7 @@ def moving_mean(array, size):
 
     .. versionadded:: 2.1.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Rename to ``moving_mean`` and remove ``moving_average`` and
         ``moving_avg`` aliases.
     """
@@ -477,7 +478,7 @@ def multiply(multiplier, multiplicand):
         >>> multiply(None, None)
         1
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return call_math_operator(multiplier, multiplicand, operator.mul, 1)
 
@@ -501,7 +502,7 @@ def power(x, n):
 
     .. versionadded:: 2.1.0
 
-    .. versionchanged: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``pow_``.
     """
     if pyd.is_number(x):
@@ -533,7 +534,7 @@ def round_(x, precision=0):
 
     .. versionadded:: 2.1.0
 
-    .. versionchanged: TODO
+    .. versionchanged:: 4.0.0
         Remove alias ``curve``.
     """
     return rounder(round, x, precision)
@@ -610,7 +611,7 @@ def std_deviation(array):
 
     .. versionadded:: 2.1.0
 
-    .. verisonchanged:: TODO
+    .. versionchanged:: 4.0.0
         Remove alias ``sigma``.
     """
     return math.sqrt(variance(array))
@@ -635,7 +636,7 @@ def subtract(minuend, subtrahend):
         >>> subtract(2, 0.5)
         1.5
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return call_math_operator(minuend, subtrahend, operator.sub, 0)
 

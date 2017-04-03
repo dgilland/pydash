@@ -96,7 +96,7 @@ def eq(value, other):
         >>> eq(1, str(1))
         False
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return value is other
 
@@ -321,7 +321,7 @@ def is_boolean(value):
     .. versionchanged:: 3.0.0
         Added ``is_bool`` as alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``is_bool``.
     """
     return isinstance(value, bool)
@@ -347,7 +347,7 @@ def is_builtin(value):
 
     .. versionadded:: 3.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``is_native``.
     """
     try:
@@ -428,7 +428,7 @@ def is_dict(value):
         Added :func:`is_dict` as main definition and made `is_plain_object`` an
         alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``is_plain_object``.
     """
     return isinstance(value, dict)
@@ -486,7 +486,7 @@ def is_equal(value, other):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed :attr:`iteratee` from :func:`is_equal` and added it in
         :func:`is_equal_with`.
     """
@@ -518,7 +518,7 @@ def is_equal_with(value, other, customizer):
         >>> is_equal_with('a', 'A', lambda a, b: a.lower() == b.lower())
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     # If customizer provided, use it for comparision.
     equal = customizer(value, other) if callable(customizer) else None
@@ -737,7 +737,7 @@ def is_integer(value):
     .. versionchanged:: 3.0.0
         Added ``is_int`` as alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``is_int``.
     """
     return is_number(value) and isinstance(value, integer_types)
@@ -854,7 +854,7 @@ def is_match(obj, source):
         Don't compare `obj` and `source` using ``type``. Use ``isinstance``
         exclusively.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Move `iteratee` argument to :func:`is_match_with`.
     """
     return is_match_with(obj, source)
@@ -870,8 +870,8 @@ def is_match_with(obj, source, customizer=None,
     Args:
         obj (list|dict): Object to compare.
         source (list|dict): Object of property values to match.
-        customizer (mixed, optional): Customizer used to compare values from `obj`
-            and `source`.
+        customizer (mixed, optional): Customizer used to compare values from
+            `obj` and `source`.
 
     Returns:
         bool: Whether `obj` is a match or not.
@@ -885,7 +885,7 @@ def is_match_with(obj, source, customizer=None,
         >>> is_match_with(obj, src, customizer)
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if _obj is NoValue:
         _obj = obj
@@ -1046,7 +1046,7 @@ def is_number(value):
     .. versionchanged:: 3.0.0
         Added ``is_num`` as alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``is_num``.
     """
     return not is_boolean(value) and isinstance(value, number_types)
@@ -1141,7 +1141,7 @@ def is_reg_exp(value):
 
     .. versionadded:: 1.1.0
 
-    .. versionchanged: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``is_re``.
     """
     return isinstance(value, RegExp)
@@ -1163,7 +1163,7 @@ def is_set(value):
         >>> is_set([1, 2, 3])
         False
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return isinstance(value, set)
 

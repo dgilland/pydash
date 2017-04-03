@@ -105,7 +105,7 @@ def assign(obj, *sources):
     .. versionchanged:: 3.4.4
         Shallow copy each `source` instead of deep copying.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
 
         - Moved `iteratee` argument to :func:`assign_with`.
         - Removed alias ``extend``.
@@ -139,7 +139,7 @@ def assign_with(obj, *sources, **kargs):
         >>> results == {'a': 1, 'b': 2}
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     sources = list(sources)
     customizer = kargs.get('customizer')
@@ -191,7 +191,7 @@ def callables(obj):
     .. versionchanged:: 2.0.0
         Renamed ``functions`` to ``callables``.
 
-    .. versionchanged: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``methods``.
     """
     return sorted(key for key, value in iterator(obj) if callable(value))
@@ -219,8 +219,8 @@ def clone(value):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
-        Move 'iteratee' parameter to :func:`clone_with`.
+    .. versionchanged:: 4.0.0
+        Moved 'iteratee' parameter to :func:`clone_with`.
     """
     return base_clone(value)
 
@@ -272,8 +272,8 @@ def clone_deep(value):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
-        Move 'iteratee' parameter to :func:`clone_deep_with`.
+    .. versionchanged:: 4.0.0
+        Moved 'iteratee' parameter to :func:`clone_deep_with`.
     """
     return base_clone(value, is_deep=True)
 
@@ -399,8 +399,8 @@ def find_last_key(obj, predicate=None):
         >>> find_last_key([1, 2, 3, 1], lambda x: x == 1)
         3
 
-    .. versionchanged: TODO
-        Made into its own function instead of an alias of ``find_key`` with
+    .. versionchanged:: 4.0.0
+        Made into its own function (instead of an alias of ``find_key``) with
         proper reverse find implementation.
     """
     reversed_obj = reversed(list(iteriteratee(obj, predicate)))
@@ -432,7 +432,7 @@ def for_in(obj, iteratee=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``for_own``.
     """
     walk = (None for ret, _, _, _ in iteriteratee(obj, iteratee)
@@ -463,7 +463,7 @@ def for_in_right(obj, iteratee=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``for_own_right``.
     """
     walk = (None for ret, _, _, _ in iteriteratee(obj, iteratee, reverse=True)
@@ -513,7 +513,7 @@ def get(obj, path, default=None):
         Fixed bug where an iterable default was iterated over instead of being
         returned when an object path wasn't found.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
 
         - Support attribute access on `obj` if item access fails.
         - Removed aliases ``get_path`` and ``deep_get``.
@@ -573,7 +573,7 @@ def has(obj, path):
         - Added :func:`deep_has` as alias.
         - Added :func:`has_path` as alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed aliases ``deep_has`` and ``has_path``.
     """
     try:
@@ -611,7 +611,7 @@ def invert(obj):
     .. versionchanged:: 2.0.0
         Added ``multivalue`` argument.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Moved ``multivalue=True`` functionality to :func:`invert_by`.
     """
     return dict((value, key) for key, value in iterator(obj))
@@ -647,7 +647,7 @@ def invert_by(obj, iteratee=None):
     Note:
         Assumes `obj` values are hashable as ``dict`` keys.
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     callback = pyd.iteratee(iteratee)
     result = {}
@@ -704,7 +704,7 @@ def keys(obj):
     .. versionchanged:: 1.1.0
         Added ``keys_in`` as alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``keys_in``.
     """
     return [key for key, _ in iterator(obj)]
@@ -803,7 +803,7 @@ def map_values_deep(obj, iteratee=None, property_path=NoValue):
     .. versionchanged:: 3.0.0
         Allow iteratees to accept partial arguments.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``deep_map_values`` to ``map_values_deep``.
     """
     properties = to_path(property_path)
@@ -852,10 +852,7 @@ def merge(obj, *sources):
         Allow `iteratee` to be passed by reference if it is the last positional
         argument.
 
-    .. versionchanged:: 3.3.0
-        Added internal option for overriding the default setter for obj values.
-
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Moved iteratee argument to :func:`merge_with`.
     """
     return merge_with(obj, *sources)
@@ -892,7 +889,7 @@ def merge_with(obj, *sources, **kargs):
         >>> obj1 == {'a': [1, 3], 'b': [2, 4]}
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     sources = list(sources)
     _clone = kargs.get('_clone', True)
@@ -962,7 +959,7 @@ def omit(obj, *properties):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Moved iteratee argument to :func:`omit_by`.
     """
     return omit_by(obj, pyd.flatten(properties))
@@ -986,7 +983,7 @@ def omit_by(obj, iteratee=None):
         >>> omit_by({'a': 1, 'b': '2', 'c': 3}, lambda v: isinstance(v, int))
         {'b': '2'}
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not callable(iteratee):
         keys = iteratee if iteratee is not None else []
@@ -1066,7 +1063,7 @@ def pick(obj, *properties):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Moved iteratee argument to :func:`pick_by`.
     """
     return pick_by(obj, pyd.flatten(properties))
@@ -1090,7 +1087,7 @@ def pick_by(obj, iteratee=None):
         >>> pick_by(obj, lambda v: isinstance(v, int)) == {'a': 1, 'c': 3}
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not callable(iteratee):
         keys = iteratee if iteratee is not None else []
@@ -1160,7 +1157,7 @@ def set_(obj, path, value):
     .. versionchanged:: 3.3.0
         Added :func:`set_` as main definition and :func:`deep_set` as alias.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
 
         - Modify `obj` in place.
         - Support creating default path values as ``list`` or ``dict`` based on
@@ -1194,7 +1191,7 @@ def set_with(obj, path, value, customizer=None):
         >>> set_with({}, '[0][1]', 'a', lambda: {})
         {0: {1: 'a'}}
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return update_with(obj, path, value, customizer=customizer)
 
@@ -1277,7 +1274,7 @@ def to_dict(obj):
 
     .. versionadded:: 3.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``to_plain_object``.
     """
     return dict(zip(pyd.keys(obj), pyd.values(obj)))
@@ -1303,7 +1300,7 @@ def to_integer(obj):
         >>> to_integer('invalid')
         0
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     try:
         # Convert to float first to handle converting floats as string since
@@ -1375,7 +1372,7 @@ def to_pairs(obj):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``pairs`` to ``to_pairs``.
     """
     return [[key, value] for key, value in iterator(obj)]
@@ -1483,7 +1480,7 @@ def update(obj, path, updater):
         >>> update([], [0, 0], lambda value: 1)
         [[1]]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return update_with(obj, path, updater)
 
@@ -1513,7 +1510,7 @@ def update_with(obj, path, updater, customizer=None):
         >>> update_with({}, '[0][1]', lambda: 'a', lambda: {})
         {0: {1: 'a'}}
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     if not callable(updater):
         updater = pyd.constant(updater)
@@ -1665,7 +1662,7 @@ def values(obj):
     .. versionchanged:: 1.1.0
         Added ``values_in`` as alias.
 
-    .. versionchanged: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``values_in``.
     """
     return [value for _, value in iterator(obj)]
@@ -1678,7 +1675,7 @@ def values(obj):
 
 def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
                _clone=True):
-    """Base clone function that supports deep clone and customizer customizer."""
+    """Base clone function that supports deep clone and customizer callback."""
     clone_by = copy.deepcopy if is_deep else copy.copy
     result = None
 

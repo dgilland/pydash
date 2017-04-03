@@ -113,7 +113,7 @@ def cond(*pairs):
         >>> func({'a': 1, 'b': 2})
         'matches A'
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     for pair in pairs:
         try:
@@ -159,7 +159,7 @@ def conforms(source):
         >>> func([0, 0])
         False
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     def _conforms(obj):
         for key, predicate in iterator(source):
@@ -189,7 +189,7 @@ def conforms_to(obj, source):
         >>> conforms_to([0, 0], [lambda n: n > 1, lambda n: n == 0])
         False
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return conforms(source)(obj)
 
@@ -211,7 +211,7 @@ def constant(value):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Returned function ignores arguments instead of raising exception.
     """
     return partial(identity, value)
@@ -237,7 +237,7 @@ def default_to(value, default_value):
         >>> default_to(None, 10)
         10
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return default_value if value is None else value
 
@@ -316,8 +316,8 @@ def iteratee(func):
         - Added support for matches property style iteratee via two item
         list/tuple.
 
-    .. versionchanged:: TODO
-        Removed alias ``iteratee``.
+    .. versionchanged:: 4.0.0
+        Removed alias ``callback``.
     """
     if callable(func):
         cbk = func
@@ -530,7 +530,7 @@ def nth_arg(pos=0):
         >>> func(11, 22, 33, 44)
         44
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     def _nth_arg(*args):
         try:
@@ -585,7 +585,7 @@ def over(funcs):
         >>> func(1, 2, 3, 4)
         [4, 1]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     def _over(*args):
         return [func(*args) for func in funcs]
@@ -609,7 +609,7 @@ def over_every(funcs):
         >>> func(1)
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     def _over_every(*args):
         return all(over(funcs)(*args))
@@ -633,7 +633,7 @@ def over_some(funcs):
         >>> func(1)
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     def _over_some(*args):
         return any(over(funcs)(*args))
@@ -688,7 +688,7 @@ def property_deep(path):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Renamed from ``property_deeperty`` to ``property_deep`` and removed
         alias ``property_deep``.
     """
@@ -717,7 +717,7 @@ def property_of(obj):
 
     .. versionadded:: 3.0.0
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Removed alias ``prop_of``.
     """
     return lambda key: property_(key)(obj)
@@ -797,7 +797,7 @@ def range_(*args):
     .. versionchanged:: 3.0.0
         Return generator instead of list.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
         Support decrementing when start argument is greater than stop argument.
     """
     return base_range(*args)
@@ -825,7 +825,7 @@ def range_right(*args):
         >>> list(range_right(0, 6, 2))
         [4, 2, 0]
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return base_range(*args, from_right=True)
 
@@ -882,7 +882,7 @@ def stub_list():
         >>> stub_list()
         []
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return []
 
@@ -898,7 +898,7 @@ def stub_dict():
         >>> stub_dict()
         {}
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return {}
 
@@ -914,7 +914,7 @@ def stub_false():
         >>> stub_false()
         False
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return False
 
@@ -930,7 +930,7 @@ def stub_string():
         >>> stub_string()
         ''
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return ''
 
@@ -946,7 +946,7 @@ def stub_true():
         >>> stub_true()
         True
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     return True
 
@@ -972,7 +972,7 @@ def times(n, iteratee=identity):
     .. versionchanged:: 3.0.0
         Reordered arguments to make `iteratee` first.
 
-    .. versionchanged:: TODO
+    .. versionchanged:: 4.0.0
 
         - Re-reordered arguments to make `iteratee` last argument.
         - Added functionality for handling `iteratee` with zero positional
@@ -1000,7 +1000,7 @@ def to_path(value):
         >>> to_path('a[0][1][2].b.c')
         ['a', 0, 1, 2, 'b', 'c']
 
-    .. versionadded:: TODO
+    .. versionadded:: 4.0.0
     """
     tokens = to_path_tokens(value)
     if isinstance(tokens, list):
