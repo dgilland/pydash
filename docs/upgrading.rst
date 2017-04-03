@@ -6,64 +6,111 @@ Upgrading
 From v3.x.x to v4.0.0
 =====================
 
-Some notable new features/functions:
+Start by reading the full list of changes in ``v4.0.0`` at the :ref:`Changelog <changelog-v4.0.0>`. There are a significant amount of backwards-incompatibilities that will likely need to be addressed:
 
-- 9 new array methods
+- All function aliases have been removed in favor of having a single named function for everything. This was done to make things less confusing by having only a single named function that performs an action vs. potentially using two different names for the same function.
+- A few functions have been removed whose functionality was duplicated by another function.
+- Some functions have been renamed for consistency and to align with Lodash.
+- Many functions have had their callback argument moved to another function to align with Lodash.
+- The generic ``callback`` argument has been renamed to either ``iteratee``, ``predicate``, or ``comparator``. This was done to make it clearer what the callback is doing and to align more with Lodash's naming conventions.
 
+Once the shock of those backwards-incompatibilities has worn off, discover 72 new functions:
+
+- 19 new array methods
+
+    - :func:`pydash.arrays.difference_by`
+    - :func:`pydash.arrays.difference_with`
     - :func:`pydash.arrays.from_pairs`
     - :func:`pydash.arrays.intersection_by`
     - :func:`pydash.arrays.intersection_with`
     - :func:`pydash.arrays.nth`
     - :func:`pydash.arrays.pull_all`
+    - :func:`pydash.arrays.sorted_index_by`
     - :func:`pydash.arrays.sorted_index_of`
+    - :func:`pydash.arrays.sorted_last_index_by`
+    - :func:`pydash.arrays.sorted_last_index_of`
     - :func:`pydash.arrays.sorted_uniq`
     - :func:`pydash.arrays.union_by`
     - :func:`pydash.arrays.union_with`
+    - :func:`pydash.arrays.uniq_by`
+    - :func:`pydash.arrays.uniq_with`
+    - :func:`pydash.arrays.xor_by`
+    - :func:`pydash.arrays.xor_with`
+    - :func:`pydash.arrays.zip_object_deep`
 
-- 1 new collection method
+- 6 new collection methods
 
+    - :func:`pydash.collections.flat_map`
+    - :func:`pydash.collections.flat_map_deep`
+    - :func:`pydash.collections.flat_depth`
+    - :func:`pydash.collections.flatten_depth`
+    - :func:`pydash.collections.invoke_map`
     - :func:`pydash.collections.sample_size`
 
-- 1 new function method
+- 2 new function methods
 
     - :func:`pydash.functions.flip`
+    - :func:`pydash.functions.unary`
 
-- 5 new string methods
+- 12 new object methods
 
-    - :func:`pydash.strings.lower_case`.
-    - :func:`pydash.strings.lower_first`.
-    - :func:`pydash.strings.to_lower`.
-    - :func:`pydash.strings.to_upper`.
-    - :func:`pydash.strings.upper_case`.
-    - :func:`pydash.strings.upper_first`.
+    - :func:`pydash.objects.assign_with`
+    - :func:`pydash.objects.clone_deep_with`
+    - :func:`pydash.objects.clone_with`
+    - :func:`pydash.objects.invert_by`
+    - :func:`pydash.objects.merge_with`
+    - :func:`pydash.objects.omit_by`
+    - :func:`pydash.objects.pick_by`
+    - :func:`pydash.objects.set_with`
+    - :func:`pydash.objects.to_integer`
+    - :func:`pydash.objects.unset`
+    - :func:`pydash.objects.update`
+    - :func:`pydash.objects.udpate_with`
 
-- 3 new numerical methods
+- 8 new numerical methods
 
-    - :func:`pydash.numerical.divide`.
-    - :func:`pydash.numerical.multiply`.
-    - :func:`pydash.numerical.subtract`.
+    - :func:`pydash.numerical.clamp`
+    - :func:`pydash.numerical.divide`
+    - :func:`pydash.numerical.max_by`
+    - :func:`pydash.numerical.mean_by`
+    - :func:`pydash.numerical.min_by`
+    - :func:`pydash.numerical.multiply`
+    - :func:`pydash.numerical.subtract`
+    - :func:`pydash.numerical.sum_by`
 
-- 13 new utility methods
+- 4 new predicate methods
 
-    - :func:`pydash.utilities.cond`.
-    - :func:`pydash.utilities.default_to`.
-    - :func:`pydash.utilities.nth_arg`.
-    - :func:`pydash.utilities.over`.
-    - :func:`pydash.utilities.over_every`.
-    - :func:`pydash.utilities.over_some`.
-    - :func:`pydash.utilities.range_right`.
-    - :func:`pydash.utilities.stub_list`.
-    - :func:`pydash.utilities.stub_dict`.
-    - :func:`pydash.utilities.stub_false`.
-    - :func:`pydash.utilities.stub_string`.
-    - :func:`pydash.utilities.stub_true`.
-    - :func:`pydash.utilities.to_path`.
+    - :func:`pydash.predicates.eq`
+    - :func:`pydash.predicates.is_equal_with`
+    - :func:`pydash.predicates.is_match_with`
+    - :func:`pydash.predicates.is_set`
 
-- 3 new predicate method
+- 6 new string methods
 
-    - :func:`pydash.predicates.eq`.
-    - :func:`pydash.predicates.is_equal_with`.
-    - :func:`pydash.predicates.is_set`.
+    - :func:`pydash.strings.lower_case`
+    - :func:`pydash.strings.lower_first`
+    - :func:`pydash.strings.to_lower`
+    - :func:`pydash.strings.to_upper`
+    - :func:`pydash.strings.upper_case`
+    - :func:`pydash.strings.upper_first`
+
+- 15 new utility methods
+
+    - :func:`pydash.utilities.cond`
+    - :func:`pydash.utilities.conforms`
+    - :func:`pydash.utilities.conforms_to`
+    - :func:`pydash.utilities.default_to`
+    - :func:`pydash.utilities.nth_arg`
+    - :func:`pydash.utilities.over`
+    - :func:`pydash.utilities.over_every`
+    - :func:`pydash.utilities.over_some`
+    - :func:`pydash.utilities.range_right`
+    - :func:`pydash.utilities.stub_list`
+    - :func:`pydash.utilities.stub_dict`
+    - :func:`pydash.utilities.stub_false`
+    - :func:`pydash.utilities.stub_string`
+    - :func:`pydash.utilities.stub_true`
+    - :func:`pydash.utilities.to_path`
 
 
 From v2.x.x to v3.0.0
@@ -225,7 +272,7 @@ There were several breaking and potentially breaking changes in ``v2.0.0``:
 
 Some notable new features:
 
-- Callback functions no longer require the full call signature definition. See :ref:`differences-callbacks` for more details.
+- Callback functions no longer require the full call signature definition.
 - A new "_" instance was added which supports both method chaining and module method calling. See :ref:`api-dash-instance` for more details.
 
 

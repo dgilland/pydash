@@ -4,6 +4,11 @@ Changelog
 =========
 
 
+.. _changelog-v4.0.0:
+
+vX.X.X (XXXX-XX-XX)
+-------------------
+
 New Features
 ++++++++++++
 
