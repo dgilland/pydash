@@ -6,7 +6,7 @@ Changelog
 
 .. _changelog-v4.0.0:
 
-vX.X.X (XXXX-XX-XX)
+v4.0.0 (2017-04-03)
 -------------------
 
 New Features
