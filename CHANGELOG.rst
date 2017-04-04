@@ -4,6 +4,22 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- Make ``property_`` work with deep path strings.
+
+Bug Fixes
++++++++++
+
+- Revert removal of ``deep_pluck`` and rename to ``pluck``. Previously, ``deep_pluck`` was removed and ``map_`` was recommended as a replacement. However, ``deep_pluck`` (now defined as ``pluck``) functionality is not supported by ``map_`` so the removal ``pluck`` was reverted.
+
+Backwards-Incompatibilities
++++++++++++++++++++++++++++
+
+- Remove ``property_deep`` (use ``property_``).
+
+
 .. _changelog-v4.0.0:
 
 v4.0.0 (2017-04-03)
