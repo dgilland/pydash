@@ -377,12 +377,11 @@ def duplicates(array, iteratee=None):
     """Creates a unique list of duplicate values from `array`. If iteratee is
     passed, each element of array is passed through a iteratee before
     duplicates are computed. The iteratee is invoked with three arguments:
-    ``(value, index, array)``. If a property name is passed for iteratee, the
-    created :func:`pydash.collections.pluck` style iteratee will return the
-    property value of the given element. If an object is passed for iteratee,
-    the created :func:`pydash.collections.where` style iteratee will return
-    ``True`` for elements that have the properties of the given object, else
-    ``False``.
+    ``(value, index, array)``. If an object path is passed for iteratee, the
+    created iteratee will return the path value of the given element. If an
+    object is passed for iteratee, the created filter style iteratee will
+    return ``True`` for elements that have the properties of the given object,
+    else ``False``.
 
     Args:
         array (list): List to process.
@@ -1843,12 +1842,11 @@ def uniq(array):
     """Creates a duplicate-value-free version of the array. If iteratee is
     passed, each element of array is passed through a iteratee before
     uniqueness is computed. The iteratee is invoked with three arguments:
-    ``(value, index, array)``. If a property name is passed for iteratee, the
-    created :func:`pydash.collections.pluck` style iteratee will return the
-    property value of the given element. If an object is passed for iteratee,
-    the created :func:`pydash.collections.where` style iteratee will return
-    ``True`` for elements that have the properties of the given object, else
-    ``False``.
+    ``(value, index, array)``. If an object path is passed for iteratee, the
+    created iteratee will return the path value of the given element. If an
+    object is passed for iteratee, the created filter style iteratee will
+    return ``True`` for elements that have the properties of the given object,
+    else ``False``.
 
     Args:
         array (list): List to process.
