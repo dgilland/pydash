@@ -609,7 +609,7 @@ def order_by(collection, keys, orders=None, reverse=False):
             else:
                 order = 1
 
-            comparers.append((pyd.property_deep(key), order))
+            comparers.append((pyd.property_(key), order))
     else:
         for key in keys:
             if key.startswith('-'):
@@ -618,7 +618,7 @@ def order_by(collection, keys, orders=None, reverse=False):
             else:
                 order = 1
 
-            comparers.append((pyd.property_deep(key), order))
+            comparers.append((pyd.property_(key), order))
 
     def comparison(left, right):
         # pylint: disable=useless-else-on-loop,missing-docstring

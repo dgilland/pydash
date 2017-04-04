@@ -409,7 +409,6 @@ from .utilities import (
     over_every,
     over_some,
     property_,
-    property_deep,
     property_of,
     random,
     range_,

@@ -284,12 +284,6 @@ def test_over_some(funcs, data, expected):
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      ['fred', 'barney']),
-])
-def test_property_(case, arg, expected):
-    assert _.map_(arg, _.property_(case)) == expected
-
-
-@parametrize('case,arg,expected', [
     ('name',
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
@@ -299,8 +293,8 @@ def test_property_(case, arg, expected):
       {'name': 'barney', 'age': 36, 'spouse': {'name': 'betty'}}],
      ['wilma', 'betty'])
 ])
-def test_property_deep(case, arg, expected):
-    assert _.map_(arg, _.property_deep(case)) == expected
+def test_property_(case, arg, expected):
+    assert _.map_(arg, _.property_(case)) == expected
 
 
 @parametrize('case,arg,expected', [

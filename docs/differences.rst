@@ -16,6 +16,14 @@ pydash adheres to the following conventions:
 - Lodash's ``is_native()`` is pydash's ``is_builtin()``. This aligns better with Python's builtins terminology.
 
 
+Callbacks
+---------
+
+There are a few differences between extra callback style support:
+
+- Pydash has an explicit shallow property access of the form ``['some_property']`` as in ``pydash.map_([{'a.b': 1, 'a': {'b': 3}}, {'a.b': 2, 'a': {'b': 4}}], ['a.b'])`` would evaulate to ``[1, 2]`` and not ``[3, 4]`` (as would be the case for ``'a.b'``).
+
+
 Extra Functions
 ---------------
 

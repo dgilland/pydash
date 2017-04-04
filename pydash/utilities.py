@@ -39,7 +39,6 @@ __all__ = (
     'over_every',
     'over_some',
     'property_',
-    'property_deep',
     'property_of',
     'random',
     'range_',
@@ -326,9 +325,9 @@ def iteratee(func):
             func = str(func)
 
         if isinstance(func, string_types):
-            cbk = property_deep(func)
+            cbk = property_(func)
         elif isinstance(func, (list, tuple)) and len(func) == 1:
-            cbk = property_(func[0])
+            cbk = property_(func)
         elif isinstance(func, (list, tuple)) and len(func) > 1:
             cbk = matches_property(*func[:2])
         elif isinstance(func, dict):
@@ -397,8 +396,8 @@ def matches_property(key, value):
 
     .. versionadded:: 3.1.0
     """
-    prop_key = property_(key)
-    return lambda obj: matches(value)(prop_key(obj))
+    prop_accessor = property_(key)
+    return lambda obj: matches(value)(prop_accessor(obj))
 
 
 def memoize(func, resolver=None):
@@ -644,15 +643,14 @@ def over_some(funcs):
     return _over_some
 
 
-def property_(key):
-    """Creates a :func:`pydash.collections.pluck` style function, which returns
-    the key value of a given object.
+def property_(path):
+    """Creates a function that returns the value at path of a given object.
 
     Args:
-        key (mixed): Key value to fetch from object.
+        path (str|list): Path value to fetch from object.
 
     Returns:
-        function: Function that returns object's key value.
+        function: Function that returns object's path value.
 
     Example:
 
@@ -666,34 +664,9 @@ def property_(key):
         1
 
     .. versionadded:: 1.0.0
-    """
-    return lambda obj: base_get(obj, key, default=None)
 
-
-def property_deep(path):
-    """Creates a :func:`pydash.collections.pluck` style function, which returns
-    the key value of a given object.
-
-    Args:
-        key (mixed): Key value to fetch from object.
-
-    Returns:
-        function: Function that returns object's key value.
-
-    Example:
-
-        >>> property_deep('a.b.c')({'a': {'b': {'c': 1}}})
-        1
-        >>> property_deep('a.1.0.b')({'a': [5, [{'b': 1}]]})
-        1
-        >>> property_deep('a.1.0.b')({}) is None
-        True
-
-    .. versionadded:: 1.0.0
-
-    .. versionchanged:: 4.0.0
-        Renamed from ``property_deeperty`` to ``property_deep`` and removed
-        alias ``property_deep``.
+    .. versionchanged:: 4.0.1
+        Made property accessor work with deep path strings.
     """
     return lambda obj: pyd.get(obj, path)
 
