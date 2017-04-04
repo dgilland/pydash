@@ -129,8 +129,9 @@ Backwards-Incompatibilities
 - Only use ``merge`` callback result if result is not ``None``. Previously, result from callback (if provided) was used unconditionally. (**breaking change**)
 - Remove functions: (**breaking change**)
 
+  - ``deep_pluck`` (no alternative) [**UPDATE:** ``deep_pluck`` functionality restored as ``pluck`` in ``v4.0.1``]
   - ``mapiter`` (no alternative)
-  - ``pluck`` and ``deep_pluck`` (use ``map_``)
+  - ``pluck`` (use ``map_``)
   - ``update_path`` (use ``update`` or ``update_with``)
   - ``set_path`` (use ``set_`` or ``set_with``)
 
