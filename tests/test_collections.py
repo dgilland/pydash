@@ -386,6 +386,23 @@ def test_partition(case, expected):
 
 
 @parametrize('case,expected', [
+    (([{'name': 'moe', 'age': 40}, {'name': 'larry', 'age': 50}],
+      'name'),
+     ['moe', 'larry']),
+    (([{'level1': {'level2': {'level3': {'value': 1}}}},
+       {'level1': {'level2': {'level3': {'value': 2}}}},
+       {'level1': {'level2': {'level3': {'value': 3}}}},
+       {'level1': {'level2': {'level3': {'value': 4}}}},
+       {'level1': {'level2': {}}},
+        {}],
+      'level1.level2.level3.value'),
+     [1, 2, 3, 4, None, None])
+])
+def test_pluck(case, expected):
+    assert _.pluck(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3], None), 1),
     (([1, 2, 3], fixtures.reduce_iteratee0), 6),
     (({'a': 1, 'b': 2, 'c': 3}, fixtures.reduce_iteratee1, {}),

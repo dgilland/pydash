@@ -34,6 +34,7 @@ __all__ = (
     'map_',
     'order_by',
     'partition',
+    'pluck',
     'reduce_',
     'reduce_right',
     'reductions',
@@ -669,6 +670,41 @@ def partition(collection, predicate=None):
             falses.append(value)
 
     return [trues, falses]
+
+
+def pluck(collection, path):
+    """Retrieves the value of a specified property from all elements in the
+    collection.
+
+    Args:
+        collection (list): List of dicts.
+        path (str|list): Collection's path to pluck
+
+    Returns:
+        list: Plucked list.
+
+    Example:
+
+        >>> pluck([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}], 'a')
+        [1, 3, 5]
+        >>> pluck([[[0, 1]], [[2, 3]], [[4, 5]]], '0.1')
+        [1, 3, 5]
+        >>> pluck([{'a': {'b': 1}}, {'a': {'b': 2}}], 'a.b')
+        [1, 2]
+        >>> pluck([{'a': {'b': [0, 1]}}, {'a': {'b': [2, 3]}}], 'a.b.1')
+        [1, 3]
+        >>> pluck([{'a': {'b': [0, 1]}}, {'a': {'b': [2, 3]}}], ['a', 'b', 1])
+        [1, 3]
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 4.0.0
+        Function removed.
+
+    .. versionchanged:: 4.0.1
+        Made property access deep.
+    """
+    return map_(collection, pyd.property_(path))
 
 
 def reduce_(collection, iteratee=None, accumulator=None):

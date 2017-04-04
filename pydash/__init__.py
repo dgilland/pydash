@@ -130,6 +130,7 @@ from .collections import (
     map_,
     order_by,
     partition,
+    pluck,
     reduce_,
     reduce_right,
     reductions,
