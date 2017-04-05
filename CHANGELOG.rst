@@ -4,6 +4,22 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- None
+
+Bug Fixes
++++++++++
+
+- Fix regression in ``intersection``, ``intersection_by``, and ``intersection_with`` introduced in ``v4.0.0`` where the a single argument supplied to intersection should return the same argument value instead of an empty list.
+
+Backwards-Incompatibilities
++++++++++++++++++++++++++++
+
+- None
+
+
 v4.0.1 (2017-04-04)
 -------------------
 
