@@ -749,16 +749,14 @@ def intersection_by(array, *others, **kargs):
 
     .. versionadded:: 4.0.0
     """
-    if not others:
-        return []
+    array = array[:]
 
-    # Check if last other is a potential iteratee.
+    if not others:
+        return array
+
     iteratee, others = parse_iteratee('iteratee', *others, **kargs)
 
-    if not array or not others:
-        return []
-
-    # Sort by smallest list length to reduce to intersection faster.
+    # Sort by smallest list length to make intersection faster.
     others = sorted(others, key=lambda other: len(other))
 
     for other in others:
@@ -796,13 +794,12 @@ def intersection_with(array, *others, **kargs):
 
     .. versionadded:: 4.0.0
     """
+    array = array[:]
+
     if not others:
-        return []
+        return array
 
     comparator, others = parse_iteratee('comparator', *others, **kargs)
-
-    if not array or not others:
-        return []
 
     # Sort by smallest list length to reduce to intersection faster.
     others = sorted(others, key=lambda other: len(other))
