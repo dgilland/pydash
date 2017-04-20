@@ -127,11 +127,14 @@ def base_get(obj, key, default=NoValue):
     except Exception:
         pass
 
-    try:
-        # Only add attribute getter if key is string.
-        getters.append(attrgetter(key))
-    except Exception:  # pragma: no cover
-        pass
+    if not isinstance(obj, (dict, list)):
+        # Don't add attrgetter for dict/list objects since we don't want class
+        # methods/attributes returned for them.
+        try:
+            # Only add attribute getter if key is string.
+            getters.append(attrgetter(key))
+        except Exception:  # pragma: no cover
+            pass
 
     for getter in getters:
         try:

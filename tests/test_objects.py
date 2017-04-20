@@ -248,6 +248,8 @@ def test_for_in_right(case, expected):
     ((namedtuple('a', ['a', 'b'])(1, 2), 'a'), 1),
     ((namedtuple('a', ['a', 'b'])(1, 2), 0), 1),
     ((namedtuple('a', ['a', 'b'])({'c': {'d': 1}}, 2), 'a.c.d'), 1),
+    (({}, 'update'), None),
+    (([], 'extend'), None),
 ])
 def test_get(case, expected):
     assert _.get(*case) == expected
