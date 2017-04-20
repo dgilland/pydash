@@ -4,6 +4,18 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- None
+
+Bug Fixes
++++++++++
+
+- Fix regression in ``get`` where ``list`` and ``dict`` objects had attributes returned when a key was missing but the key corresponded to an attribute name. For example, ``pydash.get({}, 'update')`` would return ``{}.update()`` instead of ``None``. Previous behavior was that only item-access was allowed for ``list`` and ``dict`` which has been restored.
+- Fix regression in ``invoke``/``invoke_map`` where non-attributes could be invoked. For example, ``pydash.invoke({'items': lambda: 1}, 'items')`` would return ``1`` instead of ``dict_items([('a', 'items')])``. Previous behavior was that only attribute methods could be invoked which has now been restored.
+
+
 v4.0.2 (2017-04-04)
 -------------------
 
