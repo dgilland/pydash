@@ -493,13 +493,8 @@ def invoke_map(collection, path, *args, **kargs):
 
     .. versionadded:: 4.0.0
     """
-    if callable(path):
-        method = partial(path, *args, **kargs)
-    else:
-        def method(item):
-            return pyd.get(item, path, default=pyd.noop)(*args, **kargs)
-
-    return [method(item) for item in collection]
+    return map_(collection,
+                lambda item: pyd.invoke(item, path, *args, **kargs))
 
 
 def map_(collection, iteratee=None):
