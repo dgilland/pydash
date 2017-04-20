@@ -680,7 +680,18 @@ def invoke(obj, path, *args, **kargs):
 
     .. versionadded:: 1.0.0
     """
-    return get(obj, path, default=pyd.noop)(*args, **kargs)
+    paths = to_path(path)
+    target_path = pyd.initial(paths)
+    method_name = pyd.last(paths)
+
+    try:
+        method = getattr(get(obj, target_path), method_name)
+    except AttributeError:
+        ret = None
+    else:
+        ret = method(*args, **kargs)
+
+    return ret
 
 
 def keys(obj):
