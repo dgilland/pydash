@@ -1045,8 +1045,8 @@ def to_path_tokens(value):
 
 def unescape_path_key(key):
     """Unescape path key."""
-    key = pyd.reg_exp_js_replace(key, r'/\\\\/g', r'\\')
-    key = pyd.reg_exp_js_replace(key, r'/\\\./g', '.')
+    key = key.replace(r'\\', '\\')
+    key = key.replace(r'\.', r'.')
     return key
 
 
