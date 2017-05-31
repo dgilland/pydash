@@ -4,6 +4,17 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- None
+
+Bug Fixes
++++++++++
+
+- Improve performance of ``get``. Thanks shaunpatterson_!
+
+
 v4.0.3 (2017-04-20)
 -------------------
 
@@ -884,3 +895,4 @@ v0.0.0 (2014-07-22)
 .. _bharadwajyarlagadda: https://github.com/bharadwajyarlagadda
 .. _urbnjamesmi1: https://github.com/urbnjamesmi1
 .. _tgriesser: https://github.com/tgriesser
+.. _shaunpatterson: https://github.com/shaunpatterson
