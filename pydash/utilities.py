@@ -293,6 +293,8 @@ def iteratee(func):
         5
         >>> iteratee('a.b')({'a': {'b': 5}})
         5
+        >>> iteratee(('a', 'b'))({'a': 1, 'b': 2, 'c': 3})
+        [1, 2]
         >>> iteratee(lambda a, b: a + b)(1, 2)
         3
         >>> ident = iteratee(None)
@@ -318,6 +320,9 @@ def iteratee(func):
     .. versionchanged:: 4.0.0
         Removed alias ``callback``.
     """
+    def nested_call(arg):
+        return pyd.map_(func, lambda fn: iteratee(fn)(arg))
+
     if callable(func):
         cbk = func
     else:
@@ -328,8 +333,10 @@ def iteratee(func):
             cbk = property_(func)
         elif isinstance(func, (list, tuple)) and len(func) == 1:
             cbk = property_(func)
-        elif isinstance(func, (list, tuple)) and len(func) > 1:
+        elif isinstance(func, list) and len(func) > 1:
             cbk = matches_property(*func[:2])
+        elif isinstance(func, tuple) and len(func) > 1:
+            cbk = nested_call
         elif isinstance(func, dict):
             cbk = matches(func)
         else:
