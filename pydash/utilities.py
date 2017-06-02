@@ -320,6 +320,9 @@ def iteratee(func):
     .. versionchanged:: 4.0.0
         Removed alias ``callback``.
     """
+    def nested_call(arg):
+        return pyd.map_(func, lambda fn: iteratee(fn)(arg))
+
     if callable(func):
         cbk = func
     else:
@@ -333,7 +336,7 @@ def iteratee(func):
         elif isinstance(func, list) and len(func) > 1:
             cbk = matches_property(*func[:2])
         elif isinstance(func, tuple) and len(func) > 1:
-            cbk = lambda arg: pyd.map_(func, lambda fn: iteratee(fn)(arg))
+            cbk = nested_call
         elif isinstance(func, dict):
             cbk = matches(func)
         else:
