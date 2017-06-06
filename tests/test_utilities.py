@@ -168,7 +168,13 @@ def test_identity(case, expected):
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      [True, False]),
-    (1, [[0, 1], [2, 3], [4, 5]], [1, 3, 5])
+    (1, [[0, 1], [2, 3], [4, 5]], [1, 3, 5]),
+    (('a', 'b.c', ['d', 0, 'f']),
+     [{'a': 1, 'b': {'c': 2}, 'd': [{'f': 3}, 4]}],
+     [[1, 2, 3]]),
+    (('a',),
+     [{'a': 1}],
+     [[1]]),
 ])
 def test_iteratee(case, arg, expected):
     getter = _.iteratee(case)
