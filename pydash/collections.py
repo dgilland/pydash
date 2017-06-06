@@ -50,14 +50,14 @@ __all__ = (
 )
 
 
-def at(collection, *indexes):
+def at(collection, *paths):
     """Creates a list of elements from the specified indexes, or keys, of the
     collection. Indexes may be specified as individual arguments or as arrays
     of indexes.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        indexes (mixed): The indexes of `collection` to retrieve, specified as
+        *paths (mixed): The indexes of `collection` to retrieve, specified as
             individual indexes or arrays of indexes.
 
     Returns:
@@ -69,11 +69,15 @@ def at(collection, *indexes):
         [1, 3]
         >>> at({'a': 1, 'b': 2, 'c': 3, 'd': 4}, 'a', 'c')
         [1, 3]
+        >>> at({'a': 1, 'b': 2, 'c': {'d': {'e': 3}}}, 'a', ['c', 'd', 'e'])
+        [1, 3]
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 4.1.0
+        Support deep path access.
     """
-    indexes = pyd.flatten_deep(indexes)
-    return [collection[i] for i in indexes]
+    return pyd.properties(*paths)(collection)
 
 
 def count_by(collection, iteratee=None):

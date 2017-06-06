@@ -9,7 +9,7 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
-    ((['a', 'b', 'c', 'd', 'e'], [0, 2, 4]), ['a', 'c', 'e']),
+    ((['a', 'b', 'c', 'd', 'e'], [0], [2], [4]), ['a', 'c', 'e']),
     ((['moe', 'larry', 'curly'], 0, 2), ['moe', 'curly']),
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), [1, 2])
 ])

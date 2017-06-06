@@ -409,6 +409,7 @@ from .utilities import (
     over,
     over_every,
     over_some,
+    properties,
     property_,
     property_of,
     random,

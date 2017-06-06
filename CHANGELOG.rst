@@ -4,6 +4,18 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- Add ``properties`` function that returns list of path values for an object.
+- Make ``iteratee`` support ``properties``-style callback when a ``tuple`` is passed.
+
+Bug Fixes
++++++++++
+
+- None
+
+
 v4.0.4 (2017-05-31)
 -------------------
 

@@ -38,6 +38,7 @@ __all__ = (
     'over',
     'over_every',
     'over_some',
+    'properties',
     'property_',
     'property_of',
     'random',
@@ -293,6 +294,8 @@ def iteratee(func):
         5
         >>> iteratee('a.b')({'a': {'b': 5}})
         5
+        >>> iteratee(('a', ['c', 'd', 'e']))({'a': 1, 'c': {'d': {'e': 3}}})
+        [1, 3]
         >>> iteratee(lambda a, b: a + b)(1, 2)
         3
         >>> ident = iteratee(None)
@@ -317,6 +320,9 @@ def iteratee(func):
 
     .. versionchanged:: 4.0.0
         Removed alias ``callback``.
+
+    .. versionchanged:: 4.1.0
+        Return :func:`properties` callback when `func` is a ``tuple``.
     """
     if callable(func):
         cbk = func
@@ -326,10 +332,12 @@ def iteratee(func):
 
         if isinstance(func, string_types):
             cbk = property_(func)
-        elif isinstance(func, (list, tuple)) and len(func) == 1:
+        elif isinstance(func, list) and len(func) == 1:
             cbk = property_(func)
-        elif isinstance(func, (list, tuple)) and len(func) > 1:
+        elif isinstance(func, list) and len(func) > 1:
             cbk = matches_property(*func[:2])
+        elif isinstance(func, tuple):
+            cbk = properties(*func)
         elif isinstance(func, dict):
             cbk = matches(func)
         else:
@@ -669,6 +677,28 @@ def property_(path):
         Made property accessor work with deep path strings.
     """
     return lambda obj: pyd.get(obj, path)
+
+
+def properties(*paths):
+    """Like :func:`property_` except that it returns a list of values at each
+    path in `paths`.
+
+    Args:
+        *path (str|list): Path values to fetch from object.
+
+    Returns:
+        function: Function that returns object's path value.
+
+    Example:
+
+        >>> getter = properties('a', 'b', ['c', 'd', 'e'])
+        >>> getter({'a': 1, 'b': 2, 'c': {'d': {'e': 3}}})
+        [1, 2, 3]
+
+    .. versionadded:: 4.1.0
+    """
+    return lambda obj: [getter(obj)
+                        for getter in (pyd.property_(path) for path in paths)]
 
 
 def property_of(obj):
