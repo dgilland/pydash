@@ -535,6 +535,22 @@ def test_replace(case, expected):
 
 
 @parametrize('case,expected', [
+    (('foo', 'o', 'a'), 'foa'),
+    (('foo', 'f', 'a'), 'foo'),
+])
+def test_replace_end(case, expected):
+    assert _.replace_end(*case) == expected
+
+
+@parametrize('case,expected', [
+    (('foo', 'o', 'a'), 'foo'),
+    (('foo', 'f', 'a'), 'aoo'),
+])
+def test_replace_start(case, expected):
+    assert _.replace_start(*case) == expected
+
+
+@parametrize('case,expected', [
     (('foo  bar baz', '-'), 'foo-bar-baz'),
     (('foo__bar_baz', '-'), 'foo-bar-baz'),
     (('foo-_bar-_-baz', '-'), 'foo-bar-baz'),

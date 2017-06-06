@@ -8,7 +8,10 @@ New Features
 ++++++++++++
 
 - Add ``properties`` function that returns list of path values for an object.
+- Add ``replace_end``.
+- Add ``replace_start``.
 - Make ``iteratee`` support ``properties``-style callback when a ``tuple`` is passed.
+- Make ``replace`` accept ``from_start`` and ``from_end`` arguments to limit replacement to start and/or end of string.
 
 Bug Fixes
 +++++++++

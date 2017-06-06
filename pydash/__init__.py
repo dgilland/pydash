@@ -354,6 +354,8 @@ from .strings import (
     reg_exp_replace,
     repeat,
     replace,
+    replace_end,
+    replace_start,
     separator_case,
     series_phrase,
     series_phrase_serial,

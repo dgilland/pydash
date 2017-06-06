@@ -59,6 +59,8 @@ __all__ = (
     'reg_exp_replace',
     'repeat',
     'replace',
+    'replace_end',
+    'replace_start',
     'separator_case',
     'series_phrase',
     'series_phrase_serial',
@@ -1129,7 +1131,14 @@ def repeat(text, n=0):
     return pyd.to_string(text) * int(n)
 
 
-def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
+def replace(text,
+            pattern,
+            repl,
+            ignore_case=False,
+            count=0,
+            escape=True,
+            from_start=False,
+            from_end=False):
     """Replace occurrences of `pattern` with `repl` in `text`. Optionally,
     ignore case when replacing. Optionally, set `count` to limit number of
     replacements.
@@ -1146,6 +1155,10 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
             This is needed if a literal replacement is desired when `pattern`
             may contain special regular expression characters. Defaults to
             ``True``.
+        from_start (bool, optional): Whether to limit replacement to start of
+            string.
+        from_end (bool, optional): Whether to limit replacement to end of
+            string.
 
     Returns:
         str: Replaced string.
@@ -1164,8 +1177,10 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
         'XXXXcc'
 
     .. versionadded:: 3.0.0
+
+    .. verisionchanged:: 4.1.0
+        Added ``from_start`` and ``from_end`` arguments.
     """
-    # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
 
     if pattern is None:
@@ -1176,14 +1191,96 @@ def replace(text, pattern, repl, ignore_case=False, count=0, escape=True):
     if escape:
         pattern = re.escape(pattern)
 
+    if from_start and not pattern.startswith('^'):
+        pattern = '^' + pattern
+
+    if from_end and not pattern.endswith('$'):
+        pattern += '$'
+
     if not pyd.is_function(repl):
         repl = pyd.to_string(repl)
 
     flags = re.IGNORECASE if ignore_case else 0
 
-    # NOTE: Can't use `flags` argument to re.sub in Python 2.6 so have to use
-    # this version instead.
-    return re.compile(pattern, flags=flags).sub(repl, text, count=count)
+    return re.sub(pattern, repl, text, count=count, flags=flags)
+
+
+def replace_end(text,
+                pattern,
+                repl,
+                ignore_case=False,
+                escape=True):
+    """Like :func:`replace` except it only replaces `text` with `repl` if
+    `pattern` mathces the end of `text`.
+
+    Args:
+        text (str): String to replace.
+        pattern (str): String pattern to find and replace.
+        repl (str): String to substitute `pattern` with.
+        ignore_clase (bool, optional): Whether to ignore case when replacing.
+            Defaults to ``False``.
+        escape (bool, optional): Whether to escape `pattern` when searching.
+            This is needed if a literal replacement is desired when `pattern`
+            may contain special regular expression characters. Defaults to
+            ``True``.
+
+    Returns:
+        str: Replaced string.
+
+    Example:
+
+        >>> replace_end('aabbcc', 'b', 'X')
+        'aabbcc'
+        >>> replace_end('aabbcc', 'c', 'X')
+        'aabbcX'
+
+    .. versionadded:: 4.1.0
+    """
+    return replace(text,
+                   pattern,
+                   repl,
+                   ignore_case=ignore_case,
+                   escape=escape,
+                   from_end=True)
+
+
+def replace_start(text,
+                  pattern,
+                  repl,
+                  ignore_case=False,
+                  escape=True):
+    """Like :func:`replace` except it only replaces `text` with `repl` if
+    `pattern` mathces the start of `text`.
+
+    Args:
+        text (str): String to replace.
+        pattern (str): String pattern to find and replace.
+        repl (str): String to substitute `pattern` with.
+        ignore_clase (bool, optional): Whether to ignore case when replacing.
+            Defaults to ``False``.
+        escape (bool, optional): Whether to escape `pattern` when searching.
+            This is needed if a literal replacement is desired when `pattern`
+            may contain special regular expression characters. Defaults to
+            ``True``.
+
+    Returns:
+        str: Replaced string.
+
+    Example:
+
+        >>> replace_start('aabbcc', 'b', 'X')
+        'aabbcc'
+        >>> replace_start('aabbcc', 'a', 'X')
+        'Xabbcc'
+
+    .. versionadded:: 4.1.0
+    """
+    return replace(text,
+                   pattern,
+                   repl,
+                   ignore_case=ignore_case,
+                   escape=escape,
+                   from_start=True)
 
 
 def separator_case(text, separator):
