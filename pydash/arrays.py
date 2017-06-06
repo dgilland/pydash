@@ -584,8 +584,8 @@ def from_pairs(pairs):
 
     Example:
 
-        >>> from_pairs([['a', 1]])
-        {'a': 1}
+        >>> from_pairs([['a', 1], ['b', 2]]) == {'a': 1, 'b': 2}
+        True
 
     .. versionadded:: 4.0.0
     """
