@@ -7,6 +7,7 @@ Changelog
 New Features
 ++++++++++++
 
+- Officially support Python 3.6.
 - Add ``properties`` function that returns list of path values for an object.
 - Add ``replace_end``.
 - Add ``replace_start``.
