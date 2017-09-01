@@ -17,3 +17,4 @@ Contributors
 - Michael James, `urbnjamesmi1@github <https://github.com/urbnjamesmi1>`_
 - Tim Griesser, tgriesser@gmail.com, `tgriesser@github <https://github.com/tgriesser>`_
 - Shaun Patterson, `shaunpatterson@github <https://github.com/shaunpatterson>`_
+- Brian Beck, `beck3905@github <https://github.com/beck3905>`_
