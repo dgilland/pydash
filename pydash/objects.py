@@ -962,6 +962,8 @@ def omit(obj, *properties):
         True
         >>> omit([1, 2, 3, 4], 0, 3) == {1: 2, 2: 3}
         True
+        >>> omit({'a': {'b': {'c': 'd'}}}, 'a.b.c') == {'a': {'b': {}}}
+        True
 
     .. versionadded:: 1.0.0
 
@@ -994,10 +996,30 @@ def omit_by(obj, iteratee=None):
     if not callable(iteratee):
         keys = iteratee if iteratee is not None else []
 
-        def iteratee(value, key):  # pylint: disable=function-redefined
-            return key in keys
+        if isinstance(keys, list):
+            paths = [to_path(key) for key in keys]
 
-        argcount = 2
+            grouped_paths = pyd.group_lists(paths)
+        else:
+            grouped_paths = keys
+
+        ret = {}
+        for key, value in iterator(obj):
+
+            if key in grouped_paths and not grouped_paths[key]:
+                continue
+
+            if isinstance(value, dict):
+                new_value = omit_by(value, pyd.get(grouped_paths, key))
+
+                ret[key] = new_value
+
+            else:
+
+                ret[key] = value
+
+        return ret
+
     else:
         argcount = getargcount(iteratee, maxargs=2)
 
