@@ -432,10 +432,7 @@ def group_lists(collection):
     def recursive_group(obj, paths):
         if len(paths):
             key = paths.pop(0)
-            if key in obj:
-                obj[key].update(recursive_group({}, paths))
-            else:
-                obj[key] = recursive_group({}, paths)
+            obj[key] = recursive_group({}, paths)
         return obj
 
     for item in collection:
