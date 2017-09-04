@@ -124,6 +124,7 @@ from .collections import (
     for_each,
     for_each_right,
     group_by,
+    group_lists,
     includes,
     invoke_map,
     key_by,
