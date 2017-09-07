@@ -116,8 +116,8 @@ def cond(pairs, *extra_pairs):
         'matches A'
         >>> func({'a': 0, 'b': 2})
         'matches B'
-        >>> func({'a': 0, 'b': 0})
-        {'a': 0, 'b': 0}
+        >>> func({'a': 0, 'b': 0}) == {'a': 0, 'b': 0}
+        True
 
     .. versionadded:: 4.0.0
 
