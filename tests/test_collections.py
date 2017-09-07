@@ -158,18 +158,6 @@ def test_group_by(case, expected):
 
 
 @parametrize('case,expected', [
-    (([
-        ['a', 'b'],
-        ['a', 'b', 'c'],
-        ['a', 'c'],
-        ['a', 'c', 'd']
-    ],), {'a': {'b': {'c': {}}, 'c': {'d': {}}}})
-])
-def test_group_lists(case, expected):
-    assert _.group_lists(*case) == expected
-
-
-@parametrize('case,expected', [
     (([1, 2, 3], 1), True),
     (([1, 2, 3], 1, 2), False),
     (({'name': 'fred', 'age': 40}, 'fred'), True),

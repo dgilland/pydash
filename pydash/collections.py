@@ -28,7 +28,6 @@ __all__ = (
     'for_each',
     'for_each_right',
     'group_by',
-    'group_lists',
     'includes',
     'invoke_map',
     'key_by',
@@ -402,41 +401,6 @@ def group_by(collection, iteratee=None):
         key = cbk(value)
         ret.setdefault(key, [])
         ret[key].append(value)
-
-    return ret
-
-
-def group_lists(collection):
-    """Creates an object composed of keys generated from the merging of
-    multiple lists with similar values in the same index.
-
-        Args:
-            collection (list): List of lists to iterate over.
-
-        Returns:
-            dict: Results of grouping lists.
-
-        Example:
-
-            >>> results = group_lists([ \
-                    ['a', 'b'], \
-                    ['a', 'b', 'c'], \
-                    ['a', 'c'], \
-                    ['a', 'c', 'd'] \
-                ])
-            >>> assert results == {'a': {'b': {'c': {}}, 'c': {'d': {}}}}
-
-        """
-    ret = {}
-
-    def recursive_group(obj, paths):
-        if len(paths):
-            key = paths.pop(0)
-            obj[key] = recursive_group({}, paths)
-        return obj
-
-    for item in collection:
-        pyd.merge(ret, recursive_group({}, item))
 
     return ret
 
