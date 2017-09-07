@@ -994,37 +994,30 @@ def omit_by(obj, iteratee=None):
     .. versionadded:: 4.0.0
     """
     if not callable(iteratee):
-        keys = iteratee if iteratee is not None else []
 
-        if isinstance(keys, list):
-            paths = [to_path(key) for key in keys]
+        def _unset(obj, path):
+            pyd.unset(obj, path)
+            return obj
 
-            grouped_paths = pyd.group_lists(paths)
+        paths = pyd.map_(iteratee, to_path)
+        deep_paths = pyd.filter_(paths, lambda path: len(path) > 1)
+
+        if deep_paths:
+            clone = pyd.clone_deep(obj)
         else:
-            grouped_paths = keys
+            clone = pyd.clone(obj)
 
-        ret = {}
-        for key, value in iterator(obj):
+        if isinstance(clone, list):
+            clone = pyd.to_dict(clone)
 
-            if key in grouped_paths and not grouped_paths[key]:
-                continue
-
-            if isinstance(value, dict):
-                new_value = omit_by(value, pyd.get(grouped_paths, key))
-
-                ret[key] = new_value
-
-            else:
-
-                ret[key] = value
-
-        return ret
-
+        ret = pyd.reduce_(iteratee, _unset, clone)
     else:
         argcount = getargcount(iteratee, maxargs=2)
 
-    return dict((key, value) for key, value in iterator(obj)
-                if not callit(iteratee, value, key, argcount=argcount))
+        ret = dict((key, value) for key, value in iterator(obj)
+                   if not callit(iteratee, value, key, argcount=argcount))
+
+    return ret
 
 
 def parse_int(value, radix=None):
