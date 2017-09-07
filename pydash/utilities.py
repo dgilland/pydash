@@ -97,7 +97,7 @@ def attempt(func, *args, **kargs):
     return ret
 
 
-def cond(*pairs):
+def cond(pairs, *extra_pairs):
     """Creates a function that iterates over `pairs` and invokes the
     corresponding function of the first predicate to return truthy.
 
@@ -109,12 +109,26 @@ def cond(*pairs):
 
     Example:
 
-        >>> func = cond([matches({'a': 1}), constant('matches A')])
+        >>> func = cond([[matches({'a': 1}), constant('matches A')],\
+                         [matches({'b': 2}), constant('matches B')],\
+                         [stub_true, lambda value: value]])
         >>> func({'a': 1, 'b': 2})
         'matches A'
+        >>> func({'a': 0, 'b': 2})
+        'matches B'
+        >>> func({'a': 0, 'b': 0})
+        {'a': 0, 'b': 0}
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 4.2.0
+        Fixed missing argument passing to matched function and added
+        support for passing in a single list of pairs instead of just pairs as
+        separate arguments.
     """
+    if extra_pairs:
+        pairs = [pairs] + list(extra_pairs)
+
     for pair in pairs:
         try:
             assert len(pair) == 2
@@ -125,12 +139,12 @@ def cond(*pairs):
         if not all(map(callable, pair)):
             raise TypeError('Both predicate-function pair should be callable')
 
-    def _cond(*args, **kargs):
+    def _cond(*args):
         for pair in pairs:
             predicate, iteratee = pair
 
-            if predicate(*args):
-                return iteratee()
+            if callit(predicate, *args):
+                return iteratee(*args)
 
     return _cond
 

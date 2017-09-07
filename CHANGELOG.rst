@@ -4,6 +4,16 @@ Changelog
 =========
 
 
+next (xxxx-xx-xx)
+-----------------
+
+Bug Fixes
++++++++++
+
+- Fix missing argument passing to matched function in ``cond``.
+- Support passing a single list of pairs in ``cond`` instead of just pairs as separate arguments.
+
+
 v4.1.0 (2017-06-09)
 -------------------
 
