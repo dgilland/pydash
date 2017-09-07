@@ -1178,7 +1178,7 @@ def replace(text,
 
     .. versionadded:: 3.0.0
 
-    .. verisionchanged:: 4.1.0
+    .. versionchanged:: 4.1.0
         Added ``from_start`` and ``from_end`` arguments.
     """
     text = pyd.to_string(text)
