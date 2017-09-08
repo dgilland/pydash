@@ -408,7 +408,9 @@ def test_merge_with(case, expected):
     (([1, 2, 3], 0), {1: 2, 2: 3}),
     (([1, 2, 3], 0, 1), {2: 3}),
     (({'a': {'b': {'c': 'd'}}, 'e': 'f'}, 'a.b.c', 'e'),
-     {'a': {'b': {}}})
+     {'a': {'b': {}}}),
+    (({'a': [{'b': 1, 'c': 2}, {'d': 3}]}, 'a[0].c', 'a[1].d'),
+     {'a': [{'b': 1}, {}]}),
 ])
 def test_omit(case, expected):
     assert _.omit(*case) == expected

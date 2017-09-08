@@ -969,6 +969,9 @@ def omit(obj, *properties):
 
     .. versionchanged:: 4.0.0
         Moved iteratee argument to :func:`omit_by`.
+
+    .. versionchanged:: 4.2.0
+        Support deep paths.
     """
     return omit_by(obj, pyd.flatten(properties))
 
@@ -992,25 +995,23 @@ def omit_by(obj, iteratee=None):
         {'b': '2'}
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 4.2.0
+        Support deep paths for `iteratee`.
     """
     if not callable(iteratee):
+        paths = pyd.map_(iteratee, to_path)
+
+        if any(len(path) > 1 for path in paths):
+            cloned = clone_deep(obj)
+        else:
+            cloned = to_dict(obj)
 
         def _unset(obj, path):
             pyd.unset(obj, path)
             return obj
 
-        paths = pyd.map_(iteratee, to_path)
-        deep_paths = pyd.filter_(paths, lambda path: len(path) > 1)
-
-        if deep_paths:
-            clone = pyd.clone_deep(obj)
-        else:
-            clone = pyd.clone(obj)
-
-        if isinstance(clone, list):
-            clone = pyd.to_dict(clone)
-
-        ret = pyd.reduce_(iteratee, _unset, clone)
+        ret = pyd.reduce_(paths, _unset, cloned)
     else:
         argcount = getargcount(iteratee, maxargs=2)
 
