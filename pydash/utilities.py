@@ -1021,14 +1021,17 @@ def to_path(value):
         ['a', 0, 1, 2, 'b', 'c']
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 4.2.1
+        Ensure returned path is always a list.
     """
     tokens = to_path_tokens(value)
     if isinstance(tokens, list):
         path = [token.key if isinstance(token, PathToken)
                 else token
                 for token in to_path_tokens(value)]
-    else:  # pragma: no cover
-        path = tokens
+    else:
+        path = [tokens]
     return path
 
 

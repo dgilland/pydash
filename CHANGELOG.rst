@@ -4,6 +4,13 @@ Changelog
 =========
 
 
+Bug Fixes
++++++++++
+
+- Ensure that ``to_path`` always returns a ``list``.
+- Fix ``get`` to work with path values other than just strings, integers, and lists.
+
+
 v4.2.0 (2017-09-08)
 -------------------
 
