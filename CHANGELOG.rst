@@ -7,6 +7,11 @@ Changelog
 next (xxxx-xx-xx)
 -----------------
 
+New Features
+++++++++++++
+
+- Support more iterator "hooks" in ``to_dict`` so non-iterators that expose an ``items()``, ``iteritems()``, or has ``__dict__`` attributes will be converted using those methods.
+
 Bug Fixes
 +++++++++
 

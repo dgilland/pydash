@@ -1276,8 +1276,8 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
 
 
 def to_dict(obj):
-    """Convert `obj` to ``dict`` by created a new ``dict`` using `obj` keys and
-    values.
+    """Convert `obj` to ``dict`` by creating a new ``dict`` using `obj` keys
+    and values.
 
     Args:
         obj: (mixed): Object to convert.
@@ -1298,8 +1298,11 @@ def to_dict(obj):
 
     .. versionchanged:: 4.0.0
         Removed alias ``to_plain_object``.
+
+    .. versionchanged:: 4.2.0
+        Use ``pydash.helpers.iterator`` to generate key/value pairs.
     """
-    return dict(zip(pyd.keys(obj), pyd.values(obj)))
+    return dict(tuple(iterator(obj)))
 
 
 def to_integer(obj):
