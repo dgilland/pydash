@@ -962,6 +962,8 @@ def omit(obj, *properties):
         True
         >>> omit([1, 2, 3, 4], 0, 3) == {1: 2, 2: 3}
         True
+        >>> omit({'a': {'b': {'c': 'd'}}}, 'a.b.c') == {'a': {'b': {}}}
+        True
 
     .. versionadded:: 1.0.0
 
@@ -992,17 +994,30 @@ def omit_by(obj, iteratee=None):
     .. versionadded:: 4.0.0
     """
     if not callable(iteratee):
-        keys = iteratee if iteratee is not None else []
 
-        def iteratee(value, key):  # pylint: disable=function-redefined
-            return key in keys
+        def _unset(obj, path):
+            pyd.unset(obj, path)
+            return obj
 
-        argcount = 2
+        paths = pyd.map_(iteratee, to_path)
+        deep_paths = pyd.filter_(paths, lambda path: len(path) > 1)
+
+        if deep_paths:
+            clone = pyd.clone_deep(obj)
+        else:
+            clone = pyd.clone(obj)
+
+        if isinstance(clone, list):
+            clone = pyd.to_dict(clone)
+
+        ret = pyd.reduce_(iteratee, _unset, clone)
     else:
         argcount = getargcount(iteratee, maxargs=2)
 
-    return dict((key, value) for key, value in iterator(obj)
-                if not callit(iteratee, value, key, argcount=argcount))
+        ret = dict((key, value) for key, value in iterator(obj)
+                   if not callit(iteratee, value, key, argcount=argcount))
+
+    return ret
 
 
 def parse_int(value, radix=None):
