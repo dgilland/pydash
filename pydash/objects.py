@@ -1111,18 +1111,28 @@ def pick_by(obj, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    if not callable(iteratee):
-        keys = iteratee if iteratee is not None else []
+    obj = to_dict(obj)
 
-        def iteratee(value, key):  # pylint: disable=function-redefined
-            return key in keys
+    if not callable(iteratee):
+        paths = iteratee if iteratee is not None else []
+
+        def iteratee(value, path):  # pylint: disable=function-redefined
+            return has(obj, path)
 
         argcount = 2
     else:
+        paths = keys(obj)
         argcount = getargcount(iteratee, maxargs=2)
 
-    return dict((key, value) for key, value in iterator(obj)
-                if callit(iteratee, value, key, argcount=argcount))
+    result = {}
+
+    for path in paths:
+        value = get(obj, path)
+
+        if callit(iteratee, value, path, argcount=argcount):
+            set_(result, path, value)
+
+    return result
 
 
 def rename_keys(obj, key_map):

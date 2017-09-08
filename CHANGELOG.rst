@@ -11,6 +11,7 @@ New Features
 ++++++++++++
 
 - Support more iterator "hooks" in ``to_dict`` so non-iterators that expose an ``items()``, ``iteritems()``, or has ``__dict__`` attributes will be converted using those methods.
+- Support deep paths in ``pick`` and ``pick_by``.
 
 Bug Fixes
 +++++++++

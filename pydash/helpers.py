@@ -155,38 +155,29 @@ def base_get(obj, key, default=NoValue):
 
 def base_set(obj, key, value, allow_override=True):
     """Set an object's `key` to `value`. If `obj` is a ``list`` and the
-    `key` is the next available index position, append to list; otherwise,
-    raise ``IndexError``.
+    `key` is the next available index position, append to list; otherwise, pad
+    the list of ``None`` and then append to the list.
 
     Args:
         obj (list|dict): Object to assign value to.
         key (mixed): Key or index to assign to.
         value (mixed): Value to assign.
-
-    Returns:
-        None
-
-    Raises:
-        IndexError: If `obj` is a ``list`` and `key` is greater than length of
-            `obj`.
     """
     if isinstance(obj, dict):
         if allow_override or key not in obj:
             obj[key] = value
     elif isinstance(obj, list):
-        try:
-            key = int(key)
-        except ValueError:  # pragma: no cover
-            pass
+        key = int(key)
 
         if key < len(obj):
             if allow_override:
                 obj[key] = value
-        elif key == len(obj):
+        else:
+            if key > len(obj):
+                # Pad list object with None values up to the index key so we
+                # can append the value into the key index.
+                obj[:] = (obj + [None] * key)[:key]
             obj.append(value)
-        else:  # pragma: no cover
-            # Trigger exception by assigning to invalid index.
-            obj[key] = value
 
     return obj
 
