@@ -1709,15 +1709,15 @@ def values(obj):
 
 
 def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
-               _clone=True):
+               _cloned=False):
     """Base clone function that supports deep clone and customizer callback."""
     clone_by = copy.deepcopy if is_deep else copy.copy
     result = None
 
-    if callable(customizer) and _clone:
+    if callable(customizer) and not _cloned:
         argcount = getargcount(customizer, maxargs=4)
         cbk = partial(callit, customizer, argcount=argcount)
-    elif not _clone:
+    elif _cloned:
         cbk = customizer
     else:
         cbk = None
@@ -1728,7 +1728,7 @@ def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
     if result is not None:
         return result
 
-    if _clone:
+    if not _cloned:
         result = clone_by(value)
     else:
         result = value
@@ -1737,7 +1737,7 @@ def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
         for key, subvalue in iterator(value):
             if is_deep:
                 val = base_clone(subvalue, is_deep, cbk, key, value,
-                                 _clone=False)
+                                 _cloned=True)
             else:
                 val = cbk(subvalue, key, value)
 
