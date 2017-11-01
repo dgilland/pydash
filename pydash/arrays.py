@@ -44,6 +44,7 @@ __all__ = (
     'intersperse',
     'last',
     'last_index_of',
+    'listify',
     'mapcat',
     'nth',
     'pull',
@@ -890,6 +891,41 @@ def last_index_of(array, value, from_index=None):
             return index
         index -= 1
     return -1
+
+
+def listify(item):
+    """Ensure the item is an iterable by wrapping single values in a list.
+
+    Args:
+        item (mixed): Item to wrap in a list.
+
+    Returns:
+        list: Wrapped item.
+
+    Example:
+
+        >>> listify(1)
+        [1]
+
+        >>> listify([1])
+        [1]
+
+        >>> listify({1: 2, 3: 4})
+        [1, 3]
+
+        >>> listify(a for a in [1, 2, 3])
+        [1, 2, 3]
+
+    .. versionadded:: 4.3
+    """
+    if isinstance(item, list):
+        return item
+
+    elif hasattr(item, '__iter__'):
+        return list(item)
+
+    else:
+        return [item]
 
 
 def mapcat(array, iteratee=None):
