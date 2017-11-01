@@ -492,9 +492,13 @@ def get(obj, path, default=None):
 
         >>> get({}, 'a.b.c') is None
         True
+        >>> get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c[1]')
+        2
         >>> get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1')
         2
         >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
+        2
+        >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, ['a', 'b', 1, 'c', 1])
         2
         >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2') is None
         True
@@ -680,7 +684,18 @@ def invoke(obj, path, *args, **kargs):
 
     .. versionadded:: 1.0.0
     """
-    return get(obj, path, default=pyd.noop)(*args, **kargs)
+    paths = to_path(path)
+    target_path = pyd.initial(paths)
+    method_name = pyd.last(paths)
+
+    try:
+        method = getattr(get(obj, target_path), method_name)
+    except AttributeError:
+        ret = None
+    else:
+        ret = method(*args, **kargs)
+
+    return ret
 
 
 def keys(obj):
@@ -947,11 +962,16 @@ def omit(obj, *properties):
         True
         >>> omit([1, 2, 3, 4], 0, 3) == {1: 2, 2: 3}
         True
+        >>> omit({'a': {'b': {'c': 'd'}}}, 'a.b.c') == {'a': {'b': {}}}
+        True
 
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 4.0.0
         Moved iteratee argument to :func:`omit_by`.
+
+    .. versionchanged:: 4.2.0
+        Support deep paths.
     """
     return omit_by(obj, pyd.flatten(properties))
 
@@ -975,19 +995,30 @@ def omit_by(obj, iteratee=None):
         {'b': '2'}
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 4.2.0
+        Support deep paths for `iteratee`.
     """
     if not callable(iteratee):
-        keys = iteratee if iteratee is not None else []
+        paths = pyd.map_(iteratee, to_path)
 
-        def iteratee(value, key):  # pylint: disable=function-redefined
-            return key in keys
+        if any(len(path) > 1 for path in paths):
+            cloned = clone_deep(obj)
+        else:
+            cloned = to_dict(obj)
 
-        argcount = 2
+        def _unset(obj, path):
+            pyd.unset(obj, path)
+            return obj
+
+        ret = pyd.reduce_(paths, _unset, cloned)
     else:
         argcount = getargcount(iteratee, maxargs=2)
 
-    return dict((key, value) for key, value in iterator(obj)
-                if not callit(iteratee, value, key, argcount=argcount))
+        ret = dict((key, value) for key, value in iterator(obj)
+                   if not callit(iteratee, value, key, argcount=argcount))
+
+    return ret
 
 
 def parse_int(value, radix=None):
@@ -1080,18 +1111,28 @@ def pick_by(obj, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    if not callable(iteratee):
-        keys = iteratee if iteratee is not None else []
+    obj = to_dict(obj)
 
-        def iteratee(value, key):  # pylint: disable=function-redefined
-            return key in keys
+    if not callable(iteratee):
+        paths = iteratee if iteratee is not None else []
+
+        def iteratee(value, path):  # pylint: disable=function-redefined
+            return has(obj, path)
 
         argcount = 2
     else:
+        paths = keys(obj)
         argcount = getargcount(iteratee, maxargs=2)
 
-    return dict((key, value) for key, value in iterator(obj)
-                if callit(iteratee, value, key, argcount=argcount))
+    result = {}
+
+    for path in paths:
+        value = get(obj, path)
+
+        if callit(iteratee, value, path, argcount=argcount):
+            set_(result, path, value)
+
+    return result
 
 
 def rename_keys(obj, key_map):
@@ -1245,8 +1286,8 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
 
 
 def to_dict(obj):
-    """Convert `obj` to ``dict`` by created a new ``dict`` using `obj` keys and
-    values.
+    """Convert `obj` to ``dict`` by creating a new ``dict`` using `obj` keys
+    and values.
 
     Args:
         obj: (mixed): Object to convert.
@@ -1267,8 +1308,11 @@ def to_dict(obj):
 
     .. versionchanged:: 4.0.0
         Removed alias ``to_plain_object``.
+
+    .. versionchanged:: 4.2.0
+        Use ``pydash.helpers.iterator`` to generate key/value pairs.
     """
-    return dict(zip(pyd.keys(obj), pyd.values(obj)))
+    return dict(tuple(iterator(obj)))
 
 
 def to_integer(obj):
@@ -1665,15 +1709,15 @@ def values(obj):
 
 
 def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
-               _clone=True):
+               _cloned=False):
     """Base clone function that supports deep clone and customizer callback."""
     clone_by = copy.deepcopy if is_deep else copy.copy
     result = None
 
-    if callable(customizer) and _clone:
+    if callable(customizer) and not _cloned:
         argcount = getargcount(customizer, maxargs=4)
         cbk = partial(callit, customizer, argcount=argcount)
-    elif not _clone:
+    elif _cloned:
         cbk = customizer
     else:
         cbk = None
@@ -1684,7 +1728,7 @@ def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
     if result is not None:
         return result
 
-    if _clone:
+    if not _cloned:
         result = clone_by(value)
     else:
         result = value
@@ -1693,7 +1737,7 @@ def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
         for key, subvalue in iterator(value):
             if is_deep:
                 val = base_clone(subvalue, is_deep, cbk, key, value,
-                                 _clone=False)
+                                 _cloned=True)
             else:
                 val = cbk(subvalue, key, value)
 

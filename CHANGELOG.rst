@@ -4,6 +4,81 @@ Changelog
 =========
 
 
+v4.2.1 (2017-09-08)
+-------------------
+
+Bug Fixes
++++++++++
+
+- Ensure that ``to_path`` always returns a ``list``.
+- Fix ``get`` to work with path values other than just strings, integers, and lists.
+
+
+v4.2.0 (2017-09-08)
+-------------------
+
+New Features
+++++++++++++
+
+- Support more iterator "hooks" in ``to_dict`` so non-iterators that expose an ``items()``, ``iteritems()``, or has ``__dict__`` attributes will be converted using those methods.
+- Support deep paths in ``omit`` and ``omit_by``.
+- Support deep paths in ``pick`` and ``pick_by``.
+
+Bug Fixes
++++++++++
+
+- Fix missing argument passing to matched function in ``cond``.
+- Support passing a single list of pairs in ``cond`` instead of just pairs as separate arguments.
+
+
+v4.1.0 (2017-06-09)
+-------------------
+
+New Features
+++++++++++++
+
+- Officially support Python 3.6.
+- Add ``properties`` function that returns list of path values for an object.
+- Add ``replace_end``.
+- Add ``replace_start``.
+- Make ``iteratee`` support ``properties``-style callback when a ``tuple`` is passed.
+- Make ``replace`` accept ``from_start`` and ``from_end`` arguments to limit replacement to start and/or end of string.
+
+Bug Fixes
++++++++++
+
+- None
+
+
+v4.0.4 (2017-05-31)
+-------------------
+
+New Features
+++++++++++++
+
+- None
+
+Bug Fixes
++++++++++
+
+- Improve performance of ``get``. Thanks shaunpatterson_!
+
+
+v4.0.3 (2017-04-20)
+-------------------
+
+New Features
+++++++++++++
+
+- None
+
+Bug Fixes
++++++++++
+
+- Fix regression in ``get`` where ``list`` and ``dict`` objects had attributes returned when a key was missing but the key corresponded to an attribute name. For example, ``pydash.get({}, 'update')`` would return ``{}.update()`` instead of ``None``. Previous behavior was that only item-access was allowed for ``list`` and ``dict`` which has been restored.
+- Fix regression in ``invoke``/``invoke_map`` where non-attributes could be invoked. For example, ``pydash.invoke({'items': lambda: 1}, 'items')`` would return ``1`` instead of ``dict_items([('a', 'items')])``. Previous behavior was that only attribute methods could be invoked which has now been restored.
+
+
 v4.0.2 (2017-04-04)
 -------------------
 
@@ -869,3 +944,4 @@ v0.0.0 (2014-07-22)
 .. _bharadwajyarlagadda: https://github.com/bharadwajyarlagadda
 .. _urbnjamesmi1: https://github.com/urbnjamesmi1
 .. _tgriesser: https://github.com/tgriesser
+.. _shaunpatterson: https://github.com/shaunpatterson

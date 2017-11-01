@@ -9,7 +9,7 @@ from .fixtures import parametrize
 
 
 @parametrize('case,expected', [
-    ((['a', 'b', 'c', 'd', 'e'], [0, 2, 4]), ['a', 'c', 'e']),
+    ((['a', 'b', 'c', 'd', 'e'], [0], [2], [4]), ['a', 'c', 'e']),
     ((['moe', 'larry', 'curly'], 0, 2), ['moe', 'curly']),
     (({'a': 1, 'b': 2, 'c': 3}, 'a', 'b'), [1, 2])
 ])
@@ -172,7 +172,6 @@ def test_includes(case, expected):
      [{'b': 2}.items(), {'c': 3}.items()]),
     (([{'a': {'b': {'c': 2}}}, {'a': {'b': {'c': 3}}}], 'a.b.items'),
      [{'c': 2}.items(), {'c': 3}.items()]),
-    (([1, 2, 3], lambda item, x: item ** x, 2), [2, 4, 8])
 ])
 def test_invoke_map(case, expected):
     assert _.invoke_map(*case) == expected

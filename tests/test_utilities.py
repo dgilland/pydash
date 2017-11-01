@@ -28,6 +28,10 @@ def test_attempt_exception(case, expected):
       [_.matches({'a': 1}), _.constant('matches A')]),
      {'a': 1, 'b': 2},
      'matches B'),
+    (([_.matches({'b': 2}), _.constant('matches B')],
+      [_.matches({'a': 1}), _.invert]),
+     {'a': 1, 'b': 3},
+     {1: 'a', 3: 'b'}),
     (([_.matches({'a': 1}), _.constant('matches A')],
       [_.matches({'b': 2}), _.constant('matches B')]),
      {'a': 1, 'b': 2},
@@ -42,8 +46,9 @@ def test_cond(pairs, case, expected):
     ([_.matches({'b': 2})], ValueError),
     ([_.matches({'b': 2}), _.matches({'a': 1}), _.constant('matches B')],
      ValueError),
-    ([1, 2], TypeError),
-    ([_.matches({'b': 2}), 2], TypeError)
+    ([1, 2], ValueError),
+    ([[1, 2]], TypeError),
+    ([_.matches({'b': 2}), 2], ValueError)
 ])
 def test_cond_exception(case, expected):
     with pytest.raises(expected):
@@ -168,7 +173,13 @@ def test_identity(case, expected):
      [{'name': 'fred', 'age': 40},
       {'name': 'barney', 'age': 36}],
      [True, False]),
-    (1, [[0, 1], [2, 3], [4, 5]], [1, 3, 5])
+    (1, [[0, 1], [2, 3], [4, 5]], [1, 3, 5]),
+    (('a', 'b.c', ['d', 0, 'f']),
+     [{'a': 1, 'b': {'c': 2}, 'd': [{'f': 3}, 4]}],
+     [[1, 2, 3]]),
+    (('a',),
+     [{'a': 1}],
+     [[1]]),
 ])
 def test_iteratee(case, arg, expected):
     getter = _.iteratee(case)

@@ -140,6 +140,7 @@ def test_invert_by(case, expected):
 @parametrize('case,expected', [
     (({'a': 1, 'b': 2}, 'get', 'a'), 1),
     (({'a': {'b': {'c': [1, 2, 3, 3]}}}, 'a.b.c.count', 3), 2),
+    (({}, 'count'), None)
 ])
 def test_invoke(case, expected):
     assert _.invoke(*case) == expected
@@ -247,6 +248,12 @@ def test_for_in_right(case, expected):
     ((namedtuple('a', ['a', 'b'])(1, 2), 'a'), 1),
     ((namedtuple('a', ['a', 'b'])(1, 2), 0), 1),
     ((namedtuple('a', ['a', 'b'])({'c': {'d': 1}}, 2), 'a.c.d'), 1),
+    (({}, 'update'), None),
+    (([], 'extend'), None),
+    (({(1,): {(2,): 3}}, (1,)), {(2,): 3}),
+    (({(1,): {(2,): 3}}, [(1,), (2,)]), 3),
+    (({object: 1}, object), 1),
+    (({object: {object: 1}}, [object, object]), 1),
 ])
 def test_get(case, expected):
     assert _.get(*case) == expected
@@ -403,7 +410,11 @@ def test_merge_with(case, expected):
     (({'a': 1, 'b': 2, 'c': 3}, ['a'], ['b']), {'c': 3}),
     (([1, 2, 3],), {0: 1, 1: 2, 2: 3}),
     (([1, 2, 3], 0), {1: 2, 2: 3}),
-    (([1, 2, 3], 0, 1), {2: 3})
+    (([1, 2, 3], 0, 1), {2: 3}),
+    (({'a': {'b': {'c': 'd'}}, 'e': 'f'}, 'a.b.c', 'e'),
+     {'a': {'b': {}}}),
+    (({'a': [{'b': 1, 'c': 2}, {'d': 3}]}, 'a[0].c', 'a[1].d'),
+     {'a': [{'b': 1}, {}]}),
 ])
 def test_omit(case, expected):
     assert _.omit(*case) == expected
@@ -414,7 +425,7 @@ def test_omit(case, expected):
     (({'a': 1, 'b': 2, 'c': 3}, lambda value, key: key == 'a'),
      {'b': 2, 'c': 3}),
     (([1, 2, 3],), {0: 1, 1: 2, 2: 3}),
-    (([1, 2, 3], [0]), {1: 2, 2: 3}),
+    (([1, 2, 3], [0]), {1: 2, 2: 3})
 ])
 def test_omit_by(case, expected):
     assert _.omit_by(*case) == expected
@@ -446,6 +457,9 @@ def test_parse_int(case, expected):
     ((fixtures.Object(a=1, b=2, c=3), 'a'), {'a': 1}),
     ((fixtures.ItemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
     ((fixtures.IteritemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
+    (({'a': {'b': 1, 'c': 2, 'd': 3}}, 'a.b', 'a.d'), {'a': {'b': 1, 'd': 3}}),
+    (({'a': [{'b': 1}, {'c': 2}, {'d': 3}]}, 'a[0]', 'a[2]'),
+     {'a': [{'b': 1}, None, {'d': 3}]}),
 ])
 def test_pick(case, expected):
     assert _.pick(*case) == expected

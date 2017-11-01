@@ -412,7 +412,8 @@ def duplicates(array, iteratee=None):
 
 
 def fill(array, value, start=0, end=None):
-    """Fills elements of array with value from start up to, but not including, end.
+    """Fills elements of array with value from `start` up to, but not
+    including, `end`.
 
     Args:
         array (list): List to fill.
@@ -585,8 +586,8 @@ def from_pairs(pairs):
 
     Example:
 
-        >>> from_pairs([['a', 1]])
-        {'a': 1}
+        >>> from_pairs([['a', 1], ['b', 2]]) == {'a': 1, 'b': 2}
+        True
 
     .. versionadded:: 4.0.0
     """

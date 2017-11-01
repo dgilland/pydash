@@ -38,6 +38,7 @@ __all__ = (
     'over',
     'over_every',
     'over_some',
+    'properties',
     'property_',
     'property_of',
     'random',
@@ -96,7 +97,7 @@ def attempt(func, *args, **kargs):
     return ret
 
 
-def cond(*pairs):
+def cond(pairs, *extra_pairs):
     """Creates a function that iterates over `pairs` and invokes the
     corresponding function of the first predicate to return truthy.
 
@@ -108,12 +109,26 @@ def cond(*pairs):
 
     Example:
 
-        >>> func = cond([matches({'a': 1}), constant('matches A')])
+        >>> func = cond([[matches({'a': 1}), constant('matches A')],\
+                         [matches({'b': 2}), constant('matches B')],\
+                         [stub_true, lambda value: value]])
         >>> func({'a': 1, 'b': 2})
         'matches A'
+        >>> func({'a': 0, 'b': 2})
+        'matches B'
+        >>> func({'a': 0, 'b': 0}) == {'a': 0, 'b': 0}
+        True
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 4.2.0
+        Fixed missing argument passing to matched function and added
+        support for passing in a single list of pairs instead of just pairs as
+        separate arguments.
     """
+    if extra_pairs:
+        pairs = [pairs] + list(extra_pairs)
+
     for pair in pairs:
         try:
             assert len(pair) == 2
@@ -124,12 +139,12 @@ def cond(*pairs):
         if not all(map(callable, pair)):
             raise TypeError('Both predicate-function pair should be callable')
 
-    def _cond(*args, **kargs):
+    def _cond(*args):
         for pair in pairs:
             predicate, iteratee = pair
 
-            if predicate(*args):
-                return iteratee()
+            if callit(predicate, *args):
+                return iteratee(*args)
 
     return _cond
 
@@ -293,6 +308,8 @@ def iteratee(func):
         5
         >>> iteratee('a.b')({'a': {'b': 5}})
         5
+        >>> iteratee(('a', ['c', 'd', 'e']))({'a': 1, 'c': {'d': {'e': 3}}})
+        [1, 3]
         >>> iteratee(lambda a, b: a + b)(1, 2)
         3
         >>> ident = iteratee(None)
@@ -317,6 +334,9 @@ def iteratee(func):
 
     .. versionchanged:: 4.0.0
         Removed alias ``callback``.
+
+    .. versionchanged:: 4.1.0
+        Return :func:`properties` callback when `func` is a ``tuple``.
     """
     if callable(func):
         cbk = func
@@ -326,10 +346,12 @@ def iteratee(func):
 
         if isinstance(func, string_types):
             cbk = property_(func)
-        elif isinstance(func, (list, tuple)) and len(func) == 1:
+        elif isinstance(func, list) and len(func) == 1:
             cbk = property_(func)
-        elif isinstance(func, (list, tuple)) and len(func) > 1:
+        elif isinstance(func, list) and len(func) > 1:
             cbk = matches_property(*func[:2])
+        elif isinstance(func, tuple):
+            cbk = properties(*func)
         elif isinstance(func, dict):
             cbk = matches(func)
         else:
@@ -671,6 +693,28 @@ def property_(path):
     return lambda obj: pyd.get(obj, path)
 
 
+def properties(*paths):
+    """Like :func:`property_` except that it returns a list of values at each
+    path in `paths`.
+
+    Args:
+        *path (str|list): Path values to fetch from object.
+
+    Returns:
+        function: Function that returns object's path value.
+
+    Example:
+
+        >>> getter = properties('a', 'b', ['c', 'd', 'e'])
+        >>> getter({'a': 1, 'b': 2, 'c': {'d': {'e': 3}}})
+        [1, 2, 3]
+
+    .. versionadded:: 4.1.0
+    """
+    return lambda obj: [getter(obj)
+                        for getter in (pyd.property_(path) for path in paths)]
+
+
 def property_of(obj):
     """The inverse of :func:`property_`. This method creates a function that
     returns the key value of a given key on `obj`.
@@ -977,14 +1021,17 @@ def to_path(value):
         ['a', 0, 1, 2, 'b', 'c']
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 4.2.1
+        Ensure returned path is always a list.
     """
     tokens = to_path_tokens(value)
     if isinstance(tokens, list):
         path = [token.key if isinstance(token, PathToken)
                 else token
                 for token in to_path_tokens(value)]
-    else:  # pragma: no cover
-        path = tokens
+    else:
+        path = [tokens]
     return path
 
 
@@ -1045,8 +1092,8 @@ def to_path_tokens(value):
 
 def unescape_path_key(key):
     """Unescape path key."""
-    key = pyd.reg_exp_js_replace(key, r'/\\\\/g', r'\\')
-    key = pyd.reg_exp_js_replace(key, r'/\\\./g', '.')
+    key = key.replace(r'\\', '\\')
+    key = key.replace(r'\.', r'.')
     return key
 
 
