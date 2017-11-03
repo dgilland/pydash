@@ -576,7 +576,7 @@ def test_sort_by(case, expected):
 
 
 @parametrize('case,expected', [
-    ('cat', ['c', 'a', 't']),
+    ('cat', ['cat']),
     ({'a': 1, 'b': 2, 'c': 3}, [1, 2, 3])
 ])
 def test_to_list(case, expected):

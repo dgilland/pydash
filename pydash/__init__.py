@@ -46,7 +46,6 @@ from .arrays import (
     intersperse,
     last,
     last_index_of,
-    listify,
     mapcat,
     nth,
     pop,

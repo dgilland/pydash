@@ -1049,31 +1049,51 @@ def sort_by(collection, iteratee=None, reverse=False):
     return sorted(collection, key=pyd.iteratee(iteratee), reverse=reverse)
 
 
-def to_list(collection):
-    """Converts the collection to a list.
+def to_list(item):
+    """ Converts a collection, an iterable or a single item to a list.
 
     Args:
-        collection (list|dict): Collection to iterate over.
+        item (mixed): Item to convert or wrap.
 
     Returns:
-        list: Collection converted to list.
+        list: Converted or wrapped item..
 
     Example:
 
         >>> results = to_list({'a': 1, 'b': 2, 'c': 3})
         >>> assert set(results) == set([1, 2, 3])
+
         >>> to_list((1, 2, 3, 4))
         [1, 2, 3, 4]
 
+        >>> to_list(1)
+        [1]
+
+        >>> to_list([1])
+        [1]
+
+        >>> to_list(a for a in [1, 2, 3])
+        [1, 2, 3]
+
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 4.3.0
+        Wrap non iterables items in a list.
+        Convert other iterables to list.
+
     """
-    if isinstance(collection, dict):
-        ret = collection.values()
+
+    if isinstance(item, list):
+        return item
+
+    elif isinstance(item, dict):
+        return item.values()
+
+    elif hasattr(item, '__iter__'):
+        return list(item)
+
     else:
-        ret = list(collection)
-
-    return ret
-
+        return [item]
 
 #
 # Utility methods not a part of the main API
