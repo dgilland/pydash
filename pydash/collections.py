@@ -1049,14 +1049,14 @@ def sort_by(collection, iteratee=None, reverse=False):
     return sorted(collection, key=pyd.iteratee(iteratee), reverse=reverse)
 
 
-def to_list(item):
+def to_list(collection):
     """ Converts a collection, an iterable or a single item to a list.
 
     Args:
-        item (mixed): Item to convert or wrap.
+        collection (mixed): Collection to convert item or wrap.
 
     Returns:
-        list: Converted or wrapped item..
+        list: Converted collection or wrapped item.
 
     Example:
 
@@ -1083,17 +1083,17 @@ def to_list(item):
 
     """
 
-    if isinstance(item, list):
-        return item
+    if isinstance(collection, list):
+        return collection[:]
 
-    elif isinstance(item, dict):
-        return item.values()
+    elif isinstance(collection, dict):
+        return collection.values()
 
-    elif hasattr(item, '__iter__'):
-        return list(item)
+    elif hasattr(collection, '__iter__'):
+        return list(collection)
 
     else:
-        return [item]
+        return [collection]
 
 #
 # Utility methods not a part of the main API
