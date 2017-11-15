@@ -1089,11 +1089,13 @@ def to_list(collection):
     elif isinstance(collection, dict):
         return collection.values()
 
-    elif hasattr(collection, '__iter__'):
-        return list(collection)
-
     else:
-        return [collection]
+
+        try:
+            return list(collection)
+
+        except TypeError:
+            return [collection]
 
 #
 # Utility methods not a part of the main API
