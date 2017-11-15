@@ -12,7 +12,7 @@ import random
 import pydash as pyd
 
 from .helpers import iteriteratee, iterator, callit, getargcount, NoValue
-from ._compat import cmp_to_key, _cmp
+from ._compat import cmp_to_key, _cmp, string_types
 
 
 __all__ = (
@@ -1049,11 +1049,13 @@ def sort_by(collection, iteratee=None, reverse=False):
     return sorted(collection, key=pyd.iteratee(iteratee), reverse=reverse)
 
 
-def to_list(collection):
+def to_list(collection, split_strings=True):
     """ Converts a collection, an iterable or a single item to a list.
 
     Args:
         collection (mixed): Collection to convert item or wrap.
+        split_strings (bool, optional): Whether to split strings into single
+            chars. Defaults to ``True``.
 
     Returns:
         list: Converted collection or wrapped item.
@@ -1075,11 +1077,18 @@ def to_list(collection):
         >>> to_list(a for a in [1, 2, 3])
         [1, 2, 3]
 
+        >>> to_list('cat')
+        ['c', 'a', 't']
+
+        >>> to_list('cat', split_strings=False)
+        ['cat']
+
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 4.3.0
-        Wrap non iterables items in a list.
+        Wrap non iterable items in a list.
         Convert other iterables to list.
+        Byte objects are returned as single character strings in python3.
 
     """
 
@@ -1088,6 +1097,14 @@ def to_list(collection):
 
     elif isinstance(collection, dict):
         return collection.values()
+
+    elif not split_strings and (isinstance(collection, string_types) or
+                                isinstance(collection, bytes)):
+        return [collection]
+
+    elif split_strings and isinstance(collection, bytes):
+        # in python3 iterating over bytes gives integers instead of strings
+        return list(chr(c) if isinstance(c, int) else c for c in collection)
 
     else:
 
