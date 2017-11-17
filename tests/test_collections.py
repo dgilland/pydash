@@ -575,9 +575,14 @@ def test_sort_by(case, expected):
     assert _.sort_by(*case) == expected
 
 
-@parametrize('case,expected', [
-    ('cat', ['c', 'a', 't']),
-    ({'a': 1, 'b': 2, 'c': 3}, [1, 2, 3])
+@parametrize('case,split,expected', [
+    ('cat', True, ['c', 'a', 't']),
+    (b'cat', True, ['c', 'a', 't']),
+    (u'cat', True, [u'c', u'a', u't']),
+    ('cat', False, ['cat']),
+    (b'cat', False, [b'cat']),
+    (u'cat', False, [u'cat']),
+    ({'a': 1, 'b': 2, 'c': 3}, True, [1, 2, 3])
 ])
-def test_to_list(case, expected):
-    assert set(_.to_list(case)) == set(expected)
+def test_to_list(case, split, expected):
+    assert set(_.to_list(case, split_strings=split)) == set(expected)
