@@ -1086,33 +1086,28 @@ def to_list(collection, split_strings=True):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 4.3.0
-        Wrap non iterable items in a list.
-        Convert other iterables to list.
-        Byte objects are returned as single character strings in python3.
 
+        - Wrap non-iterable items in a list.
+        - Convert other iterables to list.
+        - Byte objects are returned as single character strings in Python 3.
     """
-
     if isinstance(collection, list):
         return collection[:]
-
     elif isinstance(collection, dict):
         return collection.values()
-
     elif not split_strings and (isinstance(collection, string_types) or
                                 isinstance(collection, bytes)):
         return [collection]
-
     elif split_strings and isinstance(collection, bytes):
         # in python3 iterating over bytes gives integers instead of strings
         return list(chr(c) if isinstance(c, int) else c for c in collection)
-
     else:
-
         try:
             return list(collection)
 
         except TypeError:
             return [collection]
+
 
 #
 # Utility methods not a part of the main API
