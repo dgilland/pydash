@@ -141,8 +141,7 @@ from .collections import (
     shuffle,
     size,
     some,
-    sort_by,
-    to_list
+    sort_by
 )
 
 
@@ -251,6 +250,7 @@ from .objects import (
     to_boolean,
     to_dict,
     to_integer,
+    to_list,
     to_number,
     to_pairs,
     to_string,

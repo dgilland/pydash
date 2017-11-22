@@ -21,7 +21,7 @@ from .helpers import (
     base_get,
     base_set
 )
-from ._compat import iteritems, text_type
+from ._compat import iteritems, string_types, text_type
 from .utilities import PathToken, to_path, to_path_tokens
 
 
@@ -61,6 +61,7 @@ __all__ = (
     'to_boolean',
     'to_dict',
     'to_integer',
+    'to_list',
     'to_number',
     'to_pairs',
     'to_string',
@@ -949,7 +950,7 @@ def omit(obj, *properties):
 
     Args:
         obj (mixed): Object to process.
-        properties (str): Property values to omit.
+        *properties (str): Property values to omit.
 
     Returns:
         dict: Results of omitting properties.
@@ -958,7 +959,7 @@ def omit(obj, *properties):
 
         >>> omit({'a': 1, 'b': 2, 'c': 3}, 'b', 'c') == {'a': 1}
         True
-        >>> omit({ 'a': 1, 'b': 2, 'c': 3 }, ['a', 'c']) == {'b': 2}
+        >>> omit({'a': 1, 'b': 2, 'c': 3 }, ['a', 'c']) == {'b': 2}
         True
         >>> omit([1, 2, 3, 4], 0, 3) == {1: 2, 2: 3}
         True
@@ -1345,6 +1346,66 @@ def to_integer(obj):
         num = 0
 
     return num
+
+
+def to_list(obj, split_strings=True):
+    """ Converts a obj, an iterable or a single item to a list.
+
+    Args:
+        obj (mixed): Object to convert item or wrap.
+        split_strings (bool, optional): Whether to split strings into single
+            chars. Defaults to ``True``.
+
+    Returns:
+        list: Converted obj or wrapped item.
+
+    Example:
+
+        >>> results = to_list({'a': 1, 'b': 2, 'c': 3})
+        >>> assert set(results) == set([1, 2, 3])
+
+        >>> to_list((1, 2, 3, 4))
+        [1, 2, 3, 4]
+
+        >>> to_list(1)
+        [1]
+
+        >>> to_list([1])
+        [1]
+
+        >>> to_list(a for a in [1, 2, 3])
+        [1, 2, 3]
+
+        >>> to_list('cat')
+        ['c', 'a', 't']
+
+        >>> to_list('cat', split_strings=False)
+        ['cat']
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 4.3.0
+
+        - Wrap non-iterable items in a list.
+        - Convert other iterables to list.
+        - Byte objects are returned as single character strings in Python 3.
+    """
+    if isinstance(obj, list):
+        return obj[:]
+    elif isinstance(obj, dict):
+        return obj.values()
+    elif not split_strings and (isinstance(obj, string_types) or
+                                isinstance(obj, bytes)):
+        return [obj]
+    elif split_strings and isinstance(obj, bytes):
+        # in python3 iterating over bytes gives integers instead of strings
+        return list(chr(c) if isinstance(c, int) else c for c in obj)
+    else:
+        try:
+            return list(obj)
+
+        except TypeError:
+            return [obj]
 
 
 def to_number(obj, precision=0):
