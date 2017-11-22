@@ -128,6 +128,7 @@ from .collections import (
     invoke_map,
     key_by,
     map_,
+    nest,
     order_by,
     partition,
     pluck,

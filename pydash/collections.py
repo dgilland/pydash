@@ -32,6 +32,7 @@ __all__ = (
     'invoke_map',
     'key_by',
     'map_',
+    'nest',
     'order_by',
     'partition',
     'pluck',
@@ -535,6 +536,49 @@ def map_(collection, iteratee=None):
         Removed alias ``collect``.
     """
     return list(itermap(collection, iteratee))
+
+
+def nest(collection, *properties):
+    """This method is like :func:`group_by` except that it supports nested
+    grouping by multiple string `properties`. If only a single key is given, it
+    is like calling ``group_by(collection, prop)``.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        *properties (str): Properties to nest by.
+
+    Returns:
+        dict: Results of nested grouping by `properties`.
+
+    Example:
+
+        >>> results = nest([{'shape': 'square', 'color': 'red', 'qty': 5},\
+                            {'shape': 'square', 'color': 'blue', 'qty': 10},\
+                            {'shape': 'square', 'color': 'orange', 'qty': 5},\
+                            {'shape': 'circle', 'color': 'yellow', 'qty': 5},\
+                            {'shape': 'circle', 'color': 'pink', 'qty': 10},\
+                            {'shape': 'oval', 'color': 'purple', 'qty': 5}],\
+                           'shape', 'qty')
+        >>> expected = {\
+            'square': {5: [{'shape': 'square', 'color': 'red', 'qty': 5},\
+                           {'shape': 'square', 'color': 'orange', 'qty': 5}],\
+                       10: [{'shape': 'square', 'color': 'blue', 'qty': 10}]},\
+            'circle': {5: [{'shape': 'circle', 'color': 'yellow', 'qty': 5}],\
+                       10: [{'shape': 'circle', 'color': 'pink', 'qty': 10}]},\
+            'oval': {5: [{'shape': 'oval', 'color': 'purple', 'qty': 5}]}}
+        >>> results == expected
+        True
+
+    .. versionadded:: 4.3.0
+    """
+    if not properties:
+        return collection
+
+    properties = pyd.flatten(properties)
+    first, rest = properties[0], properties[1:]
+
+    return pyd.map_values(group_by(collection, first),
+                          lambda value: nest(value, *rest))
 
 
 def order_by(collection, keys, orders=None, reverse=False):
