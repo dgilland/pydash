@@ -4,6 +4,14 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- Add ``nest``.
+- Wrap non-iterables in a list in ``to_list`` instead of raising an exception. Thanks efenka_!
+- Add ``split_strings`` argument to ``to_list`` to control whether strings are coverted to a list (``split_strings=True``) or wrapped in a list (``split_strings=False``). Default is ``split_strings=True``. Thanks efenka_!
+
+
 v4.2.1 (2017-09-08)
 -------------------
 
@@ -946,3 +954,4 @@ v0.0.0 (2014-07-22)
 .. _tgriesser: https://github.com/tgriesser
 .. _shaunpatterson: https://github.com/shaunpatterson
 .. _beck3905_: https://github.com/beck3905
+.. _efenka: https://github.com/efenka
