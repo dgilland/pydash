@@ -18,3 +18,4 @@ Contributors
 - Tim Griesser, tgriesser@gmail.com, `tgriesser@github <https://github.com/tgriesser>`_
 - Shaun Patterson, `shaunpatterson@github <https://github.com/shaunpatterson>`_
 - Brian Beck, `beck3905@github <https://github.com/beck3905>`_
+- Frank Epperlein, `efenka@github <https://github.com/efenka>`_
