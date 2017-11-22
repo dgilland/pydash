@@ -440,6 +440,35 @@ def includes(collection, target, from_index=0):
     return target in collection
 
 
+def invoke_map(collection, path, *args, **kargs):
+    """Invokes the method at `path` of each element in `collection`, returning
+    a list of the results of each invoked method. Any additional arguments
+    are provided to each invoked method. If `path` is a function, it's invoked
+    for each element in `collection`.
+
+    Args:
+        collection (list|dict): Collection to iterate over.
+        path (str|func): String path to method to invoke or callable to invoke
+            for each element in `collection`.
+        args (optional): Arguments to pass to method call.
+        kargs (optional): Keyword arguments to pass to method call.
+
+    Returns:
+        list: List of results of invoking method of each item.
+
+    Example:
+
+        >>> items = [{'a': [{'b': 1}]}, {'a': [{'c': 2}]}]
+        >>> expected = [{'b': 1}.items(), {'c': 2}.items()]
+        >>> invoke_map(items, 'a[0].items') == expected
+        True
+
+    .. versionadded:: 4.0.0
+    """
+    return map_(collection,
+                lambda item: pyd.invoke(item, path, *args, **kargs))
+
+
 def key_by(collection, iteratee=None):
     """Creates an object composed of keys generated from the results of running
     each element of the collection through the given iteratee.
@@ -469,35 +498,6 @@ def key_by(collection, iteratee=None):
         ret[cbk(value)] = value
 
     return ret
-
-
-def invoke_map(collection, path, *args, **kargs):
-    """Invokes the method at `path` of each element in `collection`, returning
-    a list of the results of each invoked method. Any additional arguments
-    are provided to each invoked method. If `path` is a function, it's invoked
-    for each element in `collection`.
-
-    Args:
-        collection (list|dict): Collection to iterate over.
-        path (str|func): String path to method to invoke or callable to invoke
-            for each element in `collection`.
-        args (optional): Arguments to pass to method call.
-        kargs (optional): Keyword arguments to pass to method call.
-
-    Returns:
-        list: List of results of invoking method of each item.
-
-    Example:
-
-        >>> items = [{'a': [{'b': 1}]}, {'a': [{'c': 2}]}]
-        >>> expected = [{'b': 1}.items(), {'c': 2}.items()]
-        >>> invoke_map(items, 'a[0].items') == expected
-        True
-
-    .. versionadded:: 4.0.0
-    """
-    return map_(collection,
-                lambda item: pyd.invoke(item, path, *args, **kargs))
 
 
 def map_(collection, iteratee=None):
