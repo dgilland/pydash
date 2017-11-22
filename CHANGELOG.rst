@@ -21,8 +21,8 @@ New Features
 ++++++++++++
 
 - Support more iterator "hooks" in ``to_dict`` so non-iterators that expose an ``items()``, ``iteritems()``, or has ``__dict__`` attributes will be converted using those methods.
-- Support deep paths in ``omit`` and ``omit_by``.
-- Support deep paths in ``pick`` and ``pick_by``.
+- Support deep paths in ``omit`` and ``omit_by``. Thanks beck3905_!
+- Support deep paths in ``pick`` and ``pick_by``. Thanks beck3905_!
 
 Bug Fixes
 +++++++++
@@ -945,3 +945,4 @@ v0.0.0 (2014-07-22)
 .. _urbnjamesmi1: https://github.com/urbnjamesmi1
 .. _tgriesser: https://github.com/tgriesser
 .. _shaunpatterson: https://github.com/shaunpatterson
+.. _beck3905_: https://github.com/beck3905
