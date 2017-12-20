@@ -1225,8 +1225,11 @@ def set_with(obj, path, value, customizer=None):
         {0: {1: 'a'}}
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 4.3.1
+        Fixed bug where a callable `value` was called when being set.
     """
-    return update_with(obj, path, value, customizer=customizer)
+    return update_with(obj, path, pyd.constant(value), customizer=customizer)
 
 
 def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):

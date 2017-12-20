@@ -4,6 +4,18 @@ Changelog
 =========
 
 
+Bug Fixes
++++++++++
+
+- Fix ``set_with`` so that callable values are not called when being set. This bug also impacted the following functions by proxy:
+
+  - ``pick``
+  - ``pick_by``
+  - ``set_``
+  - ``transpose``
+  - ``zip_object_deep``
+
+
 v4.3.0 (2017-11-22)
 -------------------
 

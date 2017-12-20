@@ -506,6 +506,7 @@ def test_rename_keys(case, expected):
     (([1, 2, [3, 4, [5, 6]]], '[2].[2].[2]', 7), [1, 2, [3, 4, [5, 6, 7]]]),
     (({}, 'a.b[0].c', 1), {'a': {'b': [{'c': 1}]}}),
     (({}, 'a.b[0][0].c', 1), {'a': {'b': [[{'c': 1}]]}}),
+    (({}, 'a', tuple), {'a': tuple}),
 ])
 def test_set_(case, expected):
     assert _.set_(*case) == expected
@@ -513,6 +514,7 @@ def test_set_(case, expected):
 
 @parametrize('case,expected', [
     (({}, '[0][1]', 'a', lambda: {}), {0: {1: 'a'}}),
+    (({}, '[0][1]', dict, lambda: {}), {0: {1: dict}}),
 ])
 def test_set_with(case, expected):
     assert _.set_with(*case) == expected
