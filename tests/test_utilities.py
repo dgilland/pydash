@@ -219,6 +219,15 @@ def test_memoize(case, args, kargs, key):
     assert memoized.cache[key] == expected
 
 
+def test_memoize_decorator():
+
+    @_.memoize
+    def foo():
+        return object()
+
+    assert foo() == foo()
+
+
 @parametrize('case,args,kargs,expected', [
     (('a.b',), ({'a': {'b': lambda x, y: x + y}}, 1, 2), {}, 3),
     (('a.b',), ({'a': {'b': lambda x, y: x + y}}, 1,), {'y': 2}, 3),

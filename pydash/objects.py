@@ -8,6 +8,7 @@ from __future__ import absolute_import
 
 import copy
 from functools import partial
+from functools import wraps
 import math
 import re
 
@@ -1393,16 +1394,29 @@ def to_list(obj, split_strings=True):
         - Convert other iterables to list.
         - Byte objects are returned as single character strings in Python 3.
     """
+
     if isinstance(obj, list):
         return obj[:]
+
     elif isinstance(obj, dict):
         return obj.values()
+
     elif not split_strings and (isinstance(obj, string_types) or
                                 isinstance(obj, bytes)):
         return [obj]
+
     elif split_strings and isinstance(obj, bytes):
         # in python3 iterating over bytes gives integers instead of strings
         return list(chr(c) if isinstance(c, int) else c for c in obj)
+
+    elif callable(obj):
+
+        @wraps(obj)
+        def decorator(*arg, **kwargs):
+            return to_list(obj(*arg, **kwargs))
+
+        return decorator
+
     else:
         try:
             return list(obj)
