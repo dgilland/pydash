@@ -648,3 +648,14 @@ def test_sort_by(case, expected):
 ])
 def test_to_list(case, expected):
     assert set(_.to_list(*case)) == set(expected)
+
+
+def test_to_list_decorator():
+
+    @_.to_list
+    def foo():
+        yield "b"
+        yield "a"
+        yield "r"
+
+    assert foo() == ['b', 'a', 'r']
