@@ -56,6 +56,7 @@ from .arrays import (
     pull_at,
     push,
     remove,
+    repack,
     reverse,
     shift,
     slice_,

@@ -53,6 +53,7 @@ __all__ = (
     'pull_at',
     'push',
     'remove',
+    'repack',
     'reverse',
     'shift',
     'slice_',
@@ -1181,6 +1182,41 @@ def remove(array, predicate=None):
     array[:] = new_array
 
     return removed
+
+
+def repack(lhs, *items):
+    """Repacks an iterable for destructuring assignment
+    to provide extended iterable unpacking functionality in python 2.7
+
+    Args:
+        lhs (str): desired assignment structure, would be valid lhs in python 3
+        *items: items to repack for assignment
+
+    Returns:
+        tuple: items structured for assigment
+
+    >>> repack("a, *b, c", 1, 2, 3, 4)
+    (1, (2, 3), 4)
+    """
+    plan = [s.strip() for s in lhs.split(',')]
+    star = pyd.find_index(plan, lambda s: s.startswith('*'))
+
+    if star != pyd.find_last_index(plan, lambda s: s.startswith('*')):
+        raise ValueError("only one star allowed")
+
+    if -1 == star:
+        if len(items) != len(plan):
+            message_str = "need {} values to unpack (got {})"
+            raise ValueError(message_str.format(len(plan), len(items)))
+        return items
+
+    starlen = len(items) - len(plan) + 1
+    if starlen < 0:
+        message_str = "need minimum of {} values to unpack"
+        raise ValueError(message_str.format(len(plan) - 1))
+
+    mark = star + starlen
+    return items[:star] + (items[star:mark],) + items[mark:]
 
 
 def reverse(array):
