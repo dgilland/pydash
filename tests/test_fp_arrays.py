@@ -89,8 +89,7 @@ def test_difference_by(case, expected):
     (([1, 2, 3, 4], [], None), [1, 2, 3, 4]),
     (([1, 2, 3, 4], [2], [4], None), [1, 3]),
     (([{'a': 1}, {'a': 2, 'b': 2}], [{'a': 1}],
-        lambda a, b: a['a'] == b['a']),
-       [{'a': 2, 'b': 2}]),
+        lambda a, b: a['a'] == b['a']), [{'a': 2, 'b': 2}]),
 ])
 def test_difference_with(case, expected):
     a, b, c = repack("a, *b, c", *case)

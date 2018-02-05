@@ -1,1 +1,1 @@
-from .arrays import *
+from .arrays import *  # noqa

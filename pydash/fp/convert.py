@@ -15,7 +15,7 @@ _ = Placeholder
 
 def immutable(f):
     """
-    Create a transform to deep clone first argument to `f`.
+    A transform to deep clone first argument to `f`.
     """
     return lambda target, *args: f(pyd.clone_deep(target), *args)
 
@@ -24,7 +24,9 @@ def applycap(count):
     """
     Create a transform to cap number of arguments to `f`
     """
-    return lambda f: lambda *args: f(*args[:count])
+    def transform(f):
+        return lambda *args: f(*args[:count])
+    return transform
 
 
 def rearg_ex(order, interpose=False):
@@ -49,7 +51,9 @@ def rearg_ex(order, interpose=False):
         >>> rearg_ex([1, 2, 0], True)(lambda *a: a)('a', 'b', 'c', 'd')
         ('b', 'c', 'd', 'a')
     """
-    return lambda f: lambda *args: f(*getargs(order, interpose, args))
+    def transform(f):
+        return lambda *args: f(*getargs(order, interpose, args))
+    return transform
 
 
 def getargs(order, interpose, args):
