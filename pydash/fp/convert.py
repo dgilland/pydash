@@ -4,6 +4,13 @@ import re
 import pydash as pyd
 
 
+class Placeholder:
+    pass
+
+
+_ = Placeholder
+
+
 def immutable(f):
     return lambda target, *args: f(pyd.clone_deep(target), *args)
 
@@ -46,8 +53,38 @@ def getargs(order, interpose, args):
     return base + args[count:]
 
 
-def curry(count):
-    return lambda f: pyd.curry(f, count)
+def curry_ex(count):
+    """
+    Create a transform which creates an auto-curried function wrapper
+
+    The auto-curried function allows deferring an argument by passing the
+    placeholder `_` in its place.
+
+    Args:
+        count (int): the number of required arguments.  When `count` or more
+            arguments have been provided, the curried function is invoked.
+
+    Returns:
+        function: a curry transformer
+
+    Example:
+
+        >>> curry_ex(3)(lambda *a: a)('a')(_)('b', 'c')
+        ('a', 'c', 'b')
+    """
+    def _curry(f, *s):
+        def g(*args):
+            agg = s + args
+            if len(agg) < count + agg.count(_):
+                return _curry(f, *agg)
+            return f(*replace_args(agg[:count], agg[count:]))
+        return g
+    return _curry
+
+
+def replace_args(a, b):
+    i = iter(b)
+    return tuple(next(i) if v is _ else v for v in a) + tuple(i)
 
 
 def convert(order, f, mutates=None, cap=False, interpose=True):
@@ -60,6 +97,6 @@ def convert(order, f, mutates=None, cap=False, interpose=True):
         immutable if mutates else None,
         applycap(count) if cap and not rearg else None,
         rearg_ex(order, interpose and not cap) if rearg else None,
-        curry(count),
+        curry_ex(count),
     ])
     return pyd.flow(*transforms)(f)
