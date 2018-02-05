@@ -12,15 +12,15 @@ def test_immutable():
     assert a == [1, 2]
 
 
+@parametrize('count', range(1, 6))
+def test_applycap(count):
+    f = lambda *args: len(args)
+    assert convert.applycap(count)(f)(*range(5)) == count
+
+
 @parametrize('case,expected', [
     (([1, 2, 0], False, (1, 2, 3, 4, 5)), (2, 3, 1, 4, 5)),
     (([1, 2, 0], True, (1, 2, 3, 4, 5)), (2, 3, 4, 5, 1)),
 ])
 def test_getargs(case, expected):
     assert convert.getargs(*case) == expected
-
-
-@parametrize('count', range(1, 6))
-def test_applycap(count):
-    f = lambda *args: len(args)
-    assert convert.applycap(count)(f)(*range(5)) == count
