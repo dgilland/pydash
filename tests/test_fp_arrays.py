@@ -72,9 +72,9 @@ def test_difference(case, expected):
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4], [], None), [1, 2, 3, 4]),
-    (([1, 2, 3, 4], [2], [4], None), [1, 3, 4]),    # cap
+    (([1, 2, 3, 4], [2], [4], None), [1, 3]),
     (([1.2, 1.6, 2.8], [2.1], round), [1.2, 2.8]),
-    (([1.2, 1.6, 2.8], [2.1], [3.2], round), [1.2, 2.8]),   # cap
+    (([1.2, 1.6, 2.8], [2.1], [3.2], round), [1.2]),
     (([{'a': 1}, {'a': 2, 'b': 2}], [{'a': 1}], 'a'), [{'a': 2, 'b': 2}]),
 ])
 def test_difference_by(case, expected):
@@ -87,7 +87,7 @@ def test_difference_by(case, expected):
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4], [], None), [1, 2, 3, 4]),
-    (([1, 2, 3, 4], [2], [4], None), [1, 3, 4]),    # cap
+    (([1, 2, 3, 4], [2], [4], None), [1, 3]),
     (([{'a': 1}, {'a': 2, 'b': 2}], [{'a': 1}],
         lambda a, b: a['a'] == b['a']),
        [{'a': 2, 'b': 2}]),
@@ -261,12 +261,11 @@ def test_intersection(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], [101, 2, 1, 10], [2, 1], None), [1, 2]),
-    (([1, 2, 3], [101, 2, 1, 10], [2, 1], lambda a: 1 if a < 10 else 0), [1]),
+    (([1, 2, 3], [101, 2, 1, 10], [2], None), [2]),
+    (([1, 2, 3], [101, 2, 1, 10], lambda a: 1 if a < 10 else 0), [1]),
     (([{'a': 1}, {'a': 2}, {'a': 3}], [{'a': 2}], 'a'), [{'a': 2}])
 ])
 def test_intersection_by(case, expected):
-    # intersection_by is capped to three arguments
     a, b, c = repack("a, *b, c", *case)
     assert fp.intersection_by(c)(a)(*b) == expected
     assert fp.intersection_by(c)(a, *b) == expected
@@ -275,14 +274,14 @@ def test_intersection_by(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], [101, 2, 1, 10], [2, 1], None), [1, 2]),
+    (([1, 2, 3], [101, 2, 1, 10], None), [1, 2]),
+    (([1, 2, 3], [101, 2, 1, 10], [1], None), [1]),
     (([], [101, 2, 1, 10], [2, 1], None), []),
-    ((['A', 'b', 'cC'], ['a', 'cc'], ['A', 'CC'],
+    ((['A', 'b', 'cC'], ['a', 'cc'],
       lambda a, b: a.lower() == b.lower()),
      ['A', 'cC'])
 ])
 def test_intersection_with(case, expected):
-    # intersection_with is capped to three arguments
     a, b, c = repack("a, *b, c", *case)
     assert fp.intersection_with(c)(a)(*b) == expected
     assert fp.intersection_with(c)(a, *b) == expected
@@ -356,6 +355,7 @@ def test_nth(case, expected):
     (([1, 2, 3, 1, 2, 3], 2), [1, 3, 1, 3])
 ])
 def test_pull(case, expected):
+    # pull is capped to two arguments
     a, b = case
     assert fp.pull(b)(a) == expected
     assert fp.pull(b, a) == expected
@@ -608,27 +608,29 @@ def test_union(case, expected):
     (([1, 2, 3], [2, 3, 4], lambda x: x % 10), [1, 2, 3, 4]),
     (([1, 2, 3], [2, 3, 4], lambda x: x % 2), [1, 2]),
     (([11, 22, 33], [6], None), [11, 22, 33, 6]),
+    (([11, 22, 33], [6], [8], None), [11, 22, 33, 6, 8]),
     (([11, 22, 33], [], None), [11, 22, 33]),
 ])
 def test_union_by(case, expected):
-    a, b, c = case
-    assert fp.union_by(c)(a)(b) == expected
-    assert fp.union_by(c)(a, b) == expected
-    assert fp.union_by(c, a)(b) == expected
-    assert fp.union_by(c, a, b) == expected
+    a, b, c = repack("a, *b, c", *case)
+    assert fp.union_by(c)(a)(*b) == expected
+    assert fp.union_by(c)(a, *b) == expected
+    assert fp.union_by(c, a)(*b) == expected
+    assert fp.union_by(c, a, *b) == expected
 
 
 @parametrize('case,expected', [
     (([11, 22, 33], [22, 33, 44], None), [11, 22, 33, 44]),
     (([11, 22, 33], [], None), [11, 22, 33]),
+    (([11, 22, 33], [], [26], [48], None), [11, 22, 33, 26, 48]),
     (([1, 2, 3], [2, 3, 4], lambda a, b: (a % 2) == (b % 2)), [1, 2])
 ])
 def test_union_with(case, expected):
-    a, b, c = case
-    assert fp.union_with(c)(a)(b) == expected
-    assert fp.union_with(c)(a, b) == expected
-    assert fp.union_with(c, a)(b) == expected
-    assert fp.union_with(c, a, b) == expected
+    a, b, c = repack("a, *b, c", *case)
+    assert fp.union_with(c)(a)(*b) == expected
+    assert fp.union_with(c)(a, *b) == expected
+    assert fp.union_with(c, a)(*b) == expected
+    assert fp.union_with(c, a, *b) == expected
 
 
 @parametrize('case,expected', [
@@ -693,25 +695,26 @@ def test_xor(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], [5, 4], lambda val: val % 3), [3])
+    (([1, 2, 3], [5, 4], lambda val: val % 3), [3]),
+    (([1, 2, 3], [5, 4], [3], lambda val: val % 3), []),
 ])
 def test_xor_by(case, expected):
-    a, b, c = case
-    assert fp.xor_by(c)(a)(b) == expected
-    assert fp.xor_by(c)(a, b) == expected
-    assert fp.xor_by(c, a)(b) == expected
-    assert fp.xor_by(c, a, b) == expected
+    a, b, c = repack("a, *b, c", *case)
+    assert fp.xor_by(c)(a)(*b) == expected
+    assert fp.xor_by(c)(a, *b) == expected
+    assert fp.xor_by(c, a)(*b) == expected
+    assert fp.xor_by(c, a, *b) == expected
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3], [5, 4], lambda a, b: a <= b), [5, 4])
+    (([1, 2, 3], [5, 4], lambda a, b: a <= b), [5, 4]),
 ])
 def test_xor_with(case, expected):
-    a, b, c = case
-    assert fp.xor_with(c)(a)(b) == expected
-    assert fp.xor_with(c)(a, b) == expected
-    assert fp.xor_with(c, a)(b) == expected
-    assert fp.xor_with(c, a, b) == expected
+    a, b, c = repack("a, *b, c", *case)
+    assert fp.xor_with(c)(a)(*b) == expected
+    assert fp.xor_with(c)(a, *b) == expected
+    assert fp.xor_with(c, a)(*b) == expected
+    assert fp.xor_with(c, a, *b) == expected
 
 
 @parametrize('case,expected', [
@@ -747,10 +750,11 @@ def test_zip_object_deep(case, expected):
 
 @parametrize('case,expected', [
     (([1, 2], [3, 4], pydash.add), [4, 6]),
+    (([1, 2], [3, 4], [5, 6], pydash.add), [9, 12]),
 ])
 def test_zip_with(case, expected):
-    a, b, c = case
-    assert fp.zip_with(c)(a)(b) == expected
-    assert fp.zip_with(c)(a, b) == expected
-    assert fp.zip_with(c, a)(b) == expected
-    assert fp.zip_with(c, a, b) == expected
+    a, b, c = repack("a, *b, c", *case)
+    assert fp.zip_with(c)(a)(*b) == expected
+    assert fp.zip_with(c)(a, *b) == expected
+    assert fp.zip_with(c, a)(*b) == expected
+    assert fp.zip_with(c, a, *b) == expected

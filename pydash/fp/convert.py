@@ -1,3 +1,4 @@
+import operator
 import re
 
 import pydash as pyd
@@ -16,8 +17,17 @@ def applycap(count):
     return _applycap
 
 
-def rearg(order):
-    return lambda f: pyd.rearg(f, order)
+def rearg_ex(order, extended=False):
+    return lambda f: lambda *args: f(*getargs(order, extended, args))
+
+
+def getargs(order, extended, args):
+    count = len(order)
+    base = operator.itemgetter(*order)(args)
+    if extended and count < len(args):
+        index = order.index(max(order)) + 1
+        return base[:index] + args[count:] + base[index:]
+    return base
 
 
 def curry(count):
@@ -32,7 +42,7 @@ def convert(order, f, mutates=None, cap=False):
     transforms = pyd.compact([
         immutable if mutates else None,
         applycap(count) if cap else None,
-        rearg(order) if order != sorted(order) else None,
+        rearg_ex(order, not cap) if order != sorted(order) else None,
         curry(count),
     ])
     return pyd.flow(*transforms)(f)
