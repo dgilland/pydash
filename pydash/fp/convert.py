@@ -9,12 +9,7 @@ def immutable(f):
 
 
 def applycap(count):
-    def _applycap(f):
-        def g(*args):
-            newargs = args[:count]
-            return f(*newargs)
-        return g
-    return _applycap
+    return lambda f: lambda *args: f(*args[:count])
 
 
 def rearg_ex(order, extended=False):
@@ -36,13 +31,14 @@ def curry(count):
 
 def convert(order, f, mutates=None, cap=False):
     count = len(order)
+    rearg = order != sorted(order)
     if mutates is None:
         # guess whether or not we need to deep clone the arguments
         mutates = re.search(r'\bmodif[iy]', f.__doc__ or "", re.I)
     transforms = pyd.compact([
         immutable if mutates else None,
-        applycap(count) if cap else None,
-        rearg_ex(order, not cap) if order != sorted(order) else None,
+        applycap(count) if cap and not rearg else None,
+        rearg_ex(order, not cap) if rearg else None,
         curry(count),
     ])
     return pyd.flow(*transforms)(f)

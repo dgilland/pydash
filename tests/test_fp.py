@@ -18,3 +18,9 @@ def test_immutable():
 ])
 def test_getargs(case, expected):
     assert convert.getargs(*case) == expected
+
+
+@parametrize('count', range(1, 6))
+def test_applycap(count):
+    f = lambda *args: len(args)
+    assert convert.applycap(count)(f)(*range(5)) == count
