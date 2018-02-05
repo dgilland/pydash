@@ -16,20 +16,20 @@ def rearg_ex(order, extended=False):
     return lambda f: lambda *args: f(*getargs(order, extended, args))
 
 
-def getargs(order, extended, args):
+def getargs(order, interpose, args):
     count = len(order)
     base = operator.itemgetter(*order)(args)
-    if extended and count < len(args):
+    if interpose:
         index = order.index(max(order)) + 1
         return base[:index] + args[count:] + base[index:]
-    return base
+    return base + args[count:]
 
 
 def curry(count):
     return lambda f: pyd.curry(f, count)
 
 
-def convert(order, f, mutates=None, cap=False):
+def convert(order, f, mutates=None, cap=False, interpose=True):
     count = len(order)
     rearg = order != sorted(order)
     if mutates is None:
@@ -38,7 +38,7 @@ def convert(order, f, mutates=None, cap=False):
     transforms = pyd.compact([
         immutable if mutates else None,
         applycap(count) if cap and not rearg else None,
-        rearg_ex(order, not cap) if rearg else None,
+        rearg_ex(order, interpose and not cap) if rearg else None,
         curry(count),
     ])
     return pyd.flow(*transforms)(f)

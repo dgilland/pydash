@@ -93,7 +93,7 @@ flatten_deep = pyd.flatten_deep
 flatten_depth = convert([1, 0], pyd.flatten_depth)
 from_pairs = pyd.from_pairs
 head = pyd.head
-index_of = convert([1, 0], pyd.index_of)
+index_of = convert([1, 0], pyd.index_of, interpose=False)
 initial = pyd.initial
 intercalate = convert([1, 0], pyd.intercalate)
 interleave = convert([0, 1], pyd.interleave)
@@ -102,7 +102,7 @@ intersection_by = convert([1, 2, 0], pyd.intersection_by)
 intersection_with = convert([1, 2, 0], pyd.intersection_with)
 intersperse = convert([1, 0], pyd.intersperse)
 last = pyd.last
-last_index_of = convert([1, 0], pyd.last_index_of)
+last_index_of = convert([1, 0], pyd.last_index_of, interpose=False)
 mapcat = convert([1, 0], pyd.mapcat)
 nth = convert([1, 0], pyd.nth)
 pull = convert([1, 0], pyd.pull, cap=True)
