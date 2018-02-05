@@ -5,17 +5,25 @@ import pydash as pyd
 
 
 class Placeholder:
-    pass
+    """
+    Placeholder for `curry_ex`
+    """
 
 
 _ = Placeholder
 
 
 def immutable(f):
+    """
+    Create a transform to deep clone first argument to `f`.
+    """
     return lambda target, *args: f(pyd.clone_deep(target), *args)
 
 
 def applycap(count):
+    """
+    Create a transform to cap number of arguments to `f`
+    """
     return lambda f: lambda *args: f(*args[:count])
 
 
@@ -87,7 +95,23 @@ def replace_args(a, b):
     return tuple(next(i) if v is _ else v for v in a) + tuple(i)
 
 
-def convert(order, f, mutates=None, cap=False, interpose=True):
+def convert(order, f, cap=False, mutates=None, interpose=True):
+    """
+    Create fp variant of a function
+
+    Creates auto-curried, iteratee-first/data-last, non-mutating variant
+    of a function.
+
+    Args:
+        order (list): indices by which to rearrange function arguments
+        f (func): the function to wrap
+        cap (bool): if True, limits parameters to length of `order`
+        mutates (bool): if True, forces deep-clone of first argument
+        interpose(bool): if True, interposes extra argments
+
+    Returns:
+        function: fp variant of `f`
+    """
     count = len(order)
     rearg = order != sorted(order)
     if mutates is None:
