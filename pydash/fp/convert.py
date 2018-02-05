@@ -12,8 +12,29 @@ def applycap(count):
     return lambda f: lambda *args: f(*args[:count])
 
 
-def rearg_ex(order, extended=False):
-    return lambda f: lambda *args: f(*getargs(order, extended, args))
+def rearg_ex(order, interpose=False):
+    """
+    Create a transform which rearranges arguments to function
+
+    Args:
+        order (list): indices of arguments in order they should be passed
+        interpose (bool): determines how extra arguments are handled:
+
+            True -  additional arguments will be passed after
+            the last argument passed to the *new* function
+
+            True -  additional arguments will be passed at
+            the end of the argument list to the *original* function
+
+    Returns:
+        function: a rearg transformer
+
+    Example:
+
+        >>> rearg_ex([1, 2, 0], True)(lambda *a: a)('a', 'b', 'c', 'd')
+        ('b', 'c', 'd', 'a')
+    """
+    return lambda f: lambda *args: f(*getargs(order, interpose, args))
 
 
 def getargs(order, interpose, args):
