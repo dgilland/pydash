@@ -4,13 +4,40 @@ import re
 import pydash as pyd
 
 
-class Placeholder:
-    """
-    Placeholder for `curry_ex`
-    """
+"""
+Utilities for creating fp variants of pydash functions
+"""
 
 
-_ = Placeholder
+def convert(order, f, cap=False, mutates=None, interpose=True):
+    """
+    Create fp variant of a function
+
+    Creates auto-curried, iteratee-first/data-last, non-mutating variant
+    of a function.
+
+    Args:
+        order (list): indices by which to rearrange function arguments
+        f (func): the function to wrap
+        cap (bool): if True, limits parameters to length of `order`
+        mutates (bool): if True, forces deep-clone of first argument
+        interpose(bool): if True, interposes extra argments
+
+    Returns:
+        function: fp variant of `f`
+    """
+    count = len(order)
+    rearg = order != sorted(order)
+    if mutates is None:
+        # guess whether or not we need to deep clone the arguments
+        mutates = re.search(r'\bmodif[iy]', f.__doc__ or "", re.I)
+    transforms = pyd.compact([
+        immutable if mutates else None,
+        applycap(count) if cap and not rearg else None,
+        rearg_ex(order, interpose and not cap) if rearg else None,
+        curry_ex(count),
+    ])
+    return pyd.flow(*transforms)(f)
 
 
 def immutable(f):
@@ -65,6 +92,15 @@ def getargs(order, interpose, args):
     return base + args[count:]
 
 
+class Placeholder:
+    """
+    Placeholder for `curry_ex`
+    """
+
+
+_ = Placeholder
+
+
 def curry_ex(count):
     """
     Create a transform which creates an auto-curried function wrapper
@@ -97,34 +133,3 @@ def curry_ex(count):
 def replace_args(a, b):
     i = iter(b)
     return tuple(next(i) if v is _ else v for v in a) + tuple(i)
-
-
-def convert(order, f, cap=False, mutates=None, interpose=True):
-    """
-    Create fp variant of a function
-
-    Creates auto-curried, iteratee-first/data-last, non-mutating variant
-    of a function.
-
-    Args:
-        order (list): indices by which to rearrange function arguments
-        f (func): the function to wrap
-        cap (bool): if True, limits parameters to length of `order`
-        mutates (bool): if True, forces deep-clone of first argument
-        interpose(bool): if True, interposes extra argments
-
-    Returns:
-        function: fp variant of `f`
-    """
-    count = len(order)
-    rearg = order != sorted(order)
-    if mutates is None:
-        # guess whether or not we need to deep clone the arguments
-        mutates = re.search(r'\bmodif[iy]', f.__doc__ or "", re.I)
-    transforms = pyd.compact([
-        immutable if mutates else None,
-        applycap(count) if cap and not rearg else None,
-        rearg_ex(order, interpose and not cap) if rearg else None,
-        curry_ex(count),
-    ])
-    return pyd.flow(*transforms)(f)
