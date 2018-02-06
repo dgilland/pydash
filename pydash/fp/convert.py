@@ -74,6 +74,10 @@ def rearg_ex(order, interpose=False):
     Returns:
         function: a rearg transformer
 
+    Warning:
+        It is assumed that max(order) + 1 == len(order)
+        (i.e. there are no gaps in the argument list)
+
     Example:
 
         >>> rearg_ex([1, 2, 0], True)(lambda *a: a)('a', 'b', 'c', 'd')
