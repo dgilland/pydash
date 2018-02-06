@@ -1,7 +1,10 @@
 import ast
 import operator
 
-import astor
+try:
+    import astor
+except ImportError:
+    astor = None
 
 """
 Source code manipulation for rearranging fp variant examples

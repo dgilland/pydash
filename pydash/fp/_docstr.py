@@ -120,6 +120,8 @@ def cap_note(cap, func_name, order, **_):
 
 
 def convert_example(section, func_name, args, inverse, **_):
+    if not _code.astor:
+        return []
     arg_re = re.compile(r'\w+')
     arg_names = [arg_re.search(a[0]).group() for a in args]
     pos = len(code_prefix)
