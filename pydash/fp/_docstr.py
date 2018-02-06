@@ -87,8 +87,9 @@ def arguments(sections):
 def arity(order, **_):
     return ['Arity: {}'.format(len(order)), '']
 
-def new_args(order, args, **_):
-    return [ARGS] + pyd.flatten(rearg(order, args)) + ['']
+
+def new_args(inverse, args, **_):
+    return [ARGS] + pyd.flatten(rearg(inverse, args)) + ['']
 
 
 def rearg(order, args):
