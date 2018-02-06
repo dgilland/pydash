@@ -4,6 +4,8 @@ import re
 
 import pydash as pyd
 
+from . import _docstr
+
 
 """
 Utilities for creating fp variants of pydash functions
@@ -38,7 +40,10 @@ def convert(order, f, cap=False, mutates=None, interpose=True):
         rearg_ex(order, interpose and not cap) if rearg else None,
         curry_ex(count),
     ])
-    return pyd.flow(*transforms)(f)
+    g = pyd.flow(*transforms)(f)
+    g.__name__ = f.__name__
+    g.__doc__ = _docstr.convert(f.__name__, order, f.__doc__)
+    return g
 
 
 def immutable(f):
