@@ -690,7 +690,7 @@ def interleave(*arrays):
     Args:
         arrays (list): Lists to interleave.
 
-    Retruns:
+    Returns:
         list: Interleaved list.
 
     Example:
