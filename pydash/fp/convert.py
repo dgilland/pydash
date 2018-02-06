@@ -42,7 +42,7 @@ def convert(order, f, cap=False, mutates=None, interpose=True):
     ])
     g = pyd.flow(*transforms)(f)
     g.__name__ = f.__name__
-    g.__doc__ = _docstr.convert(f.__name__, order, f.__doc__)
+    g.__doc__ = _docstr.convert(f.__name__, order, cap, f.__doc__)
     return g
 
 

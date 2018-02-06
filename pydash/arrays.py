@@ -1195,8 +1195,10 @@ def repack(lhs, *items):
     Returns:
         tuple: items structured for assigment
 
-    >>> repack("a, *b, c", 1, 2, 3, 4)
-    (1, (2, 3), 4)
+    Example:
+
+        >>> repack("a, *b, c", 1, 2, 3, 4)
+        (1, (2, 3), 4)
     """
     plan = [s.strip() for s in lhs.split(',')]
     star = pyd.find_index(plan, lambda s: s.startswith('*'))

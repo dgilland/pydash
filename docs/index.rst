@@ -30,6 +30,7 @@ Includes links to source code.
     :maxdepth: 2
 
     api
+    fp
 
 
 Project Info

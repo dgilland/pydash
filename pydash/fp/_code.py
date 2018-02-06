@@ -34,7 +34,7 @@ class Reorder(ast.NodeTransformer):
         if len(args_dict) < 2:
             return node
         if len(args_dict) < len(self.order):
-            return None
+            raise TypeError('too few arguments')
         args = [args_dict.get(name) for name in self.arg_names]
         node.args = operator.itemgetter(*self.order)(args)
         node.keywords = []
