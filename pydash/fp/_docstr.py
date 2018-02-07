@@ -88,15 +88,15 @@ def arity(order, **_):
     return ['Arity: {}'.format(len(order)), '']
 
 
-def new_args(inverse, args, **_):
-    return [ARGS] + pyd.flatten(rearg(inverse, args)) + ['']
+def new_args(**context):
+    return [ARGS] + pyd.flatten(rearg(**context)) + ['']
 
 
-def rearg(order, args):
-    if len(args) < 2 or len(args) <= max(order):
+def rearg(inverse, args, **_):
+    if len(args) < 2 or len(args) <= max(inverse):
         return args
-    count = len(order)
-    base = operator.itemgetter(*order)(args)
+    count = len(inverse)
+    base = operator.itemgetter(*inverse)(args)
     return [required(a) for a in base] + args[count:]
 
 
