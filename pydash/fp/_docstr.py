@@ -153,4 +153,7 @@ def swallow_invalid(i):
 
 
 opt_re = re.compile(r'(^    \*?\w+ +\([\w,| ]+), optional(\):)')
-required = lambda arg: [opt_re.sub(r'\1\2', arg[0])] + arg[1:]
+
+
+def required(arg):
+    return [opt_re.sub(r'\1\2', arg[0])] + arg[1:]
