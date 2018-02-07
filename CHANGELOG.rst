@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+Bug Fixes
++++++++++
+
+- Fix issue in ``defaults_deep`` where sources with non-dict values would raise an exception due to assumption that object was always a dict.
+
+
 v4.3.1 (2017-12-19)
 -------------------
 

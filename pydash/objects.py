@@ -351,7 +351,8 @@ def defaults_deep(obj, *sources):
     .. versionadded:: 3.3.0
     """
     def setter(obj, key, value):
-        obj.setdefault(key, value)
+        if hasattr(obj, 'setdefault'):
+            obj.setdefault(key, value)
 
     return merge_with(obj, *sources, _setter=setter)
 

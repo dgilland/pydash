@@ -102,7 +102,21 @@ def test_defaults(case, expected):
 
 @parametrize('case,expected', [
     (({'user': {'name': 'barney'}}, {'user': {'name': 'fred', 'age': 36}}),
-     {'user': {'name': 'barney', 'age': 36}})
+     {'user': {'name': 'barney', 'age': 36}}),
+    (({}, {'a': {'b': ['c']}}, {'a': {'b': ['d']}}),
+     {'a': {'b': ['c']}}),
+    (({'a': {'b': [{'d': 'e'}]}},
+      {'a': {'b': [{'d': 'f'}]}},
+      {'a': {'b': [{'g': 'h'}]}}),
+     {'a': {'b': [{'d': 'e', 'g': 'h'}]}}),
+    (({'a': {'b': [{'d': 'e'}]}},
+      {'a': {'b': [{'d': 'f'}, {'g': 'h'}]}},
+      {'a': {'b': [{'i': 'j'}]}}),
+     {'a': {'b': [{'d': 'e', 'i': 'j'}]}}),
+    (({'a': {'b': [{'d': 'e'}, {'x': 'y'}]}},
+      {'a': {'b': [{'d': 'f'}, {'g': 'h'}]}},
+      {'a': {'b': [{'i': 'j'}]}}),
+     {'a': {'b': [{'d': 'e', 'i': 'j'}, {'x': 'y', 'g': 'h'}]}}),
 ])
 def test_defaults_deep(case, expected):
     assert _.defaults_deep(*case) == expected
