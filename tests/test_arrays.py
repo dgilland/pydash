@@ -420,6 +420,20 @@ def test_repack(case, expected):
     assert _.repack(*case) == expected
 
 
+def test_repack_exceptions():
+    with pytest.raises(ValueError):
+        _.repack("*a, *b", 1, 2, 3, 4)
+
+    with pytest.raises(ValueError):
+        _.repack("a, b", 1)
+
+    with pytest.raises(ValueError):
+        _.repack("a, b", 1, 2, 3)
+
+    with pytest.raises(ValueError):
+        _.repack("a, *b, c", 1)
+
+
 @parametrize('case,expected', [
     ([1, 2, 3, 4], [4, 3, 2, 1]),
     ('abcdef', 'fedcba'),
