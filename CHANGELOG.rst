@@ -8,6 +8,7 @@ Bug Fixes
 +++++++++
 
 - Fix issue in ``defaults_deep`` where sources with non-dict values would raise an exception due to assumption that object was always a dict.
+- Fix issue in ``curry`` where too many arguments would be passed to the curried function when evaluating function if too many arguments used in last function call.
 - Workaround issue in Python 2.7 where callable classes used as callbacks were always passed the full count of arguments even when the callable class only accept a subset of arguments.
 
 

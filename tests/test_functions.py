@@ -88,6 +88,20 @@ def test_curry(case, arglist, expected):
         assert ret == expected
 
 
+def test_curry_arity_max_from_func():
+    def func(data, accum, id):
+        accum[id] = _.reduce_(data, lambda total, n: total + n)
+        return accum
+
+    ids = [1]
+    data = [1, 2]
+
+    curried_func_with_data = _.curry(func)(data)
+    result = _.reduce_(ids, curried_func_with_data, {})
+
+    assert result == {1: 3}
+
+
 @parametrize('case,arglist,expected', [
     ((lambda a, b, c: [a, b, c],), [(1, 2, 3)], [1, 2, 3]),
     ((lambda a, b, c: [a, b, c],), [(2, 3), (1,)], [1, 2, 3]),

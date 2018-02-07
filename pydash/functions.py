@@ -143,6 +143,8 @@ class Curry(object):
         kargs.update(self.kargs)
 
         if (len(args) + len(kargs)) >= self.arity:
+            args_arity = self.arity - len(kargs)
+            args = args[:(args_arity if args_arity > 0 else 0)]
             curried = self.func(*args, **kargs)
         else:
             # NOTE: Use self.__class__ so that subclasses will use their own
