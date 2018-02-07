@@ -641,6 +641,7 @@ def test_update(case, expected):
 @parametrize('case,expected', [
     (({}, '[0][1]', _.constant('a'), lambda *_: {}), {0: {1: 'a'}}),
     (({}, '[0][1]', _.constant('a'), {}), {0: {1: 'a'}}),
+    (({}, '[0][1]', 'a', {}), {0: {1: 'a'}}),
 ])
 def test_update_with(case, expected):
     assert _.update_with(*case) == expected
