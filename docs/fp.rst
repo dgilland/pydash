@@ -45,7 +45,7 @@ In some cases, a default parameter value can be specified by passing
 Rearranged Arguments
 =====================
 
-Method arguments are rearranged to facilitate composition.
+Function arguments are rearranged to facilitate composition.
 In most cases, iteratee is given first and data last.
 
 
@@ -78,6 +78,19 @@ Iteratee Capping
 In contradistinction to ``lodash/fp``, iteratees in ``pydash.fp`` are *not*
 capped.
 
+
+Documentation
+==============
+
+The documentation for fp variant functions is automatically generated
+from the pydash docstrings.  All effort is made to ensure that the
+conversion is complete and correct.  Please report any errors.
+
+astor_ is used in converting the code examples.  This package is not a hard
+requirement for using the library, but if it is not available, the examples
+will be left out of the documentation.
+
+.. _astor: https://pypi.python.org/pypi/astor
 
 Arrays
 ======
