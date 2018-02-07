@@ -44,23 +44,38 @@ def getargcount(iteratee, maxargs):
         # set by initator.
         return iteratee._argcount
 
-    argspec = None
-
     if isinstance(iteratee, type) or pyd.is_builtin(iteratee):
         # Only pass single argument to type iteratees or builtins.
         argcount = 1
     else:
         try:
-            argspec = getfullargspec(iteratee)
-
-            if argspec and not argspec.varargs:
-                # Use inspected arg count.
-                argcount = len(argspec.args)
-            else:
-                # Assume all args are handleable
-                argcount = maxargs
+            argcount = _getfullargspec(iteratee, maxargs)
         except TypeError:  # pragma: no cover
             argcount = 1
+
+            # PY2: Python2.7 throws a TypeError on classes that have __call__()
+            # defined but Python3 doesn't. So if we fail with TypeError here,
+            # try iteratee as iteratee.__call__.
+            if hasattr(iteratee, '__call__'):
+                iteratee = iteratee.__call__
+
+                try:
+                    argcount = _getfullargspec(iteratee, maxargs)
+                except TypeError:
+                    pass
+
+    return argcount
+
+
+def _getfullargspec(iteratee, maxargs):
+    argspec = getfullargspec(iteratee)
+
+    if argspec and not argspec.varargs:
+        # Use inspected arg count.
+        argcount = len(argspec.args)
+    else:
+        # Assume all args are handleable
+        argcount = maxargs
 
     return argcount
 
