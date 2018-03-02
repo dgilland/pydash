@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+Bug Fixes
++++++++++
+
+- Fix regression in ``v4.3.2`` introduced by the support added for callable class callbacks that changed the handling of callbacks that could not be inspected. Prior to ``v4.3.2``, these callbacks would default to being passed a single callback argument, but with ``v4.3.2`` these callbacks would be passed the full set of callback arguments which could result an exception being raised due to the callback not supporting that many arguments.
+
+
 v4.3.2 (2018-02-06)
 -------------------
 

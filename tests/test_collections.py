@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+from operator import itemgetter
 
 import pydash as _
 
@@ -208,7 +209,13 @@ def test_key_by(case, expected):
       'level1.level2.level3.value'),
      [1, 2, 3, 4, None, None],
      False),
-    (([[0, 1], [2, 3], [4, 5]], 1), [1, 3, 5], False)
+    (([[0, 1], [2, 3], [4, 5]], 1), [1, 3, 5], False),
+    (([{'a': 1, 'b': 2, 'c': -1},
+       {'a': 3, 'b': 4, 'c': -1},
+       {'a': 5, 'b': 6, 'c': -1}],
+      itemgetter('a', 'b')),
+     [(1, 2), (3, 4), (5, 6)],
+     False)
 ])
 def test_map_(case, expected, sort_results):
     actual = _.map_(*case)

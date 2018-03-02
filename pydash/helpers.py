@@ -10,7 +10,7 @@ from operator import attrgetter, itemgetter
 import warnings
 
 import pydash as pyd
-from ._compat import iteritems, getfullargspec, string_types
+from ._compat import PY2, iteritems, getfullargspec, string_types
 
 
 class _NoValue(object):
@@ -48,19 +48,17 @@ def getargcount(iteratee, maxargs):
         # Only pass single argument to type iteratees or builtins.
         argcount = 1
     else:
+        argcount = 1
+
         try:
             argcount = _getfullargspec(iteratee, maxargs)
         except TypeError:  # pragma: no cover
-            argcount = 1
-
             # PY2: Python2.7 throws a TypeError on classes that have __call__()
             # defined but Python3 doesn't. So if we fail with TypeError here,
             # try iteratee as iteratee.__call__.
-            if hasattr(iteratee, '__call__'):
-                iteratee = iteratee.__call__
-
+            if PY2 and hasattr(iteratee, '__call__'):
                 try:
-                    argcount = _getfullargspec(iteratee, maxargs)
+                    argcount = _getfullargspec(iteratee.__call__, maxargs)
                 except TypeError:
                     pass
 
