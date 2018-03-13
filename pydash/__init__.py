@@ -419,6 +419,7 @@ from .utilities import (
     range_,
     range_right,
     result,
+    retry,
     stub_list,
     stub_dict,
     stub_false,

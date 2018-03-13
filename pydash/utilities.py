@@ -8,14 +8,15 @@ from __future__ import absolute_import, division
 
 from collections import namedtuple
 from datetime import datetime
-from functools import partial
+from functools import partial, wraps
 import math
 from random import uniform, randint
 import re
+import time
 
 import pydash as pyd
 from .helpers import callit, getargcount, base_get, iterator, NoValue
-from ._compat import _range, iteritems, string_types
+from ._compat import _range, iteritems, number_types, string_types
 
 
 __all__ = (
@@ -45,6 +46,7 @@ __all__ = (
     'range_',
     'range_right',
     'result',
+    'retry',
     'stub_list',
     'stub_dict',
     'stub_false',
@@ -889,6 +891,102 @@ def result(obj, key, default=None):
         ret = ret()
 
     return ret
+
+
+def retry(attempts=3,
+          delay=0.5,
+          scale=2.0,
+          max_delay=150,
+          exceptions=(Exception,),
+          on_exception=None):
+    """Decorator that retries a function multiple times if it raises an
+    exception with an optional delay between each attempt.
+
+    When a `delay` is supplied, there will be a sleep period in between retry
+    attempts. The first delay time will always be equal to `delay`. After
+    subsequent retries, the delay time will be scaled by `scale` up to
+    `max_delay`. If `max_delay` is ``0``, then `delay` can increase unbounded.
+
+    Args:
+        attempts (int, optional): Number of retry attempts. Defaults to ``3``.
+        delay (float, optional): Base amount of seconds to sleep between retry
+            attempts. Defaults to ``2.0``.
+        scale (float, optional): Scale factor to increase `delay` after first
+            retry fails. Defaults to ``2.0``.
+        max_delay (float, optional): Maximum number of seconds to sleep between
+            retries. Is ignored when equal to ``0``. Defaults to ``150``
+            (2.5 minutes).
+        exceptions (tuple, optional): Tuple of exceptions that trigger a retry
+            attempt. Exceptions not in the tuple will be ignored. Defaults to
+            ``(Exception,)`` (all exceptions).
+        on_exception (function, optional): Function that is called when a
+            retryable exception is caught. It is invoked with
+            ``on_exception(exc)`` where ``exc`` is the caught exception.
+            Defaults to ``None``.
+
+    Example:
+
+        >>> @retry(attempts=3, delay=0)
+        ... def do_something():
+        ...     print('something')
+        ...     raise Exception('something went wrong')
+        >>> try: do_something()
+        ... except Exception: print('caught something')
+        something
+        something
+        something
+        caught something
+
+    ..versionadded:: 4.4.0
+    """
+    if isinstance(exceptions, Exception):  # pragma: no cover
+        exceptions = (exceptions,)
+
+    if not isinstance(attempts, int) or attempts <= 0:
+        raise ValueError('attempts must be an integer greater than 0')
+
+    if not isinstance(delay, number_types) or delay < 0:
+        raise ValueError('delay must be a number greater than or equal to 0')
+
+    if not isinstance(scale, number_types) or scale <= 0:
+        raise ValueError('scale must be a number greater than 0')
+
+    if not isinstance(max_delay, number_types) or max_delay < 0:
+        raise ValueError('scale must be a number greater than or equal to 0')
+
+    if (not isinstance(exceptions, tuple) or
+            not all(issubclass(exc, Exception) for exc in exceptions)):
+        raise TypeError('exceptions must be a tuple of Exception types')
+
+    if on_exception and not callable(on_exception):
+        raise TypeError('on_exception must be a callable')
+
+    def decorator(func):
+        @wraps(func)
+        def decorated(*args, **kargs):
+            delay_time = delay
+
+            for attempt in range(1, attempts + 1):
+                # pylint: disable=catching-non-exception
+                try:
+                    return func(*args, **kargs)
+                except exceptions as exc:
+                    if on_exception:
+                        on_exception(exc)
+
+                    if attempt == attempts:
+                        raise
+
+                    if delay_time > 0:
+                        if attempt > 1:
+                            delay_time *= scale
+
+                        if delay_time > max_delay > 0:
+                            delay_time = max_delay
+
+                        time.sleep(delay_time)
+        return decorated
+    return decorator
 
 
 def stub_list():

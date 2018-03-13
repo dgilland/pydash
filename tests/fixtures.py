@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+import mock
+
 from pydash._compat import iteritems
 
 # pytest.mark is a generator so create alias for convenience
@@ -35,6 +37,12 @@ class IteritemsObject(object):
         else:
             for i, item in enumerate(self._items):
                 yield i, item
+
+
+@pytest.fixture
+def mocked_sleep():
+    with mock.patch('time.sleep') as mocked:
+        yield mocked
 
 
 def reduce_iteratee0(total, num):

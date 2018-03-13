@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- Add ``retry`` decorator that will retry a function multiple times if the function raises an exception.
+
+
 v4.3.3 (2018-03-02)
 -------------------
 

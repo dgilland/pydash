@@ -2,11 +2,12 @@
 
 import time
 
+import pytest
+import mock
+
 import pydash as _
 
-import pytest
-
-from .fixtures import parametrize
+from .fixtures import parametrize, mocked_sleep
 
 
 @parametrize('case,expected', [
@@ -408,6 +409,104 @@ def test_range_right(case, expected):
 ])
 def test_result(case, expected):
     assert _.result(*case) == expected
+
+
+@parametrize('case,delay_count,delay_times', [
+    ({}, 2, [0.5, 1.0]),
+    ({'attempts': 1}, 0, []),
+    ({'attempts': 3, 'delay': 0.5, 'scale': 2.0}, 2, [0.5, 1.0]),
+    ({'attempts': 5, 'delay': 1.5, 'scale': 2.5}, 4,
+     [1.5, 3.75, 9.375, 23.4375]),
+    ({'attempts': 5, 'delay': 1.5, 'scale': 2.5, 'max_delay': 8.0}, 4,
+     [1.5, 3.75, 8.0, 8.0]),
+])
+def test_retry(mocked_sleep, case, delay_count, delay_times):
+    @_.retry(**case)
+    def func():
+        raise Exception()
+
+    with pytest.raises(Exception):
+        func()
+
+    assert delay_count == mocked_sleep.call_count
+
+    delay_calls = [mock.call(time) for time in delay_times]
+    assert delay_calls == mocked_sleep.call_args_list
+
+
+@parametrize('case,delay_count', [
+    ({'attempts': 3}, 0),
+    ({'attempts': 3}, 1),
+    ({'attempts': 3}, 2),
+    ({'attempts': 5}, 3)
+])
+def test_retry_success(mocked_sleep, case, delay_count):
+    counter = {True: 0}
+
+    @_.retry(**case)
+    def func():
+        if counter[True] != delay_count:
+            counter[True] += 1
+            raise Exception()
+        return True
+
+    result = func()
+
+    assert result is True
+    assert counter[True] == delay_count
+    assert delay_count == mocked_sleep.call_count
+
+
+@parametrize('case,raise_exc,delay_count', [
+    ({'attempts': 1, 'exceptions': (RuntimeError,)}, RuntimeError, 0),
+    ({'attempts': 2, 'exceptions': (RuntimeError,)}, RuntimeError, 1),
+    ({'attempts': 2, 'exceptions': (RuntimeError,)}, Exception, 0),
+])
+def test_retry_exceptions(mocked_sleep, case, raise_exc, delay_count):
+    @_.retry(**case)
+    def func():
+        raise raise_exc()
+
+    with pytest.raises(raise_exc):
+        func()
+
+    assert delay_count == mocked_sleep.call_count
+
+
+def test_retry_on_exception(mocked_sleep):
+    attempts = 5
+    error_count = {True: 0}
+
+    def on_exception(exc):
+        error_count[True] += 1
+
+    @_.retry(attempts=attempts, on_exception=on_exception)
+    def func():
+        raise Exception()
+
+    with pytest.raises(Exception):
+        func()
+
+    assert error_count[True] == attempts
+
+
+@parametrize('case,exception', [
+    ({'attempts': 0}, ValueError),
+    ({'attempts': '1'}, ValueError),
+    ({'delay': -1}, ValueError),
+    ({'delay': '1'}, ValueError),
+    ({'scale': 0}, ValueError),
+    ({'scale': '1'}, ValueError),
+    ({'max_delay': -1}, ValueError),
+    ({'max_delay': '1'}, ValueError),
+    ({'exceptions': (1, 2)}, TypeError),
+    ({'exceptions': 1}, TypeError),
+    ({'exceptions': (Exception, 2)}, TypeError),
+    ({'on_exception': 5}, TypeError),
+])
+def test_retry_invalid_args(case, exception):
+    with pytest.raises(exception):
+        _.retry(**case)
 
 
 @parametrize('case,expected', [
