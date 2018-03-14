@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Add ``attempt`` argument to ``on_exception`` callback in ``retry``. New function signature is ``on_exception(exc, attempt)`` (previously was ``on_exception(exc)``). All arguments to ``on_exception`` callback are now optional.
+
+
 v4.4.0 (2018-03-13)
 -------------------
 

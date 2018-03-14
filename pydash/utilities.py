@@ -921,8 +921,9 @@ def retry(attempts=3,
             ``(Exception,)`` (all exceptions).
         on_exception (function, optional): Function that is called when a
             retryable exception is caught. It is invoked with
-            ``on_exception(exc)`` where ``exc`` is the caught exception.
-            Defaults to ``None``.
+            ``on_exception(exc, attempt)`` where ``exc`` is the caught
+            exception and ``attempt`` is the attempt count. All arguments are
+            optional. Defaults to ``None``.
 
     Example:
 
@@ -961,6 +962,9 @@ def retry(attempts=3,
     if on_exception and not callable(on_exception):
         raise TypeError('on_exception must be a callable')
 
+    on_exc_argcount = (getargcount(on_exception, maxargs=2) if on_exception
+                       else None)
+
     def decorator(func):
         @wraps(func)
         def decorated(*args, **kargs):
@@ -972,7 +976,10 @@ def retry(attempts=3,
                     return func(*args, **kargs)
                 except exceptions as exc:
                     if on_exception:
-                        on_exception(exc)
+                        callit(on_exception,
+                               exc,
+                               attempt,
+                               argcount=on_exc_argcount)
 
                     if attempt == attempts:
                         raise
