@@ -417,7 +417,7 @@ def test_result(case, expected):
     ({'attempts': 3, 'delay': 0.5, 'scale': 2.0}, 2, [0.5, 1.0]),
     ({'attempts': 5, 'delay': 1.5, 'scale': 2.5}, 4,
      [1.5, 3.75, 9.375, 23.4375]),
-    ({'attempts': 5, 'delay': 1.5, 'scale': 2.5, 'max_delay': 8.0}, 4,
+    ({'attempts': 5, 'delay': 1.5, 'max_delay': 8.0, 'scale': 2.5}, 4,
      [1.5, 3.75, 8.0, 8.0]),
 ])
 def test_retry(mocked_sleep, case, delay_count, delay_times):
@@ -455,6 +455,29 @@ def test_retry_success(mocked_sleep, case, delay_count):
     assert result is True
     assert counter[True] == delay_count
     assert delay_count == mocked_sleep.call_count
+
+
+@parametrize('case,unexpected_delay_times', [
+    ({'jitter': 5, 'delay': 2, 'scale': 1, 'attempts': 5},
+     [2, 2, 2, 2]),
+    ({'jitter': 10, 'delay': 3, 'scale': 1.5, 'attempts': 5},
+     [3, 4.5, 6.75, 10.125]),
+    ({'jitter': 1.0, 'delay': 3, 'scale': 1.5, 'attempts': 5},
+     [3, 4.5, 6.75, 10.125]),
+])
+def test_retry_jitter(mocked_sleep, case, unexpected_delay_times):
+    @_.retry(**case)
+    def func():
+        raise Exception()
+
+    with pytest.raises(Exception):
+        func()
+
+    unexpected_delay_calls = [mock.call(time)
+                              for time in unexpected_delay_times]
+
+    assert len(unexpected_delay_calls) == mocked_sleep.call_count
+    assert unexpected_delay_calls != mocked_sleep.call_args_list
 
 
 @parametrize('case,raise_exc,delay_count', [
@@ -495,10 +518,14 @@ def test_retry_on_exception(mocked_sleep):
     ({'attempts': '1'}, ValueError),
     ({'delay': -1}, ValueError),
     ({'delay': '1'}, ValueError),
-    ({'scale': 0}, ValueError),
-    ({'scale': '1'}, ValueError),
     ({'max_delay': -1}, ValueError),
     ({'max_delay': '1'}, ValueError),
+    ({'scale': 0}, ValueError),
+    ({'scale': '1'}, ValueError),
+    ({'jitter': -1}, ValueError),
+    ({'jitter': '1'}, ValueError),
+    ({'jitter': (1,)}, ValueError),
+    ({'jitter': ('1', '2')}, ValueError),
     ({'exceptions': (1, 2)}, TypeError),
     ({'exceptions': 1}, TypeError),
     ({'exceptions': (Exception, 2)}, TypeError),

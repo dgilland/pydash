@@ -895,8 +895,9 @@ def result(obj, key, default=None):
 
 def retry(attempts=3,
           delay=0.5,
+          max_delay=150.0,
           scale=2.0,
-          max_delay=150,
+          jitter=0,
           exceptions=(Exception,),
           on_exception=None):
     """Decorator that retries a function multiple times if it raises an
@@ -909,13 +910,20 @@ def retry(attempts=3,
 
     Args:
         attempts (int, optional): Number of retry attempts. Defaults to ``3``.
-        delay (float, optional): Base amount of seconds to sleep between retry
-            attempts. Defaults to ``2.0``.
-        scale (float, optional): Scale factor to increase `delay` after first
-            retry fails. Defaults to ``2.0``.
-        max_delay (float, optional): Maximum number of seconds to sleep between
-            retries. Is ignored when equal to ``0``. Defaults to ``150``
-            (2.5 minutes).
+        delay (int|float, optional): Base amount of seconds to sleep between
+            retry attempts. Defaults to ``0.5``.
+        max_delay (int|float, optional): Maximum number of seconds to sleep
+            between retries. Is ignored when equal to ``0``. Defaults to
+            ``150.0`` (2.5 minutes).
+        scale (int|float, optional): Scale factor to increase `delay` after
+            first retry fails. Defaults to ``2.0``.
+        jitter (int|float|tuple, optional): Random jitter to add to `delay`
+            time. Can be a positive number or 2-item tuple of numbers
+            representing the random range to choose from. When a number is
+            given, the random range will be from ``[0, jitter]``. When jitter
+            is a float or contains a float, then a random float will be chosen;
+            otherwise, a random integer will be selected. Defaults to ``0``
+            which disables jitter.
         exceptions (tuple, optional): Tuple of exceptions that trigger a retry
             attempt. Exceptions not in the tuple will be ignored. Defaults to
             ``(Exception,)`` (all exceptions).
@@ -939,6 +947,9 @@ def retry(attempts=3,
         caught something
 
     ..versionadded:: 4.4.0
+
+    ..versionchanged:: 4.5.0
+        Added ``jitter`` argument.
     """
     if isinstance(exceptions, Exception):  # pragma: no cover
         exceptions = (exceptions,)
@@ -949,11 +960,20 @@ def retry(attempts=3,
     if not isinstance(delay, number_types) or delay < 0:
         raise ValueError('delay must be a number greater than or equal to 0')
 
+    if not isinstance(max_delay, number_types) or max_delay < 0:
+        raise ValueError('scale must be a number greater than or equal to 0')
+
     if not isinstance(scale, number_types) or scale <= 0:
         raise ValueError('scale must be a number greater than 0')
 
-    if not isinstance(max_delay, number_types) or max_delay < 0:
-        raise ValueError('scale must be a number greater than or equal to 0')
+    if (not isinstance(jitter, number_types + (tuple,)) or
+            (isinstance(jitter, number_types) and jitter < 0) or
+            (isinstance(jitter, tuple) and (
+                len(jitter) != 2 or
+                not all(isinstance(jit, number_types) for jit in jitter)))):
+        raise ValueError(
+            'jitter must be a number greater than 0 or a 2-item tuple of '
+            'numbers')
 
     if (not isinstance(exceptions, tuple) or
             not all(issubclass(exc, Exception) for exc in exceptions)):
@@ -961,6 +981,9 @@ def retry(attempts=3,
 
     if on_exception and not callable(on_exception):
         raise TypeError('on_exception must be a callable')
+
+    if jitter and not isinstance(jitter, tuple):
+        jitter = (0, jitter)
 
     on_exc_argcount = (getargcount(on_exception, maxargs=2) if on_exception
                        else None)
@@ -984,14 +1007,19 @@ def retry(attempts=3,
                     if attempt == attempts:
                         raise
 
-                    if delay_time > 0:
-                        if attempt > 1:
-                            delay_time *= scale
+                    if jitter:
+                        delay_time += max(0, random(*jitter))
 
-                        if delay_time > max_delay > 0:
-                            delay_time = max_delay
+                    if delay_time < 0:  # pragma: no cover
+                        continue
 
-                        time.sleep(delay_time)
+                    if max_delay:
+                        delay_time = min(delay_time, max_delay)
+
+                    time.sleep(delay_time)
+
+                    # Scale after first iteration.
+                    delay_time *= scale
         return decorated
     return decorator
 

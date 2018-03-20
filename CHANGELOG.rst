@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- Add ``jitter`` argument to ``retry``.
+
+
 v4.4.1 (2018-03-14)
 -------------------
 
