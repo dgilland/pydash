@@ -4,6 +4,13 @@
 FP Variations
 *************
 
+.. testsetup::
+
+    import math
+    import operator
+    import re
+    from pydash.fp import *
+
 Pydash exposes a variant set of its functions which are auto-curried,
 iteratee-first, data-last, and non-mutating.
 These functions are available in ``pydash.fp``.
