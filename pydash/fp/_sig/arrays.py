@@ -1,7 +1,7 @@
 "conversion signatures for fp.arrays"
 
 
-__signatures__ = [
+signatures = [
     ("chunk", [1, 0]),
     ("compact",),
     ("concat", [0, 1]),
@@ -73,3 +73,7 @@ __signatures__ = [
     ("zip_object_deep", [0, 1]),
     ("zip_with", [1, 2, 0]),
 ]
+
+
+docstr_overrides = {
+}
