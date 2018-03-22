@@ -140,14 +140,11 @@ def test_drop_right_while(case, expected):
 
 
 @parametrize('case,expected', [
-    (([1, 2, 3, 2, 1, 5, 6, 5, 5, 5], None), [2, 1, 5]),
-    ((['A', 'b', 'C', 'a', 'B', 'c'], lambda letter: letter.lower()),
-     ['a', 'B', 'c'])
+    (([1, 2, 3, 2, 1, 5, 6, 5, 5, 5]), [2, 1, 5]),
 ])
 def test_duplicates(case, expected):
-    a, b = case
-    assert fp.duplicates(b)(a) == expected
-    assert fp.duplicates(b, a) == expected
+    a = case
+    assert fp.duplicates(a) == expected
 
 
 @parametrize('case,expected', [

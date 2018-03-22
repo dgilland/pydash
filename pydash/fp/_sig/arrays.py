@@ -12,7 +12,7 @@ signatures = [
     ("drop_while", [1, 0]),
     ("drop_right", [1, 0]),
     ("drop_right_while", [1, 0]),
-    ("duplicates", [1, 0]),
+    ("duplicates", [0]),
     ("fill", [3, 2, 0, 1]),
     ("find_index", [1, 0]),
     ("find_last_index", [1, 0]),
@@ -21,7 +21,7 @@ signatures = [
     ("flatten_depth", [1, 0]),
     ("from_pairs",),
     ("head",),
-    ("index_of", [1, 0], {"interpose": False}),
+    ("index_of", [1, 0], {"cap": True}),
     ("initial",),
     ("intercalate", [1, 0]),
     ("interleave", [0, 1]),
@@ -30,7 +30,7 @@ signatures = [
     ("intersection_with", [1, 2, 0]),
     ("intersperse", [1, 0]),
     ("last",),
-    ("last_index_of", [1, 0], {"interpose": False}),
+    ("last_index_of", [1, 0], {"cap": True}),
     ("mapcat", [1, 0]),
     ("nth", [1, 0]),
     ("pull", [1, 0], {"cap": True}),
@@ -76,4 +76,23 @@ signatures = [
 
 
 docstr_overrides = {
+    "duplicates": """
+    Creates a unique list of duplicate values from `array`.
+
+    Arity: 1
+
+    Args:
+        array (list): List to process.
+        iteratee (mixed, optional): Iteratee applied per iteration.
+
+    Returns:
+        list: List of duplicates.
+
+    Example:
+
+        >>> duplicates([0, 1, 3, 2, 3, 1])
+        [3, 1]
+
+    .. versionadded:: 3.0.0
+    """,
 }

@@ -290,27 +290,25 @@ Example:
 
     # duplicates
     "duplicates": """
-Creates a unique list of duplicate values from `array`. If iteratee is
-passed, each element of array is passed through a iteratee before
-duplicates are computed. The iteratee is invoked with three arguments:
-``(value, index, array)``. If an object path is passed for iteratee, the
-created iteratee will return the path value of the given element. If an
-object is passed for iteratee, the created filter style iteratee will
-return ``True`` for elements that have the properties of the given object,
-else ``False``.
 
-Arity: 2
+    Creates a unique list of duplicate values from `array`.
 
-Args:
-    iteratee (mixed): Iteratee applied per iteration.
-    array (list): List to process.
+    Arity: 1
 
-Returns:
-    list: List of duplicates.
-Example:
+    Args:
+        array (list): List to process.
+        iteratee (mixed, optional): Iteratee applied per iteration.
 
+    Returns:
+        list: List of duplicates.
 
-.. versionadded:: 3.0.0
+    Example:
+
+        >>> duplicates([0, 1, 3, 2, 3, 1])
+        [3, 1]
+
+    .. versionadded:: 3.0.0
+
 """,
 
     # fill
@@ -428,10 +426,13 @@ Arity: 2
 Args:
     value (mixed): Value to search for.
     array (list): List to search.
-    from_index (int, optional): Index to search from.
 
 Returns:
     int: Index of found item or ``-1`` if not found.
+Note:
+    The fp variant of index_of takes
+    exactly 2 arguments
+
 Example:
 
     >>> index_of(2, [1, 2, 3, 4])
@@ -593,10 +594,13 @@ Arity: 2
 Args:
     value (mixed): Value to search for.
     array (list): List to search.
-    from_index (int, optional): Index to search from.
 
 Returns:
     int: Index of found item or ``False`` if not found.
+Note:
+    The fp variant of last_index_of takes
+    exactly 2 arguments
+
 Example:
 
     >>> last_index_of(2, [1, 2, 2, 4])
@@ -1491,7 +1495,7 @@ drop = _convert([1, 0], pyd.drop)
 drop_while = _convert([1, 0], pyd.drop_while)
 drop_right = _convert([1, 0], pyd.drop_right)
 drop_right_while = _convert([1, 0], pyd.drop_right_while)
-duplicates = _convert([1, 0], pyd.duplicates)
+duplicates = _convert([0], pyd.duplicates)
 fill = _convert([3, 2, 0, 1], pyd.fill)
 find_index = _convert([1, 0], pyd.find_index)
 find_last_index = _convert([1, 0], pyd.find_last_index)
@@ -1500,7 +1504,7 @@ flatten_deep = pyd.flatten_deep
 flatten_depth = _convert([1, 0], pyd.flatten_depth)
 from_pairs = pyd.from_pairs
 head = pyd.head
-index_of = _convert([1, 0], pyd.index_of, **{'interpose': False})
+index_of = _convert([1, 0], pyd.index_of, **{'cap': True})
 initial = pyd.initial
 intercalate = _convert([1, 0], pyd.intercalate)
 interleave = _convert([0, 1], pyd.interleave)
@@ -1509,7 +1513,7 @@ intersection_by = _convert([1, 2, 0], pyd.intersection_by)
 intersection_with = _convert([1, 2, 0], pyd.intersection_with)
 intersperse = _convert([1, 0], pyd.intersperse)
 last = pyd.last
-last_index_of = _convert([1, 0], pyd.last_index_of, **{'interpose': False})
+last_index_of = _convert([1, 0], pyd.last_index_of, **{'cap': True})
 mapcat = _convert([1, 0], pyd.mapcat)
 nth = _convert([1, 0], pyd.nth)
 pull = _convert([1, 0], pyd.pull, **{'cap': True})
