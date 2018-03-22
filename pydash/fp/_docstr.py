@@ -118,7 +118,7 @@ def cap_note(cap, func_name, order, **_):
     ]
 
 
-def convert_example(section, func_name, args, inverse, **_):
+def convert_example(section, func_name, args, inverse, cap, **_):
     if not _code.astor:
         return []
     arg_re = re.compile(r'\w+')
@@ -129,7 +129,7 @@ def convert_example(section, func_name, args, inverse, **_):
         if not line.startswith(code_prefix):
             return line
         try:
-            code = _code.rearg(func_name, arg_names, inverse, line[pos:])
+            code = _code.rearg(func_name, arg_names, inverse, cap)(line[pos:])
             return code_prefix + code
         except TypeError:
             return 'invalid'

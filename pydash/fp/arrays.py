@@ -137,7 +137,7 @@ Returns:
     list: Difference between `others`.
 Example:
 
-    >>> difference([1, 2, 3], [1])
+    >>> difference([1, 2, 3], [1], [2])
     [3]
 
 .. versionadded:: 1.0.0
@@ -504,7 +504,7 @@ Returns:
     list: Intersection of provided lists.
 Example:
 
-    >>> intersection([1, 2, 3], [1, 2, 3, 4, 5])
+    >>> intersection([1, 2, 3], [1, 2, 3, 4, 5], [2, 3])
     [2, 3]
 
     >>> intersection([1, 2, 3])
@@ -1168,7 +1168,7 @@ Returns:
     list: Unionized list.
 Example:
 
-    >>> union([1, 2, 3], [2, 3, 4])
+    >>> union([1, 2, 3], [2, 3, 4], [3, 4, 5])
     [1, 2, 3, 4, 5]
 
 .. versionadded:: 1.0.0
@@ -1338,7 +1338,7 @@ Returns:
     list: XOR'd list.
 Example:
 
-    >>> xor([1, 3, 4], [1, 2, 4])
+    >>> xor([1, 3, 4], [1, 2, 4], [2])
     [3]
 
 .. versionadded:: 1.0.0

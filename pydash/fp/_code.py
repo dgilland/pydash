@@ -11,9 +11,9 @@ except ImportError:
     astor = None
 
 
-def rearg(func_name, arg_names, order, expr):
-    transformer = Reorder(func_name, arg_names, order)
-    return transform(transformer, expr)
+def rearg(func_name, arg_names, order, cap):
+    transformer = Reorder(func_name, arg_names, order, cap)
+    return lambda expr: transform(transformer, expr)
 
 
 def transform(transformer, expr):
@@ -23,10 +23,11 @@ def transform(transformer, expr):
 
 
 class Reorder(ast.NodeTransformer):
-    def __init__(self, func_name, arg_names, order):
+    def __init__(self, func_name, arg_names, order, cap):
         self.func_name = func_name
         self.arg_names = arg_names
         self.order = order
+        self.cap = cap
         super(Reorder, self).__init__()
 
     def visit_Call(self, node):  # noqa
@@ -36,9 +37,14 @@ class Reorder(ast.NodeTransformer):
         args_dict.update({k.arg: k.value for k in node.keywords})
         if len(args_dict) < 2:
             return node
-        if len(args_dict) < len(self.order):
+        count = len(self.order)
+        if len(args_dict) < count:
             raise TypeError('too few arguments')
         args = [args_dict.get(name) for name in self.arg_names]
-        node.args = operator.itemgetter(*self.order)(args)
+        new_args = list(operator.itemgetter(*self.order)(args))
+        if count < len(node.args):
+            if not (self.cap or node.keywords):
+                new_args.extend(node.args[count:])
+        node.args = tuple(new_args)
         node.keywords = []
         return node
