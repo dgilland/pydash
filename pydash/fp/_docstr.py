@@ -91,12 +91,13 @@ def new_args(**context):
     return [ARGS] + pyd.flatten(rearg(**context)) + ['']
 
 
-def rearg(inverse, args, **_):
+def rearg(inverse, args, cap, **_):
     if len(args) < 2 or len(args) <= max(inverse):
         return args
     count = len(inverse)
     base = operator.itemgetter(*inverse)(args)
-    return [required(a) for a in base] + args[count:]
+    extra = [] if cap else args[count:]
+    return [required(a) for a in base] + extra
 
 
 def convert_returns(section):
