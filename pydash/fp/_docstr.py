@@ -48,7 +48,11 @@ def convert(func_name, order, cap, docstr):
             lines.extend(convert_returns(section))
             lines.extend(cap_note(**context))
         elif section[0] == EXAMPLE:
-            lines.extend(convert_example(section, **context))
+            example = list(convert_example(section, **context))
+            if example[1:]:
+                lines.extend(example)
+            else:
+                print("WARNING: no example for {}".format(func_name))
         else:
             lines.extend(section)
     return '\n'.join(lines)
@@ -142,7 +146,7 @@ def filter_invalid_code(seq):
     for line in seq:
         if line == 'invalid':
             swallow_invalid(seq)
-        else:
+        elif line.strip():
             yield line
 
 

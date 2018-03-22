@@ -92,10 +92,8 @@ Args:
 Returns:
     list: New list containing chunks of `array`.
 Example:
-
     >>> chunk(2, [1, 2, 3, 4, 5])
     [[1, 2], [3, 4], [5]]
-
 .. versionadded:: 1.1.0
 """,
 
@@ -113,10 +111,8 @@ Args:
 Returns:
     list: Concatenated list.
 Example:
-
     >>> concat([1, 2], [3, 4], [[5], [6]])
     [1, 2, 3, 4, [5], [6]]
-
 .. versionadded:: 2.0.0
 
 .. versionchanged:: 4.0.0
@@ -136,10 +132,8 @@ Args:
 Returns:
     list: Difference between `others`.
 Example:
-
     >>> difference([1, 2, 3], [1], [2])
     [3]
-
 .. versionadded:: 1.0.0
 """,
 
@@ -162,10 +156,8 @@ Args:
 Returns:
     list: Difference between `others`.
 Example:
-
     >>> difference_by(round, [1.2, 1.5, 1.7, 2.8], [0.9, 3.2])
     [1.5, 1.7]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -187,13 +179,11 @@ Args:
 Returns:
     list: Difference between `others`.
 Example:
-
     >>> array = ['apple', 'banana', 'pear']
     >>> others = ['avocado', 'pumpkin'], ['peach']
     >>> comparator = lambda a, b: a[0] == b[0]
     >>> difference_with(comparator, array, *others)
     ['banana']
-
 .. versionadded:: 4.0.0
 """,
 
@@ -210,10 +200,8 @@ Args:
 Returns:
     list: Dropped list.
 Example:
-
     >>> drop(2, [1, 2, 3, 4])
     [3, 4]
-
 .. versionadded:: 1.0.0
 
 .. versionchanged:: 1.1.0
@@ -238,10 +226,8 @@ Args:
 Returns:
     list: Dropped list.
 Example:
-
     >>> drop_while(lambda x: x < 3, [1, 2, 3, 4])
     [3, 4]
-
 .. versionadded:: 1.1.0
 """,
 
@@ -258,10 +244,8 @@ Args:
 Returns:
     list: Dropped list.
 Example:
-
     >>> drop_right(2, [1, 2, 3, 4])
     [1, 2]
-
 .. versionadded:: 1.1.0
 
 .. versionchanged:: 3.0.0
@@ -283,10 +267,8 @@ Args:
 Returns:
     list: Dropped list.
 Example:
-
     >>> drop_right_while(lambda x: x >= 3, [1, 2, 3, 4])
     [1, 2]
-
 .. versionadded:: 1.1.0
 """,
 
@@ -329,12 +311,10 @@ Args:
 Returns:
     list: Filled `array`.
 Example:
-
     >>> fill(1, 3, 0, [1, 2, 3, 4, 5])
     [1, 0, 0, 4, 5]
     >>> fill(0, 100, 0, [1, 2, 3, 4, 5])
     [0, 0, 0, 0, 0]
-
 .. versionadded:: 3.1.0
 """,
 
@@ -353,12 +333,10 @@ Args:
 Returns:
     int: Index of found item or ``-1`` if not found.
 Example:
-
     >>> find_index(lambda x: x >= 3, [1, 2, 3, 4])
     2
     >>> find_index(lambda x: x > 4, [1, 2, 3, 4])
     -1
-
 .. versionadded:: 1.0.0
 """,
 
@@ -376,12 +354,10 @@ Args:
 Returns:
     int: Index of found item or ``-1`` if not found.
 Example:
-
     >>> find_last_index(lambda x: x >= 3, [1, 2, 3, 4])
     3
     >>> find_index([1, 2, 3, 4], lambda x: x > 4)
     -1
-
 .. versionadded:: 1.0.0
 """,
 
@@ -402,7 +378,6 @@ Args:
 Returns:
     list: Flattened list.
 Example:
-
     >>> flatten_depth(1, [[[1], [2, [3]], [[4]]]])
     [[1], [2, [3]], [[4]]]
     >>> flatten_depth(2, [[[1], [2, [3]], [[4]]]])
@@ -411,7 +386,6 @@ Example:
     [1, 2, 3, 4]
     >>> flatten_depth(4, [[[1], [2, [3]], [[4]]]])
     [1, 2, 3, 4]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -436,10 +410,8 @@ Note:
     exactly 2 arguments
 
 Example:
-
     >>> index_of(2, [1, 2, 3, 4])
     1
-
 .. versionadded:: 1.0.0
 """,
 
@@ -459,11 +431,8 @@ Args:
 Returns:
     list: Intercalated list.
 Example:
-
     >>> intercalate('x', [1, [2], [3], 4])
     [1, 'x', 2, 'x', 3, 'x', 4]
-
-
 .. versionadded:: 2.0.0
 """,
 
@@ -480,10 +449,8 @@ Args:
 Returns:
     list: Interleaved list.
 Example:
-
     >>> interleave([1, 2, 3], [4, 5, 6], [7, 8, 9])
     [1, 4, 7, 2, 5, 8, 3, 6, 9]
-
 .. versionadded:: 2.0.0
 """,
 
@@ -500,11 +467,8 @@ Args:
 Returns:
     list: Intersection of provided lists.
 Example:
-
     >>> intersection([1, 2, 3], [1, 2, 3, 4, 5], [2, 3])
     [2, 3]
-
-
 .. versionadded:: 1.0.0
 
 .. versionchanged:: 4.0.0
@@ -530,10 +494,8 @@ Args:
 Returns:
     list: Intersection of provided lists.
 Example:
-
     >>> intersection_by(round, [1.2, 1.5, 1.7, 2.8], [0.9, 3.2])
     [1.2, 2.8]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -555,13 +517,11 @@ Args:
 Returns:
     list: Intersection of provided lists.
 Example:
-
     >>> array = ['apple', 'banana', 'pear']
     >>> others = ['avocado', 'pumpkin'], ['peach']
     >>> comparator = lambda a, b: a[0] == b[0]
     >>> intersection_with(comparator, array, *others)
     ['pear']
-
 .. versionadded:: 4.0.0
 """,
 
@@ -578,10 +538,8 @@ Args:
 Returns:
     list: Interspersed list.
 Example:
-
     >>> intersperse('x', [1, [2], [3], 4])
     [1, 'x', [2], 'x', [3], 'x', 4]
-
 .. versionadded:: 2.0.0
 """,
 
@@ -604,10 +562,8 @@ Note:
     exactly 2 arguments
 
 Example:
-
     >>> last_index_of(2, [1, 2, 2, 4])
     2
-
 .. versionadded:: 1.0.0
 """,
 
@@ -625,10 +581,8 @@ Args:
 Returns:
     list: Mapped and concatenated list.
 Example:
-
     >>> mapcat(lambda x: list(range(x)), range(4))
     [0, 0, 1, 0, 1, 2]
-
 .. versionadded:: 2.0.0
 """,
 
@@ -645,14 +599,12 @@ Args:
 Returns:
     mixed: Returns the element at :attr:`pos`.
 Example:
-
     >>> nth(0, [1, 2, 3])
     1
     >>> nth(2, [3, 4, 5, 6])
     5
     >>> nth(-1, [11, 22, 33])
     33
-
 .. versionadded:: 4.0.0
 """,
 
@@ -671,9 +623,6 @@ Returns:
 Note:
     The fp variant of pull takes
     exactly 2 arguments
-
-Example:
-
 
 .. versionadded:: 1.0.0
 
@@ -695,10 +644,8 @@ Args:
 Returns:
     list: Resulting `array`.
 Example:
-
     >>> pull_all([2, 3], [1, 2, 2, 3, 3, 4])
     [1, 4]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -720,11 +667,9 @@ Args:
 Returns:
     list: Resulting `array`.
 Example:
-
     >>> array = [{'x': 1}, {'x': 2}, {'x': 3}, {'x': 1}]
     >>> pull_all_by('x', [{'x': 1}, {'x': 3}], array)
     [{'x': 2}]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -745,7 +690,6 @@ Args:
 Returns:
     list: Resulting `array`.
 Example:
-
     >>> array = [{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]
     >>> res = pull_all_with(lambda a, b: a == b, [{'x': 3, 'y': 4}], array)
     >>> res == [{'x': 1, 'y': 2}, {'x': 5, 'y': 6}]
@@ -754,7 +698,6 @@ Example:
     >>> res = pull_all_with(lambda a, b: a != b, [{'x': 3, 'y': 4}], array)
     >>> res == [{'x': 3, 'y': 4}]
     True
-
 .. versionadded:: 4.0.0
 """,
 
@@ -776,9 +719,6 @@ Note:
     The fp variant of pull_at takes
     exactly 2 arguments
 
-Example:
-
-
 .. versionadded:: 1.1.0
 """,
 
@@ -796,14 +736,12 @@ Args:
 Returns:
     list: Removed elements of `array`.
 Example:
-
     >>> array = [1, 2, 3, 4]
     >>> items = remove(lambda x: x >= 3, array)
     >>> items
     [3, 4]
     >>> array
     [1, 2]
-
 .. versionadded:: 1.0.0
 """,
 
@@ -821,7 +759,6 @@ Args:
 Returns:
     tuple: items structured for assigment
 Example:
-
     >>> repack('a, *b, c', 1, 2, 3, 4)
     (1, (2, 3), 4)
 """,
@@ -844,10 +781,8 @@ Args:
 Returns:
     list: Sliced list.
 Example:
-
     >>> slice_(1, 3, [1, 2, 3, 4])
     [2, 3]
-
 .. versionadded:: 1.1.0
 """,
 
@@ -865,10 +800,8 @@ Args:
 Returns:
     int: Returns the index at which `value` should be inserted into        `array`.
 Example:
-
     >>> sorted_index(2, [1, 2, 2, 3, 4])
     1
-
 .. versionadded:: 1.0.0
 
 .. versionchanged:: 4.0.0
@@ -893,13 +826,11 @@ Args:
 Returns:
     int: Returns the index at which `value` should be inserted into        `array`.
 Example:
-
     >>> array = [{'x': 4}, {'x': 5}]
     >>> sorted_index_by({'x': 4}, lambda o: o['x'], array)
     0
     >>> sorted_index_by({'x': 4}, 'x', array)
     0
-
 .. versionadded:: 4.0.0
 """,
 
@@ -917,12 +848,10 @@ Args:
 Returns:
     int: Returns the index of the first matched value, else ``-1``.
 Example:
-
     >>> sorted_index_of(3, [3, 5, 7, 10])
     0
     >>> sorted_index_of(10, [10, 10, 5, 7, 3])
     -1
-
 .. versionadded:: 4.0.0
 """,
 
@@ -941,10 +870,8 @@ Args:
 Returns:
     int: Returns the index at which `value` should be inserted into        `array`.
 Example:
-
     >>> sorted_last_index(2, [1, 2, 2, 3, 4])
     3
-
 .. versionadded:: 1.1.0
 
 .. versionchanged:: 4.0.0
@@ -969,7 +896,6 @@ Args:
 Returns:
     int: Returns the index at which `value` should be inserted into        `array`.
 Example:
-
     >>> array = [{'x': 4}, {'x': 5}]
     >>> sorted_last_index_by({'x': 4}, lambda o: o['x'], array)
     1
@@ -991,12 +917,10 @@ Args:
 Returns:
     int: Returns the index of the matched value, else ``-1``.
 Example:
-
     >>> sorted_last_index_of(5, [4, 5, 5, 5, 6])
     3
     >>> sorted_last_index_of(6, [6, 5, 5, 5, 4])
     -1
-
 .. versionadded:: 4.0.0
 """,
 
@@ -1020,10 +944,8 @@ Args:
 Returns:
     list: Unique list.
 Example:
-
     >>> sorted_uniq_by(lambda val: val % 2, [3, 2, 1, 3, 2, 1])
     [2, 3]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -1040,10 +962,8 @@ Args:
 Returns:
     list: Split list.
 Example:
-
     >>> split_at(2, [1, 2, 3, 4])
     [[1, 2], [3, 4]]
-
 .. versionadded:: 2.0.0
 """,
 
@@ -1062,10 +982,8 @@ Args:
 Returns:
     list: Taken list.
 Example:
-
     >>> take(2, [1, 2, 3, 4])
     [1, 2]
-
 .. versionadded:: 1.0.0
 
 .. versionchanged:: 1.1.0
@@ -1088,10 +1006,8 @@ Args:
 Returns:
     list: Taken list.
 Example:
-
     >>> take_right(2, [1, 2, 3, 4])
     [3, 4]
-
 .. versionadded:: 1.1.0
 
 .. versionchanged:: 3.0.0
@@ -1113,10 +1029,8 @@ Args:
 Returns:
     list: Dropped list.
 Example:
-
     >>> take_right_while(lambda x: x >= 3, [1, 2, 3, 4])
     [3, 4]
-
 .. versionadded:: 1.1.0
 """,
 
@@ -1135,10 +1049,8 @@ Args:
 Returns:
     list: Taken list.
 Example:
-
     >>> take_while(lambda x: x < 3, [1, 2, 3, 4])
     [1, 2]
-
 .. versionadded:: 1.1.0
 """,
 
@@ -1155,10 +1067,8 @@ Args:
 Returns:
     list: Unionized list.
 Example:
-
     >>> union([1, 2, 3], [2, 3, 4], [3, 4, 5])
     [1, 2, 3, 4, 5]
-
 .. versionadded:: 1.0.0
 """,
 
@@ -1178,12 +1088,10 @@ Args:
 Returns:
     list: Unionized list.
 Example:
-
     >>> union_by(lambda x: x % 2, [1, 2, 3], [2, 3, 4])
     [1, 2]
     >>> union_by(lambda x: x % 9, [1, 2, 3], [2, 3, 4])
     [1, 2, 3, 4]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -1204,11 +1112,9 @@ Args:
 Returns:
     list: Unionized list.
 Example:
-
     >>> comparator = lambda a, b: a % 2 == b % 2
     >>> union_with(comparator, [1, 2, 3], [2, 3, 4])
     [1, 2]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -1232,10 +1138,8 @@ Args:
 Returns:
     list: Unique list.
 Example:
-
     >>> uniq_by(lambda val: val % 2, [1, 2, 3, 1, 2, 3])
     [1, 2]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -1256,10 +1160,8 @@ Args:
 Returns:
     list: Unique list.
 Example:
-
     >>> uniq_with(lambda a, b: a % 2 == b % 2, [1, 2, 3, 4, 5])
     [1, 2]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -1280,11 +1182,9 @@ Args:
 Returns:
     list: Unzipped list.
 Example:
-
     >>> from pydash import add
     >>> unzip_with(add, [[1, 10, 100], [2, 20, 200]])
     [3, 30, 300]
-
 .. versionadded:: 3.3.0
 """,
 
@@ -1304,9 +1204,6 @@ Note:
     The fp variant of without takes
     exactly 2 arguments
 
-Example:
-
-
 .. versionadded:: 1.0.0
 """,
 
@@ -1323,10 +1220,8 @@ Args:
 Returns:
     list: XOR'd list.
 Example:
-
     >>> xor([1, 3, 4], [1, 2, 4], [2])
     [3]
-
 .. versionadded:: 1.0.0
 """,
 
@@ -1349,12 +1244,10 @@ Args:
 Returns:
     list: XOR'd list.
 Example:
-
     >>> xor_by(round, [2.1, 1.2], [2.3, 3.4])
     [1.2, 3.4]
     >>> xor_by('x', [{'x': 1}], [{'x': 2}, {'x': 1}])
     [{'x': 2}]
-
 .. versionadded:: 4.0.0
 """,
 
@@ -1376,13 +1269,11 @@ Args:
 Returns:
     list: XOR'd list.
 Example:
-
     >>> objects = [{'x': 1, 'y': 2}, {'x': 2, 'y': 1}]
     >>> others = [{'x': 1, 'y': 1}, {'x': 1, 'y': 2}]
     >>> expected = [{'y': 1, 'x': 2}, {'y': 1, 'x': 1}]
     >>> xor_with(lambda a, b: a == b, objects, others) == expected
     True
-
 .. versionadded:: 4.0.0
 """,
 
@@ -1400,10 +1291,8 @@ Args:
 Returns:
     list: Zipped list.
 Example:
-
     >>> zip_([1, 2, 3], [4, 5, 6], [7, 8, 9])
     [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
-
 .. versionadded:: 1.0.0
 """,
 
@@ -1422,10 +1311,8 @@ Args:
 Returns:
     dict: Zipped dict.
 Example:
-
     >>> zip_object([1, 2, 3], [4, 5, 6])
     {1: 4, 2: 5, 3: 6}
-
 .. versionadded:: 1.0.0
 
 .. versionchanged:: 4.0.0
@@ -1446,11 +1333,9 @@ Args:
 Returns:
     dict: Zipped dict.
 Example:
-
     >>> expected = {'a': {'b': {'c': 1, 'd': 2}}}
     >>> zip_object_deep(['a.b.c', 'a.b.d'], [1, 2]) == expected
     True
-
 .. versionadded:: 4.0.0
 """,
 
