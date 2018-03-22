@@ -1,13 +1,4 @@
 # -*- coding: utf-8 -*-
-import functools
-import inspect
-import operator
-import re
-
-import pydash as pyd
-
-from . import _code
-
 """
 Naïve docstring manipulation for documenting fp variants
 
@@ -17,6 +8,14 @@ TODO:
     * remove default doc for required args(?)
     * tests for docstring and code conversion
 """
+import inspect
+import operator
+import re
+
+import pydash as pyd
+
+from . import _code
+
 
 # section titles
 ARGS = 'Args:'

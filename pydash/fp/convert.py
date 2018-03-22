@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+Utilities for creating fp variants of pydash functions
+"""
 import operator
 import re
 
 import pydash as pyd
 
 from . import _docstr
-
-
-"""
-Utilities for creating fp variants of pydash functions
-"""
 
 
 def convert(order, f, cap=False, mutates=None, interpose=True):

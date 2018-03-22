@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# flake8: noqa
-# pylint: skip-file
+"""
+Source code manipulation for rearranging fp variant examples
+"""
 import ast
 import operator
 
@@ -8,10 +9,6 @@ try:
     import astor
 except ImportError:
     astor = None
-
-"""
-Source code manipulation for rearranging fp variant examples
-"""
 
 
 def rearg(func_name, arg_names, order, expr):
@@ -32,7 +29,7 @@ class Reorder(ast.NodeTransformer):
         self.order = order
         super(Reorder, self).__init__()
 
-    def visit_Call(self, node):
+    def visit_Call(self, node):  # noqa
         if node.func.id != self.func_name:
             return self.generic_visit(node)
         args_dict = dict(zip(self.arg_names, node.args))
