@@ -114,6 +114,8 @@ Returns:
     list: Concatenated list.
 Example:
 
+    >>> concat([1, 2], [3, 4], [[5], [6]])
+    [1, 2, 3, 4, [5], [6]]
 
 .. versionadded:: 2.0.0
 
@@ -437,8 +439,6 @@ Example:
 
     >>> index_of(2, [1, 2, 3, 4])
     1
-    >>> index_of(2, [2, 1, 2, 3])
-    2
 
 .. versionadded:: 1.0.0
 """,
@@ -481,6 +481,8 @@ Returns:
     list: Interleaved list.
 Example:
 
+    >>> interleave([1, 2, 3], [4, 5, 6], [7, 8, 9])
+    [1, 4, 7, 2, 5, 8, 3, 6, 9]
 
 .. versionadded:: 2.0.0
 """,
@@ -605,8 +607,6 @@ Example:
 
     >>> last_index_of(2, [1, 2, 2, 4])
     2
-    >>> last_index_of(2, [1, 2, 2, 4])
-    1
 
 .. versionadded:: 1.0.0
 """,
@@ -674,8 +674,6 @@ Note:
 
 Example:
 
-    >>> pull(2, [1, 2, 2, 3, 3, 4])
-    [1, 4]
 
 .. versionadded:: 1.0.0
 
@@ -780,8 +778,6 @@ Note:
 
 Example:
 
-    >>> pull_at(0, [1, 2, 3, 4])
-    [2, 4]
 
 .. versionadded:: 1.1.0
 """,
@@ -826,6 +822,8 @@ Returns:
     tuple: items structured for assigment
 Example:
 
+    >>> repack('a, *b, c', 1, 2, 3, 4)
+    (1, (2, 3), 4)
 """,
 
     # reverse
@@ -1308,8 +1306,6 @@ Note:
 
 Example:
 
-    >>> without(2, [1, 2, 3, 2, 4, 4])
-    [1, 3]
 
 .. versionadded:: 1.0.0
 """,
@@ -1405,6 +1401,8 @@ Returns:
     list: Zipped list.
 Example:
 
+    >>> zip_([1, 2, 3], [4, 5, 6], [7, 8, 9])
+    [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
 
 .. versionadded:: 1.0.0
 """,
@@ -1458,23 +1456,28 @@ Example:
 
     # zip_with
     "zip_with": """
-This method is like :func:`zip` except that it accepts a iteratee to
-specify how grouped values should be combined. The iteratee is invoked with
-four arguments: ``(accumulator, value, index, group)``.
 
-Arity: 3
+    This method is like :func:`zip` except that it accepts a iteratee to
+    specify how grouped values should be combined. The iteratee is invoked with
+    four arguments: ``(accumulator, value, index, group)``.
 
-Args:
-    *arrays (list): Lists to process.
-    iteratee (function): Function to combine grouped values.
+    Arity: 3
 
-Returns:
-    list: Zipped list of grouped elements.
-Example:
+    Args:
+        iteratee (function): Function to combine grouped values.
+        *arrays (list): Lists to process.
 
-    >>> from pydash import add
+    Returns:
+        list: Zipped list of grouped elements.
 
-.. versionadded:: 3.3.0
+    Example:
+
+        >>> from pydash import add
+        >>> zip_with(add, [1, 2], [10, 20], [100, 200])
+        [111, 222]
+
+    .. versionadded:: 3.3.0
+
 """,
 }
 

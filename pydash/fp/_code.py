@@ -33,18 +33,21 @@ class Reorder(ast.NodeTransformer):
     def visit_Call(self, node):  # noqa
         if node.func.id != self.func_name:
             return self.generic_visit(node)
+        required_count = len(self.order)
+        found_count = len(node.args) + len(node.keywords)
+        if found_count < required_count:
+            raise TypeError('too few arguments')
+        if found_count > required_count and self.cap:
+            raise TypeError('too many arguments')
         args_dict = dict(zip(self.arg_names, node.args))
         args_dict.update({k.arg: k.value for k in node.keywords})
-        count = len(self.order)
-        if len(args_dict) < count:
-            raise TypeError('too few arguments')
         if len(args_dict) < 2:
             return node
         args = [args_dict.get(name) for name in self.arg_names]
         new_args = list(operator.itemgetter(*self.order)(args))
-        if count < len(node.args):
+        if required_count < len(node.args):
             if not (self.cap or node.keywords):
-                new_args.extend(node.args[count:])
+                new_args.extend(node.args[required_count:])
         node.args = tuple(new_args)
         node.keywords = []
         return node

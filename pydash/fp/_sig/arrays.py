@@ -95,4 +95,26 @@ docstr_overrides = {
 
     .. versionadded:: 3.0.0
     """,
+    "zip_with": """
+    This method is like :func:`zip` except that it accepts a iteratee to
+    specify how grouped values should be combined. The iteratee is invoked with
+    four arguments: ``(accumulator, value, index, group)``.
+
+    Arity: 3
+
+    Args:
+        iteratee (function): Function to combine grouped values.
+        *arrays (list): Lists to process.
+
+    Returns:
+        list: Zipped list of grouped elements.
+
+    Example:
+
+        >>> from pydash import add
+        >>> zip_with(add, [1, 2], [10, 20], [100, 200])
+        [111, 222]
+
+    .. versionadded:: 3.3.0
+    """
 }
