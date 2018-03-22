@@ -114,8 +114,6 @@ Returns:
     list: Concatenated list.
 Example:
 
-    >>> concat([1, 2], [3, 4], [[5], [6]])
-    [1, 2, 3, 4, [5], [6]]
 
 .. versionadded:: 2.0.0
 
@@ -311,8 +309,6 @@ Returns:
     list: List of duplicates.
 Example:
 
-    >>> duplicates([0, 1, 3, 2, 3, 1])
-    [3, 1]
 
 .. versionadded:: 3.0.0
 """,
@@ -484,8 +480,6 @@ Returns:
     list: Interleaved list.
 Example:
 
-    >>> interleave([1, 2, 3], [4, 5, 6], [7, 8, 9])
-    [1, 4, 7, 2, 5, 8, 3, 6, 9]
 
 .. versionadded:: 2.0.0
 """,
@@ -507,8 +501,6 @@ Example:
     >>> intersection([1, 2, 3], [1, 2, 3, 4, 5], [2, 3])
     [2, 3]
 
-    >>> intersection([1, 2, 3])
-    [1, 2, 3]
 
 .. versionadded:: 1.0.0
 
@@ -656,8 +648,6 @@ Example:
     5
     >>> nth(-1, [11, 22, 33])
     33
-    >>> nth([11, 22, 33])
-    11
 
 .. versionadded:: 4.0.0
 """,
@@ -832,8 +822,6 @@ Returns:
     tuple: items structured for assigment
 Example:
 
-    >>> repack('a, *b, c', 1, 2, 3, 4)
-    (1, (2, 3), 4)
 """,
 
     # reverse
@@ -855,8 +843,6 @@ Returns:
     list: Sliced list.
 Example:
 
-    >>> slice_([1, 2, 3, 4])
-    [1]
     >>> slice_(1, 3, [1, 2, 3, 4])
     [2, 3]
 
@@ -1415,8 +1401,6 @@ Returns:
     list: Zipped list.
 Example:
 
-    >>> zip_([1, 2, 3], [4, 5, 6], [7, 8, 9])
-    [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
 
 .. versionadded:: 1.0.0
 """,

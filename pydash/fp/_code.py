@@ -35,11 +35,11 @@ class Reorder(ast.NodeTransformer):
             return self.generic_visit(node)
         args_dict = dict(zip(self.arg_names, node.args))
         args_dict.update({k.arg: k.value for k in node.keywords})
-        if len(args_dict) < 2:
-            return node
         count = len(self.order)
         if len(args_dict) < count:
             raise TypeError('too few arguments')
+        if len(args_dict) < 2:
+            return node
         args = [args_dict.get(name) for name in self.arg_names]
         new_args = list(operator.itemgetter(*self.order)(args))
         if count < len(node.args):
