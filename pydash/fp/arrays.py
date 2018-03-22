@@ -38,7 +38,6 @@ __all__ = (
     "pull_all_by",
     "pull_all_with",
     "pull_at",
-    "remove",
     "repack",
     "reverse",
     "slice_",
@@ -742,29 +741,6 @@ Example:
 
 """,
 
-    # remove
-    "remove": """
-Removes all elements from a list that the predicate returns truthy for
-and returns an array of removed elements.
-
-Arity: 2
-
-Args:
-    predicate (mixed): Predicate applied per iteration.
-    array (list): List to remove elements from.
-
-Returns:
-    list: Removed elements of `array`.
-Example:
-    >>> array = [1, 2, 3, 4]
-    >>> items = remove(lambda x: x >= 3, array)
-    >>> items
-    [3, 4]
-    >>> array
-    [1, 2]
-.. versionadded:: 1.0.0
-""",
-
     # repack
     "repack": """
 Repacks an iterable for destructuring assignment
@@ -1436,7 +1412,6 @@ pull_all = _convert([1, 0], pyd.pull_all)
 pull_all_by = _convert([2, 1, 0], pyd.pull_all_by)
 pull_all_with = _convert([2, 1, 0], pyd.pull_all_with)
 pull_at = _convert([1, 0], pyd.pull_at, **{'cap': True})
-remove = _convert([1, 0], pyd.remove)
 repack = _convert([0, 1], pyd.repack)
 reverse = pyd.reverse
 slice_ = _convert([2, 0, 1], pyd.slice_)

@@ -3,7 +3,7 @@ import pydash
 from pydash import fp, repack
 from .fixtures import parametrize
 
-# The following pydash functions are exposed unmodified:
+# The following unary pydash functions are exposed unmodified:
 #   compact
 #   flatten
 #   flatten_deep
@@ -21,6 +21,7 @@ from .fixtures import parametrize
 # The following pydash functions are excluded:
 #   pop
 #   push
+#   remove
 #   shift
 #   splice
 #   unshift
@@ -406,17 +407,6 @@ def test_pull_at(case, expected):
     a, b = case
     assert fp.pull_at(b)(a) == expected
     assert fp.pull_at(b, a) == expected
-    assert a != expected
-
-
-@parametrize('case,expected', [
-    (([1, 2, 3, 4, 5, 6], lambda x: x % 2 == 0), [2, 4, 6]),
-    (([1, 2, 3, 4], lambda x: x >= 3), [3, 4]),
-])
-def test_remove(case, expected):
-    a, b = case
-    assert fp.remove(b)(a) == expected
-    assert fp.remove(b, a) == expected
     assert a != expected
 
 

@@ -38,7 +38,6 @@ signatures = [
     ("pull_all_by", [2, 1, 0]),
     ("pull_all_with", [2, 1, 0]),
     ("pull_at", [1, 0], {"cap": True}),
-    ("remove", [1, 0]),
     ("repack", [0, 1]),
     ("reverse",),
     ("slice_", [2, 0, 1]),
