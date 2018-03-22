@@ -13,6 +13,7 @@ __all__ = (
     "drop_right",
     "drop_right_while",
     "duplicates",
+    "duplicates_by",
     "fill",
     "find_index",
     "find_last_index",
@@ -289,7 +290,6 @@ Arity: 1
 
 Args:
     array (list): List to process.
-    iteratee (mixed, optional): Iteratee applied per iteration.
 
 Returns:
     list: List of duplicates.
@@ -298,6 +298,34 @@ Example:
 
     >>> duplicates([0, 1, 3, 2, 3, 1])
     [3, 1]
+
+.. versionadded:: 3.0.0
+
+""",
+
+    # duplicates_by
+    "duplicates_by": """
+
+Creates a unique list of duplicate values from `array`.
+Each element of array is passed through `iteratee` before
+duplicates are computed. The iteratee is invoked with three arguments:
+``(value, index, array)``. If an object path is passed for iteratee, the
+created iteratee will return the path value of the given element. If an
+object is passed for iteratee, the created filter style iteratee will
+return ``True`` for elements that have the properties of the given object,
+else ``False``.
+
+Args:
+    iteratee (mixed, optional): Iteratee applied per iteration.
+    array (list): List to process.
+
+Returns:
+    list: List of duplicates.
+
+Example:
+
+    >>> duplicates_by(lambda v: v // 2, [0,1,2,3,4,6,8,9])
+    [1, 3, 9]
 
 .. versionadded:: 3.0.0
 
@@ -643,7 +671,7 @@ Args:
     array (list): List to pull from.
 
 Returns:
-    list: Resulting `array`.
+    list: Filtered list.
 
 Note:
     The fp variant of pull takes
@@ -748,7 +776,7 @@ Args:
     array (list): List to pull from.
 
 Returns:
-    list: Resulting `array`.
+    list: Filtered list.
 
 Note:
     The fp variant of pull_at takes
@@ -1443,6 +1471,7 @@ drop_while = _convert([1, 0], pyd.drop_while)
 drop_right = _convert([1, 0], pyd.drop_right)
 drop_right_while = _convert([1, 0], pyd.drop_right_while)
 duplicates = _convert([0], pyd.duplicates)
+duplicates_by = _convert([1, 0], pyd.duplicates)
 fill = _convert([3, 2, 0, 1], pyd.fill)
 find_index = _convert([1, 0], pyd.find_index)
 find_last_index = _convert([1, 0], pyd.find_last_index)

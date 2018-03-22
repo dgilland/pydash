@@ -36,16 +36,16 @@ def all_function_data(module):
 
 def function_data(sig, docstr):
     return {
-        "name": sig[0],
+        "target_name": sig[0],
         "conversion": function_conversion(sig),
         "docstr": docstr.rstrip(' ') or function_docstr(*sig),
     }
 
 
 templates = {
-    1: "{0} = pyd.{0}",
-    2: "{0} = _convert({1!r}, pyd.{0})",
-    3: "{0} = _convert({1!r}, pyd.{0}, **{2!r})",
+    2: "{0} = pyd.{1}",
+    3: "{0} = _convert({2!r}, pyd.{1})",
+    4: "{0} = _convert({2!r}, pyd.{1}, **{3!r})",
 }
 
 
@@ -53,12 +53,18 @@ def function_conversion(sig):
     return templates[len(sig)].format(*sig)
 
 
-def function_docstr(name, order=None, options=None):
+def function_docstr(target_name, source_name, order=None, options=None):
     if order is None:
         return None
-    original_func = getattr(pyd, name)
+    original_func = getattr(pyd, source_name)
     cap = (options or {}).get('cap', False)
-    return _docstr.convert(name, order, cap, original_func.__doc__)
+    return _docstr.convert(
+        target_name=target_name,
+        source_name=source_name,
+        order=order,
+        cap=cap,
+        docstr=original_func.__doc__
+    )
 
 
 def module_code(name, functions):
@@ -67,17 +73,17 @@ def module_code(name, functions):
     yield "from .convert import convert"
     yield "__all__ = ("
     for func_data in functions:
-        yield '    "{}",'.format(func_data["name"])
+        yield '    "{}",'.format(func_data["target_name"])
     yield ")"
     yield ""
     yield ""
     yield "docstrings = {"
     for func_data in functions:
         yield ""
-        yield "    # {}".format(func_data["name"])
+        yield "    # {}".format(func_data["target_name"])
         if func_data["docstr"] is None:
             continue
-        yield '    "{}": """'.format(func_data["name"])
+        yield '    "{}": """'.format(func_data["target_name"])
         yield textwrap.dedent(func_data["docstr"])
         yield '""",'
     yield "}"

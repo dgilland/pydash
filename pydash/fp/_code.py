@@ -11,8 +11,8 @@ except ImportError:
     astor = None
 
 
-def rearg(func_name, arg_names, order, cap):
-    transformer = Reorder(func_name, arg_names, order, cap)
+def rewrite(**context):
+    transformer = Reorder(**context)
     return lambda expr: transform(transformer, expr)
 
 
@@ -23,16 +23,18 @@ def transform(transformer, expr):
 
 
 class Reorder(ast.NodeTransformer):
-    def __init__(self, func_name, arg_names, order, cap):
-        self.func_name = func_name
-        self.arg_names = arg_names
-        self.order = order
-        self.cap = cap
+    def __init__(self, **context):
+        self.target_name = context["target_name"]
+        self.source_name = context["source_name"]
+        self.arg_names = context["arg_names"]
+        self.order = context["inverse"]
+        self.cap = context["cap"]
         super(Reorder, self).__init__()
 
     def visit_Call(self, node):  # noqa
-        if node.func.id != self.func_name:
+        if node.func.id != self.source_name:
             return self.generic_visit(node)
+        node.func.id = self.target_name
         required_count = len(self.order)
         found_count = len(node.args) + len(node.keywords)
         if found_count < required_count:

@@ -26,10 +26,11 @@ RETURNS = 'Returns:'
 code_prefix = '    >>> '
 
 
-def convert(func_name, order, cap, docstr):
+def convert(target_name, source_name, order, cap, docstr):
     sections = docstr_sections(docstr)
     context = {
-        'func_name': func_name,
+        'target_name': target_name,
+        'source_name': source_name,
         'order': order,
         'inverse': [p[1] for p in sorted(zip(order, range(len(order))))],
         'args': arguments(sections),
@@ -48,11 +49,11 @@ def convert(func_name, order, cap, docstr):
             lines.extend(convert_returns(section))
             lines.extend(cap_note(**context))
         elif section[0] == EXAMPLE:
-            example = list(convert_example(section, **context))
+            example = list(convert_example(section, context))
             if example[1:]:
                 lines.extend(example)
             else:
-                print("WARNING: no example for {}".format(func_name))
+                print("WARNING: no example for {}".format(target_name))
         else:
             lines.extend(section)
     return '\n'.join(lines)
@@ -111,29 +112,29 @@ def convert_returns(section):
     ] + [return_re.sub('Resulting', ''.join(line)) for line in section[1:]]
 
 
-def cap_note(cap, func_name, order, **_):
+def cap_note(cap, target_name, order, **_):
     if not cap:
         return []
     return [
         'Note:',
-        '    The fp variant of {} takes'.format(func_name),
+        '    The fp variant of {} takes'.format(target_name),
         '    exactly {} arguments'.format(len(order)),
         '',
     ]
 
 
-def convert_example(section, func_name, args, inverse, cap, **_):
+def convert_example(section, context):
     if not _code.astor:
         return []
     arg_re = re.compile(r'\w+')
-    arg_names = [arg_re.search(a[0]).group() for a in args]
+    arg_names = [arg_re.search(a[0]).group() for a in context["args"]]
     pos = len(code_prefix)
 
     def code_rearg(line):
         if not line.startswith(code_prefix):
             return line
         try:
-            code = _code.rearg(func_name, arg_names, inverse, cap)(line[pos:])
+            code = _code.rewrite(arg_names=arg_names, **context)(line[pos:])
             return code_prefix + code
         except TypeError:
             return 'invalid'

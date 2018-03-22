@@ -149,6 +149,17 @@ def test_duplicates(case, expected):
 
 
 @parametrize('case,expected', [
+    (([1, 2, 3, 2, 1, 5, 6, 5, 5, 5], None), [2, 1, 5]),
+    ((['A', 'b', 'C', 'a', 'B', 'c'], lambda letter: letter.lower()),
+     ['a', 'B', 'c'])
+])
+def test_duplicates_by(case, expected):
+    a, b = case
+    assert fp.duplicates_by(b)(a) == expected
+    assert fp.duplicates_by(b, a) == expected
+
+
+@parametrize('case,expected', [
     (([1, 2, 3, 4, 5], 0, 0, None), [0, 0, 0, 0, 0]),
     (([1, 2, 3, 4, 5], 0, 2, None), [1, 2, 0, 0, 0]),
     (([1, 2, 3, 4, 5], 0, 2, 3), [1, 2, 0, 4, 5]),
