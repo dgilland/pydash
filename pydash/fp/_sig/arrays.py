@@ -95,6 +95,84 @@ docstr_overrides = {
 
     .. versionadded:: 3.0.0
     """,
+    "pull": """
+    Creates a copy of `array` with all occurrences of specified value
+    removed.
+
+    Arity: 2
+
+    Args:
+        value (mixed): Value to remove.
+        array (list): List to pull from.
+
+    Returns:
+        list: Resulting `array`.
+
+    Note:
+        The fp variant of pull takes
+        exactly 2 arguments
+
+    Example:
+
+        >>> pull(2, [1, 2, 2, 3, 3, 4])
+        [1, 3, 3, 4]
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 4.0.0
+        :func:`pull` method now calls :func:`pull_all` method for the desired
+        functionality.
+    """,
+    "pull_at": """
+    Creates a copy of `array` with elements corresponding to the specified indexes 
+    removed.  Indexes may be specified as a list.
+
+    Arity: 2
+
+    Args:
+        indexes (int): Indexes to pull.
+        array (list): List to pull from.
+
+    Returns:
+        list: Resulting `array`.
+
+    Note:
+        The fp variant of pull_at takes
+        exactly 2 arguments
+
+    Example:
+
+        >>> pull_at([0, 2], [1, 2, 3, 4])
+        [2, 4]
+
+        >>> pull_at(2, [1, 2, 3, 4])
+        [1, 2, 4]
+
+
+    .. versionadded:: 1.1.0
+    """,
+    "without": """
+    Creates an array with all occurrences of the passed values removed.
+
+    Arity: 2
+
+    Args:
+        values (mixed): Values to remove.
+        array (list): List to filter.
+
+    Returns:
+        list: Filtered list.
+    Note:
+        The fp variant of without takes
+        exactly 2 arguments
+
+    Example:
+
+        >>> without(2, [1, 2, 3, 2, 4, 4])
+        [1, 3, 4, 4]
+
+    .. versionadded:: 1.0.0
+    """,
     "zip_with": """
     This method is like :func:`zip` except that it accepts a iteratee to
     specify how grouped values should be combined. The iteratee is invoked with

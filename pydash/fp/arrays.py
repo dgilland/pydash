@@ -610,25 +610,34 @@ Example:
 
     # pull
     "pull": """
-Removes all provided values from the given array.
 
-Arity: 2
+    Creates a copy of `array` with all occurrences of specified value
+    removed.
 
-Args:
-    values (mixed): Values to remove.
-    array (list): List to pull from.
+    Arity: 2
 
-Returns:
-    list: Resulting `array`.
-Note:
-    The fp variant of pull takes
-    exactly 2 arguments
+    Args:
+        value (mixed): Value to remove.
+        array (list): List to pull from.
 
-.. versionadded:: 1.0.0
+    Returns:
+        list: Resulting `array`.
 
-.. versionchanged:: 4.0.0
-    :func:`pull` method now calls :func:`pull_all` method for the desired
-    functionality.
+    Note:
+        The fp variant of pull takes
+        exactly 2 arguments
+
+    Example:
+
+        >>> pull(2, [1, 2, 2, 3, 3, 4])
+        [1, 3, 3, 4]
+
+    .. versionadded:: 1.0.0
+
+    .. versionchanged:: 4.0.0
+        :func:`pull` method now calls :func:`pull_all` method for the desired
+        functionality.
+
 """,
 
     # pull_all
@@ -703,23 +712,34 @@ Example:
 
     # pull_at
     "pull_at": """
-Removes elements from `array` corresponding to the specified indexes and
-returns a list of the removed elements. Indexes may be specified as a list
-of indexes or as individual arguments.
 
-Arity: 2
+    Creates a copy of `array` with elements corresponding to the specified indexes 
+    removed.  Indexes may be specified as a list.
 
-Args:
-    indexes (int): Indexes to pull.
-    array (list): List to pull from.
+    Arity: 2
 
-Returns:
-    list: Resulting `array`.
-Note:
-    The fp variant of pull_at takes
-    exactly 2 arguments
+    Args:
+        indexes (int): Indexes to pull.
+        array (list): List to pull from.
 
-.. versionadded:: 1.1.0
+    Returns:
+        list: Resulting `array`.
+
+    Note:
+        The fp variant of pull_at takes
+        exactly 2 arguments
+
+    Example:
+
+        >>> pull_at([0, 2], [1, 2, 3, 4])
+        [2, 4]
+
+        >>> pull_at(2, [1, 2, 3, 4])
+        [1, 2, 4]
+
+
+    .. versionadded:: 1.1.0
+
 """,
 
     # remove
@@ -1190,21 +1210,28 @@ Example:
 
     # without
     "without": """
-Creates an array with all occurrences of the passed values removed.
 
-Arity: 2
+    Creates an array with all occurrences of the passed values removed.
 
-Args:
-    values (mixed): Values to remove.
-    array (list): List to filter.
+    Arity: 2
 
-Returns:
-    list: Filtered list.
-Note:
-    The fp variant of without takes
-    exactly 2 arguments
+    Args:
+        values (mixed): Values to remove.
+        array (list): List to filter.
 
-.. versionadded:: 1.0.0
+    Returns:
+        list: Filtered list.
+    Note:
+        The fp variant of without takes
+        exactly 2 arguments
+
+    Example:
+
+        >>> without(2, [1, 2, 3, 2, 4, 4])
+        [1, 3, 4, 4]
+
+    .. versionadded:: 1.0.0
+
 """,
 
     # xor

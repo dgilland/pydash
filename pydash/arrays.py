@@ -1085,7 +1085,7 @@ def pull_all_with(array, values, comparator=None):
 
 def pull_at(array, *indexes):
     """Removes elements from `array` corresponding to the specified indexes and
-    returns a list of the removed elements. Indexes may be specified as a list
+    returns the resulting list. Indexes may be specified as a list
     of indexes or as individual arguments.
 
     Args:
