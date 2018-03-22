@@ -6,6 +6,8 @@ You should not need to run this to use pydash.fp
 """
 
 import os
+import textwrap
+
 import pydash as pyd
 from . import _docstr
 from ._sig import arrays
@@ -76,7 +78,7 @@ def module_code(name, functions):
         if func_data["docstr"] is None:
             continue
         yield '    "{}": """'.format(func_data["name"])
-        yield func_data["docstr"]
+        yield textwrap.dedent(func_data["docstr"])
         yield '""",'
     yield "}"
     yield ""

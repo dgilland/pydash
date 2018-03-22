@@ -123,8 +123,8 @@ docstr_overrides = {
         functionality.
     """,
     "pull_at": """
-    Creates a copy of `array` with elements corresponding to the specified indexes 
-    removed.  Indexes may be specified as a list.
+    Creates a copy of `array` with elements corresponding to the specified
+    indexes removed.  Indexes may be specified as a list.
 
     Arity: 2
 

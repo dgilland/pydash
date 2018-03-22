@@ -108,8 +108,7 @@ def convert_returns(section):
     return_re = re.compile('modified', re.I)
     return [
         section[0],
-        return_re.sub('Resulting', ''.join(section[1:]))
-    ]
+    ] + [return_re.sub('Resulting', ''.join(line)) for line in section[1:]]
 
 
 def cap_note(cap, func_name, order, **_):

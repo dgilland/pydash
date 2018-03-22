@@ -90,6 +90,7 @@ Args:
 
 Returns:
     list: New list containing chunks of `array`.
+
 Example:
     >>> chunk(2, [1, 2, 3, 4, 5])
     [[1, 2], [3, 4], [5]]
@@ -109,6 +110,7 @@ Args:
 
 Returns:
     list: Concatenated list.
+
 Example:
     >>> concat([1, 2], [3, 4], [[5], [6]])
     [1, 2, 3, 4, [5], [6]]
@@ -130,6 +132,7 @@ Args:
 
 Returns:
     list: Difference between `others`.
+
 Example:
     >>> difference([1, 2, 3], [1], [2])
     [3]
@@ -154,6 +157,7 @@ Args:
 
 Returns:
     list: Difference between `others`.
+
 Example:
     >>> difference_by(round, [1.2, 1.5, 1.7, 2.8], [0.9, 3.2])
     [1.5, 1.7]
@@ -177,6 +181,7 @@ Args:
 
 Returns:
     list: Difference between `others`.
+
 Example:
     >>> array = ['apple', 'banana', 'pear']
     >>> others = ['avocado', 'pumpkin'], ['peach']
@@ -198,6 +203,7 @@ Args:
 
 Returns:
     list: Dropped list.
+
 Example:
     >>> drop(2, [1, 2, 3, 4])
     [3, 4]
@@ -224,6 +230,7 @@ Args:
 
 Returns:
     list: Dropped list.
+
 Example:
     >>> drop_while(lambda x: x < 3, [1, 2, 3, 4])
     [3, 4]
@@ -242,6 +249,7 @@ Args:
 
 Returns:
     list: Dropped list.
+
 Example:
     >>> drop_right(2, [1, 2, 3, 4])
     [1, 2]
@@ -265,6 +273,7 @@ Args:
 
 Returns:
     list: Dropped list.
+
 Example:
     >>> drop_right_while(lambda x: x >= 3, [1, 2, 3, 4])
     [1, 2]
@@ -274,23 +283,23 @@ Example:
     # duplicates
     "duplicates": """
 
-    Creates a unique list of duplicate values from `array`.
+Creates a unique list of duplicate values from `array`.
 
-    Arity: 1
+Arity: 1
 
-    Args:
-        array (list): List to process.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+Args:
+    array (list): List to process.
+    iteratee (mixed, optional): Iteratee applied per iteration.
 
-    Returns:
-        list: List of duplicates.
+Returns:
+    list: List of duplicates.
 
-    Example:
+Example:
 
-        >>> duplicates([0, 1, 3, 2, 3, 1])
-        [3, 1]
+    >>> duplicates([0, 1, 3, 2, 3, 1])
+    [3, 1]
 
-    .. versionadded:: 3.0.0
+.. versionadded:: 3.0.0
 
 """,
 
@@ -309,6 +318,7 @@ Args:
 
 Returns:
     list: Filled `array`.
+
 Example:
     >>> fill(1, 3, 0, [1, 2, 3, 4, 5])
     [1, 0, 0, 4, 5]
@@ -331,6 +341,7 @@ Args:
 
 Returns:
     int: Index of found item or ``-1`` if not found.
+
 Example:
     >>> find_index(lambda x: x >= 3, [1, 2, 3, 4])
     2
@@ -352,6 +363,7 @@ Args:
 
 Returns:
     int: Index of found item or ``-1`` if not found.
+
 Example:
     >>> find_last_index(lambda x: x >= 3, [1, 2, 3, 4])
     3
@@ -376,6 +388,7 @@ Args:
 
 Returns:
     list: Flattened list.
+
 Example:
     >>> flatten_depth(1, [[[1], [2, [3]], [[4]]]])
     [[1], [2, [3]], [[4]]]
@@ -404,6 +417,7 @@ Args:
 
 Returns:
     int: Index of found item or ``-1`` if not found.
+
 Note:
     The fp variant of index_of takes
     exactly 2 arguments
@@ -429,6 +443,7 @@ Args:
 
 Returns:
     list: Intercalated list.
+
 Example:
     >>> intercalate('x', [1, [2], [3], 4])
     [1, 'x', 2, 'x', 3, 'x', 4]
@@ -447,6 +462,7 @@ Args:
 
 Returns:
     list: Interleaved list.
+
 Example:
     >>> interleave([1, 2, 3], [4, 5, 6], [7, 8, 9])
     [1, 4, 7, 2, 5, 8, 3, 6, 9]
@@ -465,6 +481,7 @@ Args:
 
 Returns:
     list: Intersection of provided lists.
+
 Example:
     >>> intersection([1, 2, 3], [1, 2, 3, 4, 5], [2, 3])
     [2, 3]
@@ -492,6 +509,7 @@ Args:
 
 Returns:
     list: Intersection of provided lists.
+
 Example:
     >>> intersection_by(round, [1.2, 1.5, 1.7, 2.8], [0.9, 3.2])
     [1.2, 2.8]
@@ -515,6 +533,7 @@ Args:
 
 Returns:
     list: Intersection of provided lists.
+
 Example:
     >>> array = ['apple', 'banana', 'pear']
     >>> others = ['avocado', 'pumpkin'], ['peach']
@@ -536,6 +555,7 @@ Args:
 
 Returns:
     list: Interspersed list.
+
 Example:
     >>> intersperse('x', [1, [2], [3], 4])
     [1, 'x', [2], 'x', [3], 'x', 4]
@@ -556,6 +576,7 @@ Args:
 
 Returns:
     int: Index of found item or ``False`` if not found.
+
 Note:
     The fp variant of last_index_of takes
     exactly 2 arguments
@@ -579,6 +600,7 @@ Args:
 
 Returns:
     list: Mapped and concatenated list.
+
 Example:
     >>> mapcat(lambda x: list(range(x)), range(4))
     [0, 0, 1, 0, 1, 2]
@@ -597,6 +619,7 @@ Args:
 
 Returns:
     mixed: Returns the element at :attr:`pos`.
+
 Example:
     >>> nth(0, [1, 2, 3])
     1
@@ -610,32 +633,32 @@ Example:
     # pull
     "pull": """
 
-    Creates a copy of `array` with all occurrences of specified value
-    removed.
+Creates a copy of `array` with all occurrences of specified value
+removed.
 
-    Arity: 2
+Arity: 2
 
-    Args:
-        value (mixed): Value to remove.
-        array (list): List to pull from.
+Args:
+    value (mixed): Value to remove.
+    array (list): List to pull from.
 
-    Returns:
-        list: Resulting `array`.
+Returns:
+    list: Resulting `array`.
 
-    Note:
-        The fp variant of pull takes
-        exactly 2 arguments
+Note:
+    The fp variant of pull takes
+    exactly 2 arguments
 
-    Example:
+Example:
 
-        >>> pull(2, [1, 2, 2, 3, 3, 4])
-        [1, 3, 3, 4]
+    >>> pull(2, [1, 2, 2, 3, 3, 4])
+    [1, 3, 3, 4]
 
-    .. versionadded:: 1.0.0
+.. versionadded:: 1.0.0
 
-    .. versionchanged:: 4.0.0
-        :func:`pull` method now calls :func:`pull_all` method for the desired
-        functionality.
+.. versionchanged:: 4.0.0
+    :func:`pull` method now calls :func:`pull_all` method for the desired
+    functionality.
 
 """,
 
@@ -651,6 +674,7 @@ Args:
 
 Returns:
     list: Resulting `array`.
+
 Example:
     >>> pull_all([2, 3], [1, 2, 2, 3, 3, 4])
     [1, 4]
@@ -674,6 +698,7 @@ Args:
 
 Returns:
     list: Resulting `array`.
+
 Example:
     >>> array = [{'x': 1}, {'x': 2}, {'x': 3}, {'x': 1}]
     >>> pull_all_by('x', [{'x': 1}, {'x': 3}], array)
@@ -697,6 +722,7 @@ Args:
 
 Returns:
     list: Resulting `array`.
+
 Example:
     >>> array = [{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]
     >>> res = pull_all_with(lambda a, b: a == b, [{'x': 3, 'y': 4}], array)
@@ -712,32 +738,32 @@ Example:
     # pull_at
     "pull_at": """
 
-    Creates a copy of `array` with elements corresponding to the specified indexes 
-    removed.  Indexes may be specified as a list.
+Creates a copy of `array` with elements corresponding to the specified
+indexes removed.  Indexes may be specified as a list.
 
-    Arity: 2
+Arity: 2
 
-    Args:
-        indexes (int): Indexes to pull.
-        array (list): List to pull from.
+Args:
+    indexes (int): Indexes to pull.
+    array (list): List to pull from.
 
-    Returns:
-        list: Resulting `array`.
+Returns:
+    list: Resulting `array`.
 
-    Note:
-        The fp variant of pull_at takes
-        exactly 2 arguments
+Note:
+    The fp variant of pull_at takes
+    exactly 2 arguments
 
-    Example:
+Example:
 
-        >>> pull_at([0, 2], [1, 2, 3, 4])
-        [2, 4]
+    >>> pull_at([0, 2], [1, 2, 3, 4])
+    [2, 4]
 
-        >>> pull_at(2, [1, 2, 3, 4])
-        [1, 2, 4]
+    >>> pull_at(2, [1, 2, 3, 4])
+    [1, 2, 4]
 
 
-    .. versionadded:: 1.1.0
+.. versionadded:: 1.1.0
 
 """,
 
@@ -754,6 +780,7 @@ Args:
 
 Returns:
     tuple: items structured for assigment
+
 Example:
     >>> repack('a, *b, c', 1, 2, 3, 4)
     (1, (2, 3), 4)
@@ -776,6 +803,7 @@ Args:
 
 Returns:
     list: Sliced list.
+
 Example:
     >>> slice_(1, 3, [1, 2, 3, 4])
     [2, 3]
@@ -794,7 +822,9 @@ Args:
     array (list): List to inspect.
 
 Returns:
-    int: Returns the index at which `value` should be inserted into        `array`.
+    int: Returns the index at which `value` should be inserted into
+    `array`.
+
 Example:
     >>> sorted_index(2, [1, 2, 2, 3, 4])
     1
@@ -820,7 +850,9 @@ Args:
     array (list): List to inspect.
 
 Returns:
-    int: Returns the index at which `value` should be inserted into        `array`.
+    int: Returns the index at which `value` should be inserted into
+    `array`.
+
 Example:
     >>> array = [{'x': 4}, {'x': 5}]
     >>> sorted_index_by({'x': 4}, lambda o: o['x'], array)
@@ -843,6 +875,7 @@ Args:
 
 Returns:
     int: Returns the index of the first matched value, else ``-1``.
+
 Example:
     >>> sorted_index_of(3, [3, 5, 7, 10])
     0
@@ -864,7 +897,9 @@ Args:
     array (list): List to inspect.
 
 Returns:
-    int: Returns the index at which `value` should be inserted into        `array`.
+    int: Returns the index at which `value` should be inserted into
+    `array`.
+
 Example:
     >>> sorted_last_index(2, [1, 2, 2, 3, 4])
     3
@@ -890,7 +925,9 @@ Args:
     array (list): List to inspect.
 
 Returns:
-    int: Returns the index at which `value` should be inserted into        `array`.
+    int: Returns the index at which `value` should be inserted into
+    `array`.
+
 Example:
     >>> array = [{'x': 4}, {'x': 5}]
     >>> sorted_last_index_by({'x': 4}, lambda o: o['x'], array)
@@ -912,6 +949,7 @@ Args:
 
 Returns:
     int: Returns the index of the matched value, else ``-1``.
+
 Example:
     >>> sorted_last_index_of(5, [4, 5, 5, 5, 6])
     3
@@ -939,6 +977,7 @@ Args:
 
 Returns:
     list: Unique list.
+
 Example:
     >>> sorted_uniq_by(lambda val: val % 2, [3, 2, 1, 3, 2, 1])
     [2, 3]
@@ -957,6 +996,7 @@ Args:
 
 Returns:
     list: Split list.
+
 Example:
     >>> split_at(2, [1, 2, 3, 4])
     [[1, 2], [3, 4]]
@@ -977,6 +1017,7 @@ Args:
 
 Returns:
     list: Taken list.
+
 Example:
     >>> take(2, [1, 2, 3, 4])
     [1, 2]
@@ -1001,6 +1042,7 @@ Args:
 
 Returns:
     list: Taken list.
+
 Example:
     >>> take_right(2, [1, 2, 3, 4])
     [3, 4]
@@ -1024,6 +1066,7 @@ Args:
 
 Returns:
     list: Dropped list.
+
 Example:
     >>> take_right_while(lambda x: x >= 3, [1, 2, 3, 4])
     [3, 4]
@@ -1044,6 +1087,7 @@ Args:
 
 Returns:
     list: Taken list.
+
 Example:
     >>> take_while(lambda x: x < 3, [1, 2, 3, 4])
     [1, 2]
@@ -1062,6 +1106,7 @@ Args:
 
 Returns:
     list: Unionized list.
+
 Example:
     >>> union([1, 2, 3], [2, 3, 4], [3, 4, 5])
     [1, 2, 3, 4, 5]
@@ -1083,6 +1128,7 @@ Args:
 
 Returns:
     list: Unionized list.
+
 Example:
     >>> union_by(lambda x: x % 2, [1, 2, 3], [2, 3, 4])
     [1, 2]
@@ -1107,6 +1153,7 @@ Args:
 
 Returns:
     list: Unionized list.
+
 Example:
     >>> comparator = lambda a, b: a % 2 == b % 2
     >>> union_with(comparator, [1, 2, 3], [2, 3, 4])
@@ -1133,6 +1180,7 @@ Args:
 
 Returns:
     list: Unique list.
+
 Example:
     >>> uniq_by(lambda val: val % 2, [1, 2, 3, 1, 2, 3])
     [1, 2]
@@ -1155,6 +1203,7 @@ Args:
 
 Returns:
     list: Unique list.
+
 Example:
     >>> uniq_with(lambda a, b: a % 2 == b % 2, [1, 2, 3, 4, 5])
     [1, 2]
@@ -1177,6 +1226,7 @@ Args:
 
 Returns:
     list: Unzipped list.
+
 Example:
     >>> from pydash import add
     >>> unzip_with(add, [[1, 10, 100], [2, 20, 200]])
@@ -1187,26 +1237,26 @@ Example:
     # without
     "without": """
 
-    Creates an array with all occurrences of the passed values removed.
+Creates an array with all occurrences of the passed values removed.
 
-    Arity: 2
+Arity: 2
 
-    Args:
-        values (mixed): Values to remove.
-        array (list): List to filter.
+Args:
+    values (mixed): Values to remove.
+    array (list): List to filter.
 
-    Returns:
-        list: Filtered list.
-    Note:
-        The fp variant of without takes
-        exactly 2 arguments
+Returns:
+    list: Filtered list.
+Note:
+    The fp variant of without takes
+    exactly 2 arguments
 
-    Example:
+Example:
 
-        >>> without(2, [1, 2, 3, 2, 4, 4])
-        [1, 3, 4, 4]
+    >>> without(2, [1, 2, 3, 2, 4, 4])
+    [1, 3, 4, 4]
 
-    .. versionadded:: 1.0.0
+.. versionadded:: 1.0.0
 
 """,
 
@@ -1222,6 +1272,7 @@ Args:
 
 Returns:
     list: XOR'd list.
+
 Example:
     >>> xor([1, 3, 4], [1, 2, 4], [2])
     [3]
@@ -1246,6 +1297,7 @@ Args:
 
 Returns:
     list: XOR'd list.
+
 Example:
     >>> xor_by(round, [2.1, 1.2], [2.3, 3.4])
     [1.2, 3.4]
@@ -1271,6 +1323,7 @@ Args:
 
 Returns:
     list: XOR'd list.
+
 Example:
     >>> objects = [{'x': 1, 'y': 2}, {'x': 2, 'y': 1}]
     >>> others = [{'x': 1, 'y': 1}, {'x': 1, 'y': 2}]
@@ -1293,6 +1346,7 @@ Args:
 
 Returns:
     list: Zipped list.
+
 Example:
     >>> zip_([1, 2, 3], [4, 5, 6], [7, 8, 9])
     [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
@@ -1313,6 +1367,7 @@ Args:
 
 Returns:
     dict: Zipped dict.
+
 Example:
     >>> zip_object([1, 2, 3], [4, 5, 6])
     {1: 4, 2: 5, 3: 6}
@@ -1335,6 +1390,7 @@ Args:
 
 Returns:
     dict: Zipped dict.
+
 Example:
     >>> expected = {'a': {'b': {'c': 1, 'd': 2}}}
     >>> zip_object_deep(['a.b.c', 'a.b.d'], [1, 2]) == expected
@@ -1345,26 +1401,26 @@ Example:
     # zip_with
     "zip_with": """
 
-    This method is like :func:`zip` except that it accepts a iteratee to
-    specify how grouped values should be combined. The iteratee is invoked with
-    four arguments: ``(accumulator, value, index, group)``.
+This method is like :func:`zip` except that it accepts a iteratee to
+specify how grouped values should be combined. The iteratee is invoked with
+four arguments: ``(accumulator, value, index, group)``.
 
-    Arity: 3
+Arity: 3
 
-    Args:
-        iteratee (function): Function to combine grouped values.
-        *arrays (list): Lists to process.
+Args:
+    iteratee (function): Function to combine grouped values.
+    *arrays (list): Lists to process.
 
-    Returns:
-        list: Zipped list of grouped elements.
+Returns:
+    list: Zipped list of grouped elements.
 
-    Example:
+Example:
 
-        >>> from pydash import add
-        >>> zip_with(add, [1, 2], [10, 20], [100, 200])
-        [111, 222]
+    >>> from pydash import add
+    >>> zip_with(add, [1, 2], [10, 20], [100, 200])
+    [111, 222]
 
-    .. versionadded:: 3.3.0
+.. versionadded:: 3.3.0
 
 """,
 }

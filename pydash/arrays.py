@@ -1365,7 +1365,7 @@ def sorted_index(array, value):
 
     Returns:
         int: Returns the index at which `value` should be inserted into
-            `array`.
+        `array`.
 
     Example:
 
@@ -1394,7 +1394,7 @@ def sorted_index_by(array, value, iteratee=None):
 
     Returns:
         int: Returns the index at which `value` should be inserted into
-            `array`.
+        `array`.
 
     Example:
 
@@ -1454,7 +1454,7 @@ def sorted_last_index(array, value):
 
     Returns:
         int: Returns the index at which `value` should be inserted into
-            `array`.
+        `array`.
 
     Example:
 
@@ -1483,7 +1483,7 @@ def sorted_last_index_by(array, value, iteratee=None):
 
     Returns:
         int: Returns the index at which `value` should be inserted into
-            `array`.
+        `array`.
 
     Example:
 
