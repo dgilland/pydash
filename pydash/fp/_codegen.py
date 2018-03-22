@@ -6,6 +6,8 @@ You should not need to run this to use pydash.fp
 """
 
 import os
+import pydash as pyd
+from . import _docstr
 from ._sig import arrays
 
 
@@ -33,13 +35,37 @@ def module_code(name, signatures):
     yield ")"
     yield ""
     yield ""
+    yield "docstrings = {"
+    for sig in signatures:
+        yield ""
+        yield "    # {}".format(sig[0])
+        if len(sig) == 1:
+            continue
+        yield '    "{}": """'.format(sig[0])
+        yield function_docstr(*sig)
+        yield '""",'
+    yield "}"
+    yield ""
+    yield ""
+    yield "def _convert(order, func, **kwargs):"
+    yield "    fp_func = convert(order, func, **kwargs)"
+    yield "    fp_func.__doc__ = docstrings.get(func.__name__, func.__doc__)"
+    yield "    return fp_func"
+    yield ""
+    yield ""
     templates = {
         1: "{0} = pyd.{0}",
-        2: "{0} = convert({1!r}, pyd.{0})",
-        3: "{0} = convert({1!r}, pyd.{0}, **{2!r})",
+        2: "{0} = _convert({1!r}, pyd.{0})",
+        3: "{0} = _convert({1!r}, pyd.{0}, **{2!r})",
     }
     for sig in signatures:
         yield templates[len(sig)].format(*sig)
+
+
+def function_docstr(name, order, options=None):
+    original_func = getattr(pyd, name)
+    cap = (options or {}).get('cap', False)
+    return _docstr.convert(name, order, cap, original_func.__doc__)
 
 
 if __name__ == "__main__":
