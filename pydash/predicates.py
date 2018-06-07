@@ -494,8 +494,8 @@ def is_equal(value, other):
 
 
 def is_equal_with(value, other, customizer):
-    """This method is like _.isEqual except that it accepts customizer which
-    is invoked to compare values. A customizer is provided which will be
+    """This method is like :func:`is_equal` except that it accepts customizer
+    which is invoked to compare values. A customizer is provided which will be
     executed to compare values. If the customizer returns ``None``, comparisons
     will be handled by the method instead. The customizer is invoked with two
     arguments: ``(value, other)``.

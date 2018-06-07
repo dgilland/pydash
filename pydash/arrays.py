@@ -689,7 +689,7 @@ def interleave(*arrays):
     Args:
         arrays (list): Lists to interleave.
 
-    Retruns:
+    Returns:
         list: Interleaved list.
 
     Example:
@@ -1897,7 +1897,7 @@ def uniq_by(array, iteratee=None):
 
 
 def uniq_with(array, comparator=None):
-    """This method is like _.uniq except that it accepts comparator which is
+    """This method is like :func:`uniq` except that it accepts comparator which is
     invoked to compare elements of array. The order of result values is
     determined by the order they occur in the array.The comparator is invoked
     with two arguments: ``(value, other)``.
