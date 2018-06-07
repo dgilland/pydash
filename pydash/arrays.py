@@ -2283,24 +2283,36 @@ def iterunique(array, comparator=None, iteratee=None):
     if not array:  # pragma: no cover
         return
 
-    if comparator is None:
-        comparator = pyd.is_equal
+    if iteratee is not None:
+        iteratee = pyd.iteratee(iteratee)
 
-    iteratee = pyd.iteratee(iteratee)
+    seen_hashable = set()
+    seen_unhashable = []
 
-    seen = []
     for item in array:
-        cmp_item = iteratee(item)
-        new = True
+        if iteratee is None:
+            cmp_item = item
+        else:
+            cmp_item = iteratee(item)
 
-        for seen_item in seen:
-            if comparator(cmp_item, seen_item):
-                new = False
-                break
-
-        if new:
-            yield item
-            seen.append(cmp_item)
+        if comparator is None:
+            try:
+                if cmp_item not in seen_hashable:
+                    yield item
+                    seen_hashable.add(cmp_item)
+            except TypeError:
+                if cmp_item not in seen_unhashable:
+                    yield item
+                    seen_unhashable.append(cmp_item)
+        else:
+            unseen = True
+            for seen_item in seen_unhashable:
+                if comparator(cmp_item, seen_item):
+                    unseen = False
+                    break
+            if unseen:
+                yield item
+                seen_unhashable.append(cmp_item)
 
 
 def iterduplicates(array):
