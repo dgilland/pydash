@@ -787,8 +787,9 @@ def reduce_(collection, iteratee=None, accumulator=None):
 
     if iteratee is None:
         iteratee = pyd.identity
-
-    argcount = getargcount(iteratee, maxargs=3)
+        argcount = 1
+    else:
+        argcount = getargcount(iteratee, maxargs=3)
 
     for index, item in iterable:
         result = callit(iteratee, result, item, index, argcount=argcount)
@@ -854,10 +855,11 @@ def reductions(collection, iteratee=None, accumulator=None, from_right=False):
     """
     if iteratee is None:
         iteratee = pyd.identity
+        argcount = 1
+    else:
+        argcount = getargcount(iteratee, maxargs=3)
 
     results = []
-
-    argcount = getargcount(iteratee, maxargs=3)
 
     def interceptor(result, item, index):
         result = callit(iteratee, result, item, index, argcount=argcount)

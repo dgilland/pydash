@@ -1538,11 +1538,12 @@ def transform(obj, iteratee=None, accumulator=None):
     """
     if iteratee is None:
         iteratee = pyd.identity
+        argcount = 1
+    else:
+        argcount = getargcount(iteratee, maxargs=4)
 
     if accumulator is None:
         accumulator = []
-
-    argcount = getargcount(iteratee, maxargs=4)
 
     walk = (None for key, item in iterator(obj)
             if callit(iteratee,

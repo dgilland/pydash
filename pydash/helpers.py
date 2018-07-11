@@ -80,14 +80,17 @@ def _getfullargspec(iteratee, maxargs):
 
 def iteriteratee(obj, iteratee=None, reverse=False):
     """Return iterative iteratee based on collection type."""
-    cbk = pyd.iteratee(iteratee)
+    if iteratee is None:
+        cbk = pyd.identity
+        argcount = 1
+    else:
+        cbk = pyd.iteratee(iteratee)
+        argcount = getargcount(cbk, maxargs=3)
+
     items = iterator(obj)
 
     if reverse:
         items = reversed(tuple(items))
-
-    # Precompute argcount to avoid repeated calculations during iteratee loop.
-    argcount = getargcount(cbk, maxargs=3)
 
     for key, item in items:
         yield (callit(cbk, item, key, obj, argcount=argcount),

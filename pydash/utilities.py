@@ -1104,7 +1104,7 @@ def stub_true():
     return True
 
 
-def times(n, iteratee=identity):
+def times(n, iteratee=None):
     """Executes the iteratee `n` times, returning a list of the results of each
     iteratee execution. The iteratee is invoked with one argument: ``(index)``.
 
@@ -1131,7 +1131,12 @@ def times(n, iteratee=identity):
         - Added functionality for handling `iteratee` with zero positional
           arguments.
     """
-    argcount = getargcount(iteratee, maxargs=1)
+    if iteratee is None:
+        iteratee = identity
+        argcount = 1
+    else:
+        argcount = getargcount(iteratee, maxargs=1)
+
     return [callit(iteratee, index, argcount=argcount) for index in _range(n)]
 
 

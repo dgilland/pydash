@@ -577,7 +577,8 @@ def test_stub_true(case, expected):
 
 
 @parametrize('case,expected', [
-    ((5, lambda i: i * i), [0, 1, 4, 9, 16])
+    ((5, lambda i: i * i), [0, 1, 4, 9, 16]),
+    ((5,), [0, 1, 2, 3, 4])
 ])
 def test_times(case, expected):
     assert _.times(*case) == expected
