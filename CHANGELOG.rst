@@ -4,6 +4,25 @@ Changelog
 =========
 
 
+Misc
+++++
+
+- Improve performance of the following functions for large datasets:
+
+  - ``duplicates``
+  - ``sorted_uniq``
+  - ``sorted_uniq_by``
+  - ``union``
+  - ``union_by``
+  - ``union_with``
+  - ``uniq``
+  - ``uniq_by``
+  - ``uniq_with``
+  - ``xor``
+  - ``xor_by``
+  - ``xor_with``
+
+
 v4.5.0 (2018-03-20)
 -------------------
 
