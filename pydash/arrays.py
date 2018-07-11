@@ -53,6 +53,7 @@ __all__ = (
     'pull_at',
     'push',
     'remove',
+    'repack',
     'reverse',
     'shift',
     'slice_',
@@ -1084,7 +1085,7 @@ def pull_all_with(array, values, comparator=None):
 
 def pull_at(array, *indexes):
     """Removes elements from `array` corresponding to the specified indexes and
-    returns a list of the removed elements. Indexes may be specified as a list
+    returns the resulting list. Indexes may be specified as a list
     of indexes or as individual arguments.
 
     Args:
@@ -1181,6 +1182,43 @@ def remove(array, predicate=None):
     array[:] = new_array
 
     return removed
+
+
+def repack(lhs, *items):
+    """Repacks an iterable for destructuring assignment
+    to provide extended iterable unpacking functionality in python 2.7
+
+    Args:
+        lhs (str): desired assignment structure, would be valid lhs in python 3
+        *items: items to repack for assignment
+
+    Returns:
+        tuple: items structured for assigment
+
+    Example:
+
+        >>> repack("a, *b, c", 1, 2, 3, 4)
+        (1, (2, 3), 4)
+    """
+    plan = [s.strip() for s in lhs.split(',')]
+    star = pyd.find_index(plan, lambda s: s.startswith('*'))
+
+    if star != pyd.find_last_index(plan, lambda s: s.startswith('*')):
+        raise ValueError("only one star allowed")
+
+    if -1 == star:
+        if len(items) != len(plan):
+            message_str = "need {} values to unpack (got {})"
+            raise ValueError(message_str.format(len(plan), len(items)))
+        return items
+
+    starlen = len(items) - len(plan) + 1
+    if starlen < 0:
+        message_str = "need minimum of {} values to unpack"
+        raise ValueError(message_str.format(len(plan) - 1))
+
+    mark = star + starlen
+    return items[:star] + (items[star:mark],) + items[mark:]
 
 
 def reverse(array):
@@ -1327,7 +1365,7 @@ def sorted_index(array, value):
 
     Returns:
         int: Returns the index at which `value` should be inserted into
-            `array`.
+        `array`.
 
     Example:
 
@@ -1356,7 +1394,7 @@ def sorted_index_by(array, value, iteratee=None):
 
     Returns:
         int: Returns the index at which `value` should be inserted into
-            `array`.
+        `array`.
 
     Example:
 
@@ -1416,7 +1454,7 @@ def sorted_last_index(array, value):
 
     Returns:
         int: Returns the index at which `value` should be inserted into
-            `array`.
+        `array`.
 
     Example:
 
@@ -1445,7 +1483,7 @@ def sorted_last_index_by(array, value, iteratee=None):
 
     Returns:
         int: Returns the index at which `value` should be inserted into
-            `array`.
+        `array`.
 
     Example:
 

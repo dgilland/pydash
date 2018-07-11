@@ -19,3 +19,4 @@ Contributors
 - Shaun Patterson, `shaunpatterson@github <https://github.com/shaunpatterson>`_
 - Brian Beck, `beck3905@github <https://github.com/beck3905>`_
 - Frank Epperlein, `efenka@github <https://github.com/efenka>`_
+- Aryeh Leib Taurog, `altaurog <https://github.com/altaurog>`_

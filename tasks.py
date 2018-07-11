@@ -18,6 +18,7 @@ PYLINT_IGNORE = ','.join([
 ])
 TEST_TARGETS = ' '.join([PACKAGE_NAME, 'tests'])
 COV_TARGET = PACKAGE_NAME
+FP_GENERATOR = '.'.join([PACKAGE_NAME, 'fp', '_codegen'])
 
 
 @task
@@ -71,6 +72,12 @@ def tox(ctx):
 
 
 @task
+def fp(ctx):
+    """Generate code for fp variant"""
+    run('python -m {0}'.format(FP_GENERATOR))
+
+
+@task(pre=[fp])
 def docs(ctx, serve=False, port=8000):
     """Build documentation."""
     run('rm -rf {0}'.format('docs/_build'))
@@ -82,7 +89,7 @@ def docs(ctx, serve=False, port=8000):
             .format('docs/_build/html', port))
 
 
-@task
+@task(pre=[fp])
 def build(ctx):
     """Build package distribution."""
     run('python setup.py sdist bdist_wheel')

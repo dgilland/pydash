@@ -1,3 +1,4 @@
+astor==0.6.2
 coverage==4.4.1
 flake8==3.5.0
 invoke==0.22.1
