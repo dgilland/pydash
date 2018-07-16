@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import re
+import sys
+
+import pytest
 
 import pydash as _
 from pydash._compat import urlsplit, parse_qsl
@@ -173,13 +176,31 @@ def test_escape(case, expected):
 
 
 @parametrize('case,expected', [
-    ('[pydash](http://pydash.readthedocs.org/)',
-     '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)'),
     ('abc', 'abc'),
     ('', ''),
     (None, ''),
 ])
 def test_escape_reg_exp(case, expected):
+    assert _.escape_reg_exp(case) == expected
+
+
+@pytest.mark.skipif(sys.version_info < (3, 7),
+                    reason='requires python3.7 or higher')
+@parametrize('case,expected', [
+    ('[pydash](http://pydash.readthedocs.org/)',
+     '\\[pydash\\]\\(http://pydash\\.readthedocs\\.org/\\)'),
+])
+def test_escape_reg_exp_gte_py37(case, expected):
+    assert _.escape_reg_exp(case) == expected
+
+
+@pytest.mark.skipif(sys.version_info >= (3, 7),
+                    reason='requires python3.6 or lower')
+@parametrize('case,expected', [
+    ('[pydash](http://pydash.readthedocs.org/)',
+     '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)'),
+])
+def test_escape_reg_exp_lte_py36(case, expected):
     assert _.escape_reg_exp(case) == expected
 
 

@@ -4,13 +4,12 @@
 
 from __future__ import absolute_import
 
-from collections import Iterable
 from functools import wraps
 from operator import attrgetter, itemgetter
 import warnings
 
 import pydash as pyd
-from ._compat import PY2, iteritems, getfullargspec, string_types
+from ._compat import Iterable, PY2, iteritems, getfullargspec, string_types
 
 
 class _NoValue(object):

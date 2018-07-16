@@ -28,6 +28,7 @@ def _identity(x): return x
 
 
 if PY2:
+    from collections import Iterable
     from HTMLParser import HTMLParser
     from itertools import izip
     from urllib import urlencode
@@ -54,6 +55,7 @@ if PY2:
         cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
         return cls
 else:
+    from collections.abc import Iterable
     from html.parser import HTMLParser
     from urllib.parse import (
         urlencode, urlsplit, urlunsplit, parse_qs, parse_qsl)
