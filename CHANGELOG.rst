@@ -1040,5 +1040,5 @@ v0.0.0 (2014-07-22)
 .. _urbnjamesmi1: https://github.com/urbnjamesmi1
 .. _tgriesser: https://github.com/tgriesser
 .. _shaunpatterson: https://github.com/shaunpatterson
-.. _beck3905_: https://github.com/beck3905
+.. _beck3905: https://github.com/beck3905
 .. _efenka: https://github.com/efenka

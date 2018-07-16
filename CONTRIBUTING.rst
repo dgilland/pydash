@@ -36,7 +36,7 @@ Look through the GitHub issues for features. Anything tagged with "enhancement" 
 Write Documentation
 +++++++++++++++++++
 
-Pydash could always use more documentation, whether as part of the official pydash docs, in docstrings, or even on the web in blog posts, articles, and such.
+pydash could always use more documentation, whether as part of the official pydash docs, in docstrings, or even on the web in blog posts, articles, and such.
 
 
 Submit Feedback
@@ -59,9 +59,9 @@ Ready to contribute? Here's how to set up ``pydash`` for local development.
 1. Fork the ``pydash`` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/pydash.git
+    $ git clone git@github.com:your_username_here/pydash.git
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenv installed, this is how you set up your fork for local development::
+3. Install Python dependencies into a virtualenv::
 
     $ cd pydash
     $ pip install -r requirements-dev.txt
@@ -74,7 +74,7 @@ Ready to contribute? Here's how to set up ``pydash`` for local development.
 
 5. When you're done making changes, check that your changes pass linting and all unit tests by testing with tox across all supported Python versions::
 
-    $ invoke tox
+    $ tox
 
 6. Add yourself to ``AUTHORS.rst``.
 
@@ -94,4 +94,4 @@ Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated. Put your new functionality into a function with a docstring, and add the feature to the README.rst.
-3. The pull request should work for Python 2.7, 3.4, and 3.5. Check https://travis-ci.org/dgilland/pydash/pull_requests and make sure that the tests pass for all supported Python versions.
+3. The pull request should work for all versions Python that this project supports. Check https://travis-ci.org/dgilland/pydash/pull_requests and make sure that the all environments pass.
