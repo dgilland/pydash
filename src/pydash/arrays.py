@@ -405,7 +405,7 @@ def duplicates(array, iteratee=None):
 
     # NOTE: Using array[i] instead of item since iteratee could have modified
     # returned item values.
-    lst = uniq([array[i] for i, _ in iterduplicates(computed)])
+    lst = uniq(array[i] for i, _ in iterduplicates(computed))
 
     return lst
 
@@ -440,7 +440,7 @@ def fill(array, value, start=0, end=None):
     if end is None:
         end = len(array)
     else:
-        end = min([end, len(array)])
+        end = min(end, len(array))
 
     # Use this style of assignment so that `array` is mutated.
     array[:] = array[:start] + [value] * len(array[start:end]) + array[end:]
@@ -1165,20 +1165,17 @@ def remove(array, predicate=None):
 
     .. versionadded:: 1.0.0
     """
-    to_remove = [i for is_true, _, i, _ in iteriteratee(array, predicate)
-                 if is_true]
-
     removed = []
-    new_array = []
+    kept = []
 
-    for i, item in enumerate(array):
-        if i in to_remove:
+    for is_true, _, i, _ in iteriteratee(array, predicate):
+        if is_true:
             removed.append(array[i])
         else:
-            new_array.append(item)
+            kept.append(array[i])
 
     # Modify array in place.
-    array[:] = new_array
+    array[:] = kept
 
     return removed
 
@@ -1617,7 +1614,7 @@ def split_at(array, index):
 
     .. versionadded:: 2.0.0
     """
-    return [take(array, index), drop(array, index)]
+    return [array[:index], array[index:]]
 
 
 def tail(array):

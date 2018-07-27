@@ -620,7 +620,7 @@ def invert(obj):
     .. versionchanged:: 4.0.0
         Moved ``multivalue=True`` functionality to :func:`invert_by`.
     """
-    return dict((value, key) for key, value in iterator(obj))
+    return {value: key for key, value in iterator(obj)}
 
 
 def invert_by(obj, iteratee=None):
@@ -749,8 +749,8 @@ def map_keys(obj, iteratee=None):
 
     .. versionadded:: 3.3.0
     """
-    return dict((result, value)
-                for result, value, _, _ in iteriteratee(obj, iteratee))
+    return {result: value
+            for result, value, _, _ in iteriteratee(obj, iteratee)}
 
 
 def map_values(obj, iteratee=None):
@@ -776,8 +776,8 @@ def map_values(obj, iteratee=None):
 
     .. versionadded:: 1.0.0
     """
-    return dict((key, result)
-                for result, _, key, _ in iteriteratee(obj, iteratee))
+    return {key: result
+            for result, _, key, _ in iteriteratee(obj, iteratee)}
 
 
 def map_values_deep(obj, iteratee=None, property_path=NoValue):
@@ -1017,8 +1017,8 @@ def omit_by(obj, iteratee=None):
     else:
         argcount = getargcount(iteratee, maxargs=2)
 
-        ret = dict((key, value) for key, value in iterator(obj)
-                   if not callit(iteratee, value, key, argcount=argcount))
+        ret = {key: value for key, value in iterator(obj)
+               if not callit(iteratee, value, key, argcount=argcount)}
 
     return ret
 
@@ -1156,8 +1156,8 @@ def rename_keys(obj, key_map):
 
     .. versionadded:: 2.0.0
     """
-    return dict((key_map.get(key, key), value)
-                for key, value in iteritems(obj))
+    return {key_map.get(key, key): value
+            for key, value in iteritems(obj)}
 
 
 def set_(obj, path, value):
@@ -1317,7 +1317,7 @@ def to_dict(obj):
     .. versionchanged:: 4.2.0
         Use ``pydash.helpers.iterator`` to generate key/value pairs.
     """
-    return dict(tuple(iterator(obj)))
+    return dict(iterator(obj))
 
 
 def to_integer(obj):
@@ -1407,7 +1407,6 @@ def to_list(obj, split_strings=True):
     else:
         try:
             return list(obj)
-
         except TypeError:
             return [obj]
 

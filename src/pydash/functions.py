@@ -6,10 +6,11 @@
 
 from __future__ import absolute_import
 
+import itertools
 import time
 
 import pydash as pyd
-from ._compat import _range, getfullargspec
+from ._compat import _range, getfullargspec, iteritems
 
 
 __all__ = (
@@ -186,9 +187,9 @@ class Debounce(object):
         """
         present = pyd.now()
 
-        if any([(present - self.last_call) >= self.wait,
+        if ((present - self.last_call) >= self.wait or
                 (self.max_wait and
-                 (present - self.last_execution) >= self.max_wait)]):
+                 (present - self.last_execution) >= self.max_wait)):
             self.last_result = self.func(*args, **kargs)
             self.last_execution = present
 
@@ -250,7 +251,7 @@ class Juxtapose(object):
         self.funcs = funcs
 
     def __call__(self, *objs):
-        return pyd.map_(self.funcs, lambda func: func(*objs))
+        return [func(*objs) for func in self.funcs]
 
 
 class OverArgs(object):
@@ -303,11 +304,11 @@ class Partial(object):
         arguments from left or right depending on :attr:`from_right`.
         """
         if self.from_right:
-            args = list(args) + list(self.args)
+            args = itertools.chain(args, self.args)
         else:
-            args = list(self.args) + list(args)
+            args = itertools.chain(self.args, args)
 
-        kargs = dict(list(self.kargs.items()) + list(kargs.items()))
+        kargs = dict(itertools.chain(iteritems(self.kargs), iteritems(kargs)))
 
         return self.func(*args, **kargs)
 
@@ -342,9 +343,9 @@ class Rearg(object):
                 # back.
                 rest.append(arg)
 
-        reargs = [reargs[key] for key in sorted(reargs)] + rest
+        args = itertools.chain((reargs[key] for key in sorted(reargs)), rest)
 
-        return self.func(*reargs, **kargs)
+        return self.func(*args, **kargs)
 
 
 class Spread(object):

@@ -132,9 +132,13 @@ def cond(pairs, *extra_pairs):
         pairs = [pairs] + list(extra_pairs)
 
     for pair in pairs:
+        is_valid = False
         try:
-            assert len(pair) == 2
+            is_valid = len(pair) == 2
         except Exception:
+            pass
+
+        if not is_valid:
             raise ValueError('Each predicate-function pair should contain '
                              'exactly two elements')
 
@@ -258,7 +262,7 @@ def default_to(value, default_value):
     return default_value if value is None else value
 
 
-def identity(*args):
+def identity(arg=None, *args):
     """Return the first argument provided to it.
 
     Args:
@@ -278,7 +282,7 @@ def identity(*args):
 
     .. versionadded:: 1.0.0
     """
-    return args[0] if args else None
+    return arg
 
 
 def iteratee(func):
@@ -638,7 +642,7 @@ def over_every(funcs):
     .. versionadded:: 4.0.0
     """
     def _over_every(*args):
-        return all(over(funcs)(*args))
+        return all(func(*args) for func in funcs)
 
     return _over_every
 
@@ -662,7 +666,7 @@ def over_some(funcs):
     .. versionadded:: 4.0.0
     """
     def _over_some(*args):
-        return any(over(funcs)(*args))
+        return any(func(*args) for func in funcs)
 
     return _over_some
 
@@ -771,9 +775,9 @@ def random(start=0, stop=1, floating=False):
 
     .. versionadded:: 1.0.0
     """
-    floating = any([isinstance(start, float),
-                    isinstance(stop, float),
-                    floating is True])
+    floating = (isinstance(start, float) or
+                isinstance(stop, float) or
+                floating is True)
 
     if stop < start:
         stop, start = start, stop

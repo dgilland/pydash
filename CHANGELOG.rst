@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+Misc
+++++
+
+- Internal code optimizations.
+
+
 v4.6.1 (2018-07-16)
 -------------------
 

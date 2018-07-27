@@ -165,7 +165,7 @@ def mean_by(collection, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    return sum_by(collection, iteratee) / pyd.size(collection)
+    return sum_by(collection, iteratee) / len(collection)
 
 
 def ceil(x, precision=0):
@@ -355,7 +355,7 @@ def median(collection, iteratee=None):
     """
     length = len(collection)
     middle = (length + 1) / 2
-    collection = [ret[0] for ret in iteriteratee(sorted(collection), iteratee)]
+    collection = sorted(ret[0] for ret in iteriteratee(collection, iteratee))
 
     if pyd.is_odd(length):
         result = collection[int(middle - 1)]
@@ -508,7 +508,7 @@ def power(x, n):
     if pyd.is_number(x):
         result = pow(x, n)
     elif pyd.is_list(x):
-        result = pyd.map_(x, lambda item: pow(item, n))
+        result = [pow(item, n) for item in x]
     else:
         result = None
 
@@ -564,7 +564,8 @@ def scale(array, maximum=1):
     .. versionadded:: 2.1.0
     """
     array_max = max(array)
-    return pyd.map_(array, lambda item: item * (maximum / array_max))
+    factor = maximum / array_max
+    return [item * factor for item in array]
 
 
 def slope(point1, point2):
@@ -714,7 +715,7 @@ def zscore(collection, iteratee=None):
     avg = mean(array)
     sig = std_deviation(array)
 
-    return pyd.map_(array, lambda item: (item - avg) / sig)
+    return [(item - avg) / sig for item in array]
 
 
 #
@@ -756,7 +757,7 @@ def rounder(func, x, precision):
         result = rounder_func(x)
     elif pyd.is_iterable(x):
         try:
-            result = pyd.map_(x, rounder_func)
+            result = [rounder_func(item) for item in x]
         except TypeError:
             pass
 

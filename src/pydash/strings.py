@@ -241,8 +241,7 @@ def chars(text):
 
     .. versionadded:: 3.0.0
     """
-    text = pyd.to_string(text)
-    return list(text)
+    return list(pyd.to_string(text))
 
 
 def chop(text, step):
@@ -265,11 +264,14 @@ def chop(text, step):
     """
     if text is None:
         return []
+
     text = pyd.to_string(text)
+
     if step <= 0:
         chopped = [text]
     else:
         chopped = [text[i:i + step] for i in _range(0, len(text), step)]
+
     return chopped
 
 
@@ -292,13 +294,16 @@ def chop_right(text, step):
     """
     if text is None:
         return []
+
     text = pyd.to_string(text)
+
     if step <= 0:
         chopped = [text]
     else:
         text_len = len(text)
         chopped = [text[-(i + step):text_len - i]
                    for i in _range(0, text_len, step)][::-1]
+
     return chopped
 
 
@@ -341,8 +346,10 @@ def count_substr(text, subtext):
     """
     if text is None or subtext is None:
         return 0
+
     text = pyd.to_string(text)
     subtext = pyd.to_string(subtext)
+
     return text.count(subtext)
 
 
@@ -365,9 +372,8 @@ def deburr(text):
 
     .. versionadded:: 2.0.0
     """
-    text = pyd.to_string(text)
     return reg_exp_js_replace(
-        text,
+        pyd.to_string(text),
         RE_LATIN1,
         lambda match: DEBURRED_LETTERS.get(match.group(), match.group()))
 
@@ -858,7 +864,7 @@ def pad_start(text, length, chars=' '):
     """
     # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
-    length = max((length, len(text)))
+    length = max(length, len(text))
     return (repeat(chars, length) + text)[-length:]
 
 

@@ -463,7 +463,7 @@ def is_empty(value):
 
     .. versionadded:: 1.0.0
     """
-    return any([is_boolean(value), is_number(value), not value])
+    return is_boolean(value) or is_number(value) or not value
 
 
 def is_equal(value, other):

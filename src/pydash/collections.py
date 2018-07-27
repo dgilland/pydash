@@ -144,12 +144,12 @@ def every(collection, predicate=None):
 
     .. versionadded:: 1.0.0
 
-    .. versionchanged: TOOD
+    .. versionchanged: 4.0.0
         Removed alias ``all_``.
     """
     if predicate:
         cbk = pyd.iteratee(predicate)
-        collection = [cbk(item) for item in collection]
+        collection = (cbk(item) for item in collection)
 
     return all(collection)
 
@@ -1056,10 +1056,9 @@ def some(collection, predicate=None):
     .. versionchanged:: 4.0.0
         Removed alias ``any_``.
     """
-
     if predicate:
         cbk = pyd.iteratee(predicate)
-        collection = [cbk(item) for item in collection]
+        collection = (cbk(item) for item in collection)
 
     return any(collection)
 
