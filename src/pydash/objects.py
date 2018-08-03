@@ -1316,8 +1316,15 @@ def to_dict(obj):
 
     .. versionchanged:: 4.2.0
         Use ``pydash.helpers.iterator`` to generate key/value pairs.
+
+    .. versionchanged:: 4.7.1
+        Try to convert to ``dict`` using ``dict()`` first, then fallback to
+        using ``pydash.helpers.iterator``.
     """
-    return dict(iterator(obj))
+    try:
+        return dict(obj)
+    except Exception:
+        return dict(iterator(obj))
 
 
 def to_integer(obj):

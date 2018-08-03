@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+New Features
+++++++++++++
+
+- Modify ``to_dict`` to first try to convert using ``dict()`` before falling back to using ``pydash.helpers.iterator()``.
+
+
 v4.7.0 (2018-07-26)
 -------------------
 
