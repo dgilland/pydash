@@ -488,7 +488,7 @@ def find_last_index(array, predicate=None):
 
         >>> find_last_index([1, 2, 3, 4], lambda x: x >= 3)
         3
-        >>> find_index([1, 2, 3, 4], lambda x: x > 4)
+        >>> find_last_index([1, 2, 3, 4], lambda x: x > 4)
         -1
 
     .. versionadded:: 1.0.0
@@ -501,8 +501,7 @@ def find_last_index(array, predicate=None):
 
 
 def flatten(array):
-    """Flattens a nested array. If `is_deep` is ``True`` the array is
-    recursively flattened, otherwise it is only flattened a single level.
+    """Flattens array a single level deep.
 
     Args:
         array (list): List to flatten.
@@ -529,8 +528,7 @@ def flatten(array):
 
 
 def flatten_deep(array):
-    """Flattens a nested array recursively. This is the same as calling
-    ``flatten(array, is_deep=True)``.
+    """Flattens an array recursively.
 
     Args:
         array (list): List to flatten.
@@ -895,7 +893,7 @@ def last_index_of(array, value, from_index=None):
 
 def mapcat(array, iteratee=None):
     """Map a iteratee to each element of a list and concatenate the results
-    into a single list using :func:`cat`.
+    into a single list using :func:`concat`.
 
     Args:
         array (list): List to map and concatenate.
