@@ -320,8 +320,9 @@ def test_rearg(case, args, kargs, expected):
 
 
 @parametrize('case,args,expected', [
-    (lambda args: args, ['a', 'b', 'c'], ['a', 'b', 'c']),
-    (lambda args: ','.join(args), ['a', 'b', 'c'], 'a,b,c'),
+    (lambda *args: args, ['a', 'b', 'c'], ('a', 'b', 'c')),
+    (lambda *args: ','.join(args), ['a', 'b', 'c'], 'a,b,c'),
+    (lambda a, b, c: '{} {} {}'.format(a, b, c), [1, 2, 3], '1 2 3'),
 ])
 def test_spread(case, args, expected):
     assert _.spread(case)(args) == expected

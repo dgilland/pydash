@@ -355,7 +355,7 @@ class Spread(object):
 
     def __call__(self, args):
         """Return results from :attr:`func` using array of `args` provided."""
-        return self.func(args)
+        return self.func(*args)
 
 
 class Throttle(object):
@@ -924,7 +924,7 @@ def spread(func):
 
     Example:
 
-        >>> greet = spread(lambda people: 'Hello ' + ', '.join(people) + '!')
+        >>> greet = spread(lambda *people: 'Hello ' + ', '.join(people) + '!')
         >>> greet(['Mike', 'Don', 'Leo'])
         'Hello Mike, Don, Leo!'
 

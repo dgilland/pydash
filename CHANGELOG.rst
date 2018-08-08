@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+Bug Fixes
++++++++++
+
+- Fix bug in ``spread`` where arguments were not being passed to wrapped function properly.
+
+
 v4.7.1 (2018-08-03)
 -------------------
 
