@@ -44,7 +44,7 @@ Templating
 - pydash doesn't have ``template()``. See :ref:`Templating <templating>` for more details.
 
 
-.. _lodashcontrib: https://github.com/TheNodeILs/lodash-contrib
+.. _lodashcontrib: https://github.com/node4good/lodash-contrib
 .. _lodashdeep: https://github.com/marklagendijk/lodash-deep
 .. _lodashmath: https://github.com/Delapouite/lodash.math
 .. _underscorestring: https://github.com/epeli/underscore.string
