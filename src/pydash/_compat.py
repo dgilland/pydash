@@ -16,7 +16,6 @@ from __future__ import absolute_import
 import sys
 import cgi
 import inspect
-from collections import Hashable
 from decimal import Decimal
 from functools import partial
 
@@ -28,7 +27,7 @@ def _identity(x): return x
 
 
 if PY2:
-    from collections import Iterable
+    from collections import Hashable, Iterable
     from HTMLParser import HTMLParser
     from itertools import izip
     from urllib import urlencode
@@ -40,6 +39,8 @@ if PY2:
     integer_types = (int, long)
     number_types = (int, long, float, Decimal)
     getfullargspec = inspect.getargspec
+    html_unescape = HTMLParser().unescape
+    html_escape = partial(cgi.escape, quote=True)
 
     def iterkeys(d): return d.iterkeys()
 
@@ -55,7 +56,8 @@ if PY2:
         cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
         return cls
 else:
-    from collections.abc import Iterable
+    from collections.abc import Hashable, Iterable
+    import html
     from html.parser import HTMLParser
     from urllib.parse import (
         urlencode, urlsplit, urlunsplit, parse_qs, parse_qsl)
@@ -67,6 +69,8 @@ else:
     number_types = (int, float, Decimal)
     builtins = _builtins.__dict__.values()
     getfullargspec = inspect.getfullargspec
+    html_unescape = html.unescape
+    html_escape = html.escape
 
     def iterkeys(d): return iter(d.keys())
 
@@ -84,8 +88,6 @@ else:
 
 builtins = dict((value, key) for key, value in iteritems(_builtins.__dict__)
                 if isinstance(value, Hashable))
-html_escape = partial(cgi.escape, quote=True)
-html_unescape = HTMLParser().unescape
 
 try:
     from functools import cmp_to_key
