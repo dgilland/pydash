@@ -117,8 +117,8 @@ def every(collection, predicate=None):
     ``(value, index|key, collection)``. If a property name is passed for
     predicate, the created :func:`pluck` style predicate will return the
     property value of the given element. If an object is passed for predicate,
-    the created :func:`where` style predicate will return ``True`` for elements
-    that have the properties of the given object, else ``False``.
+    the created :func:`.matches` style predicate will return ``True`` for
+    elements that have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -507,8 +507,8 @@ def map_(collection, iteratee=None):
     ``(value, index|key, collection)``. If a property name is passed for
     iteratee, the created :func:`pluck` style iteratee will return the property
     value of the given element. If an object is passed for iteratee, the
-    created :func:`where` style iteratee will return ``True`` for elements that
-    have the properties of the given object, else ``False``.
+    created :func:`.matches` style iteratee will return ``True`` for elements
+    that have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -684,7 +684,7 @@ def partition(collection, predicate=None):
     If a property name is provided for `predicate` the created :func:`pluck`
     style predicate returns the property value of the given element.
 
-    If an object is provided for `predicate` the created :func:`where` style
+    If an object is provided for `predicate` the created :func:`.matches` style
     predicate returns ``True`` for elements that have the properties of the
     given object, else ``False``.
 
@@ -1030,8 +1030,8 @@ def some(collection, predicate=None):
     ``(value, index|key, collection)``. If a property name is passed for
     predicate, the created :func:`map_` style predicate will return the
     property value of the given element. If an object is passed for predicate,
-    the created :func:`where` style predicate will return ``True`` for elements
-    that have the properties of the given object, else ``False``.
+    the created :func:`.matches` style predicate will return ``True`` for
+    elements that have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.

@@ -372,10 +372,10 @@ def iteratee(func):
 
 
 def matches(source):
-    """Creates a :func:`pydash.collections.where` style predicate function
-    which performs a deep comparison between a given object and the `source`
-    object, returning ``True`` if the given object has equivalent property
-    values, else ``False``.
+    """Creates a matches-style predicate function which performs a deep
+    comparison between a given object and the `source` object, returning
+    ``True`` if the given object has equivalent property values, else
+    ``False``.
 
     Args:
         source (dict): Source object used for comparision.

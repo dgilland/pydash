@@ -597,8 +597,6 @@ def invert(obj):
 
     Args:
         obj (dict): Dict to invert.
-        multivalue (bool, optional): Whether to return inverted values as
-            lists. Defaults to ``False``.
 
     Returns:
         dict: Inverted dict.
