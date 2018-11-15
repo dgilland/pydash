@@ -186,7 +186,7 @@ def test_escape_reg_exp(case, expected):
 
 @pytest.mark.skipif(sys.version_info < (3, 7),
                     reason='requires python3.7 or higher')
-@parametrize('case,expected', [
+@parametrize('case,expected', [  # noqa
     ('[pydash](http://pydash.readthedocs.org/)',
      '\\[pydash\\]\\(http://pydash\\.readthedocs\\.org/\\)'),
 ])
@@ -196,8 +196,8 @@ def test_escape_reg_exp_gte_py37(case, expected):
 
 @pytest.mark.skipif(sys.version_info >= (3, 7),
                     reason='requires python3.6 or lower')
-@parametrize('case,expected', [
-    ('[pydash](http://pydash.readthedocs.org/)',
+@parametrize('case,expected', [  # noqa
+    ('[pydash](http://pydash.readthedocs.org/)',  # noqa
      '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)'),
 ])
 def test_escape_reg_exp_lte_py36(case, expected):
@@ -332,7 +332,7 @@ def test_lines(case, expected):
     assert _.lines(case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', [  # noqa
     ('fooBar', 'foo bar'),
     ('--foo-Bar--', 'foo bar'),
     ('*Foo*B_a*R', 'foo b a r'),
@@ -916,7 +916,7 @@ def test_unquote(case, expected):
     assert _.unquote(*case) == expected
 
 
-@parametrize('case,expected', [
+@parametrize('case,expected', [  # noqa
     ('fooBar', 'FOO BAR'),
     ('--foo-Bar--', 'FOO BAR'),
     ('*Foo*B_a*R', 'FOO B A R'),
@@ -976,8 +976,8 @@ def test_url(case, expected):
     assert r_fragment == e_fragment
 
 
-@parametrize('case,expected', [
-    ('hello world!', ['hello', 'world']),
+@parametrize('case,expected', [  # noqa
+    ('hello world!', ['hello', 'world']),  # noqa
     ('hello_world', ['hello', 'world']),
     ('hello!@#$%^&*()_+{}|:"<>?-=[]\;\,.\'/world', ['hello', 'world']),
     ('hello 12345 world', ['hello', '12345', 'world']),
