@@ -1664,8 +1664,16 @@ def update_with(obj, path, updater, customizer=None):
 
         try:
             target = target[key]
-        except TypeError:  # pragma: no cover
-            target = target[int(key)]
+        except TypeError as exc:  # pragma: no cover
+            try:
+                target = target[int(key)]
+                _failed = False
+            except Exception:
+                _failed = True
+
+            if _failed:
+                raise TypeError('Unable to update object at index {!r}. {}'
+                                .format(key, exc))
 
     value = base_get(target, last_key, default=None)
     base_set(target, last_key, callit(updater, value))

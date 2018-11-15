@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+Bug Fixes
++++++++++
+
+- Raise an explicit exception in ``set_``, ``set_with``, ``update``, and ``update_with`` when an object cannot be updated due to that object or one of its nested objects not being subscriptable.
+
+
 v4.7.3 (2018-08-07)
 -------------------
 
