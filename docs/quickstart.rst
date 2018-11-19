@@ -9,10 +9,9 @@ The first is by using the module directly or importing from it:
 .. doctest::
 
     >>> import pydash
-    >>> from pydash import flatten
 
     # Arrays
-    >>> flatten([1, 2, [3, [4, 5, [6, 7]]]])
+    >>> pydash.flatten([1, 2, [3, [4, 5, [6, 7]]]])
     [1, 2, 3, [4, 5, [6, 7]]]
 
     >>> pydash.flatten_deep([1, 2, [3, [4, 5, [6, 7]]]])
