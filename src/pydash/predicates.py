@@ -1272,4 +1272,4 @@ def is_zero(value):
 
     .. versionadded:: 2.0.0
     """
-    return value is 0
+    return value == 0
