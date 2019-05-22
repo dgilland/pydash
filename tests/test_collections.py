@@ -84,6 +84,12 @@ def test_filter_(case, expected):
        {'name': 'fred', 'age': 40, 'blocked': True},
        {'name': 'pebbles', 'age': 1, 'blocked': False}],),
      {'name': 'barney', 'age': 36, 'blocked': False}),
+    (({'abc': 1, 'xyz': 2, 'c': 3}.keys(),
+      lambda x: 'y' in x),
+     'xyz'),
+    (({'abc': 1, 'xyz': 2, 'c': 3}.values(),
+      lambda x: x < 2),
+     1),
 ])
 def test_find(case, expected):
     assert _.find(*case) == expected
@@ -91,6 +97,12 @@ def test_find(case, expected):
 
 @parametrize('case,expected', [
     (([1, 2, 3, 4], lambda num: num % 2 == 1), 3),
+    (({'abc': 1, 'xyz': 2, 'c': 3}.keys(),
+      lambda x: 'y' in x),
+     'xyz'),
+    (({'abc': 1, 'xyz': 2, 'c': 3}.values(),
+      lambda x: x < 2),
+     1),
 ])
 def test_find_last(case, expected):
     assert _.find_last(*case) == expected

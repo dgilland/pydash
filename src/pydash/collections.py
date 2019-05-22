@@ -205,8 +205,8 @@ def find(collection, predicate=None):
     .. versionchanged:: 4.0.0
         Removed aliases ``detect`` and ``find_where``.
     """
-    search = (collection[key]
-              for is_true, _, key, _ in iteriteratee(collection, predicate)
+    search = (value
+              for is_true, value, _, _ in iteriteratee(collection, predicate)
               if is_true)
     return next(search, None)
 
@@ -232,8 +232,8 @@ def find_last(collection, predicate=None):
 
     .. versionadded:: 1.0.0
     """
-    search = (collection[key]
-              for is_true, _, key, _ in iteriteratee(collection,
+    search = (value
+              for is_true, value, _, _ in iteriteratee(collection,
                                                      predicate,
                                                      reverse=True)
               if is_true)
