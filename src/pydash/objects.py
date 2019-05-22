@@ -1811,7 +1811,7 @@ def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
     else:
         result = value
 
-    if cbk:
+    if cbk and not pyd.is_string(value) and not isinstance(value, bytes):
         for key, subvalue in iterator(value):
             if is_deep:
                 val = base_clone(subvalue, is_deep, cbk, key, value,

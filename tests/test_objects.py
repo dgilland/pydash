@@ -85,6 +85,8 @@ def test_clone_deep(case):
     ({'a': 1, 'b': 2, 'c': {'d': 3}},
      lambda v, k: v + 2 if isinstance(v, int) and k else None,
      {'a': 3, 'b': 4, 'c': {'d': 5}}),
+    (['a'], lambda a: None, ['a']),
+    ('a', lambda a: None, 'a'),
 ])
 def test_clone_deep_with(case, iteratee, expected):
     result = _.clone_deep_with(case, iteratee)
