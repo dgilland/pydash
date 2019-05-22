@@ -234,8 +234,8 @@ def find_last(collection, predicate=None):
     """
     search = (value
               for is_true, value, _, _ in iteriteratee(collection,
-                                                     predicate,
-                                                     reverse=True)
+                                                       predicate,
+                                                       reverse=True)
               if is_true)
     return next(search, None)
 
