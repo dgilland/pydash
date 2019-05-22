@@ -4,6 +4,13 @@ Changelog
 =========
 
 
+Bug Fixes
++++++++++
+
+- Fix handling of string and byte values in ``clone_with`` and ``clone_deep_with`` when a customizer is used.
+- Fix handling of non-indexable iterables in ``find`` and ``find_last``.
+
+
 v4.7.4 (2018-11-14)
 -------------------
 
