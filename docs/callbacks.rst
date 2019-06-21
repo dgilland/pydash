@@ -39,12 +39,12 @@ where ``item`` is an element of ``obj``, ``index`` is the ``dict`` or ``list`` i
     1
 
     # Two argument callback.
-    >>> callback = lambda item, index: index == 3
+    >>> callback = lambda index: index == 3
     >>> pydash.find_index(users, callback)
     -1
 
     # Three argument callback.
-    >>> callback = lambda item, index, obj: obj[index]['active']
+    >>> callback = lambda index, obj: obj[index]['active']
     >>> pydash.find_index(users, callback)
     2
 
