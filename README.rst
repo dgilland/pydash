@@ -8,7 +8,7 @@ The kitchen sink of Python utility libraries for doing "stuff" in a functional w
 Note
 ====
 
-Looking for a library that is more memory efficient and better suited for large datasets? Check out `fnc <https://github.com/dgilland/pydash>`_! It's built around generators and iteration and has iteratee-first function signatures.
+Looking for a library that is more memory efficient and better suited for large datasets? Check out `fnc <https://github.com/dgilland/fnc>`_! It's built around generators and iteration and has iteratee-first function signatures.
 
 
 Links
