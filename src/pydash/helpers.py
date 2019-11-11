@@ -152,7 +152,8 @@ def base_get(obj, key, default=NoValue):
 
     if not isinstance(obj, _attr_ignored_types) or hasattr(obj, '_fields'):
         # Don't add attrgetter for dict/list objects since we don't want class
-        # methods/attributes returned for them. Always allow getattr for namedtuple
+        # methods/attributes returned for them.
+        # Always allow getattr for namedtuple.
         try:
             # Only add attribute getter if key is string.
             getters.append(attrgetter(key))
