@@ -27,7 +27,7 @@ def _identity(x): return x
 
 
 if PY2:
-    from collections import Hashable, Iterable
+    from collections import Hashable, Iterable, Sequence, Mapping
     from HTMLParser import HTMLParser
     from itertools import izip
     from urllib import urlencode
@@ -56,7 +56,7 @@ if PY2:
         cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
         return cls
 else:
-    from collections.abc import Hashable, Iterable
+    from collections.abc import Hashable, Iterable, Sequence, Mapping
     import html
     from html.parser import HTMLParser
     from urllib.parse import (
