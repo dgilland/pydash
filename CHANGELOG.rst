@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+Bug Fixes
++++++++++
+
+- Fix handling of ``Sequence``, ``Mapping``, and ``namedtuple`` types in ``get`` so that their attributes aren't accessed during look-up. Thanks jwilson8767_!
+
+
 v4.7.5 (2019-05-21)
 -------------------
 
@@ -1097,3 +1103,4 @@ v0.0.0 (2014-07-22)
 .. _shaunpatterson: https://github.com/shaunpatterson
 .. _beck3905: https://github.com/beck3905
 .. _efenka: https://github.com/efenka
+.. _jwilson8767: https://github.com/jwilson8767
