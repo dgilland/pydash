@@ -9,9 +9,9 @@ from operator import attrgetter, itemgetter
 import warnings
 
 import pydash as pyd
-from ._compat import Iterable, PY2, iteritems, getfullargspec, string_types, Sequence, Mapping
-
-_attr_ignored_types = (Mapping, Sequence)
+from ._compat import (
+    Iterable, PY2, iteritems, getfullargspec, string_types, Sequence, Mapping
+)
 
 
 class _NoValue(object):
@@ -144,7 +144,10 @@ def base_get(obj, key, default=NoValue):
     except Exception:
         pass
 
-    if not isinstance(obj, _attr_ignored_types) or (isinstance(obj, tuple) and hasattr(obj, "_fields")):
+    if (
+        not isinstance(obj, (Mapping, Sequence)) or
+        (isinstance(obj, tuple) and hasattr(obj, "_fields"))
+    ):
         # Don't add attrgetter for dict/list objects since we don't want class
         # methods/attributes returned for them.
         # Always allow getattr for namedtuple.

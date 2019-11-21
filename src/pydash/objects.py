@@ -479,7 +479,7 @@ def get(obj, path, default=None):
     described by `path`. If path doesn't exist, `default` is returned.
 
     Args:
-        obj (list|dict|typing.Sequence|typing.Mapping): Object to process.
+        obj (list|dict|Sequence|Mapping): Object to process.
         path (str|list): List or ``.`` delimited string of path describing
             path.
 
