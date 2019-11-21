@@ -479,7 +479,7 @@ def get(obj, path, default=None):
     described by `path`. If path doesn't exist, `default` is returned.
 
     Args:
-        obj (list|dict): Object to process.
+        obj (list|dict|typing.Sequence|typing.Mapping): Object to process.
         path (str|list): List or ``.`` delimited string of path describing
             path.
 
@@ -523,6 +523,9 @@ def get(obj, path, default=None):
 
         - Support attribute access on `obj` if item access fails.
         - Removed aliases ``get_path`` and ``deep_get``.
+
+    .. versionchanged:: 4.7.6
+        Fixed bug where getattr is used on Mappings and Sequence in Python 3.5+
     """
     if default is NoValue:
         # When NoValue given for default, then this method will raise if path

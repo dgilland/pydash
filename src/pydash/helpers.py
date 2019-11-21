@@ -9,17 +9,19 @@ from operator import attrgetter, itemgetter
 import warnings
 
 import pydash as pyd
-from ._compat import Iterable, PY2, iteritems, getfullargspec, string_types
+from ._compat import Iterable, PY2, iteritems, getfullargspec, string_types, Sequence, Mapping
+
+_attr_ignored_types = (Mapping, Sequence)
 
 
 class _NoValue(object):
-    """Represents an unset value. Used to differeniate between an explicit
+    """Represents an unset value. Used to differentiate between an explicit
     ``None`` and an unset value.
     """
     pass
 
 
-#: Singleton object that differeniates between an explicit ``None`` value and
+#: Singleton object that differentiates between an explicit ``None`` value and
 #: an unset value.
 NoValue = _NoValue()
 
@@ -142,9 +144,10 @@ def base_get(obj, key, default=NoValue):
     except Exception:
         pass
 
-    if not isinstance(obj, (dict, list)):
+    if not isinstance(obj, _attr_ignored_types) or (isinstance(obj, tuple) and hasattr(obj, "_fields")):
         # Don't add attrgetter for dict/list objects since we don't want class
         # methods/attributes returned for them.
+        # Always allow getattr for namedtuple.
         try:
             # Only add attribute getter if key is string.
             getters.append(attrgetter(key))
