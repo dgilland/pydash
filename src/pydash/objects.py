@@ -781,7 +781,7 @@ def map_values(obj, iteratee=None):
             for result, _, key, _ in iteriteratee(obj, iteratee)}
 
 
-def map_values_deep(obj, iteratee=None, property_path=NoValue):
+def map_values_deep(obj, iteratee=None, leaf_predicate=None, property_path=NoValue):
     """Map all non-object values in `obj` with return values from `iteratee`.
     The iteratee is invoked with two arguments: ``(obj_value, property_path)``
     where ``property_path`` contains the list of path keys corresponding to the
@@ -789,6 +789,7 @@ def map_values_deep(obj, iteratee=None, property_path=NoValue):
 
     Args:
         obj (list|dict): Object to map.
+        leaf_predicate (function): Predicate applied per leaf value.
         iteratee (function): Iteratee applied to each value.
 
     Returns:
@@ -806,6 +807,14 @@ def map_values_deep(obj, iteratee=None, property_path=NoValue):
         >>> z = map_values_deep(x, lambda val, props: props)
         >>> z == {'a': ['a'], 'b': {'c': ['b', 'c']}}
         True
+        >>> x = {'a': 3, 'b': {'c': 3, 'd': 5}}
+        >>> z = map_values_deep(x, lambda val: val * 2, lambda leaf: leaf == 3)
+        >>> z == {'a': 6, 'b': {'c': 6, 'd': 5}}
+        True
+        >>> x = {'a': [], 'b': {'c': []}}
+        >>> z = map_values_deep(x, lambda val: val.append(1), lambda leaf: isinstance(leaf, list))
+        >>> z == {'a': [1], 'b': {'c': [1]}}
+        True
 
     .. versionadded: 2.2.0
 
@@ -817,10 +826,11 @@ def map_values_deep(obj, iteratee=None, property_path=NoValue):
     """
     properties = to_path(property_path)
 
-    if pyd.is_object(obj):
+    if leaf_predicate is None and pyd.is_object(obj) or (leaf_predicate and not leaf_predicate(obj)):
         deep_iteratee = (
             lambda value, key: map_values_deep(value,
                                                iteratee,
+                                               leaf_predicate,
                                                pyd.flatten([properties, key])))
         return assign(obj, map_values(obj, deep_iteratee))
     else:

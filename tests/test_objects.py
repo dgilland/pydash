@@ -333,7 +333,7 @@ def test_map_values(case, expected):
                 'value': 'value 3'
             }
         }}},
-      lambda value, property_path: '.'.join(property_path) + '==' + value),
+      lambda value, property_path: '.'.join(property_path) + '==' + value, lambda v: isinstance(v, str)),
      {'level1': {
          'value': 'level1.value==value 1',
          'level2': {
@@ -345,7 +345,7 @@ def test_map_values(case, expected):
     (([['value 1', [['value 2', ['value 3']]]]],
       lambda value, property_path: (_.join(property_path, '.') +
                                     '==' +
-                                    value)),
+                                    value), lambda v: isinstance(v, str)),
      [['0.0==value 1', [['0.1.0.0==value 2', ['0.1.0.1.0==value 3']]]]]),
 ])
 def test_map_values_deep(case, expected):
