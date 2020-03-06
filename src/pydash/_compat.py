@@ -83,7 +83,14 @@ else:
     implements_to_string = _identity
     izip = zip
 
-    def _cmp(a, b): return (a > b) - (a < b)
+    def _cmp(a, b):
+        if (a is None and b is None):
+            return 0
+        elif (a is None):
+            return -1
+        elif(b is None):
+            return 1
+        return (a > b) - (a < b)
 
 
 builtins = dict((value, key) for key, value in iteritems(_builtins.__dict__)
