@@ -471,6 +471,7 @@ def test_parse_int(case, expected):
     (([1, 2, 3],), {}),
     (([1, 2, 3], 0), {0: 1}),
     ((fixtures.Object(a=1, b=2, c=3), 'a'), {'a': 1}),
+    ((fixtures.ObjectWithDecoratorProperty(a=1), ['testProperty','a']), {'testProperty': 5, 'a':1}),
     ((fixtures.ItemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
     ((fixtures.IteritemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
     (({'a': {'b': 1, 'c': 2, 'd': 3}}, 'a.b', 'a.d'), {'a': {'b': 1, 'd': 3}}),

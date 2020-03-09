@@ -111,7 +111,7 @@ def iterator(obj):
     elif isinstance(obj, Iterable):
         return enumerate(obj)
     else:
-        return iteritems(getattr(obj, '__dict__', {}))
+        return iteritems(dict((attribute, getattr(obj, attribute)) for attribute in dir(obj) if not attribute.startswith('__')))
 
 
 def base_get(obj, key, default=NoValue):

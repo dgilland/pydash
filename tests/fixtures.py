@@ -14,6 +14,14 @@ class Object(object):
         for key, value in iteritems(attrs):
             setattr(self, key, value)
 
+class ObjectWithDecoratorProperty():
+    @property
+    def testProperty(self):
+        return 5
+
+    def __init__(self, **attrs):
+        for key, value in iteritems(attrs):
+            setattr(self, key, value)
 
 class ItemsObject(object):
     def __init__(self, items):
