@@ -20,3 +20,5 @@ Contributors
 - Brian Beck, `beck3905@github <https://github.com/beck3905>`_
 - Frank Epperlein, `efenka@github <https://github.com/efenka>`_
 - Joshua Wilson, `jwilson8767@github <https://github.com/jwilson8767>`_
+- Hugo Mendes, `hugosoftdev@github <https://github.com/hugosoftdev>`_
+- Isabella Oliveira, `isabellaro@github <https://github.com/IsabellaRO>`_
