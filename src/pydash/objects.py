@@ -1116,6 +1116,10 @@ def pick_by(obj, iteratee=None):
     """
     obj = to_dict(obj)
 
+    if iteratee is None:
+        iteratee = pyd.identity
+        argcount = 1
+
     if not callable(iteratee):
         paths = iteratee if iteratee is not None else []
 
