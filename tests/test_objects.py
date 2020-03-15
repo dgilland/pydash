@@ -485,7 +485,7 @@ def test_pick(case, expected):
     (({'a': 1, 'b': 2, 'c': 3}, ['a', 'b']), {'a': 1, 'b': 2}),
     (({'a': 1, 'b': 2, 'c': 3}, lambda value, key: key in ['a']),
      {'a': 1}),
-    (([1, 2, 3],), {}),
+    (([1, 2, 3],), {0: 1, 1: 2, 2: 3}),
     (([1, 2, 3], [0]), {0: 1}),
     ((fixtures.Object(a=1, b=2, c=3), 'a'), {'a': 1}),
     ((fixtures.ItemsObject({'a': 1, 'b': 2, 'c': 3}), 'a'), {'a': 1}),
