@@ -199,6 +199,9 @@ def base_set(obj, key, value, allow_override=True):
                 # can append the value into the key index.
                 obj[:] = (obj + [None] * key)[:key]
             obj.append(value)
+    else:
+        if allow_override or not hasattr(obj, key):
+            setattr(obj, key, value)
 
     return obj
 

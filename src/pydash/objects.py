@@ -1670,7 +1670,7 @@ def update_with(obj, path, updater, customizer=None):
         base_set(target, key, path_obj, allow_override=False)
 
         try:
-            target = target[key]
+            target = get(target, key)
         except TypeError as exc:  # pragma: no cover
             try:
                 target = target[int(key)]
