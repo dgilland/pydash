@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v4.8.0 (2020-06-13)
+-------------------
+
 - Support attribute based setters like ``argparse.Namespace`` in ``set_``, ``set_with``, ``update``, and ``update_with``.
 - Fix exception in ``order_by`` when ``None`` used as a sort key. Thanks elijose55_!
 - Fix behavior of ``pick_by`` to return the passed in argument when only one argument given. Previously, an empty dictionary was returned. Thanks elijose55_!
