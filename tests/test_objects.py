@@ -532,7 +532,8 @@ def test_set_(case, expected):
 @parametrize('case,expected', [
     (({}, '[0][1]', 'a', lambda: {}), {0: {1: 'a'}}),
     (({}, '[0][1]', dict, lambda: {}), {0: {1: dict}}),
-    ((Namespace(), "a.b", 5, lambda: Namespace()), Namespace(a=Namespace(b=5))),
+    ((Namespace(), "a.b", 5, lambda: Namespace()),
+     Namespace(a=Namespace(b=5))),
     ((Namespace(a=Namespace(b=5)), "a.c.d", 55, lambda: Namespace()),
      Namespace(a=Namespace(b=5, c=Namespace(d=55)))),
 ])
