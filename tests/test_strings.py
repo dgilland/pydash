@@ -198,7 +198,7 @@ def test_escape_reg_exp_gte_py37(case, expected):
                     reason='requires python3.6 or lower')
 @parametrize('case,expected', [  # noqa
     ('[pydash](http://pydash.readthedocs.org/)',  # noqa
-     '\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)'),
+     r'\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)'),
 ])
 def test_escape_reg_exp_lte_py36(case, expected):
     assert _.escape_reg_exp(case) == expected
@@ -340,7 +340,7 @@ def test_lines(case, expected):
     ('/?*Foo10/;"B*Ar', 'foo 10 b ar'),
     ('/?F@O__o10456?>.B?>";Ar', 'f o o 10456 b ar'),
     ('FoO Bar', 'fo o bar'),
-    ('F\n\soO Bar', 'f so o bar'),
+    ('F\n\\soO Bar', 'f so o bar'),
     ('Foo1054665Bar', 'foo 1054665 bar')
 ])
 def test_lower_case(case, expected):
@@ -924,7 +924,7 @@ def test_unquote(case, expected):
     ('/?*Foo10/;"B*Ar', 'FOO 10 B AR'),
     ('/?F@O__o10456?>.B?>";Ar', 'F O O 10456 B AR'),
     ('FoO Bar', 'FO O BAR'),
-    ('F\n\soO Bar', 'F SO O BAR'),
+    ('F\n\\soO Bar', 'F SO O BAR'),
     ('Foo1054665Bar', 'FOO 1054665 BAR')
 ])
 def test_upper_case(case, expected):
@@ -979,7 +979,7 @@ def test_url(case, expected):
 @parametrize('case,expected', [  # noqa
     ('hello world!', ['hello', 'world']),  # noqa
     ('hello_world', ['hello', 'world']),
-    ('hello!@#$%^&*()_+{}|:"<>?-=[]\;\,.\'/world', ['hello', 'world']),
+    ('hello!@#$%^&*()_+{}|:"<>?-=[]\\;\\,.\'/world', ['hello', 'world']),
     ('hello 12345 world', ['hello', '12345', 'world']),
     ('enable 24h format', ['enable', '24', 'h', 'format']),
     ('tooLegit2Quit', ['too', 'Legit', '2', 'Quit']),
