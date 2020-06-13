@@ -4,6 +4,12 @@ Changelog
 =========
 
 
+- Support attribute based setters like ``argparse.Namespace`` in ``set_``, ``set_with``, ``update``, and ``update_with``.
+- Fix exception in ``order_by`` when ``None`` used as a sort key. Thanks elijose55_!
+- Fix behavior of ``pick_by`` to return the passed in argument when only one argument given. Previously, an empty dictionary was returned. Thanks elijose55_!
+- Officially support Python 3.8.
+
+
 v4.7.6 (2019-11-20)
 -------------------
 
@@ -1107,3 +1113,4 @@ v0.0.0 (2014-07-22)
 .. _beck3905: https://github.com/beck3905
 .. _efenka: https://github.com/efenka
 .. _jwilson8767: https://github.com/jwilson8767
+.. _elijose55: https://github.com/elijose55
