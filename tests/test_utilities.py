@@ -134,6 +134,7 @@ def test_constant(case):
 def test_default_to(case, expected):
     assert _.default_to(*case) == expected
 
+
 @parametrize('case,expected', [
     (([1, 10, 20]), 1),
     (([None, 10, 20]), 10),
