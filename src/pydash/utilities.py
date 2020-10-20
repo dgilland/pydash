@@ -262,6 +262,34 @@ def default_to(value, default_value):
     return default_value if value is None else value
 
 
+def default_to_any(value, *default_values):
+    """Checks :attr:`value` to determine whether a default value should be
+    returned in its place. The first item that is not None of the
+    :attr:`default_values` is returned.
+
+    Args:
+        value (mixed): Value passed in by the user.
+        *default_values (mixed): Default values passed in by the user.
+
+    Returns:
+        mixed: Returns :attr:`value` if :attr:`value` is given otherwise
+            returns the first not None value of :attr:`default_values`.
+
+    Example:
+
+        >>> default_to_any(1, 10, 20)
+        1
+        >>> default_to_any(None, 10, 20)
+        10
+        >>> default_to_any(None, None, 20)
+        20
+
+
+    .. versionadded:: 4.8.1
+    """
+    return pyd.reduce_(default_values, pyd.default_to, value)
+
+
 def identity(arg=None, *args):
     """Return the first argument provided to it.
 

@@ -21,3 +21,4 @@ Contributors
 - Frank Epperlein, `efenka@github <https://github.com/efenka>`_
 - Joshua Wilson, `jwilson8767@github <https://github.com/jwilson8767>`_
 - Eli Jose, `elijose55@github <https://github.com/elijose55>`_
+- Gonzalo Naveira, `gonzalonaveira@github <https://github.com/gonzalonaveira>`_
