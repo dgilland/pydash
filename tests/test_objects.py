@@ -524,6 +524,7 @@ def test_rename_keys(case, expected):
     (({}, 'a.b[0].c', 1), {'a': {'b': [{'c': 1}]}}),
     (({}, 'a.b[0][0].c', 1), {'a': {'b': [[{'c': 1}]]}}),
     (({}, 'a', tuple), {'a': tuple}),
+    (({}, r'a.b\.c.d', 1), {'a': {'b.c': {'d': 1}}}),
 ])
 def test_set_(case, expected):
     assert _.set_(*case) == expected

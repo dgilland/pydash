@@ -1670,9 +1670,7 @@ def update_with(obj, path, updater, customizer=None):
         base_set(target, key, path_obj, allow_override=False)
 
         try:
-            if isinstance(key, str):
-                key = key.replace('.', r'\.')
-            target = get(target, key)
+            target = base_get(target, key, default=None)
         except TypeError as exc:  # pragma: no cover
             try:
                 target = target[int(key)]
