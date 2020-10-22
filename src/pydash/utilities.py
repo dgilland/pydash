@@ -237,31 +237,6 @@ def constant(value):
     return partial(identity, value)
 
 
-def default_to(value, default_value):
-    """Checks :attr:`value` to determine whether a default value should be
-    returned in its place. The :attr:`default_value` is returned if value is
-    None.
-
-    Args:
-        value (mixed): Value passed in by the user.
-        default_value (mixed): Default value passed in by the user.
-
-    Returns:
-        mixed: Returns :attr:`value` if :attr:`value` is given otherwise
-            returns :attr:`default_value`.
-
-    Example:
-
-        >>> default_to(1, 10)
-        1
-        >>> default_to(None, 10)
-        10
-
-    .. versionadded:: 4.0.0
-    """
-    return default_value if value is None else value
-
-
 def default_to_any(value, *default_values):
     """Checks :attr:`value` to determine whether a default value should be
     returned in its place. The first item that is not None of the
@@ -285,9 +260,37 @@ def default_to_any(value, *default_values):
         20
 
 
-    .. versionadded:: 4.8.1
+    .. versionadded:: x.x.x
     """
-    return pyd.reduce_(default_values, pyd.default_to, value)
+    values = (value,) + default_values
+    for val in values:
+        if val is not None:
+            return val
+
+
+def default_to(value, default_value):
+    """Checks :attr:`value` to determine whether a default value should be
+    returned in its place. The :attr:`default_value` is returned if value is
+    None.
+
+    Args:
+        value (mixed): Value passed in by the user.
+        default_value (mixed): Default value passed in by the user.
+
+    Returns:
+        mixed: Returns :attr:`value` if :attr:`value` is given otherwise
+            returns :attr:`default_value`.
+
+    Example:
+
+        >>> default_to(1, 10)
+        1
+        >>> default_to(None, 10)
+        10
+
+    .. versionadded:: 4.0.0
+    """
+    return default_to_any(value, default_value)
 
 
 def identity(arg=None, *args):
