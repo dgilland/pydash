@@ -237,6 +237,37 @@ def constant(value):
     return partial(identity, value)
 
 
+def default_to_any(value, *default_values):
+    """Checks :attr:`value` to determine whether a default value should be
+    returned in its place. The first item that is not None of the
+    :attr:`default_values` is returned.
+
+    Args:
+        value (mixed): Value passed in by the user.
+        *default_values (mixed): Default values passed in by the user.
+
+    Returns:
+        mixed: Returns :attr:`value` if :attr:`value` is given otherwise
+            returns the first not None value of :attr:`default_values`.
+
+    Example:
+
+        >>> default_to_any(1, 10, 20)
+        1
+        >>> default_to_any(None, 10, 20)
+        10
+        >>> default_to_any(None, None, 20)
+        20
+
+
+    .. versionadded:: x.x.x
+    """
+    values = (value,) + default_values
+    for val in values:
+        if val is not None:
+            return val
+
+
 def default_to(value, default_value):
     """Checks :attr:`value` to determine whether a default value should be
     returned in its place. The :attr:`default_value` is returned if value is
@@ -259,7 +290,7 @@ def default_to(value, default_value):
 
     .. versionadded:: 4.0.0
     """
-    return default_value if value is None else value
+    return default_to_any(value, default_value)
 
 
 def identity(arg=None, *args):

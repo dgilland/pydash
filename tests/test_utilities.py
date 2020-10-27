@@ -126,6 +126,18 @@ def test_constant(case):
 
 
 @parametrize('case,expected', [
+    (([1, 10, 20]), 1),
+    (([None, 10, 20]), 10),
+    (([None, None, 20]), 20),
+    (([None, [1, 2], [3, 4]]), [1, 2]),
+    (([None, None, [3, 4]]), [3, 4]),
+    (([None, None, None]), None)
+])
+def test_default_to_any(case, expected):
+    assert _.default_to_any(*case) == expected
+
+
+@parametrize('case,expected', [
     (([1, 10]), 1),
     (([None, 10]), 10),
     (([[1, 2], [3, 4]]), [1, 2]),
