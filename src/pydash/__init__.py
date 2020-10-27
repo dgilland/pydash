@@ -392,6 +392,7 @@ from .utilities import (
     conforms_to,
     constant,
     default_to,
+    default_to_any,
     iteratee,
     identity,
     matches,
