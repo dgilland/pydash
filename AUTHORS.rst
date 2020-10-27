@@ -22,3 +22,4 @@ Contributors
 - Joshua Wilson, `jwilson8767@github <https://github.com/jwilson8767>`_
 - Eli Jose, `elijose55@github <https://github.com/elijose55>`_
 - Gonzalo Naveira, `gonzalonaveira@github <https://github.com/gonzalonaveira>`_
+- Wenbo Zhao, zhaowb@gmail.com, `zhaowb@github <https://github.com/zhaowb>`_
