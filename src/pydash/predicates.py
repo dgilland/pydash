@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Predicate functions that return boolean evaluations of objects.
+"""
+Predicate functions that return boolean evaluations of objects.
 
 .. versionadded:: 2.0.0
 """
@@ -14,69 +15,65 @@ import re
 from types import BuiltinFunctionType
 
 import pydash as pyd
+
+from ._compat import builtins, integer_types, izip, number_types, string_types
 from .helpers import NoValue, callit, iterator
-from ._compat import (
-    builtins,
-    integer_types,
-    izip,
-    number_types,
-    string_types
-)
 
 
 __all__ = (
-    'eq',
-    'gt',
-    'gte',
-    'lt',
-    'lte',
-    'in_range',
-    'is_associative',
-    'is_blank',
-    'is_boolean',
-    'is_builtin',
-    'is_date',
-    'is_decreasing',
-    'is_dict',
-    'is_empty',
-    'is_equal',
-    'is_equal_with',
-    'is_error',
-    'is_even',
-    'is_float',
-    'is_function',
-    'is_increasing',
-    'is_indexed',
-    'is_instance_of',
-    'is_integer',
-    'is_iterable',
-    'is_json',
-    'is_list',
-    'is_match',
-    'is_match_with',
-    'is_monotone',
-    'is_nan',
-    'is_negative',
-    'is_none',
-    'is_number',
-    'is_object',
-    'is_odd',
-    'is_positive',
-    'is_reg_exp',
-    'is_set',
-    'is_strictly_decreasing',
-    'is_strictly_increasing',
-    'is_string',
-    'is_tuple',
-    'is_zero',
+    "eq",
+    "gt",
+    "gte",
+    "lt",
+    "lte",
+    "in_range",
+    "is_associative",
+    "is_blank",
+    "is_boolean",
+    "is_builtin",
+    "is_date",
+    "is_decreasing",
+    "is_dict",
+    "is_empty",
+    "is_equal",
+    "is_equal_with",
+    "is_error",
+    "is_even",
+    "is_float",
+    "is_function",
+    "is_increasing",
+    "is_indexed",
+    "is_instance_of",
+    "is_integer",
+    "is_iterable",
+    "is_json",
+    "is_list",
+    "is_match",
+    "is_match_with",
+    "is_monotone",
+    "is_nan",
+    "is_negative",
+    "is_none",
+    "is_number",
+    "is_object",
+    "is_odd",
+    "is_positive",
+    "is_reg_exp",
+    "is_set",
+    "is_strictly_decreasing",
+    "is_strictly_increasing",
+    "is_string",
+    "is_tuple",
+    "is_zero",
 )
 
 
-RegExp = type(re.compile(''))
+RegExp = type(re.compile(""))
 
 
 def eq(value, other):
-    """Checks if :attr:`value` is equal to :attr:`other`.
+    """
+    Checks if :attr:`value` is equal to :attr:`other`.
 
     Args:
         value (mixed): Value to compare.
@@ -102,7 +99,8 @@ def eq(value, other):
 
 
 def gt(value, other):
-    """Checks if `value` is greater than `other`.
+    """
+    Checks if `value` is greater than `other`.
 
     Args:
         value (number): Value to compare.
@@ -126,7 +124,8 @@ def gt(value, other):
 
 
 def gte(value, other):
-    """Checks if `value` is greater than or equal to `other`.
+    """
+    Checks if `value` is greater than or equal to `other`.
 
     Args:
         value (number): Value to compare.
@@ -150,7 +149,8 @@ def gte(value, other):
 
 
 def lt(value, other):
-    """Checks if `value` is less than `other`.
+    """
+    Checks if `value` is less than `other`.
 
     Args:
         value (number): Value to compare.
@@ -174,7 +174,8 @@ def lt(value, other):
 
 
 def lte(value, other):
-    """Checks if `value` is less than or equal to `other`.
+    """
+    Checks if `value` is less than or equal to `other`.
 
     Args:
         value (number): Value to compare.
@@ -198,15 +199,14 @@ def lte(value, other):
 
 
 def in_range(value, start=0, end=None):
-    """Checks if `value` is between `start` and up to but not including `end`.
-    If `end` is not specified it defaults to `start` with `start` becoming
-    ``0``.
+    """
+    Checks if `value` is between `start` and up to but not including `end`. If `end` is not
+    specified it defaults to `start` with `start` becoming ``0``.
 
     Args:
 
         value (int|float): Number to check.
-        start (int|float, optional): Start of range inclusive. Defaults to
-            ``0``.
+        start (int|float, optional): Start of range inclusive. Defaults to ``0``.
         end (int|float, optional): End of range exclusive. Defaults to `start`.
 
     Returns:
@@ -245,8 +245,8 @@ def in_range(value, start=0, end=None):
 
 
 def is_associative(value):
-    """Checks if `value` is an associative object meaning that it can be
-    accessed via an index or key
+    """
+    Checks if `value` is an associative object meaning that it can be accessed via an index or key.
 
     Args:
         value (mixed): Value to check.
@@ -267,7 +267,7 @@ def is_associative(value):
 
     .. versionadded:: 2.0.0
     """
-    return hasattr(value, '__getitem__')
+    return hasattr(value, "__getitem__")
 
 
 def is_blank(text):
@@ -291,7 +291,7 @@ def is_blank(text):
     .. versionadded:: 3.0.0
     """
     try:
-        ret = bool(re.match(r'^(\s+)?$', text))
+        ret = bool(re.match(r"^(\s+)?$", text))
     except TypeError:
         ret = False
 
@@ -299,7 +299,8 @@ def is_blank(text):
 
 
 def is_boolean(value):
-    """Checks if `value` is a boolean value.
+    """
+    Checks if `value` is a boolean value.
 
     Args:
         value (mixed): Value to check.
@@ -328,10 +329,11 @@ def is_boolean(value):
 
 
 def is_builtin(value):
-    """Checks if `value` is a Python builtin function or method.
+    """
+    Checks if `value` is a Python builtin function or method.
 
     Args:
-        value (function): Value to check.
+        value (callable): Value to check.
 
     Returns:
         bool: Whether `value` is a Python builtin function or method.
@@ -357,7 +359,8 @@ def is_builtin(value):
 
 
 def is_date(value):
-    """Check if `value` is a date object.
+    """
+    Check if `value` is a date object.
 
     Args:
         value (mixed): Value to check.
@@ -384,7 +387,8 @@ def is_date(value):
 
 
 def is_decreasing(value):
-    """Check if `value` is monotonically decreasing.
+    """
+    Check if `value` is monotonically decreasing.
 
     Args:
         value (list): Value to check.
@@ -407,7 +411,8 @@ def is_decreasing(value):
 
 
 def is_dict(value):
-    """Checks if `value` is a ``dict``.
+    """
+    Checks if `value` is a ``dict``.
 
     Args:
         value (mixed): Value to check.
@@ -425,8 +430,7 @@ def is_dict(value):
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 3.0.0
-        Added :func:`is_dict` as main definition and made `is_plain_object`` an
-        alias.
+        Added :func:`is_dict` as main definition and made `is_plain_object`` an alias.
 
     .. versionchanged:: 4.0.0
         Removed alias ``is_plain_object``.
@@ -435,7 +439,8 @@ def is_dict(value):
 
 
 def is_empty(value):
-    """Checks if `value` is empty.
+    """
+    Checks if `value` is empty.
 
     Args:
         value (mixed): Value to check.
@@ -467,8 +472,8 @@ def is_empty(value):
 
 
 def is_equal(value, other):
-    """Performs a comparison between two values to determine if they are
-    equivalent to each other.
+    """
+    Performs a comparison between two values to determine if they are equivalent to each other.
 
     Args:
         value (list|dict): Object to compare.
@@ -494,17 +499,16 @@ def is_equal(value, other):
 
 
 def is_equal_with(value, other, customizer):
-    """This method is like :func:`is_equal` except that it accepts customizer
-    which is invoked to compare values. A customizer is provided which will be
-    executed to compare values. If the customizer returns ``None``, comparisons
-    will be handled by the method instead. The customizer is invoked with two
-    arguments: ``(value, other)``.
+    """
+    This method is like :func:`is_equal` except that it accepts customizer which is invoked to
+    compare values. A customizer is provided which will be executed to compare values. If the
+    customizer returns ``None``, comparisons will be handled by the method instead. The customizer
+    is invoked with two arguments: ``(value, other)``.
 
     Args:
         value (list|dict): Object to compare.
         other (list|dict): Object to compare.
-        customizer (mixed, optional): Customizer used to compare values from
-            `value` and `other`.
+        customizer (mixed, optional): Customizer used to compare values from `value` and `other`.
 
     Returns:
         bool: Whether `value` and `other` are equal.
@@ -526,11 +530,13 @@ def is_equal_with(value, other, customizer):
     # Return customizer results if anything but None.
     if equal is not None:
         pass
-    elif (callable(customizer) and
-          type(value) is type(other) and
-          isinstance(value, (list, dict)) and
-          isinstance(other, (list, dict)) and
-          len(value) == len(other)):
+    elif (
+        callable(customizer)
+        and type(value) is type(other)
+        and isinstance(value, (list, dict))
+        and isinstance(other, (list, dict))
+        and len(value) == len(other)
+    ):
         # Walk a/b to determine equality using customizer.
         for key, value in iterator(value):
             if pyd.has(other, key):
@@ -541,14 +547,15 @@ def is_equal_with(value, other, customizer):
             if not equal:
                 break
     else:
-        # Use basic == comparision.
+        # Use basic == comparison.
         equal = value == other
 
     return equal
 
 
 def is_error(value):
-    """Checks if `value` is an ``Exception``.
+    """
+    Checks if `value` is an ``Exception``.
 
     Args:
         value (mixed): Value to check.
@@ -571,7 +578,8 @@ def is_error(value):
 
 
 def is_even(value):
-    """Checks if `value` is even.
+    """
+    Checks if `value` is even.
 
     Args:
         value (mixed): Value to check.
@@ -594,7 +602,8 @@ def is_even(value):
 
 
 def is_float(value):
-    """Checks if `value` is a float.
+    """
+    Checks if `value` is a float.
 
     Args:
         value (mixed): Value to check.
@@ -615,7 +624,8 @@ def is_float(value):
 
 
 def is_function(value):
-    """Checks if `value` is a function.
+    """
+    Checks if `value` is a function.
 
     Args:
         value (mixed): Value to check.
@@ -638,7 +648,8 @@ def is_function(value):
 
 
 def is_increasing(value):
-    """Check if `value` is monotonically increasing.
+    """
+    Check if `value` is monotonically increasing.
 
     Args:
         value (list): Value to check.
@@ -663,8 +674,8 @@ def is_increasing(value):
 
 
 def is_indexed(value):
-    """Checks if `value` is integer indexed, i.e., ``list``, ``str`` or
-    ``tuple``.
+    """
+    Checks if `value` is integer indexed, i.e., ``list``, ``str`` or ``tuple``.
 
     Args:
         value (mixed): Value to check.
@@ -692,12 +703,13 @@ def is_indexed(value):
 
 
 def is_instance_of(value, types):
-    """Checks if `value` is an instance of `types`.
+    """
+    Checks if `value` is an instance of `types`.
 
     Args:
         value (mixed): Value to check.
-        types (mixed): Types to check against. Pass as ``tuple`` to check if
-            `value` is one of multiple types.
+        types (mixed): Types to check against. Pass as ``tuple`` to check if `value` is one of
+            multiple types.
 
     Returns:
         bool: Whether `value` is an instance of `types`.
@@ -715,7 +727,8 @@ def is_instance_of(value, types):
 
 
 def is_integer(value):
-    """Checks if `value` is a integer.
+    """
+    Checks if `value` is a integer.
 
     Args:
         value (mixed): Value to check.
@@ -744,7 +757,8 @@ def is_integer(value):
 
 
 def is_iterable(value):
-    """Checks if `value` is an iterable.
+    """
+    Checks if `value` is an iterable.
 
     Args:
         value (mixed): Value to check.
@@ -776,7 +790,8 @@ def is_iterable(value):
 
 
 def is_json(value):
-    """Checks if `value` is a valid JSON string.
+    """
+    Checks if `value` is a valid JSON string.
 
     Args:
         value (mixed): Value to check.
@@ -805,7 +820,8 @@ def is_json(value):
 
 
 def is_list(value):
-    """Checks if `value` is a list.
+    """
+    Checks if `value` is a list.
 
     Args:
         value (mixed): Value to check.
@@ -828,8 +844,9 @@ def is_list(value):
 
 
 def is_match(obj, source):
-    """Performs a partial deep comparison between `obj` and `source` to
-    determine if `obj` contains equivalent property values.
+    """
+    Performs a partial deep comparison between `obj` and `source` to determine if `obj` contains
+    equivalent property values.
 
     Args:
         obj (list|dict): Object to compare.
@@ -860,18 +877,17 @@ def is_match(obj, source):
     return is_match_with(obj, source)
 
 
-def is_match_with(obj, source, customizer=None,
-                  _key=NoValue, _obj=NoValue, _source=NoValue):
-    """This method is like :func:`is_match` except that it accepts customizer
-    which is invoked to compare values. If customizer returns ``None``,
-    comparisons are handled by the method instead. The customizer is invoked
-    with five arguments: ``(obj_value, src_value, index|key, obj, source)``.
+def is_match_with(obj, source, customizer=None, _key=NoValue, _obj=NoValue, _source=NoValue):
+    """
+    This method is like :func:`is_match` except that it accepts customizer which is invoked to
+    compare values. If customizer returns ``None``, comparisons are handled by the method instead.
+    The customizer is invoked with five arguments: ``(obj_value, src_value, index|key, obj,
+    source)``.
 
     Args:
         obj (list|dict): Object to compare.
         source (list|dict): Object of property values to match.
-        customizer (mixed, optional): Customizer used to compare values from
-            `obj` and `source`.
+        customizer (mixed, optional): Customizer used to compare values from `obj` and `source`.
 
     Returns:
         bool: Whether `obj` is a match or not.
@@ -894,6 +910,7 @@ def is_match_with(obj, source, customizer=None,
         _source = source
 
     if not callable(customizer):
+
         def cbk(obj_value, src_value):
             return obj_value == src_value
 
@@ -901,18 +918,22 @@ def is_match_with(obj, source, customizer=None,
     else:
         cbk = customizer
 
-    if (isinstance(obj, dict) and isinstance(source, dict) or
-            isinstance(obj, list) and isinstance(source, list) or
-            isinstance(obj, tuple) and isinstance(source, tuple)):
-        # Set equal to True if source is empty, otherwise, False and then allow
-        # deep comparison to determine equality.
+    if (
+        isinstance(obj, dict)
+        and isinstance(source, dict)
+        or isinstance(obj, list)
+        and isinstance(source, list)
+        or isinstance(obj, tuple)
+        and isinstance(source, tuple)
+    ):
+        # Set equal to True if source is empty, otherwise, False and then allow deep comparison to
+        # determine equality.
         equal = not source
 
         # Walk a/b to determine equality.
         for key, value in iterator(source):
             try:
-                equal = is_match_with(obj[key], value, cbk,
-                                      _key=key, _obj=_obj, _source=_source)
+                equal = is_match_with(obj[key], value, cbk, _key=key, _obj=_obj, _source=_source)
             except Exception:  # pylint: disable=broad-except
                 equal = False
 
@@ -925,11 +946,12 @@ def is_match_with(obj, source, customizer=None,
 
 
 def is_monotone(value, op):
-    """Checks if `value` is monotonic when `operator` used for comparison.
+    """
+    Checks if `value` is monotonic when `operator` used for comparison.
 
     Args:
         value (list): Value to check.
-        op (function): Operation to used for comparison.
+        op (callable): Operation to used for comparison.
 
     Returns:
         bool: Whether `value` is monotone.
@@ -946,14 +968,14 @@ def is_monotone(value, op):
     if not is_list(value):
         value = [value]
 
-    search = (False for x, y in izip(value, islice(value, 1, None))
-              if not op(x, y))
+    search = (False for x, y in izip(value, islice(value, 1, None)) if not op(x, y))
 
     return next(search, True)
 
 
 def is_nan(value):
-    """Checks if `value` is not a number.
+    """
+    Checks if `value` is not a number.
 
     Args:
         value (mixed): Value to check.
@@ -976,7 +998,8 @@ def is_nan(value):
 
 
 def is_negative(value):
-    """Checks if `value` is negative.
+    """
+    Checks if `value` is negative.
 
     Args:
         value (mixed): Value to check.
@@ -999,7 +1022,8 @@ def is_negative(value):
 
 
 def is_none(value):
-    """Checks if `value` is `None`.
+    """
+    Checks if `value` is `None`.
 
     Args:
         value (mixed): Value to check.
@@ -1020,7 +1044,8 @@ def is_none(value):
 
 
 def is_number(value):
-    """Checks if `value` is a number.
+    """
+    Checks if `value` is a number.
 
     Args:
         value (mixed): Value to check.
@@ -1053,7 +1078,8 @@ def is_number(value):
 
 
 def is_object(value):
-    """Checks if `value` is a ``list`` or ``dict``.
+    """
+    Checks if `value` is a ``list`` or ``dict``.
 
     Args:
         value (mixed): Value to check.
@@ -1078,7 +1104,8 @@ def is_object(value):
 
 
 def is_odd(value):
-    """Checks if `value` is odd.
+    """
+    Checks if `value` is odd.
 
     Args:
         value (mixed): Value to check.
@@ -1101,7 +1128,8 @@ def is_odd(value):
 
 
 def is_positive(value):
-    """Checks if `value` is positive.
+    """
+    Checks if `value` is positive.
 
     Args:
         value (mixed): Value to check.
@@ -1124,7 +1152,8 @@ def is_positive(value):
 
 
 def is_reg_exp(value):
-    """Checks if `value` is a ``RegExp`` object.
+    """
+    Checks if `value` is a ``RegExp`` object.
 
     Args:
         value (mxied): Value to check.
@@ -1148,7 +1177,8 @@ def is_reg_exp(value):
 
 
 def is_set(value):
-    """Checks if the given value is a set object or not.
+    """
+    Checks if the given value is a set object or not.
 
     Args:
         value (mixed): Value passed in by the user.
@@ -1169,7 +1199,8 @@ def is_set(value):
 
 
 def is_strictly_decreasing(value):
-    """Check if `value` is strictly decreasing.
+    """
+    Check if `value` is strictly decreasing.
 
     Args:
         value (list): Value to check.
@@ -1190,7 +1221,8 @@ def is_strictly_decreasing(value):
 
 
 def is_strictly_increasing(value):
-    """Check if `value` is strictly increasing.
+    """
+    Check if `value` is strictly increasing.
 
     Args:
         value (list): Value to check.
@@ -1211,7 +1243,8 @@ def is_strictly_increasing(value):
 
 
 def is_string(value):
-    """Checks if `value` is a string.
+    """
+    Checks if `value` is a string.
 
     Args:
         value (mixed): Value to check.
@@ -1232,7 +1265,8 @@ def is_string(value):
 
 
 def is_tuple(value):
-    """Checks if `value` is a tuple.
+    """
+    Checks if `value` is a tuple.
 
     Args:
         value (mixed): Value to check.
@@ -1255,7 +1289,8 @@ def is_tuple(value):
 
 
 def is_zero(value):
-    """Checks if `value` is ``0``.
+    """
+    Checks if `value` is ``0``.
 
     Args:
         value (mixed): Value to check.

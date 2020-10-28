@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Utility functions.
+"""
+Utility functions.
 
 .. versionadded:: 1.0.0
 """
@@ -10,76 +11,77 @@ from collections import namedtuple
 from datetime import datetime
 from functools import partial, wraps
 import math
-from random import uniform, randint
+from random import randint, uniform
 import re
 import time
 
 import pydash as pyd
-from .helpers import callit, getargcount, base_get, iterator, NoValue
-from ._compat import _range, iteritems, number_types, string_types
+
+from ._compat import _range, number_types, string_types
+from .helpers import NoValue, base_get, callit, getargcount, iterator
 
 
 __all__ = (
-    'attempt',
-    'cond',
-    'conforms',
-    'conforms_to',
-    'constant',
-    'default_to',
-    'identity',
-    'iteratee',
-    'matches',
-    'matches_property',
-    'memoize',
-    'method',
-    'method_of',
-    'noop',
-    'nth_arg',
-    'now',
-    'over',
-    'over_every',
-    'over_some',
-    'properties',
-    'property_',
-    'property_of',
-    'random',
-    'range_',
-    'range_right',
-    'result',
-    'retry',
-    'stub_list',
-    'stub_dict',
-    'stub_false',
-    'stub_string',
-    'stub_true',
-    'times',
-    'to_path',
-    'unique_id',
+    "attempt",
+    "cond",
+    "conforms",
+    "conforms_to",
+    "constant",
+    "default_to",
+    "identity",
+    "iteratee",
+    "matches",
+    "matches_property",
+    "memoize",
+    "method",
+    "method_of",
+    "noop",
+    "nth_arg",
+    "now",
+    "over",
+    "over_every",
+    "over_some",
+    "properties",
+    "property_",
+    "property_of",
+    "random",
+    "range_",
+    "range_right",
+    "result",
+    "retry",
+    "stub_list",
+    "stub_dict",
+    "stub_false",
+    "stub_string",
+    "stub_true",
+    "times",
+    "to_path",
+    "unique_id",
 )
 
 # These regexes are used in to_path() to parse deep path strings.
 
-# This is used to split a deep path string into dict keys or list indexex.
-# This matches "." as delimiter (unless it is escaped by "//") and
-# "[<integer>]" as delimiter while keeping the "[<integer>]" as an item.
-RE_PATH_KEY_DELIM = re.compile(r'(?<!\\)(?:\\\\)*\.|(\[\d+\])')
+# This is used to split a deep path string into dict keys or list indexes. This matches "." as
+# delimiter (unless it is escaped by "//") and "[<integer>]" as delimiter while keeping the
+# "[<integer>]" as an item.
+RE_PATH_KEY_DELIM = re.compile(r"(?<!\\)(?:\\\\)*\.|(\[\d+\])")
 
-# Matches on path strings like "[<integer>]". This is used to test whether a
-# path string part is a list index.
-RE_PATH_LIST_INDEX = re.compile(r'^\[\d+\]$')
+# Matches on path strings like "[<integer>]". This is used to test whether a path string part is a
+# list index.
+RE_PATH_LIST_INDEX = re.compile(r"^\[\d+\]$")
 
 
 ID_COUNTER = 0
 
-PathToken = namedtuple('PathToken', ['key', 'default_factory'])
+PathToken = namedtuple("PathToken", ["key", "default_factory"])
 
 
 def attempt(func, *args, **kargs):
-    """Attempts to execute `func`, returning either the result or the caught
-    error object.
+    """
+    Attempts to execute `func`, returning either the result or the caught error object.
 
     Args:
-        func (function): The function to attempt.
+        func (callable): The function to attempt.
 
     Returns:
         mixed: Returns the `func` result or error object.
@@ -100,14 +102,15 @@ def attempt(func, *args, **kargs):
 
 
 def cond(pairs, *extra_pairs):
-    """Creates a function that iterates over `pairs` and invokes the
-    corresponding function of the first predicate to return truthy.
+    """
+    Creates a function that iterates over `pairs` and invokes the corresponding function of the
+    first predicate to return truthy.
 
     Args:
         pairs (list): A list of predicate-function pairs.
 
     Returns:
-        function: Returns the new composite function.
+        callable: Returns the new composite function.
 
     Example:
 
@@ -124,9 +127,8 @@ def cond(pairs, *extra_pairs):
     .. versionadded:: 4.0.0
 
     .. versionchanged:: 4.2.0
-        Fixed missing argument passing to matched function and added
-        support for passing in a single list of pairs instead of just pairs as
-        separate arguments.
+        Fixed missing argument passing to matched function and added support for passing in a single
+        list of pairs instead of just pairs as separate arguments.
     """
     if extra_pairs:
         pairs = [pairs] + list(extra_pairs)
@@ -139,11 +141,10 @@ def cond(pairs, *extra_pairs):
             pass
 
         if not is_valid:
-            raise ValueError('Each predicate-function pair should contain '
-                             'exactly two elements')
+            raise ValueError("Each predicate-function pair should contain " "exactly two elements")
 
         if not all(map(callable, pair)):
-            raise TypeError('Both predicate-function pair should be callable')
+            raise TypeError("Both predicate-function pair should be callable")
 
     def _cond(*args):
         for pair in pairs:
@@ -156,15 +157,16 @@ def cond(pairs, *extra_pairs):
 
 
 def conforms(source):
-    """Creates a function that invokes the predicate properties of `source`
-    with the corresponding property values of a given object, returning
-    ``True`` if all predicates return truthy, else ``False``.
+    """
+    Creates a function that invokes the predicate properties of `source` with the corresponding
+    property values of a given object, returning ``True`` if all predicates return truthy, else
+    ``False``.
 
     Args:
         source (dict|list): The object of property predicates to conform to.
 
     Returns:
-        function: Returns the new spec function.
+        callable: Returns the new spec function.
 
     Example:
 
@@ -181,6 +183,7 @@ def conforms(source):
 
     .. versionadded:: 4.0.0
     """
+
     def _conforms(obj):
         for key, predicate in iterator(source):
             if not pyd.has(obj, key) or not predicate(obj[key]):
@@ -191,8 +194,9 @@ def conforms(source):
 
 
 def conforms_to(obj, source):
-    """Checks if `obj` conforms to `source` by invoking the predicate
-    properties of `source` with the corresponding property values of `obj`.
+    """
+    Checks if `obj` conforms to `source` by invoking the predicate properties of `source` with the
+    corresponding property values of `obj`.
 
     Args:
         obj (dict|list): The object to inspect.
@@ -215,13 +219,14 @@ def conforms_to(obj, source):
 
 
 def constant(value):
-    """Creates a function that returns `value`.
+    """
+    Creates a function that returns `value`.
 
     Args:
         value (mixed): Constant value to return.
 
     Returns:
-        function: Function that always returns `value`.
+        callable: Function that always returns `value`.
 
     Example:
 
@@ -237,18 +242,42 @@ def constant(value):
     return partial(identity, value)
 
 
+def default_to(value, default_value):
+    """
+    Checks `value` to determine whether a default value should be returned in its place. The
+    `default_value` is returned if value is None.
+
+    Args:
+        value (mixed): Value passed in by the user.
+        default_value (mixed): Default value passed in by the user.
+
+    Returns:
+        mixed: Returns `value` if :attr:`value` is given otherwise returns `default_value`.
+
+    Example:
+
+        >>> default_to(1, 10)
+        1
+        >>> default_to(None, 10)
+        10
+
+    .. versionadded:: 4.0.0
+    """
+    return default_to_any(value, default_value)
+
+
 def default_to_any(value, *default_values):
-    """Checks :attr:`value` to determine whether a default value should be
-    returned in its place. The first item that is not None of the
-    :attr:`default_values` is returned.
+    """
+    Checks `value` to determine whether a default value should be returned in its place. The first
+    item that is not None of the `default_values` is returned.
 
     Args:
         value (mixed): Value passed in by the user.
         *default_values (mixed): Default values passed in by the user.
 
     Returns:
-        mixed: Returns :attr:`value` if :attr:`value` is given otherwise
-            returns the first not None value of :attr:`default_values`.
+        mixed: Returns `value` if :attr:`value` is given otherwise returns the first not None value
+            of `default_values`.
 
     Example:
 
@@ -268,33 +297,9 @@ def default_to_any(value, *default_values):
             return val
 
 
-def default_to(value, default_value):
-    """Checks :attr:`value` to determine whether a default value should be
-    returned in its place. The :attr:`default_value` is returned if value is
-    None.
-
-    Args:
-        value (mixed): Value passed in by the user.
-        default_value (mixed): Default value passed in by the user.
-
-    Returns:
-        mixed: Returns :attr:`value` if :attr:`value` is given otherwise
-            returns :attr:`default_value`.
-
-    Example:
-
-        >>> default_to(1, 10)
-        1
-        >>> default_to(None, 10)
-        10
-
-    .. versionadded:: 4.0.0
-    """
-    return default_to_any(value, default_value)
-
-
 def identity(arg=None, *args):
-    """Return the first argument provided to it.
+    """
+    Return the first argument provided to it.
 
     Args:
         *args (mixed): Arguments.
@@ -317,17 +322,17 @@ def identity(arg=None, *args):
 
 
 def iteratee(func):
-    """Return a pydash style iteratee. If `func` is a property name the created
-    iteratee will return the property value for a given element. If `func` is
-    an object the created iteratee will return ``True`` for elements that
-    contain the equivalent object properties, otherwise it will return
+    """
+    Return a pydash style iteratee. If `func` is a property name the created iteratee will return
+    the property value for a given element. If `func` is an object the created iteratee will return
+    ``True`` for elements that contain the equivalent object properties, otherwise it will return
     ``False``.
 
     Args:
         func (mixed): Object to create iteratee function from.
 
     Returns:
-        function: Iteratee function.
+        callable: Iteratee function.
 
     Example:
 
@@ -364,10 +369,8 @@ def iteratee(func):
         Made pluck style iteratee support deep property access.
 
     .. versionchanged:: 3.1.0
-        - Added support for shallow pluck style property access via single item
-        list/tuple.
-        - Added support for matches property style iteratee via two item
-        list/tuple.
+        - Added support for shallow pluck style property access via single item list/tuple.
+        - Added support for matches property style iteratee via two item list/tuple.
 
     .. versionchanged:: 4.0.0
         Removed alias ``callback``.
@@ -394,26 +397,25 @@ def iteratee(func):
         else:
             cbk = identity
 
-        # Optimize iteratee by specifying the exact number of arguments the
-        # iteratee takes so that arg inspection (costly process) can be
-        # skipped in helpers.callit().
+        # Optimize iteratee by specifying the exact number of arguments the iteratee takes so that
+        # arg inspection (costly process) can be skipped in helpers.callit().
         cbk._argcount = 1
 
     return cbk
 
 
 def matches(source):
-    """Creates a matches-style predicate function which performs a deep
-    comparison between a given object and the `source` object, returning
-    ``True`` if the given object has equivalent property values, else
-    ``False``.
+    """
+    Creates a matches-style predicate function which performs a deep comparison between a given
+    object and the `source` object, returning ``True`` if the given object has equivalent property
+    values, else ``False``.
 
     Args:
         source (dict): Source object used for comparision.
 
     Returns:
-        function: Function that compares an object to `source` and returns
-            whether the two objects contain the same items.
+        callable: Function that compares an object to `source` and returns whether the two objects
+            contain the same items.
 
     Example:
 
@@ -433,16 +435,16 @@ def matches(source):
 
 
 def matches_property(key, value):
-    """Creates a function that compares the property value of `key` on a given
-    object to `value`.
+    """
+    Creates a function that compares the property value of `key` on a given object to `value`.
 
     Args:
         key (str): Object key to match against.
         value (mixed): Value to compare to.
 
     Returns:
-        function: Function that compares `value` to an object's `key` and
-            returns whether they are equal.
+        callable: Function that compares `value` to an object's `key` and returns whether they are
+            equal.
 
     Example:
 
@@ -460,19 +462,18 @@ def matches_property(key, value):
 
 
 def memoize(func, resolver=None):
-    """Creates a function that memoizes the result of `func`. If `resolver` is
-    provided it will be used to determine the cache key for storing the result
-    based on the arguments provided to the memoized function. By default, all
-    arguments provided to the memoized function are used as the cache key.
-    The result cache is exposed as the cache property on the memoized function.
+    """
+    Creates a function that memoizes the result of `func`. If `resolver` is provided it will be used
+    to determine the cache key for storing the result based on the arguments provided to the
+    memoized function. By default, all arguments provided to the memoized function are used as the
+    cache key. The result cache is exposed as the cache property on the memoized function.
 
     Args:
-        func (function): Function to memoize.
-        resolver (function, optional): Function that returns the cache key to
-            use.
+        func (callable): Function to memoize.
+        resolver (callable, optional): Function that returns the cache key to use.
 
     Returns:
-        function: Memoized function.
+        callable: Memoized function.
 
     Example:
 
@@ -488,33 +489,35 @@ def memoize(func, resolver=None):
 
     .. versionadded:: 1.0.0
     """
+
     def memoized(*args, **kargs):
         if resolver:
             key = resolver(*args, **kargs)
         else:
-            key = '{0}{1}'.format(args, kargs)
+            key = "{0}{1}".format(args, kargs)
 
         if key not in memoized.cache:
             memoized.cache[key] = func(*args, **kargs)
 
         return memoized.cache[key]
+
     memoized.cache = {}
 
     return memoized
 
 
 def method(path, *args, **kargs):
-    """Creates a function that invokes the method at `path` on a given object.
-    Any additional arguments are provided to the invoked method.
+    """
+    Creates a function that invokes the method at `path` on a given object. Any additional arguments
+    are provided to the invoked method.
 
     Args:
         path (str): Object path of method to invoke.
         *args (mixed): Global arguments to apply to method when invoked.
-        **kargs (mixed): Global keyword argument to apply to method when
-            invoked.
+        **kargs (mixed): Global keyword argument to apply to method when invoked.
 
     Returns:
-        function: Function that invokes method located at path for object.
+        callable: Function that invokes method located at path for object.
 
     Example:
 
@@ -527,25 +530,26 @@ def method(path, *args, **kargs):
 
     .. versionadded:: 3.3.0
     """
+
     def _method(obj, *_args, **_kargs):
         func = pyd.partial(pyd.get(obj, path), *args, **kargs)
         return func(*_args, **_kargs)
+
     return _method
 
 
 def method_of(obj, *args, **kargs):
-    """The opposite of :func:`method`. This method creates a function that
-    invokes the method at a given path on object. Any additional arguments are
-    provided to the invoked method.
+    """
+    The opposite of :func:`method`. This method creates a function that invokes the method at a
+    given path on object. Any additional arguments are provided to the invoked method.
 
     Args:
         obj (mixed): The object to query.
         *args (mixed): Global arguments to apply to method when invoked.
-        **kargs (mixed): Global keyword argument to apply to method when
-            invoked.
+        **kargs (mixed): Global keyword argument to apply to method when invoked.
 
     Returns:
-        function: Function that invokes method located at path for object.
+        callable: Function that invokes method located at path for object.
 
     Example:
 
@@ -558,14 +562,17 @@ def method_of(obj, *args, **kargs):
 
     .. versionadded:: 3.3.0
     """
+
     def _method_of(path, *_args, **_kargs):
         func = pyd.partial(pyd.get(obj, path), *args, **kargs)
         return func(*_args, **_kargs)
+
     return _method_of
 
 
 def noop(*args, **kargs):  # pylint: disable=unused-argument
-    """A no-operation function.
+    """
+    A no-operation function.
 
     .. versionadded:: 1.0.0
     """
@@ -573,14 +580,15 @@ def noop(*args, **kargs):  # pylint: disable=unused-argument
 
 
 def nth_arg(pos=0):
-    """Creates a function that gets the argument at index n. If n is negative,
-    the nth argument from the end is returned.
+    """
+    Creates a function that gets the argument at index n. If n is negative, the nth argument from
+    the end is returned.
 
     Args:
         pos (int): The index of the argument to return.
 
     Returns:
-        function: Returns the new pass-thru function.
+        callable: Returns the new pass-thru function.
 
     Example:
 
@@ -593,6 +601,7 @@ def nth_arg(pos=0):
 
     .. versionadded:: 4.0.0
     """
+
     def _nth_arg(*args):
         try:
             position = math.ceil(float(pos))
@@ -605,8 +614,9 @@ def nth_arg(pos=0):
 
 
 def now():
-    """Return the number of milliseconds that have elapsed since the Unix epoch
-    (1 January 1970 00:00:00 UTC).
+    """
+    Return the number of milliseconds that have elapsed since the Unix epoch (1 January 1970
+    00:00:00 UTC).
 
     Returns:
         int: Milliseconds since Unix epoch.
@@ -619,26 +629,27 @@ def now():
     epoch = datetime.utcfromtimestamp(0)
     delta = datetime.utcnow() - epoch
 
-    if hasattr(delta, 'total_seconds'):
+    if hasattr(delta, "total_seconds"):
         seconds = delta.total_seconds()
     else:  # pragma: no cover
         # PY26
-        seconds = ((delta.microseconds +
-                    (delta.seconds + delta.days * 24 * 3600) * 10**6) /
-                   10**6)
+        seconds = (
+            delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10 ** 6
+        ) / 10 ** 6
 
     return int(seconds * 1000)
 
 
 def over(funcs):
-    """Creates a function that invokes all functions in `funcs` with the
-    arguments it receives and returns their results.
+    """
+    Creates a function that invokes all functions in `funcs` with the arguments it receives and
+    returns their results.
 
     Args:
         funcs (list): List of functions to be invoked.
 
     Returns:
-        function: Returns the new pass-thru function.
+        callable: Returns the new pass-thru function.
 
     Example:
 
@@ -648,6 +659,7 @@ def over(funcs):
 
     .. versionadded:: 4.0.0
     """
+
     def _over(*args):
         return [func(*args) for func in funcs]
 
@@ -655,14 +667,15 @@ def over(funcs):
 
 
 def over_every(funcs):
-    """Creates a function that checks if all of the functions in `funcs` return
-    truthy when invoked with the arguments it receives.
+    """
+    Creates a function that checks if all of the functions in `funcs` return truthy when invoked
+    with the arguments it receives.
 
     Args:
         funcs (list): List of functions to be invoked.
 
     Returns:
-        function: Returns the new pass-thru function.
+        callable: Returns the new pass-thru function.
 
     Example:
 
@@ -672,6 +685,7 @@ def over_every(funcs):
 
     .. versionadded:: 4.0.0
     """
+
     def _over_every(*args):
         return all(func(*args) for func in funcs)
 
@@ -679,14 +693,15 @@ def over_every(funcs):
 
 
 def over_some(funcs):
-    """Creates a function that checks if any of the functions in `funcs` return
-    truthy when invoked with the arguments it receives.
+    """
+    Creates a function that checks if any of the functions in `funcs` return truthy when invoked
+    with the arguments it receives.
 
     Args:
         funcs (list): List of functions to be invoked.
 
     Returns:
-        function: Returns the new pass-thru function.
+        callable: Returns the new pass-thru function.
 
     Example:
 
@@ -696,6 +711,7 @@ def over_some(funcs):
 
     .. versionadded:: 4.0.0
     """
+
     def _over_some(*args):
         return any(func(*args) for func in funcs)
 
@@ -703,13 +719,14 @@ def over_some(funcs):
 
 
 def property_(path):
-    """Creates a function that returns the value at path of a given object.
+    """
+    Creates a function that returns the value at path of a given object.
 
     Args:
         path (str|list): Path value to fetch from object.
 
     Returns:
-        function: Function that returns object's path value.
+        callable: Function that returns object's path value.
 
     Example:
 
@@ -731,14 +748,14 @@ def property_(path):
 
 
 def properties(*paths):
-    """Like :func:`property_` except that it returns a list of values at each
-    path in `paths`.
+    """
+    Like :func:`property_` except that it returns a list of values at each path in `paths`.
 
     Args:
         *path (str|list): Path values to fetch from object.
 
     Returns:
-        function: Function that returns object's path value.
+        callable: Function that returns object's path value.
 
     Example:
 
@@ -748,19 +765,19 @@ def properties(*paths):
 
     .. versionadded:: 4.1.0
     """
-    return lambda obj: [getter(obj)
-                        for getter in (pyd.property_(path) for path in paths)]
+    return lambda obj: [getter(obj) for getter in (pyd.property_(path) for path in paths)]
 
 
 def property_of(obj):
-    """The inverse of :func:`property_`. This method creates a function that
-    returns the key value of a given key on `obj`.
+    """
+    The inverse of :func:`property_`. This method creates a function that returns the key value of a
+    given key on `obj`.
 
     Args:
         obj (dict|list): Object to fetch values from.
 
     Returns:
-        function: Function that returns object's key value.
+        callable: Function that returns object's key value.
 
     Example:
 
@@ -781,16 +798,17 @@ def property_of(obj):
 
 
 def random(start=0, stop=1, floating=False):
-    """Produces a random number between `start` and `stop` (inclusive). If only
-    one argument is provided a number between 0 and the given number will be
-    returned. If floating is truthy or either `start` or `stop` are floats a
-    floating-point number will be returned instead of an integer.
+    """
+    Produces a random number between `start` and `stop` (inclusive). If only one argument is
+    provided a number between 0 and the given number will be returned. If floating is truthy or
+    either `start` or `stop` are floats a floating-point number will be returned instead of an
+    integer.
 
     Args:
         start (int): Minimum value.
         stop (int): Maximum value.
-        floating (bool, optional): Whether to force random value to ``float``.
-            Default is ``False``.
+        floating (bool, optional): Whether to force random value to ``float``. Defaults to
+            ``False``.
 
     Returns:
         int|float: Random value.
@@ -806,9 +824,7 @@ def random(start=0, stop=1, floating=False):
 
     .. versionadded:: 1.0.0
     """
-    floating = (isinstance(start, float) or
-                isinstance(stop, float) or
-                floating is True)
+    floating = isinstance(start, float) or isinstance(stop, float) or floating is True
 
     if stop < start:
         stop, start = start, stop
@@ -822,15 +838,15 @@ def random(start=0, stop=1, floating=False):
 
 
 def range_(*args):
-    """Creates a list of numbers (positive and/or negative) progressing from
-    start up to but not including end. If `start` is less than `stop`,
-    a zero-length range is created unless a negative `step` is specified.
+    """
+    Creates a list of numbers (positive and/or negative) progressing from start up to but not
+    including end. If `start` is less than `stop`, a zero-length range is created unless a negative
+    `step` is specified.
 
     Args:
         start (int, optional): Integer to start with. Defaults to ``0``.
         stop (int): Integer to stop at.
-        step (int, optional): The value to increment or decrement by. Defaults
-            to ``1``.
+        step (int, optional): The value to increment or decrement by. Defaults to ``1``.
 
     Yields:
         int: Next integer in range.
@@ -861,14 +877,14 @@ def range_(*args):
 
 
 def range_right(*args):
-    """Similar to :func:`range_`, except that it populates the values in
-    descending order.
+    """
+    Similar to :func:`range_`, except that it populates the values in descending order.
 
     Args:
         start (int, optional): Integer to start with. Defaults to ``0``.
         stop (int): Integer to stop at.
-        step (int, optional): The value to increment or decrement by. Defaults
-            to ``1`` if `start` < `stop` else ``-1``.
+        step (int, optional): The value to increment or decrement by. Defaults to ``1`` if `start`
+            < `stop` else ``-1``.
 
     Yields:
         int: Next integer in range.
@@ -888,15 +904,15 @@ def range_right(*args):
 
 
 def result(obj, key, default=None):
-    """Return the value of property `key` on `obj`. If `key` value is a
-    function it will be invoked and its result returned, else the property
-    value is returned. If `obj` is falsey then `default` is returned.
+    """
+    Return the value of property `key` on `obj`. If `key` value is a function it will be invoked and
+    its result returned, else the property value is returned. If `obj` is falsey then `default` is
+    returned.
 
     Args:
         obj (list|dict): Object to retrieve result from.
         key (mixed): Key or index to get result from.
-        default (mixed, optional): Default value to return if `obj` is falsey.
-            Defaults to ``None``.
+        default (mixed, optional): Default value to return if `obj` is falsey. Defaults to ``None``.
 
     Returns:
         mixed: Result of ``obj[key]`` or ``None``.
@@ -928,15 +944,18 @@ def result(obj, key, default=None):
     return ret
 
 
-def retry(attempts=3,
-          delay=0.5,
-          max_delay=150.0,
-          scale=2.0,
-          jitter=0,
-          exceptions=(Exception,),
-          on_exception=None):
-    """Decorator that retries a function multiple times if it raises an
-    exception with an optional delay between each attempt.
+def retry(  # noqa: C901
+    attempts=3,
+    delay=0.5,
+    max_delay=150.0,
+    scale=2.0,
+    jitter=0,
+    exceptions=(Exception,),
+    on_exception=None,
+):
+    """
+    Decorator that retries a function multiple times if it raises an exception with an optional
+    delay between each attempt.
 
     When a `delay` is supplied, there will be a sleep period in between retry
     attempts. The first delay time will always be equal to `delay`. After
@@ -945,28 +964,23 @@ def retry(attempts=3,
 
     Args:
         attempts (int, optional): Number of retry attempts. Defaults to ``3``.
-        delay (int|float, optional): Base amount of seconds to sleep between
-            retry attempts. Defaults to ``0.5``.
-        max_delay (int|float, optional): Maximum number of seconds to sleep
-            between retries. Is ignored when equal to ``0``. Defaults to
-            ``150.0`` (2.5 minutes).
-        scale (int|float, optional): Scale factor to increase `delay` after
-            first retry fails. Defaults to ``2.0``.
-        jitter (int|float|tuple, optional): Random jitter to add to `delay`
-            time. Can be a positive number or 2-item tuple of numbers
-            representing the random range to choose from. When a number is
-            given, the random range will be from ``[0, jitter]``. When jitter
-            is a float or contains a float, then a random float will be chosen;
-            otherwise, a random integer will be selected. Defaults to ``0``
-            which disables jitter.
-        exceptions (tuple, optional): Tuple of exceptions that trigger a retry
-            attempt. Exceptions not in the tuple will be ignored. Defaults to
-            ``(Exception,)`` (all exceptions).
-        on_exception (function, optional): Function that is called when a
-            retryable exception is caught. It is invoked with
-            ``on_exception(exc, attempt)`` where ``exc`` is the caught
-            exception and ``attempt`` is the attempt count. All arguments are
-            optional. Defaults to ``None``.
+        delay (int|float, optional): Base amount of seconds to sleep between retry attempts.
+            Defaults to ``0.5``.
+        max_delay (int|float, optional): Maximum number of seconds to sleep between retries. Is
+            ignored when equal to ``0``. Defaults to ``150.0`` (2.5 minutes).
+        scale (int|float, optional): Scale factor to increase `delay` after first retry fails.
+            Defaults to ``2.0``.
+        jitter (int|float|tuple, optional): Random jitter to add to `delay` time. Can be a positive
+            number or 2-item tuple of numbers representing the random range to choose from. When a
+            number is given, the random range will be from ``[0, jitter]``. When jitter is a float
+            or contains a float, then a random float will be chosen; otherwise, a random integer
+            will be selected. Defaults to ``0`` which disables jitter.
+        exceptions (tuple, optional): Tuple of exceptions that trigger a retry attempt. Exceptions
+            not in the tuple will be ignored. Defaults to ``(Exception,)`` (all exceptions).
+        on_exception (callable, optional): Function that is called when a retryable exception is
+            caught. It is invoked with ``on_exception(exc, attempt)`` where ``exc`` is the caught
+            exception and ``attempt`` is the attempt count. All arguments are optional. Defaults to
+            ``None``.
 
     Example:
 
@@ -990,38 +1004,39 @@ def retry(attempts=3,
         exceptions = (exceptions,)
 
     if not isinstance(attempts, int) or attempts <= 0:
-        raise ValueError('attempts must be an integer greater than 0')
+        raise ValueError("attempts must be an integer greater than 0")
 
     if not isinstance(delay, number_types) or delay < 0:
-        raise ValueError('delay must be a number greater than or equal to 0')
+        raise ValueError("delay must be a number greater than or equal to 0")
 
     if not isinstance(max_delay, number_types) or max_delay < 0:
-        raise ValueError('scale must be a number greater than or equal to 0')
+        raise ValueError("scale must be a number greater than or equal to 0")
 
     if not isinstance(scale, number_types) or scale <= 0:
-        raise ValueError('scale must be a number greater than 0')
+        raise ValueError("scale must be a number greater than 0")
 
-    if (not isinstance(jitter, number_types + (tuple,)) or
-            (isinstance(jitter, number_types) and jitter < 0) or
-            (isinstance(jitter, tuple) and (
-                len(jitter) != 2 or
-                not all(isinstance(jit, number_types) for jit in jitter)))):
-        raise ValueError(
-            'jitter must be a number greater than 0 or a 2-item tuple of '
-            'numbers')
+    if (
+        not isinstance(jitter, number_types + (tuple,))
+        or (isinstance(jitter, number_types) and jitter < 0)
+        or (
+            isinstance(jitter, tuple)
+            and (len(jitter) != 2 or not all(isinstance(jit, number_types) for jit in jitter))
+        )
+    ):
+        raise ValueError("jitter must be a number greater than 0 or a 2-item tuple of " "numbers")
 
-    if (not isinstance(exceptions, tuple) or
-            not all(issubclass(exc, Exception) for exc in exceptions)):
-        raise TypeError('exceptions must be a tuple of Exception types')
+    if not isinstance(exceptions, tuple) or not all(
+        issubclass(exc, Exception) for exc in exceptions
+    ):
+        raise TypeError("exceptions must be a tuple of Exception types")
 
     if on_exception and not callable(on_exception):
-        raise TypeError('on_exception must be a callable')
+        raise TypeError("on_exception must be a callable")
 
     if jitter and not isinstance(jitter, tuple):
         jitter = (0, jitter)
 
-    on_exc_argcount = (getargcount(on_exception, maxargs=2) if on_exception
-                       else None)
+    on_exc_argcount = getargcount(on_exception, maxargs=2) if on_exception else None
 
     def decorator(func):
         @wraps(func)
@@ -1034,10 +1049,7 @@ def retry(attempts=3,
                     return func(*args, **kargs)
                 except exceptions as exc:
                     if on_exception:
-                        callit(on_exception,
-                               exc,
-                               attempt,
-                               argcount=on_exc_argcount)
+                        callit(on_exception, exc, attempt, argcount=on_exc_argcount)
 
                     if attempt == attempts:
                         raise
@@ -1055,12 +1067,15 @@ def retry(attempts=3,
 
                     # Scale after first iteration.
                     delay_time *= scale
+
         return decorated
+
     return decorator
 
 
 def stub_list():
-    """Returns empty "list".
+    """
+    Returns empty "list".
 
     Returns:
         list: Empty list.
@@ -1076,7 +1091,8 @@ def stub_list():
 
 
 def stub_dict():
-    """Returns empty "dict".
+    """
+    Returns empty "dict".
 
     Returns:
         dict: Empty dict.
@@ -1092,7 +1108,8 @@ def stub_dict():
 
 
 def stub_false():
-    """Returns ``False``.
+    """
+    Returns ``False``.
 
     Returns:
         bool: False
@@ -1108,7 +1125,8 @@ def stub_false():
 
 
 def stub_string():
-    """Returns an empty string.
+    """
+    Returns an empty string.
 
     Returns:
         str: Empty string
@@ -1120,11 +1138,12 @@ def stub_string():
 
     .. versionadded:: 4.0.0
     """
-    return ''
+    return ""
 
 
 def stub_true():
-    """Returns ``True``.
+    """
+    Returns ``True``.
 
     Returns:
         bool: True
@@ -1140,12 +1159,13 @@ def stub_true():
 
 
 def times(n, iteratee=None):
-    """Executes the iteratee `n` times, returning a list of the results of each
-    iteratee execution. The iteratee is invoked with one argument: ``(index)``.
+    """
+    Executes the iteratee `n` times, returning a list of the results of each iteratee execution. The
+    iteratee is invoked with one argument: ``(index)``.
 
     Args:
         n (int): Number of times to execute `iteratee`.
-        iteratee (function): Function to execute.
+        iteratee (callable): Function to execute.
 
     Returns:
         list: A list of results from calling `iteratee`.
@@ -1163,8 +1183,7 @@ def times(n, iteratee=None):
     .. versionchanged:: 4.0.0
 
         - Re-reordered arguments to make `iteratee` last argument.
-        - Added functionality for handling `iteratee` with zero positional
-          arguments.
+        - Added functionality for handling `iteratee` with zero positional arguments.
     """
     if iteratee is None:
         iteratee = identity
@@ -1176,7 +1195,8 @@ def times(n, iteratee=None):
 
 
 def to_path(value):
-    """Converts values to a property path array.
+    """
+    Converts values to a property path array.
 
     Args:
         value (mixed): Value to convert.
@@ -1200,17 +1220,17 @@ def to_path(value):
     """
     tokens = to_path_tokens(value)
     if isinstance(tokens, list):
-        path = [token.key if isinstance(token, PathToken)
-                else token
-                for token in to_path_tokens(value)]
+        path = [
+            token.key if isinstance(token, PathToken) else token for token in to_path_tokens(value)
+        ]
     else:
         path = [tokens]
     return path
 
 
 def unique_id(prefix=None):
-    """Generates a unique ID. If `prefix` is provided the ID will be appended
-    to  it.
+    """
+    Generates a unique ID. If `prefix` is provided the ID will be appended to  it.
 
     Args:
         prefix (str, optional): String prefix to prepend to ID value.
@@ -1233,8 +1253,9 @@ def unique_id(prefix=None):
     global ID_COUNTER
     ID_COUNTER += 1
 
-    return '{0}{1}'.format(pyd.to_string('' if prefix is None else prefix),
-                           pyd.to_string(ID_COUNTER))
+    return "{0}{1}".format(
+        pyd.to_string("" if prefix is None else prefix), pyd.to_string(ID_COUNTER)
+    )
 
 
 #
@@ -1244,15 +1265,16 @@ def unique_id(prefix=None):
 
 def to_path_tokens(value):
     """Parse `value` into :class:`PathToken` objects."""
-    if pyd.is_string(value) and ('.' in value or '[' in value):
-        # Since we can't tell whether a bare number is supposed to be dict key
-        # or a list index, we support a special syntax where any string-integer
-        # surrounded by brackets is treated as a list index and converted to an
-        # integer.
-        keys = [PathToken(int(key[1:-1]), default_factory=list)
-                if RE_PATH_LIST_INDEX.match(key)
-                else PathToken(unescape_path_key(key), default_factory=dict)
-                for key in filter(None, RE_PATH_KEY_DELIM.split(value))]
+    if pyd.is_string(value) and ("." in value or "[" in value):
+        # Since we can't tell whether a bare number is supposed to be dict key or a list index, we
+        # support a special syntax where any string-integer surrounded by brackets is treated as a
+        # list index and converted to an integer.
+        keys = [
+            PathToken(int(key[1:-1]), default_factory=list)
+            if RE_PATH_LIST_INDEX.match(key)
+            else PathToken(unescape_path_key(key), default_factory=dict)
+            for key in filter(None, RE_PATH_KEY_DELIM.split(value))
+        ]
     elif pyd.is_string(value) or pyd.is_number(value):
         keys = [PathToken(value, default_factory=dict)]
     elif value is NoValue:
@@ -1265,14 +1287,14 @@ def to_path_tokens(value):
 
 def unescape_path_key(key):
     """Unescape path key."""
-    key = key.replace(r'\\', '\\')
-    key = key.replace(r'\.', r'.')
+    key = key.replace(r"\\", "\\")
+    key = key.replace(r"\.", r".")
     return key
 
 
 def base_range(*args, **kargs):
     """Yield range values."""
-    from_right = kargs.get('from_right', False)
+    from_right = kargs.get("from_right", False)
 
     if len(args) >= 3:
         args = args[:3]
@@ -1288,8 +1310,9 @@ def base_range(*args, **kargs):
 
     for arg in check_args:
         if not isinstance(arg, int):  # pragma: no cover
-            raise TypeError("range cannot interpret '{0}' object as an "
-                            "integer".format(type(arg).__name__))
+            raise TypeError(
+                "range cannot interpret '{0}' object as an " "integer".format(type(arg).__name__)
+            )
 
     def gen():
         if not args:

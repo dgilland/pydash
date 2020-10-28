@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Functions that operate on lists, dicts, and other objects.
+"""
+Functions that operate on lists, dicts, and other objects.
 
 .. versionadded:: 1.0.0
 """
@@ -12,69 +13,63 @@ import math
 import re
 
 import pydash as pyd
-from .helpers import (
-    NoValue,
-    callit,
-    iterator,
-    iteriteratee,
-    getargcount,
-    base_get,
-    base_set
-)
+
 from ._compat import iteritems, string_types, text_type
+from .helpers import NoValue, base_get, base_set, callit, getargcount, iterator, iteriteratee
 from .utilities import PathToken, to_path, to_path_tokens
 
 
 __all__ = (
-    'assign',
-    'assign_with',
-    'callables',
-    'clone',
-    'clone_deep',
-    'clone_deep_with',
-    'clone_with',
-    'defaults',
-    'defaults_deep',
-    'find_key',
-    'find_last_key',
-    'for_in',
-    'for_in_right',
-    'get',
-    'has',
-    'invert',
-    'invert_by',
-    'invoke',
-    'keys',
-    'map_keys',
-    'map_values',
-    'map_values_deep',
-    'merge',
-    'merge_with',
-    'omit',
-    'omit_by',
-    'parse_int',
-    'pick',
-    'pick_by',
-    'rename_keys',
-    'set_',
-    'set_with',
-    'to_boolean',
-    'to_dict',
-    'to_integer',
-    'to_list',
-    'to_number',
-    'to_pairs',
-    'to_string',
-    'transform',
-    'unset',
-    'update',
-    'update_with',
-    'values',
+    "assign",
+    "assign_with",
+    "callables",
+    "clone",
+    "clone_deep",
+    "clone_deep_with",
+    "clone_with",
+    "defaults",
+    "defaults_deep",
+    "find_key",
+    "find_last_key",
+    "for_in",
+    "for_in_right",
+    "get",
+    "has",
+    "invert",
+    "invert_by",
+    "invoke",
+    "keys",
+    "map_keys",
+    "map_values",
+    "map_values_deep",
+    "merge",
+    "merge_with",
+    "omit",
+    "omit_by",
+    "parse_int",
+    "pick",
+    "pick_by",
+    "rename_keys",
+    "set_",
+    "set_with",
+    "to_boolean",
+    "to_dict",
+    "to_integer",
+    "to_list",
+    "to_number",
+    "to_pairs",
+    "to_string",
+    "transform",
+    "unset",
+    "update",
+    "update_with",
+    "values",
 )
 
 
 def assign(obj, *sources):
-    """Assigns properties of source object(s) to the destination object.
+    """
+    Assigns properties of source object(s) to the destination object.
 
     Args:
         obj (dict): Destination object whose properties will be modified.
@@ -115,10 +110,11 @@ def assign(obj, *sources):
 
 
 def assign_with(obj, *sources, **kargs):
-    """This method is like :func:`assign` except that it accepts customizer
-    which is invoked to produce the assigned values. If customizer returns
-    ``None``, assignment is handled by the method instead. The customizer is
-    invoked with five arguments: ``(obj_value, src_value, key, obj, source)``.
+    """
+    This method is like :func:`assign` except that it accepts customizer which is invoked to produce
+    the assigned values. If customizer returns ``None``, assignment is handled by the method
+    instead. The customizer is invoked with five arguments: ``(obj_value, src_value, key, obj,
+    source)``.
 
     Args:
         obj (dict): Destination object whose properties will be modified.
@@ -143,7 +139,7 @@ def assign_with(obj, *sources, **kargs):
     .. versionadded:: 4.0.0
     """
     sources = list(sources)
-    customizer = kargs.get('customizer')
+    customizer = kargs.get("customizer")
 
     if customizer is None and callable(sources[-1]):
         customizer = sources.pop()
@@ -158,13 +154,7 @@ def assign_with(obj, *sources, **kargs):
 
         for key, value in iteritems(source):
             if customizer:
-                val = callit(customizer,
-                             obj.get(key),
-                             value,
-                             key,
-                             obj,
-                             source,
-                             argcount=argcount)
+                val = callit(customizer, obj.get(key), value, key, obj, source, argcount=argcount)
                 if val is not None:
                     value = val
 
@@ -174,7 +164,8 @@ def assign_with(obj, *sources, **kargs):
 
 
 def callables(obj):
-    """Creates a sorted list of keys of an object that are callable.
+    """
+    Creates a sorted list of keys of an object that are callable.
 
     Args:
         obj (list|dict): Object to inspect.
@@ -199,7 +190,8 @@ def callables(obj):
 
 
 def clone(value):
-    """Creates a clone of `value`.
+    """
+    Creates a clone of `value`.
 
     Args:
         value (list|dict): Object to clone.
@@ -227,10 +219,10 @@ def clone(value):
 
 
 def clone_with(value, customizer=None):
-    """This method is like :func:`clone` except that it accepts customizer
-    which is invoked to produce the cloned value. If customizer returns
-    ``None``, cloning is handled by the method instead. The customizer is
-    invoked with up to three arguments: ``(value, index|key, object)``.
+    """
+    This method is like :func:`clone` except that it accepts customizer which is invoked to produce
+    the cloned value. If customizer returns ``None``, cloning is handled by the method instead. The
+    customizer is invoked with up to three arguments: ``(value, index|key, object)``.
 
     Args:
         value (list|dict): Object to clone.
@@ -251,8 +243,9 @@ def clone_with(value, customizer=None):
 
 
 def clone_deep(value):
-    """Creates a deep clone of `value`. If a iteratee is provided it will be
-    executed to produce the cloned values.
+    """
+    Creates a deep clone of `value`. If a iteratee is provided it will be executed to produce the
+    cloned values.
 
     Args:
         value (list|dict): Object to clone.
@@ -280,8 +273,8 @@ def clone_deep(value):
 
 
 def clone_deep_with(value, customizer=None):
-    """This method is like :func:`clone_with` except that it recursively clones
-    `value`.
+    """
+    This method is like :func:`clone_with` except that it recursively clones `value`.
 
     Args:
         value (list|dict): Object to clone.
@@ -294,8 +287,9 @@ def clone_deep_with(value, customizer=None):
 
 
 def defaults(obj, *sources):
-    """Assigns properties of source object(s) to the destination object for all
-    destination properties that resolve to undefined.
+    """
+    Assigns properties of source object(s) to the destination object for all destination properties
+    that resolve to undefined.
 
     Args:
         obj (dict): Destination object whose properties will be modified.
@@ -326,8 +320,8 @@ def defaults(obj, *sources):
 
 
 def defaults_deep(obj, *sources):
-    """This method is like :func:`defaults` except that it recursively assigns
-    default properties.
+    """
+    This method is like :func:`defaults` except that it recursively assigns default properties.
 
     Args:
         obj (dict): Destination object whose properties will be modified.
@@ -350,17 +344,18 @@ def defaults_deep(obj, *sources):
 
     .. versionadded:: 3.3.0
     """
+
     def setter(obj, key, value):
-        if hasattr(obj, 'setdefault'):
+        if hasattr(obj, "setdefault"):
             obj.setdefault(key, value)
 
     return merge_with(obj, *sources, _setter=setter)
 
 
 def find_key(obj, predicate=None):
-    """This method is like :func:`pydash.arrays.find_index` except that it
-    returns the key of the first element that passes the predicate check,
-    instead of the element itself.
+    """
+    This method is like :func:`pydash.arrays.find_index` except that it returns the key of the first
+    element that passes the predicate check, instead of the element itself.
 
     Args:
         obj (list|dict): Object to search.
@@ -384,8 +379,9 @@ def find_key(obj, predicate=None):
 
 
 def find_last_key(obj, predicate=None):
-    """This method is like :func:`find_key` except that it iterates over
-    elements of a collection in the opposite order.
+    """
+    This method is like :func:`find_key` except that it iterates over elements of a collection in
+    the opposite order.
 
     Args:
         obj (list|dict): Object to search.
@@ -412,8 +408,9 @@ def find_last_key(obj, predicate=None):
 
 
 def for_in(obj, iteratee=None):
-    """Iterates over own and inherited enumerable properties of `obj`,
-    executing `iteratee` for each property.
+    """
+    Iterates over own and inherited enumerable properties of `obj`, executing `iteratee` for each
+    property.
 
     Args:
         obj (list|dict): Object to process.
@@ -437,15 +434,14 @@ def for_in(obj, iteratee=None):
     .. versionchanged:: 4.0.0
         Removed alias ``for_own``.
     """
-    walk = (None for ret, _, _, _ in iteriteratee(obj, iteratee)
-            if ret is False)
+    walk = (None for ret, _, _, _ in iteriteratee(obj, iteratee) if ret is False)
     next(walk, None)
     return obj
 
 
 def for_in_right(obj, iteratee=None):
-    """This function is like :func:`for_in` except it iterates over the
-    properties in reverse order.
+    """
+    This function is like :func:`for_in` except it iterates over the properties in reverse order.
 
     Args:
         obj (list|dict): Object to process.
@@ -468,24 +464,22 @@ def for_in_right(obj, iteratee=None):
     .. versionchanged:: 4.0.0
         Removed alias ``for_own_right``.
     """
-    walk = (None for ret, _, _, _ in iteriteratee(obj, iteratee, reverse=True)
-            if ret is False)
+    walk = (None for ret, _, _, _ in iteriteratee(obj, iteratee, reverse=True) if ret is False)
     next(walk, None)
     return obj
 
 
 def get(obj, path, default=None):
-    """Get the value at any depth of a nested object based on the path
-    described by `path`. If path doesn't exist, `default` is returned.
+    """
+    Get the value at any depth of a nested object based on the path described by `path`. If path
+    doesn't exist, `default` is returned.
 
     Args:
         obj (list|dict|Sequence|Mapping): Object to process.
-        path (str|list): List or ``.`` delimited string of path describing
-            path.
+        path (str|list): List or ``.`` delimited string of path describing path.
 
     Keyword Arguments:
-        default (mixed): Default value to return if path doesn't exist.
-            Defaults to ``None``.
+        default (mixed): Default value to return if path doesn't exist. Defaults to ``None``.
 
     Returns:
         mixed: Value of `obj` at path.
@@ -516,8 +510,8 @@ def get(obj, path, default=None):
         - Made :func:`deep_get` an alias.
 
     .. versionchanged:: 3.4.7
-        Fixed bug where an iterable default was iterated over instead of being
-        returned when an object path wasn't found.
+        Fixed bug where an iterable default was iterated over instead of being returned when an
+        object path wasn't found.
 
     .. versionchanged:: 4.0.0
 
@@ -528,13 +522,12 @@ def get(obj, path, default=None):
         Fixed bug where getattr is used on Mappings and Sequence in Python 3.5+
     """
     if default is NoValue:
-        # When NoValue given for default, then this method will raise if path
-        # is not present in obj.
+        # When NoValue given for default, then this method will raise if path is not present in obj.
         sentinel = default
     else:
-        # When a returnable default is given, use a sentinel value to detect
-        # when base_get() returns a default value for a missing path so we can
-        # exit early from the loop and not mistakenly iterate over the default.
+        # When a returnable default is given, use a sentinel value to detect when base_get() returns
+        # a default value for a missing path so we can exit early from the loop and not mistakenly
+        # iterate over the default.
         sentinel = object()
 
     for key in to_path(path):
@@ -549,12 +542,13 @@ def get(obj, path, default=None):
 
 
 def has(obj, path):
-    """Checks if `path` exists as a key of `obj`.
+    """
+    Checks if `path` exists as a key of `obj`.
 
     Args:
         obj (mixed): Object to test.
-        path (mixed): Path to test for. Can be a list of nested keys or a ``.``
-            delimited string of path describing the path.
+        path (mixed): Path to test for. Can be a list of nested keys or a ``.`` delimited string of
+            path describing the path.
 
     Returns:
         bool: Whether `obj` has `path`.
@@ -595,8 +589,8 @@ def has(obj, path):
 
 
 def invert(obj):
-    """Creates an object composed of the inverted keys and values of the given
-    object.
+    """
+    Creates an object composed of the inverted keys and values of the given object.
 
     Args:
         obj (dict): Dict to invert.
@@ -625,11 +619,11 @@ def invert(obj):
 
 
 def invert_by(obj, iteratee=None):
-    """This method is like :func:`invert` except that the inverted object is
-    generated from the results of running each element of object thru iteratee.
-    The corresponding inverted value of each inverted key is a list of keys
-    responsible for generating the inverted value. The iteratee is invoked with
-    one argument: ``(value)``.
+    """
+    This method is like :func:`invert` except that the inverted object is generated from the results
+    of running each element of object thru iteratee. The corresponding inverted value of each
+    inverted key is a list of keys responsible for generating the inverted value. The iteratee is
+    invoked with one argument: ``(value)``.
 
     Args:
         obj (dict): Object to invert.
@@ -666,7 +660,8 @@ def invert_by(obj, iteratee=None):
 
 
 def invoke(obj, path, *args, **kargs):
-    """Invokes the method at path of object.
+    """
+    Invokes the method at path of object.
 
     Args:
         obj (dict): The object to query.
@@ -702,7 +697,8 @@ def invoke(obj, path, *args, **kargs):
 
 
 def keys(obj):
-    """Creates a list composed of the keys of `obj`.
+    """
+    Creates a list composed of the keys of `obj`.
 
     Args:
         obj (mixed): Object to extract keys from.
@@ -729,10 +725,10 @@ def keys(obj):
 
 
 def map_keys(obj, iteratee=None):
-    """The opposite of :func:`map_values`, this method creates an object with
-    the same values as object and keys generated by running each own enumerable
-    string keyed property of object thru iteratee. The iteratee is invoked with
-    three arguments: ``(value, key, object)``.
+    """
+    The opposite of :func:`map_values`, this method creates an object with the same values as object
+    and keys generated by running each own enumerable string keyed property of object thru iteratee.
+    The iteratee is invoked with three arguments: ``(value, key, object)``.
 
     Args:
         obj (list|dict): Object to map.
@@ -750,14 +746,14 @@ def map_keys(obj, iteratee=None):
 
     .. versionadded:: 3.3.0
     """
-    return {result: value
-            for result, value, _, _ in iteriteratee(obj, iteratee)}
+    return {result: value for result, value, _, _ in iteriteratee(obj, iteratee)}
 
 
 def map_values(obj, iteratee=None):
-    """Creates an object with the same keys as object and values generated by
-    running each string keyed property of object thru iteratee. The iteratee is
-    invoked with three arguments: ``(value, key, object)``.
+    """
+    Creates an object with the same keys as object and values generated by running each string keyed
+    property of object thru iteratee. The iteratee is invoked with three arguments: ``(value, key,
+    object)``.
 
     Args:
         obj (list|dict): Object to map.
@@ -777,19 +773,18 @@ def map_values(obj, iteratee=None):
 
     .. versionadded:: 1.0.0
     """
-    return {key: result
-            for result, _, key, _ in iteriteratee(obj, iteratee)}
+    return {key: result for result, _, key, _ in iteriteratee(obj, iteratee)}
 
 
 def map_values_deep(obj, iteratee=None, property_path=NoValue):
-    """Map all non-object values in `obj` with return values from `iteratee`.
-    The iteratee is invoked with two arguments: ``(obj_value, property_path)``
-    where ``property_path`` contains the list of path keys corresponding to the
-    path of ``obj_value``.
+    """
+    Map all non-object values in `obj` with return values from `iteratee`. The iteratee is invoked
+    with two arguments: ``(obj_value, property_path)`` where ``property_path`` contains the list of
+    path keys corresponding to the path of ``obj_value``.
 
     Args:
         obj (list|dict): Object to map.
-        iteratee (function): Iteratee applied to each value.
+        iteratee (callable): Iteratee applied to each value.
 
     Returns:
         mixed: The modified object.
@@ -818,24 +813,23 @@ def map_values_deep(obj, iteratee=None, property_path=NoValue):
     properties = to_path(property_path)
 
     if pyd.is_object(obj):
-        deep_iteratee = (
-            lambda value, key: map_values_deep(value,
-                                               iteratee,
-                                               pyd.flatten([properties, key])))
+
+        def deep_iteratee(value, key):
+            return map_values_deep(value, iteratee, pyd.flatten([properties, key]))
+
         return assign(obj, map_values(obj, deep_iteratee))
     else:
         return callit(iteratee, obj, properties)
 
 
 def merge(obj, *sources):
-    """Recursively merges properties of the source object(s) into the
-    destination object. Subsequent sources will overwrite property assignments
-    of previous sources.
+    """
+    Recursively merges properties of the source object(s) into the destination object. Subsequent
+    sources will overwrite property assignments of previous sources.
 
     Args:
         obj (dict): Destination object to merge source(s) into.
-        sources (dict): Source objects to merge from. subsequent sources
-            overwrite previous ones.
+        sources (dict): Source objects to merge from. subsequent sources overwrite previous ones.
 
     Returns:
         dict: Merged object.
@@ -858,8 +852,7 @@ def merge(obj, *sources):
         Apply :func:`clone_deep` to each `source` before assigning to `obj`.
 
     .. versionchanged:: 2.3.2
-        Allow `iteratee` to be passed by reference if it is the last positional
-        argument.
+        Allow `iteratee` to be passed by reference if it is the last positional argument.
 
     .. versionchanged:: 4.0.0
         Moved iteratee argument to :func:`merge_with`.
@@ -868,10 +861,10 @@ def merge(obj, *sources):
 
 
 def merge_with(obj, *sources, **kargs):
-    """This method is like :func:`merge` except that it accepts customizer
-    which is invoked to produce the merged values of the destination and source
-    properties. If customizer returns ``None``, merging is handled by this
-    method instead. The customizer is invoked with five arguments:
+    """
+    This method is like :func:`merge` except that it accepts customizer which is invoked to produce
+    the merged values of the destination and source properties. If customizer returns ``None``,
+    merging is handled by this method instead. The customizer is invoked with five arguments:
     ``(obj_value, src_value, key, obj, source)``.
 
     Args:
@@ -880,7 +873,7 @@ def merge_with(obj, *sources, **kargs):
             overwrite previous ones.
 
     Keyword Args:
-        iteratee (function, optional): Iteratee function to handle merging
+        iteratee (callable, optional): Iteratee function to handle merging
             (must be passed in as keyword argument).
 
     Returns:
@@ -901,9 +894,9 @@ def merge_with(obj, *sources, **kargs):
     .. versionadded:: 4.0.0
     """
     sources = list(sources)
-    _clone = kargs.get('_clone', True)
-    iteratee = kargs.get('iteratee')
-    setter = kargs.get('_setter', base_set)
+    _clone = kargs.get("_clone", True)
+    iteratee = kargs.get("iteratee")
+    setter = kargs.get("_setter", base_set)
 
     if iteratee is None and callable(sources[-1]):
         iteratee = sources.pop()
@@ -921,10 +914,8 @@ def merge_with(obj, *sources, **kargs):
 
         for key, src_value in iterator(source):
             obj_value = base_get(obj, key, default=None)
-            all_sequences = all([isinstance(src_value, list),
-                                 isinstance(obj_value, list)])
-            all_mappings = all([isinstance(src_value, dict),
-                                isinstance(obj_value, dict)])
+            all_sequences = all([isinstance(src_value, list), isinstance(obj_value, list)])
+            all_mappings = all([isinstance(src_value, dict), isinstance(obj_value, dict)])
 
             if cbk:
                 _result = cbk(obj_value, src_value, key, obj, source)
@@ -934,10 +925,7 @@ def merge_with(obj, *sources, **kargs):
             if _result is not None:
                 result = _result
             elif all_sequences or all_mappings:
-                result = merge_with(obj_value,
-                                    src_value,
-                                    _clone=False,
-                                    _setter=setter)
+                result = merge_with(obj_value, src_value, _clone=False, _setter=setter)
             else:
                 result = src_value
 
@@ -947,8 +935,9 @@ def merge_with(obj, *sources, **kargs):
 
 
 def omit(obj, *properties):
-    """The opposite of :func:`pick`. This method creates an object composed of
-    the property paths of `obj` that are not omitted.
+    """
+    The opposite of :func:`pick`. This method creates an object composed of the property paths of
+    `obj` that are not omitted.
 
     Args:
         obj (mixed): Object to process.
@@ -980,14 +969,14 @@ def omit(obj, *properties):
 
 
 def omit_by(obj, iteratee=None):
-    """The opposite of :func:`pick_by`. This method creates an object composed
-    of the string keyed properties of object that predicate doesn't return
-    truthy for. The predicate is invoked with two arguments: ``(value, key)``.
+    """
+    The opposite of :func:`pick_by`. This method creates an object composed of the string keyed
+    properties of object that predicate doesn't return truthy for. The predicate is invoked with two
+    arguments: ``(value, key)``.
 
     Args:
         obj (mixed): Object to process.
-        iteratee (mixed, optional): Iteratee used to determine which properties
-            to omit.
+        iteratee (mixed, optional): Iteratee used to determine which properties to omit.
 
     Returns:
         dict: Results of omitting properties.
@@ -1018,16 +1007,20 @@ def omit_by(obj, iteratee=None):
     else:
         argcount = getargcount(iteratee, maxargs=2)
 
-        ret = {key: value for key, value in iterator(obj)
-               if not callit(iteratee, value, key, argcount=argcount)}
+        ret = {
+            key: value
+            for key, value in iterator(obj)
+            if not callit(iteratee, value, key, argcount=argcount)
+        }
 
     return ret
 
 
 def parse_int(value, radix=None):
-    """Converts the given `value` into an integer of the specified `radix`. If
-    `radix` is falsey, a radix of ``10`` is used unless the `value` is a
-    hexadecimal, in which case a radix of 16 is used.
+    """
+    Converts the given `value` into an integer of the specified `radix`. If `radix` is falsey, a
+    radix of ``10`` is used unless the `value` is a hexadecimal, in which case a radix of 16 is
+    used.
 
     Args:
         value (mixed): Value to parse.
@@ -1060,9 +1053,8 @@ def parse_int(value, radix=None):
         radix = 10
 
     try:
-        # NOTE: Must convert value to string when supplying radix to int().
-        # Dropping radix arg when 10 is needed to allow floats to parse
-        # correctly.
+        # NOTE: Must convert value to string when supplying radix to int(). Dropping radix arg when
+        # 10 is needed to allow floats to parse correctly.
         args = (value,) if radix == 10 else (to_string(value), radix)
         parsed = int(*args)
     except (ValueError, TypeError):
@@ -1072,7 +1064,8 @@ def parse_int(value, radix=None):
 
 
 def pick(obj, *properties):
-    """Creates an object composed of the picked object properties.
+    """
+    Creates an object composed of the picked object properties.
 
     Args:
         obj (list|dict): Object to pick from.
@@ -1095,13 +1088,13 @@ def pick(obj, *properties):
 
 
 def pick_by(obj, iteratee=None):
-    """Creates an object composed of the object properties predicate returns
-    truthy for. The predicate is invoked with two arguments: ``(value, key)``.
+    """
+    Creates an object composed of the object properties predicate returns truthy for. The predicate
+    is invoked with two arguments: ``(value, key)``.
 
     Args:
         obj (list|dict): Object to pick from.
-        iteratee (mixed, optional): Iteratee used to determine which properties
-            to pick.
+        iteratee (mixed, optional): Iteratee used to determine which properties to pick.
 
     Returns:
         dict: Dict containg picked properties.
@@ -1143,12 +1136,13 @@ def pick_by(obj, iteratee=None):
 
 
 def rename_keys(obj, key_map):
-    """Rename the keys of `obj` using `key_map` and return new object.
+    """
+    Rename the keys of `obj` using `key_map` and return new object.
 
     Args:
         obj (dict): Object to rename.
-        key_map (dict): Renaming map whose keys correspond to existing keys in
-            `obj` and whose values are the new key name.
+        key_map (dict): Renaming map whose keys correspond to existing keys in `obj` and whose
+            values are the new key name.
 
     Returns:
         dict: Renamed `obj`.
@@ -1161,13 +1155,13 @@ def rename_keys(obj, key_map):
 
     .. versionadded:: 2.0.0
     """
-    return {key_map.get(key, key): value
-            for key, value in iteritems(obj)}
+    return {key_map.get(key, key): value for key, value in iteritems(obj)}
 
 
 def set_(obj, path, value):
-    """Sets the value of an object described by `path`. If any part of the
-    object path doesn't exist, it will be created.
+    """
+    Sets the value of an object described by `path`. If any part of the object path doesn't exist,
+    it will be created.
 
     Args:
         obj (list|dict): Object to modify.
@@ -1199,25 +1193,24 @@ def set_(obj, path, value):
     .. versionchanged:: 4.0.0
 
         - Modify `obj` in place.
-        - Support creating default path values as ``list`` or ``dict`` based on
-          whether key or index substrings are used.
+        - Support creating default path values as ``list`` or ``dict`` based on whether key or index
+          substrings are used.
         - Remove alias ``deep_set``.
     """
     return set_with(obj, path, value)
 
 
 def set_with(obj, path, value, customizer=None):
-    """This method is like :func:`set_` except that it accepts customizer which
-    is invoked to produce the objects of path. If customizer returns undefined
-    path creation is handled by the method instead. The customizer is invoked
-    with three arguments: ``(nested_value, key, nested_object)``.
+    """
+    This method is like :func:`set_` except that it accepts customizer which is invoked to produce
+    the objects of path. If customizer returns undefined path creation is handled by the method
+    instead. The customizer is invoked with three arguments: ``(nested_value, key, nested_object)``.
 
     Args:
         obj (list|dict): Object to modify.
         path (str | list): Target path to set value to.
         value (mixed): Value to set.
-        customizer (function, optional): The function to customize assigned
-            values.
+        customizer (callable, optional): The function to customize assigned values.
 
     Returns:
         mixed: Modified `obj`.
@@ -1238,24 +1231,21 @@ def set_with(obj, path, value, customizer=None):
     return update_with(obj, path, pyd.constant(value), customizer=customizer)
 
 
-def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
-    """Convert `obj` to boolean. This is not like the builtin ``bool``
-    function. By default commonly considered strings values are converted to
-    their boolean equivalent, i.e., ``'0'`` and ``'false'`` are converted to
-    ``False`` while ``'1'`` and ``'true'`` are converted to ``True``. If a
-    string value is provided that isn't recognized as having a common boolean
-    conversion, then the returned value is ``None``. Non-string values of `obj`
-    are converted using ``bool``. Optionally, `true_values` and `false_values`
-    can be overridden but each value must be a string.
+def to_boolean(obj, true_values=("true", "1"), false_values=("false", "0")):
+    """
+    Convert `obj` to boolean. This is not like the builtin ``bool`` function. By default commonly
+    considered strings values are converted to their boolean equivalent, i.e., ``'0'`` and
+    ``'false'`` are converted to ``False`` while ``'1'`` and ``'true'`` are converted to ``True``.
+    If a string value is provided that isn't recognized as having a common boolean conversion, then
+    the returned value is ``None``. Non-string values of `obj` are converted using ``bool``.
+    Optionally, `true_values` and `false_values` can be overridden but each value must be a string.
 
     Args:
         obj (mixed): Object to convert.
-        true_values (tuple, optional): Values to consider ``True``. Each value
-            must be a string. Comparision is case-insensitive. Defaults to
-            ``('true', '1')``.
-        false_values (tuple, optional): Values to consider ``False``. Each
-            value must be a string. Comparision is case-insensitive. Defaults
-            to ``('false', '0')``.
+        true_values (tuple, optional): Values to consider ``True``. Each value must be a string.
+            Comparision is case-insensitive. Defaults to ``('true', '1')``.
+        false_values (tuple, optional): Values to consider ``False``. Each value must be a string.
+            Comparision is case-insensitive. Defaults to ``('false', '0')``.
 
     Returns:
         bool: Boolean value of `obj`.
@@ -1281,7 +1271,7 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
             if text.lower() in [val.lower() for val in vals]:
                 return True
             else:
-                return re.match('|'.join(vals), text)
+                return re.match("|".join(vals), text)
 
         if true_values and boolean_match(obj, true_values):
             value = True
@@ -1296,8 +1286,8 @@ def to_boolean(obj, true_values=('true', '1'), false_values=('false', '0')):
 
 
 def to_dict(obj):
-    """Convert `obj` to ``dict`` by creating a new ``dict`` using `obj` keys
-    and values.
+    """
+    Convert `obj` to ``dict`` by creating a new ``dict`` using `obj` keys and values.
 
     Args:
         obj: (mixed): Object to convert.
@@ -1323,8 +1313,8 @@ def to_dict(obj):
         Use ``pydash.helpers.iterator`` to generate key/value pairs.
 
     .. versionchanged:: 4.7.1
-        Try to convert to ``dict`` using ``dict()`` first, then fallback to
-        using ``pydash.helpers.iterator``.
+        Try to convert to ``dict`` using ``dict()`` first, then fallback to using
+        ``pydash.helpers.iterator``.
     """
     try:
         return dict(obj)
@@ -1333,7 +1323,8 @@ def to_dict(obj):
 
 
 def to_integer(obj):
-    """Converts `obj` to an integer.
+    """
+    Converts `obj` to an integer.
 
     Args:
         obj (str|int|float): Object to convert.
@@ -1355,8 +1346,8 @@ def to_integer(obj):
     .. versionadded:: 4.0.0
     """
     try:
-        # Convert to float first to handle converting floats as string since
-        # int('1.1') would fail but this wouldn't.
+        # Convert to float first to handle converting floats as string since int('1.1') would fail
+        # but this won't.
         num = int(float(obj))
     except (ValueError, TypeError):
         num = 0
@@ -1365,12 +1356,13 @@ def to_integer(obj):
 
 
 def to_list(obj, split_strings=True):
-    """ Converts a obj, an iterable or a single item to a list.
+    """
+    Converts a obj, an iterable or a single item to a list.
 
     Args:
         obj (mixed): Object to convert item or wrap.
-        split_strings (bool, optional): Whether to split strings into single
-            chars. Defaults to ``True``.
+        split_strings (bool, optional): Whether to split strings into single chars. Defaults to
+            ``True``.
 
     Returns:
         list: Converted obj or wrapped item.
@@ -1410,8 +1402,7 @@ def to_list(obj, split_strings=True):
         return obj[:]
     elif isinstance(obj, dict):
         return obj.values()
-    elif not split_strings and (isinstance(obj, string_types) or
-                                isinstance(obj, bytes)):
+    elif not split_strings and (isinstance(obj, string_types) or isinstance(obj, bytes)):
         return [obj]
     elif split_strings and isinstance(obj, bytes):
         # in python3 iterating over bytes gives integers instead of strings
@@ -1424,14 +1415,14 @@ def to_list(obj, split_strings=True):
 
 
 def to_number(obj, precision=0):
-    """Convert `obj` to a number. All numbers are retuned as ``float``. If
-    precision is negative, round `obj` to the nearest positive integer place.
-    If `obj` can't be converted to a number, ``None`` is returned.
+    """
+    Convert `obj` to a number. All numbers are retuned as ``float``. If precision is negative, round
+    `obj` to the nearest positive integer place. If `obj` can't be converted to a number, ``None``
+    is returned.
 
     Args:
         obj (str|int|float): Object to convert.
-        precision (int, optional): Precision to round number to. Defaults to
-            ``0``.
+        precision (int, optional): Precision to round number to. Defaults to ``0``.
 
     Returns:
         float: Converted number or ``None`` if can't be converted.
@@ -1451,8 +1442,8 @@ def to_number(obj, precision=0):
         factor = pow(10, precision)
 
         if precision < 0:
-            # Round down since negative `precision` means we are going to
-            # the nearest positive integer place.
+            # Round down since negative `precision` means we are going to the nearest positive
+            # integer place.
             rounder = math.floor
         else:
             rounder = round
@@ -1465,8 +1456,9 @@ def to_number(obj, precision=0):
 
 
 def to_pairs(obj):
-    """Creates a two dimensional list of an object's key-value pairs, i.e.
-    ``[[key1, value1], [key2, value2]]``.
+    """
+    Creates a two dimensional list of an object's key-value pairs, i.e. ``[[key1, value1], [key2,
+    value2]]``.
 
     Args:
         obj (mixed): Object to process.
@@ -1490,7 +1482,8 @@ def to_pairs(obj):
 
 
 def to_string(obj):
-    """Converts an object to string.
+    """
+    Converts an object to string.
 
     Args:
         obj (mixed): Object to convert.
@@ -1517,25 +1510,24 @@ def to_string(obj):
     if pyd.is_string(obj):
         res = obj
     elif obj is None:
-        res = ''
+        res = ""
     else:
         res = text_type(obj)
     return res
 
 
 def transform(obj, iteratee=None, accumulator=None):
-    """An alernative to :func:`pydash.collections.reduce`, this method
-    transforms `obj` to a new accumulator object which is the result of running
-    each of its properties through a iteratee, with each iteratee execution
-    potentially mutating the accumulator object. The iteratee is invoked with
-    four arguments: ``(accumulator, value, key, object)``. Iteratees may exit
-    iteration early by explicitly returning ``False``.
+    """
+    An alernative to :func:`pydash.collections.reduce`, this method transforms `obj` to a new
+    accumulator object which is the result of running each of its properties through a iteratee,
+    with each iteratee execution potentially mutating the accumulator object. The iteratee is
+    invoked with four arguments: ``(accumulator, value, key, object)``. Iteratees may exit iteration
+    early by explicitly returning ``False``.
 
     Args:
         obj (list|dict): Object to process.
         iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Accumulated object. Defaults to
-            ``list``.
+        accumulator (mixed, optional): Accumulated object. Defaults to ``list``.
 
     Returns:
         mixed: Accumulated object.
@@ -1556,28 +1548,26 @@ def transform(obj, iteratee=None, accumulator=None):
     if accumulator is None:
         accumulator = []
 
-    walk = (None for key, item in iterator(obj)
-            if callit(iteratee,
-                      accumulator,
-                      item,
-                      key,
-                      obj,
-                      argcount=argcount) is False)
+    walk = (
+        None
+        for key, item in iterator(obj)
+        if callit(iteratee, accumulator, item, key, obj, argcount=argcount) is False
+    )
     next(walk, None)
 
     return accumulator
 
 
 def update(obj, path, updater):
-    """This method is like :func:`set_` except that accepts updater to produce
-    the value to set. Use :func:`update_with` to customize path creation. The
-    updater is invoked with one argument: ``(value)``.
+    """
+    This method is like :func:`set_` except that accepts updater to produce the value to set. Use
+    :func:`update_with` to customize path creation. The updater is invoked with one argument:
+    ``(value)``.
 
     Args:
         obj (list|dict): Object to modify.
-        path (str|list): A string or list of keys that describe the object path
-            to modify.
-        updater (function): Function that returns updated value.
+        path (str|list): A string or list of keys that describe the object path to modify.
+        updater (callable): Function that returns updated value.
 
     Returns:
         mixed: Updated `obj`.
@@ -1597,19 +1587,17 @@ def update(obj, path, updater):
     return update_with(obj, path, updater)
 
 
-def update_with(obj, path, updater, customizer=None):
-    """This method is like :func:`update` except that it accepts customizer
-    which is invoked to produce the objects of path. If customizer returns
-    ``None``, path creation is handled by the method instead. The customizer is
-    invoked with three arguments: ``(nested_value, key, nested_object)``.
+def update_with(obj, path, updater, customizer=None):  # noqa: C901
+    """
+    This method is like :func:`update` except that it accepts customizer which is invoked to produce
+    the objects of path. If customizer returns ``None``, path creation is handled by the method
+    instead. The customizer is invoked with three arguments: ``(nested_value, key, nested_object)``.
 
     Args:
         obj (list|dict): Object to modify.
-        path (str|list): A string or list of keys that describe the object path
-            to modify.
-        updater (function): Function that returns updated value.
-        customizer (function, optional): The function to customize assigned
-            values.
+        path (str|list): A string or list of keys that describe the object path to modify.
+        updater (callable): Function that returns updated value.
+        customizer (callable, optional): The function to customize assigned values.
 
     Returns:
         mixed: Updated `obj`.
@@ -1630,8 +1618,7 @@ def update_with(obj, path, updater, customizer=None):
     if customizer is not None and not callable(customizer):
         call_customizer = partial(callit, clone, customizer, argcount=1)
     elif customizer:
-        call_customizer = partial(callit, customizer,
-                                  argcount=getargcount(customizer, maxargs=3))
+        call_customizer = partial(callit, customizer, argcount=getargcount(customizer, maxargs=3))
     else:
         call_customizer = None
 
@@ -1651,9 +1638,7 @@ def update_with(obj, path, updater, customizer=None):
     for idx, token in enumerate(pyd.initial(tokens)):
         if isinstance(token, PathToken):
             key = token.key
-            default_factory = pyd.get(tokens,
-                                      [idx + 1, 'default_factory'],
-                                      default=default_type)
+            default_factory = pyd.get(tokens, [idx + 1, "default_factory"], default=default_type)
         else:
             key = token
             default_factory = default_type
@@ -1679,8 +1664,7 @@ def update_with(obj, path, updater, customizer=None):
                 _failed = True
 
             if _failed:
-                raise TypeError('Unable to update object at index {!r}. {}'
-                                .format(key, exc))
+                raise TypeError("Unable to update object at index {!r}. {}".format(key, exc))
 
     value = base_get(target, last_key, default=None)
     base_set(target, last_key, callit(updater, value))
@@ -1688,12 +1672,12 @@ def update_with(obj, path, updater, customizer=None):
     return obj
 
 
-def unset(obj, path):
-    """Removes the property at `path` of `obj`.
+def unset(obj, path):  # noqa: C901
+    """
+    Removes the property at `path` of `obj`.
 
     Note:
-        Only ``list``, ``dict``, or objects with a ``pop()`` method can be
-        unset by this function.
+        Only ``list``, ``dict``, or objects with a ``pop()`` method can be unset by this function.
 
     Args:
         obj (mixed): The object to modify.
@@ -1727,7 +1711,7 @@ def unset(obj, path):
 
     target = obj
 
-    for idx, token in enumerate(pyd.initial(tokens)):
+    for token in pyd.initial(tokens):
         if isinstance(token, PathToken):
             key = token.key
         else:
@@ -1761,7 +1745,8 @@ def unset(obj, path):
 
 
 def values(obj):
-    """Creates a list composed of the values of `obj`.
+    """
+    Creates a list composed of the values of `obj`.
 
     Args:
         obj (mixed): Object to extract values from.
@@ -1793,8 +1778,7 @@ def values(obj):
 #
 
 
-def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
-               _cloned=False):
+def base_clone(value, is_deep=False, customizer=None, key=None, obj=None, _cloned=False):
     """Base clone function that supports deep clone and customizer callback."""
     clone_by = copy.deepcopy if is_deep else copy.copy
     result = None
@@ -1821,8 +1805,7 @@ def base_clone(value, is_deep=False, customizer=None, key=None, obj=None,
     if cbk and not pyd.is_string(value) and not isinstance(value, bytes):
         for key, subvalue in iterator(value):
             if is_deep:
-                val = base_clone(subvalue, is_deep, cbk, key, value,
-                                 _cloned=True)
+                val = base_clone(subvalue, is_deep, cbk, key, value, _cloned=True)
             else:
                 val = cbk(subvalue, key, value)
 

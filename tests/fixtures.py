@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import mock
+import pytest
 
 from pydash._compat import iteritems
+
 
 # pytest.mark is a generator so create alias for convenience
 parametrize = pytest.mark.parametrize
@@ -41,7 +42,7 @@ class IteritemsObject(object):
 
 @pytest.fixture
 def mocked_sleep():
-    with mock.patch('time.sleep') as mocked:
+    with mock.patch("time.sleep") as mocked:
         yield mocked
 
 
@@ -70,8 +71,8 @@ def transform_iteratee0(result, num):
 
 
 def is_equal_iteratee0(a, b):
-    a_greet = a.startswith('h') if hasattr(a, 'startswith') else False
-    b_greet = b.startswith('h') if hasattr(b, 'startswith') else False
+    a_greet = a.startswith("h") if hasattr(a, "startswith") else False
+    b_greet = b.startswith("h") if hasattr(b, "startswith") else False
 
     return a_greet == b_greet if a_greet or b_greet else None
 
@@ -87,7 +88,7 @@ def for_in_iteratee1(value, key, obj):
 
 def for_in_iteratee2(value, index, obj):
     if index == 2:
-        obj[index] = 'index:2'
+        obj[index] = "index:2"
         return True
     elif index == 0:
         obj[index] = False

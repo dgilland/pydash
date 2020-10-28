@@ -21,10 +21,9 @@ def test_chaining_methods():
         assert chained.method is getattr(_, method)
 
 
-@parametrize('value,methods', [
-    ([1, 2, 3, 4], [('without', (2, 3)),
-                    ('reject', (lambda x: x > 1,))])
-])
+@parametrize(
+    "value,methods", [([1, 2, 3, 4], [("without", (2, 3)), ("reject", (lambda x: x > 1,))])]
+)
 def test_chaining(value, methods):
     expected = deepcopy(value)
     actual = _.chain(deepcopy(value))
@@ -48,23 +47,23 @@ def test_chaining_invalid_method():
 
 
 def test_chaining_lazy():
-    tracker = {'called': False}
+    tracker = {"called": False}
 
     def interceptor(value):
-        tracker['called'] = True
+        tracker["called"] = True
         return value.pop()
 
     chain = _.chain([1, 2, 3, 4, 5]).initial().tap(interceptor)
 
-    assert not tracker['called']
+    assert not tracker["called"]
 
     chain = chain.last()
 
-    assert not tracker['called']
+    assert not tracker["called"]
 
     result = chain.value()
 
-    assert tracker['called']
+    assert tracker["called"]
     assert result == 3
 
 
@@ -129,7 +128,7 @@ def test_dash_instance_methods():
 
 
 def test_dash_suffixed_method_aliases():
-    methods = _.filter_(pydash_methods, lambda m: m.endswith('_'))
+    methods = _.filter_(pydash_methods, lambda m: m.endswith("_"))
     assert methods
 
     for method in methods:
@@ -145,23 +144,22 @@ def test_dash_alias():
     assert _.py_ is _._
 
 
-@parametrize('case,expected', [
-    ([1, 2, 3], '[1, 2, 3]'),
-])
+@parametrize(
+    "case,expected",
+    [
+        ([1, 2, 3], "[1, 2, 3]"),
+    ],
+)
 def test_chaining_value_to_string(case, expected):
     assert _.chain(case).to_string() == expected
 
 
-@parametrize('value,interceptor,expected', [
-    ([1, 2, 3, 4, 5], lambda value: value.pop(), 3)
-])
+@parametrize("value,interceptor,expected", [([1, 2, 3, 4, 5], lambda value: value.pop(), 3)])
 def test_tap(value, interceptor, expected):
     actual = _.chain(value).initial().tap(interceptor).last().value()
     assert actual == expected
 
 
-@parametrize('value,func,expected', [
-    ([1, 2, 3, 4, 5], lambda value: [sum(value)], 10)
-])
+@parametrize("value,func,expected", [([1, 2, 3, 4, 5], lambda value: [sum(value)], 10)])
 def test_thru(value, func, expected):
     assert _.chain(value).initial().thru(func).last().value()

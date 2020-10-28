@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Method chaining interface.
+"""
+Method chaining interface.
 
 .. versionadded:: 1.0.0
 """
@@ -7,13 +8,14 @@
 from __future__ import absolute_import, print_function
 
 import pydash as pyd
+
 from .helpers import NoValue
 
 
 __all__ = (
-    'chain',
-    'tap',
-    'thru',
+    "chain",
+    "tap",
+    "thru",
 )
 
 
@@ -27,7 +29,8 @@ class Chain(object):
         self._value = value
 
     def value(self):
-        """Return current value of the chain operations.
+        """
+        Return current value of the chain operations.
 
         Returns:
             mixed: Current value of chain operations.
@@ -35,7 +38,8 @@ class Chain(object):
         return self(self._value)
 
     def to_string(self):
-        """Return current value as string.
+        """
+        Return current value as string.
 
         Returns:
             str: Current value of chain operations casted to ``str``.
@@ -43,7 +47,8 @@ class Chain(object):
         return self.module.to_string(self.value())
 
     def commit(self):
-        """Executes the chained sequence and returns the wrapped result.
+        """
+        Executes the chained sequence and returns the wrapped result.
 
         Returns:
             Chain: New instance of :class:`Chain` with resolved value from
@@ -52,8 +57,8 @@ class Chain(object):
         return Chain(self.value())
 
     def plant(self, value):
-        """Return a clone of the chained sequence planting `value` as the
-        wrapped value.
+        """
+        Return a clone of the chained sequence planting `value` as the wrapped value.
 
         Args:
             value (mixed): Value to plant as the initial chain value.
@@ -62,7 +67,7 @@ class Chain(object):
         wrapper = self._value
         wrappers = []
 
-        if hasattr(wrapper, '_value'):
+        if hasattr(wrapper, "_value"):
             wrappers = [wrapper]
 
             while isinstance(wrapper._value, ChainWrapper):
@@ -72,14 +77,14 @@ class Chain(object):
         clone = Chain(value)
 
         for wrap in wrappers:
-            clone = ChainWrapper(clone._value, wrap.method)(*wrap.args,
-                                                            **wrap.kargs)
+            clone = ChainWrapper(clone._value, wrap.method)(*wrap.args, **wrap.kargs)
 
         return clone
 
     @classmethod
     def get_method(cls, name):
-        """Return valid :attr:`module` method.
+        """
+        Return valid :attr:`module` method.
 
         Args:
             name (str): Name of pydash method to get.
@@ -88,38 +93,36 @@ class Chain(object):
             function: :attr:`module` callable.
 
         Raises:
-            InvalidMethod: Raised if `name` is not a valid :attr:`module`
-                method.
+            InvalidMethod: Raised if `name` is not a valid :attr:`module` method.
         """
         # Python 3.5 issue with pytest doctest call where inspect module tries
         # to unwrap this class. If we don't return here, we get an
         # InvalidMethod exception.
-        if name in ('__wrapped__',):  # pragma: no cover
+        if name in ("__wrapped__",):  # pragma: no cover
             return cls
 
         method = getattr(cls.module, name, None)
 
-        if not callable(method) and not name.endswith('_'):
+        if not callable(method) and not name.endswith("_"):
             # Alias method names not ending in underscore to their underscore
             # counterpart. This allows chaining of functions like "map_()"
             # using "map()" instead.
-            method = getattr(cls.module, name + '_', None)
+            method = getattr(cls.module, name + "_", None)
 
         if not callable(method):
-            raise cls.module.InvalidMethod(('Invalid pydash method: {0}'
-                                            .format(name)))
+            raise cls.module.InvalidMethod(("Invalid pydash method: {0}".format(name)))
 
         return method
 
     def __getattr__(self, attr):
-        """Proxy attribute access to :attr:`module`.
+        """
+        Proxy attribute access to :attr:`module`.
 
         Args:
             attr (str): Name of :attr:`module` function to chain.
 
         Returns:
-            ChainWrapper: New instance of :class:`ChainWrapper` with value
-                passed on.
+            ChainWrapper: New instance of :class:`ChainWrapper` with value passed on.
 
         Raises:
             InvalidMethod: Raised if `attr` is not a valid function.
@@ -127,7 +130,8 @@ class Chain(object):
         return ChainWrapper(self._value, self.get_method(attr))
 
     def __call__(self, value):
-        """Return result of passing `value` through chained methods.
+        """
+        Return result of passing `value` through chained methods.
 
         Args:
             value (mixed): Initial value to pass through chained methods.
@@ -142,8 +146,8 @@ class Chain(object):
 
 
 class ChainWrapper(object):
-    """Wrap :class:`Chain` method call within a :class:`ChainWrapper` context.
-    """
+    """Wrap :class:`Chain` method call within a :class:`ChainWrapper` context."""
+
     def __init__(self, value, method):
         self._value = value
         self.method = method
@@ -158,9 +162,11 @@ class ChainWrapper(object):
         return new
 
     def unwrap(self, value=NoValue):
-        """Execute :meth:`method` with :attr:`_value`, :attr:`args`, and
-        :attr:`kargs`. If :attr:`_value` is an instance of
-        :class:`ChainWrapper`, then unwrap it before calling :attr:`method`.
+        """
+        Execute :meth:`method` with :attr:`_value`, :attr:`args`, and :attr:`kargs`.
+
+        If :attr:`_value` is an instance of :class:`ChainWrapper`, then unwrap it before calling
+        :attr:`method`.
         """
         # Generate a copy of ourself so that we don't modify the chain wrapper
         # _value directly. This way if we are late passing a value, we don't
@@ -182,12 +188,13 @@ class ChainWrapper(object):
         return wrapper.method(value, *wrapper.args, **wrapper.kargs)
 
     def __call__(self, *args, **kargs):
-        """Invoke the :attr:`method` with :attr:`value` as the first argument
-        and return a new :class:`Chain` object with the return value.
+        """
+        Invoke the :attr:`method` with :attr:`value` as the first argument and return a new
+        :class:`Chain` object with the return value.
 
         Returns:
-            Chain: New instance of :class:`Chain` with the results of
-                :attr:`method` passed in as value.
+            Chain: New instance of :class:`Chain` with the results of :attr:`method` passed in as
+                value.
         """
         self.args = args
         self.kargs = kargs
@@ -195,9 +202,8 @@ class ChainWrapper(object):
 
 
 class _Dash(object):
-    """Class that provides attribute access to valid :mod:`pydash` methods and
-    callable access to :mod:`pydash` method chaining.
-    """
+    """Class that provides attribute access to valid :mod:`pydash` methods and callable access to
+    :mod:`pydash` method chaining."""
 
     def __getattr__(self, attr):
         """Proxy to :meth:`Chain.get_method`."""
@@ -209,9 +215,9 @@ class _Dash(object):
 
 
 def chain(value=NoValue):
-    """Creates a :class:`Chain` object which wraps the given value to enable
-    intuitive method chaining. Chaining is lazy and won't compute a final value
-    until :meth:`Chain.value` is called.
+    """
+    Creates a :class:`Chain` object which wraps the given value to enable intuitive method chaining.
+    Chaining is lazy and won't compute a final value until :meth:`Chain.value` is called.
 
     Args:
         value (mixed): Value to initialize chain operations with.
@@ -258,21 +264,21 @@ def chain(value=NoValue):
 
         - Added support for late passing of `value`.
         - Added :meth:`Chain.plant` for replacing initial chain value.
-        - Added :meth:`Chain.commit` for returning a new :class:`Chain`
-          instance initialized with the results from calling
-          :meth:`Chain.value`.
+        - Added :meth:`Chain.commit` for returning a new :class:`Chain` instance initialized with
+          the results from calling :meth:`Chain.value`.
     """
     return Chain(value)
 
 
 def tap(value, interceptor):
-    """Invokes `interceptor` with the `value` as the first argument and then
-    returns `value`. The purpose of this method is to "tap into" a method chain
-    in order to perform operations on intermediate results within the chain.
+    """
+    Invokes `interceptor` with the `value` as the first argument and then returns `value`. The
+    purpose of this method is to "tap into" a method chain in order to perform operations on
+    intermediate results within the chain.
 
     Args:
         value (mixed): Current value of chain operation.
-        interceptor (function): Function called on `value`.
+        interceptor (callable): Function called on `value`.
 
     Returns:
         mixed: `value` after `interceptor` call.
@@ -293,12 +299,13 @@ def tap(value, interceptor):
 
 
 def thru(value, interceptor):
-    """Returns the result of calling `interceptor` on `value`. The purpose of
-    this method is to pass `value` through a function during a method chain.
+    """
+    Returns the result of calling `interceptor` on `value`. The purpose of this method is to pass
+    `value` through a function during a method chain.
 
     Args:
         value (mixed): Current value of chain operation.
-        interceptor (function): Function called with `value`.
+        interceptor (callable): Function called with `value`.
 
     Returns:
         mixed: Results of ``interceptor(value)``.

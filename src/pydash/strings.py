@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""String functions.
+"""
+String functions.
 
 .. versionadded:: 1.1.0
 """
@@ -9,9 +10,9 @@ import re
 import unicodedata
 
 import pydash as pyd
-from .helpers import NoValue
-from .objects import to_string
+
 from ._compat import (
+    _range,
     html_unescape,
     iteritems,
     parse_qsl,
@@ -19,166 +20,162 @@ from ._compat import (
     urlencode,
     urlsplit,
     urlunsplit,
-    _range
 )
+from .helpers import NoValue
+from .objects import to_string
 
 
 __all__ = (
-    'camel_case',
-    'capitalize',
-    'chop',
-    'chop_right',
-    'chars',
-    'clean',
-    'count_substr',
-    'deburr',
-    'decapitalize',
-    'ends_with',
-    'ensure_ends_with',
-    'ensure_starts_with',
-    'escape',
-    'escape_reg_exp',
-    'has_substr',
-    'human_case',
-    'insert_substr',
-    'join',
-    'kebab_case',
-    'lines',
-    'lower_case',
-    'lower_first',
-    'number_format',
-    'pad',
-    'pad_end',
-    'pad_start',
-    'pascal_case',
-    'predecessor',
-    'prune',
-    'quote',
-    'reg_exp_js_match',
-    'reg_exp_js_replace',
-    'reg_exp_replace',
-    'repeat',
-    'replace',
-    'replace_end',
-    'replace_start',
-    'separator_case',
-    'series_phrase',
-    'series_phrase_serial',
-    'slugify',
-    'snake_case',
-    'split',
-    'start_case',
-    'starts_with',
-    'strip_tags',
-    'substr_left',
-    'substr_left_end',
-    'substr_right',
-    'substr_right_end',
-    'successor',
-    'surround',
-    'swap_case',
-    'title_case',
-    'to_lower',
-    'to_upper',
-    'trim',
-    'trim_end',
-    'trim_start',
-    'truncate',
-    'unescape',
-    'unquote',
-    'upper_case',
-    'upper_first',
-    'url',
-    'words',
+    "camel_case",
+    "capitalize",
+    "chop",
+    "chop_right",
+    "chars",
+    "clean",
+    "count_substr",
+    "deburr",
+    "decapitalize",
+    "ends_with",
+    "ensure_ends_with",
+    "ensure_starts_with",
+    "escape",
+    "escape_reg_exp",
+    "has_substr",
+    "human_case",
+    "insert_substr",
+    "join",
+    "kebab_case",
+    "lines",
+    "lower_case",
+    "lower_first",
+    "number_format",
+    "pad",
+    "pad_end",
+    "pad_start",
+    "pascal_case",
+    "predecessor",
+    "prune",
+    "quote",
+    "reg_exp_js_match",
+    "reg_exp_js_replace",
+    "reg_exp_replace",
+    "repeat",
+    "replace",
+    "replace_end",
+    "replace_start",
+    "separator_case",
+    "series_phrase",
+    "series_phrase_serial",
+    "slugify",
+    "snake_case",
+    "split",
+    "start_case",
+    "starts_with",
+    "strip_tags",
+    "substr_left",
+    "substr_left_end",
+    "substr_right",
+    "substr_right_end",
+    "successor",
+    "surround",
+    "swap_case",
+    "title_case",
+    "to_lower",
+    "to_upper",
+    "trim",
+    "trim_end",
+    "trim_start",
+    "truncate",
+    "unescape",
+    "unquote",
+    "upper_case",
+    "upper_first",
+    "url",
+    "words",
 )
 
 
-HTML_ESCAPES = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;',
-    '`': '&#96;'
-}
+HTML_ESCAPES = {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;", "`": "&#96;"}
 
 DEBURRED_LETTERS = {
-    '\xC0': 'A',
-    '\xC1': 'A',
-    '\xC2': 'A',
-    '\xC3': 'A',
-    '\xC4': 'A',
-    '\xC5': 'A',
-    '\xE0': 'a',
-    '\xE1': 'a',
-    '\xE2': 'a',
-    '\xE3': 'a',
-    '\xE4': 'a',
-    '\xE5': 'a',
-    '\xC7': 'C',
-    '\xE7': 'c',
-    '\xD0': 'D',
-    '\xF0': 'd',
-    '\xC8': 'E',
-    '\xC9': 'E',
-    '\xCA': 'E',
-    '\xCB': 'E',
-    '\xE8': 'e',
-    '\xE9': 'e',
-    '\xEA': 'e',
-    '\xEB': 'e',
-    '\xCC': 'I',
-    '\xCD': 'I',
-    '\xCE': 'I',
-    '\xCF': 'I',
-    '\xEC': 'i',
-    '\xED': 'i',
-    '\xEE': 'i',
-    '\xEF': 'i',
-    '\xD1': 'N',
-    '\xF1': 'n',
-    '\xD2': 'O',
-    '\xD3': 'O',
-    '\xD4': 'O',
-    '\xD5': 'O',
-    '\xD6': 'O',
-    '\xD8': 'O',
-    '\xF2': 'o',
-    '\xF3': 'o',
-    '\xF4': 'o',
-    '\xF5': 'o',
-    '\xF6': 'o',
-    '\xF8': 'o',
-    '\xD9': 'U',
-    '\xDA': 'U',
-    '\xDB': 'U',
-    '\xDC': 'U',
-    '\xF9': 'u',
-    '\xFA': 'u',
-    '\xFB': 'u',
-    '\xFC': 'u',
-    '\xDD': 'Y',
-    '\xFD': 'y',
-    '\xFF': 'y',
-    '\xC6': 'Ae',
-    '\xE6': 'ae',
-    '\xDE': 'Th',
-    '\xFE': 'th',
-    '\xDF': 'ss',
-    '\xD7': ' ',
-    '\xF7': ' '
+    "\xC0": "A",
+    "\xC1": "A",
+    "\xC2": "A",
+    "\xC3": "A",
+    "\xC4": "A",
+    "\xC5": "A",
+    "\xE0": "a",
+    "\xE1": "a",
+    "\xE2": "a",
+    "\xE3": "a",
+    "\xE4": "a",
+    "\xE5": "a",
+    "\xC7": "C",
+    "\xE7": "c",
+    "\xD0": "D",
+    "\xF0": "d",
+    "\xC8": "E",
+    "\xC9": "E",
+    "\xCA": "E",
+    "\xCB": "E",
+    "\xE8": "e",
+    "\xE9": "e",
+    "\xEA": "e",
+    "\xEB": "e",
+    "\xCC": "I",
+    "\xCD": "I",
+    "\xCE": "I",
+    "\xCF": "I",
+    "\xEC": "i",
+    "\xED": "i",
+    "\xEE": "i",
+    "\xEF": "i",
+    "\xD1": "N",
+    "\xF1": "n",
+    "\xD2": "O",
+    "\xD3": "O",
+    "\xD4": "O",
+    "\xD5": "O",
+    "\xD6": "O",
+    "\xD8": "O",
+    "\xF2": "o",
+    "\xF3": "o",
+    "\xF4": "o",
+    "\xF5": "o",
+    "\xF6": "o",
+    "\xF8": "o",
+    "\xD9": "U",
+    "\xDA": "U",
+    "\xDB": "U",
+    "\xDC": "U",
+    "\xF9": "u",
+    "\xFA": "u",
+    "\xFB": "u",
+    "\xFC": "u",
+    "\xDD": "Y",
+    "\xFD": "y",
+    "\xFF": "y",
+    "\xC6": "Ae",
+    "\xE6": "ae",
+    "\xDE": "Th",
+    "\xFE": "th",
+    "\xDF": "ss",
+    "\xD7": " ",
+    "\xF7": " ",
 }
 
 # Use Javascript style regex to make Lo-Dash compatibility easier.
-UPPER = '[A-Z\\xC0-\\xD6\\xD8-\\xDE]'
-LOWER = '[a-z\\xDf-\\xF6\\xF8-\\xFF]+'
-RE_WORDS = ('/{upper}+(?={upper}{lower})|{upper}?{lower}|{upper}+|[0-9]+/g'
-            .format(upper=UPPER, lower=LOWER))
-RE_LATIN1 = '/[\xC0-\xFF]/g'
+UPPER = "[A-Z\\xC0-\\xD6\\xD8-\\xDE]"
+LOWER = "[a-z\\xDf-\\xF6\\xF8-\\xFF]+"
+RE_WORDS = "/{upper}+(?={upper}{lower})|{upper}?{lower}|{upper}+|[0-9]+/g".format(
+    upper=UPPER, lower=LOWER
+)
+RE_LATIN1 = "/[\xC0-\xFF]/g"
 
 
 def camel_case(text):
-    """Converts `text` to camel case.
+    """
+    Converts `text` to camel case.
 
     Args:
         text (str): String to convert.
@@ -193,17 +190,17 @@ def camel_case(text):
 
     .. versionadded:: 1.1.0
     """
-    text = ''.join(word.title() for word in words(text))
+    text = "".join(word.title() for word in words(text))
     return text[:1].lower() + text[1:]
 
 
 def capitalize(text, strict=True):
-    """Capitalizes the first character of `text`.
+    """
+    Capitalizes the first character of `text`.
 
     Args:
         text (str): String to capitalize.
-        strict (bool, optional): Whether to cast rest of string to lower
-            case. Defaults to ``True``.
+        strict (bool, optional): Whether to cast rest of string to lower case. Defaults to ``True``.
 
     Returns:
         str: Capitalized string.
@@ -221,12 +218,12 @@ def capitalize(text, strict=True):
         Added `strict` option.
     """
     text = pyd.to_string(text)
-    return (text.capitalize() if strict
-            else text[:1].upper() + text[1:])
+    return text.capitalize() if strict else text[:1].upper() + text[1:]
 
 
 def chars(text):
-    """Split `text` into a list of single characters.
+    """
+    Split `text` into a list of single characters.
 
     Args:
         text (str): String to split up.
@@ -245,15 +242,15 @@ def chars(text):
 
 
 def chop(text, step):
-    """Break up `text` into intervals of length `step`.
+    """
+    Break up `text` into intervals of length `step`.
 
     Args:
         text (str): String to chop.
         step (int): Interval to chop `text`.
 
     Returns:
-        list: List of chopped characters.
-              If `text` is `None` an empty list is returned.
+        list: List of chopped characters. If `text` is `None` an empty list is returned.
 
     Example:
 
@@ -270,13 +267,14 @@ def chop(text, step):
     if step <= 0:
         chopped = [text]
     else:
-        chopped = [text[i:i + step] for i in _range(0, len(text), step)]
+        chopped = [text[i : i + step] for i in _range(0, len(text), step)]
 
     return chopped
 
 
 def chop_right(text, step):
-    """Like :func:`chop` except `text` is chopped from right.
+    """
+    Like :func:`chop` except `text` is chopped from right.
 
     Args:
         text (str): String to chop.
@@ -301,14 +299,14 @@ def chop_right(text, step):
         chopped = [text]
     else:
         text_len = len(text)
-        chopped = [text[-(i + step):text_len - i]
-                   for i in _range(0, text_len, step)][::-1]
+        chopped = [text[-(i + step) : text_len - i] for i in _range(0, text_len, step)][::-1]
 
     return chopped
 
 
 def clean(text):
-    """Trim and replace multiple spaces with a single space.
+    """
+    Trim and replace multiple spaces with a single space.
 
     Args:
         text (str): String to clean.
@@ -324,11 +322,12 @@ def clean(text):
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
-    return ' '.join(pyd.compact(text.split()))
+    return " ".join(pyd.compact(text.split()))
 
 
 def count_substr(text, subtext):
-    """Count the occurrences of `subtext` in `text`.
+    """
+    Count the occurrences of `subtext` in `text`.
 
     Args:
         text (str): Source string to count from.
@@ -354,8 +353,8 @@ def count_substr(text, subtext):
 
 
 def deburr(text):
-    """Deburrs `text` by converting latin-1 supplementary letters to basic
-    latin letters.
+    """
+    Deburrs `text` by converting latin-1 supplementary letters to basic latin letters.
 
     Args:
         text (str): String to deburr.
@@ -375,11 +374,13 @@ def deburr(text):
     return reg_exp_js_replace(
         pyd.to_string(text),
         RE_LATIN1,
-        lambda match: DEBURRED_LETTERS.get(match.group(), match.group()))
+        lambda match: DEBURRED_LETTERS.get(match.group(), match.group()),
+    )
 
 
 def decapitalize(text):
-    """Decaptitalizes the first character of `text`.
+    """
+    Decaptitalizes the first character of `text`.
 
     Args:
         text (str): String to decapitalize.
@@ -399,13 +400,13 @@ def decapitalize(text):
 
 
 def ends_with(text, target, position=None):
-    """Checks if `text` ends with a given target string.
+    """
+    Checks if `text` ends with a given target string.
 
     Args:
         text (str): String to check.
         target (str): String to check for.
-        position (int, optional): Position to search from. Defaults to
-            end of `text`.
+        position (int, optional): Position to search from. Defaults to end of `text`.
 
     Returns:
         bool: Whether `text` ends with `target`.
@@ -429,13 +430,13 @@ def ends_with(text, target, position=None):
 
 
 def ensure_ends_with(text, suffix):
-    """Append a given suffix to a string, but only if the source string does
-    not end with that suffix.
+    """
+    Append a given suffix to a string, but only if the source string does not end with that suffix.
 
     Args:
         text (str): Source string to append `suffix` to.
-        suffix (str): String to append to the source string if the source
-            string does not end with `suffix`.
+        suffix (str): String to append to the source string if the source string does not end with
+            `suffix`.
 
     Returns:
         str: source string possibly extended by `suffix`.
@@ -451,17 +452,18 @@ def ensure_ends_with(text, suffix):
     """
     text = pyd.to_string(text)
     suffix = pyd.to_string(suffix)
-    return text if text.endswith(suffix) else '{0}{1}'.format(text, suffix)
+    return text if text.endswith(suffix) else "{0}{1}".format(text, suffix)
 
 
 def ensure_starts_with(text, prefix):
-    """Prepend a given prefix to a string, but only if the source string does
-    not start with that prefix.
+    """
+    Prepend a given prefix to a string, but only if the source string does not start with that
+    prefix.
 
     Args:
         text (str): Source string to prepend `prefix` to.
-        suffix (str): String to prepend to the source string if the source
-            string does not start with `prefix`.
+        suffix (str): String to prepend to the source string if the source string does not start
+            with `prefix`.
 
     Returns:
         str: source string possibly prefixed by `prefix`
@@ -477,12 +479,13 @@ def ensure_starts_with(text, prefix):
     """
     text = pyd.to_string(text)
     prefix = pyd.to_string(prefix)
-    return text if text.startswith(prefix) else '{1}{0}'.format(text, prefix)
+    return text if text.startswith(prefix) else "{1}{0}".format(text, prefix)
 
 
 def escape(text):
-    r"""Converts the characters ``&``, ``<``, ``>``, ``"``, ``'``, and ``\```
-    in `text` to their corresponding HTML entities.
+    r"""
+    Converts the characters ``&``, ``<``, ``>``, ``"``, ``'``, and ``\``` in `text` to their
+    corresponding HTML entities.
 
     Args:
         text (str): String to escape.
@@ -501,13 +504,14 @@ def escape(text):
         Moved function to :mod:`pydash.strings`.
     """
     text = pyd.to_string(text)
-    # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars
-    # differently (e.g. "'" isn't escaped by html_escape() but is by Lo-Dash).
-    return ''.join(HTML_ESCAPES.get(char, char) for char in text)
+    # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars differently (e.g.
+    # "'" isn't escaped by html_escape() but is by Lo-Dash).
+    return "".join(HTML_ESCAPES.get(char, char) for char in text)
 
 
 def escape_reg_exp(text):
-    """Escapes the RegExp special characters in `text`.
+    """
+    Escapes the RegExp special characters in `text`.
 
     Args:
         text (str): String to escape.
@@ -530,7 +534,8 @@ def escape_reg_exp(text):
 
 
 def has_substr(text, subtext):
-    """Returns whether `subtext` is included in `text`.
+    """
+    Returns whether `subtext` is included in `text`.
 
     Args:
         text (str): String to search.
@@ -554,8 +559,9 @@ def has_substr(text, subtext):
 
 
 def human_case(text):
-    """Converts `text` to human case which has only the first letter
-    capitalized and each word separated by a space.
+    """
+    Converts `text` to human case which has only the first letter capitalized and each word
+    separated by a space.
 
     Args:
         text (str): String to convert.
@@ -572,16 +578,19 @@ def human_case(text):
 
     .. versionadded:: 3.0.0
     """
-    return (pyd.chain(text)
-            .snake_case()
-            .reg_exp_replace('_id$', '')
-            .replace('_', ' ')
-            .capitalize()
-            .value())
+    return (
+        pyd.chain(text)
+        .snake_case()
+        .reg_exp_replace("_id$", "")
+        .replace("_", " ")
+        .capitalize()
+        .value()
+    )
 
 
 def insert_substr(text, index, subtext):
-    """Insert `subtext` in `text` starting at position `index`.
+    """
+    Insert `subtext` in `text` starting at position `index`.
 
     Args:
         text (str): String to add substring to.
@@ -603,13 +612,13 @@ def insert_substr(text, index, subtext):
     return text[:index] + subtext + text[index:]
 
 
-def join(array, separator=''):
-    """Joins an iterable into a string using `separator` between each element.
+def join(array, separator=""):
+    """
+    Joins an iterable into a string using `separator` between each element.
 
     Args:
         array (iterable): Iterable to implode.
-        separator (str, optional): Separator to using when joining. Defaults to
-            ``''``.
+        separator (str, optional): Separator to using when joining. Defaults to ``''``.
 
     Returns:
         str: Joined string.
@@ -632,7 +641,8 @@ def join(array, separator=''):
 
 
 def kebab_case(text):
-    """Converts `text` to kebab case (a.k.a. spinal case).
+    """
+    Converts `text` to kebab case (a.k.a. spinal case).
 
     Args:
         text (str): String to convert.
@@ -647,7 +657,7 @@ def kebab_case(text):
 
     .. versionadded:: 1.1.0
     """
-    return separator_case(text, '-')
+    return separator_case(text, "-")
 
 
 def lines(text):
@@ -671,7 +681,8 @@ def lines(text):
 
 
 def lower_case(text):
-    """Converts string to lower case as space separated words.
+    """
+    Converts string to lower case as space separated words.
 
     Args:
         text (str): String to convert.
@@ -690,11 +701,12 @@ def lower_case(text):
 
     .. versionadded:: 4.0.0
     """
-    return ' '.join(words(text)).lower()
+    return " ".join(words(text)).lower()
 
 
 def lower_first(text):
-    """Converts the first character of string to lower case.
+    """
+    Converts the first character of string to lower case.
 
     Args:
         text (str): String passed in by the user.
@@ -718,17 +730,15 @@ def lower_first(text):
     return text[:1].lower() + text[1:]
 
 
-def number_format(number, scale=0, decimal_separator='.', order_separator=','):
-    """Format a number to scale with custom decimal and order separators.
+def number_format(number, scale=0, decimal_separator=".", order_separator=","):
+    """
+    Format a number to scale with custom decimal and order separators.
 
     Args:
         number (int|float): Number to format.
-        scale (int, optional): Number of decimals to include. Defaults to
-            ``0``.
-        decimal_separator (str, optional): Decimal separator to use. Defaults
-            to ``'.'``.
-        order_separator (str, optional): Order separator to use. Defaults to
-            ``','``.
+        scale (int, optional): Number of decimals to include. Defaults to ``0``.
+        decimal_separator (str, optional): Decimal separator to use. Defaults to ``'.'``.
+        order_separator (str, optional): Order separator to use. Defaults to ``','``.
 
     Returns:
         str: Formatted number as string.
@@ -742,20 +752,19 @@ def number_format(number, scale=0, decimal_separator='.', order_separator=','):
 
     .. versionadded:: 3.0.0
     """
-    # Create a string formatter which converts number to the appropriately
-    # scaled representation.
-    fmt = '{{0:.{0:d}f}}'.format(scale)
+    # Create a string formatter which converts number to the appropriately scaled representation.
+    fmt = "{{0:.{0:d}f}}".format(scale)
 
     try:
-        num_parts = fmt.format(number).split('.')
+        num_parts = fmt.format(number).split(".")
     except ValueError:
-        text = ''
+        text = ""
     else:
         int_part = num_parts[0]
-        dec_part = (num_parts + [''])[1]
+        dec_part = (num_parts + [""])[1]
 
-        # Reverse the integer part, chop it into groups of 3, join on
-        # `order_separator`, and then unreverse the string.
+        # Reverse the integer part, chop it into groups of 3, join on `order_separator`, and then
+        # un-reverse the string.
         int_part = order_separator.join(chop(int_part[::-1], 3))[::-1]
 
         text = decimal_separator.join(pyd.compact([int_part, dec_part]))
@@ -763,10 +772,11 @@ def number_format(number, scale=0, decimal_separator='.', order_separator=','):
     return text
 
 
-def pad(text, length, chars=' '):
-    """Pads `text` on the left and right sides if it is shorter than the
-    given padding length. The `chars` string may be truncated if the number of
-    padding characters can't be evenly divided by the padding length.
+def pad(text, length, chars=" "):
+    """
+    Pads `text` on the left and right sides if it is shorter than the given padding length. The
+    `chars` string may be truncated if the number of padding characters can't be evenly divided by
+    the padding length.
 
     Args:
         text (str): String to pad.
@@ -788,8 +798,7 @@ def pad(text, length, chars=' '):
     .. versionadded:: 1.1.0
 
     .. versionchanged:: 3.0.0
-        Fix handling of multiple `chars` so that padded string isn't over
-        padded.
+        Fix handling of multiple `chars` so that padded string isn't over padded.
     """
     # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
@@ -801,15 +810,16 @@ def pad(text, length, chars=' '):
     mid = (length - text_len) / 2.0
     left_len = int(math.floor(mid))
     right_len = int(math.ceil(mid))
-    chars = pad_end('', right_len, chars)
+    chars = pad_end("", right_len, chars)
 
     return chars[:left_len] + text + chars
 
 
-def pad_end(text, length, chars=' '):
-    """Pads `text` on the right side if it is shorter than the given padding
-    length. The `chars` string may be truncated if the number of padding
-    characters can't be evenly divided by the padding length.
+def pad_end(text, length, chars=" "):
+    """
+    Pads `text` on the right side if it is shorter than the given padding length. The `chars` string
+    may be truncated if the number of padding characters can't be evenly divided by the padding
+    length.
 
     Args:
         text (str): String to pad.
@@ -837,10 +847,11 @@ def pad_end(text, length, chars=' '):
     return (text + repeat(chars, length))[:length]
 
 
-def pad_start(text, length, chars=' '):
-    """Pads `text` on the left side if it is shorter than the given padding
-    length. The `chars` string may be truncated if the number of padding
-    characters can't be evenly divided by the padding length.
+def pad_start(text, length, chars=" "):
+    """
+    Pads `text` on the left side if it is shorter than the given padding length. The `chars` string
+    may be truncated if the number of padding characters can't be evenly divided by the padding
+    length.
 
     Args:
         text (str): String to pad.
@@ -869,12 +880,12 @@ def pad_start(text, length, chars=' '):
 
 
 def pascal_case(text, strict=True):
-    """Like :func:`camel_case` except the first letter is capitalized.
+    """
+    Like :func:`camel_case` except the first letter is capitalized.
 
     Args:
         text (str): String to convert.
-        strict (bool, optional): Whether to cast rest of string to lower case.
-            Defaults to ``True``.
+        strict (bool, optional): Whether to cast rest of string to lower case. Defaults to ``True``.
 
     Returns:
         str: String converted to class case.
@@ -897,7 +908,8 @@ def pascal_case(text, strict=True):
 
 
 def predecessor(char):
-    """Return the predecessor character of `char`.
+    """
+    Return the predecessor character of `char`.
 
     Args:
         char (str): Character to find the predecessor of.
@@ -920,17 +932,17 @@ def predecessor(char):
     return chr(ord(char) - 1)
 
 
-def prune(text, length=0, omission='...'):
-    """Like :func:`truncate` except it ensures that the pruned string doesn't
-    exceed the original length, i.e., it avoids half-chopped words when
-    truncating. If the pruned text + `omission` text is longer than the
-    original text, then the original text is returned.
+def prune(text, length=0, omission="..."):
+    """
+    Like :func:`truncate` except it ensures that the pruned string doesn't exceed the original
+    length, i.e., it avoids half-chopped words when truncating. If the pruned text + `omission` text
+    is longer than the original text, then the original text is returned.
 
     Args:
         text (str): String to prune.
         length (int, optional): Target prune length. Defaults to ``0``.
-        omission (str, optional): Omission text to append to the end of the
-            pruned string. Defaults to ``'...'``.
+        omission (str, optional): Omission text to append to the end of the pruned string. Defaults
+            to ``'...'``.
 
     Returns:
         str: Pruned string.
@@ -958,23 +970,23 @@ def prune(text, length=0, omission='...'):
     # Replace non-alphanumeric chars with whitespace.
     def repl(match):
         char = match.group(0)
-        return ' ' if char.upper() == char.lower() else char
+        return " " if char.upper() == char.lower() else char
 
-    subtext = reg_exp_replace(text[:length + 1], r'.(?=\W*\w*$)', repl)
+    subtext = reg_exp_replace(text[: length + 1], r".(?=\W*\w*$)", repl)
 
-    if re.match(r'\w\w', subtext[-2:]):
-        # Last two characters are alphanumeric. Remove last "word" from end of
-        # string so that we prune to the next whole word.
-        subtext = reg_exp_replace(subtext, r'\s*\S+$', '')
+    if re.match(r"\w\w", subtext[-2:]):
+        # Last two characters are alphanumeric. Remove last "word" from end of string so that we
+        # prune to the next whole word.
+        subtext = reg_exp_replace(subtext, r"\s*\S+$", "")
     else:
-        # Last character (at least) is whitespace. So remove that character as
-        # well as any other whitespace.
+        # Last character (at least) is whitespace. So remove that character as well as any other
+        # whitespace.
         subtext = subtext[:-1].rstrip()
 
     subtext_len = len(subtext)
 
-    # Only add omission text if doing so will result in a string that is
-    # equal two or smaller in length than the original.
+    # Only add omission text if doing so will result in a string that is equal two or smaller in
+    # length than the original.
     if (subtext_len + omission_len) <= text_len:
         text = text[:subtext_len] + omission
 
@@ -982,7 +994,8 @@ def prune(text, length=0, omission='...'):
 
 
 def quote(text, quote_char='"'):
-    """Quote a string with another string.
+    """
+    Quote a string with another string.
 
     Args:
         text (str): String to be quoted.
@@ -1004,7 +1017,8 @@ def quote(text, quote_char='"'):
 
 
 def reg_exp_js_match(text, reg_exp):
-    """Return list of matches using Javascript style regular expression.
+    """
+    Return list of matches using Javascript style regular expression.
 
     Args:
         text (str): String to evaluate.
@@ -1037,8 +1051,8 @@ def reg_exp_js_match(text, reg_exp):
 
 
 def reg_exp_js_replace(text, reg_exp, repl):
-    """Replace `text` with `repl` using Javascript style regular expression to
-    find matches.
+    """
+    Replace `text` with `repl` using Javascript style regular expression to find matches.
 
     Args:
         text (str): String to evaluate.
@@ -1074,18 +1088,17 @@ def reg_exp_js_replace(text, reg_exp, repl):
 
 
 def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
-    """Replace occurrences of regex `pattern` with `repl` in `text`.
-    Optionally, ignore case when replacing. Optionally, set `count` to limit
-    number of replacements.
+    """
+    Replace occurrences of regex `pattern` with `repl` in `text`. Optionally, ignore case when
+    replacing. Optionally, set `count` to limit number of replacements.
 
     Args:
         text (str): String to replace.
         pattern (str): String pattern to find and replace.
         repl (str): String to substitute `pattern` with.
-        ignore_clase (bool, optional): Whether to ignore case when replacing.
-            Defaults to ``False``.
-        count (int, optional): Maximum number of occurrences to replace.
-            Defaults to ``0`` which replaces all.
+        ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
+        count (int, optional): Maximum number of occurrences to replace. Defaults to ``0`` which
+            replaces all.
 
     Returns:
         str: Replaced string.
@@ -1109,16 +1122,12 @@ def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
     if pattern is None:
         return pyd.to_string(text)
 
-    return replace(text,
-                   pattern,
-                   repl,
-                   ignore_case=ignore_case,
-                   count=count,
-                   escape=False)
+    return replace(text, pattern, repl, ignore_case=ignore_case, count=count, escape=False)
 
 
 def repeat(text, n=0):
-    """Repeats the given string `n` times.
+    """
+    Repeats the given string `n` times.
 
     Args:
         text (str): String to repeat.
@@ -1137,34 +1146,25 @@ def repeat(text, n=0):
     return pyd.to_string(text) * int(n)
 
 
-def replace(text,
-            pattern,
-            repl,
-            ignore_case=False,
-            count=0,
-            escape=True,
-            from_start=False,
-            from_end=False):
-    """Replace occurrences of `pattern` with `repl` in `text`. Optionally,
-    ignore case when replacing. Optionally, set `count` to limit number of
-    replacements.
+def replace(
+    text, pattern, repl, ignore_case=False, count=0, escape=True, from_start=False, from_end=False
+):
+    """
+    Replace occurrences of `pattern` with `repl` in `text`. Optionally, ignore case when replacing.
+    Optionally, set `count` to limit number of replacements.
 
     Args:
         text (str): String to replace.
         pattern (str): String pattern to find and replace.
         repl (str): String to substitute `pattern` with.
-        ignore_clase (bool, optional): Whether to ignore case when replacing.
-            Defaults to ``False``.
-        count (int, optional): Maximum number of occurrences to replace.
-            Defaults to ``0`` which replaces all.
-        escape (bool, optional): Whether to escape `pattern` when searching.
-            This is needed if a literal replacement is desired when `pattern`
-            may contain special regular expression characters. Defaults to
-            ``True``.
-        from_start (bool, optional): Whether to limit replacement to start of
-            string.
-        from_end (bool, optional): Whether to limit replacement to end of
-            string.
+        ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
+        count (int, optional): Maximum number of occurrences to replace. Defaults to ``0`` which
+            replaces all.
+        escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
+            literal replacement is desired when `pattern` may contain special regular expression
+            characters. Defaults to ``True``.
+        from_start (bool, optional): Whether to limit replacement to start of string.
+        from_end (bool, optional): Whether to limit replacement to end of string.
 
     Returns:
         str: Replaced string.
@@ -1197,11 +1197,11 @@ def replace(text,
     if escape:
         pattern = re.escape(pattern)
 
-    if from_start and not pattern.startswith('^'):
-        pattern = '^' + pattern
+    if from_start and not pattern.startswith("^"):
+        pattern = "^" + pattern
 
-    if from_end and not pattern.endswith('$'):
-        pattern += '$'
+    if from_end and not pattern.endswith("$"):
+        pattern += "$"
 
     if not pyd.is_function(repl):
         repl = pyd.to_string(repl)
@@ -1211,24 +1211,19 @@ def replace(text,
     return re.sub(pattern, repl, text, count=count, flags=flags)
 
 
-def replace_end(text,
-                pattern,
-                repl,
-                ignore_case=False,
-                escape=True):
-    """Like :func:`replace` except it only replaces `text` with `repl` if
-    `pattern` mathces the end of `text`.
+def replace_end(text, pattern, repl, ignore_case=False, escape=True):
+    """
+    Like :func:`replace` except it only replaces `text` with `repl` if `pattern` mathces the end of
+    `text`.
 
     Args:
         text (str): String to replace.
         pattern (str): String pattern to find and replace.
         repl (str): String to substitute `pattern` with.
-        ignore_clase (bool, optional): Whether to ignore case when replacing.
-            Defaults to ``False``.
-        escape (bool, optional): Whether to escape `pattern` when searching.
-            This is needed if a literal replacement is desired when `pattern`
-            may contain special regular expression characters. Defaults to
-            ``True``.
+        ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
+        escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
+            literal replacement is desired when `pattern` may contain special regular expression
+            characters. Defaults to ``True``.
 
     Returns:
         str: Replaced string.
@@ -1242,32 +1237,22 @@ def replace_end(text,
 
     .. versionadded:: 4.1.0
     """
-    return replace(text,
-                   pattern,
-                   repl,
-                   ignore_case=ignore_case,
-                   escape=escape,
-                   from_end=True)
+    return replace(text, pattern, repl, ignore_case=ignore_case, escape=escape, from_end=True)
 
 
-def replace_start(text,
-                  pattern,
-                  repl,
-                  ignore_case=False,
-                  escape=True):
-    """Like :func:`replace` except it only replaces `text` with `repl` if
-    `pattern` mathces the start of `text`.
+def replace_start(text, pattern, repl, ignore_case=False, escape=True):
+    """
+    Like :func:`replace` except it only replaces `text` with `repl` if `pattern` mathces the start
+    of `text`.
 
     Args:
         text (str): String to replace.
         pattern (str): String pattern to find and replace.
         repl (str): String to substitute `pattern` with.
-        ignore_clase (bool, optional): Whether to ignore case when replacing.
-            Defaults to ``False``.
-        escape (bool, optional): Whether to escape `pattern` when searching.
-            This is needed if a literal replacement is desired when `pattern`
-            may contain special regular expression characters. Defaults to
-            ``True``.
+        ignore_clase (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
+        escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
+            literal replacement is desired when `pattern` may contain special regular expression
+            characters. Defaults to ``True``.
 
     Returns:
         str: Replaced string.
@@ -1281,16 +1266,12 @@ def replace_start(text,
 
     .. versionadded:: 4.1.0
     """
-    return replace(text,
-                   pattern,
-                   repl,
-                   ignore_case=ignore_case,
-                   escape=escape,
-                   from_start=True)
+    return replace(text, pattern, repl, ignore_case=ignore_case, escape=escape, from_start=True)
 
 
 def separator_case(text, separator):
-    """Splits `text` on words and joins with `separator`.
+    """
+    Splits `text` on words and joins with `separator`.
 
     Args:
         text (str): String to convert.
@@ -1306,36 +1287,31 @@ def separator_case(text, separator):
 
     .. versionadded:: 3.0.0
     """
-    return separator.join(word.lower()
-                          for word in words(text) if word)
+    return separator.join(word.lower() for word in words(text) if word)
 
 
-def series_phrase(items, separator=', ', last_separator=' and ', serial=False):
-    """Join items into a grammatical series phrase, e.g., ``"item1, item2,
-    item3 and item4"``.
+def series_phrase(items, separator=", ", last_separator=" and ", serial=False):
+    """
+    Join items into a grammatical series phrase, e.g., ``"item1, item2, item3 and item4"``.
 
     Args:
         items (list): List of string items to join.
         separator (str, optional): Item separator. Defaults to ``', '``.
-        last_separator (str, optional): Last item separator. Defaults to
-            ``' and '``.
-        serial (bool, optional): Whether to include `separator` with
-            `last_separator` when number of items is greater than 2. Defaults
-            to ``False``.
+        last_separator (str, optional): Last item separator. Defaults to ``' and '``.
+        serial (bool, optional): Whether to include `separator` with `last_separator` when number of
+            items is greater than 2. Defaults to ``False``.
 
     Returns:
         str: Joined string.
 
     Example:
 
-        Example:
-
-            >>> series_phrase(['apples', 'bananas', 'peaches'])
-            'apples, bananas and peaches'
-            >>> series_phrase(['apples', 'bananas', 'peaches'], serial=True)
-            'apples, bananas, and peaches'
-            >>> series_phrase(['apples', 'bananas', 'peaches'], '; ', ', or ')
-            'apples; bananas, or peaches'
+        >>> series_phrase(['apples', 'bananas', 'peaches'])
+        'apples, bananas and peaches'
+        >>> series_phrase(['apples', 'bananas', 'peaches'], serial=True)
+        'apples, bananas, and peaches'
+        >>> series_phrase(['apples', 'bananas', 'peaches'], '; ', ', or ')
+        'apples; bananas, or peaches'
 
 
     .. versionadded:: 3.0.0
@@ -1355,15 +1331,15 @@ def series_phrase(items, separator=', ', last_separator=' and ', serial=False):
     return separator.join(items)
 
 
-def series_phrase_serial(items, separator=', ', last_separator=' and '):
-    """Join items into a grammatical series phrase using a serial separator,
-    e.g., ``"item1, item2, item3, and item4"``.
+def series_phrase_serial(items, separator=", ", last_separator=" and "):
+    """
+    Join items into a grammatical series phrase using a serial separator, e.g., ``"item1, item2,
+    item3, and item4"``.
 
     Args:
         items (list): List of string items to join.
         separator (str, optional): Item separator. Defaults to ``', '``.
-        last_separator (str, optional): Last item separator. Defaults to
-            ``' and '``.
+        last_separator (str, optional): Last item separator. Defaults to ``' and '``.
 
     Returns:
         str: Joined string.
@@ -1378,13 +1354,13 @@ def series_phrase_serial(items, separator=', ', last_separator=' and '):
     return series_phrase(items, separator, last_separator, serial=True)
 
 
-def slugify(text, separator='-'):
-    """Convert `text` into an ASCII slug which can be used safely in URLs.
-    Incoming `text` is converted to unicode and noramlzied using the ``NFKD``
-    form. This results in some accented characters being converted to their
-    ASCII "equivalent" (e.g. ``é`` is converted to ``e``). Leading and trailing
-    whitespace is trimmed and any remaining whitespace or other special
-    characters without an ASCII equivalent are replaced with ``-``.
+def slugify(text, separator="-"):
+    """
+    Convert `text` into an ASCII slug which can be used safely in URLs. Incoming `text` is converted
+    to unicode and noramlzied using the ``NFKD`` form. This results in some accented characters
+    being converted to their ASCII "equivalent" (e.g. ``é`` is converted to ``e``). Leading and
+    trailing whitespace is trimmed and any remaining whitespace or other special characters without
+    an ASCII equivalent are replaced with ``-``.
 
     Args:
         text (str): String to slugify.
@@ -1402,15 +1378,18 @@ def slugify(text, separator='-'):
 
     .. versionadded:: 3.0.0
     """
-    normalized = (unicodedata.normalize('NFKD', text_type(pyd.to_string(text)))
-                  .encode('ascii', 'ignore')
-                  .decode('utf8'))
+    normalized = (
+        unicodedata.normalize("NFKD", text_type(pyd.to_string(text)))
+        .encode("ascii", "ignore")
+        .decode("utf8")
+    )
 
     return separator_case(normalized, separator)
 
 
 def snake_case(text):
-    """Converts `text` to snake case.
+    """
+    Converts `text` to snake case.
 
     Args:
         text (str): String to convert.
@@ -1428,18 +1407,17 @@ def snake_case(text):
     .. versionchanged:: 4.0.0
         Removed alias ``underscore_case``.
     """
-    return separator_case(text, '_')
+    return separator_case(text, "_")
 
 
 def split(text, separator=NoValue):
-    """Splits `text` on `separator`. If `separator` not provided, then `text`
-    is split on whitespace. If `separator` is falsey, then `text` is split on
-    every character.
+    """
+    Splits `text` on `separator`. If `separator` not provided, then `text` is split on whitespace.
+    If `separator` is falsey, then `text` is split on every character.
 
     Args:
         text (str): String to explode.
-        separator (str, optional): Separator string to split on. Defaults to
-            ``NoValue``.
+        separator (str, optional): Separator string to split on. Defaults to ``NoValue``.
 
     Returns:
         list: Split string.
@@ -1454,8 +1432,7 @@ def split(text, separator=NoValue):
     .. versionadded:: 2.0.0
 
     .. versionchanged:: 3.0.0
-        Changed `separator` default to ``NoValue`` and supported splitting on
-        whitespace by default.
+        Changed `separator` default to ``NoValue`` and supported splitting on whitespace by default.
 
     .. versionchanged:: 4.0.0
         Removed alias ``explode``.
@@ -1473,7 +1450,8 @@ def split(text, separator=NoValue):
 
 
 def start_case(text):
-    """Convert `text` to start case.
+    """
+    Convert `text` to start case.
 
     Args:
         text (str): String to convert.
@@ -1489,17 +1467,17 @@ def start_case(text):
     .. versionadded:: 3.1.0
     """
     text = pyd.to_string(text)
-    return ' '.join(capitalize(word, strict=False) for word in words(text))
+    return " ".join(capitalize(word, strict=False) for word in words(text))
 
 
 def starts_with(text, target, position=0):
-    """Checks if `text` starts with a given target string.
+    """
+    Checks if `text` starts with a given target string.
 
     Args:
         text (str): String to check.
         target (str): String to check for.
-        position (int, optional): Position to search from. Defaults to
-            beginning of `text`.
+        position (int, optional): Position to search from. Defaults to beginning of `text`.
 
     Returns:
         bool: Whether `text` starts with `target`.
@@ -1521,7 +1499,8 @@ def starts_with(text, target, position=0):
 
 
 def strip_tags(text):
-    """Removes all HTML tags from `text`.
+    """
+    Removes all HTML tags from `text`.
 
     Args:
         text (str): String to strip.
@@ -1536,13 +1515,13 @@ def strip_tags(text):
 
     .. versionadded:: 3.0.0
     """
-    return reg_exp_replace(text, r'<\/?[^>]+>', '')
+    return reg_exp_replace(text, r"<\/?[^>]+>", "")
 
 
 def substr_left(text, subtext):
-    """Searches `text` from left-to-right for `subtext` and returns a substring
-    consisting of the characters in `text` that are to the left of `subtext` or
-    all string if no match found.
+    """
+    Searches `text` from left-to-right for `subtext` and returns a substring consisting of the
+    characters in `text` that are to the left of `subtext` or all string if no match found.
 
     Args:
         text (str): String to partition.
@@ -1563,9 +1542,9 @@ def substr_left(text, subtext):
 
 
 def substr_left_end(text, subtext):
-    """Searches `text` from right-to-left for `subtext` and returns a substring
-    consisting of the characters in `text` that are to the left of `subtext`
-    or all string if no match found.
+    """
+    Searches `text` from right-to-left for `subtext` and returns a substring consisting of the
+    characters in `text` that are to the left of `subtext` or all string if no match found.
 
     Args:
         text (str): String to partition.
@@ -1586,9 +1565,9 @@ def substr_left_end(text, subtext):
 
 
 def substr_right(text, subtext):
-    """Searches `text` from right-to-left for `subtext` and returns a substring
-    consisting of the characters in `text` that are to the right of `subtext`
-    or all string if no match found.
+    """
+    Searches `text` from right-to-left for `subtext` and returns a substring consisting of the
+    characters in `text` that are to the right of `subtext` or all string if no match found.
 
     Args:
         text (str): String to partition.
@@ -1609,9 +1588,9 @@ def substr_right(text, subtext):
 
 
 def substr_right_end(text, subtext):
-    """Searches `text` from left-to-right for `subtext` and returns a substring
-    consisting of the characters in `text` that are to the right of `subtext`
-    or all string if no match found.
+    """
+    Searches `text` from left-to-right for `subtext` and returns a substring consisting of the
+    characters in `text` that are to the right of `subtext` or all string if no match found.
 
     Args:
         text (str): String to partition.
@@ -1632,7 +1611,8 @@ def substr_right_end(text, subtext):
 
 
 def successor(char):
-    """Return the successor character of `char`.
+    """
+    Return the successor character of `char`.
 
     Args:
         char (str): Character to find the successor of.
@@ -1656,7 +1636,8 @@ def successor(char):
 
 
 def surround(text, wrapper):
-    """Surround a string with another string.
+    """
+    Surround a string with another string.
 
     Args:
         text (str): String to surround with `wrapper`.
@@ -1674,11 +1655,12 @@ def surround(text, wrapper):
 
     .. versionadded:: 2.4.0
     """
-    return '{1}{0}{1}'.format(pyd.to_string(text), pyd.to_string(wrapper))
+    return "{1}{0}{1}".format(pyd.to_string(text), pyd.to_string(wrapper))
 
 
 def swap_case(text):
-    """Swap case of `text` characters.
+    """
+    Swap case of `text` characters.
 
     Args:
         text (str): String to swap case.
@@ -1698,7 +1680,8 @@ def swap_case(text):
 
 
 def title_case(text):
-    """Convert `text` to title case.
+    """
+    Convert `text` to title case.
 
     Args:
         text (str): String to convert.
@@ -1715,11 +1698,12 @@ def title_case(text):
     """
     text = pyd.to_string(text)
     # NOTE: Can't use text.title() since it doesn't handle apostrophes.
-    return ' '.join(word.capitalize() for word in re.split(' ', text))
+    return " ".join(word.capitalize() for word in re.split(" ", text))
 
 
 def to_lower(text):
-    """Converts the given :attr:`text` to lower text.
+    """
+    Converts the given :attr:`text` to lower text.
 
     Args:
         text (str): String to convert.
@@ -1742,7 +1726,8 @@ def to_lower(text):
 
 
 def to_upper(text):
-    """Converts the given :attr:`text` to upper text.
+    """
+    Converts the given :attr:`text` to upper text.
 
     Args:
         text (str): String to convert.
@@ -1765,8 +1750,8 @@ def to_upper(text):
 
 
 def trim(text, chars=None):
-    r"""Removes leading and trailing whitespace or specified characters from
-    `text`.
+    r"""
+    Removes leading and trailing whitespace or specified characters from `text`.
 
     Args:
         text (str): String to trim.
@@ -1788,7 +1773,8 @@ def trim(text, chars=None):
 
 
 def trim_end(text, chars=None):
-    r"""Removes trailing whitespace or specified characters from `text`.
+    r"""
+    Removes trailing whitespace or specified characters from `text`.
 
     Args:
         text (str): String to trim.
@@ -1812,7 +1798,8 @@ def trim_end(text, chars=None):
 
 
 def trim_start(text, chars=None):
-    r"""Removes leading  whitespace or specified characters from `text`.
+    r"""
+    Removes leading  whitespace or specified characters from `text`.
 
     Args:
         text (str): String to trim.
@@ -1835,10 +1822,10 @@ def trim_start(text, chars=None):
     return text.lstrip(chars)
 
 
-def truncate(text, length=30, omission='...', separator=None):
-    """Truncates `text` if it is longer than the given maximum string length.
-    The last characters of the truncated string are replaced with the omission
-    string which defaults to ``...``.
+def truncate(text, length=30, omission="...", separator=None):
+    """
+    Truncates `text` if it is longer than the given maximum string length. The last characters of
+    the truncated string are replaced with the omission string which defaults to ``...``.
 
     Args:
         text (str): String to truncate.
@@ -1890,9 +1877,9 @@ def truncate(text, length=30, omission='...', separator=None):
 
 
 def unescape(text):
-    """The inverse of :func:`escape`. This method converts the HTML entities
-    ``&amp;``, ``&lt;``, ``&gt;``, ``&quot;``, ``&#39;``, and ``&#96;`` in
-    `text` to their corresponding characters.
+    """
+    The inverse of :func:`escape`. This method converts the HTML entities ``&amp;``, ``&lt;``,
+    ``&gt;``, ``&quot;``, ``&#39;``, and ``&#96;`` in `text` to their corresponding characters.
 
     Args:
         text (str): String to unescape.
@@ -1916,7 +1903,8 @@ def unescape(text):
 
 
 def upper_case(text):
-    """Converts string to upper case, as space separated words.
+    """
+    Converts string to upper case, as space separated words.
 
     Args:
         text (str): String to be converted to uppercase.
@@ -1935,11 +1923,12 @@ def upper_case(text):
 
     .. versionadded:: 4.0.0
     """
-    return ' '.join(words(text)).upper()
+    return " ".join(words(text)).upper()
 
 
 def upper_first(text):
-    """Converts the first character of string to upper case.
+    """
+    Converts the first character of string to upper case.
 
     Args:
         text (str): String passed in by the user.
@@ -1964,8 +1953,8 @@ def upper_first(text):
 
 
 def unquote(text, quote_char='"'):
-    """Unquote `text` by removing `quote_char` if `text` begins and ends with
-    it.
+    """
+    Unquote `text` by removing `quote_char` if `text` begins and ends with it.
 
     Args:
         text (str): String to unquote.
@@ -1989,15 +1978,16 @@ def unquote(text, quote_char='"'):
     text = pyd.to_string(text)
     inner = text[1:-1]
 
-    if text == '{0}{1}{0}'.format(quote_char, inner):
+    if text == "{0}{1}{0}".format(quote_char, inner):
         text = inner
 
     return text
 
 
 def url(*paths, **params):
-    """Combines a series of URL paths into a single URL. Optionally, pass in
-    keyword arguments to append query parameters.
+    """
+    Combines a series of URL paths into a single URL. Optionally, pass in keyword arguments to
+    append query parameters.
 
     Args:
         paths (str): URL paths to combine.
@@ -2027,9 +2017,9 @@ def url(*paths, **params):
         scheme, netloc, path, query, fragment = urlsplit(path)
         query = parse_qsl(query)
         params_list += query
-        paths_list.append(urlunsplit((scheme, netloc, path, '', fragment)))
+        paths_list.append(urlunsplit((scheme, netloc, path, "", fragment)))
 
-    path = delimitedpathjoin('/', *paths_list)
+    path = delimitedpathjoin("/", *paths_list)
     scheme, netloc, path, query, fragment = urlsplit(path)
     query = urlencode(params_list)
 
@@ -2037,12 +2027,12 @@ def url(*paths, **params):
 
 
 def words(text, pattern=None):
-    """Return list of words contained in `text`.
+    """
+    Return list of words contained in `text`.
 
     Args:
         text (str): String to split.
-        pattern (str, optional): Custom pattern to split words on. Defaults to
-            ``None``.
+        pattern (str, optional): Custom pattern to split words on. Defaults to ``None``.
 
     Returns:
         list: List of words.
@@ -2071,14 +2061,12 @@ def words(text, pattern=None):
 
 
 def js_to_py_re_find(reg_exp):
-    """Return Python regular expression matching function based on Javascript
-    style regexp.
-    """
-    pattern, options = reg_exp[1:].rsplit('/', 1)
-    flags = re.I if 'i' in options else 0
+    """Return Python regular expression matching function based on Javascript style regexp."""
+    pattern, options = reg_exp[1:].rsplit("/", 1)
+    flags = re.I if "i" in options else 0
 
     def find(text):
-        if 'g' in options:
+        if "g" in options:
             results = re.findall(pattern, text, flags=flags)
         else:
             results = re.search(pattern, text, flags=flags)
@@ -2094,25 +2082,20 @@ def js_to_py_re_find(reg_exp):
 
 
 def js_to_py_reg_exp_replace(reg_exp):
-    """Return Python regular expression substitution function based on
-    Javascript style regexp.
-    """
-    pattern, options = reg_exp[1:].rsplit('/', 1)
-    count = 0 if 'g' in options else 1
-    ignore_case = 'i' in options
+    """Return Python regular expression substitution function based on Javascript style regexp."""
+    pattern, options = reg_exp[1:].rsplit("/", 1)
+    count = 0 if "g" in options else 1
+    ignore_case = "i" in options
 
     def _replace(text, repl):
-        return reg_exp_replace(text,
-                               pattern,
-                               repl,
-                               ignore_case=ignore_case,
-                               count=count)
+        return reg_exp_replace(text, pattern, repl, ignore_case=ignore_case, count=count)
 
     return _replace
 
 
 def delimitedpathjoin(delimiter, *paths):
-    """Join delimited path using specified delimiter.
+    """
+    Join delimited path using specified delimiter.
 
     >>> assert delimitedpathjoin('.', '') == ''
     >>> assert delimitedpathjoin('.', '.') == '.'
@@ -2131,23 +2114,23 @@ def delimitedpathjoin(delimiter, *paths):
     paths = [pyd.to_string(path) for path in pyd.flatten_deep(paths) if path]
 
     if len(paths) == 1:
-        # Special case where there's no need to join anything.
-        # Doing this because if path==[delimiter], then an extra delimiter
-        # would be added if the else clause ran instead.
+        # Special case where there's no need to join anything. Doing this because if
+        # path==[delimiter], then an extra delimiter would be added if the else clause ran instead.
         path = paths[0]
     else:
-        leading = delimiter if paths and paths[0].startswith(delimiter) else ''
-        trailing = delimiter if paths and paths[-1].endswith(delimiter) else ''
-        middle = delimiter.join([path.strip(delimiter)
-                                 for path in paths if path.strip(delimiter)])
-        path = ''.join([leading, middle, trailing])
+        leading = delimiter if paths and paths[0].startswith(delimiter) else ""
+        trailing = delimiter if paths and paths[-1].endswith(delimiter) else ""
+        middle = delimiter.join([path.strip(delimiter) for path in paths if path.strip(delimiter)])
+        path = "".join([leading, middle, trailing])
 
     return path
 
 
 def flatten_url_params(params):
-    """Flatten URL params into list of tuples. If any param value is a list or
-    tuple, then map each value to the param key.
+    """
+    Flatten URL params into list of tuples. If any param value is a list or tuple, then map each
+    value to the param key.
+
     >>> params = [('a', 1), ('a', [2, 3])]
     >>> assert flatten_url_params(params) == [('a', 1), ('a', 2), ('a', 3)]
     >>> params = {'a': [1, 2, 3]}

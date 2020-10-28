@@ -1,64 +1,64 @@
 # -*- coding: utf-8 -*-
-"""Functions that operate on lists and dicts.
+"""
+Functions that operate on lists and dicts.
 
 .. versionadded:: 1.0.0
 """
 
 from __future__ import absolute_import
 
-from functools import partial
 import random
 
 import pydash as pyd
 
-from .helpers import iteriteratee, iterator, callit, getargcount, NoValue
-from ._compat import cmp_to_key, _cmp
+from ._compat import _cmp, cmp_to_key
+from .helpers import callit, getargcount, iterator, iteriteratee
 
 
 __all__ = (
-    'at',
-    'count_by',
-    'every',
-    'filter_',
-    'find',
-    'find_last',
-    'flat_map',
-    'flat_map_deep',
-    'flat_map_depth',
-    'for_each',
-    'for_each_right',
-    'group_by',
-    'includes',
-    'invoke_map',
-    'key_by',
-    'map_',
-    'nest',
-    'order_by',
-    'partition',
-    'pluck',
-    'reduce_',
-    'reduce_right',
-    'reductions',
-    'reductions_right',
-    'reject',
-    'sample',
-    'sample_size',
-    'shuffle',
-    'size',
-    'some',
-    'sort_by'
+    "at",
+    "count_by",
+    "every",
+    "filter_",
+    "find",
+    "find_last",
+    "flat_map",
+    "flat_map_deep",
+    "flat_map_depth",
+    "for_each",
+    "for_each_right",
+    "group_by",
+    "includes",
+    "invoke_map",
+    "key_by",
+    "map_",
+    "nest",
+    "order_by",
+    "partition",
+    "pluck",
+    "reduce_",
+    "reduce_right",
+    "reductions",
+    "reductions_right",
+    "reject",
+    "sample",
+    "sample_size",
+    "shuffle",
+    "size",
+    "some",
+    "sort_by",
 )
 
 
 def at(collection, *paths):
-    """Creates a list of elements from the specified indexes, or keys, of the
-    collection. Indexes may be specified as individual arguments or as arrays
-    of indexes.
+    """
+    Creates a list of elements from the specified indexes, or keys, of the collection. Indexes may
+    be specified as individual arguments or as arrays of indexes.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        *paths (mixed): The indexes of `collection` to retrieve, specified as
-            individual indexes or arrays of indexes.
+        *paths (mixed): The indexes of `collection` to retrieve, specified as individual indexes or
+            arrays of indexes.
 
     Returns:
         list: filtered list
@@ -81,8 +81,9 @@ def at(collection, *paths):
 
 
 def count_by(collection, iteratee=None):
-    """Creates an object composed of keys generated from the results of running
-    each element of `collection` through the iteratee.
+    """
+    Creates an object composed of keys generated from the results of running each element of
+    `collection` through the iteratee.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -112,13 +113,13 @@ def count_by(collection, iteratee=None):
 
 
 def every(collection, predicate=None):
-    """Checks if the predicate returns a truthy value for all elements of a
-    collection. The predicate is invoked with three arguments:
-    ``(value, index|key, collection)``. If a property name is passed for
-    predicate, the created :func:`pluck` style predicate will return the
-    property value of the given element. If an object is passed for predicate,
-    the created :func:`.matches` style predicate will return ``True`` for
-    elements that have the properties of the given object, else ``False``.
+    """
+    Checks if the predicate returns a truthy value for all elements of a collection. The predicate
+    is invoked with three arguments: ``(value, index|key, collection)``. If a property name is
+    passed for predicate, the created :func:`pluck` style predicate will return the property value
+    of the given element. If an object is passed for predicate, the created :func:`.matches` style
+    predicate will return ``True`` for elements that have the properties of the given object, else
+    ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -155,8 +156,9 @@ def every(collection, predicate=None):
 
 
 def filter_(collection, predicate=None):
-    """Iterates over elements of a collection, returning a list of all elements
-    the predicate returns truthy for.
+    """
+    Iterates over elements of a collection, returning a list of all elements the predicate returns
+    truthy for.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -177,14 +179,13 @@ def filter_(collection, predicate=None):
     .. versionchanged:: 4.0.0
         Removed alias ``select``.
     """
-    return [value
-            for is_true, value, _, _ in iteriteratee(collection, predicate)
-            if is_true]
+    return [value for is_true, value, _, _ in iteriteratee(collection, predicate) if is_true]
 
 
 def find(collection, predicate=None):
-    """Iterates over elements of a collection, returning the first element that
-    the predicate returns truthy for.
+    """
+    Iterates over elements of a collection, returning the first element that the predicate returns
+    truthy for.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -205,15 +206,14 @@ def find(collection, predicate=None):
     .. versionchanged:: 4.0.0
         Removed aliases ``detect`` and ``find_where``.
     """
-    search = (value
-              for is_true, value, _, _ in iteriteratee(collection, predicate)
-              if is_true)
+    search = (value for is_true, value, _, _ in iteriteratee(collection, predicate) if is_true)
     return next(search, None)
 
 
 def find_last(collection, predicate=None):
-    """This method is like :func:`find` except that it iterates over elements
-    of a `collection` from right to left.
+    """
+    This method is like :func:`find` except that it iterates over elements of a `collection` from
+    right to left.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -232,19 +232,19 @@ def find_last(collection, predicate=None):
 
     .. versionadded:: 1.0.0
     """
-    search = (value
-              for is_true, value, _, _ in iteriteratee(collection,
-                                                       predicate,
-                                                       reverse=True)
-              if is_true)
+    search = (
+        value
+        for is_true, value, _, _ in iteriteratee(collection, predicate, reverse=True)
+        if is_true
+    )
     return next(search, None)
 
 
 def flat_map(collection, iteratee=None):
-    """Creates a flattened list of values by running each element in
-    collection thru `iteratee` and flattening the mapped results. The
-    `iteratee` is invoked with three arguments:
-    ``(value, index|key, collection)``.
+    """
+    Creates a flattened list of values by running each element in collection thru `iteratee` and
+    flattening the mapped results. The `iteratee` is invoked with three arguments: ``(value,
+    index|key, collection)``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -265,8 +265,8 @@ def flat_map(collection, iteratee=None):
 
 
 def flat_map_deep(collection, iteratee=None):
-    """This method is like :func:`flat_map` except that it recursively flattens
-    the mapped results.
+    """
+    This method is like :func:`flat_map` except that it recursively flattens the mapped results.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -287,8 +287,9 @@ def flat_map_deep(collection, iteratee=None):
 
 
 def flat_map_depth(collection, iteratee=None, depth=1):
-    """This method is like :func:`flat_map` except that it recursively flattens
-    the mapped results up to `depth` times.
+    """
+    This method is like :func:`flat_map` except that it recursively flattens the mapped results up
+    to `depth` times.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -307,13 +308,12 @@ def flat_map_depth(collection, iteratee=None, depth=1):
 
     .. versionadded:: 4.0.0
     """
-    return pyd.flatten_depth(itermap(collection, iteratee=iteratee),
-                             depth=depth)
+    return pyd.flatten_depth(itermap(collection, iteratee=iteratee), depth=depth)
 
 
 def for_each(collection, iteratee=None):
-    """Iterates over elements of a collection, executing the iteratee for each
-    element.
+    """
+    Iterates over elements of a collection, executing the iteratee for each element.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -335,15 +335,14 @@ def for_each(collection, iteratee=None):
     .. versionchanged:: 4.0.0
         Removed alias ``each``.
     """
-    next((None for ret, _, _, _ in iteriteratee(collection, iteratee)
-          if ret is False),
-         None)
+    next((None for ret, _, _, _ in iteriteratee(collection, iteratee) if ret is False), None)
     return collection
 
 
 def for_each_right(collection, iteratee):
-    """This method is like :func:`for_each` except that it iterates over
-    elements of a `collection` from right to left.
+    """
+    This method is like :func:`for_each` except that it iterates over elements of a `collection`
+    from right to left.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -365,17 +364,17 @@ def for_each_right(collection, iteratee):
     .. versionchanged:: 4.0.0
         Removed alias ``each_right``.
     """
-    next((None for ret, _, _, _ in iteriteratee(collection,
-                                                iteratee,
-                                                reverse=True)
-          if ret is False),
-         None)
+    next(
+        (None for ret, _, _, _ in iteriteratee(collection, iteratee, reverse=True) if ret is False),
+        None,
+    )
     return collection
 
 
 def group_by(collection, iteratee=None):
-    """Creates an object composed of keys generated from the results of running
-    each element of a `collection` through the iteratee.
+    """
+    Creates an object composed of keys generated from the results of running each element of a
+    `collection` through the iteratee.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -406,8 +405,9 @@ def group_by(collection, iteratee=None):
 
 
 def includes(collection, target, from_index=0):
-    """Checks if a given value is present in a collection. If `from_index` is
-    negative, it is used as the offset from the end of the collection.
+    """
+    Checks if a given value is present in a collection. If `from_index` is negative, it is used as
+    the offset from the end of the collection.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -442,15 +442,15 @@ def includes(collection, target, from_index=0):
 
 
 def invoke_map(collection, path, *args, **kargs):
-    """Invokes the method at `path` of each element in `collection`, returning
-    a list of the results of each invoked method. Any additional arguments
-    are provided to each invoked method. If `path` is a function, it's invoked
-    for each element in `collection`.
+    """
+    Invokes the method at `path` of each element in `collection`, returning a list of the results of
+    each invoked method. Any additional arguments are provided to each invoked method. If `path` is
+    a function, it's invoked for each element in `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        path (str|func): String path to method to invoke or callable to invoke
-            for each element in `collection`.
+        path (str|func): String path to method to invoke or callable to invoke for each element in
+            `collection`.
         args (optional): Arguments to pass to method call.
         kargs (optional): Keyword arguments to pass to method call.
 
@@ -466,13 +466,13 @@ def invoke_map(collection, path, *args, **kargs):
 
     .. versionadded:: 4.0.0
     """
-    return map_(collection,
-                lambda item: pyd.invoke(item, path, *args, **kargs))
+    return map_(collection, lambda item: pyd.invoke(item, path, *args, **kargs))
 
 
 def key_by(collection, iteratee=None):
-    """Creates an object composed of keys generated from the results of running
-    each element of the collection through the given iteratee.
+    """
+    Creates an object composed of keys generated from the results of running each element of the
+    collection through the given iteratee.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -502,13 +502,13 @@ def key_by(collection, iteratee=None):
 
 
 def map_(collection, iteratee=None):
-    """Creates an array of values by running each element in the collection
-    through the iteratee. The iteratee is invoked with three arguments:
-    ``(value, index|key, collection)``. If a property name is passed for
-    iteratee, the created :func:`pluck` style iteratee will return the property
-    value of the given element. If an object is passed for iteratee, the
-    created :func:`.matches` style iteratee will return ``True`` for elements
-    that have the properties of the given object, else ``False``.
+    """
+    Creates an array of values by running each element in the collection through the iteratee. The
+    iteratee is invoked with three arguments: ``(value, index|key, collection)``. If a property name
+    is passed for iteratee, the created :func:`pluck` style iteratee will return the property value
+    of the given element. If an object is passed for iteratee, the created :func:`.matches` style
+    iteratee will return ``True`` for elements that have the properties of the given object, else
+    ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -539,9 +539,9 @@ def map_(collection, iteratee=None):
 
 
 def nest(collection, *properties):
-    """This method is like :func:`group_by` except that it supports nested
-    grouping by multiple string `properties`. If only a single key is given, it
-    is like calling ``group_by(collection, prop)``.
+    """
+    This method is like :func:`group_by` except that it supports nested grouping by multiple string
+    `properties`. If only a single key is given, it is like calling ``group_by(collection, prop)``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -577,28 +577,24 @@ def nest(collection, *properties):
     properties = pyd.flatten(properties)
     first, rest = properties[0], properties[1:]
 
-    return pyd.map_values(group_by(collection, first),
-                          lambda value: nest(value, *rest))
+    return pyd.map_values(group_by(collection, first), lambda value: nest(value, *rest))
 
 
 def order_by(collection, keys, orders=None, reverse=False):
-    """This method is like :func:`sort_by` except that it sorts by key names
-    instead of an iteratee function. Keys can be sorted in descending order by
-    prepending a ``"-"`` to the key name (e.g. ``"name"`` would become
-    ``"-name"``) or by passing a list of boolean sort options via `orders`
+    """
+    This method is like :func:`sort_by` except that it sorts by key names instead of an iteratee
+    function. Keys can be sorted in descending order by prepending a ``"-"`` to the key name (e.g.
+    ``"name"`` would become ``"-name"``) or by passing a list of boolean sort options via `orders`
     where ``True`` is ascending and ``False`` is descending.
 
     Args:
         collection (list|dict): Collection to iterate over.
-        keys (list): List of keys to sort by. By default, keys will be sorted
-            in ascending order. To sort a key in descending order, prepend a
-            ``"-"`` to the key name. For example, to sort the key value for
-            ``"name"`` in descending order, use ``"-name"``.
-        orders (list, optional): List of boolean sort orders to apply for each
-            key. ``True`` corresponds to ascending order while ``False`` is
-            descending. Defaults to ``None``.
-        reverse (bool, optional): Whether to reverse the sort. Defaults to
-            ``False``.
+        keys (list): List of keys to sort by. By default, keys will be sorted in ascending order. To
+            sort a key in descending order, prepend a ``"-"`` to the key name. For example, to sort
+            the key value for ``"name"`` in descending order, use ``"-name"``.
+        orders (list, optional): List of boolean sort orders to apply for each key. ``True``
+            corresponds to ascending order while ``False`` is descending. Defaults to ``None``.
+        reverse (bool, optional): Whether to reverse the sort. Defaults to ``False``.
 
     Returns:
         list: Sorted list.
@@ -655,7 +651,7 @@ def order_by(collection, keys, orders=None, reverse=False):
             comparers.append((pyd.property_(key), order))
     else:
         for key in keys:
-            if key.startswith('-'):
+            if key.startswith("-"):
                 order = -1
                 key = key[1:]
             else:
@@ -676,17 +672,17 @@ def order_by(collection, keys, orders=None, reverse=False):
 
 
 def partition(collection, predicate=None):
-    """Creates an array of elements split into two groups, the first of which
-    contains elements the `predicate` returns truthy for, while the second of
-    which contains elements the `predicate` returns falsey for. The `predicate`
-    is invoked with three arguments: ``(value, index|key, collection)``.
+    """
+    Creates an array of elements split into two groups, the first of which contains elements the
+    `predicate` returns truthy for, while the second of which contains elements the `predicate`
+    returns falsey for. The `predicate` is invoked with three arguments: ``(value, index|key,
+    collection)``.
 
-    If a property name is provided for `predicate` the created :func:`pluck`
-    style predicate returns the property value of the given element.
+    If a property name is provided for `predicate` the created :func:`pluck` style predicate returns
+    the property value of the given element.
 
-    If an object is provided for `predicate` the created :func:`.matches` style
-    predicate returns ``True`` for elements that have the properties of the
-    given object, else ``False``.
+    If an object is provided for `predicate` the created :func:`.matches` style predicate returns
+    ``True`` for elements that have the properties of the given object, else ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -715,8 +711,8 @@ def partition(collection, predicate=None):
 
 
 def pluck(collection, path):
-    """Retrieves the value of a specified property from all elements in the
-    collection.
+    """
+    Retrieves the value of a specified property from all elements in the collection.
 
     Args:
         collection (list): List of dicts.
@@ -750,16 +746,16 @@ def pluck(collection, path):
 
 
 def reduce_(collection, iteratee=None, accumulator=None):
-    """Reduces a collection to a value which is the accumulated result of
-    running each element in the collection through the iteratee, where each
-    successive iteratee execution consumes the return value of the previous
-    execution.
+    """
+    Reduces a collection to a value which is the accumulated result of running each element in the
+    collection through the iteratee, where each successive iteratee execution consumes the return
+    value of the previous execution.
 
     Args:
         collection (list|dict): Collection to iterate over.
         iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Initial value of aggregator. Default is
-            to use the result of the first iteration.
+        accumulator (mixed, optional): Initial value of aggregator. Default is to use the result of
+            the first iteration.
 
     Returns:
         mixed: Accumulator object containing results of reduction.
@@ -780,8 +776,7 @@ def reduce_(collection, iteratee=None, accumulator=None):
         try:
             _, accumulator = next(iterable)
         except StopIteration:
-            raise TypeError(
-                'reduce_() of empty sequence with no initial value')
+            raise TypeError("reduce_() of empty sequence with no initial value")
 
     result = accumulator
 
@@ -798,14 +793,15 @@ def reduce_(collection, iteratee=None, accumulator=None):
 
 
 def reduce_right(collection, iteratee=None, accumulator=None):
-    """This method is like :func:`reduce_` except that it iterates over
-    elements of a `collection` from right to left.
+    """
+    This method is like :func:`reduce_` except that it iterates over elements of a `collection` from
+    right to left.
 
     Args:
         collection (list|dict): Collection to iterate over.
         iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Initial value of aggregator. Default is
-            to use the result of the first iteration.
+        accumulator (mixed, optional): Initial value of aggregator. Default is to use the result of
+            the first iteration.
 
     Returns:
         mixed: Accumulator object containing results of reduction.
@@ -830,14 +826,15 @@ def reduce_right(collection, iteratee=None, accumulator=None):
 
 
 def reductions(collection, iteratee=None, accumulator=None, from_right=False):
-    """This function is like :func:`reduce_` except that it returns a list of
-    every intermediate value in the reduction operation.
+    """
+    This function is like :func:`reduce_` except that it returns a list of every intermediate value
+    in the reduction operation.
 
     Args:
         collection (list|dict): Collection to iterate over.
         iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Initial value of aggregator. Default is
-            to use the result of the first iteration.
+        accumulator (mixed, optional): Initial value of aggregator. Default is to use the result of
+            the first iteration.
 
     Returns:
         list: Results of each reduction operation.
@@ -873,14 +870,15 @@ def reductions(collection, iteratee=None, accumulator=None, from_right=False):
 
 
 def reductions_right(collection, iteratee=None, accumulator=None):
-    """This method is like :func:`reductions` except that it iterates over
-    elements of a `collection` from right to left.
+    """
+    This method is like :func:`reductions` except that it iterates over elements of a `collection`
+    from right to left.
 
     Args:
         collection (list|dict): Collection to iterate over.
         iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Initial value of aggregator. Default is
-            to use the result of the first iteration.
+        accumulator (mixed, optional): Initial value of aggregator. Default is to use the result of
+            the first iteration.
 
     Returns:
         list: Results of each reduction operation.
@@ -900,8 +898,9 @@ def reductions_right(collection, iteratee=None, accumulator=None):
 
 
 def reject(collection, predicate=None):
-    """The opposite of :func:`filter_` this method returns the elements of a
-    collection that the predicate does **not** return truthy for.
+    """
+    The opposite of :func:`filter_` this method returns the elements of a collection that the
+    predicate does **not** return truthy for.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -921,13 +920,12 @@ def reject(collection, predicate=None):
 
     .. versionadded:: 1.0.0
     """
-    return [value
-            for is_true, value, _, _ in iteriteratee(collection, predicate)
-            if not is_true]
+    return [value for is_true, value, _, _ in iteriteratee(collection, predicate) if not is_true]
 
 
 def sample(collection):
-    """Retrieves a random element from a given `collection`.
+    """
+    Retrieves a random element from a given `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -951,7 +949,8 @@ def sample(collection):
 
 
 def sample_size(collection, n=None):
-    """Retrieves list of `n` random elements from a collection.
+    """
+    Retrieves list of `n` random elements from a collection.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -974,8 +973,8 @@ def sample_size(collection, n=None):
 
 
 def shuffle(collection):
-    """Creates a list of shuffled values, using a version of the Fisher-Yates
-    shuffle.
+    """
+    Creates a list of shuffled values, using a version of the Fisher-Yates shuffle.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -1005,8 +1004,8 @@ def shuffle(collection):
 
 
 def size(collection):
-    """Gets the size of the `collection` by returning `len(collection)` for
-    iterable objects.
+    """
+    Gets the size of the `collection` by returning `len(collection)` for iterable objects.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -1025,13 +1024,13 @@ def size(collection):
 
 
 def some(collection, predicate=None):
-    """Checks if the predicate returns a truthy value for any element of a
-    collection. The predicate is invoked with three arguments:
-    ``(value, index|key, collection)``. If a property name is passed for
-    predicate, the created :func:`map_` style predicate will return the
-    property value of the given element. If an object is passed for predicate,
-    the created :func:`.matches` style predicate will return ``True`` for
-    elements that have the properties of the given object, else ``False``.
+    """
+    Checks if the predicate returns a truthy value for any element of a collection. The predicate is
+    invoked with three arguments: ``(value, index|key, collection)``. If a property name is passed
+    for predicate, the created :func:`map_` style predicate will return the property value of the
+    given element. If an object is passed for predicate, the created :func:`.matches` style
+    predicate will return ``True`` for elements that have the properties of the given object, else
+    ``False``.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -1064,14 +1063,14 @@ def some(collection, predicate=None):
 
 
 def sort_by(collection, iteratee=None, reverse=False):
-    """Creates a list of elements, sorted in ascending order by the results of
-    running each element in a `collection` through the iteratee.
+    """
+    Creates a list of elements, sorted in ascending order by the results of running each element in
+    a `collection` through the iteratee.
 
     Args:
         collection (list|dict): Collection to iterate over.
         iteratee (mixed, optional): Iteratee applied per iteration.
-        reverse (bool, optional): Whether to reverse the sort. Defaults to
-            ``False``.
+        reverse (bool, optional): Whether to reverse the sort. Defaults to ``False``.
 
     Returns:
         list: Sorted list.

@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Python port of Lo-Dash
-"""
+"""Python port of Lo-Dash."""
 
 from .__version__ import __version__
-
-
-#
-# Arrays
-#
-
 from .arrays import (
     chunk,
     compact,
@@ -82,28 +75,11 @@ from .arrays import (
     xor_by,
     xor_with,
     zip_,
-    zip_with,
     zip_object,
-    zip_object_deep
+    zip_object_deep,
+    zip_with,
 )
-
-
-#
-# Chaining
-#
-
-from .chaining import (
-    chain,
-    tap,
-    thru,
-    _Dash
-)
-
-
-#
-# Collections
-#
-
+from .chaining import _Dash, chain, tap, thru
 from .collections import (
     at,
     count_by,
@@ -135,14 +111,9 @@ from .collections import (
     shuffle,
     size,
     some,
-    sort_by
+    sort_by,
 )
-
-
-#
-# Functions
-#
-
+from .exceptions import InvalidMethod
 from .functions import (
     after,
     ary,
@@ -169,12 +140,6 @@ from .functions import (
     unary,
     wrap,
 )
-
-
-#
-# Numerical
-#
-
 from .numerical import (
     add,
     ceil,
@@ -202,12 +167,6 @@ from .numerical import (
     variance,
     zscore,
 )
-
-
-#
-# Objects
-#
-
 from .objects import (
     assign,
     assign_with,
@@ -252,20 +211,12 @@ from .objects import (
     unset,
     update,
     update_with,
-    values
+    values,
 )
-
-
-#
-# Predicates
-#
-
 from .predicates import (
     eq,
     gt,
     gte,
-    lt,
-    lte,
     in_range,
     is_associative,
     is_blank,
@@ -305,13 +256,9 @@ from .predicates import (
     is_string,
     is_tuple,
     is_zero,
+    lt,
+    lte,
 )
-
-
-#
-# Strings
-#
-
 from .strings import (
     camel_case,
     capitalize,
@@ -323,8 +270,8 @@ from .strings import (
     deburr,
     decapitalize,
     ends_with,
-    ensure_starts_with,
     ensure_ends_with,
+    ensure_starts_with,
     escape,
     escape_reg_exp,
     has_substr,
@@ -380,11 +327,6 @@ from .strings import (
     url,
     words,
 )
-
-#
-# Utilities
-#
-
 from .utilities import (
     attempt,
     cond,
@@ -393,8 +335,8 @@ from .utilities import (
     constant,
     default_to,
     default_to_any,
-    iteratee,
     identity,
+    iteratee,
     matches,
     matches_property,
     memoize,
@@ -414,9 +356,9 @@ from .utilities import (
     range_right,
     result,
     retry,
-    stub_list,
     stub_dict,
     stub_false,
+    stub_list,
     stub_string,
     stub_true,
     times,
@@ -424,19 +366,6 @@ from .utilities import (
     unique_id,
 )
 
-
-#
-# Exceptions
-#
-
-from .exceptions import (
-    InvalidMethod
-)
-
-
-#
-# "_" Instance
-#
 
 py_ = _Dash()
 _ = py_

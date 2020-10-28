@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Numerical/mathemetical related functions.
+"""
+Numerical/mathemetical related functions.
 
 .. versionadded:: 2.1.0
 """
@@ -10,44 +11,46 @@ import math
 import operator
 
 import pydash as pyd
-from .helpers import NoValue, iterator_with_default, iteriteratee, iterator
+
 from ._compat import _range
+from .helpers import NoValue, iterator, iterator_with_default, iteriteratee
 
 
 __all__ = (
-    'add',
-    'ceil',
-    'clamp',
-    'divide',
-    'floor',
-    'max_',
-    'max_by',
-    'mean',
-    'mean_by',
-    'median',
-    'min_',
-    'min_by',
-    'moving_mean',
-    'multiply',
-    'power',
-    'round_',
-    'scale',
-    'slope',
-    'std_deviation',
-    'sum_',
-    'sum_by',
-    'subtract',
-    'transpose',
-    'variance',
-    'zscore',
+    "add",
+    "ceil",
+    "clamp",
+    "divide",
+    "floor",
+    "max_",
+    "max_by",
+    "mean",
+    "mean_by",
+    "median",
+    "min_",
+    "min_by",
+    "moving_mean",
+    "multiply",
+    "power",
+    "round_",
+    "scale",
+    "slope",
+    "std_deviation",
+    "sum_",
+    "sum_by",
+    "subtract",
+    "transpose",
+    "variance",
+    "zscore",
 )
 
 
-INFINITY = float('inf')
+INFINITY = float("inf")
 
 
 def add(a, b):
-    """Adds two numbers.
+    """
+    Adds two numbers.
 
     Args:
         a (number): First number to add.
@@ -73,11 +76,11 @@ def add(a, b):
 
 
 def sum_(collection):
-    """Sum each element in `collection`.
+    """
+    Sum each element in `collection`.
 
     Args:
-        collection (list|dict|number): Collection to process or first number to
-            add.
+        collection (list|dict|number): Collection to process or first number to add.
 
     Returns:
         number: Result of summation.
@@ -100,14 +103,13 @@ def sum_(collection):
 
 
 def sum_by(collection, iteratee=None):
-    """Sum each element in `collection`. If iteratee is passed, each element of
-    `collection` is passed through a iteratee before the summation is computed.
+    """
+    Sum each element in `collection`. If iteratee is passed, each element of `collection` is passed
+    through a iteratee before the summation is computed.
 
     Args:
-        collection (list|dict|number): Collection to process or first number to
-            add.
-        iteratee (mixed|number, optional): Iteratee applied per iteration or
-            second number to add.
+        collection (list|dict|number): Collection to process or first number to add.
+        iteratee (mixed|number, optional): Iteratee applied per iteration or second number to add.
 
     Returns:
         number: Result of summation.
@@ -123,7 +125,8 @@ def sum_by(collection, iteratee=None):
 
 
 def mean(collection):
-    """Calculate arithmetic mean of each element in `collection`.
+    """
+    Calculate arithmetic mean of each element in `collection`.
 
     Args:
         collection (list|dict): Collection to process.
@@ -147,9 +150,9 @@ def mean(collection):
 
 
 def mean_by(collection, iteratee=None):
-    """Calculate arithmetic mean of each element in `collection`. If iteratee
-    is passed, each element of `collection` is passed through a iteratee before
-    the mean is computed.
+    """
+    Calculate arithmetic mean of each element in `collection`. If iteratee is passed, each element
+    of `collection` is passed through a iteratee before the mean is computed.
 
     Args:
         collection (list|dict): Collection to process.
@@ -169,7 +172,8 @@ def mean_by(collection, iteratee=None):
 
 
 def ceil(x, precision=0):
-    """Round number up to precision.
+    """
+    Round number up to precision.
 
     Args:
         x (number): Number to round up.
@@ -193,7 +197,8 @@ def ceil(x, precision=0):
 
 
 def clamp(x, lower, upper=None):
-    """Clamps number within the inclusive lower and upper bounds.
+    """
+    Clamps number within the inclusive lower and upper bounds.
 
     Args:
         x (number): Number to clamp.
@@ -229,7 +234,8 @@ def clamp(x, lower, upper=None):
 
 
 def divide(dividend, divisor):
-    """Divide two numbers.
+    """
+    Divide two numbers.
 
     Args:
         dividend (int/float): The first number in a division.
@@ -255,7 +261,8 @@ def divide(dividend, divisor):
 
 
 def floor(x, precision=0):
-    """Round number down to precision.
+    """
+    Round number down to precision.
 
     Args:
         x (number): Number to round down.
@@ -279,7 +286,8 @@ def floor(x, precision=0):
 
 
 def max_(collection, default=NoValue):
-    """Retrieves the maximum value of a `collection`.
+    """
+    Retrieves the maximum value of a `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -304,7 +312,8 @@ def max_(collection, default=NoValue):
 
 
 def max_by(collection, iteratee=None, default=NoValue):
-    """Retrieves the maximum value of a `collection`.
+    """
+    Retrieves the maximum value of a `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -328,14 +337,13 @@ def max_by(collection, iteratee=None, default=NoValue):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return max(iterator_with_default(collection, default),
-               key=pyd.iteratee(iteratee))
+    return max(iterator_with_default(collection, default), key=pyd.iteratee(iteratee))
 
 
 def median(collection, iteratee=None):
-    """Calculate median of each element in `collection`. If iteratee is passed,
-    each element of `collection` is passed through a iteratee before the
-    median is computed.
+    """
+    Calculate median of each element in `collection`. If iteratee is passed, each element of
+    `collection` is passed through a iteratee before the median is computed.
 
     Args:
         collection (list|dict): Collection to process.
@@ -368,7 +376,8 @@ def median(collection, iteratee=None):
 
 
 def min_(collection, default=NoValue):
-    """Retrieves the minimum value of a `collection`.
+    """
+    Retrieves the minimum value of a `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -393,7 +402,8 @@ def min_(collection, default=NoValue):
 
 
 def min_by(collection, iteratee=None, default=NoValue):
-    """Retrieves the minimum value of a `collection`.
+    """
+    Retrieves the minimum value of a `collection`.
 
     Args:
         collection (list|dict): Collection to iterate over.
@@ -416,12 +426,12 @@ def min_by(collection, iteratee=None, default=NoValue):
     """
     if isinstance(collection, dict):
         collection = collection.values()
-    return min(iterator_with_default(collection, default),
-               key=pyd.iteratee(iteratee))
+    return min(iterator_with_default(collection, default), key=pyd.iteratee(iteratee))
 
 
 def moving_mean(array, size):
-    """Calculate moving mean of each element of `array`.
+    """
+    Calculate moving mean of each element of `array`.
 
     Args:
         array (list): List to process.
@@ -442,14 +452,13 @@ def moving_mean(array, size):
     .. versionadded:: 2.1.0
 
     .. versionchanged:: 4.0.0
-        Rename to ``moving_mean`` and remove ``moving_average`` and
-        ``moving_avg`` aliases.
+        Rename to ``moving_mean`` and remove ``moving_average`` and ``moving_avg`` aliases.
     """
     result = []
     size = int(size)
 
     for i in _range(size - 1, len(array) + 1):
-        window = array[i - size:i]
+        window = array[i - size : i]
 
         if len(window) == size:
             result.append(mean(window))
@@ -458,7 +467,8 @@ def moving_mean(array, size):
 
 
 def multiply(multiplier, multiplicand):
-    """Multiply two numbers.
+    """
+    Multiply two numbers.
 
     Args:
         multiplier (int/float): The first number in a multiplication.
@@ -484,7 +494,8 @@ def multiply(multiplier, multiplicand):
 
 
 def power(x, n):
-    """Calculate exponentiation of `x` raised to the `n` power.
+    """
+    Calculate exponentiation of `x` raised to the `n` power.
 
     Args:
         x (number): Base number.
@@ -516,7 +527,8 @@ def power(x, n):
 
 
 def round_(x, precision=0):
-    """Round number to precision.
+    """
+    Round number to precision.
 
     Args:
         x (number): Number to round.
@@ -541,7 +553,8 @@ def round_(x, precision=0):
 
 
 def scale(array, maximum=1):
-    """Scale list of value to a maximum number.
+    """
+    Scale list of value to a maximum number.
 
     Args:
         array (list): Numbers to scale.
@@ -569,7 +582,8 @@ def scale(array, maximum=1):
 
 
 def slope(point1, point2):
-    """Calculate the slope between two points.
+    """
+    Calculate the slope between two points.
 
     Args:
         point1 (list|tuple): X and Y coordinates of first point.
@@ -597,7 +611,8 @@ def slope(point1, point2):
 
 
 def std_deviation(array):
-    """Calculate standard deviation of list of numbers.
+    """
+    Calculate standard deviation of list of numbers.
 
     Args:
         array (list): List to process.
@@ -619,7 +634,8 @@ def std_deviation(array):
 
 
 def subtract(minuend, subtrahend):
-    """Subtracts two numbers.
+    """
+    Subtracts two numbers.
 
     Args:
         minuend (int/float): Value passed in by the user.
@@ -643,7 +659,8 @@ def subtract(minuend, subtrahend):
 
 
 def transpose(array):
-    """Transpose the elements of `array`.
+    """
+    Transpose the elements of `array`.
 
     Args:
         array (list): List to process.
@@ -668,7 +685,8 @@ def transpose(array):
 
 
 def variance(array):
-    """Calculate the variance of the elements in `array`.
+    """
+    Calculate the variance of the elements in `array`.
 
     Args:
         array (list): List to process.
@@ -692,9 +710,9 @@ def variance(array):
 
 
 def zscore(collection, iteratee=None):
-    """Calculate the standard score assuming normal distribution. If iteratee
-    is passed, each element of `collection` is passed through a iteratee before
-    the standard score is computed.
+    """
+    Calculate the standard score assuming normal distribution. If iteratee is passed, each element
+    of `collection` is passed through a iteratee before the standard score is computed.
 
     Args:
         collection (list|dict): Collection to process.
@@ -721,6 +739,7 @@ def zscore(collection, iteratee=None):
 #
 # Utility methods not a part of the main API
 #
+
 
 def call_math_operator(value1, value2, op, default):
     """Return the result of the math operation on the given values."""
