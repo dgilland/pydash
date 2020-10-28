@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v4.9.0 (2020-10-27)
+-------------------
+
 - Add ``default_to_any``. Thanks gonzalonaveira_!
 - Fix mishandling of key names containing ``\.`` in ``set_``, ``set_with``, and ``update_with`` where the ``.`` was not treated as a literal value within the key name. Thanks zhaowb_!
 
