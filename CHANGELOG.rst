@@ -4,6 +4,10 @@ Changelog
 =========
 
 
+- Add ``default_to_any``. Thanks gonzalonaveira_!
+- Fix mishandling of key names containing ``\.`` in ``set_``, ``set_with``, and ``update_with`` where the ``.`` was not treated as a literal value within the key name. Thanks zhaowb_!
+
+
 v4.8.0 (2020-06-13)
 -------------------
 
@@ -1117,3 +1121,5 @@ v0.0.0 (2014-07-22)
 .. _efenka: https://github.com/efenka
 .. _jwilson8767: https://github.com/jwilson8767
 .. _elijose55: https://github.com/elijose55
+.. _gonzalonaveira: https://github.com/gonzalonaveira
+.. _zhaowb: https://github.com/zhaowb

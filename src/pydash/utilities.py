@@ -260,7 +260,7 @@ def default_to_any(value, *default_values):
         20
 
 
-    .. versionadded:: x.x.x
+    .. versionadded:: 4.9.0
     """
     values = (value,) + default_values
     for val in values:
