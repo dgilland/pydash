@@ -19,6 +19,7 @@ Guide
     chaining
     templating
     upgrading
+    devguide
 
 
 API Reference
