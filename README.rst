@@ -1,7 +1,7 @@
 pydash
 ******
 
-|version| |travis| |coveralls| |license|
+|version| |build| |coveralls| |license|
 
 The kitchen sink of Python utility libraries for doing "stuff" in a functional way. Based on the `Lo-Dash <http://lodash.com/>`_  Javascript library.
 
@@ -23,8 +23,8 @@ Links
 .. |version| image:: http://img.shields.io/pypi/v/pydash.svg?style=flat-square
     :target: https://pypi.python.org/pypi/pydash/
 
-.. |travis| image:: http://img.shields.io/travis/dgilland/pydash/master.svg?style=flat-square
-    :target: https://travis-ci.org/dgilland/pydash
+.. |build| image:: https://img.shields.io/github/workflow/status/dgilland/pydash/Main/master?style=flat-square
+    :target: https://github.com/dgilland/pydash/actions
 
 .. |coveralls| image:: http://img.shields.io/coveralls/dgilland/pydash/master.svg?style=flat-square
     :target: https://coveralls.io/r/dgilland/pydash
