@@ -64,7 +64,7 @@ Ready to contribute? Here's how to set up ``pydash`` for local development.
 3. Install Python dependencies into a virtualenv::
 
     $ cd pydash
-    $ pip install -r requirements-dev.txt
+    $ pip install -r requirements.txt
 
 4. Create a branch for local development::
 
@@ -72,19 +72,23 @@ Ready to contribute? Here's how to set up ``pydash`` for local development.
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass linting and all unit tests by testing with tox across all supported Python versions::
+5. Autoformat code::
+
+    $ inv fmt
+
+6. When you're done making changes, check that your changes pass all unit tests by testing with ``tox`` across all supported Python versions::
 
     $ tox
 
-6. Add yourself to ``AUTHORS.rst``.
+7. Add yourself to ``AUTHORS.rst``.
 
-7. Commit your changes and push your branch to GitHub::
+8. Commit your changes and push your branch to GitHub::
 
     $ git add .
-    $ git commit -m "Detailed description of your changes."
-    $ git push origin name-of-your-bugfix-or-feature
+    $ git commit -m "<Detailed description of your changes>"
+    $ git push origin name-of-your-bugfix-or-feature-branch
 
-8. Submit a pull request through the GitHub website.
+9. Submit a pull request through GitHub.
 
 
 Pull Request Guidelines
@@ -93,5 +97,4 @@ Pull Request Guidelines
 Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests.
-2. If the pull request adds functionality, the docs should be updated. Put your new functionality into a function with a docstring, and add the feature to the README.rst.
-3. The pull request should work for all versions Python that this project supports. Check https://travis-ci.org/dgilland/pydash/pull_requests and make sure that the all environments pass.
+2. The pull request should work for all versions Python that this project supports.

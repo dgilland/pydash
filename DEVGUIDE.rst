@@ -177,7 +177,7 @@ CI/CD
 
 This project uses `Github Actions <https://docs.github.com/en/free-pro-team@latest/actions>`_ for CI/CD:
 
-- https://github.com/dgilland/fnc/actions
+- https://github.com/dgilland/pydash/actions
 
 
 .. _pyenv: https://github.com/pyenv/pyenv

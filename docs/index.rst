@@ -11,7 +11,7 @@ Guide
 .. toctree::
     :maxdepth: 2
 
-    install
+    installation
     quickstart
     differences
     callbacks
