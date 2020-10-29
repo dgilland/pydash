@@ -28,6 +28,7 @@ __all__ = (
     "conforms_to",
     "constant",
     "default_to",
+    "default_to_any",
     "identity",
     "iteratee",
     "matches",
