@@ -3,7 +3,10 @@
 import math
 from operator import itemgetter
 
+import pytest
+
 import pydash as _
+from pydash._compat import PY2
 
 from . import fixtures
 from .fixtures import parametrize
@@ -133,6 +136,15 @@ def test_filter_(case, expected):
     ],
 )
 def test_find(case, expected):
+    assert _.find(*case) == expected
+
+
+@pytest.mark.skipif(PY2, reason="test requires Python 3 inspect.signature")
+@parametrize(
+    "case,expected",
+    [(({"abc": 1, "xyz": 2, "c": 3}.values(), fixtures.Filter(lambda x: x < 2)), 1)],
+)
+def test_find_using_callable_class(case, expected):
     assert _.find(*case) == expected
 
 

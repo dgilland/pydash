@@ -40,6 +40,14 @@ class IteritemsObject(object):
                 yield i, item
 
 
+class Filter(object):
+    def __init__(self, predicate):
+        self.predicate = predicate
+
+    def __call__(self, item):
+        return self.predicate(item)
+
+
 @pytest.fixture
 def mocked_sleep():
     with mock.patch("time.sleep") as mocked:

@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 
 from functools import wraps
+import inspect
 from operator import attrgetter, itemgetter
 import warnings
 
@@ -51,27 +52,44 @@ def getargcount(iteratee, maxargs):
         argcount = 1
 
         try:
-            argcount = _getfullargspec(iteratee, maxargs)
+            argcount = _getargcount(iteratee, maxargs)
         except TypeError:  # pragma: no cover
             # PY2: Python2.7 throws a TypeError on classes that have __call__() defined but Python3
             # doesn't. So if we fail with TypeError here, try iteratee as iteratee.__call__.
             if PY2 and hasattr(iteratee, "__call__"):  # noqa: B004
                 try:
-                    argcount = _getfullargspec(iteratee.__call__, maxargs)
+                    argcount = _getargcount(iteratee.__call__, maxargs)
                 except TypeError:
                     pass
 
     return argcount
 
 
-def _getfullargspec(iteratee, maxargs):
-    argspec = getfullargspec(iteratee)
+def _getargcount(iteratee, maxargs):
+    argcount = None
 
-    if argspec and not argspec.varargs:
-        # Use inspected arg count.
-        argcount = len(argspec.args)
-    else:
-        # Assume all args are handleable
+    try:
+        # PY2: inspect.signature was added in Python 3.
+        # Try to use inspect.signature when possible since it works better for our purpose of
+        # getting the iteratee argcount since it takes into account the "self" argument in callable
+        # classes.
+        sig = inspect.signature(iteratee)
+    except (TypeError, ValueError, AttributeError):
+        pass
+    else:  # pragma: no cover
+        if not any(
+            param.kind == inspect.Parameter.VAR_POSITIONAL for param in sig.parameters.values()
+        ):
+            argcount = len(sig.parameters)
+
+    if argcount is None:
+        argspec = getfullargspec(iteratee)
+        if argspec and not argspec.varargs:  # pragma: no cover
+            # Use inspected arg count.
+            argcount = len(argspec.args)
+
+    if argcount is None:
+        # Assume all args are handleable.
         argcount = maxargs
 
     return argcount
