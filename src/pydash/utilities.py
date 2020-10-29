@@ -76,7 +76,7 @@ ID_COUNTER = 0
 PathToken = namedtuple("PathToken", ["key", "default_factory"])
 
 
-def attempt(func, *args, **kargs):
+def attempt(func, *args, **kwargs):
     """
     Attempts to execute `func`, returning either the result or the caught error object.
 
@@ -94,7 +94,7 @@ def attempt(func, *args, **kargs):
     .. versionadded:: 1.1.0
     """
     try:
-        ret = func(*args, **kargs)
+        ret = func(*args, **kwargs)
     except Exception as ex:
         ret = ex
 
@@ -490,14 +490,14 @@ def memoize(func, resolver=None):
     .. versionadded:: 1.0.0
     """
 
-    def memoized(*args, **kargs):
+    def memoized(*args, **kwargs):
         if resolver:
-            key = resolver(*args, **kargs)
+            key = resolver(*args, **kwargs)
         else:
-            key = "{0}{1}".format(args, kargs)
+            key = "{0}{1}".format(args, kwargs)
 
         if key not in memoized.cache:
-            memoized.cache[key] = func(*args, **kargs)
+            memoized.cache[key] = func(*args, **kwargs)
 
         return memoized.cache[key]
 
@@ -506,7 +506,7 @@ def memoize(func, resolver=None):
     return memoized
 
 
-def method(path, *args, **kargs):
+def method(path, *args, **kwargs):
     """
     Creates a function that invokes the method at `path` on a given object. Any additional arguments
     are provided to the invoked method.
@@ -514,7 +514,7 @@ def method(path, *args, **kargs):
     Args:
         path (str): Object path of method to invoke.
         *args (mixed): Global arguments to apply to method when invoked.
-        **kargs (mixed): Global keyword argument to apply to method when invoked.
+        **kwargs (mixed): Global keyword argument to apply to method when invoked.
 
     Returns:
         callable: Function that invokes method located at path for object.
@@ -531,14 +531,14 @@ def method(path, *args, **kargs):
     .. versionadded:: 3.3.0
     """
 
-    def _method(obj, *_args, **_kargs):
-        func = pyd.partial(pyd.get(obj, path), *args, **kargs)
-        return func(*_args, **_kargs)
+    def _method(obj, *_args, **_kwargs):
+        func = pyd.partial(pyd.get(obj, path), *args, **kwargs)
+        return func(*_args, **_kwargs)
 
     return _method
 
 
-def method_of(obj, *args, **kargs):
+def method_of(obj, *args, **kwargs):
     """
     The opposite of :func:`method`. This method creates a function that invokes the method at a
     given path on object. Any additional arguments are provided to the invoked method.
@@ -546,7 +546,7 @@ def method_of(obj, *args, **kargs):
     Args:
         obj (mixed): The object to query.
         *args (mixed): Global arguments to apply to method when invoked.
-        **kargs (mixed): Global keyword argument to apply to method when invoked.
+        **kwargs (mixed): Global keyword argument to apply to method when invoked.
 
     Returns:
         callable: Function that invokes method located at path for object.
@@ -563,14 +563,14 @@ def method_of(obj, *args, **kargs):
     .. versionadded:: 3.3.0
     """
 
-    def _method_of(path, *_args, **_kargs):
-        func = pyd.partial(pyd.get(obj, path), *args, **kargs)
-        return func(*_args, **_kargs)
+    def _method_of(path, *_args, **_kwargs):
+        func = pyd.partial(pyd.get(obj, path), *args, **kwargs)
+        return func(*_args, **_kwargs)
 
     return _method_of
 
 
-def noop(*args, **kargs):  # pylint: disable=unused-argument
+def noop(*args, **kwargs):  # pylint: disable=unused-argument
     """
     A no-operation function.
 
@@ -1040,13 +1040,13 @@ def retry(  # noqa: C901
 
     def decorator(func):
         @wraps(func)
-        def decorated(*args, **kargs):
+        def decorated(*args, **kwargs):
             delay_time = delay
 
             for attempt in range(1, attempts + 1):
                 # pylint: disable=catching-non-exception
                 try:
-                    return func(*args, **kargs)
+                    return func(*args, **kwargs)
                 except exceptions as exc:
                     if on_exception:
                         callit(on_exception, exc, attempt, argcount=on_exc_argcount)
@@ -1292,9 +1292,9 @@ def unescape_path_key(key):
     return key
 
 
-def base_range(*args, **kargs):
+def base_range(*args, **kwargs):
     """Yield range values."""
-    from_right = kargs.get("from_right", False)
+    from_right = kwargs.get("from_right", False)
 
     if len(args) >= 3:
         args = args[:3]

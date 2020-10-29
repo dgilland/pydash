@@ -77,7 +77,7 @@ class Chain(object):
         clone = Chain(value)
 
         for wrap in wrappers:
-            clone = ChainWrapper(clone._value, wrap.method)(*wrap.args, **wrap.kargs)
+            clone = ChainWrapper(clone._value, wrap.method)(*wrap.args, **wrap.kwargs)
 
         return clone
 
@@ -152,7 +152,7 @@ class ChainWrapper(object):
         self._value = value
         self.method = method
         self.args = ()
-        self.kargs = {}
+        self.kwargs = {}
 
     def _generate(self):
         """Generate a copy of this instance."""
@@ -163,7 +163,7 @@ class ChainWrapper(object):
 
     def unwrap(self, value=NoValue):
         """
-        Execute :meth:`method` with :attr:`_value`, :attr:`args`, and :attr:`kargs`.
+        Execute :meth:`method` with :attr:`_value`, :attr:`args`, and :attr:`kwargs`.
 
         If :attr:`_value` is an instance of :class:`ChainWrapper`, then unwrap it before calling
         :attr:`method`.
@@ -185,9 +185,9 @@ class ChainWrapper(object):
         if wrapper._value is not NoValue:
             value = wrapper._value
 
-        return wrapper.method(value, *wrapper.args, **wrapper.kargs)
+        return wrapper.method(value, *wrapper.args, **wrapper.kwargs)
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """
         Invoke the :attr:`method` with :attr:`value` as the first argument and return a new
         :class:`Chain` object with the return value.
@@ -197,7 +197,7 @@ class ChainWrapper(object):
                 value.
         """
         self.args = args
-        self.kargs = kargs
+        self.kwargs = kwargs
         return Chain(self)
 
 

@@ -27,11 +27,11 @@ class _NoValue(object):
 NoValue = _NoValue()
 
 
-def callit(iteratee, *args, **kargs):
+def callit(iteratee, *args, **kwargs):
     """Inspect argspec of `iteratee` function and only pass the supported arguments when calling
     it."""
     maxargs = len(args)
-    argcount = kargs["argcount"] if "argcount" in kargs else getargcount(iteratee, maxargs)
+    argcount = kwargs["argcount"] if "argcount" in kwargs else getargcount(iteratee, maxargs)
     argstop = min([maxargs, argcount])
 
     return iteratee(*args[:argstop])
@@ -196,10 +196,10 @@ def base_set(obj, key, value, allow_override=True):
     return obj
 
 
-def parse_iteratee(iteratee_keyword, *args, **kargs):
+def parse_iteratee(iteratee_keyword, *args, **kwargs):
     """Try to find iteratee function passed in either as a keyword argument or as the last
     positional argument in `args`."""
-    iteratee = kargs.get(iteratee_keyword)
+    iteratee = kwargs.get(iteratee_keyword)
     last_arg = args[-1]
 
     if iteratee is None and (
@@ -246,12 +246,12 @@ def deprecated(func):  # pragma: no cover
     """
 
     @wraps(func)
-    def wrapper(*args, **kargs):
+    def wrapper(*args, **kwargs):
         warnings.warn(
             "Call to deprecated function {0}.".format(func.__name__),
             category=DeprecationWarning,
             stacklevel=3,
         )
-        return func(*args, **kargs)
+        return func(*args, **kwargs)
 
     return wrapper

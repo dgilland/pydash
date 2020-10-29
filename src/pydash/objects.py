@@ -109,7 +109,7 @@ def assign(obj, *sources):
     return assign_with(obj, *sources)
 
 
-def assign_with(obj, *sources, **kargs):
+def assign_with(obj, *sources, **kwargs):
     """
     This method is like :func:`assign` except that it accepts customizer which is invoked to produce
     the assigned values. If customizer returns ``None``, assignment is handled by the method
@@ -139,7 +139,7 @@ def assign_with(obj, *sources, **kargs):
     .. versionadded:: 4.0.0
     """
     sources = list(sources)
-    customizer = kargs.get("customizer")
+    customizer = kwargs.get("customizer")
 
     if customizer is None and callable(sources[-1]):
         customizer = sources.pop()
@@ -659,7 +659,7 @@ def invert_by(obj, iteratee=None):
     return result
 
 
-def invoke(obj, path, *args, **kargs):
+def invoke(obj, path, *args, **kwargs):
     """
     Invokes the method at path of object.
 
@@ -667,7 +667,7 @@ def invoke(obj, path, *args, **kargs):
         obj (dict): The object to query.
         path (list|str): The path of the method to invoke.
         args (optional): Arguments to pass to method call.
-        kargs (optional): Keyword arguments to pass to method call.
+        kwargs (optional): Keyword arguments to pass to method call.
 
     Returns:
         mixed: Result of the invoked method.
@@ -691,7 +691,7 @@ def invoke(obj, path, *args, **kargs):
     except AttributeError:
         ret = None
     else:
-        ret = method(*args, **kargs)
+        ret = method(*args, **kwargs)
 
     return ret
 
@@ -860,7 +860,7 @@ def merge(obj, *sources):
     return merge_with(obj, *sources)
 
 
-def merge_with(obj, *sources, **kargs):
+def merge_with(obj, *sources, **kwargs):
     """
     This method is like :func:`merge` except that it accepts customizer which is invoked to produce
     the merged values of the destination and source properties. If customizer returns ``None``,
@@ -894,9 +894,9 @@ def merge_with(obj, *sources, **kargs):
     .. versionadded:: 4.0.0
     """
     sources = list(sources)
-    _clone = kargs.get("_clone", True)
-    iteratee = kargs.get("iteratee")
-    setter = kargs.get("_setter", base_set)
+    _clone = kwargs.get("_clone", True)
+    iteratee = kwargs.get("iteratee")
+    setter = kwargs.get("_setter", base_set)
 
     if iteratee is None and callable(sources[-1]):
         iteratee = sources.pop()

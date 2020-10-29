@@ -441,7 +441,7 @@ def includes(collection, target, from_index=0):
     return target in collection
 
 
-def invoke_map(collection, path, *args, **kargs):
+def invoke_map(collection, path, *args, **kwargs):
     """
     Invokes the method at `path` of each element in `collection`, returning a list of the results of
     each invoked method. Any additional arguments are provided to each invoked method. If `path` is
@@ -452,7 +452,7 @@ def invoke_map(collection, path, *args, **kargs):
         path (str|func): String path to method to invoke or callable to invoke for each element in
             `collection`.
         args (optional): Arguments to pass to method call.
-        kargs (optional): Keyword arguments to pass to method call.
+        kwargs (optional): Keyword arguments to pass to method call.
 
     Returns:
         list: List of results of invoking method of each item.
@@ -466,7 +466,7 @@ def invoke_map(collection, path, *args, **kargs):
 
     .. versionadded:: 4.0.0
     """
-    return map_(collection, lambda item: pyd.invoke(item, path, *args, **kargs))
+    return map_(collection, lambda item: pyd.invoke(item, path, *args, **kwargs))
 
 
 def key_by(collection, iteratee=None):

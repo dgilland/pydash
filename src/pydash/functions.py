@@ -56,12 +56,12 @@ class After(object):
         self.n = n
         self.func = func
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """Return results of :attr:`func` after :attr:`n` calls."""
         self.n -= 1
 
         if self.n <= 0:
-            return self.func(*args, **kargs)
+            return self.func(*args, **kwargs)
 
 
 class Ary(object):
@@ -77,7 +77,7 @@ class Ary(object):
         self.n = n
         self.func = func
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """
         Return results of :attr:`func` with arguments capped to :attr:`n`.
 
@@ -86,27 +86,27 @@ class Ary(object):
         if self.n is not None:
             args = args[: self.n]
 
-        return self.func(*args, **kargs)
+        return self.func(*args, **kwargs)
 
 
 class Before(After):
     """Wrap a function in a before context."""
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         self.n -= 1
 
         if self.n > 0:
-            return self.func(*args, **kargs)
+            return self.func(*args, **kwargs)
 
 
 class Flow(object):
     """Wrap a function in a flow context."""
 
-    def __init__(self, *funcs, **kargs):
+    def __init__(self, *funcs, **kwargs):
         self.funcs = funcs
-        self.from_right = kargs.get("from_right", True)
+        self.from_right = kwargs.get("from_right", True)
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """Return results of composing :attr:`funcs`."""
         funcs = list(self.funcs)
         from_index = -1 if self.from_right else 0
@@ -114,9 +114,9 @@ class Flow(object):
         result = None
 
         while funcs:
-            result = funcs.pop(from_index)(*args, **kargs)
+            result = funcs.pop(from_index)(*args, **kwargs)
             args = (result,)
-            kargs = {}
+            kwargs = {}
 
         return result
 
@@ -139,26 +139,26 @@ class Conjoin(object):
 class Curry(object):
     """Wrap a function in a curry context."""
 
-    def __init__(self, func, arity, args=None, kargs=None):
+    def __init__(self, func, arity, args=None, kwargs=None):
         self.func = func
         self.arity = len(getfullargspec(func).args) if arity is None else arity
         self.args = () if args is None else args
-        self.kargs = {} if kargs is None else kargs
+        self.kwargs = {} if kwargs is None else kwargs
 
-    def __call__(self, *args, **kargs):
-        """Store `args` and `kargs` and call :attr:`func` if we've reached or exceeded the function
+    def __call__(self, *args, **kwargs):
+        """Store `args` and `kwargs` and call :attr:`func` if we've reached or exceeded the function
         arity."""
         args = self.compose_args(args)
-        kargs.update(self.kargs)
+        kwargs.update(self.kwargs)
 
-        if (len(args) + len(kargs)) >= self.arity:
-            args_arity = self.arity - len(kargs)
+        if (len(args) + len(kwargs)) >= self.arity:
+            args_arity = self.arity - len(kwargs)
             args = args[: (args_arity if args_arity > 0 else 0)]
-            curried = self.func(*args, **kargs)
+            curried = self.func(*args, **kwargs)
         else:
             # NOTE: Use self.__class__ so that subclasses will use their own
             # class to generate next iteration of call.
-            curried = self.__class__(self.func, self.arity, args, kargs)
+            curried = self.__class__(self.func, self.arity, args, kwargs)
 
         return curried
 
@@ -189,7 +189,7 @@ class Debounce(object):
         self.last_call = pyd.now() - self.wait
         self.last_execution = pyd.now() - max_wait if pyd.is_number(max_wait) else None
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """
         Execute :attr:`func` if function hasn't been called witinin last :attr:`wait` milliseconds
         or in last :attr:`max_wait` milliseconds.
@@ -201,7 +201,7 @@ class Debounce(object):
         if (present - self.last_call) >= self.wait or (
             self.max_wait and (present - self.last_execution) >= self.max_wait
         ):
-            self.last_result = self.func(*args, **kargs)
+            self.last_result = self.func(*args, **kwargs)
             self.last_execution = present
 
         self.last_call = present
@@ -230,8 +230,8 @@ class Flip(object):
     def __init__(self, func):
         self.func = func
 
-    def __call__(self, *args, **kargs):
-        return self.func(*reversed(args), **kargs)
+    def __call__(self, *args, **kwargs):
+        return self.func(*reversed(args), **kwargs)
 
 
 class Iterated(object):
@@ -286,9 +286,9 @@ class Negate(object):
     def __init__(self, func):
         self.func = func
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """Return negated results of calling :attr:`func`."""
-        return not self.func(*args, **kargs)
+        return not self.func(*args, **kwargs)
 
 
 class Once(object):
@@ -299,10 +299,10 @@ class Once(object):
         self.result = None
         self.called = False
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """Return results from the first call of :attr:`func`."""
         if not self.called:
-            self.result = self.func(*args, **kargs)
+            self.result = self.func(*args, **kwargs)
             self.called = True
 
         return self.result
@@ -311,13 +311,13 @@ class Once(object):
 class Partial(object):
     """Wrap a function in a partial context."""
 
-    def __init__(self, func, args, kargs=None, from_right=False):
+    def __init__(self, func, args, kwargs=None, from_right=False):
         self.func = func
         self.args = args
-        self.kargs = kargs or {}
+        self.kwargs = kwargs or {}
         self.from_right = from_right
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """
         Return results from :attr:`func` with :attr:`args` + `args`.
 
@@ -328,9 +328,9 @@ class Partial(object):
         else:
             args = itertools.chain(self.args, args)
 
-        kargs = dict(itertools.chain(iteritems(self.kargs), iteritems(kargs)))
+        kwargs = dict(itertools.chain(iteritems(self.kwargs), iteritems(kwargs)))
 
-        return self.func(*args, **kargs)
+        return self.func(*args, **kwargs)
 
 
 class Rearg(object):
@@ -345,7 +345,7 @@ class Rearg(object):
             (src_index, dest_index) for dest_index, src_index in enumerate(pyd.flatten(indexes))
         )
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """Return results from :attr:`func` using rearranged arguments."""
         reargs = {}
         rest = []
@@ -364,7 +364,7 @@ class Rearg(object):
 
         args = itertools.chain((reargs[key] for key in sorted(reargs)), rest)
 
-        return self.func(*args, **kargs)
+        return self.func(*args, **kwargs)
 
 
 class Spread(object):
@@ -388,7 +388,7 @@ class Throttle(object):
         self.last_result = None
         self.last_execution = pyd.now() - self.wait
 
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         """
         Execute :attr:`func` if function hasn't been called witinin last :attr:`wait` milliseconds.
 
@@ -397,7 +397,7 @@ class Throttle(object):
         present = pyd.now()
 
         if (present - self.last_execution) >= self.wait:
-            self.last_result = self.func(*args, **kargs)
+            self.last_result = self.func(*args, **kwargs)
             self.last_execution = present
 
         return self.last_result
@@ -599,7 +599,7 @@ def debounce(func, wait, max_wait=False):
     return Debounce(func, wait, max_wait=max_wait)
 
 
-def delay(func, wait, *args, **kargs):
+def delay(func, wait, *args, **kwargs):
     """
     Executes the `func` function after `wait` milliseconds. Additional arguments will be provided to
     `func` when it is invoked.
@@ -608,7 +608,7 @@ def delay(func, wait, *args, **kargs):
         func (callable): Function to execute.
         wait (int): Milliseconds to wait before executing `func`.
         *args (optional): Arguments to pass to `func`.
-        **kargs (optional): Keyword arguments to pass to `func`.
+        **kwargs (optional): Keyword arguments to pass to `func`.
 
     Returns:
         mixed: Return from `func`.
@@ -616,7 +616,7 @@ def delay(func, wait, *args, **kargs):
     .. versionadded:: 1.0.0
     """
     time.sleep(wait / 1000.0)
-    return func(*args, **kargs)
+    return func(*args, **kwargs)
 
 
 def disjoin(*funcs):
@@ -864,7 +864,7 @@ def over_args(func, *transforms):
     return OverArgs(func, *transforms)
 
 
-def partial(func, *args, **kargs):
+def partial(func, *args, **kwargs):
     """
     Creates a function that, when called, invokes `func` with any additional partial arguments
     prepended to those provided to the new function.
@@ -872,7 +872,7 @@ def partial(func, *args, **kargs):
     Args:
         func (callable): Function to execute.
         *args (optional): Partial arguments to prepend to function call.
-        **kargs (optional): Partial keyword arguments to bind to function call.
+        **kwargs (optional): Partial keyword arguments to bind to function call.
 
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
@@ -890,10 +890,10 @@ def partial(func, *args, **kargs):
 
     .. versionadded:: 1.0.0
     """
-    return Partial(func, args, kargs)
+    return Partial(func, args, kwargs)
 
 
-def partial_right(func, *args, **kargs):
+def partial_right(func, *args, **kwargs):
     """
     This method is like :func:`partial` except that partial arguments are appended to those provided
     to the new function.
@@ -901,7 +901,7 @@ def partial_right(func, *args, **kargs):
     Args:
         func (callable): Function to execute.
         *args (optional): Partial arguments to append to function call.
-        **kargs (optional): Partial keyword arguments to bind to function call.
+        **kwargs (optional): Partial keyword arguments to bind to function call.
 
     Returns:
         Partial: Function wrapped in a :class:`Partial` context.
@@ -914,7 +914,7 @@ def partial_right(func, *args, **kargs):
 
     .. versionadded:: 1.0.0
     """
-    return Partial(func, args, kargs, from_right=True)
+    return Partial(func, args, kwargs, from_right=True)
 
 
 def rearg(func, *indexes):

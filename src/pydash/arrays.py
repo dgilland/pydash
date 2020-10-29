@@ -181,7 +181,7 @@ def difference(array, *others):
     return difference_with(array, *others)
 
 
-def difference_by(array, *others, **kargs):
+def difference_by(array, *others, **kwargs):
     """
     This method is like :func:`difference` except that it accepts an iteratee which is invoked for
     each element of each array to generate the criterion by which they're compared. The order and
@@ -212,7 +212,7 @@ def difference_by(array, *others, **kargs):
         return array
 
     # Check if last other is a potential iteratee.
-    iteratee, others = parse_iteratee("iteratee", *others, **kargs)
+    iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     for other in others:
         if not other:
@@ -222,7 +222,7 @@ def difference_by(array, *others, **kargs):
     return array
 
 
-def difference_with(array, *others, **kargs):
+def difference_with(array, *others, **kwargs):
     """
     This method is like :func:`difference` except that it accepts a comparator which is invoked to
     compare the elements of all arrays. The order and references of result values are determined by
@@ -254,7 +254,7 @@ def difference_with(array, *others, **kargs):
     if not others:
         return array
 
-    comparator = kargs.get("comparator")
+    comparator = kwargs.get("comparator")
     last_other = others[-1]
 
     # Check if last other is a comparator.
@@ -740,7 +740,7 @@ def intersection(array, *others):
     return intersection_with(array, *others)
 
 
-def intersection_by(array, *others, **kargs):
+def intersection_by(array, *others, **kwargs):
     """
     This method is like :func:`intersection` except that it accepts an iteratee which is invoked for
     each element of each array to generate the criterion by which they're compared. The order and
@@ -770,7 +770,7 @@ def intersection_by(array, *others, **kargs):
     if not others:
         return array
 
-    iteratee, others = parse_iteratee("iteratee", *others, **kargs)
+    iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     # Sort by smallest list length to make intersection faster.
     others = sorted(others, key=lambda other: len(other))
@@ -783,7 +783,7 @@ def intersection_by(array, *others, **kargs):
     return array
 
 
-def intersection_with(array, *others, **kargs):
+def intersection_with(array, *others, **kwargs):
     """
     This method is like :func:`intersection` except that it accepts a comparator which is invoked to
     compare the elements of all arrays. The order and references of result values are determined by
@@ -815,7 +815,7 @@ def intersection_with(array, *others, **kargs):
     if not others:
         return array
 
-    comparator, others = parse_iteratee("comparator", *others, **kargs)
+    comparator, others = parse_iteratee("comparator", *others, **kwargs)
 
     # Sort by smallest list length to reduce to intersection faster.
     others = sorted(others, key=lambda other: len(other))
@@ -1791,7 +1791,7 @@ def union(array, *others):
     return uniq(flatten([array] + list(others)))
 
 
-def union_by(array, *others, **kargs):
+def union_by(array, *others, **kwargs):
     """
     This method is similar to :func:`union` except that it accepts iteratee which is invoked for
     each element of each arrays to generate the criterion by which uniqueness is computed.
@@ -1818,12 +1818,12 @@ def union_by(array, *others, **kargs):
     if not others:
         return array[:]
 
-    iteratee, others = parse_iteratee("iteratee", *others, **kargs)
+    iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     return uniq_by(flatten([array] + list(others)), iteratee=iteratee)
 
 
-def union_with(array, *others, **kargs):
+def union_with(array, *others, **kwargs):
     """
     This method is like :func:`union` except that it accepts comparator which is invoked to compare
     elements of arrays. Result values are chosen from the first array in which the value occurs.
@@ -1852,7 +1852,7 @@ def union_with(array, *others, **kargs):
     if not others:
         return array[:]
 
-    comparator, others = parse_iteratee("comparator", *others, **kargs)
+    comparator, others = parse_iteratee("comparator", *others, **kwargs)
 
     return uniq_with(flatten([array] + list(others)), comparator=comparator)
 
@@ -2064,7 +2064,7 @@ def xor(array, *lists):
     return xor_by(array, *lists)
 
 
-def xor_by(array, *lists, **kargs):
+def xor_by(array, *lists, **kwargs):
     """
     This method is like :func:`xor` except that it accepts iteratee which is invoked for each
     element of each arrays to generate the criterion by which by which they're compared. The order
@@ -2094,7 +2094,7 @@ def xor_by(array, *lists, **kargs):
     if not lists:
         return array[:]
 
-    iteratee, lists = parse_iteratee("iteratee", *lists, **kargs)
+    iteratee, lists = parse_iteratee("iteratee", *lists, **kwargs)
 
     return xor(
         uniq(
@@ -2108,7 +2108,7 @@ def xor_by(array, *lists, **kargs):
     )
 
 
-def xor_with(array, *lists, **kargs):
+def xor_with(array, *lists, **kwargs):
     """
     This method is like :func:`xor` except that it accepts comparator which is invoked to compare
     elements of arrays. The order of result values is determined by the order they occur in the
@@ -2138,7 +2138,7 @@ def xor_with(array, *lists, **kargs):
     if not lists:
         return array[:]
 
-    comp, lists = parse_iteratee("comparator", *lists, **kargs)
+    comp, lists = parse_iteratee("comparator", *lists, **kwargs)
 
     return xor_with(
         uniq(
@@ -2233,7 +2233,7 @@ def zip_object_deep(keys, values=None):
     return obj
 
 
-def zip_with(*arrays, **kargs):
+def zip_with(*arrays, **kwargs):
     """
     This method is like :func:`zip` except that it accepts a iteratee to specify how grouped values
     should be combined. The iteratee is invoked with four arguments: ``(accumulator, value, index,
@@ -2258,8 +2258,8 @@ def zip_with(*arrays, **kargs):
 
     .. versionadded:: 3.3.0
     """
-    if "iteratee" in kargs:
-        iteratee = kargs["iteratee"]
+    if "iteratee" in kwargs:
+        iteratee = kwargs["iteratee"]
     elif len(arrays) > 1:
         iteratee = arrays[-1]
         arrays = arrays[:-1]
