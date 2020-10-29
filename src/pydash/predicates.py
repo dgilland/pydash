@@ -815,7 +815,7 @@ def is_json(value):
     try:
         json.loads(value)
         return True
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         return False
 
 
@@ -934,7 +934,7 @@ def is_match_with(obj, source, customizer=None, _key=NoValue, _obj=NoValue, _sou
         for key, value in iterator(source):
             try:
                 equal = is_match_with(obj[key], value, cbk, _key=key, _obj=_obj, _source=_source)
-            except Exception:  # pylint: disable=broad-except
+            except Exception:
                 equal = False
 
             if not equal:

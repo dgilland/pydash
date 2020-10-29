@@ -1449,7 +1449,7 @@ def to_number(obj, precision=0):
             rounder = round
 
         num = rounder(float(obj) * factor) / factor
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         num = None
 
     return num
