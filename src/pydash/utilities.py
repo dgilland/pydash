@@ -795,7 +795,7 @@ def property_of(obj):
     .. versionchanged:: 4.0.0
         Removed alias ``prop_of``.
     """
-    return lambda key: property_(key)(obj)
+    return lambda key: pyd.get(obj, key)
 
 
 def random(start=0, stop=1, floating=False):
