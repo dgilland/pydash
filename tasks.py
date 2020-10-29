@@ -10,15 +10,15 @@ Where <task> is a function defined below with the @task decorator.
 
 from __future__ import print_function
 
-import os
 from functools import partial
+import os
 
 from invoke import Exit, UnexpectedExit, run as _run, task
 
 
 PACKAGE_SOURCE = "src/pydash"
 TEST_TARGETS = "{} tests".format(PACKAGE_SOURCE)
-LINT_TARGETS = "{} tasks.py".format(PACKAGE_SOURCE)
+LINT_TARGETS = "{} tasks.py".format(TEST_TARGETS)
 EXIT_EXCEPTIONS = (Exit, UnexpectedExit, SystemExit)
 
 
@@ -97,7 +97,7 @@ def lint(ctx):
 
 
 @task(help={"args": "Override default pytest arguments"})
-def unit(ctx, args="--cov={} {}".format(PACKAGE_SOURCE, TEST_TARGETS)):
+def unit(ctx, args="--cov={} {}".format(PACKAGE_SOURCE, TEST_TARGETS)):  # noqa: B008
     """Run unit tests using pytest."""
     tox_env_site_packages_dir = os.getenv("TOX_ENV_SITE_PACKAGES_DIR")
     if tox_env_site_packages_dir:
@@ -105,7 +105,6 @@ def unit(ctx, args="--cov={} {}".format(PACKAGE_SOURCE, TEST_TARGETS)):
         tox_env_package = os.path.join(tox_env_site_packages_dir, os.path.basename(PACKAGE_SOURCE))
         args = args.replace(PACKAGE_SOURCE, tox_env_package)
     run("pytest {}".format(args))
-
 
 
 @task
