@@ -17,7 +17,7 @@ Links
 - Project: https://github.com/dgilland/pydash
 - Documentation: http://pydash.readthedocs.org
 - PyPi: https://pypi.python.org/pypi/pydash/
-- TravisCI: https://travis-ci.org/dgilland/pydash
+- Github Actions: https://github.com/dgilland/pydash/actions
 
 
 .. |version| image:: http://img.shields.io/pypi/v/pydash.svg?style=flat-square
