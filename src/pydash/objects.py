@@ -1109,20 +1109,20 @@ def pick_by(obj, iteratee=None):
     """
     obj = to_dict(obj)
 
-    if iteratee is None:
-        iteratee = pyd.identity
-        argcount = 1
-
-    if not callable(iteratee):
+    if iteratee is None or callable(iteratee):
+        paths = keys(obj)
+        if iteratee is None:
+            iteratee = pyd.identity
+            argcount = 1
+        else:
+            argcount = getargcount(iteratee, maxargs=2)
+    else:
         paths = iteratee if iteratee is not None else []
 
         def iteratee(value, path):  # pylint: disable=function-redefined
             return has(obj, path)
 
         argcount = 2
-    else:
-        paths = keys(obj)
-        argcount = getargcount(iteratee, maxargs=2)
 
     result = {}
 
