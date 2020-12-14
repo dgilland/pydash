@@ -118,7 +118,7 @@ def iterator(obj):
     if isinstance(obj, dict):
         return iteritems(obj)
     elif hasattr(obj, "iteritems"):
-        return obj.iteritems()  # noqa: B004
+        return obj.iteritems()  # noqa: B301
     elif hasattr(obj, "items"):
         return iter(obj.items())
     elif isinstance(obj, Iterable):
