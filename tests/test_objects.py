@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from argparse import Namespace
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 import datetime as dt
 
 import pydash as _
@@ -372,6 +372,12 @@ def test_get(case, expected):
     assert _.get(*case) == expected
 
 
+def test_get__should_not_populate_defaultdict():
+    data = defaultdict(list)
+    _.get(data, "a")
+    assert data == {}
+
+
 @parametrize(
     "case,expected",
     [
@@ -400,6 +406,12 @@ def test_get(case, expected):
 )
 def test_has(case, expected):
     assert _.has(*case) == expected
+
+
+def test_has__should_not_populate_defaultdict():
+    data = defaultdict(list)
+    _.has(data, "a")
+    assert data == {}
 
 
 @parametrize("case,expected", [({"a": 1, "b": 2, "c": 3}, ["a", "b", "c"]), ([1, 2, 3], [0, 1, 2])])

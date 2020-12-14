@@ -146,6 +146,13 @@ def base_get(obj, key, default=NoValue):
     Raises:
         KeyError: If `obj` is missing key, index, or attribute and no default value provided.
     """
+    if isinstance(obj, dict):
+        value = obj.get(key, default)
+        if value is NoValue:
+            # Raise if there's no default provided.
+            raise KeyError('Object "{0}" does not have key "{1}"'.format(repr(obj), key))
+        return value
+
     # Build list of getters to try to retrieve key value from obj.
     getters = [itemgetter(key)]
 
