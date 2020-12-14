@@ -16,7 +16,8 @@ import os
 from invoke import Exit, UnexpectedExit, run as _run, task
 
 
-PACKAGE_SOURCE = "src/pydash"
+PACKAGE_NAME = "pydash"
+PACKAGE_SOURCE = "src/{}".format(PACKAGE_NAME)
 TEST_TARGETS = "{} tests".format(PACKAGE_SOURCE)
 LINT_TARGETS = "{} tasks.py".format(TEST_TARGETS)
 EXIT_EXCEPTIONS = (Exit, UnexpectedExit, SystemExit)
@@ -97,14 +98,17 @@ def lint(ctx):
 
 
 @task(help={"args": "Override default pytest arguments"})
-def unit(ctx, args="--cov={} {}".format(PACKAGE_SOURCE, TEST_TARGETS)):  # noqa: B008
+def unit(
+    ctx, args="{} --cov={} --flake8 --pylint".format(PACKAGE_SOURCE, TEST_TARGETS)  # noqa: B008
+):
     """Run unit tests using pytest."""
     tox_env_site_packages_dir = os.getenv("TOX_ENV_SITE_PACKAGES_DIR")
     if tox_env_site_packages_dir:
         # Re-path package source to match tox env so that we generate proper coverage report.
-        tox_env_package = os.path.join(tox_env_site_packages_dir, os.path.basename(PACKAGE_SOURCE))
-        args = args.replace(PACKAGE_SOURCE, tox_env_package)
-    run("pytest {}".format(args))
+        tox_env_pkg_src = os.path.join(tox_env_site_packages_dir, os.path.basename(PACKAGE_SOURCE))
+        args = args.replace(PACKAGE_SOURCE, tox_env_pkg_src)
+
+    run(f"pytest {args}")
 
 
 @task
@@ -116,8 +120,11 @@ def test(ctx):
     print("Building docs")
     docs(ctx)
 
+    print("Checking linters")
+    lint(ctx)
+
     print("Running unit tests")
-    unit(ctx)
+    unit(ctx, args="{} --cov={}".format(TEST_TARGETS, PACKAGE_NAME))
 
 
 @task
