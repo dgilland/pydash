@@ -8,18 +8,23 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
-venv/
-*.egg
-*.egg-info/
-?eggs/
-dist/
 build/
-parts/
-var/
-sdist/
 develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
 .installed.cfg
+*.egg
+MANIFEST
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -34,15 +39,18 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+.nox/
 .coverage
 .coverage.*
 .cache
-.pytest_cache
 nosetests.xml
 coverage.xml
-junit.xml
-*,cover
+*.cover
+*.py,cover
 .hypothesis/
+.pytest_cache/
+cover/
+junit.xml
 
 # Translations
 *.mo
@@ -51,17 +59,49 @@ junit.xml
 # Django stuff:
 *.log
 
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# PEP 582
+__pypackages__/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
 # Mr Developer
 .mr.developer.cfg
 .project
 .pydevproject
 .idea
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
+.DS_Store
 
 # NodeJS
 node_modules
