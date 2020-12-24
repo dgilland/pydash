@@ -108,7 +108,7 @@ def unit(
         tox_env_pkg_src = os.path.join(tox_env_site_packages_dir, os.path.basename(PACKAGE_SOURCE))
         args = args.replace(PACKAGE_SOURCE, tox_env_pkg_src)
 
-    run(f"pytest {args}")
+    run("pytest {}".format(args))
 
 
 @task
