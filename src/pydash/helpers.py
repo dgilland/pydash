@@ -127,7 +127,7 @@ def iterator(obj):
         return iteritems(getattr(obj, "__dict__", {}))
 
 
-def base_get(obj, key, default=NoValue):
+def base_get(obj, key, default=NoValue):  # noqa: disable=C901
     """
     Safely get an item by `key` from a sequence or mapping object when `default` provided.
 
@@ -147,7 +147,15 @@ def base_get(obj, key, default=NoValue):
         KeyError: If `obj` is missing key, index, or attribute and no default value provided.
     """
     if isinstance(obj, dict):
-        value = obj.get(key, default)
+        value = obj.get(key, NoValue)
+        if value is NoValue:
+            # TODO: Clean this up and possibly merge with code below.
+            try:
+                int_key = int(key)
+            except Exception:
+                value = default
+            else:
+                value = obj.get(int_key, default)
         if value is NoValue:
             # Raise if there's no default provided.
             raise KeyError('Object "{0}" does not have key "{1}"'.format(repr(obj), key))

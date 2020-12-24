@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+- Fix regression introduced in ``v4.9.1`` that broke ``pydash.get`` for dictionaries and dot-delimited keys that reference integer dict-keys.
+
+
 v4.9.1 (2020-12-14)
 -------------------
 

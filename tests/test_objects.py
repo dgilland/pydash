@@ -366,6 +366,7 @@ def test_for_in_right(case, expected):
         (({(1,): {(2,): 3}}, [(1,), (2,)]), 3),
         (({object: 1}, object), 1),
         (({object: {object: 1}}, [object, object]), 1),
+        (({1: {"name": "John Doe"}}, "1.name"), "John Doe"),
     ],
 )
 def test_get(case, expected):
