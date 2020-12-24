@@ -127,7 +127,7 @@ def iterator(obj):
         return iteritems(getattr(obj, "__dict__", {}))
 
 
-def base_get(obj, key, default=NoValue):  # noqa: disable=C901
+def base_get(obj, key, default=NoValue):
     """
     Safely get an item by `key` from a sequence or mapping object when `default` provided.
 
@@ -147,54 +147,60 @@ def base_get(obj, key, default=NoValue):  # noqa: disable=C901
         KeyError: If `obj` is missing key, index, or attribute and no default value provided.
     """
     if isinstance(obj, dict):
-        value = obj.get(key, NoValue)
-        if value is NoValue:
-            # TODO: Clean this up and possibly merge with code below.
+        value = _base_get_dict(obj, key, default=default)
+    elif not isinstance(obj, (Mapping, Sequence)) or (
+        isinstance(obj, tuple) and hasattr(obj, "_fields")
+    ):
+        # Don't use getattr for dict/list objects since we don't want class methods/attributes
+        # returned for them but do allow getattr for namedtuple.
+        value = _base_get_object(obj, key, default=default)
+    else:
+        value = _base_get_item(obj, key, default=default)
+
+    if value is NoValue:
+        # Raise if there's no default provided.
+        raise KeyError('Object "{0}" does not have key "{1}"'.format(repr(obj), key))
+
+    return value
+
+
+def _base_get_dict(obj, key, default=NoValue):
+    value = obj.get(key, NoValue)
+    if value is NoValue:
+        value = default
+        if not isinstance(key, int):
+            # Try integer key fallback.
             try:
-                int_key = int(key)
+                value = obj.get(int(key), default)
             except Exception:
-                value = default
-            else:
-                value = obj.get(int_key, default)
-        if value is NoValue:
-            # Raise if there's no default provided.
-            raise KeyError('Object "{0}" does not have key "{1}"'.format(repr(obj), key))
-        return value
+                pass
+    return value
 
-    # Build list of getters to try to retrieve key value from obj.
-    getters = [itemgetter(key)]
 
+def _base_get_item(obj, key, default=NoValue):
     try:
-        # Only add list index getter if key can be cast as integer.
-        getters.append(itemgetter(int(key)))
+        return obj[key]
     except Exception:
         pass
 
-    if not isinstance(obj, (Mapping, Sequence)) or (
-        isinstance(obj, tuple) and hasattr(obj, "_fields")
-    ):
-        # Don't add attrgetter for dict/list objects since we don't want class methods/attributes
-        # returned for them. Always allow getattr for namedtuple.
+    if not isinstance(key, int):
         try:
-            # Only add attribute getter if key is string.
-            getters.append(attrgetter(key))
-        except Exception:  # pragma: no cover
+            return obj[int(key)]
+        except Exception:
             pass
 
-    for getter in getters:
-        try:
-            ret = getter(obj)
-            break
-        except Exception:  # pragma: no cover
-            pass
-    else:
-        # The for-loop didn't break which means we weren't able to find key.
-        if default is NoValue:
-            # Raise if there's no default provided.
-            raise KeyError('Object "{0}" does not have key "{1}"'.format(repr(obj), key))
-        ret = default
+    return default
 
-    return ret
+
+def _base_get_object(obj, key, default=NoValue):
+    value = _base_get_item(obj, key, default=NoValue)
+    if value is NoValue:
+        value = default
+        try:
+            value = getattr(obj, key)
+        except Exception:
+            pass
+    return value
 
 
 def base_set(obj, key, value, allow_override=True):
