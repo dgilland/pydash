@@ -2141,15 +2141,17 @@ def words(text, pattern=None):
 
 
 def compounder(text):
-    """Remove single quote before passing into words(), required by certain
-    functions such as kebab_case, camel_case, start_case etc. to match
-    Lodash-style outputs
+    """
+    Remove single quote before passing into words(), required by certain functions such as
+    kebab_case, camel_case, start_case etc.
+
+    to match Lodash-style outputs
     """
     return words(deburr(text).replace("'", ""))
 
 
 def has_unicode_word(text):
-    """Check if the text contains unicode or requires more complex regex to handle"""
+    """Check if the text contains unicode or requires more complex regex to handle."""
     text = pyd.to_string(text)
     result = re.findall("[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]", text)
     return bool(result)
