@@ -2151,8 +2151,8 @@ def compounder(text):
 
     to match Lodash-style outputs
     """
-    # Reference: https://github.com/lodash/lodash/blob/2f79053d7bc7c9c9561a30dda202b3dcd2b72b90/camelCase.js#L25 # noqa
-    return words(re.sub("['\u2019]", "", to_string(text)))
+    # Reference: https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L4968 # noqa
+    return words(re.sub(RS_APOS, "", to_string(text)))
 
 
 def has_unicode_word(text):
@@ -2162,7 +2162,7 @@ def has_unicode_word(text):
     Reference: https://github.com/lodash/lodash/blob/master/words.js#L3
     """
     text = pyd.to_string(text)
-    result = re.findall("[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]", text)
+    result = re.findall(RE_UNICODE_WORDS, text)
     return bool(result)
 
 
