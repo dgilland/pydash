@@ -2152,7 +2152,7 @@ def compounder(text):
     to match Lodash-style outputs
     """
     # Reference: https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L4968 # noqa
-    return words(re.sub(RS_APOS, "", to_string(text)))
+    return words(deburr(re.sub(RS_APOS, "", to_string(text))))
 
 
 def has_unicode_word(text):
