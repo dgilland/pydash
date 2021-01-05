@@ -165,6 +165,7 @@ DEBURRED_LETTERS = {
 }
 
 # Use Javascript style regex to make Lo-Dash compatibility easier.
+# Link to Javascript Regex definition: https://github.com/lodash/lodash/blob/master/.internal/unicodeWords.js
 RE_WORDS = "/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g"
 RE_LATIN1 = "/[\xC0-\xFF]/g"
 # Used to compose unicode character classes.
