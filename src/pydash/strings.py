@@ -165,8 +165,11 @@ DEBURRED_LETTERS = {
 }
 
 # Use Javascript style regex to make Lo-Dash compatibility easier.
-# Link to Javascript Regex definition: https://github.com/lodash/lodash/blob/master/.internal/unicodeWords.js
-RE_WORDS = "/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g"
+# Lodash Regex definition: https://github.com/lodash/lodash/blob/master/.internal/unicodeWords.js
+
+# Reference: https://github.com/lodash/lodash/blob/master/words.js#L8
+RE_ASCII_WORDS = "/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g"
+
 RE_LATIN1 = "/[\xC0-\xFF]/g"
 # Used to compose unicode character classes.
 RS_ASTRAL_RANGE = "\\ud800-\\udfff"
@@ -2104,7 +2107,7 @@ def url(*paths, **params):
 def words(text, pattern=None):
     """
     Return list of words contained in `text`.
-
+    Reference: https://github.com/lodash/lodash/blob/master/words.js#L30
     Args:
         text (str): String to split.
         pattern (str, optional): Custom pattern to split words on. Defaults to ``None``.
@@ -2131,7 +2134,7 @@ def words(text, pattern=None):
         if has_unicode_word(text):
             return reg_exp_js_match(text, RE_UNICODE_WORDS)
         else:
-            return reg_exp_js_match(text, RE_WORDS)
+            return reg_exp_js_match(text, RE_ASCII_WORDS)
 
     return reg_exp_js_match(text, pattern)
 
@@ -2152,7 +2155,11 @@ def compounder(text):
 
 
 def has_unicode_word(text):
-    """Check if the text contains unicode or requires more complex regex to handle."""
+    """
+    Check if the text contains unicode or requires more complex regex to handle.
+
+    Reference: https://github.com/lodash/lodash/blob/master/words.js#L3
+    """
     text = pyd.to_string(text)
     result = re.findall("[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]", text)
     return bool(result)
