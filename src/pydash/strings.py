@@ -165,12 +165,90 @@ DEBURRED_LETTERS = {
 }
 
 # Use Javascript style regex to make Lo-Dash compatibility easier.
-UPPER = "[A-Z\\xC0-\\xD6\\xD8-\\xDE]"
-LOWER = "[a-z\\xDf-\\xF6\\xF8-\\xFF]+"
-RE_WORDS = "/{upper}+(?={upper}{lower})|{upper}?{lower}|{upper}+|[0-9]+/g".format(
-    upper=UPPER, lower=LOWER
-)
+# Lodash Regex definition: https://github.com/lodash/lodash/blob/master/.internal/unicodeWords.js
+
+# Reference: https://github.com/lodash/lodash/blob/master/words.js#L8
+RE_ASCII_WORDS = "/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g"
+
 RE_LATIN1 = "/[\xC0-\xFF]/g"
+# Used to compose unicode character classes.
+RS_ASTRAL_RANGE = "\\ud800-\\udfff"
+RS_COMBO_MARKS_RANGE = "\\u0300-\\u036f"
+RE_COMBO_HALF_MARKS_RANGE = "\\ufe20-\\ufe2f"
+RS_COMBO_SYMBOLS_RANGE = "\\u20d0-\\u20ff"
+RS_COMBO_MARKS_EXTENDED_RANGE = "\\u1ab0-\\u1aff"
+RS_COMBO_MARKS_SUPPLEMENT_RANGE = "\\u1dc0-\\u1dff"
+RS_COMBO_RANGE = (
+    RS_COMBO_MARKS_RANGE
+    + RE_COMBO_HALF_MARKS_RANGE
+    + RS_COMBO_SYMBOLS_RANGE
+    + RS_COMBO_MARKS_EXTENDED_RANGE
+    + RS_COMBO_MARKS_SUPPLEMENT_RANGE
+)
+RS_DINGBAT_RANGE = "\\u2700-\\u27bf"
+RS_LOWER_RANGE = "a-z\\xdf-\\xf6\\xf8-\\xff"
+RS_MATH_OP_RANGE = "\\xac\\xb1\\xd7\\xf7"
+RS_NON_CHAR_RANGE = "\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf"
+RS_PUNCTUATION_RANGE = "\\u2000-\\u206f"
+RS_SPACE_RANGE = (
+    " \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\"
+    "u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\"
+    "u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000"
+)
+RS_UPPER_RANGE = "A-Z\\xc0-\\xd6\\xd8-\\xde"
+RS_VAR_RANGE = "\\ufe0e\\ufe0f"
+RS_BREAK_RANGE = RS_MATH_OP_RANGE + RS_NON_CHAR_RANGE + RS_PUNCTUATION_RANGE + RS_SPACE_RANGE
+
+# Used to compose unicode capture groups.
+RS_APOS = "['\u2019]"
+RS_BREAK = "[{0}]".format(RS_BREAK_RANGE)
+RS_COMBO = "[{0}]".format(RS_COMBO_RANGE)
+RS_DIGIT = "\\d"
+RS_DINGBAT = "[{0}]".format(RS_DINGBAT_RANGE)
+RS_LOWER = "[{0}]".format(RS_LOWER_RANGE)
+RS_MISC = "[^{0}{1}]".format(
+    RS_ASTRAL_RANGE, RS_BREAK_RANGE + RS_DIGIT + RS_DINGBAT_RANGE + RS_LOWER_RANGE + RS_UPPER_RANGE
+)
+RS_FITZ = "\\ud83c[\\udffb-\\udfff]"
+RS_MODIFIER = "(?:{0}|{1})".format(RS_COMBO, RS_FITZ)
+RS_NON_ASTRAL = "[^{0}]".format(RS_ASTRAL_RANGE)
+RS_REGIONAL = "(?:\\ud83c[\\udde6-\\uddff]){2}"
+RS_SURR_PAIR = "[\\ud800-\\udbff][\\udc00-\\udfff]"
+RS_UPPER = "[{0}]".format(RS_UPPER_RANGE)
+RS_ZWJ = "\\u200d"
+
+# Used to compose unicode regexes.
+RS_MISC_LOWER = "(?:{0}|{1})".format(RS_LOWER, RS_MISC)
+RS_MISC_UPPER = "(?:{0}|{1})".format(RS_UPPER, RS_MISC)
+RS_OPT_CONTR_LOWER = "(?:{0}(?:d|ll|m|re|s|t|ve))?".format(RS_APOS)
+RS_OPT_CONTR_UPPER = "(?:{0}(?:D|LL|M|RE|S|T|VE))?".format(RS_APOS)
+RE_OPT_MOD = "{0}?".format(RS_MODIFIER)
+RS_OPT_VAR = "[{0}]?".format(RS_VAR_RANGE)
+RS_OPT_JOIN = "(?:{0}(?:{1}|{2}|{3}){4})*".format(
+    RS_ZWJ, RS_NON_ASTRAL, RS_REGIONAL, RS_SURR_PAIR, RS_OPT_VAR + RE_OPT_MOD
+)
+RS_ORD_LOWER = "\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])"
+RS_ORD_UPPER = "\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])"
+RS_SEQ = RS_OPT_VAR + RE_OPT_MOD + RS_OPT_JOIN
+RS_EMOJI = "(?:{0}|{1}|{2}){3}".format(RS_DINGBAT, RS_REGIONAL, RS_SURR_PAIR, RS_SEQ)
+
+RE_UNICODE_WORDS = (
+    "/{0}?{1}+{2}(?={3}|{0}|$)|{4}+{5}"
+    "(?={3}|{6}|$)|{0}?{7}+{2}|{0}+{5}|{8}|{9}|{10}+|{11}/g".format(
+        RS_UPPER,
+        RS_LOWER,
+        RS_OPT_CONTR_LOWER,
+        RS_BREAK,
+        RS_MISC_UPPER,
+        RS_OPT_CONTR_UPPER,
+        RS_UPPER + RS_MISC_LOWER,
+        RS_MISC_LOWER,
+        RS_ORD_UPPER,
+        RS_ORD_LOWER,
+        RS_DIGIT,
+        RS_EMOJI,
+    )
+)
 
 
 def camel_case(text):
@@ -190,7 +268,7 @@ def camel_case(text):
 
     .. versionadded:: 1.1.0
     """
-    text = "".join(word.title() for word in words(text))
+    text = "".join(word.title() for word in compounder(text))
     return text[:1].lower() + text[1:]
 
 
@@ -657,7 +735,7 @@ def kebab_case(text):
 
     .. versionadded:: 1.1.0
     """
-    return separator_case(text, "-")
+    return "-".join(word.lower() for word in compounder(text) if word)
 
 
 def lines(text):
@@ -701,7 +779,7 @@ def lower_case(text):
 
     .. versionadded:: 4.0.0
     """
-    return " ".join(words(text)).lower()
+    return " ".join(compounder(text)).lower()
 
 
 def lower_first(text):
@@ -1407,7 +1485,7 @@ def snake_case(text):
     .. versionchanged:: 4.0.0
         Removed alias ``underscore_case``.
     """
-    return separator_case(text, "_")
+    return "_".join(word.lower() for word in compounder(text) if word)
 
 
 def split(text, separator=NoValue):
@@ -1467,7 +1545,7 @@ def start_case(text):
     .. versionadded:: 3.1.0
     """
     text = pyd.to_string(text)
-    return " ".join(capitalize(word, strict=False) for word in words(text))
+    return " ".join(capitalize(word, strict=False) for word in compounder(text))
 
 
 def starts_with(text, target, position=0):
@@ -1923,7 +2001,7 @@ def upper_case(text):
 
     .. versionadded:: 4.0.0
     """
-    return " ".join(words(text)).upper()
+    return " ".join(compounder(text)).upper()
 
 
 def upper_first(text):
@@ -2029,7 +2107,7 @@ def url(*paths, **params):
 def words(text, pattern=None):
     """
     Return list of words contained in `text`.
-
+    Reference: https://github.com/lodash/lodash/blob/master/words.js#L30
     Args:
         text (str): String to split.
         pattern (str, optional): Custom pattern to split words on. Defaults to ``None``.
@@ -2052,12 +2130,41 @@ def words(text, pattern=None):
     .. versionchanged:: 3.2.0
         Improved matching for one character words.
     """
-    return reg_exp_js_match(text, pattern or RE_WORDS)
+    if pattern is None:
+        if has_unicode_word(text):
+            return reg_exp_js_match(text, RE_UNICODE_WORDS)
+        else:
+            return reg_exp_js_match(text, RE_ASCII_WORDS)
+
+    return reg_exp_js_match(text, pattern)
 
 
 #
 # Utility functions not a part of main API
 #
+
+
+def compounder(text):
+    """
+    Remove single quote before passing into words(), required by certain functions such as
+    kebab_case, camel_case, start_case etc.
+
+    to match Lodash-style outputs
+    """
+    # Reference: https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L4968 # noqa
+    return words(deburr(re.sub(RS_APOS, "", to_string(text))))
+
+
+def has_unicode_word(text):
+    """
+    Check if the text contains unicode or requires more complex regex to handle.
+
+    Reference: https://github.com/lodash/lodash/blob/master/words.js#L3
+    """
+    text = pyd.to_string(text)
+    RE_HAS_UNICODE_WORD = "[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]"
+    result = re.search(RE_HAS_UNICODE_WORD, text)
+    return bool(result)
 
 
 def js_to_py_re_find(reg_exp):
@@ -2070,7 +2177,6 @@ def js_to_py_re_find(reg_exp):
             results = re.findall(pattern, text, flags=flags)
         else:
             results = re.search(pattern, text, flags=flags)
-
             if results:
                 results = [results.group()]
             else:
