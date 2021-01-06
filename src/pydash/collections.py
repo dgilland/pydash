@@ -1,18 +1,15 @@
-# -*- coding: utf-8 -*-
 """
 Functions that operate on lists and dicts.
 
 .. versionadded:: 1.0.0
 """
 
-from __future__ import absolute_import
-
+from functools import cmp_to_key
 import random
 
 import pydash as pyd
 
-from ._compat import _cmp, cmp_to_key
-from .helpers import callit, getargcount, iterator, iteriteratee
+from .helpers import callit, cmp, getargcount, iterator, iteriteratee
 
 
 __all__ = (
@@ -662,7 +659,7 @@ def order_by(collection, keys, orders=None, reverse=False):
     def comparison(left, right):
         # pylint: disable=useless-else-on-loop,missing-docstring
         for func, mult in comparers:
-            result = _cmp(func(left), func(right))
+            result = cmp(func(left), func(right))
             if result:
                 return mult * result
         else:

@@ -1,18 +1,14 @@
-# -*- coding: utf-8 -*-
 """
 Functions that wrap other functions.
 
 .. versionadded:: 1.0.0
 """
 
-from __future__ import absolute_import
-
+from inspect import getfullargspec
 import itertools
 import time
 
 import pydash as pyd
-
-from ._compat import _range, getfullargspec, iteritems
 
 
 __all__ = (
@@ -252,7 +248,7 @@ class Iterated(object):
         value = initial
         iteration = self._iteration(value)
 
-        for _ in _range(n):
+        for _ in range(n):
             value = next(iteration)
 
         return value
@@ -328,7 +324,7 @@ class Partial(object):
         else:
             args = itertools.chain(self.args, args)
 
-        kwargs = dict(itertools.chain(iteritems(self.kwargs), iteritems(kwargs)))
+        kwargs = {**self.kwargs, **kwargs}
 
         return self.func(*args, **kwargs)
 
@@ -341,9 +337,9 @@ class Rearg(object):
 
         # Index `indexes` by the index value so we can do a lookup mapping by walking the function
         # arguments.
-        self.indexes = dict(
-            (src_index, dest_index) for dest_index, src_index in enumerate(pyd.flatten(indexes))
-        )
+        self.indexes = {
+            src_index: dest_index for dest_index, src_index in enumerate(pyd.flatten(indexes))
+        }
 
     def __call__(self, *args, **kwargs):
         """Return results from :attr:`func` using rearranged arguments."""

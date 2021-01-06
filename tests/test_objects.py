@@ -1,14 +1,15 @@
-# -*- coding: utf-8 -*-
-
 from argparse import Namespace
 from collections import defaultdict, namedtuple
 import datetime as dt
 
+import pytest
+
 import pydash as _
 
 from . import fixtures
-from .fixtures import parametrize
 
+
+parametrize = pytest.mark.parametrize
 
 today = dt.date.today()
 

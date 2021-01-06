@@ -1,18 +1,6 @@
-# -*- coding: utf-8 -*-
-
-import mock
-import pytest
-
-from pydash._compat import iteritems
-
-
-# pytest.mark is a generator so create alias for convenience
-parametrize = pytest.mark.parametrize
-
-
 class Object(object):
     def __init__(self, **attrs):
-        for key, value in iteritems(attrs):
+        for key, value in attrs.items():
             setattr(self, key, value)
 
 
@@ -22,7 +10,7 @@ class ItemsObject(object):
 
     def items(self):
         if isinstance(self._items, dict):
-            return list(iteritems(self._items))
+            return list(self._items.items())
         else:
             return enumerate(self._items)
 
@@ -33,7 +21,7 @@ class IteritemsObject(object):
 
     def iteritems(self):
         if isinstance(self._items, dict):
-            for key, value in iteritems(self._items):
+            for key, value in self._items.items():
                 yield key, value
         else:
             for i, item in enumerate(self._items):
@@ -46,12 +34,6 @@ class Filter(object):
 
     def __call__(self, item):
         return self.predicate(item)
-
-
-@pytest.fixture
-def mocked_sleep():
-    with mock.patch("time.sleep") as mocked:
-        yield mocked
 
 
 def reduce_iteratee0(total, num):

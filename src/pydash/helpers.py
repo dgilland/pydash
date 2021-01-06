@@ -1,31 +1,24 @@
-# -*- coding: utf-8 -*-
 """Generic utility methods not part of main API."""
 
-from __future__ import absolute_import
-
+import builtins
+from collections.abc import Hashable, Iterable, Mapping, Sequence
+from decimal import Decimal
 from functools import wraps
 import inspect
-from operator import attrgetter, itemgetter
+from inspect import getfullargspec
 import warnings
 
 import pydash as pyd
 
-from ._compat import PY2, Iterable, Mapping, Sequence, getfullargspec, iteritems, string_types
 
+#: Singleton object that differentiates between an explicit ``None`` value and an unset value.
+UNSET = object()
 
-class _NoValue(object):
-    """
-    Represents an unset value.
+#: Tuple of number types.
+NUMBER_TYPES = (int, float, Decimal)
 
-    Used to differentiate between an explicit ``None`` and an unset value.
-    """
-
-    pass
-
-
-#: Singleton object that differentiates between an explicit ``None`` value and
-#: an unset value.
-NoValue = _NoValue()
+#: Dictionary of builtins with keys as the builtin function and values as the string name.
+BUILTINS = {value: key for key, value in builtins.__dict__.items() if isinstance(value, Hashable)}
 
 
 def callit(iteratee, *args, **kwargs):
@@ -54,13 +47,7 @@ def getargcount(iteratee, maxargs):
         try:
             argcount = _getargcount(iteratee, maxargs)
         except TypeError:  # pragma: no cover
-            # PY2: Python2.7 throws a TypeError on classes that have __call__() defined but Python3
-            # doesn't. So if we fail with TypeError here, try iteratee as iteratee.__call__.
-            if PY2 and hasattr(iteratee, "__call__"):  # noqa: B004
-                try:
-                    argcount = _getargcount(iteratee.__call__, maxargs)
-                except TypeError:
-                    pass
+            pass
 
     return argcount
 
@@ -110,13 +97,13 @@ def iteriteratee(obj, iteratee=None, reverse=False):
         items = reversed(tuple(items))
 
     for key, item in items:
-        yield (callit(cbk, item, key, obj, argcount=argcount), item, key, obj)
+        yield callit(cbk, item, key, obj, argcount=argcount), item, key, obj
 
 
 def iterator(obj):
     """Return iterative based on object type."""
     if isinstance(obj, dict):
-        return iteritems(obj)
+        return obj.items()
     elif hasattr(obj, "iteritems"):
         return obj.iteritems()  # noqa: B301
     elif hasattr(obj, "items"):
@@ -124,10 +111,10 @@ def iterator(obj):
     elif isinstance(obj, Iterable):
         return enumerate(obj)
     else:
-        return iteritems(getattr(obj, "__dict__", {}))
+        return getattr(obj, "__dict__", {}).items()
 
 
-def base_get(obj, key, default=NoValue):
+def base_get(obj, key, default=UNSET):
     """
     Safely get an item by `key` from a sequence or mapping object when `default` provided.
 
@@ -136,8 +123,6 @@ def base_get(obj, key, default=NoValue):
         key (mixed): Key or index identifying which item to retrieve.
 
     Keyword Args:
-        use_default (bool, optional): Whether to use `default` value when `key` doesn't exist in
-            `obj`.
         default (mixed, optional): Default value to return if `key` not found in `obj`.
 
     Returns:
@@ -157,16 +142,16 @@ def base_get(obj, key, default=NoValue):
     else:
         value = _base_get_item(obj, key, default=default)
 
-    if value is NoValue:
+    if value is UNSET:
         # Raise if there's no default provided.
-        raise KeyError('Object "{0}" does not have key "{1}"'.format(repr(obj), key))
+        raise KeyError(f'Object "{repr(obj)}" does not have key "{key}"')
 
     return value
 
 
-def _base_get_dict(obj, key, default=NoValue):
-    value = obj.get(key, NoValue)
-    if value is NoValue:
+def _base_get_dict(obj, key, default=UNSET):
+    value = obj.get(key, UNSET)
+    if value is UNSET:
         value = default
         if not isinstance(key, int):
             # Try integer key fallback.
@@ -177,7 +162,7 @@ def _base_get_dict(obj, key, default=NoValue):
     return value
 
 
-def _base_get_item(obj, key, default=NoValue):
+def _base_get_item(obj, key, default=UNSET):
     try:
         return obj[key]
     except Exception:
@@ -192,9 +177,9 @@ def _base_get_item(obj, key, default=NoValue):
     return default
 
 
-def _base_get_object(obj, key, default=NoValue):
-    value = _base_get_item(obj, key, default=NoValue)
-    if value is NoValue:
+def _base_get_object(obj, key, default=UNSET):
+    value = _base_get_item(obj, key, default=UNSET)
+    if value is UNSET:
         value = default
         try:
             value = getattr(obj, key)
@@ -212,6 +197,7 @@ def base_set(obj, key, value, allow_override=True):
         obj (list|dict): Object to assign value to.
         key (mixed): Key or index to assign to.
         value (mixed): Value to assign.
+        allow_override (bool): Whether to allow overriding a previously set key.
     """
     if isinstance(obj, dict):
         if allow_override or key not in obj:
@@ -234,6 +220,21 @@ def base_set(obj, key, value, allow_override=True):
     return obj
 
 
+def cmp(a, b):  # pragma: no cover
+    """
+    Replacement for built-in function ``cmp`` that was removed in Python 3.
+
+    Note: Mainly used for comparison during sorting.
+    """
+    if a is None and b is None:
+        return 0
+    elif a is None:
+        return -1
+    elif b is None:
+        return 1
+    return (a > b) - (a < b)
+
+
 def parse_iteratee(iteratee_keyword, *args, **kwargs):
     """Try to find iteratee function passed in either as a keyword argument or as the last
     positional argument in `args`."""
@@ -242,14 +243,14 @@ def parse_iteratee(iteratee_keyword, *args, **kwargs):
 
     if iteratee is None and (
         callable(last_arg)
-        or isinstance(last_arg, string_types)
+        or isinstance(last_arg, str)
         or isinstance(last_arg, dict)
         or last_arg is None
     ):
         iteratee = last_arg
         args = args[:-1]
 
-    return (iteratee, args)
+    return iteratee, args
 
 
 class iterator_with_default(object):
@@ -264,12 +265,12 @@ class iterator_with_default(object):
 
     def next_default(self):
         ret = self.default
-        self.default = NoValue
+        self.default = UNSET
         return ret
 
     def __next__(self):
         ret = next(self.iter, self.next_default())
-        if ret is NoValue:
+        if ret is UNSET:
             raise StopIteration
         return ret
 
@@ -286,7 +287,7 @@ def deprecated(func):  # pragma: no cover
     @wraps(func)
     def wrapper(*args, **kwargs):
         warnings.warn(
-            "Call to deprecated function {0}.".format(func.__name__),
+            f"Call to deprecated function {func.__name__}.",
             category=DeprecationWarning,
             stacklevel=3,
         )

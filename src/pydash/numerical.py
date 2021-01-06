@@ -1,19 +1,15 @@
-# -*- coding: utf-8 -*-
 """
 Numerical/mathemetical related functions.
 
 .. versionadded:: 2.1.0
 """
 
-from __future__ import absolute_import, division
-
 import math
 import operator
 
 import pydash as pyd
 
-from ._compat import _range
-from .helpers import NoValue, iterator, iterator_with_default, iteriteratee
+from .helpers import UNSET, iterator, iterator_with_default, iteriteratee
 
 
 __all__ = (
@@ -285,7 +281,7 @@ def floor(x, precision=0):
     return rounder(math.floor, x, precision)
 
 
-def max_(collection, default=NoValue):
+def max_(collection, default=UNSET):
     """
     Retrieves the maximum value of a `collection`.
 
@@ -311,7 +307,7 @@ def max_(collection, default=NoValue):
     return max_by(collection, default=default)
 
 
-def max_by(collection, iteratee=None, default=NoValue):
+def max_by(collection, iteratee=None, default=UNSET):
     """
     Retrieves the maximum value of a `collection`.
 
@@ -375,7 +371,7 @@ def median(collection, iteratee=None):
     return result
 
 
-def min_(collection, default=NoValue):
+def min_(collection, default=UNSET):
     """
     Retrieves the minimum value of a `collection`.
 
@@ -401,7 +397,7 @@ def min_(collection, default=NoValue):
     return min_by(collection, default=default)
 
 
-def min_by(collection, iteratee=None, default=NoValue):
+def min_by(collection, iteratee=None, default=UNSET):
     """
     Retrieves the minimum value of a `collection`.
 
@@ -457,7 +453,7 @@ def moving_mean(array, size):
     result = []
     size = int(size)
 
-    for i in _range(size - 1, len(array) + 1):
+    for i in range(size - 1, len(array) + 1):
         window = array[i - size : i]
 
         if len(window) == size:

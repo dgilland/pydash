@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
-
 import re
 import sys
+from urllib.parse import parse_qsl, urlsplit
 
 import pytest
 
 import pydash as _
-from pydash._compat import parse_qsl, urlsplit
 
-from .fixtures import parametrize
+
+parametrize = pytest.mark.parametrize
 
 
 @parametrize(

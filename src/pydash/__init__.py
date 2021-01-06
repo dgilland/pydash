@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Python port of Lo-Dash."""
 
 from .__version__ import __version__

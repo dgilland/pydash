@@ -1,15 +1,12 @@
-# -*- coding: utf-8 -*-
 """
 Method chaining interface.
 
 .. versionadded:: 1.0.0
 """
 
-from __future__ import absolute_import, print_function
-
 import pydash as pyd
 
-from .helpers import NoValue
+from .helpers import UNSET
 
 
 __all__ = (
@@ -25,7 +22,7 @@ class Chain(object):
     #: Object that contains attribute references to available methods.
     module = pyd
 
-    def __init__(self, value=NoValue):
+    def __init__(self, value=UNSET):
         self._value = value
 
     def value(self):
@@ -110,7 +107,7 @@ class Chain(object):
             method = getattr(cls.module, name + "_", None)
 
         if not callable(method):
-            raise cls.module.InvalidMethod(("Invalid pydash method: {0}".format(name)))
+            raise cls.module.InvalidMethod(f"Invalid pydash method: {name}")
 
         return method
 
@@ -161,7 +158,7 @@ class ChainWrapper(object):
         new.__dict__ = self.__dict__.copy()
         return new
 
-    def unwrap(self, value=NoValue):
+    def unwrap(self, value=UNSET):
         """
         Execute :meth:`method` with :attr:`_value`, :attr:`args`, and :attr:`kwargs`.
 
@@ -178,11 +175,11 @@ class ChainWrapper(object):
         if isinstance(wrapper._value, ChainWrapper):
             # pylint: disable=no-member,maybe-no-member
             wrapper._value = wrapper._value.unwrap(value)
-        elif not isinstance(value, ChainWrapper) and value is not NoValue:
+        elif not isinstance(value, ChainWrapper) and value is not UNSET:
             # Override wrapper's initial value.
             wrapper._value = value
 
-        if wrapper._value is not NoValue:
+        if wrapper._value is not UNSET:
             value = wrapper._value
 
         return wrapper.method(value, *wrapper.args, **wrapper.kwargs)
@@ -209,12 +206,12 @@ class _Dash(object):
         """Proxy to :meth:`Chain.get_method`."""
         return Chain.get_method(attr)
 
-    def __call__(self, value=NoValue):
+    def __call__(self, value=UNSET):
         """Return a new instance of :class:`Chain` with `value` as the seed."""
         return Chain(value)
 
 
-def chain(value=NoValue):
+def chain(value=UNSET):
     """
     Creates a :class:`Chain` object which wraps the given value to enable intuitive method chaining.
     Chaining is lazy and won't compute a final value until :meth:`Chain.value` is called.

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Utility functions.
 
@@ -17,8 +16,7 @@ import time
 
 import pydash as pyd
 
-from ._compat import _range, number_types, string_types
-from .helpers import NoValue, base_get, callit, getargcount, iterator
+from .helpers import NUMBER_TYPES, UNSET, base_get, callit, getargcount, iterator
 
 
 __all__ = (
@@ -385,7 +383,7 @@ def iteratee(func):
         if isinstance(func, int):
             func = str(func)
 
-        if isinstance(func, string_types):
+        if isinstance(func, str):
             cbk = property_(func)
         elif isinstance(func, list) and len(func) == 1:
             cbk = property_(func)
@@ -1007,21 +1005,21 @@ def retry(  # noqa: C901
     if not isinstance(attempts, int) or attempts <= 0:
         raise ValueError("attempts must be an integer greater than 0")
 
-    if not isinstance(delay, number_types) or delay < 0:
+    if not isinstance(delay, NUMBER_TYPES) or delay < 0:
         raise ValueError("delay must be a number greater than or equal to 0")
 
-    if not isinstance(max_delay, number_types) or max_delay < 0:
+    if not isinstance(max_delay, NUMBER_TYPES) or max_delay < 0:
         raise ValueError("scale must be a number greater than or equal to 0")
 
-    if not isinstance(scale, number_types) or scale <= 0:
+    if not isinstance(scale, NUMBER_TYPES) or scale <= 0:
         raise ValueError("scale must be a number greater than 0")
 
     if (
-        not isinstance(jitter, number_types + (tuple,))
-        or (isinstance(jitter, number_types) and jitter < 0)
+        not isinstance(jitter, NUMBER_TYPES + (tuple,))
+        or (isinstance(jitter, NUMBER_TYPES) and jitter < 0)
         or (
             isinstance(jitter, tuple)
-            and (len(jitter) != 2 or not all(isinstance(jit, number_types) for jit in jitter))
+            and (len(jitter) != 2 or not all(isinstance(jit, NUMBER_TYPES) for jit in jitter))
         )
     ):
         raise ValueError("jitter must be a number greater than 0 or a 2-item tuple of " "numbers")
@@ -1192,7 +1190,7 @@ def times(n, iteratee=None):
     else:
         argcount = getargcount(iteratee, maxargs=1)
 
-    return [callit(iteratee, index, argcount=argcount) for index in _range(n)]
+    return [callit(iteratee, index, argcount=argcount) for index in range(n)]
 
 
 def to_path(value):
@@ -1278,7 +1276,7 @@ def to_path_tokens(value):
         ]
     elif pyd.is_string(value) or pyd.is_number(value):
         keys = [PathToken(value, default_factory=dict)]
-    elif value is NoValue:
+    elif value is UNSET:
         keys = []
     else:
         keys = value

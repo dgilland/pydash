@@ -1,18 +1,15 @@
-# -*- coding: utf-8 -*-
 """
 Functions that operate on lists.
 
 .. versionadded:: 1.0.0
 """
 
-from __future__ import absolute_import
-
 from bisect import bisect_left, bisect_right
+from functools import cmp_to_key
 from math import ceil
 
 import pydash as pyd
 
-from ._compat import cmp_to_key
 from .helpers import base_get, iteriteratee, parse_iteratee
 
 
@@ -2351,7 +2348,7 @@ def iterduplicates(array):
     seen = []
     for i, item in enumerate(array):
         if item in seen:
-            yield (i, item)
+            yield i, item
         else:
             seen.append(item)
 

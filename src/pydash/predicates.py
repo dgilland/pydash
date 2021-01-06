@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 """
 Predicate functions that return boolean evaluations of objects.
 
 .. versionadded:: 2.0.0
 """
-
-from __future__ import absolute_import
 
 import datetime
 from itertools import islice
@@ -16,8 +13,7 @@ from types import BuiltinFunctionType
 
 import pydash as pyd
 
-from ._compat import builtins, integer_types, izip, number_types, string_types
-from .helpers import NoValue, callit, iterator
+from .helpers import BUILTINS, NUMBER_TYPES, UNSET, callit, iterator
 
 
 __all__ = (
@@ -353,7 +349,7 @@ def is_builtin(value):
         Removed alias ``is_native``.
     """
     try:
-        return isinstance(value, BuiltinFunctionType) or value in builtins
+        return isinstance(value, BuiltinFunctionType) or value in BUILTINS
     except TypeError:  # pragma: no cover
         return False
 
@@ -699,7 +695,7 @@ def is_indexed(value):
     .. versionchanged:: 3.0.0
         Return ``True`` for tuples.
     """
-    return isinstance(value, (list, tuple, string_types))
+    return isinstance(value, (list, tuple, str))
 
 
 def is_instance_of(value, types):
@@ -753,7 +749,7 @@ def is_integer(value):
     .. versionchanged:: 4.0.0
         Removed alias ``is_int``.
     """
-    return is_number(value) and isinstance(value, integer_types)
+    return is_number(value) and isinstance(value, int)
 
 
 def is_iterable(value):
@@ -877,7 +873,7 @@ def is_match(obj, source):
     return is_match_with(obj, source)
 
 
-def is_match_with(obj, source, customizer=None, _key=NoValue, _obj=NoValue, _source=NoValue):
+def is_match_with(obj, source, customizer=None, _key=UNSET, _obj=UNSET, _source=UNSET):
     """
     This method is like :func:`is_match` except that it accepts customizer which is invoked to
     compare values. If customizer returns ``None``, comparisons are handled by the method instead.
@@ -903,10 +899,10 @@ def is_match_with(obj, source, customizer=None, _key=NoValue, _obj=NoValue, _sou
 
     .. versionadded:: 4.0.0
     """
-    if _obj is NoValue:
+    if _obj is UNSET:
         _obj = obj
 
-    if _source is NoValue:
+    if _source is UNSET:
         _source = source
 
     if not callable(customizer):
@@ -968,7 +964,7 @@ def is_monotone(value, op):
     if not is_list(value):
         value = [value]
 
-    search = (False for x, y in izip(value, islice(value, 1, None)) if not op(x, y))
+    search = (False for x, y in zip(value, islice(value, 1, None)) if not op(x, y))
 
     return next(search, True)
 
@@ -1074,7 +1070,7 @@ def is_number(value):
     .. versionchanged:: 4.0.0
         Removed alias ``is_num``.
     """
-    return not is_boolean(value) and isinstance(value, number_types)
+    return not is_boolean(value) and isinstance(value, NUMBER_TYPES)
 
 
 def is_object(value):
@@ -1261,7 +1257,7 @@ def is_string(value):
 
     .. versionadded:: 1.0.0
     """
-    return isinstance(value, string_types)
+    return isinstance(value, str)
 
 
 def is_tuple(value):

@@ -1,27 +1,18 @@
-# -*- coding: utf-8 -*-
 """
 String functions.
 
 .. versionadded:: 1.1.0
 """
 
+import html
 import math
 import re
 import unicodedata
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import pydash as pyd
 
-from ._compat import (
-    _range,
-    html_unescape,
-    iteritems,
-    parse_qsl,
-    text_type,
-    urlencode,
-    urlsplit,
-    urlunsplit,
-)
-from .helpers import NoValue
+from .helpers import UNSET
 from .objects import to_string
 
 
@@ -345,7 +336,7 @@ def chop(text, step):
     if step <= 0:
         chopped = [text]
     else:
-        chopped = [text[i : i + step] for i in _range(0, len(text), step)]
+        chopped = [text[i : i + step] for i in range(0, len(text), step)]
 
     return chopped
 
@@ -377,7 +368,7 @@ def chop_right(text, step):
         chopped = [text]
     else:
         text_len = len(text)
-        chopped = [text[-(i + step) : text_len - i] for i in _range(0, text_len, step)][::-1]
+        chopped = [text[-(i + step) : text_len - i] for i in range(0, text_len, step)][::-1]
 
     return chopped
 
@@ -1135,7 +1126,7 @@ def reg_exp_js_replace(text, reg_exp, repl):
     Args:
         text (str): String to evaluate.
         reg_exp (str): Javascript style regular expression.
-        repl (str): Replacement string.
+        repl (str|callable): Replacement string or callable.
 
     Returns:
         str: Modified string.
@@ -1457,9 +1448,7 @@ def slugify(text, separator="-"):
     .. versionadded:: 3.0.0
     """
     normalized = (
-        unicodedata.normalize("NFKD", text_type(pyd.to_string(text)))
-        .encode("ascii", "ignore")
-        .decode("utf8")
+        unicodedata.normalize("NFKD", pyd.to_string(text)).encode("ascii", "ignore").decode("utf8")
     )
 
     return separator_case(normalized, separator)
@@ -1488,7 +1477,7 @@ def snake_case(text):
     return "_".join(word.lower() for word in compounder(text) if word)
 
 
-def split(text, separator=NoValue):
+def split(text, separator=UNSET):
     """
     Splits `text` on `separator`. If `separator` not provided, then `text` is split on whitespace.
     If `separator` is falsey, then `text` is split on every character.
@@ -1517,7 +1506,7 @@ def split(text, separator=NoValue):
     """
     text = pyd.to_string(text)
 
-    if separator is NoValue:
+    if separator is UNSET:
         ret = text.split()
     elif separator:
         ret = text.split(separator)
@@ -1977,7 +1966,7 @@ def unescape(text):
         Moved to :mod:`pydash.strings`.
     """
     text = pyd.to_string(text)
-    return html_unescape(text)
+    return html.unescape(text)
 
 
 def upper_case(text):
@@ -2243,7 +2232,7 @@ def flatten_url_params(params):
     >>> assert flatten_url_params(params) == [('a', 1), ('a', 2), ('a', 3)]
     """
     if isinstance(params, dict):
-        params = list(iteritems(params))
+        params = list(params.items())
 
     flattened = []
     for param, value in params:

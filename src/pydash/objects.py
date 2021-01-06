@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 """
 Functions that operate on lists, dicts, and other objects.
 
 .. versionadded:: 1.0.0
 """
-
-from __future__ import absolute_import
 
 import copy
 from functools import partial
@@ -14,8 +11,7 @@ import re
 
 import pydash as pyd
 
-from ._compat import iteritems, string_types, text_type
-from .helpers import NoValue, base_get, base_set, callit, getargcount, iterator, iteriteratee
+from .helpers import UNSET, base_get, base_set, callit, getargcount, iterator, iteriteratee
 from .utilities import PathToken, to_path, to_path_tokens
 
 
@@ -152,7 +148,7 @@ def assign_with(obj, *sources, **kwargs):
     for source in sources:
         source = source.copy()
 
-        for key, value in iteritems(source):
+        for key, value in source.items():
             if customizer:
                 val = callit(customizer, obj.get(key), value, key, obj, source, argcount=argcount)
                 if val is not None:
@@ -313,7 +309,7 @@ def defaults(obj, *sources):
     .. versionadded:: 1.0.0
     """
     for source in sources:
-        for key, value in iteritems(source):
+        for key, value in source.items():
             obj.setdefault(key, value)
 
     return obj
@@ -521,7 +517,7 @@ def get(obj, path, default=None):
     .. versionchanged:: 4.7.6
         Fixed bug where getattr is used on Mappings and Sequence in Python 3.5+
     """
-    if default is NoValue:
+    if default is UNSET:
         # When NoValue given for default, then this method will raise if path is not present in obj.
         sentinel = default
     else:
@@ -580,7 +576,7 @@ def has(obj, path):
         Removed aliases ``deep_has`` and ``has_path``.
     """
     try:
-        get(obj, path, default=NoValue)
+        get(obj, path, default=UNSET)
         exists = True
     except (KeyError, IndexError, TypeError, ValueError):
         exists = False
@@ -776,7 +772,7 @@ def map_values(obj, iteratee=None):
     return {key: result for result, _, key, _ in iteriteratee(obj, iteratee)}
 
 
-def map_values_deep(obj, iteratee=None, property_path=NoValue):
+def map_values_deep(obj, iteratee=None, property_path=UNSET):
     """
     Map all non-object values in `obj` with return values from `iteratee`. The iteratee is invoked
     with two arguments: ``(obj_value, property_path)`` where ``property_path`` contains the list of
@@ -1168,7 +1164,7 @@ def rename_keys(obj, key_map):
 
     .. versionadded:: 2.0.0
     """
-    return {key_map.get(key, key): value for key, value in iteritems(obj)}
+    return {key_map.get(key, key): value for key, value in obj.items()}
 
 
 def set_(obj, path, value):
@@ -1415,7 +1411,7 @@ def to_list(obj, split_strings=True):
         return obj[:]
     elif isinstance(obj, dict):
         return obj.values()
-    elif not split_strings and (isinstance(obj, string_types) or isinstance(obj, bytes)):
+    elif not split_strings and isinstance(obj, (str, bytes)):
         return [obj]
     elif split_strings and isinstance(obj, bytes):
         # in python3 iterating over bytes gives integers instead of strings
@@ -1525,7 +1521,7 @@ def to_string(obj):
     elif obj is None:
         res = ""
     else:
-        res = text_type(obj)
+        res = str(obj)
     return res
 
 
@@ -1677,7 +1673,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
                 _failed = True
 
             if _failed:
-                raise TypeError("Unable to update object at index {!r}. {}".format(key, exc))
+                raise TypeError(f"Unable to update object at index {key!r}. {exc}")
 
     value = base_get(target, last_key, default=None)
     base_set(target, last_key, callit(updater, value))
@@ -1736,14 +1732,14 @@ def unset(obj, path):  # noqa: C901
             except TypeError:
                 target = target[int(key)]
         except Exception:
-            target = NoValue
+            target = UNSET
 
-        if target is NoValue:
+        if target is UNSET:
             break
 
     did_unset = False
 
-    if target is not NoValue:
+    if target is not UNSET:
         try:
             try:
                 target.pop(last_key)

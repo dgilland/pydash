@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Project version information."""
 
 from pkg_resources import DistributionNotFound, get_distribution

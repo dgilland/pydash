@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
-
 from copy import deepcopy
+
+import pytest
 
 import pydash as _
 
-from .fixtures import parametrize
+
+parametrize = pytest.mark.parametrize
 
 
 pydash_methods = _.filter_(dir(_), lambda m: callable(getattr(_, m, None)))

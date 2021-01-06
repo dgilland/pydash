@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 import pydash as _
 
-from .fixtures import parametrize
+
+parametrize = pytest.mark.parametrize
 
 
 @parametrize(

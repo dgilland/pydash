@@ -1,8 +1,18 @@
 import time
+from unittest import mock
+
+import pytest
 
 import pydash as _
 
-from .fixtures import parametrize
+
+parametrize = pytest.mark.parametrize
+
+
+@pytest.fixture
+def mocked_sleep():
+    with mock.patch("time.sleep") as mocked:
+        yield mocked
 
 
 @parametrize(

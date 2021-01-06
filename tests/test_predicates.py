@@ -1,14 +1,16 @@
-# -*- coding: utf-8 -*-
-
 import datetime
 import decimal
 import operator
 import re
 
+import pytest
+
 import pydash as _
 
 from . import fixtures
-from .fixtures import parametrize
+
+
+parametrize = pytest.mark.parametrize
 
 
 @parametrize(
