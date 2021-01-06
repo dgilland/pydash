@@ -270,8 +270,9 @@ def test_negate(func, args):
 
 @parametrize("case,arglist,expected", [(lambda a: a * a, [(2,), (4,)], 4)])
 def test_once(case, arglist, expected):
+    fn = _.once(case)
     for args in arglist:
-        _.once(case)(*args) == expected
+        assert fn(*args) == expected
 
 
 @parametrize(
@@ -300,7 +301,7 @@ def test_partial_as_iteratee():
     func = _.partial(lambda offset, value, *args: value + offset, 5)
     case = [1, 2, 3]
     expected = [6, 7, 8]
-    _.map_(case, func) == expected
+    assert _.map_(case, func) == expected
 
 
 @parametrize(

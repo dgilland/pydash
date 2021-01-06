@@ -4,6 +4,18 @@ Changelog
 =========
 
 
+v4.9.2 (2020-12-24)
+-------------------
+
+- Fix regression introduced in ``v4.9.1`` that broke ``pydash.get`` for dictionaries and dot-delimited keys that reference integer dict-keys.
+
+
+v4.9.1 (2020-12-14)
+-------------------
+
+- Fix bug in ``get/has`` that caused ``defaultdict`` objects to get populated on key access.
+
+
 v4.9.0 (2020-10-27)
 -------------------
 
