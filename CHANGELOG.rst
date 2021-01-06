@@ -4,6 +4,23 @@ Changelog
 =========
 
 
+- Drop support for Python 2.7. (**breaking change**)
+- Improve Unicode word splitting in string functions to be inline with Lodash. Thanks mervynlee94_! (**breaking change**)
+
+  - ``camel_case``
+  - ``human_case``
+  - ``kebab_case``
+  - ``lower_case``
+  - ``pascal_case``
+  - ``separator_case``
+  - ``slugify``
+  - ``snake_case``
+  - ``start_case``
+  - ``upper_case``
+
+- Optimize regular expression constants used in ``pydash.strings`` by pre-compiling them to regular expression pattern objects.
+
+
 v4.9.3 (2021-03-03)
 -------------------
 
@@ -1144,3 +1161,4 @@ v0.0.0 (2014-07-22)
 .. _elijose55: https://github.com/elijose55
 .. _gonzalonaveira: https://github.com/gonzalonaveira
 .. _zhaowb: https://github.com/zhaowb
+.. _mervynlee94: https://github.com/mervynlee94
