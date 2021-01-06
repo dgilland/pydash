@@ -13,7 +13,6 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 import pydash as pyd
 
 from .helpers import UNSET
-from .objects import to_string
 
 
 __all__ = (
@@ -86,6 +85,40 @@ __all__ = (
 )
 
 
+class JSRegExp:
+    """
+    Javascript-style regular expression pattern.
+
+    Converts a Javascript-style regular expression to the equivalent Python version.
+    """
+
+    def __init__(self, reg_exp):
+        pattern, options = reg_exp[1:].rsplit("/", 1)
+
+        self._global = "g" in options
+        self._ignore_case = "i" in options
+
+        flags = re.I if self._ignore_case else 0
+        self.pattern = re.compile(pattern, flags=flags)
+
+    def find(self, text):
+        """Return list of regular expression matches."""
+        if self._global:
+            results = self.pattern.findall(text)
+        else:
+            res = self.pattern.search(text)
+            if res:
+                results = [res.group()]
+            else:
+                results = []
+        return results
+
+    def replace(self, text, repl):
+        """Replace parts of text that match the regular expression."""
+        count = 0 if self._global else 1
+        return self.pattern.sub(repl, text, count=count)
+
+
 HTML_ESCAPES = {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;", "`": "&#96;"}
 
 DEBURRED_LETTERS = {
@@ -156,12 +189,12 @@ DEBURRED_LETTERS = {
 }
 
 # Use Javascript style regex to make Lo-Dash compatibility easier.
-# Lodash Regex definition: https://github.com/lodash/lodash/blob/master/.internal/unicodeWords.js
+# Lodash Regex definitions: https://github.com/lodash/lodash/blob/master/.internal/unicodeWords.js
 
-# Reference: https://github.com/lodash/lodash/blob/master/words.js#L8
-RE_ASCII_WORDS = "/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g"
+# References: https://github.com/lodash/lodash/blob/master/words.js#L8
+RS_ASCII_WORDS = "/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g"
+RS_LATIN1 = "/[\xC0-\xFF]/g"
 
-RE_LATIN1 = "/[\xC0-\xFF]/g"
 # Used to compose unicode character classes.
 RS_ASTRAL_RANGE = "\\ud800-\\udfff"
 RS_COMBO_MARKS_RANGE = "\\u0300-\\u036f"
@@ -192,54 +225,59 @@ RS_BREAK_RANGE = RS_MATH_OP_RANGE + RS_NON_CHAR_RANGE + RS_PUNCTUATION_RANGE + R
 
 # Used to compose unicode capture groups.
 RS_APOS = "['\u2019]"
-RS_BREAK = "[{0}]".format(RS_BREAK_RANGE)
-RS_COMBO = "[{0}]".format(RS_COMBO_RANGE)
+RS_BREAK = f"[{RS_BREAK_RANGE}]"
+RS_COMBO = f"[{RS_COMBO_RANGE}]"
 RS_DIGIT = "\\d"
-RS_DINGBAT = "[{0}]".format(RS_DINGBAT_RANGE)
-RS_LOWER = "[{0}]".format(RS_LOWER_RANGE)
-RS_MISC = "[^{0}{1}]".format(
-    RS_ASTRAL_RANGE, RS_BREAK_RANGE + RS_DIGIT + RS_DINGBAT_RANGE + RS_LOWER_RANGE + RS_UPPER_RANGE
+RS_DINGBAT = f"[{RS_DINGBAT_RANGE}]"
+RS_LOWER = f"[{RS_LOWER_RANGE}]"
+RS_MISC = (
+    f"[^{RS_ASTRAL_RANGE}{RS_BREAK_RANGE}{RS_DIGIT}"
+    f"{RS_DINGBAT_RANGE}{RS_LOWER_RANGE}{RS_UPPER_RANGE}]"
 )
 RS_FITZ = "\\ud83c[\\udffb-\\udfff]"
-RS_MODIFIER = "(?:{0}|{1})".format(RS_COMBO, RS_FITZ)
-RS_NON_ASTRAL = "[^{0}]".format(RS_ASTRAL_RANGE)
+RS_MODIFIER = f"(?:{RS_COMBO}|{RS_FITZ})"
+RS_NON_ASTRAL = f"[^{RS_ASTRAL_RANGE}]"
 RS_REGIONAL = "(?:\\ud83c[\\udde6-\\uddff]){2}"
 RS_SURR_PAIR = "[\\ud800-\\udbff][\\udc00-\\udfff]"
-RS_UPPER = "[{0}]".format(RS_UPPER_RANGE)
+RS_UPPER = f"[{RS_UPPER_RANGE}]"
 RS_ZWJ = "\\u200d"
 
 # Used to compose unicode regexes.
-RS_MISC_LOWER = "(?:{0}|{1})".format(RS_LOWER, RS_MISC)
-RS_MISC_UPPER = "(?:{0}|{1})".format(RS_UPPER, RS_MISC)
-RS_OPT_CONTR_LOWER = "(?:{0}(?:d|ll|m|re|s|t|ve))?".format(RS_APOS)
-RS_OPT_CONTR_UPPER = "(?:{0}(?:D|LL|M|RE|S|T|VE))?".format(RS_APOS)
-RE_OPT_MOD = "{0}?".format(RS_MODIFIER)
-RS_OPT_VAR = "[{0}]?".format(RS_VAR_RANGE)
-RS_OPT_JOIN = "(?:{0}(?:{1}|{2}|{3}){4})*".format(
-    RS_ZWJ, RS_NON_ASTRAL, RS_REGIONAL, RS_SURR_PAIR, RS_OPT_VAR + RE_OPT_MOD
+RS_MISC_LOWER = f"(?:{RS_LOWER}|{RS_MISC})"
+RS_MISC_UPPER = f"(?:{RS_UPPER}|{RS_MISC})"
+RS_OPT_CONTR_LOWER = f"(?:{RS_APOS}(?:d|ll|m|re|s|t|ve))?"
+RS_OPT_CONTR_UPPER = f"(?:{RS_APOS}(?:D|LL|M|RE|S|T|VE))?"
+RE_OPT_MOD = f"{RS_MODIFIER}?"
+RS_OPT_VAR = f"[{RS_VAR_RANGE}]?"
+RS_OPT_JOIN = (
+    f"(?:{RS_ZWJ}(?:{RS_NON_ASTRAL}|{RS_REGIONAL}|{RS_SURR_PAIR}){RS_OPT_VAR}{RE_OPT_MOD})*"
 )
 RS_ORD_LOWER = "\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])"
 RS_ORD_UPPER = "\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])"
 RS_SEQ = RS_OPT_VAR + RE_OPT_MOD + RS_OPT_JOIN
-RS_EMOJI = "(?:{0}|{1}|{2}){3}".format(RS_DINGBAT, RS_REGIONAL, RS_SURR_PAIR, RS_SEQ)
+RS_EMOJI = f"(?:{RS_DINGBAT}|{RS_REGIONAL}|{RS_SURR_PAIR}){RS_SEQ}"
 
-RE_UNICODE_WORDS = (
-    "/{0}?{1}+{2}(?={3}|{0}|$)|{4}+{5}"
-    "(?={3}|{6}|$)|{0}?{7}+{2}|{0}+{5}|{8}|{9}|{10}+|{11}/g".format(
-        RS_UPPER,
-        RS_LOWER,
-        RS_OPT_CONTR_LOWER,
-        RS_BREAK,
-        RS_MISC_UPPER,
-        RS_OPT_CONTR_UPPER,
-        RS_UPPER + RS_MISC_LOWER,
-        RS_MISC_LOWER,
-        RS_ORD_UPPER,
-        RS_ORD_LOWER,
-        RS_DIGIT,
-        RS_EMOJI,
-    )
+RS_HAS_UNICODE_WORD = "[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]"
+RS_UNICODE_WORDS = (
+    f"/"
+    f"{RS_UPPER}?{RS_LOWER}+{RS_OPT_CONTR_LOWER}(?={RS_BREAK}|{RS_UPPER}|$)"
+    f"|{RS_MISC_UPPER}+{RS_OPT_CONTR_UPPER}(?={RS_BREAK}|{RS_UPPER}{RS_MISC_LOWER}|$)"
+    f"|{RS_UPPER}?{RS_MISC_LOWER}+{RS_OPT_CONTR_LOWER}"
+    f"|{RS_UPPER}+{RS_OPT_CONTR_UPPER}"
+    f"|{RS_ORD_UPPER}"
+    f"|{RS_ORD_LOWER}"
+    f"|{RS_DIGIT}+"
+    f"|{RS_EMOJI}"
+    f"/g"
 )
+
+# Compiled regexes for use in functions.
+JS_RE_ASCII_WORDS = JSRegExp(RS_ASCII_WORDS)
+JS_RE_UNICODE_WORDS = JSRegExp(RS_UNICODE_WORDS)
+JS_RE_LATIN1 = JSRegExp(RS_LATIN1)
+RE_HAS_UNICODE_WORD = re.compile(RS_HAS_UNICODE_WORD)
+RE_APOS = re.compile(RS_APOS)
+RE_HTML_TAGS = re.compile(r"<\/?[^>]+>")
 
 
 def camel_case(text):
@@ -258,6 +296,9 @@ def camel_case(text):
         'fooBarBAz'
 
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     text = "".join(word.title() for word in compounder(text))
     return text[:1].lower() + text[1:]
@@ -440,10 +481,9 @@ def deburr(text):
 
     .. versionadded:: 2.0.0
     """
-    return reg_exp_js_replace(
-        pyd.to_string(text),
-        RE_LATIN1,
-        lambda match: DEBURRED_LETTERS.get(match.group(), match.group()),
+    text = pyd.to_string(text)
+    return JS_RE_LATIN1.replace(
+        text, lambda match: DEBURRED_LETTERS.get(match.group(), match.group())
     )
 
 
@@ -573,8 +613,8 @@ def escape(text):
         Moved function to :mod:`pydash.strings`.
     """
     text = pyd.to_string(text)
-    # NOTE: Not using _compat.html_escape because Lo-Dash escapes certain chars differently (e.g.
-    # "'" isn't escaped by html_escape() but is by Lo-Dash).
+    # NOTE: Not using html.escape because Lo-Dash escapes certain chars differently (e.g. "'" isn't
+    # escaped by html.escape() but is by Lo-Dash).
     return "".join(HTML_ESCAPES.get(char, char) for char in text)
 
 
@@ -646,6 +686,9 @@ def human_case(text):
         'User'
 
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     return (
         pyd.chain(text)
@@ -725,6 +768,9 @@ def kebab_case(text):
         'a-b-c-d-e-f'
 
     .. versionadded:: 1.1.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     return "-".join(word.lower() for word in compounder(text) if word)
 
@@ -769,6 +815,9 @@ def lower_case(text):
         'foo 10 b ar'
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     return " ".join(compounder(text)).lower()
 
@@ -967,6 +1016,9 @@ def pascal_case(text, strict=True):
         'FooBarBAz'
 
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     text = pyd.to_string(text)
 
@@ -1116,7 +1168,7 @@ def reg_exp_js_match(text, reg_exp):
         Renamed from ``js_match`` to ``reg_exp_js_match``.
     """
     text = pyd.to_string(text)
-    return js_to_py_re_find(reg_exp)(text)
+    return JSRegExp(reg_exp).find(text)
 
 
 def reg_exp_js_replace(text, reg_exp, repl):
@@ -1153,7 +1205,7 @@ def reg_exp_js_replace(text, reg_exp, repl):
     text = pyd.to_string(text)
     if not pyd.is_function(repl):
         repl = pyd.to_string(repl)
-    return js_to_py_reg_exp_replace(reg_exp)(text, repl)
+    return JSRegExp(reg_exp).replace(text, repl)
 
 
 def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
@@ -1163,7 +1215,7 @@ def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
 
     Args:
         text (str): String to replace.
-        pattern (str): String pattern to find and replace.
+        pattern (str|re.Pattern): Pattern to find and replace.
         repl (str): String to substitute `pattern` with.
         ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
         count (int, optional): Maximum number of occurrences to replace. Defaults to ``0`` which
@@ -1224,7 +1276,7 @@ def replace(
 
     Args:
         text (str): String to replace.
-        pattern (str): String pattern to find and replace.
+        pattern (str|re.Pattern): Pattern to find and replace.
         repl (str): String to substitute `pattern` with.
         ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
         count (int, optional): Maximum number of occurrences to replace. Defaults to ``0`` which
@@ -1255,29 +1307,37 @@ def replace(
 
     .. versionchanged:: 4.1.0
         Added ``from_start`` and ``from_end`` arguments.
+
+    .. versionchanged:: 5.0.0
+        Added support for ``pattern`` as ``re.Pattern`` object.
     """
     text = pyd.to_string(text)
 
     if pattern is None:
         return text
 
-    pattern = pyd.to_string(pattern)
-
-    if escape:
-        pattern = re.escape(pattern)
-
-    if from_start and not pattern.startswith("^"):
-        pattern = "^" + pattern
-
-    if from_end and not pattern.endswith("$"):
-        pattern += "$"
-
     if not pyd.is_function(repl):
         repl = pyd.to_string(repl)
 
     flags = re.IGNORECASE if ignore_case else 0
 
-    return re.sub(pattern, repl, text, count=count, flags=flags)
+    if isinstance(pattern, re.Pattern):
+        pat = pattern
+    else:
+        pattern = pyd.to_string(pattern)
+
+        if escape:
+            pattern = re.escape(pattern)
+
+        if from_start and not pattern.startswith("^"):
+            pattern = "^" + pattern
+
+        if from_end and not pattern.endswith("$"):
+            pattern += "$"
+
+        pat = re.compile(pattern, flags=flags)
+
+    return pat.sub(repl, text, count=count)
 
 
 def replace_end(text, pattern, repl, ignore_case=False, escape=True):
@@ -1287,7 +1347,7 @@ def replace_end(text, pattern, repl, ignore_case=False, escape=True):
 
     Args:
         text (str): String to replace.
-        pattern (str): String pattern to find and replace.
+        pattern (str|re.Pattern): Pattern to find and replace.
         repl (str): String to substitute `pattern` with.
         ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
         escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
@@ -1316,9 +1376,9 @@ def replace_start(text, pattern, repl, ignore_case=False, escape=True):
 
     Args:
         text (str): String to replace.
-        pattern (str): String pattern to find and replace.
+        pattern (str|re.Pattern): Pattern to find and replace.
         repl (str): String to substitute `pattern` with.
-        ignore_clase (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
+        ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
         escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
             literal replacement is desired when `pattern` may contain special regular expression
             characters. Defaults to ``True``.
@@ -1355,6 +1415,9 @@ def separator_case(text, separator):
         'a-b-c-d'
 
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     return separator.join(word.lower() for word in words(text) if word)
 
@@ -1446,6 +1509,9 @@ def slugify(text, separator="-"):
         True
 
     .. versionadded:: 3.0.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     normalized = (
         unicodedata.normalize("NFKD", pyd.to_string(text)).encode("ascii", "ignore").decode("utf8")
@@ -1473,6 +1539,9 @@ def snake_case(text):
 
     .. versionchanged:: 4.0.0
         Removed alias ``underscore_case``.
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     return "_".join(word.lower() for word in compounder(text) if word)
 
@@ -1532,8 +1601,10 @@ def start_case(text):
         'Foo Bar'
 
     .. versionadded:: 3.1.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
-    text = pyd.to_string(text)
     return " ".join(capitalize(word, strict=False) for word in compounder(text))
 
 
@@ -1582,7 +1653,7 @@ def strip_tags(text):
 
     .. versionadded:: 3.0.0
     """
-    return reg_exp_replace(text, r"<\/?[^>]+>", "")
+    return RE_HTML_TAGS.sub("", pyd.to_string(text))
 
 
 def substr_left(text, subtext):
@@ -1789,7 +1860,7 @@ def to_lower(text):
 
     .. versionadded:: 4.0.0
     """
-    return to_string(text).lower()
+    return pyd.to_string(text).lower()
 
 
 def to_upper(text):
@@ -1813,7 +1884,7 @@ def to_upper(text):
 
     .. versionadded:: 4.0.0
     """
-    return to_string(text).upper()
+    return pyd.to_string(text).upper()
 
 
 def trim(text, chars=None):
@@ -1989,6 +2060,9 @@ def upper_case(text):
         'FOO 10 B AR'
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
     return " ".join(compounder(text)).upper()
 
@@ -2096,7 +2170,10 @@ def url(*paths, **params):
 def words(text, pattern=None):
     """
     Return list of words contained in `text`.
-    Reference: https://github.com/lodash/lodash/blob/master/words.js#L30
+
+    References:
+        https://github.com/lodash/lodash/blob/master/words.js#L30
+
     Args:
         text (str): String to split.
         pattern (str, optional): Custom pattern to split words on. Defaults to ``None``.
@@ -2118,14 +2195,19 @@ def words(text, pattern=None):
 
     .. versionchanged:: 3.2.0
         Improved matching for one character words.
+
+    .. versionchanged:: 5.0.0
+        Improved unicode word support.
     """
+    text = pyd.to_string(text)
     if pattern is None:
         if has_unicode_word(text):
-            return reg_exp_js_match(text, RE_UNICODE_WORDS)
+            reg_exp = JS_RE_UNICODE_WORDS
         else:
-            return reg_exp_js_match(text, RE_ASCII_WORDS)
-
-    return reg_exp_js_match(text, pattern)
+            reg_exp = JS_RE_ASCII_WORDS
+    else:
+        reg_exp = JSRegExp(pattern)
+    return reg_exp.find(text)
 
 
 #
@@ -2135,57 +2217,25 @@ def words(text, pattern=None):
 
 def compounder(text):
     """
-    Remove single quote before passing into words(), required by certain functions such as
-    kebab_case, camel_case, start_case etc.
+    Remove single quote before passing into words() to match Lodash-style outputs.
 
-    to match Lodash-style outputs
+    Required by certain functions such as kebab_case, camel_case, start_case etc.
+
+    References:
+        https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L4968
     """
-    # Reference: https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L4968 # noqa
-    return words(deburr(re.sub(RS_APOS, "", to_string(text))))
+    return words(deburr(RE_APOS.sub("", pyd.to_string(text))))
 
 
 def has_unicode_word(text):
     """
     Check if the text contains unicode or requires more complex regex to handle.
 
-    Reference: https://github.com/lodash/lodash/blob/master/words.js#L3
+    References:
+        https://github.com/lodash/lodash/blob/master/words.js#L3
     """
-    text = pyd.to_string(text)
-    RE_HAS_UNICODE_WORD = "[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]"
-    result = re.search(RE_HAS_UNICODE_WORD, text)
+    result = RE_HAS_UNICODE_WORD.search(text)
     return bool(result)
-
-
-def js_to_py_re_find(reg_exp):
-    """Return Python regular expression matching function based on Javascript style regexp."""
-    pattern, options = reg_exp[1:].rsplit("/", 1)
-    flags = re.I if "i" in options else 0
-
-    def find(text):
-        if "g" in options:
-            results = re.findall(pattern, text, flags=flags)
-        else:
-            results = re.search(pattern, text, flags=flags)
-            if results:
-                results = [results.group()]
-            else:
-                results = []
-
-        return results
-
-    return find
-
-
-def js_to_py_reg_exp_replace(reg_exp):
-    """Return Python regular expression substitution function based on Javascript style regexp."""
-    pattern, options = reg_exp[1:].rsplit("/", 1)
-    count = 0 if "g" in options else 1
-    ignore_case = "i" in options
-
-    def _replace(text, repl):
-        return reg_exp_replace(text, pattern, repl, ignore_case=ignore_case, count=count)
-
-    return _replace
 
 
 def delimitedpathjoin(delimiter, *paths):

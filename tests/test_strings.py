@@ -669,6 +669,7 @@ def test_repeat(case, expected):
     "case,expected",
     [
         (("foo", "o", "a"), "faa"),
+        (("foo", re.compile("o"), "a"), "faa"),
         (("foo", "o", "a", False, 1), "fao"),
         (("fOO", "o", "a"), "fOO"),
         (("fOO", "o", "a", True), "faa"),
