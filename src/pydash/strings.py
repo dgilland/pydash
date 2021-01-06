@@ -2162,7 +2162,8 @@ def has_unicode_word(text):
     Reference: https://github.com/lodash/lodash/blob/master/words.js#L3
     """
     text = pyd.to_string(text)
-    result = re.findall(RE_UNICODE_WORDS, text)
+    RE_HAS_UNICODE_WORD = "[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]"
+    result = re.search(RE_HAS_UNICODE_WORD, text)
     return bool(result)
 
 
