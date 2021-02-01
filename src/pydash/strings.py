@@ -561,7 +561,9 @@ def ensure_ends_with(text, suffix):
     """
     text = pyd.to_string(text)
     suffix = pyd.to_string(suffix)
-    return text if text.endswith(suffix) else "{0}{1}".format(text, suffix)
+    if text.endswith(suffix):
+        return text
+    return f"{text}{suffix}"
 
 
 def ensure_starts_with(text, prefix):
@@ -588,7 +590,9 @@ def ensure_starts_with(text, prefix):
     """
     text = pyd.to_string(text)
     prefix = pyd.to_string(prefix)
-    return text if text.startswith(prefix) else "{1}{0}".format(text, prefix)
+    if text.startswith(prefix):
+        return text
+    return f"{prefix}{text}"
 
 
 def escape(text):
@@ -871,7 +875,7 @@ def number_format(number, scale=0, decimal_separator=".", order_separator=","):
     .. versionadded:: 3.0.0
     """
     # Create a string formatter which converts number to the appropriately scaled representation.
-    fmt = "{{0:.{0:d}f}}".format(scale)
+    fmt = f"{{0:.{scale:d}f}}"
 
     try:
         num_parts = fmt.format(number).split(".")
@@ -1793,7 +1797,9 @@ def surround(text, wrapper):
 
     .. versionadded:: 2.4.0
     """
-    return "{1}{0}{1}".format(pyd.to_string(text), pyd.to_string(wrapper))
+    text = pyd.to_string(text)
+    wrapper = pyd.to_string(wrapper)
+    return f"{wrapper}{text}{wrapper}"
 
 
 def swap_case(text):
@@ -2119,7 +2125,7 @@ def unquote(text, quote_char='"'):
     text = pyd.to_string(text)
     inner = text[1:-1]
 
-    if text == "{0}{1}{0}".format(quote_char, inner):
+    if text == f"{quote_char}{inner}{quote_char}":
         text = inner
 
     return text

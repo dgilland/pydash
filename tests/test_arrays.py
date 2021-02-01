@@ -395,7 +395,7 @@ def test_last_index_of(case, value, from_index, expected):
 
 @parametrize(
     "case,expected",
-    [(([1, 2, None, 4, None, 6], lambda x, i: ["{0}".format(i)] if x is None else []), ["2", "4"])],
+    [(([1, 2, None, 4, None, 6], lambda x, i: [str(i)] if x is None else []), ["2", "4"])],
 )
 def test_mapcat(case, expected):
     assert _.mapcat(*case) == expected

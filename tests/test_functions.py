@@ -220,7 +220,7 @@ def flip(case, args, expected):
 @parametrize(
     "case,args,expected",
     [
-        ((lambda x: "!!!" + x + "!!!", lambda x: "Hi {0}".format(x)), ("Bob",), "Hi !!!Bob!!!"),
+        ((lambda x: "!!!" + x + "!!!", lambda x: f"Hi {x}"), ("Bob",), "Hi !!!Bob!!!"),
         ((lambda x: x + x, lambda x: x * x), (5,), 100),
     ],
 )
@@ -231,7 +231,7 @@ def test_flow(case, args, expected):
 @parametrize(
     "case,args,expected",
     [
-        ((lambda x: "Hi {0}".format(x), lambda x: "!!!" + x + "!!!"), ("Bob",), "Hi !!!Bob!!!"),
+        ((lambda x: f"Hi {x}", lambda x: "!!!" + x + "!!!"), ("Bob",), "Hi !!!Bob!!!"),
         ((lambda x: x + x, lambda x: x * x), (5,), 50),
     ],
 )
@@ -344,7 +344,7 @@ def test_rearg(case, args, kargs, expected):
     [
         (lambda *args: args, ["a", "b", "c"], ("a", "b", "c")),
         (lambda *args: ",".join(args), ["a", "b", "c"], "a,b,c"),
-        (lambda a, b, c: "{} {} {}".format(a, b, c), [1, 2, 3], "1 2 3"),
+        (lambda a, b, c: f"{a} {b} {c}", [1, 2, 3], "1 2 3"),
     ],
 )
 def test_spread(case, args, expected):
@@ -388,7 +388,7 @@ def test_unary(case, args, kargs, expected):
     "case,args,expected",
     [
         (
-            (lambda a: a.strip(), lambda func, text: "<p>{0}</p>".format(func(text))),
+            (lambda a: a.strip(), lambda func, text: f"<p>{func(text)}</p>"),
             ("  hello world!  ",),
             "<p>hello world!</p>",
         )

@@ -493,7 +493,7 @@ def memoize(func, resolver=None):
         if resolver:
             key = resolver(*args, **kwargs)
         else:
-            key = "{0}{1}".format(args, kwargs)
+            key = f"{args}{kwargs}"
 
         if key not in memoized.cache:
             memoized.cache[key] = func(*args, **kwargs)
@@ -1252,9 +1252,11 @@ def unique_id(prefix=None):
     global ID_COUNTER
     ID_COUNTER += 1
 
-    return "{0}{1}".format(
-        pyd.to_string("" if prefix is None else prefix), pyd.to_string(ID_COUNTER)
-    )
+    if prefix is None:
+        prefix = ""
+    else:
+        prefix = pyd.to_string(prefix)
+    return f"{prefix}{ID_COUNTER}"
 
 
 #
@@ -1309,9 +1311,7 @@ def base_range(*args, **kwargs):
 
     for arg in check_args:
         if not isinstance(arg, int):  # pragma: no cover
-            raise TypeError(
-                "range cannot interpret '{0}' object as an " "integer".format(type(arg).__name__)
-            )
+            raise TypeError(f"range cannot interpret {type(arg).__name__!r} object as an integer")
 
     def gen():
         if not args:
