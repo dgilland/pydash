@@ -1031,7 +1031,7 @@ def some(collection, predicate=None):
 
     Args:
         collection (list|dict): Collection to iterate over.
-        predicateed (mixed, optional): Predicate applied per iteration.
+        predicate (mixed, optional): Predicate applied per iteration.
 
     Returns:
         bool: Whether any of the elements are truthy.

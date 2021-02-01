@@ -473,8 +473,6 @@ def get(obj, path, default=None):
     Args:
         obj (list|dict|Sequence|Mapping): Object to process.
         path (str|list): List or ``.`` delimited string of path describing path.
-
-    Keyword Arguments:
         default (mixed): Default value to return if path doesn't exist. Defaults to ``None``.
 
     Returns:
@@ -623,6 +621,7 @@ def invert_by(obj, iteratee=None):
 
     Args:
         obj (dict): Object to invert.
+        iteratee (mixed): Iteratee applied per iteration.
 
     Returns:
         dict: Inverted dict.
@@ -781,6 +780,7 @@ def map_values_deep(obj, iteratee=None, property_path=UNSET):
     Args:
         obj (list|dict): Object to map.
         iteratee (callable): Iteratee applied to each value.
+        property_path (mixed, optional): Path key(s) to access.
 
     Returns:
         mixed: The modified object.

@@ -121,8 +121,6 @@ def base_get(obj, key, default=UNSET):
     Args:
         obj (list|dict): Sequence or mapping to retrieve item from.
         key (mixed): Key or index identifying which item to retrieve.
-
-    Keyword Args:
         default (mixed, optional): Default value to return if `key` not found in `obj`.
 
     Returns:

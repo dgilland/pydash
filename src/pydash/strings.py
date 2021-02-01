@@ -573,7 +573,7 @@ def ensure_starts_with(text, prefix):
 
     Args:
         text (str): Source string to prepend `prefix` to.
-        suffix (str): String to prepend to the source string if the source string does not start
+        prefix (str): String to prepend to the source string if the source string does not start
             with `prefix`.
 
     Returns:
@@ -2105,6 +2105,7 @@ def unquote(text, quote_char='"'):
 
     Args:
         text (str): String to unquote.
+        quote_char (str, optional): Quote character to remove. Defaults to `"`.
 
     Returns:
         str: Unquoted string.
