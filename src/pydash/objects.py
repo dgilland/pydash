@@ -1787,7 +1787,7 @@ def values(obj):
 #
 
 
-def base_clone(value, is_deep=False, customizer=None, key=None, obj=None, _cloned=False):
+def base_clone(value, is_deep=False, customizer=None, key=None, _cloned=False):
     """Base clone function that supports deep clone and customizer callback."""
     clone_by = copy.deepcopy if is_deep else copy.copy
     result = None
@@ -1814,7 +1814,7 @@ def base_clone(value, is_deep=False, customizer=None, key=None, obj=None, _clone
     if cbk and not pyd.is_string(value) and not isinstance(value, bytes):
         for key, subvalue in iterator(value):
             if is_deep:
-                val = base_clone(subvalue, is_deep, cbk, key, value, _cloned=True)
+                val = base_clone(subvalue, is_deep, cbk, key, _cloned=True)
             else:
                 val = cbk(subvalue, key, value)
 
