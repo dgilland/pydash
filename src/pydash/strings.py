@@ -7,6 +7,7 @@ String functions.
 import html
 import math
 import re
+import typing
 import unicodedata
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
@@ -1219,7 +1220,7 @@ def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
 
     Args:
         text (str): String to replace.
-        pattern (str|re.Pattern): Pattern to find and replace.
+        pattern (str|typing.Pattern): Pattern to find and replace.
         repl (str): String to substitute `pattern` with.
         ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
         count (int, optional): Maximum number of occurrences to replace. Defaults to ``0`` which
@@ -1280,7 +1281,7 @@ def replace(
 
     Args:
         text (str): String to replace.
-        pattern (str|re.Pattern): Pattern to find and replace.
+        pattern (str|typing.Pattern): Pattern to find and replace.
         repl (str): String to substitute `pattern` with.
         ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
         count (int, optional): Maximum number of occurrences to replace. Defaults to ``0`` which
@@ -1313,7 +1314,7 @@ def replace(
         Added ``from_start`` and ``from_end`` arguments.
 
     .. versionchanged:: 5.0.0
-        Added support for ``pattern`` as ``re.Pattern`` object.
+        Added support for ``pattern`` as ``typing.Pattern`` object.
     """
     text = pyd.to_string(text)
 
@@ -1325,7 +1326,7 @@ def replace(
 
     flags = re.IGNORECASE if ignore_case else 0
 
-    if isinstance(pattern, re.Pattern):
+    if isinstance(pattern, typing.Pattern):
         pat = pattern
     else:
         pattern = pyd.to_string(pattern)
@@ -1351,7 +1352,7 @@ def replace_end(text, pattern, repl, ignore_case=False, escape=True):
 
     Args:
         text (str): String to replace.
-        pattern (str|re.Pattern): Pattern to find and replace.
+        pattern (str|typing.Pattern): Pattern to find and replace.
         repl (str): String to substitute `pattern` with.
         ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
         escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
@@ -1380,7 +1381,7 @@ def replace_start(text, pattern, repl, ignore_case=False, escape=True):
 
     Args:
         text (str): String to replace.
-        pattern (str|re.Pattern): Pattern to find and replace.
+        pattern (str|typing.Pattern): Pattern to find and replace.
         repl (str): String to substitute `pattern` with.
         ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
         escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
