@@ -178,7 +178,7 @@ def test_delay(func, wait, args, kargs, expected):
     result = _.delay(func, wait, *args, **kargs)
     stop = time.time() * 1000
 
-    assert (wait - 5) <= (stop - start) <= (wait + 5)
+    assert (wait - 10) <= (stop - start) <= (wait + 10)
     assert result == expected
 
 
