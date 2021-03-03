@@ -535,6 +535,14 @@ def test_map_values_deep(case, expected):
             },
         ),
         (({"foo": {"bar": 1}}, {"foo": {}}), {"foo": {"bar": 1}}),
+        (({},), {}),
+        (([],), []),
+        ((None,), None),
+        ((None, {"a": 1}), None),
+        ((None, None, None, {"a": 1}), None),
+        (({"a": 1}, None), {"a": 1}),
+        (({"a": 1}, None, None, None, {"b": 2}), {"a": 1, "b": 2}),
+        (({"a": None}, None, None, None, {"b": None}), {"a": None, "b": None}),
     ],
 )
 def test_merge(case, expected):

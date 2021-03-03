@@ -856,6 +856,9 @@ def merge(obj, *sources):
 
     .. versionchanged:: 4.0.0
         Moved iteratee argument to :func:`merge_with`.
+
+    .. versionchanged:: 4.9.3
+        Fixed regression in v4.8.0 that caused exception when `obj` was ``None``.
     """
     return merge_with(obj, *sources)
 
@@ -892,13 +895,19 @@ def merge_with(obj, *sources, **kwargs):
         True
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: 4.9.3
+        Fixed regression in v4.8.0 that caused exception when `obj` was ``None``.
     """
+    if obj is None:
+        return None
+
     sources = list(sources)
     _clone = kwargs.get("_clone", True)
     iteratee = kwargs.get("iteratee")
     setter = kwargs.get("_setter", base_set)
 
-    if iteratee is None and callable(sources[-1]):
+    if iteratee is None and sources and callable(sources[-1]):
         iteratee = sources.pop()
 
     if callable(iteratee):
