@@ -903,38 +903,42 @@ def merge_with(obj, *sources, **kwargs):
         return None
 
     sources = list(sources)
-    _clone = kwargs.get("_clone", True)
-    iteratee = kwargs.get("iteratee")
-    setter = kwargs.get("_setter", base_set)
+    iteratee = kwargs.pop("iteratee", None)
 
     if iteratee is None and sources and callable(sources[-1]):
         iteratee = sources.pop()
 
+    sources = [copy.deepcopy(source) for source in sources]
+
     if callable(iteratee):
-        argcount = getargcount(iteratee, maxargs=5)
-        cbk = partial(callit, iteratee, argcount=argcount)
+        iteratee = partial(callit, iteratee, argcount=getargcount(iteratee, maxargs=5))
     else:
-        cbk = None
+        iteratee = None
+
+    return _merge_with(obj, *sources, iteratee=iteratee, **kwargs)
+
+
+def _merge_with(obj, *sources, **kwargs):
+    iteratee = kwargs.get("iteratee")
+    setter = kwargs.get("_setter")
+
+    if setter is None:
+        setter = base_set
 
     for source in sources:
-        # Don't re-clone if we've already cloned before.
-        if _clone:
-            source = copy.deepcopy(source)
-
         for key, src_value in iterator(source):
             obj_value = base_get(obj, key, default=None)
-            all_sequences = all([isinstance(src_value, list), isinstance(obj_value, list)])
-            all_mappings = all([isinstance(src_value, dict), isinstance(obj_value, dict)])
+            all_sequences = isinstance(src_value, list) and isinstance(obj_value, list)
+            all_mappings = isinstance(src_value, dict) and isinstance(obj_value, dict)
 
-            if cbk:
-                _result = cbk(obj_value, src_value, key, obj, source)
-            else:
-                _result = None
+            _result = None
+            if iteratee:
+                _result = iteratee(obj_value, src_value, key, obj, source)
 
             if _result is not None:
                 result = _result
             elif all_sequences or all_mappings:
-                result = merge_with(obj_value, src_value, _clone=False, _setter=setter)
+                result = _merge_with(obj_value, src_value, _setter=setter)
             else:
                 result = src_value
 
