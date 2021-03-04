@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v4.9.3 (2021-03-03)
+-------------------
+
 - Fix regression introduced in ``v4.8.0`` that caused ``merge`` and ``merge_with`` to raise an exception when passing ``None`` as the first argument.
 
 
