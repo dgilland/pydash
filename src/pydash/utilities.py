@@ -4,8 +4,6 @@ Utility functions.
 .. versionadded:: 1.0.0
 """
 
-from __future__ import absolute_import, division
-
 from collections import namedtuple
 from datetime import datetime
 from functools import partial, wraps
