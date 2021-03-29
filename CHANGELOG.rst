@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v5.0.0 (2021-03-29)
+-------------------
+
 - Drop support for Python 2.7. (**breaking change**)
 - Improve Unicode word splitting in string functions to be inline with Lodash. Thanks mervynlee94_! (**breaking change**)
 
