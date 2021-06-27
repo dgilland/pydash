@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v5.0.1 (2021-06-27)
+-------------------
+
 - Fix bug in ``merge_with`` that prevented custom iteratee from being used when recursively merging. Thanks weineel_!
 
 
