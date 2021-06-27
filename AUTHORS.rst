@@ -24,3 +24,4 @@ Contributors
 - Gonzalo Naveira, `gonzalonaveira@github <https://github.com/gonzalonaveira>`_
 - Wenbo Zhao, zhaowb@gmail.com, `zhaowb@github <https://github.com/zhaowb>`_
 - Mervyn Lee, `mervynlee94@github <https://github.com/mervynlee94>`_
+- Weineel Lee, `weineel@github <https://github.com/weineel>`_

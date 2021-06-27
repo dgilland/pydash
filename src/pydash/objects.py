@@ -934,7 +934,7 @@ def _merge_with(obj, *sources, **kwargs):
             if _result is not None:
                 result = _result
             elif all_sequences or all_mappings:
-                result = _merge_with(obj_value, src_value, _setter=setter)
+                result = _merge_with(obj_value, src_value, iteratee=iteratee, _setter=setter)
             else:
                 result = src_value
 

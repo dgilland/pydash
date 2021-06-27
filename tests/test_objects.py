@@ -573,11 +573,11 @@ def test_merge_no_link_list():
     [
         (
             (
-                {"fruits": ["apple"], "vegetables": ["beet"]},
-                {"fruits": ["banana"], "vegetables": ["carrot"]},
-                lambda a, b: a + b if isinstance(a, list) else b,
+                {"fruits": ["apple"], "others": {"vegetables": ["beet"]}},
+                {"fruits": ["banana"], "others": {"vegetables": ["carrot"]}},
+                lambda a, b: a + b if isinstance(a, list) else None,
             ),
-            {"fruits": ["apple", "banana"], "vegetables": ["beet", "carrot"]},
+            {"fruits": ["apple", "banana"], "others": {"vegetables": ["beet", "carrot"]}},
         ),
     ],
 )
