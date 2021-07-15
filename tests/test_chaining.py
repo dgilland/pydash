@@ -47,6 +47,12 @@ def test_chaining_invalid_method():
     assert raised
 
 
+def test_invalid_method_subclasses_attribute_error():
+    # NOTE: This needs to subclass AttributeError due to compatibility with typing.Protocol and
+    #  runtime_checkable. See https://github.com/dgilland/pydash/issues/165
+    assert issubclass(_.InvalidMethod, AttributeError)
+
+
 def test_chaining_lazy():
     tracker = {"called": False}
 
