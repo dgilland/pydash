@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v5.0.2 (2021-07-15)
+-------------------
+
 - Fix compatibility issue between ``pydash.py_`` / ``pydash._`` and ``typing.Protocol`` + ``typing.runtime_checkable`` that caused an exception to be raised for ``isinstance(py_, SomeRuntimeCheckableProtocol)``.
 
 
