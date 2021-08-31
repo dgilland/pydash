@@ -6,11 +6,23 @@ Numerical/mathemetical related functions.
 
 import math
 import operator
+from operator import (
+    add,
+    mul as multiply,
+    pow,
+    sub as subtract,
+    truediv as divide,
+)
+import re
+from statistics import mean, median, stdev as std_deviation, variance
+from typing import Iterable, List, TypeVar
 
 import pydash as pyd
 
 from .helpers import UNSET, iterator, iterator_with_default, iteriteratee
 
+
+T = TypeVar("T")
 
 __all__ = (
     "add",
@@ -44,33 +56,6 @@ __all__ = (
 INFINITY = float("inf")
 
 
-def add(a, b):
-    """
-    Adds two numbers.
-
-    Args:
-        a (number): First number to add.
-        b (number): Second number to add.
-
-    Returns:
-        number
-
-    Example:
-
-        >>> add(10, 5)
-        15
-
-    .. versionadded:: 2.1.0
-
-    .. versionchanged:: 3.3.0
-        Support adding two numbers when passed as positional arguments.
-
-    .. versionchanged:: 4.0.0
-        Only support two argument addition.
-    """
-    return a + b
-
-
 def sum_(collection):
     """
     Sum each element in `collection`.
@@ -98,7 +83,7 @@ def sum_(collection):
     return sum_by(collection)
 
 
-def sum_by(collection, iteratee=None):
+def sum_by(collection: Iterable, iteratee=lambda x: x):
     """
     Sum each element in `collection`. If iteratee is passed, each element of `collection` is passed
     through a iteratee before the summation is computed.
@@ -117,35 +102,10 @@ def sum_by(collection, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    return sum(result[0] for result in iteriteratee(collection, iteratee))
+    return sum(map(iteratee, collection))
 
 
-def mean(collection):
-    """
-    Calculate arithmetic mean of each element in `collection`.
-
-    Args:
-        collection (list|dict): Collection to process.
-
-    Returns:
-        float: Result of mean.
-
-    Example:
-
-        >>> mean([1, 2, 3, 4])
-        2.5
-
-    .. versionadded:: 2.1.0
-
-    .. versionchanged:: 4.0.0
-
-        - Removed ``average`` and ``avg`` aliases.
-        - Moved iteratee functionality to :func:`mean_by`.
-    """
-    return mean_by(collection)
-
-
-def mean_by(collection, iteratee=None):
+def mean_by(collection, iteratee=lambda x: x):
     """
     Calculate arithmetic mean of each element in `collection`. If iteratee is passed, each element
     of `collection` is passed through a iteratee before the mean is computed.
@@ -307,7 +267,7 @@ def max_(collection, default=UNSET):
     return max_by(collection, default=default)
 
 
-def max_by(collection, iteratee=None, default=UNSET):
+def max_by(collection, iteratee=lambda x: x, default=UNSET):
     """
     Retrieves the maximum value of a `collection`.
 
@@ -333,10 +293,10 @@ def max_by(collection, iteratee=None, default=UNSET):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return max(iterator_with_default(collection, default), key=pyd.iteratee(iteratee))
+    return max(collection, key=iteratee, default=default)
 
 
-def median(collection, iteratee=None):
+def median_by(collection, iteratee=lambda x: x):
     """
     Calculate median of each element in `collection`. If iteratee is passed, each element of
     `collection` is passed through a iteratee before the median is computed.
@@ -357,18 +317,7 @@ def median(collection, iteratee=None):
 
     .. versionadded:: 2.1.0
     """
-    length = len(collection)
-    middle = (length + 1) / 2
-    collection = sorted(ret[0] for ret in iteriteratee(collection, iteratee))
-
-    if pyd.is_odd(length):
-        result = collection[int(middle - 1)]
-    else:
-        left = int(middle - 1.5)
-        right = int(middle - 0.5)
-        result = (collection[left] + collection[right]) / 2
-
-    return result
+    return median(map(iteratee, collection))
 
 
 def min_(collection, default=UNSET):
@@ -397,7 +346,7 @@ def min_(collection, default=UNSET):
     return min_by(collection, default=default)
 
 
-def min_by(collection, iteratee=None, default=UNSET):
+def min_by(collection, iteratee=lambda x: x, default=UNSET):
     """
     Retrieves the minimum value of a `collection`.
 
@@ -422,7 +371,7 @@ def min_by(collection, iteratee=None, default=UNSET):
     """
     if isinstance(collection, dict):
         collection = collection.values()
-    return min(iterator_with_default(collection, default), key=pyd.iteratee(iteratee))
+    return min(collection, key=iteratee, default=default)
 
 
 def moving_mean(array, size):
@@ -460,33 +409,6 @@ def moving_mean(array, size):
             result.append(mean(window))
 
     return result
-
-
-def multiply(multiplier, multiplicand):
-    """
-    Multiply two numbers.
-
-    Args:
-        multiplier (int/float): The first number in a multiplication.
-        multiplicand (int/float): The second number in a multiplication.
-
-    Returns:
-        int/float: Returns the product.
-
-    Example:
-
-        >>> multiply(4, 5)
-        20
-        >>> multiply(10, 4)
-        40
-        >>> multiply(None, 10)
-        10
-        >>> multiply(None, None)
-        1
-
-    .. versionadded:: 4.0.0
-    """
-    return call_math_operator(multiplier, multiplicand, operator.mul, 1)
 
 
 def power(x, n):
@@ -595,8 +517,8 @@ def slope(point1, point2):
 
     .. versionadded:: 2.1.0
     """
-    x1, y1 = point1[0], point1[1]
-    x2, y2 = point2[0], point2[1]
+    x1, y1 = point1
+    x2, y2 = point2
 
     if x1 == x2:
         result = INFINITY
@@ -606,55 +528,7 @@ def slope(point1, point2):
     return result
 
 
-def std_deviation(array):
-    """
-    Calculate standard deviation of list of numbers.
-
-    Args:
-        array (list): List to process.
-
-    Returns:
-        float: Calculated standard deviation.
-
-    Example:
-
-        >>> round(std_deviation([1, 18, 20, 4]), 2) == 8.35
-        True
-
-    .. versionadded:: 2.1.0
-
-    .. versionchanged:: 4.0.0
-        Remove alias ``sigma``.
-    """
-    return math.sqrt(variance(array))
-
-
-def subtract(minuend, subtrahend):
-    """
-    Subtracts two numbers.
-
-    Args:
-        minuend (int/float): Value passed in by the user.
-        subtrahend (int/float): Value passed in by the user.
-
-    Returns:
-        int/float: Result of the difference from the given values.
-
-    Example:
-
-        >>> subtract(10, 5)
-        5
-        >>> subtract(-10, 4)
-        -14
-        >>> subtract(2, 0.5)
-        1.5
-
-    .. versionadded:: 4.0.0
-    """
-    return call_math_operator(minuend, subtrahend, operator.sub, 0)
-
-
-def transpose(array):
+def transpose(array: List[List]):
     """
     Transpose the elements of `array`.
 
@@ -671,41 +545,11 @@ def transpose(array):
 
     .. versionadded:: 2.1.0
     """
-    trans = []
 
-    for y, row in iterator(array):
-        for x, col in iterator(row):
-            trans = pyd.set_(trans, [x, y], col)
-
-    return trans
+    return list(zip(*array))
 
 
-def variance(array):
-    """
-    Calculate the variance of the elements in `array`.
-
-    Args:
-        array (list): List to process.
-
-    Returns:
-        float: Calculated variance.
-
-    Example:
-
-        >>> variance([1, 18, 20, 4])
-        69.6875
-
-    .. versionadded:: 2.1.0
-    """
-    avg = mean(array)
-
-    def var(x):
-        return power(x - avg, 2)
-
-    return pyd._(array).map_(var).mean().value()
-
-
-def zscore(collection, iteratee=None):
+def zscore(collection, iteratee=lambda x: x):
     """
     Calculate the standard score assuming normal distribution. If iteratee is passed, each element
     of `collection` is passed through a iteratee before the standard score is computed.
@@ -725,7 +569,7 @@ def zscore(collection, iteratee=None):
 
     .. versionadded:: 2.1.0
     """
-    array = pyd.map_(collection, iteratee)
+    array = map(iteratee, collection)
     avg = mean(array)
     sig = std_deviation(array)
 

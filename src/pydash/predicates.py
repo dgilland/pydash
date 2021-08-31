@@ -8,6 +8,7 @@ import datetime
 from itertools import islice
 import json
 import operator
+from operator import eq, ge as gte, gt, le as lte, lt
 import re
 from types import BuiltinFunctionType
 
@@ -65,133 +66,6 @@ __all__ = (
 
 
 RegExp = type(re.compile(""))
-
-
-def eq(value, other):
-    """
-    Checks if :attr:`value` is equal to :attr:`other`.
-
-    Args:
-        value (mixed): Value to compare.
-        other (mixed): Other value to compare.
-
-    Returns:
-        bool: Whether :attr:`value` is equal to :attr:`other`.
-
-    Example:
-
-        >>> eq(None, None)
-        True
-        >>> eq(None, '')
-        False
-        >>> eq('a', 'a')
-        True
-        >>> eq(1, str(1))
-        False
-
-    .. versionadded:: 4.0.0
-    """
-    return value is other
-
-
-def gt(value, other):
-    """
-    Checks if `value` is greater than `other`.
-
-    Args:
-        value (number): Value to compare.
-        other (number): Other value to compare.
-
-    Returns:
-        bool: Whether `value` is greater than `other`.
-
-    Example:
-
-        >>> gt(5, 3)
-        True
-        >>> gt(3, 5)
-        False
-        >>> gt(5, 5)
-        False
-
-    .. versionadded:: 3.3.0
-    """
-    return value > other
-
-
-def gte(value, other):
-    """
-    Checks if `value` is greater than or equal to `other`.
-
-    Args:
-        value (number): Value to compare.
-        other (number): Other value to compare.
-
-    Returns:
-        bool: Whether `value` is greater than or equal to `other`.
-
-    Example:
-
-        >>> gte(5, 3)
-        True
-        >>> gte(3, 5)
-        False
-        >>> gte(5, 5)
-        True
-
-    .. versionadded:: 3.3.0
-    """
-    return value >= other
-
-
-def lt(value, other):
-    """
-    Checks if `value` is less than `other`.
-
-    Args:
-        value (number): Value to compare.
-        other (number): Other value to compare.
-
-    Returns:
-        bool: Whether `value` is less than `other`.
-
-    Example:
-
-        >>> lt(5, 3)
-        False
-        >>> lt(3, 5)
-        True
-        >>> lt(5, 5)
-        False
-
-    .. versionadded:: 3.3.0
-    """
-    return value < other
-
-
-def lte(value, other):
-    """
-    Checks if `value` is less than or equal to `other`.
-
-    Args:
-        value (number): Value to compare.
-        other (number): Other value to compare.
-
-    Returns:
-        bool: Whether `value` is less than or equal to `other`.
-
-    Example:
-
-        >>> lte(5, 3)
-        False
-        >>> lte(3, 5)
-        True
-        >>> lte(5, 5)
-        True
-
-    .. versionadded:: 3.3.0
-    """
-    return value <= other
 
 
 def in_range(value, start=0, end=None):
@@ -873,7 +747,9 @@ def is_match(obj, source):
     return is_match_with(obj, source)
 
 
-def is_match_with(obj, source, customizer=None, _key=UNSET, _obj=UNSET, _source=UNSET):
+def is_match_with(
+    obj, source, customizer=None, _key=UNSET, _obj=UNSET, _source=UNSET
+):
     """
     This method is like :func:`is_match` except that it accepts customizer which is invoked to
     compare values. If customizer returns ``None``, comparisons are handled by the method instead.
@@ -929,7 +805,9 @@ def is_match_with(obj, source, customizer=None, _key=UNSET, _obj=UNSET, _source=
         # Walk a/b to determine equality.
         for key, value in iterator(source):
             try:
-                equal = is_match_with(obj[key], value, cbk, _key=key, _obj=_obj, _source=_source)
+                equal = is_match_with(
+                    obj[key], value, cbk, _key=key, _obj=_obj, _source=_source
+                )
             except Exception:
                 equal = False
 
@@ -964,7 +842,9 @@ def is_monotone(value, op):
     if not is_list(value):
         value = [value]
 
-    search = (False for x, y in zip(value, islice(value, 1, None)) if not op(x, y))
+    search = (
+        False for x, y in zip(value, islice(value, 1, None)) if not op(x, y)
+    )
 
     return next(search, True)
 
