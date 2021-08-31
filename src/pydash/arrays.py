@@ -7,11 +7,23 @@ Functions that operate on lists.
 from bisect import bisect_left, bisect_right
 from functools import cmp_to_key
 from math import ceil
+from typing import (
+    Any,
+    Callable,
+    Iterable,
+    List,
+    Optional,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 import pydash as pyd
 
 from .helpers import base_get, iteriteratee, parse_iteratee
 
+
+T = TypeVar("T")
 
 __all__ = (
     "chunk",
@@ -91,7 +103,7 @@ __all__ = (
 )
 
 
-def chunk(array, size=1):
+def chunk(array: List[T], size: int = 1) -> List[List[T]]:
     """
     Creates a list of elements split into groups the length of `size`. If `array` can't be split
     evenly, the final chunk will be the remaining elements.
@@ -110,11 +122,11 @@ def chunk(array, size=1):
 
     .. versionadded:: 1.1.0
     """
-    chunks = int(ceil(len(array) / float(size)))
+    chunks = int(ceil(len(array) / size))
     return [array[i * size : (i + 1) * size] for i in range(chunks)]
 
 
-def compact(array):
+def compact(array: List[Any]) -> List[Any]:
     """
     Creates a list with all falsey values of array removed.
 
@@ -134,7 +146,7 @@ def compact(array):
     return [item for item in array if item]
 
 
-def concat(*arrays):
+def concat(*arrays: List[Any]) -> List[Any]:
     """
     Concatenates zero or more lists into one.
 
@@ -157,7 +169,7 @@ def concat(*arrays):
     return flatten(arrays)
 
 
-def difference(array, *others):
+def difference(array: List, *others: List) -> List:
     """
     Creates a list of list elements not present in others.
 
@@ -178,7 +190,7 @@ def difference(array, *others):
     return difference_with(array, *others)
 
 
-def difference_by(array, *others, **kwargs):
+def difference_by(array: List, *others: List, **kwargs: Callable):
     """
     This method is like :func:`difference` except that it accepts an iteratee which is invoked for
     each element of each array to generate the criterion by which they're compared. The order and
@@ -219,7 +231,7 @@ def difference_by(array, *others, **kwargs):
     return array
 
 
-def difference_with(array, *others, **kwargs):
+def difference_with(array: List[T], *others: List[T], **kwargs: Callable):
     """
     This method is like :func:`difference` except that it accepts a comparator which is invoked to
     compare the elements of all arrays. The order and references of result values are determined by
@@ -267,7 +279,7 @@ def difference_with(array, *others, **kwargs):
     return array
 
 
-def drop(array, n=1):
+def drop(array: List, n: int = 1):
     """
     Creates a slice of `array` with `n` elements dropped from the beginning.
 
@@ -294,7 +306,7 @@ def drop(array, n=1):
     return drop_while(array, lambda _, index: index < n)
 
 
-def drop_right(array, n=1):
+def drop_right(array: List, n: int = 1):
     """
     Creates a slice of `array` with `n` elements dropped from the end.
 
@@ -319,7 +331,7 @@ def drop_right(array, n=1):
     return drop_right_while(array, lambda _, index: (length - index) <= n)
 
 
-def drop_right_while(array, predicate=None):
+def drop_right_while(array: List[T], predicate: Callable[[T], bool] = None):
     """
     Creates a slice of `array` excluding elements dropped from the end. Elements are dropped until
     the `predicate` returns falsey. The `predicate` is invoked with three arguments: ``(value,
@@ -349,7 +361,7 @@ def drop_right_while(array, predicate=None):
     return array[:n]
 
 
-def drop_while(array, predicate=None):
+def drop_while(array: List, predicate: Callable = None):
     """
     Creates a slice of `array` excluding elements dropped from the beginning. Elements are dropped
     until the `predicate` returns falsey. The `predicate` is invoked with three arguments: ``(value,
@@ -379,7 +391,7 @@ def drop_while(array, predicate=None):
     return array[n:]
 
 
-def duplicates(array, iteratee=None):
+def duplicates(array: List, iteratee=None):
     """
     Creates a unique list of duplicate values from `array`. If iteratee is passed, each element of
     array is passed through a iteratee before duplicates are computed. The iteratee is invoked with
@@ -473,7 +485,9 @@ def find_index(array, predicate=None):
 
     .. versionadded:: 1.0.0
     """
-    search = (i for is_true, _, i, _ in iteriteratee(array, predicate) if is_true)
+    search = (
+        i for is_true, _, i, _ in iteriteratee(array, predicate) if is_true
+    )
     return next(search, -1)
 
 
@@ -498,11 +512,15 @@ def find_last_index(array, predicate=None):
 
     .. versionadded:: 1.0.0
     """
-    search = (i for is_true, _, i, _ in iteriteratee(array, predicate, reverse=True) if is_true)
+    search = (
+        i
+        for is_true, _, i, _ in iteriteratee(array, predicate, reverse=True)
+        if is_true
+    )
     return next(search, -1)
 
 
-def flatten(array):
+def flatten(array: List):
     """
     Flattens array a single level deep.
 
@@ -550,7 +568,7 @@ def flatten_deep(array):
     return flatten_depth(array, depth=-1)
 
 
-def flatten_depth(array, depth=1):
+def flatten_depth(array: List, depth: int = 1):
     """
     Recursively flatten `array` up to `depth` times.
 
@@ -647,7 +665,7 @@ def index_of(array, value, from_index=0):
         return -1
 
 
-def initial(array):
+def initial(array: List):
     """
     Return all but the last element of `array`.
 
@@ -689,7 +707,7 @@ def intercalate(array, separator):
     return flatten(intersperse(array, separator))
 
 
-def interleave(*arrays):
+def interleave(*arrays: List):
     """
     Merge multiple lists into a single list by inserting the next element of each list by sequential
     round-robin into the new list.
@@ -710,7 +728,7 @@ def interleave(*arrays):
     return list(iterinterleave(*arrays))
 
 
-def intersection(array, *others):
+def intersection(array: List, *others: List):
     """
     Computes the intersection of all the passed-in arrays.
 
@@ -737,7 +755,7 @@ def intersection(array, *others):
     return intersection_with(array, *others)
 
 
-def intersection_by(array, *others, **kwargs):
+def intersection_by(array: List, *others: List, **kwargs: Callable):
     """
     This method is like :func:`intersection` except that it accepts an iteratee which is invoked for
     each element of each array to generate the criterion by which they're compared. The order and
@@ -770,9 +788,9 @@ def intersection_by(array, *others, **kwargs):
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     # Sort by smallest list length to make intersection faster.
-    others = sorted(others, key=lambda other: len(other))
+    _others = sorted(others, key=lambda other: len(other))
 
-    for other in others:
+    for other in _others:
         array = list(iterintersection(array, other, iteratee=iteratee))
         if not array:
             break
@@ -780,7 +798,7 @@ def intersection_by(array, *others, **kwargs):
     return array
 
 
-def intersection_with(array, *others, **kwargs):
+def intersection_with(array: List, *others: List, **kwargs: Callable):
     """
     This method is like :func:`intersection` except that it accepts a comparator which is invoked to
     compare the elements of all arrays. The order and references of result values are determined by
@@ -815,9 +833,9 @@ def intersection_with(array, *others, **kwargs):
     comparator, others = parse_iteratee("comparator", *others, **kwargs)
 
     # Sort by smallest list length to reduce to intersection faster.
-    others = sorted(others, key=lambda other: len(other))
+    _others = sorted(others, key=lambda other: len(other))
 
-    for other in others:
+    for other in _others:
         array = list(iterintersection(array, other, comparator=comparator))
         if not array:
             break
@@ -825,7 +843,7 @@ def intersection_with(array, *others, **kwargs):
     return array
 
 
-def intersperse(array, separator):
+def intersperse(array: List, separator):
     """
     Insert a separating element between the elements of `array`.
 
@@ -866,7 +884,7 @@ def last(array):
     return base_get(array, -1, default=None)
 
 
-def last_index_of(array, value, from_index=None):
+def last_index_of(array: List[T], value: T, from_index: Optional[int] = None):
     """
     Gets the index at which the last occurrence of value is found.
 
@@ -895,7 +913,11 @@ def last_index_of(array, value, from_index=None):
         pass
     else:
         # Set starting index base on from_index offset.
-        index = max(0, index + from_index) if from_index < 0 else min(from_index, index - 1)
+        index = (
+            max(0, index + from_index)
+            if from_index < 0
+            else min(from_index, index - 1)
+        )
 
     while index:
         if index < array_len and array[index] == value:
@@ -904,7 +926,7 @@ def last_index_of(array, value, from_index=None):
     return -1
 
 
-def mapcat(array, iteratee=None):
+def mapcat(array: List[T], iteratee: Callable[[T], Any] = None):
     """
     Map a iteratee to each element of a list and concatenate the results into a single list using
     :func:`concat`.
@@ -926,7 +948,7 @@ def mapcat(array, iteratee=None):
     return concat(*pyd.map_(array, iteratee))
 
 
-def nth(array, pos=0):
+def nth(array: List, pos: int = 0):
     """
     Gets the element at index n of array.
 
@@ -953,7 +975,7 @@ def nth(array, pos=0):
     return pyd.get(array, pos)
 
 
-def pop(array, index=-1):
+def pop(array: List, index: int = -1):
     """
     Remove element of array at `index` and return element.
 
@@ -986,7 +1008,7 @@ def pop(array, index=-1):
     return array.pop(index)
 
 
-def pull(array, *values):
+def pull(array: List[T], *values: T):
     """
     Removes all provided values from the given array.
 
@@ -1014,7 +1036,7 @@ def pull(array, *values):
     return pull_all(array, values)
 
 
-def pull_all(array, values):
+def pull_all(array: List[T], values: T):
     """
     Removes all provided values from the given array.
 
@@ -1037,7 +1059,7 @@ def pull_all(array, values):
     return array
 
 
-def pull_all_by(array, values, iteratee=None):
+def pull_all_by(array: List, values, iteratee=None):
     """
     This method is like :func:`pull_all` except that it accepts iteratee which is invoked for each
     element of array and values to generate the criterion by which they're compared. The iteratee is
@@ -1064,7 +1086,7 @@ def pull_all_by(array, values, iteratee=None):
     return pull_all(array, values)
 
 
-def pull_all_with(array, values, comparator=None):
+def pull_all_with(array: List, values, comparator=None):
     """
     This method is like :func:`pull_all` except that it accepts comparator which is invoked to
     compare elements of array to values. The comparator is invoked with two arguments: ``(arr_val,
@@ -1092,11 +1114,13 @@ def pull_all_with(array, values, comparator=None):
 
     .. versionadded:: 4.0.0
     """
-    values = difference(array, difference_with(array, values, comparator=comparator))
+    values = difference(
+        array, difference_with(array, values, comparator=comparator)
+    )
     return pull_all(array, values)
 
 
-def pull_at(array, *indexes):
+def pull_at(array: List, *indexes: int):
     """
     Removes elements from `array` corresponding to the specified indexes and returns a list of the
     removed elements. Indexes may be specified as a list of indexes or as individual arguments.
@@ -1125,7 +1149,7 @@ def pull_at(array, *indexes):
     return array
 
 
-def push(array, *items):
+def push(array: List, *items):
     """
     Push items onto the end of `array` and return modified `array`.
 
@@ -1155,7 +1179,7 @@ def push(array, *items):
     return array
 
 
-def remove(array, predicate=None):
+def remove(array: List, predicate=None):
     """
     Removes all elements from a list that the predicate returns truthy for and returns an array of
     removed elements.
@@ -1196,7 +1220,7 @@ def remove(array, predicate=None):
     return removed
 
 
-def reverse(array):
+def reverse(array: List):
     """
     Return `array` in reverse order.
 
@@ -1218,7 +1242,7 @@ def reverse(array):
     return array[::-1]
 
 
-def shift(array):
+def shift(array: List):
     """
     Remove the first element of `array` and return it.
 
@@ -1245,7 +1269,7 @@ def shift(array):
     return pop(array, 0)
 
 
-def slice_(array, start=0, end=None):
+def slice_(array: List, start=0, end=None):
     """
     Slices `array` from the `start` index up to, but not including, the `end` index.
 
@@ -1274,7 +1298,7 @@ def slice_(array, start=0, end=None):
     return array[start:end]
 
 
-def sort(array, comparator=None, key=None, reverse=False):
+def sort(array: List, comparator=None, key=None, reverse=False):
     """
     Sort `array` using optional `comparator`, `key`, and `reverse` options and return sorted
     `array`.
@@ -1319,7 +1343,9 @@ def sort(array, comparator=None, key=None, reverse=False):
     .. versionadded:: 2.2.0
     """
     if comparator and key:
-        raise ValueError('The "comparator" and "key" arguments are mutually exclusive')
+        raise ValueError(
+            'The "comparator" and "key" arguments are mutually exclusive'
+        )
 
     if comparator:
         key = cmp_to_key(comparator)
@@ -1328,7 +1354,7 @@ def sort(array, comparator=None, key=None, reverse=False):
     return array
 
 
-def sorted_index(array, value):
+def sorted_index(array: List, value):
     """
     Uses a binary search to determine the lowest index at which `value` should be inserted into
     `array` in order to maintain its sort order.
@@ -1353,7 +1379,7 @@ def sorted_index(array, value):
     return sorted_index_by(array, value)
 
 
-def sorted_index_by(array, value, iteratee=None):
+def sorted_index_by(array: List, value, iteratee=None):
     """
     This method is like :func:`sorted_index` except that it accepts iteratee which is invoked for
     `value` and each element of `array` to compute their sort ranking. The iteratee is invoked with
@@ -1386,7 +1412,7 @@ def sorted_index_by(array, value, iteratee=None):
     return bisect_left(array, value)
 
 
-def sorted_index_of(array, value):
+def sorted_index_of(array: List, value):
     """
     Returns the index of the matched `value` from the sorted `array`, else ``-1``.
 
@@ -1414,7 +1440,7 @@ def sorted_index_of(array, value):
         return -1
 
 
-def sorted_last_index(array, value):
+def sorted_last_index(array: List, value):
     """
     This method is like :func:`sorted_index` except that it returns the highest index at which
     `value` should be inserted into `array` in order to maintain its sort order.
@@ -1439,7 +1465,7 @@ def sorted_last_index(array, value):
     return sorted_last_index_by(array, value)
 
 
-def sorted_last_index_by(array, value, iteratee=None):
+def sorted_last_index_by(array: List, value, iteratee=None):
     """
     This method is like :func:`sorted_last_index` except that it accepts iteratee which is invoked
     for `value` and each element of `array` to compute their sort ranking. The iteratee is invoked
@@ -1470,7 +1496,7 @@ def sorted_last_index_by(array, value, iteratee=None):
     return bisect_right(array, value)
 
 
-def sorted_last_index_of(array, value):
+def sorted_last_index_of(array: List, value):
     """
     This method is like :func:`last_index_of` except that it performs a binary search on a sorted
     `array`.
@@ -1499,7 +1525,7 @@ def sorted_last_index_of(array, value):
         return -1
 
 
-def sorted_uniq(array):
+def sorted_uniq(array: List):
     """
     Return sorted array with unique elements.
 
@@ -1521,7 +1547,7 @@ def sorted_uniq(array):
     return sorted(uniq(array))
 
 
-def sorted_uniq_by(array, iteratee=None):
+def sorted_uniq_by(array: List, iteratee=None):
     """
     This method is like :func:`sorted_uniq` except that it accepts iteratee which is invoked for
     each element in array to generate the criterion by which uniqueness is computed. The order of
@@ -1546,7 +1572,7 @@ def sorted_uniq_by(array, iteratee=None):
     return sorted(uniq_by(array, iteratee=iteratee))
 
 
-def splice(array, start, count=None, *items):
+def splice(array: List, start: int, count: int = None, *items):
     """
     Modify the contents of `array` by inserting elements starting at index `start` and removing
     `count` number of elements after.
@@ -1608,7 +1634,7 @@ def splice(array, start, count=None, *items):
         return removed
 
 
-def split_at(array, index):
+def split_at(array: List, index: int):
     """
     Returns a list of two lists composed of the split of `array` at `index`.
 
@@ -1629,7 +1655,7 @@ def split_at(array, index):
     return [array[:index], array[index:]]
 
 
-def tail(array):
+def tail(array: List):
     """
     Return all but the first element of `array`.
 
@@ -1652,7 +1678,7 @@ def tail(array):
     return array[1:]
 
 
-def take(array, n=1):
+def take(array: List, n: int = 1):
     """
     Creates a slice of `array` with `n` elements taken from the beginning.
 
@@ -1679,7 +1705,7 @@ def take(array, n=1):
     return take_while(array, lambda _, index: index < n)
 
 
-def take_right(array, n=1):
+def take_right(array: List, n: int = 1):
     """
     Creates a slice of `array` with `n` elements taken from the end.
 
@@ -1704,7 +1730,7 @@ def take_right(array, n=1):
     return take_right_while(array, lambda _, index: (length - index) <= n)
 
 
-def take_right_while(array, predicate=None):
+def take_right_while(array: List[T], predicate: Callable[[T], bool] = None):
     """
     Creates a slice of `array` with elements taken from the end. Elements are taken until the
     `predicate` returns falsey. The `predicate` is invoked with three arguments: ``(value, index,
@@ -1734,7 +1760,7 @@ def take_right_while(array, predicate=None):
     return array[n:]
 
 
-def take_while(array, predicate=None):
+def take_while(array: List[T], predicate: Callable[[T], bool] = None):
     """
     Creates a slice of `array` with elements taken from the beginning. Elements are taken until the
     `predicate` returns falsey. The `predicate` is invoked with three arguments: ``(value, index,
@@ -1764,7 +1790,7 @@ def take_while(array, predicate=None):
     return array[:n]
 
 
-def union(array, *others):
+def union(array: List, *others: List):
     """
     Computes the union of the passed-in arrays.
 
@@ -1788,7 +1814,7 @@ def union(array, *others):
     return uniq(flatten([array] + list(others)))
 
 
-def union_by(array, *others, **kwargs):
+def union_by(array: List[T], *others: List[T], **kwargs: Callable[[T], Any]):
     """
     This method is similar to :func:`union` except that it accepts iteratee which is invoked for
     each element of each arrays to generate the criterion by which uniqueness is computed.
@@ -1820,7 +1846,7 @@ def union_by(array, *others, **kwargs):
     return uniq_by(flatten([array] + list(others)), iteratee=iteratee)
 
 
-def union_with(array, *others, **kwargs):
+def union_with(array: List, *others, **kwargs):
     """
     This method is like :func:`union` except that it accepts comparator which is invoked to compare
     elements of arrays. Result values are chosen from the first array in which the value occurs.
@@ -1854,7 +1880,7 @@ def union_with(array, *others, **kwargs):
     return uniq_with(flatten([array] + list(others)), comparator=comparator)
 
 
-def uniq(array):
+def uniq(array: Iterable):
     """
     Creates a duplicate-value-free version of the array. If iteratee is passed, each element of
     array is passed through a iteratee before uniqueness is computed. The iteratee is invoked with
@@ -1884,7 +1910,7 @@ def uniq(array):
     return uniq_by(array)
 
 
-def uniq_by(array, iteratee=None):
+def uniq_by(array: List[T], iteratee: callable[[T], Any] = None):
     """
     This method is like :func:`uniq` except that it accepts iteratee which is invoked for each
     element in array to generate the criterion by which uniqueness is computed. The order of result
@@ -1909,7 +1935,7 @@ def uniq_by(array, iteratee=None):
     return list(iterunique(array, iteratee=iteratee))
 
 
-def uniq_with(array, comparator=None):
+def uniq_with(array: List, comparator=None):
     """
     This method is like :func:`uniq` except that it accepts comparator which is invoked to compare
     elements of array. The order of result values is determined by the order they occur in the
@@ -1933,7 +1959,7 @@ def uniq_with(array, comparator=None):
     return list(iterunique(array, comparator=comparator))
 
 
-def unshift(array, *items):
+def unshift(array: List[T], *items: T):
     """
     Insert the given elements at the beginning of `array` and return the modified list.
 
@@ -1963,7 +1989,7 @@ def unshift(array, *items):
     return array
 
 
-def unzip(array):
+def unzip(array: List):
     """
     The inverse of :func:`zip_`, this method splits groups of elements into lists composed of
     elements from each group at their corresponding indexes.
@@ -1984,7 +2010,7 @@ def unzip(array):
     return zip_(*array)
 
 
-def unzip_with(array, iteratee=None):
+def unzip_with(array: Iterable[List], iteratee: Callable = None):
     """
     This method is like :func:`unzip` except that it accepts a iteratee to specify how regrouped
     values should be combined. The iteratee is invoked with four arguments: ``(accumulator, value,
@@ -2019,7 +2045,7 @@ def unzip_with(array, iteratee=None):
     return pyd.map_(result, cbk)
 
 
-def without(array, *values):
+def without(array: List, *values):
     """
     Creates an array with all occurrences of the passed values removed.
 
@@ -2061,7 +2087,7 @@ def xor(array, *lists):
     return xor_by(array, *lists)
 
 
-def xor_by(array, *lists, **kwargs):
+def xor_by(array: List, *lists, **kwargs):
     """
     This method is like :func:`xor` except that it accepts iteratee which is invoked for each
     element of each arrays to generate the criterion by which by which they're compared. The order
@@ -2105,7 +2131,7 @@ def xor_by(array, *lists, **kwargs):
     )
 
 
-def xor_with(array, *lists, **kwargs):
+def xor_with(array: List, *lists: List, **kwargs: Callable):
     """
     This method is like :func:`xor` except that it accepts comparator which is invoked to compare
     elements of arrays. The order of result values is determined by the order they occur in the
@@ -2149,7 +2175,7 @@ def xor_with(array, *lists, **kwargs):
     )
 
 
-def zip_(*arrays):
+def zip_(*arrays: List):
     """
     Groups the elements of each array at their corresponding indexes. Useful for separate data
     sources that are coordinated through matching array indexes.
@@ -2230,7 +2256,7 @@ def zip_object_deep(keys, values=None):
     return obj
 
 
-def zip_with(*arrays, **kwargs):
+def zip_with(*arrays: List, **kwargs: Callable):
     """
     This method is like :func:`zip` except that it accepts a iteratee to specify how grouped values
     should be combined. The iteratee is invoked with four arguments: ``(accumulator, value, index,
@@ -2271,7 +2297,7 @@ def zip_with(*arrays, **kwargs):
 #
 
 
-def iterflatten(array, depth=-1):
+def iterflatten(array: Union[List, Tuple], depth: int = -1):
     """Iteratively flatten a list shallowly or deeply."""
     for item in array:
         if isinstance(item, (list, tuple)) and depth != 0:
@@ -2281,9 +2307,9 @@ def iterflatten(array, depth=-1):
             yield item
 
 
-def iterinterleave(*arrays):
+def iterinterleave(*arrays: List):
     """Interleave multiple lists."""
-    iters = [iter(arr) for arr in arrays]
+    iters = (iter(arr) for arr in arrays)
 
     while iters:
         nextiters = []
@@ -2297,7 +2323,7 @@ def iterinterleave(*arrays):
         iters = nextiters
 
 
-def iterintersperse(iterable, separator):
+def iterintersperse(iterable: Iterable, separator):
     """Iteratively intersperse iterable."""
     iterable = iter(iterable)
     yield next(iterable)
@@ -2306,7 +2332,7 @@ def iterintersperse(iterable, separator):
         yield item
 
 
-def iterunique(array, comparator=None, iteratee=None):  # noqa: C901
+def iterunique(array: List, comparator=None, iteratee=None):  # noqa: C901
     """Yield each unique item in array."""
     if not array:  # pragma: no cover
         return
@@ -2343,7 +2369,7 @@ def iterunique(array, comparator=None, iteratee=None):  # noqa: C901
                 seen_unhashable.append(cmp_item)
 
 
-def iterduplicates(array):
+def iterduplicates(array: List):
     """Yield duplictes found in `array`."""
     seen = []
     for i, item in enumerate(array):
@@ -2353,7 +2379,7 @@ def iterduplicates(array):
             seen.append(item)
 
 
-def iterintersection(array, other, comparator=None, iteratee=None):
+def iterintersection(array: List, other, comparator=None, iteratee=None):
     """Yield intersecting values between `array` and `other` using `comparator` to determine if they
     intersect."""
     if not array or not other:  # pragma: no cover
@@ -2388,7 +2414,7 @@ def iterintersection(array, other, comparator=None, iteratee=None):
                 break
 
 
-def iterdifference(array, other, comparator=None, iteratee=None):
+def iterdifference(array: List, other, comparator=None, iteratee=None):
     """Yield different values in `array` as compared to `other` using `comparator` to determine if
     they are different."""
     if not array or not other:  # pragma: no cover
