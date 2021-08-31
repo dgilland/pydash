@@ -120,7 +120,14 @@ class JSRegExp:
         return self.pattern.sub(repl, text, count=count)
 
 
-HTML_ESCAPES = {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;", "`": "&#96;"}
+HTML_ESCAPES = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+    "`": "&#96;",
+}
 
 DEBURRED_LETTERS = {
     "\xC0": "A",
@@ -222,7 +229,9 @@ RS_SPACE_RANGE = (
 )
 RS_UPPER_RANGE = "A-Z\\xc0-\\xd6\\xd8-\\xde"
 RS_VAR_RANGE = "\\ufe0e\\ufe0f"
-RS_BREAK_RANGE = RS_MATH_OP_RANGE + RS_NON_CHAR_RANGE + RS_PUNCTUATION_RANGE + RS_SPACE_RANGE
+RS_BREAK_RANGE = (
+    RS_MATH_OP_RANGE + RS_NON_CHAR_RANGE + RS_PUNCTUATION_RANGE + RS_SPACE_RANGE
+)
 
 # Used to compose unicode capture groups.
 RS_APOS = "['\u2019]"
@@ -250,15 +259,15 @@ RS_OPT_CONTR_LOWER = f"(?:{RS_APOS}(?:d|ll|m|re|s|t|ve))?"
 RS_OPT_CONTR_UPPER = f"(?:{RS_APOS}(?:D|LL|M|RE|S|T|VE))?"
 RE_OPT_MOD = f"{RS_MODIFIER}?"
 RS_OPT_VAR = f"[{RS_VAR_RANGE}]?"
-RS_OPT_JOIN = (
-    f"(?:{RS_ZWJ}(?:{RS_NON_ASTRAL}|{RS_REGIONAL}|{RS_SURR_PAIR}){RS_OPT_VAR}{RE_OPT_MOD})*"
-)
+RS_OPT_JOIN = f"(?:{RS_ZWJ}(?:{RS_NON_ASTRAL}|{RS_REGIONAL}|{RS_SURR_PAIR}){RS_OPT_VAR}{RE_OPT_MOD})*"
 RS_ORD_LOWER = "\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])"
 RS_ORD_UPPER = "\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])"
 RS_SEQ = RS_OPT_VAR + RE_OPT_MOD + RS_OPT_JOIN
 RS_EMOJI = f"(?:{RS_DINGBAT}|{RS_REGIONAL}|{RS_SURR_PAIR}){RS_SEQ}"
 
-RS_HAS_UNICODE_WORD = "[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]"
+RS_HAS_UNICODE_WORD = (
+    "[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]"
+)
 RS_UNICODE_WORDS = (
     f"/"
     f"{RS_UPPER}?{RS_LOWER}+{RS_OPT_CONTR_LOWER}(?={RS_BREAK}|{RS_UPPER}|$)"
@@ -410,7 +419,9 @@ def chop_right(text, step):
         chopped = [text]
     else:
         text_len = len(text)
-        chopped = [text[-(i + step) : text_len - i] for i in range(0, text_len, step)][::-1]
+        chopped = [
+            text[-(i + step) : text_len - i] for i in range(0, text_len, step)
+        ][::-1]
 
     return chopped
 
@@ -1248,7 +1259,9 @@ def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
     if pattern is None:
         return pyd.to_string(text)
 
-    return replace(text, pattern, repl, ignore_case=ignore_case, count=count, escape=False)
+    return replace(
+        text, pattern, repl, ignore_case=ignore_case, count=count, escape=False
+    )
 
 
 def repeat(text, n=0):
@@ -1273,7 +1286,14 @@ def repeat(text, n=0):
 
 
 def replace(
-    text, pattern, repl, ignore_case=False, count=0, escape=True, from_start=False, from_end=False
+    text,
+    pattern,
+    repl,
+    ignore_case=False,
+    count=0,
+    escape=True,
+    from_start=False,
+    from_end=False,
 ):
     """
     Replace occurrences of `pattern` with `repl` in `text`. Optionally, ignore case when replacing.
@@ -1371,7 +1391,14 @@ def replace_end(text, pattern, repl, ignore_case=False, escape=True):
 
     .. versionadded:: 4.1.0
     """
-    return replace(text, pattern, repl, ignore_case=ignore_case, escape=escape, from_end=True)
+    return replace(
+        text,
+        pattern,
+        repl,
+        ignore_case=ignore_case,
+        escape=escape,
+        from_end=True,
+    )
 
 
 def replace_start(text, pattern, repl, ignore_case=False, escape=True):
@@ -1400,7 +1427,14 @@ def replace_start(text, pattern, repl, ignore_case=False, escape=True):
 
     .. versionadded:: 4.1.0
     """
-    return replace(text, pattern, repl, ignore_case=ignore_case, escape=escape, from_start=True)
+    return replace(
+        text,
+        pattern,
+        repl,
+        ignore_case=ignore_case,
+        escape=escape,
+        from_start=True,
+    )
 
 
 def separator_case(text, separator):
@@ -1519,7 +1553,9 @@ def slugify(text, separator="-"):
         Improved unicode word support.
     """
     normalized = (
-        unicodedata.normalize("NFKD", pyd.to_string(text)).encode("ascii", "ignore").decode("utf8")
+        unicodedata.normalize("NFKD", pyd.to_string(text))
+        .encode("ascii", "ignore")
+        .decode("utf8")
     )
 
     return separator_case(normalized, separator)
@@ -2273,7 +2309,9 @@ def delimitedpathjoin(delimiter, *paths):
     else:
         leading = delimiter if paths and paths[0].startswith(delimiter) else ""
         trailing = delimiter if paths and paths[-1].endswith(delimiter) else ""
-        middle = delimiter.join([path.strip(delimiter) for path in paths if path.strip(delimiter)])
+        middle = delimiter.join(
+            [path.strip(delimiter) for path in paths if path.strip(delimiter)]
+        )
         path = "".join([leading, middle, trailing])
 
     return path

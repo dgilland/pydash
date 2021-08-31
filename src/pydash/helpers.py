@@ -26,7 +26,7 @@ def callit(iteratee, *args, **kwargs):
     it."""
     maxargs = len(args)
     argcount = kwargs["argcount"] if "argcount" in kwargs else getargcount(iteratee, maxargs)
-    argstop = min([maxargs, argcount])
+    argstop = min(maxargs, argcount)
 
     return iteratee(*args[:argstop])
 

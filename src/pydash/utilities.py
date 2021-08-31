@@ -138,7 +138,10 @@ def cond(pairs, *extra_pairs):
             pass
 
         if not is_valid:
-            raise ValueError("Each predicate-function pair should contain " "exactly two elements")
+            raise ValueError(
+                "Each predicate-function pair should contain "
+                "exactly two elements"
+            )
 
         if not all(map(callable, pair)):
             raise TypeError("Both predicate-function pair should be callable")
@@ -623,18 +626,8 @@ def now():
     .. versionchanged:: 3.0.0
         Use ``datetime`` module for calculating elapsed time.
     """
-    epoch = datetime.utcfromtimestamp(0)
-    delta = datetime.utcnow() - epoch
-
-    if hasattr(delta, "total_seconds"):
-        seconds = delta.total_seconds()
-    else:  # pragma: no cover
-        # PY26
-        seconds = (
-            delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10 ** 6
-        ) / 10 ** 6
-
-    return int(seconds * 1000)
+    # https://stackoverflow.com/a/23004143
+    return int(datetime.now().timestamp() * 1000)
 
 
 def over(funcs):
@@ -762,7 +755,9 @@ def properties(*paths):
 
     .. versionadded:: 4.1.0
     """
-    return lambda obj: [getter(obj) for getter in (pyd.property_(path) for path in paths)]
+    return lambda obj: [
+        getter(obj) for getter in (pyd.property_(path) for path in paths)
+    ]
 
 
 def property_of(obj):
@@ -821,7 +816,9 @@ def random(start=0, stop=1, floating=False):
 
     .. versionadded:: 1.0.0
     """
-    floating = isinstance(start, float) or isinstance(stop, float) or floating is True
+    floating = (
+        isinstance(start, float) or isinstance(stop, float) or floating is True
+    )
 
     if stop < start:
         stop, start = start, stop
@@ -1017,10 +1014,16 @@ def retry(  # noqa: C901
         or (isinstance(jitter, NUMBER_TYPES) and jitter < 0)
         or (
             isinstance(jitter, tuple)
-            and (len(jitter) != 2 or not all(isinstance(jit, NUMBER_TYPES) for jit in jitter))
+            and (
+                len(jitter) != 2
+                or not all(isinstance(jit, NUMBER_TYPES) for jit in jitter)
+            )
         )
     ):
-        raise ValueError("jitter must be a number greater than 0 or a 2-item tuple of " "numbers")
+        raise ValueError(
+            "jitter must be a number greater than 0 or a 2-item tuple of "
+            "numbers"
+        )
 
     if not isinstance(exceptions, tuple) or not all(
         issubclass(exc, Exception) for exc in exceptions
@@ -1033,7 +1036,9 @@ def retry(  # noqa: C901
     if jitter and not isinstance(jitter, tuple):
         jitter = (0, jitter)
 
-    on_exc_argcount = getargcount(on_exception, maxargs=2) if on_exception else None
+    on_exc_argcount = (
+        getargcount(on_exception, maxargs=2) if on_exception else None
+    )
 
     def decorator(func):
         @wraps(func)
@@ -1046,7 +1051,9 @@ def retry(  # noqa: C901
                     return func(*args, **kwargs)
                 except exceptions as exc:
                     if on_exception:
-                        callit(on_exception, exc, attempt, argcount=on_exc_argcount)
+                        callit(
+                            on_exception, exc, attempt, argcount=on_exc_argcount
+                        )
 
                     if attempt == attempts:
                         raise
@@ -1218,7 +1225,8 @@ def to_path(value):
     tokens = to_path_tokens(value)
     if isinstance(tokens, list):
         path = [
-            token.key if isinstance(token, PathToken) else token for token in to_path_tokens(value)
+            token.key if isinstance(token, PathToken) else token
+            for token in to_path_tokens(value)
         ]
     else:
         path = [tokens]
@@ -1309,7 +1317,9 @@ def base_range(*args, **kwargs):
 
     for arg in check_args:
         if not isinstance(arg, int):  # pragma: no cover
-            raise TypeError(f"range cannot interpret {type(arg).__name__!r} object as an integer")
+            raise TypeError(
+                f"range cannot interpret {type(arg).__name__!r} object as an integer"
+            )
 
     def gen():
         if not args:

@@ -5,15 +5,7 @@ Numerical/mathemetical related functions.
 """
 
 import math
-import operator
-from operator import (
-    add,
-    mul as multiply,
-    pow,
-    sub as subtract,
-    truediv as divide,
-)
-import re
+from operator import add, mul as multiply, pow, sub as subtract, truediv as divide
 from statistics import mean, median, stdev as std_deviation, variance
 from typing import Iterable, List, TypeVar
 
@@ -187,33 +179,6 @@ def clamp(x, lower, upper=None):
         x = upper
 
     return x
-
-
-def divide(dividend, divisor):
-    """
-    Divide two numbers.
-
-    Args:
-        dividend (int/float): The first number in a division.
-        divisor (int/float): The second number in a division.
-
-    Returns:
-        int/float: Returns the quotient.
-
-    Example:
-
-        >>> divide(20, 5)
-        4.0
-        >>> divide(1.5, 3)
-        0.5
-        >>> divide(None, None)
-        1.0
-        >>> divide(5, None)
-        5.0
-
-    .. versionadded:: 4.0.0
-    """
-    return call_math_operator(dividend, divisor, operator.truediv, 1)
 
 
 def floor(x, precision=0):

@@ -7,16 +7,7 @@ Functions that operate on lists.
 from bisect import bisect_left, bisect_right
 from functools import cmp_to_key
 from math import ceil
-from typing import (
-    Any,
-    Callable,
-    Iterable,
-    List,
-    Optional,
-    Tuple,
-    TypeVar,
-    Union,
-)
+from typing import Any, Callable, Iterable, List, Optional, Tuple, TypeVar, Union
 
 import pydash as pyd
 
@@ -520,7 +511,7 @@ def find_last_index(array, predicate=None):
     return next(search, -1)
 
 
-def flatten(array: List):
+def flatten(array: Iterable):
     """
     Flattens array a single level deep.
 
@@ -568,7 +559,7 @@ def flatten_deep(array):
     return flatten_depth(array, depth=-1)
 
 
-def flatten_depth(array: List, depth: int = 1):
+def flatten_depth(array: Iterable, depth: int = 1):
     """
     Recursively flatten `array` up to `depth` times.
 
@@ -1910,7 +1901,7 @@ def uniq(array: Iterable):
     return uniq_by(array)
 
 
-def uniq_by(array: List[T], iteratee: callable[[T], Any] = None):
+def uniq_by(array: List[T], iteratee: Callable[[T], Any] = None):
     """
     This method is like :func:`uniq` except that it accepts iteratee which is invoked for each
     element in array to generate the criterion by which uniqueness is computed. The order of result
@@ -2297,7 +2288,7 @@ def zip_with(*arrays: List, **kwargs: Callable):
 #
 
 
-def iterflatten(array: Union[List, Tuple], depth: int = -1):
+def iterflatten(array: Iterable, depth: int = -1):
     """Iteratively flatten a list shallowly or deeply."""
     for item in array:
         if isinstance(item, (list, tuple)) and depth != 0:

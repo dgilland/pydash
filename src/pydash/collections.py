@@ -6,6 +6,8 @@ Functions that operate on lists and dicts.
 
 from functools import cmp_to_key
 import random
+from random import sample as sample_size, shuffle as _shuffle
+from typing import Iterable
 
 import pydash as pyd
 
@@ -176,10 +178,14 @@ def filter_(collection, predicate=None):
     .. versionchanged:: 4.0.0
         Removed alias ``select``.
     """
-    return [value for is_true, value, _, _ in iteriteratee(collection, predicate) if is_true]
+    return [
+        value
+        for is_true, value, _, _ in iteriteratee(collection, predicate)
+        if is_true
+    ]
 
 
-def find(collection, predicate=None):
+def find(collection: Iterable, predicate=None):
     """
     Iterates over elements of a collection, returning the first element that the predicate returns
     truthy for.
@@ -203,7 +209,11 @@ def find(collection, predicate=None):
     .. versionchanged:: 4.0.0
         Removed aliases ``detect`` and ``find_where``.
     """
-    search = (value for is_true, value, _, _ in iteriteratee(collection, predicate) if is_true)
+    search = (
+        value
+        for is_true, value, _, _ in iteriteratee(collection, predicate)
+        if is_true
+    )
     return next(search, None)
 
 
@@ -231,13 +241,15 @@ def find_last(collection, predicate=None):
     """
     search = (
         value
-        for is_true, value, _, _ in iteriteratee(collection, predicate, reverse=True)
+        for is_true, value, _, _ in iteriteratee(
+            collection, predicate, reverse=True
+        )
         if is_true
     )
     return next(search, None)
 
 
-def flat_map(collection, iteratee=None):
+def flat_map(collection, iteratee=lambda x: x):
     """
     Creates a flattened list of values by running each element in collection thru `iteratee` and
     flattening the mapped results. The `iteratee` is invoked with three arguments: ``(value,
@@ -258,10 +270,10 @@ def flat_map(collection, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    return pyd.flatten(itermap(collection, iteratee=iteratee))
+    return pyd.flatten(map(iteratee, collection))
 
 
-def flat_map_deep(collection, iteratee=None):
+def flat_map_deep(collection, iteratee=lambda x: x):
     """
     This method is like :func:`flat_map` except that it recursively flattens the mapped results.
 
@@ -280,7 +292,7 @@ def flat_map_deep(collection, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    return pyd.flatten_deep(itermap(collection, iteratee=iteratee))
+    return pyd.flatten_deep(map(iteratee, collection))
 
 
 def flat_map_depth(collection, iteratee=None, depth=1):
@@ -305,7 +317,7 @@ def flat_map_depth(collection, iteratee=None, depth=1):
 
     .. versionadded:: 4.0.0
     """
-    return pyd.flatten_depth(itermap(collection, iteratee=iteratee), depth=depth)
+    return pyd.flatten_depth(map(iteratee, collection), depth=depth)
 
 
 def for_each(collection, iteratee=None):
@@ -332,7 +344,14 @@ def for_each(collection, iteratee=None):
     .. versionchanged:: 4.0.0
         Removed alias ``each``.
     """
-    next((None for ret, _, _, _ in iteriteratee(collection, iteratee) if ret is False), None)
+    next(
+        (
+            None
+            for ret, _, _, _ in iteriteratee(collection, iteratee)
+            if ret is False
+        ),
+        None,
+    )
     return collection
 
 
@@ -362,7 +381,11 @@ def for_each_right(collection, iteratee):
         Removed alias ``each_right``.
     """
     next(
-        (None for ret, _, _, _ in iteriteratee(collection, iteratee, reverse=True) if ret is False),
+        (
+            None
+            for ret, _, _, _ in iteriteratee(collection, iteratee, reverse=True)
+            if ret is False
+        ),
         None,
     )
     return collection
@@ -463,7 +486,9 @@ def invoke_map(collection, path, *args, **kwargs):
 
     .. versionadded:: 4.0.0
     """
-    return map_(collection, lambda item: pyd.invoke(item, path, *args, **kwargs))
+    return map_(
+        collection, lambda item: pyd.invoke(item, path, *args, **kwargs)
+    )
 
 
 def key_by(collection, iteratee=None):
@@ -489,16 +514,12 @@ def key_by(collection, iteratee=None):
     .. versionchanged:: 4.0.0
         Renamed from ``index_by`` to ``key_by``.
     """
-    ret = {}
     cbk = pyd.iteratee(iteratee)
 
-    for value in collection:
-        ret[cbk(value)] = value
-
-    return ret
+    return {cbk(value): value for value in collection}
 
 
-def map_(collection, iteratee=None):
+def map_(collection, iteratee=lambda x: x):
     """
     Creates an array of values by running each element in the collection through the iteratee. The
     iteratee is invoked with three arguments: ``(value, index|key, collection)``. If a property name
@@ -532,7 +553,7 @@ def map_(collection, iteratee=None):
     .. versionchanged:: 4.0.0
         Removed alias ``collect``.
     """
-    return list(itermap(collection, iteratee))
+    return map(iteratee, collection)
 
 
 def nest(collection, *properties):
@@ -574,7 +595,9 @@ def nest(collection, *properties):
     properties = pyd.flatten(properties)
     first, rest = properties[0], properties[1:]
 
-    return pyd.map_values(group_by(collection, first), lambda value: nest(value, *rest))
+    return pyd.map_values(
+        group_by(collection, first), lambda value: nest(value, *rest)
+    )
 
 
 def order_by(collection, keys, orders=None, reverse=False):
@@ -917,7 +940,11 @@ def reject(collection, predicate=None):
 
     .. versionadded:: 1.0.0
     """
-    return [value for is_true, value, _, _ in iteriteratee(collection, predicate) if not is_true]
+    return [
+        value
+        for is_true, value, _, _ in iteriteratee(collection, predicate)
+        if not is_true
+    ]
 
 
 def sample(collection):
@@ -943,30 +970,6 @@ def sample(collection):
         function now only returns a single random sample.
     """
     return random.choice(collection)
-
-
-def sample_size(collection, n=None):
-    """
-    Retrieves list of `n` random elements from a collection.
-
-    Args:
-        collection (list|dict): Collection to iterate over.
-        n (int, optional): Number of random samples to return.
-
-    Returns:
-        list: List of `n` sampled collection values.
-
-    Examples:
-
-        >>> items = [1, 2, 3, 4, 5]
-        >>> results = sample_size(items, 2)
-        >>> assert len(results) == 2
-        >>> assert set(items).intersection(results) == set(results)
-
-    .. versionadded:: 4.0.0
-    """
-    num = min(n or 1, len(collection))
-    return random.sample(collection, num)
 
 
 def shuffle(collection):
@@ -995,7 +998,7 @@ def shuffle(collection):
     collection = list(collection)
 
     # NOTE: random.shuffle uses Fisher-Yates.
-    random.shuffle(collection)
+    _shuffle(collection)
 
     return collection
 
