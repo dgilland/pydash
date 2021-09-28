@@ -1,3 +1,4 @@
+from collections import namedtuple
 import math
 from operator import itemgetter
 
@@ -136,6 +137,17 @@ def test_filter_(case, expected):
 )
 def test_find(case, expected):
     assert _.find(*case) == expected
+
+
+def test_find_class_object():
+    obj = fixtures.Object(a=1, b=2)
+    assert _.find([None, {}, obj], {"b": 2}) == obj
+
+
+def test_find_namedtuple():
+    User = namedtuple("User", ["first_name", "last_name"])
+    obj = User(first_name="Bob", last_name="Smith")
+    assert _.find([None, {}, obj], {"first_name": "Bob"}) == obj
 
 
 @parametrize(

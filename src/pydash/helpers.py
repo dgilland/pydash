@@ -102,7 +102,7 @@ def iteriteratee(obj, iteratee=None, reverse=False):
 
 def iterator(obj):
     """Return iterative based on object type."""
-    if isinstance(obj, dict):
+    if isinstance(obj, Mapping):
         return obj.items()
     elif hasattr(obj, "iteritems"):
         return obj.iteritems()  # noqa: B301

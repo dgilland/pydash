@@ -4,6 +4,7 @@ Predicate functions that return boolean evaluations of objects.
 .. versionadded:: 2.0.0
 """
 
+from collections.abc import Iterable, Mapping
 import datetime
 from itertools import islice
 import json
@@ -13,7 +14,7 @@ from types import BuiltinFunctionType
 
 import pydash as pyd
 
-from .helpers import BUILTINS, NUMBER_TYPES, UNSET, callit, iterator
+from .helpers import BUILTINS, NUMBER_TYPES, UNSET, base_get, callit, iterator
 
 
 __all__ = (
@@ -914,14 +915,7 @@ def is_match_with(obj, source, customizer=None, _key=UNSET, _obj=UNSET, _source=
     else:
         cbk = customizer
 
-    if (
-        isinstance(obj, dict)
-        and isinstance(source, dict)
-        or isinstance(obj, list)
-        and isinstance(source, list)
-        or isinstance(obj, tuple)
-        and isinstance(source, tuple)
-    ):
+    if isinstance(source, (Mapping, Iterable)) and not isinstance(source, str):
         # Set equal to True if source is empty, otherwise, False and then allow deep comparison to
         # determine equality.
         equal = not source
@@ -929,7 +923,8 @@ def is_match_with(obj, source, customizer=None, _key=UNSET, _obj=UNSET, _source=
         # Walk a/b to determine equality.
         for key, value in iterator(source):
             try:
-                equal = is_match_with(obj[key], value, cbk, _key=key, _obj=_obj, _source=_source)
+                obj_value = base_get(obj, key)
+                equal = is_match_with(obj_value, value, cbk, _key=key, _obj=_obj, _source=_source)
             except Exception:
                 equal = False
 
