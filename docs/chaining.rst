@@ -42,7 +42,6 @@ Method chaining is deferred (lazy) until ``.value()`` is called:
 
 .. doctest::
 
-    >>> from __future__ import print_function
     >>> from pydash import py_
 
     >>> def echo(value): print(value)
@@ -156,4 +155,3 @@ Through ``py_`` any function that ends with ``"_"`` can be accessed without the 
 
     >>> py_.filter([1, 2, 3], lambda x: x > 1) == pydash.filter_([1, 2, 3], lambda x: x > 1)
     True
-
