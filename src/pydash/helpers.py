@@ -35,7 +35,7 @@ def getargcount(iteratee, maxargs):
     """Return argument count of iteratee function."""
     if hasattr(iteratee, "_argcount"):
         # Optimization feature where argcount of iteratee is known and properly
-        # set by initator.
+        # set by initiator.
         return iteratee._argcount
 
     if isinstance(iteratee, type) or pyd.is_builtin(iteratee):

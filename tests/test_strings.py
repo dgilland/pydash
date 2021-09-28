@@ -1165,37 +1165,37 @@ def test_upper_first(case, expected):
 @parametrize(
     "case,expected",
     [
-        ({"args": [""], "kargs": {}}, ""),
-        ({"args": ["/"], "kargs": {}}, "/"),
-        ({"args": ["http://github.com"], "kargs": {}}, "http://github.com"),
-        ({"args": ["http://github.com:80"], "kargs": {}}, "http://github.com:80"),
+        ({"args": [""], "kwargs": {}}, ""),
+        ({"args": ["/"], "kwargs": {}}, "/"),
+        ({"args": ["http://github.com"], "kwargs": {}}, "http://github.com"),
+        ({"args": ["http://github.com:80"], "kwargs": {}}, "http://github.com:80"),
         (
-            {"args": ["http://github.com:80", "pydash", "issues/"], "kargs": {}},
+            {"args": ["http://github.com:80", "pydash", "issues/"], "kwargs": {}},
             "http://github.com:80/pydash/issues/",
         ),
-        ({"args": ["/foo", "bar", "/baz", "/qux/"], "kargs": {}}, "/foo/bar/baz/qux/"),
-        ({"args": ["/foo/bar"], "kargs": {"a": 1, "b": "two"}}, "/foo/bar?a=1&b=two"),
-        ({"args": ["/foo/bar?x=5"], "kargs": {"a": 1, "b": "two"}}, "/foo/bar?x=5&a=1&b=two"),
+        ({"args": ["/foo", "bar", "/baz", "/qux/"], "kwargs": {}}, "/foo/bar/baz/qux/"),
+        ({"args": ["/foo/bar"], "kwargs": {"a": 1, "b": "two"}}, "/foo/bar?a=1&b=two"),
+        ({"args": ["/foo/bar?x=5"], "kwargs": {"a": 1, "b": "two"}}, "/foo/bar?x=5&a=1&b=two"),
         (
-            {"args": ["/foo/bar?x=5", "baz?z=3"], "kargs": {"a": 1, "b": "two"}},
+            {"args": ["/foo/bar?x=5", "baz?z=3"], "kwargs": {"a": 1, "b": "two"}},
             "/foo/bar/baz?x=5&a=1&b=two&z=3",
         ),
         (
-            {"args": ["/foo/bar?x=5", "baz?z=3"], "kargs": {"a": [1, 2], "b": "two"}},
+            {"args": ["/foo/bar?x=5", "baz?z=3"], "kwargs": {"a": [1, 2], "b": "two"}},
             "/foo/bar/baz?x=5&a=1&a=2&b=two&z=3",
         ),
         (
-            {"args": ["/foo#bar", "baz"], "kargs": {"a": [1, 2], "b": "two"}},
+            {"args": ["/foo#bar", "baz"], "kwargs": {"a": [1, 2], "b": "two"}},
             "/foo?a=1&a=2&b=two#bar/baz",
         ),
         (
-            {"args": ["/foo", "baz#bar"], "kargs": {"a": [1, 2], "b": "two"}},
+            {"args": ["/foo", "baz#bar"], "kwargs": {"a": [1, 2], "b": "two"}},
             "/foo/baz?a=1&a=2&b=two#bar",
         ),
     ],
 )
 def test_url(case, expected):
-    result = _.url(*case["args"], **case["kargs"])
+    result = _.url(*case["args"], **case["kwargs"])
 
     r_scheme, r_netloc, r_path, r_query, r_fragment = urlsplit(result)
     e_scheme, e_netloc, e_path, e_query, e_fragment = urlsplit(expected)

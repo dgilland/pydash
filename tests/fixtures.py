@@ -49,7 +49,7 @@ def reduce_right_iteratee0(a, b):
     return a + b
 
 
-def noop(*args, **kargs):
+def noop(*args, **kwargs):
     pass
 
 

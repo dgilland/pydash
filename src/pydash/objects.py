@@ -1051,7 +1051,7 @@ def parse_int(value, radix=None):
     """
     if not radix and pyd.is_string(value):
         try:
-            # Check if value is hexadcimal and if so use base-16 conversion.
+            # Check if value is hexadecimal and if so use base-16 conversion.
             int(value, 16)
         except ValueError:
             pass

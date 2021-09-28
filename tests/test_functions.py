@@ -34,7 +34,7 @@ def test_after(case, expected):
 
 
 @parametrize(
-    "case,args,kargs,expected",
+    "case,args,kwargs,expected",
     [
         ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 1), (1, 2, 3, 4), {}, 1),
         ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 2), (1, 2, 3, 4), {}, 3),
@@ -45,8 +45,8 @@ def test_after(case, expected):
         ((lambda a=0, b=0, c=0, d=0: a + b + c + d, None), (1, 2, 3, 4), {}, 10),
     ],
 )
-def test_ary(case, args, kargs, expected):
-    assert _.ary(*case)(*args, **kargs) == expected
+def test_ary(case, args, kwargs, expected):
+    assert _.ary(*case)(*args, **kwargs) == expected
 
 
 @parametrize(
@@ -181,11 +181,12 @@ def test_debounce_max_wait():
 
 
 @parametrize(
-    "func,wait,args,kargs,expected", [(lambda a, b, c: (a, b, c), 250, (1, 2), {"c": 3}, (1, 2, 3))]
+    "func,wait,args,kwargs,expected",
+    [(lambda a, b, c: (a, b, c), 250, (1, 2), {"c": 3}, (1, 2, 3))],
 )
-def test_delay(func, wait, args, kargs, expected):
+def test_delay(func, wait, args, kwargs, expected):
     start = time.time() * 1000
-    result = _.delay(func, wait, *args, **kargs)
+    result = _.delay(func, wait, *args, **kwargs)
     stop = time.time() * 1000
 
     assert (wait - 10) <= (stop - start) <= (wait + 10)
@@ -297,14 +298,14 @@ def test_over_args(func, transforms, args, expected):
 
 
 @parametrize(
-    "case,case_args,case_kargs,args,expected",
+    "case,case_args,case_kwargs,args,expected",
     [
         (lambda a, b, c: a + b + c, ("a", "b"), {}, ("c",), "abc"),
         (lambda a, b, c: a + b + c, ("a",), {"c": "d"}, ("b",), "abd"),
     ],
 )
-def test_partial(case, case_args, case_kargs, args, expected):
-    assert _.partial(case, *case_args, **case_kargs)(*args) == expected
+def test_partial(case, case_args, case_kwargs, args, expected):
+    assert _.partial(case, *case_args, **case_kwargs)(*args) == expected
 
 
 def test_partial_as_iteratee():
@@ -315,18 +316,18 @@ def test_partial_as_iteratee():
 
 
 @parametrize(
-    "case,case_args,case_kargs,args,expected",
+    "case,case_args,case_kwargs,args,expected",
     [
         (lambda a, b, c: a + b + c, ("a", "b"), {}, ("c",), "cab"),
         (lambda a, b, c: a + b + c, ("a",), {"c": "d"}, ("b",), "bad"),
     ],
 )
-def test_partial_right(case, case_args, case_kargs, args, expected):
-    assert _.partial_right(case, *case_args, **case_kargs)(*args) == expected
+def test_partial_right(case, case_args, case_kwargs, args, expected):
+    assert _.partial_right(case, *case_args, **case_kwargs)(*args) == expected
 
 
 @parametrize(
-    "case,args,kargs,expected",
+    "case,args,kwargs,expected",
     [
         ((lambda a, b, c: [a, b, c], 2, 0, 1), ("b", "c", "a"), {}, ["a", "b", "c"]),
         ((lambda a, b, c: [a, b, c], [2, 0, 1]), ("b", "c", "a"), {}, ["a", "b", "c"]),
@@ -335,8 +336,8 @@ def test_partial_right(case, case_args, case_kargs, args, expected):
         ((lambda a, b, c: [a, b, c], 3, 2, 0, 1), ("b", "c", "a"), {}, ["a", "b", "c"]),
     ],
 )
-def test_rearg(case, args, kargs, expected):
-    assert _.rearg(*case)(*args, **kargs) == expected
+def test_rearg(case, args, kwargs, expected):
+    assert _.rearg(*case)(*args, **kwargs) == expected
 
 
 @parametrize(
@@ -374,14 +375,14 @@ def test_throttle():
 
 
 @parametrize(
-    "case,args,kargs,expected",
+    "case,args,kwargs,expected",
     [
         (lambda a=0, b=0, c=0, d=0: a + b + c + d, (1, 2, 3, 4), {}, 1),
         (lambda a=0, b=0, c=0, d=0: a + b + c + d, (1, 2, 3, 4), {"d": 10}, 11),
     ],
 )
-def test_unary(case, args, kargs, expected):
-    assert _.unary(case)(*args, **kargs) == expected
+def test_unary(case, args, kwargs, expected):
+    assert _.unary(case)(*args, **kwargs) == expected
 
 
 @parametrize(

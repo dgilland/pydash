@@ -520,7 +520,7 @@ def is_equal_with(value, other, customizer):
 
     .. versionadded:: 4.0.0
     """
-    # If customizer provided, use it for comparision.
+    # If customizer provided, use it for comparison.
     equal = customizer(value, other) if callable(customizer) else None
 
     # Return customizer results if anything but None.

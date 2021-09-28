@@ -1,5 +1,5 @@
 """
-Numerical/mathemetical related functions.
+Numerical/mathematical related functions.
 
 .. versionadded:: 2.1.0
 """

@@ -187,8 +187,8 @@ class Debounce(object):
 
     def __call__(self, *args, **kwargs):
         """
-        Execute :attr:`func` if function hasn't been called witinin last :attr:`wait` milliseconds
-        or in last :attr:`max_wait` milliseconds.
+        Execute :attr:`func` if function hasn't been called within last :attr:`wait` milliseconds or
+        in last :attr:`max_wait` milliseconds.
 
         Return results of last successful call.
         """
@@ -386,7 +386,7 @@ class Throttle(object):
 
     def __call__(self, *args, **kwargs):
         """
-        Execute :attr:`func` if function hasn't been called witinin last :attr:`wait` milliseconds.
+        Execute :attr:`func` if function hasn't been called within last :attr:`wait` milliseconds.
 
         Return results of last successful call.
         """

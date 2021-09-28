@@ -215,7 +215,7 @@ def test_matches_property(case, arg, expected):
 
 
 @parametrize(
-    "case,args,kargs,key",
+    "case,args,kwargs,key",
     [
         ((lambda a, b: a + b,), (1, 2), {}, "(1, 2){}"),
         ((lambda a, b: a + b,), (1,), {"b": 2}, "(1,){'b': 2}"),
@@ -223,16 +223,16 @@ def test_matches_property(case, arg, expected):
         ((lambda a, b: a + b, lambda a, b: a * b), (1,), {"b": 2}, 2),
     ],
 )
-def test_memoize(case, args, kargs, key):
+def test_memoize(case, args, kwargs, key):
     memoized = _.memoize(*case)
-    expected = case[0](*args, **kargs)
-    assert memoized(*args, **kargs) == expected
+    expected = case[0](*args, **kwargs)
+    assert memoized(*args, **kwargs) == expected
     assert memoized.cache
     assert memoized.cache[key] == expected
 
 
 @parametrize(
-    "case,args,kargs,expected",
+    "case,args,kwargs,expected",
     [
         (("a.b",), ({"a": {"b": lambda x, y: x + y}}, 1, 2), {}, 3),
         (
@@ -255,12 +255,12 @@ def test_memoize(case, args, kargs, key):
         ),
     ],
 )
-def test_method(case, args, kargs, expected):
-    assert _.method(*case)(*args, **kargs) == expected
+def test_method(case, args, kwargs, expected):
+    assert _.method(*case)(*args, **kwargs) == expected
 
 
 @parametrize(
-    "case,args,kargs,expected",
+    "case,args,kwargs,expected",
     [
         (({"a": {"b": lambda x, y: x + y}},), ("a.b", 1, 2), {}, 3),
         (
@@ -274,8 +274,8 @@ def test_method(case, args, kargs, expected):
         ),
     ],
 )
-def test_method_of(case, args, kargs, expected):
-    assert _.method_of(*case)(*args, **kargs) == expected
+def test_method_of(case, args, kwargs, expected):
+    assert _.method_of(*case)(*args, **kwargs) == expected
 
 
 @parametrize("case,expected", [((), None), ((1, 2, 3), None)])

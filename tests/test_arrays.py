@@ -582,8 +582,8 @@ def test_sorted_index(case, expected):
         (
             (
                 ["twenty", "thirty", "fifty"],
-                "fourty",
-                lambda x: {"twenty": 20, "thirty": 30, "fourty": 40, "fifty": 50}[x],
+                "forty",
+                lambda x: {"twenty": 20, "thirty": 30, "forty": 40, "fifty": 50}[x],
             ),
             2,
         ),
@@ -623,8 +623,8 @@ def test_sorted_last_index(case, expected):
         (
             (
                 ["twenty", "thirty", "fifty"],
-                "fourty",
-                lambda x: {"twenty": 20, "thirty": 30, "fourty": 40, "fifty": 50}[x],
+                "forty",
+                lambda x: {"twenty": 20, "thirty": 30, "forty": 40, "fifty": 50}[x],
             ),
             2,
         ),
