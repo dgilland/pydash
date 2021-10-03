@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v5.1.0 (2021-10-02)
+-------------------
+
 - Support matches-style callbacks on non-dictionary objects that are compatible with ``pydash.get`` in functions like ``pydash.find``.
 
 v5.0.2 (2021-07-15)
