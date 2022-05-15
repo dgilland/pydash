@@ -535,9 +535,9 @@ def is_equal_with(value, other, customizer):
         and len(value) == len(other)
     ):
         # Walk a/b to determine equality using customizer.
-        for key, value in iterator(value):
+        for key, val in iterator(value):
             if pyd.has(other, key):
-                equal = is_equal_with(value, other[key], customizer)
+                equal = is_equal_with(val, other[key], customizer)
             else:
                 equal = False
 
