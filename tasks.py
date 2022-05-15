@@ -72,6 +72,12 @@ def pylint(ctx):
 
 
 @task
+def mypy(ctx):
+    """Check code using mypy type checker."""
+    run(f"mypy {LINT_TARGETS}")
+
+
+@task
 def lint(ctx):
     """Run linters."""
     linters = {"flake8": flake8, "pylint": pylint}
