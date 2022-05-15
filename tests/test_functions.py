@@ -289,8 +289,8 @@ def test_once(case, arglist, expected):
 @parametrize(
     "func,transforms,args,expected",
     [
-        (lambda a, b: [a, b], [lambda x: x ** 2, lambda x: x * 2], (5, 10), [25, 20]),
-        (lambda a, b: [a, b], ([lambda x: x ** 2, lambda x: x * 2],), (5, 10), [25, 20]),
+        (lambda a, b: [a, b], [lambda x: x**2, lambda x: x * 2], (5, 10), [25, 20]),
+        (lambda a, b: [a, b], ([lambda x: x**2, lambda x: x * 2],), (5, 10), [25, 20]),
     ],
 )
 def test_over_args(func, transforms, args, expected):

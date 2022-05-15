@@ -788,7 +788,7 @@ def test_series_phrase_serial(case, expected):
     [
         ("Foo Bar", "foo-bar"),
         (" foo bar ", "foo-bar"),
-        (u"Un éléphant à l'orée du bois", "un-elephant-a-l-oree-du-bois"),
+        ("Un éléphant à l'orée du bois", "un-elephant-a-l-oree-du-bois"),
         ("", ""),
         (5, "5"),
         (None, ""),

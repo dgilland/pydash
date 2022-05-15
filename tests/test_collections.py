@@ -1014,10 +1014,10 @@ def test_sort_by(case, expected):
     [
         (("cat",), ["c", "a", "t"]),
         ((b"cat",), ["c", "a", "t"]),
-        ((u"cat",), [u"c", u"a", u"t"]),
+        (("cat",), ["c", "a", "t"]),
         (("cat", False), ["cat"]),
         ((b"cat", False), [b"cat"]),
-        ((u"cat", False), [u"cat"]),
+        (("cat", False), ["cat"]),
         (({"a": 1, "b": 2, "c": 3},), [1, 2, 3]),
     ],
 )

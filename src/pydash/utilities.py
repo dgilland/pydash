@@ -631,8 +631,8 @@ def now():
     else:  # pragma: no cover
         # PY26
         seconds = (
-            delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10 ** 6
-        ) / 10 ** 6
+            delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10**6
+        ) / 10**6
 
     return int(seconds * 1000)
 
