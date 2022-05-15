@@ -13,6 +13,8 @@ parametrize = pytest.mark.parametrize
 
 today = dt.date.today()
 
+SomeNamedTuple = namedtuple("SomeNamedTuple", ["a", "b"])
+
 
 @parametrize(
     "case,expected",
@@ -358,9 +360,9 @@ def test_for_in_right(case, expected):
         ),
         (({"one": ["hello", "there"]}, "one.bad.hello", []), []),
         (({"one": ["hello", None]}, "one.1.hello"), None),
-        ((namedtuple("a", ["a", "b"])(1, 2), "a"), 1),
-        ((namedtuple("a", ["a", "b"])(1, 2), 0), 1),
-        ((namedtuple("a", ["a", "b"])({"c": {"d": 1}}, 2), "a.c.d"), 1),
+        ((SomeNamedTuple(1, 2), "a"), 1),
+        ((SomeNamedTuple(1, 2), 0), 1),
+        ((SomeNamedTuple({"c": {"d": 1}}, 2), "a.c.d"), 1),
         (({}, "update"), None),
         (([], "extend"), None),
         (({(1,): {(2,): 3}}, (1,)), {(2,): 3}),
