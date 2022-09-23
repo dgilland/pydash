@@ -7,7 +7,7 @@ import pytest
 
 import pydash as _
 
-from . import fixtures
+from . import helpers
 
 
 parametrize = pytest.mark.parametrize
@@ -250,7 +250,7 @@ def test_is_equal(case, expected):
         (([1, 2], [1, 2, 3], None), False),
         (([1, 2, 3], [1, 2], lambda a, b: None if isinstance(a, list) else True), False),
         (([1, 2], [1, 2, 3], lambda a, b: None if isinstance(a, list) else True), False),
-        ((["hello", "goodbye"], ["hi", "goodbye"], fixtures.is_equal_iteratee0), True),
+        ((["hello", "goodbye"], ["hi", "goodbye"], helpers.is_equal_iteratee0), True),
     ],
 )
 def test_is_equal_with(case, expected):

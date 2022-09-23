@@ -6,7 +6,7 @@ import pytest
 
 import pydash as _
 
-from . import fixtures
+from . import helpers
 
 
 parametrize = pytest.mark.parametrize
@@ -140,7 +140,7 @@ def test_find(case, expected):
 
 
 def test_find_class_object():
-    obj = fixtures.Object(a=1, b=2)
+    obj = helpers.Object(a=1, b=2)
     assert _.find([None, {}, obj], {"b": 2}) == obj
 
 
@@ -152,7 +152,7 @@ def test_find_namedtuple():
 
 @parametrize(
     "case,expected",
-    [(({"abc": 1, "xyz": 2, "c": 3}.values(), fixtures.Filter(lambda x: x < 2)), 1)],
+    [(({"abc": 1, "xyz": 2, "c": 3}.values(), helpers.Filter(lambda x: x < 2)), 1)],
 )
 def test_find_using_callable_class(case, expected):
     assert _.find(*case) == expected
@@ -215,9 +215,9 @@ def test_flat_map_depth(case, expected):
 @parametrize(
     "case,expected",
     [
-        (([1, 2, 3], fixtures.noop), [1, 2, 3]),
+        (([1, 2, 3], helpers.noop), [1, 2, 3]),
         (([1, 2, 3], lambda value: value < 2), [1, 2, 3]),
-        (({"one": 1, "two": 2, "three": 3}, fixtures.noop), {"one": 1, "two": 2, "three": 3}),
+        (({"one": 1, "two": 2, "three": 3}, helpers.noop), {"one": 1, "two": 2, "three": 3}),
     ],
 )
 def test_for_each(case, expected):
@@ -227,9 +227,9 @@ def test_for_each(case, expected):
 @parametrize(
     "case,expected",
     [
-        (([1, 2, 3], fixtures.noop), [1, 2, 3]),
+        (([1, 2, 3], helpers.noop), [1, 2, 3]),
         (([1, 2, 3], lambda value: value < 2), [1, 2, 3]),
-        (({"one": 1, "two": 2, "three": 3}, fixtures.noop), {"one": 1, "two": 2, "three": 3}),
+        (({"one": 1, "two": 2, "three": 3}, helpers.noop), {"one": 1, "two": 2, "three": 3}),
     ],
 )
 def test_for_each_right(case, expected):
@@ -783,8 +783,8 @@ def test_pluck(case, expected):
     "case,expected",
     [
         (([1, 2, 3], None), 1),
-        (([1, 2, 3], fixtures.reduce_iteratee0), 6),
-        (({"a": 1, "b": 2, "c": 3}, fixtures.reduce_iteratee1, {}), {"a": 3, "b": 6, "c": 9}),
+        (([1, 2, 3], helpers.reduce_iteratee0), 6),
+        (({"a": 1, "b": 2, "c": 3}, helpers.reduce_iteratee1, {}), {"a": 3, "b": 6, "c": 9}),
     ],
 )
 def test_reduce_(case, expected):
@@ -807,9 +807,9 @@ def test_reduce_raise(case, exception):
     "case,expected",
     [
         (([1, 2, 3], None), 3),
-        (([1, 2, 3], fixtures.reduce_iteratee0), 6),
-        (([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_iteratee0), [4, 5, 2, 3, 0, 1]),
-        (({"a": 1, "b": 2, "c": 3}, fixtures.reduce_iteratee1, {}), {"a": 3, "b": 6, "c": 9}),
+        (([1, 2, 3], helpers.reduce_iteratee0), 6),
+        (([[0, 1], [2, 3], [4, 5]], helpers.reduce_right_iteratee0), [4, 5, 2, 3, 0, 1]),
+        (({"a": 1, "b": 2, "c": 3}, helpers.reduce_iteratee1, {}), {"a": 3, "b": 6, "c": 9}),
     ],
 )
 def test_reduce_right(case, expected):
@@ -832,8 +832,8 @@ def test_reduce_right_exception(case, exception):
     "case,expected",
     [
         (([1, 2, 3], None), [1, 1]),
-        (([1, 2, 3], fixtures.reduce_iteratee0), [3, 6]),
-        (([1, 2, 3, 4, 5], fixtures.reduce_iteratee0, 0), [1, 3, 6, 10, 15]),
+        (([1, 2, 3], helpers.reduce_iteratee0), [3, 6]),
+        (([1, 2, 3, 4, 5], helpers.reduce_iteratee0, 0), [1, 3, 6, 10, 15]),
     ],
 )
 def test_reductions(case, expected):
@@ -844,9 +844,9 @@ def test_reductions(case, expected):
     "case,expected",
     [
         (([1, 2, 3], None), [3, 3]),
-        (([1, 2, 3], fixtures.reduce_iteratee0), [5, 6]),
+        (([1, 2, 3], helpers.reduce_iteratee0), [5, 6]),
         (
-            ([[0, 1], [2, 3], [4, 5]], fixtures.reduce_right_iteratee0),
+            ([[0, 1], [2, 3], [4, 5]], helpers.reduce_right_iteratee0),
             [[4, 5, 2, 3], [4, 5, 2, 3, 0, 1]],
         ),
     ],

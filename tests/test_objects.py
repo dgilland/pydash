@@ -6,7 +6,7 @@ import pytest
 
 import pydash as _
 
-from . import fixtures
+from . import helpers
 
 
 parametrize = pytest.mark.parametrize
@@ -288,14 +288,14 @@ def test_find_last_key(case, expected):
     "case,expected",
     [
         (
-            ({"name": "fred", "employer": "slate"}, fixtures.for_in_iteratee0),
+            ({"name": "fred", "employer": "slate"}, helpers.for_in_iteratee0),
             ({"name": "fredfred", "employer": "slateslate"},),
         ),
         (
-            ({"name": "fred", "employer": "slate"}, fixtures.for_in_iteratee1),
+            ({"name": "fred", "employer": "slate"}, helpers.for_in_iteratee1),
             ({"name": "fredfred", "employer": "slate"}, {"name": "fred", "employer": "slateslate"}),
         ),
-        (([1, 2, 3], fixtures.for_in_iteratee2), ([False, True, 3],)),
+        (([1, 2, 3], helpers.for_in_iteratee2), ([False, True, 3],)),
     ],
 )
 def test_for_in(case, expected):
@@ -306,14 +306,14 @@ def test_for_in(case, expected):
     "case,expected",
     [
         (
-            ({"name": "fred", "employer": "slate"}, fixtures.for_in_iteratee0),
+            ({"name": "fred", "employer": "slate"}, helpers.for_in_iteratee0),
             ({"name": "fredfred", "employer": "slateslate"},),
         ),
         (
-            ({"name": "fred", "employer": "slate"}, fixtures.for_in_iteratee1),
+            ({"name": "fred", "employer": "slate"}, helpers.for_in_iteratee1),
             ({"name": "fredfred", "employer": "slate"}, {"name": "fred", "employer": "slateslate"}),
         ),
-        (([1, 2, 3], fixtures.for_in_iteratee2), ([1, True, "index:2"],)),
+        (([1, 2, 3], helpers.for_in_iteratee2), ([1, True, "index:2"],)),
     ],
 )
 def test_for_in_right(case, expected):
@@ -644,9 +644,9 @@ def test_parse_int(case, expected):
         (({"a": 1, "b": 2, "c": 3}, ["a"], ["b"]), {"a": 1, "b": 2}),
         (([1, 2, 3],), {}),
         (([1, 2, 3], 0), {0: 1}),
-        ((fixtures.Object(a=1, b=2, c=3), "a"), {"a": 1}),
-        ((fixtures.ItemsObject({"a": 1, "b": 2, "c": 3}), "a"), {"a": 1}),
-        ((fixtures.IteritemsObject({"a": 1, "b": 2, "c": 3}), "a"), {"a": 1}),
+        ((helpers.Object(a=1, b=2, c=3), "a"), {"a": 1}),
+        ((helpers.ItemsObject({"a": 1, "b": 2, "c": 3}), "a"), {"a": 1}),
+        ((helpers.IteritemsObject({"a": 1, "b": 2, "c": 3}), "a"), {"a": 1}),
         (({"a": {"b": 1, "c": 2, "d": 3}}, "a.b", "a.d"), {"a": {"b": 1, "d": 3}}),
         (
             ({"a": [{"b": 1}, {"c": 2}, {"d": 3}]}, "a[0]", "a[2]"),
@@ -665,9 +665,9 @@ def test_pick(case, expected):
         (({"a": 1, "b": 2, "c": 3}, lambda value, key: key in ["a"]), {"a": 1}),
         (([1, 2, 3],), {0: 1, 1: 2, 2: 3}),
         (([1, 2, 3], [0]), {0: 1}),
-        ((fixtures.Object(a=1, b=2, c=3), "a"), {"a": 1}),
-        ((fixtures.ItemsObject({"a": 1, "b": 2, "c": 3}), "a"), {"a": 1}),
-        ((fixtures.IteritemsObject({"a": 1, "b": 2, "c": 3}), "a"), {"a": 1}),
+        ((helpers.Object(a=1, b=2, c=3), "a"), {"a": 1}),
+        ((helpers.ItemsObject({"a": 1, "b": 2, "c": 3}), "a"), {"a": 1}),
+        ((helpers.IteritemsObject({"a": 1, "b": 2, "c": 3}), "a"), {"a": 1}),
     ],
 )
 def test_pick_by(case, expected):
@@ -824,7 +824,7 @@ def test_to_string(case, expected):
             ([1, 2, 3, 4, 5], lambda acc, value, key: acc.append((key, value))),
             [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)],
         ),
-        (([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fixtures.transform_iteratee0), [1, 9, 25]),
+        (([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], helpers.transform_iteratee0), [1, 9, 25]),
         (([1, 2, 3, 4, 5],), []),
     ],
 )

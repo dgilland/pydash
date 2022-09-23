@@ -9,12 +9,6 @@ import pydash as _
 parametrize = pytest.mark.parametrize
 
 
-@pytest.fixture
-def mocked_sleep():
-    with mock.patch("time.sleep") as mocked:
-        yield mocked
-
-
 @parametrize("case,expected", [((lambda a, b: a / b, 4, 2), 2)])
 def test_attempt(case, expected):
     assert _.attempt(*case) == expected
@@ -472,7 +466,7 @@ def test_result(case, expected):
         ({"attempts": 5, "delay": 1.5, "max_delay": 8.0, "scale": 2.5}, 4, [1.5, 3.75, 8.0, 8.0]),
     ],
 )
-def test_retry(mocked_sleep, case, delay_count, delay_times):
+def test_retry(mock_sleep, case, delay_count, delay_times):
     @_.retry(**case)
     def func():
         raise Exception()
@@ -480,17 +474,17 @@ def test_retry(mocked_sleep, case, delay_count, delay_times):
     with pytest.raises(Exception):
         func()
 
-    assert delay_count == mocked_sleep.call_count
+    assert delay_count == mock_sleep.call_count
 
     delay_calls = [mock.call(time) for time in delay_times]
-    assert delay_calls == mocked_sleep.call_args_list
+    assert delay_calls == mock_sleep.call_args_list
 
 
 @parametrize(
     "case,delay_count",
     [({"attempts": 3}, 0), ({"attempts": 3}, 1), ({"attempts": 3}, 2), ({"attempts": 5}, 3)],
 )
-def test_retry_success(mocked_sleep, case, delay_count):
+def test_retry_success(mock_sleep, case, delay_count):
     counter = {True: 0}
 
     @_.retry(**case)
@@ -504,7 +498,7 @@ def test_retry_success(mocked_sleep, case, delay_count):
 
     assert result is True
     assert counter[True] == delay_count
-    assert delay_count == mocked_sleep.call_count
+    assert delay_count == mock_sleep.call_count
 
 
 @parametrize(
@@ -515,7 +509,7 @@ def test_retry_success(mocked_sleep, case, delay_count):
         ({"jitter": 1.0, "delay": 3, "scale": 1.5, "attempts": 5}, [3, 4.5, 6.75, 10.125]),
     ],
 )
-def test_retry_jitter(mocked_sleep, case, unexpected_delay_times):
+def test_retry_jitter(mock_sleep, case, unexpected_delay_times):
     @_.retry(**case)
     def func():
         raise Exception()
@@ -525,8 +519,8 @@ def test_retry_jitter(mocked_sleep, case, unexpected_delay_times):
 
     unexpected_delay_calls = [mock.call(time) for time in unexpected_delay_times]
 
-    assert len(unexpected_delay_calls) == mocked_sleep.call_count
-    assert unexpected_delay_calls != mocked_sleep.call_args_list
+    assert len(unexpected_delay_calls) == mock_sleep.call_count
+    assert unexpected_delay_calls != mock_sleep.call_args_list
 
 
 @parametrize(
@@ -537,7 +531,7 @@ def test_retry_jitter(mocked_sleep, case, unexpected_delay_times):
         ({"attempts": 2, "exceptions": (RuntimeError,)}, Exception, 0),
     ],
 )
-def test_retry_exceptions(mocked_sleep, case, raise_exc, delay_count):
+def test_retry_exceptions(mock_sleep, case, raise_exc, delay_count):
     @_.retry(**case)
     def func():
         raise raise_exc()
@@ -545,10 +539,10 @@ def test_retry_exceptions(mocked_sleep, case, raise_exc, delay_count):
     with pytest.raises(raise_exc):
         func()
 
-    assert delay_count == mocked_sleep.call_count
+    assert delay_count == mock_sleep.call_count
 
 
-def test_retry_on_exception(mocked_sleep):
+def test_retry_on_exception(mock_sleep):
     attempts = 5
     error_count = {True: 0}
 

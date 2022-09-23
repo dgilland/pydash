@@ -9,12 +9,6 @@ import pydash as _
 parametrize = pytest.mark.parametrize
 
 
-@pytest.fixture
-def mocked_sleep():
-    with mock.patch("time.sleep") as mocked:
-        yield mocked
-
-
 @parametrize(
     "case,expected",
     [
