@@ -4,6 +4,9 @@ Changelog
 =========
 
 
+v5.1.1 (2022-09-23)
+-------------------
+
 - Add support for Python 3.10.
 - Fix timing assertion issue in test for ``pydash.delay`` where it could fail on certain environments.
 
