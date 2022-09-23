@@ -781,7 +781,8 @@ def kebab_case(text):
 
 
 def lines(text):
-    r"""Split lines in `text` into an array.
+    r"""
+    Split lines in `text` into an array.
 
     Args:
         text (str): String to split.

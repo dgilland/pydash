@@ -268,7 +268,8 @@ def is_associative(value):
 
 
 def is_blank(text):
-    r"""Checks if `text` contains only whitespace characters.
+    r"""
+    Checks if `text` contains only whitespace characters.
 
     Args:
         text (str): String to test.
