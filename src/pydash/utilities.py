@@ -997,9 +997,6 @@ def retry(  # noqa: C901
     ..versionchanged:: 4.5.0
         Added ``jitter`` argument.
     """
-    if isinstance(exceptions, Exception):  # pragma: no cover
-        exceptions = (exceptions,)
-
     if not isinstance(attempts, int) or attempts <= 0:
         raise ValueError("attempts must be an integer greater than 0")
 

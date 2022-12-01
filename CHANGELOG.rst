@@ -3,6 +3,8 @@
 Changelog
 =========
 
+- Remove unnecessary type check and conversion for ``exceptions`` argument in ``pydash.retry``.
+
 
 v5.1.1 (2022-09-23)
 -------------------
