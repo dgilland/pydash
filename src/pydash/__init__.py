@@ -1,6 +1,6 @@
 """Python port of Lo-Dash."""
 
-__version__ = "5.1.1"
+__version__ = "5.1.2"
 
 from .arrays import (
     chunk,
