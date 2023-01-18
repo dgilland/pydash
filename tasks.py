@@ -18,6 +18,7 @@ PACKAGE_NAME = "pydash"
 PACKAGE_SOURCE = f"src/{PACKAGE_NAME}"
 TEST_TARGETS = f"{PACKAGE_SOURCE} tests"
 LINT_TARGETS = f"{TEST_TARGETS} tasks.py"
+LINT_EXCLUDE = "tests/pytest_mypy_testing"
 EXIT_EXCEPTIONS = (Exit, UnexpectedExit, SystemExit)
 
 
@@ -28,7 +29,7 @@ run = partial(_run, pty=True)
 @task
 def black(ctx, quiet=False):
     """Autoformat code using black."""
-    run(f"black {LINT_TARGETS}", hide=quiet)
+    run(f"black --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}", hide=quiet)
 
 
 @task
@@ -62,19 +63,19 @@ def fmt(ctx):
 @task
 def flake8(ctx):
     """Check code for PEP8 violations using flake8."""
-    run(f"flake8 --format=pylint {LINT_TARGETS}")
+    run(f"flake8 --format=pylint --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
 def pylint(ctx):
     """Check code for static errors using pylint."""
-    run(f"pylint {LINT_TARGETS}")
+    run(f"pylint --ignore='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
 def mypy(ctx):
     """Check code using mypy type checker."""
-    run(f"mypy {LINT_TARGETS}")
+    run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task

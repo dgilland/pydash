@@ -6,10 +6,12 @@ Functions that operate on lists and dicts.
 
 from functools import cmp_to_key
 import random
+import typing as t
 
 import pydash as pyd
 
 from .helpers import callit, cmp, getargcount, iterator, iteriteratee
+from .types import IterateeObjT
 
 
 __all__ = (
@@ -46,6 +48,31 @@ __all__ = (
     "sort_by",
 )
 
+T = t.TypeVar("T")
+T2 = t.TypeVar("T2")
+T3 = t.TypeVar("T3")
+T4 = t.TypeVar("T4")
+
+
+@t.overload
+def at(collection: t.Mapping[T, T2], *paths: T) -> t.List[t.Union[T2, None]]:
+    ...
+
+
+@t.overload
+def at(collection: t.Mapping[T, t.Any], *paths: t.Union[T, t.Iterable[T]]) -> t.List[t.Any]:
+    ...
+
+
+@t.overload
+def at(collection: t.Iterable[T], *paths: int) -> t.List[t.Union[T, None]]:
+    ...
+
+
+@t.overload
+def at(collection: t.Iterable[t.Any], *paths: t.Union[int, t.Iterable[int]]) -> t.List[t.Any]:
+    ...
+
 
 def at(collection, *paths):
     """
@@ -75,6 +102,50 @@ def at(collection, *paths):
         Support deep path access.
     """
     return pyd.properties(*paths)(collection)
+
+
+@t.overload
+def count_by(collection: t.Mapping[t.Any, T2], iteratee: None = None) -> t.Dict[T2, int]:
+    ...
+
+
+@t.overload
+def count_by(
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
+) -> t.Dict[T3, int]:
+    ...
+
+
+@t.overload
+def count_by(collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T3, int]:
+    ...
+
+
+@t.overload
+def count_by(collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T3, int]:
+    ...
+
+
+@t.overload
+def count_by(collection: t.Iterable[T], iteratee: None = None) -> t.Dict[T, int]:
+    ...
+
+
+@t.overload
+def count_by(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]
+) -> t.Dict[T2, int]:
+    ...
+
+
+@t.overload
+def count_by(collection: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T2, int]:
+    ...
+
+
+@t.overload
+def count_by(collection: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, int]:
+    ...
 
 
 def count_by(collection, iteratee=None):
@@ -109,7 +180,9 @@ def count_by(collection, iteratee=None):
     return ret
 
 
-def every(collection, predicate=None):
+def every(
+    collection: t.Iterable[T], predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None
+) -> bool:
     """
     Checks if the predicate returns a truthy value for all elements of a collection. The predicate
     is invoked with three arguments: ``(value, index|key, collection)``. If a property name is
@@ -152,6 +225,54 @@ def every(collection, predicate=None):
     return all(collection)
 
 
+@t.overload
+def filter_(
+    collection: t.Mapping[T, T2],
+    predicate: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], IterateeObjT, None] = None,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def filter_(
+    collection: t.Mapping[T, T2],
+    predicate: t.Union[t.Callable[[T2, T], t.Any], IterateeObjT, None] = None,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def filter_(
+    collection: t.Mapping[t.Any, T2],
+    predicate: t.Union[t.Callable[[T2], t.Any], IterateeObjT, None] = None,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def filter_(
+    collection: t.Iterable[T],
+    predicate: t.Union[t.Callable[[T, int, t.List[T]], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def filter_(
+    collection: t.Iterable[T],
+    predicate: t.Union[t.Callable[[T, int], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def filter_(
+    collection: t.Iterable[T],
+    predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
+
+
 def filter_(collection, predicate=None):
     """
     Iterates over elements of a collection, returning a list of all elements the predicate returns
@@ -177,6 +298,54 @@ def filter_(collection, predicate=None):
         Removed alias ``select``.
     """
     return [value for is_true, value, _, _ in iteriteratee(collection, predicate) if is_true]
+
+
+@t.overload
+def find(
+    collection: t.Dict[T, T2],
+    predicate: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T2, None]:
+    ...
+
+
+@t.overload
+def find(
+    collection: t.Dict[T, T2],
+    predicate: t.Union[t.Callable[[T2, T], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T2, None]:
+    ...
+
+
+@t.overload
+def find(
+    collection: t.Dict[T, T2],
+    predicate: t.Union[t.Callable[[T2], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T2, None]:
+    ...
+
+
+@t.overload
+def find(
+    collection: t.List[T],
+    predicate: t.Union[t.Callable[[T, int, t.List[T]], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find(
+    collection: t.List[T],
+    predicate: t.Union[t.Callable[[T, int], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find(
+    collection: t.List[T],
+    predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T, None]:
+    ...
 
 
 def find(collection, predicate=None):
@@ -205,6 +374,54 @@ def find(collection, predicate=None):
     """
     search = (value for is_true, value, _, _ in iteriteratee(collection, predicate) if is_true)
     return next(search, None)
+
+
+@t.overload
+def find_last(
+    collection: t.Dict[T, T2],
+    predicate: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T2, None]:
+    ...
+
+
+@t.overload
+def find_last(
+    collection: t.Dict[T, T2],
+    predicate: t.Union[t.Callable[[T2, T], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T2, None]:
+    ...
+
+
+@t.overload
+def find_last(
+    collection: t.Dict[t.Any, T2],
+    predicate: t.Union[t.Callable[[T2], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T2, None]:
+    ...
+
+
+@t.overload
+def find_last(
+    collection: t.List[T],
+    predicate: t.Union[t.Callable[[T, int, t.List[T]], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_last(
+    collection: t.List[T],
+    predicate: t.Union[t.Callable[[T, int], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_last(
+    collection: t.List[T],
+    predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
+) -> t.Union[T, None]:
+    ...
 
 
 def find_last(collection, predicate=None):
@@ -237,6 +454,100 @@ def find_last(collection, predicate=None):
     return next(search, None)
 
 
+@t.overload
+def flat_map(
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], t.Iterable[T3]]
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def flat_map(
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Iterable[T3]]
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def flat_map(
+    collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], t.Iterable[T3]]
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def flat_map(
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], T3]) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Mapping[t.Any, t.Iterable[T2]], iteratee: None = None) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Mapping[t.Any, T2], iteratee: None = None) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def flat_map(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Iterable[T2]]
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def flat_map(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int], t.Iterable[T2]]
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Iterable[T], iteratee: t.Callable[[T], t.Iterable[T2]]) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def flat_map(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Iterable[t.Iterable[T]], iteratee: None = None) -> t.List[T]:
+    ...
+
+
+@t.overload
+def flat_map(collection: t.Iterable[T], iteratee: None = None) -> t.List[T]:
+    ...
+
+
 def flat_map(collection, iteratee=None):
     """
     Creates a flattened list of values by running each element in collection thru `iteratee` and
@@ -261,7 +572,51 @@ def flat_map(collection, iteratee=None):
     return pyd.flatten(itermap(collection, iteratee=iteratee))
 
 
-def flat_map_deep(collection, iteratee=None):
+@t.overload
+def flat_map_deep(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], None] = None,
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_deep(
+    collection: t.Mapping[T, T2], iteratee: t.Union[t.Callable[[T2, T], t.Any], None] = None
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_deep(
+    collection: t.Mapping[t.Any, T2], iteratee: t.Union[t.Callable[[T2], t.Any], None] = None
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_deep(
+    collection: t.Iterable[T],
+    iteratee: t.Union[t.Callable[[T, int, t.List[T]], t.Any], None] = None,
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_deep(
+    collection: t.Iterable[T], iteratee: t.Union[t.Callable[[T, int], t.Any], None] = None
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_deep(
+    collection: t.Iterable[T], iteratee: t.Union[t.Callable[[T], t.Any], None] = None
+) -> t.List:
+    ...
+
+
+def flat_map_deep(collection: t.Iterable, iteratee=None):
     """
     This method is like :func:`flat_map` except that it recursively flattens the mapped results.
 
@@ -281,6 +636,60 @@ def flat_map_deep(collection, iteratee=None):
     .. versionadded:: 4.0.0
     """
     return pyd.flatten_deep(itermap(collection, iteratee=iteratee))
+
+
+@t.overload
+def flat_map_depth(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], None] = None,
+    depth: int = 1,
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_depth(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Union[t.Callable[[T2, T], t.Any], None] = None,
+    depth: int = 1,
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_depth(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Union[t.Callable[[T2], t.Any], None] = None,
+    depth: int = 1,
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_depth(
+    collection: t.Iterable[T],
+    iteratee: t.Union[t.Callable[[T, int, t.List[T]], t.Any], None] = None,
+    depth: int = 1,
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_depth(
+    collection: t.Iterable[T],
+    iteratee: t.Union[t.Callable[[T, int], t.Any], None] = None,
+    depth: int = 1,
+) -> t.List:
+    ...
+
+
+@t.overload
+def flat_map_depth(
+    collection: t.Iterable[T],
+    iteratee: t.Union[t.Callable[[T], t.Any], None] = None,
+    depth: int = 1,
+) -> t.List:
+    ...
 
 
 def flat_map_depth(collection, iteratee=None, depth=1):
@@ -306,6 +715,54 @@ def flat_map_depth(collection, iteratee=None, depth=1):
     .. versionadded:: 4.0.0
     """
     return pyd.flatten_depth(itermap(collection, iteratee=iteratee), depth=depth)
+
+
+@t.overload
+def for_each(
+    collection: t.Dict[T, T2],
+    iteratee: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], IterateeObjT, None] = None,
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_each(
+    collection: t.Dict[T, T2],
+    iteratee: t.Union[t.Callable[[T2, T], t.Any], IterateeObjT, None] = None,
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_each(
+    collection: t.Dict[T, T2],
+    iteratee: t.Union[t.Callable[[T2], t.Any], IterateeObjT, None] = None,
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_each(
+    collection: t.List[T],
+    iteratee: t.Union[t.Callable[[T, int, t.List[T]], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_each(
+    collection: t.List[T],
+    iteratee: t.Union[t.Callable[[T, int], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_each(
+    collection: t.List[T],
+    iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
 
 
 def for_each(collection, iteratee=None):
@@ -334,6 +791,54 @@ def for_each(collection, iteratee=None):
     """
     next((None for ret, _, _, _ in iteriteratee(collection, iteratee) if ret is False), None)
     return collection
+
+
+@t.overload
+def for_each_right(
+    collection: t.Dict[T, T2],
+    iteratee: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], IterateeObjT],
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_each_right(
+    collection: t.Dict[T, T2],
+    iteratee: t.Union[t.Callable[[T2, T], t.Any], IterateeObjT],
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_each_right(
+    collection: t.Dict[T, T2],
+    iteratee: t.Union[t.Callable[[T2], t.Any], IterateeObjT],
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_each_right(
+    collection: t.List[T],
+    iteratee: t.Union[t.Callable[[T, int, t.List[T]], t.Any], IterateeObjT],
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_each_right(
+    collection: t.List[T],
+    iteratee: t.Union[t.Callable[[T, int], t.Any], IterateeObjT],
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_each_right(
+    collection: t.List[T],
+    iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
+) -> t.List[T]:
+    ...
 
 
 def for_each_right(collection, iteratee):
@@ -366,6 +871,18 @@ def for_each_right(collection, iteratee):
         None,
     )
     return collection
+
+
+@t.overload
+def group_by(collection: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, t.List[T]]:
+    ...
+
+
+@t.overload
+def group_by(
+    collection: t.Iterable[T], iteratee: t.Union[IterateeObjT, None] = None
+) -> t.Dict[t.Any, t.List[T]]:
+    ...
 
 
 def group_by(collection, iteratee=None):
@@ -401,7 +918,7 @@ def group_by(collection, iteratee=None):
     return ret
 
 
-def includes(collection, target, from_index=0):
+def includes(collection: t.Union[t.Sequence, t.Dict], target: t.Any, from_index: int = 0) -> bool:
     """
     Checks if a given value is present in a collection. If `from_index` is negative, it is used as
     the offset from the end of the collection.
@@ -429,16 +946,22 @@ def includes(collection, target, from_index=0):
         Renamed from ``contains`` to ``includes`` and removed alias
         ``include``.
     """
+    collection_values: t.Container
     if isinstance(collection, dict):
-        collection = collection.values()
+        collection_values = collection.values()
     else:
         # only makes sense to do this if `collection` is not a dict
-        collection = collection[from_index:]
+        collection_values = collection[from_index:]
 
-    return target in collection
+    return target in collection_values
 
 
-def invoke_map(collection, path, *args, **kwargs):
+def invoke_map(
+    collection: t.Iterable,
+    path: t.Union[str, int, t.List[t.Union[str, int]]],
+    *args: t.Any,
+    **kwargs: t.Any
+) -> t.List[t.Any]:
     """
     Invokes the method at `path` of each element in `collection`, returning a list of the results of
     each invoked method. Any additional arguments are provided to each invoked method. If `path` is
@@ -464,6 +987,16 @@ def invoke_map(collection, path, *args, **kwargs):
     .. versionadded:: 4.0.0
     """
     return map_(collection, lambda item: pyd.invoke(item, path, *args, **kwargs))
+
+
+@t.overload
+def key_by(collection: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, T]:
+    ...
+
+
+@t.overload
+def key_by(collection: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict:
+    ...
 
 
 def key_by(collection, iteratee=None):
@@ -496,6 +1029,43 @@ def key_by(collection, iteratee=None):
         ret[cbk(value)] = value
 
     return ret
+
+
+@t.overload
+def map_(
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def map_(collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def map_(collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], T3]) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def map_(collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def map_(collection: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def map_(collection: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def map_(collection: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.List:
+    ...
 
 
 def map_(collection, iteratee=None):
@@ -535,7 +1105,7 @@ def map_(collection, iteratee=None):
     return list(itermap(collection, iteratee))
 
 
-def nest(collection, *properties):
+def nest(collection: t.Iterable, *properties: t.Any) -> t.Any:
     """
     This method is like :func:`group_by` except that it supports nested grouping by multiple string
     `properties`. If only a single key is given, it is like calling ``group_by(collection, prop)``.
@@ -571,10 +1141,50 @@ def nest(collection, *properties):
     if not properties:
         return collection
 
-    properties = pyd.flatten(properties)
-    first, rest = properties[0], properties[1:]
+    flat_properties = pyd.flatten(properties)
+    first, rest = flat_properties[0], flat_properties[1:]
 
     return pyd.map_values(group_by(collection, first), lambda value: nest(value, *rest))
+
+
+@t.overload
+def order_by(
+    collection: t.Mapping[t.Any, T2],
+    keys: t.Iterable[t.Union[str, int]],
+    orders: t.Union[t.Iterable[bool], bool],
+    reverse: bool = False,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def order_by(
+    collection: t.Mapping[t.Any, T2],
+    keys: t.Iterable[str],
+    orders: None = None,
+    reverse: bool = False,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def order_by(
+    collection: t.Iterable[T],
+    keys: t.Iterable[t.Union[str, int]],
+    orders: t.Union[t.Iterable[bool], bool],
+    reverse: bool = False,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def order_by(
+    collection: t.Iterable[T],
+    keys: t.Iterable[str],
+    orders: None = None,
+    reverse: bool = False,
+) -> t.List[T]:
+    ...
 
 
 def order_by(collection, keys, orders=None, reverse=False):
@@ -668,6 +1278,60 @@ def order_by(collection, keys, orders=None, reverse=False):
     return sorted(collection, key=cmp_to_key(comparison), reverse=reverse)
 
 
+@t.overload
+def partition(
+    collection: t.Mapping[T, T2], predicate: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
+) -> t.List[t.List[T2]]:
+    ...
+
+
+@t.overload
+def partition(
+    collection: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]
+) -> t.List[t.List[T2]]:
+    ...
+
+
+@t.overload
+def partition(
+    collection: t.Mapping[t.Any, T2], predicate: t.Callable[[T2], t.Any]
+) -> t.List[t.List[T2]]:
+    ...
+
+
+@t.overload
+def partition(
+    collection: t.Mapping[t.Any, T2], predicate: t.Union[IterateeObjT, None] = None
+) -> t.List[t.List[T2]]:
+    ...
+
+
+@t.overload
+def partition(
+    collection: t.Iterable[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]
+) -> t.List[t.List[T]]:
+    ...
+
+
+@t.overload
+def partition(
+    collection: t.Iterable[T], predicate: t.Callable[[T, int], t.Any]
+) -> t.List[t.List[T]]:
+    ...
+
+
+@t.overload
+def partition(collection: t.Iterable[T], predicate: t.Callable[[T], t.Any]) -> t.List[t.List[T]]:
+    ...
+
+
+@t.overload
+def partition(
+    collection: t.Iterable[T], predicate: t.Union[IterateeObjT, None] = None
+) -> t.List[t.List[T]]:
+    ...
+
+
 def partition(collection, predicate=None):
     """
     Creates an array of elements split into two groups, the first of which contains elements the
@@ -707,7 +1371,7 @@ def partition(collection, predicate=None):
     return [trues, falses]
 
 
-def pluck(collection, path):
+def pluck(collection: t.Iterable, path: t.Union[str, int, t.List[t.Union[str, int]]]) -> t.List:
     """
     Retrieves the value of a specified property from all elements in the collection.
 
@@ -740,6 +1404,121 @@ def pluck(collection, path):
         Made property access deep.
     """
     return map_(collection, pyd.property_(path))
+
+
+@t.overload
+def reduce_(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Callable[[T3, T2, T], T3],
+    accumulator: T3,
+) -> T3:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[T3, T2], T3],
+    accumulator: T3,
+) -> T3:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Mapping,
+    iteratee: t.Callable[[T3], T3],
+    accumulator: T3,
+) -> T3:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Callable[[T2, T2, T], T2],
+    accumulator: None = None,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[T2, T2], T2],
+    accumulator: None = None,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Mapping,
+    iteratee: t.Callable[[T], T],
+    accumulator: None = None,
+) -> T:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T2, T, int], T2],
+    accumulator: T2,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T2, T], T2],
+    accumulator: T2,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Iterable,
+    iteratee: t.Callable[[T2], T2],
+    accumulator: T2,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T, T, int], T],
+    accumulator: None = None,
+) -> T:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T, T], T],
+    accumulator: None = None,
+) -> T:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Iterable,
+    iteratee: t.Callable[[T], T],
+    accumulator: None = None,
+) -> T:
+    ...
+
+
+@t.overload
+def reduce_(
+    collection: t.Iterable[T], iteratee: None = None, accumulator: t.Union[T, None] = None
+) -> T:
+    ...
 
 
 def reduce_(collection, iteratee=None, accumulator=None):
@@ -789,6 +1568,121 @@ def reduce_(collection, iteratee=None, accumulator=None):
     return result
 
 
+@t.overload
+def reduce_right(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Callable[[T3, T2, T], T3],
+    accumulator: T3,
+) -> T3:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[T3, T2], T3],
+    accumulator: T3,
+) -> T3:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Mapping,
+    iteratee: t.Callable[[T3], T3],
+    accumulator: T3,
+) -> T3:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Callable[[T2, T2, T], T2],
+    accumulator: None = None,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[T2, T2], T2],
+    accumulator: None = None,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Mapping,
+    iteratee: t.Callable[[T], T],
+    accumulator: None = None,
+) -> T:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T2, T, int], T2],
+    accumulator: T2,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T2, T], T2],
+    accumulator: T2,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Iterable,
+    iteratee: t.Callable[[T2], T2],
+    accumulator: T2,
+) -> T2:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T, T, int], T],
+    accumulator: None = None,
+) -> T:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T, T], T],
+    accumulator: None = None,
+) -> T:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Iterable,
+    iteratee: t.Callable[[T], T],
+    accumulator: None = None,
+) -> T:
+    ...
+
+
+@t.overload
+def reduce_right(
+    collection: t.Iterable[T], iteratee: None = None, accumulator: t.Union[T, None] = None
+) -> T:
+    ...
+
+
 def reduce_right(collection, iteratee=None, accumulator=None):
     """
     This method is like :func:`reduce_` except that it iterates over elements of a `collection` from
@@ -820,6 +1714,136 @@ def reduce_right(collection, iteratee=None, accumulator=None):
         collection = list(collection)[::-1]
 
     return reduce_(collection, iteratee, accumulator)
+
+
+@t.overload
+def reductions(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Callable[[T3, T2, T], T3],
+    accumulator: T3,
+    from_right: bool = False,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[T3, T2], T3],
+    accumulator: T3,
+    from_right: bool = False,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Mapping,
+    iteratee: t.Callable[[T3], T3],
+    accumulator: T3,
+    from_right: bool = False,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Callable[[T2, T2, T], T2],
+    accumulator: None = None,
+    from_right: bool = False,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[T2, T2], T2],
+    accumulator: None = None,
+    from_right: bool = False,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Mapping,
+    iteratee: t.Callable[[T], T],
+    accumulator: None = None,
+    from_right: bool = False,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T2, T, int], T2],
+    accumulator: T2,
+    from_right: bool = False,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T2, T], T2],
+    accumulator: T2,
+    from_right: bool = False,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Iterable,
+    iteratee: t.Callable[[T2], T2],
+    accumulator: T2,
+    from_right: bool = False,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T, T, int], T],
+    accumulator: None = None,
+    from_right: bool = False,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T, T], T],
+    accumulator: None = None,
+    from_right: bool = False,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Iterable,
+    iteratee: t.Callable[[T], T],
+    accumulator: None = None,
+    from_right: bool = False,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reductions(
+    collection: t.Iterable[T],
+    iteratee: None = None,
+    accumulator: t.Union[T, None] = None,
+    from_right: bool = False,
+) -> t.List[T]:
+    ...
 
 
 def reductions(collection, iteratee=None, accumulator=None, from_right=False):
@@ -866,6 +1890,121 @@ def reductions(collection, iteratee=None, accumulator=None, from_right=False):
     return results
 
 
+@t.overload
+def reductions_right(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Callable[[T3, T2, T], T3],
+    accumulator: T3,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[T3, T2], T3],
+    accumulator: T3,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Mapping,
+    iteratee: t.Callable[[T3], T3],
+    accumulator: T3,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Mapping[T, T2],
+    iteratee: t.Callable[[T2, T2, T], T2],
+    accumulator: None = None,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[T2, T2], T2],
+    accumulator: None = None,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Mapping,
+    iteratee: t.Callable[[T], T],
+    accumulator: None = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T2, T, int], T2],
+    accumulator: T2,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T2, T], T2],
+    accumulator: T2,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Iterable,
+    iteratee: t.Callable[[T2], T2],
+    accumulator: T2,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T, T, int], T],
+    accumulator: None = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Iterable[T],
+    iteratee: t.Callable[[T, T], T],
+    accumulator: None = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Iterable,
+    iteratee: t.Callable[[T], T],
+    accumulator: None = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reductions_right(
+    collection: t.Iterable[T], iteratee: None = None, accumulator: t.Union[T, None] = None
+) -> t.List[T]:
+    ...
+
+
 def reductions_right(collection, iteratee=None, accumulator=None):
     """
     This method is like :func:`reductions` except that it iterates over elements of a `collection`
@@ -894,6 +2033,54 @@ def reductions_right(collection, iteratee=None, accumulator=None):
     return reductions(collection, iteratee, accumulator, from_right=True)
 
 
+@t.overload
+def reject(
+    collection: t.Mapping[T, T2],
+    predicate: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], IterateeObjT, None] = None,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reject(
+    collection: t.Mapping[T, T2],
+    predicate: t.Union[t.Callable[[T2, T], t.Any], IterateeObjT, None] = None,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reject(
+    collection: t.Mapping[t.Any, T2],
+    predicate: t.Union[t.Callable[[T2], t.Any], IterateeObjT, None] = None,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def reject(
+    collection: t.Iterable[T],
+    predicate: t.Union[t.Callable[[T, int, t.List[T]], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reject(
+    collection: t.Iterable[T],
+    predicate: t.Union[t.Callable[[T, int], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
+
+
+@t.overload
+def reject(
+    collection: t.Iterable[T],
+    predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
+) -> t.List[T]:
+    ...
+
+
 def reject(collection, predicate=None):
     """
     The opposite of :func:`filter_` this method returns the elements of a collection that the
@@ -920,7 +2107,7 @@ def reject(collection, predicate=None):
     return [value for is_true, value, _, _ in iteriteratee(collection, predicate) if not is_true]
 
 
-def sample(collection):
+def sample(collection: t.Sequence[T]) -> T:
     """
     Retrieves a random element from a given `collection`.
 
@@ -945,7 +2132,7 @@ def sample(collection):
     return random.choice(collection)
 
 
-def sample_size(collection, n=None):
+def sample_size(collection: t.Sequence[T], n: t.Union[int, None] = None) -> t.List[T]:
     """
     Retrieves list of `n` random elements from a collection.
 
@@ -967,6 +2154,16 @@ def sample_size(collection, n=None):
     """
     num = min(n or 1, len(collection))
     return random.sample(collection, num)
+
+
+@t.overload
+def shuffle(collection: t.Mapping[t.Any, T]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def shuffle(collection: t.Iterable[T]) -> t.List[T]:
+    ...
 
 
 def shuffle(collection):
@@ -1000,7 +2197,7 @@ def shuffle(collection):
     return collection
 
 
-def size(collection):
+def size(collection: t.Sized) -> int:
     """
     Gets the size of the `collection` by returning `len(collection)` for iterable objects.
 
@@ -1020,7 +2217,9 @@ def size(collection):
     return len(collection)
 
 
-def some(collection, predicate=None):
+def some(
+    collection: t.Iterable[T], predicate: t.Union[t.Callable[[T], t.Any], None] = None
+) -> bool:
     """
     Checks if the predicate returns a truthy value for any element of a collection. The predicate is
     invoked with three arguments: ``(value, index|key, collection)``. If a property name is passed
@@ -1059,6 +2258,24 @@ def some(collection, predicate=None):
     return any(collection)
 
 
+@t.overload
+def sort_by(
+    collection: t.Mapping[t.Any, T2],
+    iteratee: t.Union[t.Callable[[T2], t.Any], IterateeObjT, None] = None,
+    reverse: bool = False,
+) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def sort_by(
+    collection: t.Iterable[T],
+    iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
+    reverse: bool = False,
+) -> t.List[T]:
+    ...
+
+
 def sort_by(collection, iteratee=None, reverse=False):
     """
     Creates a list of elements, sorted in ascending order by the results of running each element in
@@ -1094,7 +2311,10 @@ def sort_by(collection, iteratee=None, reverse=False):
 #
 
 
-def itermap(collection, iteratee=None):
+def itermap(
+    collection: t.Iterable,
+    iteratee: t.Union[t.Callable, IterateeObjT, None] = None,
+) -> t.Generator:
     """Generative mapper."""
     for result in iteriteratee(collection, iteratee):
         yield result[0]

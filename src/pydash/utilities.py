@@ -11,10 +11,14 @@ import math
 from random import randint, uniform
 import re
 import time
+import typing as t
+
+from typing_extensions import ParamSpec
 
 import pydash as pyd
 
 from .helpers import NUMBER_TYPES, UNSET, base_get, callit, getargcount, iterator
+from .types import IterateeObjT
 
 
 __all__ = (
@@ -55,6 +59,9 @@ __all__ = (
     "to_path",
     "unique_id",
 )
+
+T = t.TypeVar("T")
+P = ParamSpec("P")
 
 # These regexes are used in to_path() to parse deep path strings.
 
@@ -316,6 +323,16 @@ def identity(arg=None, *args):
     .. versionadded:: 1.0.0
     """
     return arg
+
+
+@t.overload
+def iteratee(func: t.Callable[P, T]) -> t.Callable[P, T]:
+    ...
+
+
+@t.overload
+def iteratee(func: t.Any) -> t.Callable:
+    ...
 
 
 def iteratee(func):
@@ -744,7 +761,7 @@ def property_(path):
     return lambda obj: pyd.get(obj, path)
 
 
-def properties(*paths):
+def properties(*paths: t.Any) -> t.Callable[[t.Any], t.Any]:
     """
     Like :func:`property_` except that it returns a list of values at each path in `paths`.
 

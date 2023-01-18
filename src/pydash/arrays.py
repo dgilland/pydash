@@ -7,6 +7,7 @@ Functions that operate on lists.
 from bisect import bisect_left, bisect_right
 from functools import cmp_to_key
 from math import ceil
+import typing as t
 
 import pydash as pyd
 
@@ -89,6 +90,8 @@ __all__ = (
     "zip_object_deep",
     "zip_with",
 )
+
+T = t.TypeVar("T")
 
 
 def chunk(array, size=1):
@@ -502,7 +505,7 @@ def find_last_index(array, predicate=None):
     return next(search, -1)
 
 
-def flatten(array):
+def flatten(array: t.Iterable[t.Union[t.Iterable[T], T]]) -> t.List[T]:
     """
     Flattens array a single level deep.
 
@@ -550,7 +553,7 @@ def flatten_deep(array):
     return flatten_depth(array, depth=-1)
 
 
-def flatten_depth(array, depth=1):
+def flatten_depth(array: t.Iterable, depth: int = 1) -> t.List:
     """
     Recursively flatten `array` up to `depth` times.
 
