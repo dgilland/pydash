@@ -20,7 +20,7 @@ class DocString(t.NamedTuple):
 
 
 def docstrings(path: Path) -> t.Iterable[DocString]:
-    docstring_re = re.compile(r"def (.+?)\((?:.|\n)+?:[\s\n]+?\"\"\"((?:.|\s|\n)+?)\"\"\"")
+    docstring_re = re.compile(r"def (.+?)\((?:.|\n)+?:[\s\n]+?r?\"\"\"((?:.|\s|\n)+?)\"\"\"")
 
     with open(path) as f:
         text = f.read()
