@@ -8,10 +8,12 @@ import copy
 from functools import partial
 import math
 import re
+import typing as t
 
 import pydash as pyd
 
 from .helpers import UNSET, base_get, base_set, callit, getargcount, iterator, iteriteratee
+from .types import IterateeObjT, SupportsComparison
 from .utilities import PathToken, to_path, to_path_tokens
 
 
@@ -62,8 +64,17 @@ __all__ = (
     "values",
 )
 
+T = t.TypeVar("T")
+T2 = t.TypeVar("T2")
+T3 = t.TypeVar("T3")
+T4 = t.TypeVar("T4")
+T5 = t.TypeVar("T5")
+SupportsComparisonT = t.TypeVar("SupportsComparisonT", bound=SupportsComparison)
 
-def assign(obj, *sources):
+
+def assign(
+    obj: t.Mapping[T, T2], *sources: t.Mapping[T3, T4]
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
     """
     Assigns properties of source object(s) to the destination object.
 
@@ -105,7 +116,59 @@ def assign(obj, *sources):
     return assign_with(obj, *sources)
 
 
-def assign_with(obj, *sources, **kwargs):
+@t.overload
+def assign_with(
+    obj: t.Mapping[T, T2],
+    *sources: t.Mapping[T3, t.Any],
+    customizer: t.Callable[[t.Union[T2, None]], T5],
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
+
+
+@t.overload
+def assign_with(
+    obj: t.Mapping[T, T2],
+    *sources: t.Mapping[T3, T4],
+    customizer: t.Callable[[t.Union[T2, None], T4], T5],
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
+
+
+@t.overload
+def assign_with(
+    obj: t.Mapping[T, T2],
+    *sources: t.Mapping[T3, T4],
+    customizer: t.Callable[[t.Union[T2, None], T4, T3], T5],
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
+
+
+@t.overload
+def assign_with(
+    obj: t.Mapping[T, T2],
+    *sources: t.Mapping[T3, T4],
+    customizer: t.Callable[[t.Union[T2, None], T4, T3, t.Dict[T, T2]], T5],
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
+
+
+@t.overload
+def assign_with(
+    obj: t.Mapping[T, T2],
+    *sources: t.Mapping[T3, T4],
+    customizer: t.Callable[[t.Union[T2, None], T4, T3, t.Dict[T, T2], t.Dict[T3, T4]], T5],
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
+
+
+@t.overload
+def assign_with(
+    obj: t.Mapping[T, T2], *sources: t.Mapping[T3, T4], customizer: None = None
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
+    ...
+
+
+def assign_with(obj, *sources, customizer=None):
     """
     This method is like :func:`assign` except that it accepts customizer which is invoked to produce
     the assigned values. If customizer returns ``None``, assignment is handled by the method
@@ -128,14 +191,13 @@ def assign_with(obj, *sources, **kwargs):
     Example:
 
         >>> customizer = lambda o, s: s if o is None else o
-        >>> results = assign({'a': 1}, {'b': 2}, {'a': 3}, customizer)
+        >>> results = assign_with({'a': 1}, {'b': 2}, {'a': 3}, customizer)
         >>> results == {'a': 1, 'b': 2}
         True
 
     .. versionadded:: 4.0.0
     """
     sources = list(sources)
-    customizer = kwargs.get("customizer")
 
     if customizer is None and callable(sources[-1]):
         customizer = sources.pop()
@@ -159,7 +221,17 @@ def assign_with(obj, *sources, **kwargs):
     return obj
 
 
-def callables(obj):
+@t.overload
+def callables(obj: t.Mapping[SupportsComparisonT, t.Any]) -> t.List[SupportsComparisonT]:
+    ...
+
+
+@t.overload
+def callables(obj: t.Iterable[T]) -> t.List[T]:
+    ...
+
+
+def callables(obj) -> t.List:
     """
     Creates a sorted list of keys of an object that are callable.
 
@@ -185,7 +257,7 @@ def callables(obj):
     return sorted(key for key, value in iterator(obj) if callable(value))
 
 
-def clone(value):
+def clone(value: T) -> T:
     """
     Creates a clone of `value`.
 
@@ -214,6 +286,54 @@ def clone(value):
     return base_clone(value)
 
 
+@t.overload
+def clone_with(
+    value: t.Mapping[T, T2], customizer: t.Callable[[T2, T, t.Mapping[T, T2]], T3]
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
+
+
+@t.overload
+def clone_with(
+    value: t.Mapping[T, T2], customizer: t.Callable[[T2, T], T3]
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
+
+
+@t.overload
+def clone_with(
+    value: t.Mapping[T, T2], customizer: t.Callable[[T2], T3]
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
+
+
+@t.overload
+def clone_with(
+    value: t.List[T], customizer: t.Callable[[T, int, t.List[T]], T2]
+) -> t.List[t.Union[T, T2]]:
+    ...
+
+
+@t.overload
+def clone_with(value: t.List[T], customizer: t.Callable[[T, int], T2]) -> t.List[t.Union[T, T2]]:
+    ...
+
+
+@t.overload
+def clone_with(value: t.List[T], customizer: t.Callable[[T], T2]) -> t.List[t.Union[T, T2]]:
+    ...
+
+
+@t.overload
+def clone_with(value: T, customizer: None = None) -> T:
+    ...
+
+
+@t.overload
+def clone_with(value: t.Any, customizer: t.Callable) -> t.Any:
+    ...
+
+
 def clone_with(value, customizer=None):
     """
     This method is like :func:`clone` except that it accepts customizer which is invoked to produce
@@ -238,7 +358,7 @@ def clone_with(value, customizer=None):
     return base_clone(value, customizer=customizer)
 
 
-def clone_deep(value):
+def clone_deep(value: T) -> T:
     """
     Creates a deep clone of `value`. If a iteratee is provided it will be executed to produce the
     cloned values.
@@ -268,6 +388,56 @@ def clone_deep(value):
     return base_clone(value, is_deep=True)
 
 
+@t.overload
+def clone_deep_with(
+    value: t.Mapping[T, T2], customizer: t.Callable[[T2, T, t.Mapping[T, T2]], T3]
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
+
+
+@t.overload
+def clone_deep_with(
+    value: t.Mapping[T, T2], customizer: t.Callable[[T2, T], T3]
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
+
+
+@t.overload
+def clone_deep_with(
+    value: t.Mapping[T, T2], customizer: t.Callable[[T2], T3]
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
+
+
+@t.overload
+def clone_deep_with(
+    value: t.List[T], customizer: t.Callable[[T, int, t.List[T]], T2]
+) -> t.List[t.Union[T, T2]]:
+    ...
+
+
+@t.overload
+def clone_deep_with(
+    value: t.List[T], customizer: t.Callable[[T, int], T2]
+) -> t.List[t.Union[T, T2]]:
+    ...
+
+
+@t.overload
+def clone_deep_with(value: t.List[T], customizer: t.Callable[[T], T2]) -> t.List[t.Union[T, T2]]:
+    ...
+
+
+@t.overload
+def clone_deep_with(value: T, customizer: None = None) -> T:
+    ...
+
+
+@t.overload
+def clone_deep_with(value: t.Any, customizer: t.Callable) -> t.Any:
+    ...
+
+
 def clone_deep_with(value, customizer=None):
     """
     This method is like :func:`clone_with` except that it recursively clones `value`.
@@ -282,7 +452,9 @@ def clone_deep_with(value, customizer=None):
     return base_clone(value, is_deep=True, customizer=customizer)
 
 
-def defaults(obj, *sources):
+def defaults(
+    obj: t.Dict[T, T2], *sources: t.Dict[T3, T4]
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
     """
     Assigns properties of source object(s) to the destination object for all destination properties
     that resolve to undefined.
@@ -315,7 +487,9 @@ def defaults(obj, *sources):
     return obj
 
 
-def defaults_deep(obj, *sources):
+def defaults_deep(
+    obj: t.Dict[T, T2], *sources: t.Dict[T3, T4]
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
     """
     This method is like :func:`defaults` except that it recursively assigns default properties.
 
@@ -348,6 +522,52 @@ def defaults_deep(obj, *sources):
     return merge_with(obj, *sources, _setter=setter)
 
 
+@t.overload
+def find_key(
+    obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
+) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2], t.Any]) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_key(obj: t.Mapping[T, t.Any], predicate: None = None) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_key(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]
+) -> t.Union[int, None]:
+    ...
+
+
+@t.overload
+def find_key(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]
+) -> t.Union[int, None]:
+    ...
+
+
+@t.overload
+def find_key(collection: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.Union[int, None]:
+    ...
+
+
+@t.overload
+def find_key(collection: t.Iterable[t.Any], iteratee: None = None) -> t.Union[int, None]:
+    ...
+
+
 def find_key(obj, predicate=None):
     """
     This method is like :func:`pydash.arrays.find_index` except that it returns the key of the first
@@ -372,6 +592,54 @@ def find_key(obj, predicate=None):
     for result, _, key, _ in iteriteratee(obj, predicate):
         if result:
             return key
+
+
+@t.overload
+def find_last_key(
+    obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
+) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_last_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_last_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2], t.Any]) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_last_key(obj: t.Mapping[T, t.Any], predicate: None = None) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def find_last_key(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]
+) -> t.Union[int, None]:
+    ...
+
+
+@t.overload
+def find_last_key(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]
+) -> t.Union[int, None]:
+    ...
+
+
+@t.overload
+def find_last_key(
+    collection: t.Iterable[T], iteratee: t.Callable[[T], t.Any]
+) -> t.Union[int, None]:
+    ...
+
+
+@t.overload
+def find_last_key(collection: t.Iterable[t.Any], iteratee: None = None) -> t.Union[int, None]:
+    ...
 
 
 def find_last_key(obj, predicate=None):
@@ -401,6 +669,48 @@ def find_last_key(obj, predicate=None):
     for result, _, key, _ in reversed_obj:
         if result:
             return key
+
+
+@t.overload
+def for_in(
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_in(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_in(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_in(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_in(obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_in(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_in(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_in(obj: t.Iterable[T], iteratee: None = None) -> t.List[T]:
+    ...
 
 
 def for_in(obj, iteratee=None):
@@ -435,6 +745,48 @@ def for_in(obj, iteratee=None):
     return obj
 
 
+@t.overload
+def for_in_right(
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_in_right(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_in_right(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_in_right(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def for_in_right(obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_in_right(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_in_right(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def for_in_right(obj: t.Iterable[T], iteratee: None = None) -> t.List[T]:
+    ...
+
+
 def for_in_right(obj, iteratee=None):
     """
     This function is like :func:`for_in` except it iterates over the properties in reverse order.
@@ -465,7 +817,9 @@ def for_in_right(obj, iteratee=None):
     return obj
 
 
-def get(obj, path, default=None):
+def get(
+    obj: t.Iterable, path: t.Union[str, int, t.List[t.Union[str, int]]], default: t.Any = None
+) -> t.Any:
     """
     Get the value at any depth of a nested object based on the path described by `path`. If path
     doesn't exist, `default` is returned.
@@ -535,7 +889,7 @@ def get(obj, path, default=None):
     return obj
 
 
-def has(obj, path):
+def has(obj: t.Iterable, path: t.Union[str, int, t.List[t.Union[str, int]]]) -> bool:
     """
     Checks if `path` exists as a key of `obj`.
 
@@ -582,7 +936,17 @@ def has(obj, path):
     return exists
 
 
-def invert(obj):
+@t.overload
+def invert(obj: t.Mapping[T, T2]) -> t.Dict[T2, T]:
+    ...
+
+
+@t.overload
+def invert(obj: t.List[T]) -> t.Dict[T, int]:
+    ...
+
+
+def invert(obj) -> t.Dict:
     """
     Creates an object composed of the inverted keys and values of the given object.
 
@@ -610,6 +974,26 @@ def invert(obj):
         Moved ``multivalue=True`` functionality to :func:`invert_by`.
     """
     return {value: key for key, value in iterator(obj)}
+
+
+@t.overload
+def invert_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T3, t.List[T]]:
+    ...
+
+
+@t.overload
+def invert_by(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T2, t.List[T]]:
+    ...
+
+
+@t.overload
+def invert_by(obj: t.List[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, t.List[int]]:
+    ...
+
+
+@t.overload
+def invert_by(obj: t.List[T], iteratee: None = None) -> t.Dict[T, t.List[int]]:
+    ...
 
 
 def invert_by(obj, iteratee=None):
@@ -654,7 +1038,9 @@ def invert_by(obj, iteratee=None):
     return result
 
 
-def invoke(obj, path, *args, **kwargs):
+def invoke(
+    obj: t.Dict, path: t.Union[str, int, t.List[t.Union[str, int]]], *args: t.Any, **kwargs: t.Any
+) -> t.Any:
     """
     Invokes the method at path of object.
 
@@ -691,7 +1077,7 @@ def invoke(obj, path, *args, **kwargs):
     return ret
 
 
-def keys(obj):
+def keys(obj: t.Iterable[T]) -> t.List[T]:
     """
     Creates a list composed of the keys of `obj`.
 
@@ -719,6 +1105,43 @@ def keys(obj):
     return [key for key, _ in iterator(obj)]
 
 
+@t.overload
+def map_keys(
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
+) -> t.Dict[T3, T2]:
+    ...
+
+
+@t.overload
+def map_keys(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T3, T2]:
+    ...
+
+
+@t.overload
+def map_keys(obj: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T3, T2]:
+    ...
+
+
+@t.overload
+def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.Dict[T2, T]:
+    ...
+
+
+@t.overload
+def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T2, T]:
+    ...
+
+
+@t.overload
+def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, T]:
+    ...
+
+
+@t.overload
+def map_keys(obj: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict:
+    ...
+
+
 def map_keys(obj, iteratee=None):
     """
     The opposite of :func:`map_values`, this method creates an object with the same values as object
@@ -742,6 +1165,43 @@ def map_keys(obj, iteratee=None):
     .. versionadded:: 3.3.0
     """
     return {result: value for result, value, _, _ in iteriteratee(obj, iteratee)}
+
+
+@t.overload
+def map_values(
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
+) -> t.Dict[T, T3]:
+    ...
+
+
+@t.overload
+def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T, T3]:
+    ...
+
+
+@t.overload
+def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T, T3]:
+    ...
+
+
+@t.overload
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def map_values(obj: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict:
+    ...
 
 
 def map_values(obj, iteratee=None):
@@ -771,7 +1231,9 @@ def map_values(obj, iteratee=None):
     return {key: result for result, _, key, _ in iteriteratee(obj, iteratee)}
 
 
-def map_values_deep(obj, iteratee=None, property_path=UNSET):
+def map_values_deep(
+    obj: t.Iterable, iteratee: t.Union[t.Callable, None] = None, property_path: t.Any = UNSET
+) -> t.Any:
     """
     Map all non-object values in `obj` with return values from `iteratee`. The iteratee is invoked
     with two arguments: ``(obj_value, property_path)`` where ``property_path`` contains the list of
@@ -818,6 +1280,18 @@ def map_values_deep(obj, iteratee=None, property_path=UNSET):
         return callit(iteratee, obj, properties)
 
 
+@t.overload
+def merge(
+    obj: t.Mapping[T, T2], *sources: t.Mapping[T3, T4]
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
+    ...
+
+
+@t.overload
+def merge(obj: t.List[T], *sources: t.List[T2]) -> t.List[t.Union[T, T2]]:
+    ...
+
+
 def merge(obj, *sources):
     """
     Recursively merges properties of the source object(s) into the destination object. Subsequent
@@ -859,7 +1333,7 @@ def merge(obj, *sources):
     return merge_with(obj, *sources)
 
 
-def merge_with(obj, *sources, **kwargs):
+def merge_with(obj: t.Any, *sources: t.Any, **kwargs: t.Any) -> t.Any:
     """
     This method is like :func:`merge` except that it accepts customizer which is invoked to produce
     the merged values of the destination and source properties. If customizer returns ``None``,
@@ -943,7 +1417,21 @@ def _merge_with(obj, *sources, **kwargs):
     return obj
 
 
-def omit(obj, *properties):
+@t.overload
+def omit(
+    obj: t.Mapping[T, T2], *properties: t.Union[str, int, t.List[t.Union[str, int]]]
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def omit(
+    obj: t.Iterable[T], *properties: t.Union[str, int, t.List[t.Union[str, int]]]
+) -> t.Dict[int, T]:
+    ...
+
+
+def omit(obj: t.Iterable, *properties):
     """
     The opposite of :func:`pick`. This method creates an object composed of the property paths of
     `obj` that are not omitted.
@@ -975,6 +1463,36 @@ def omit(obj, *properties):
         Support deep paths.
     """
     return omit_by(obj, pyd.flatten(properties))
+
+
+@t.overload
+def omit_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def omit_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def omit_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.Dict[int, T]:
+    ...
+
+
+@t.overload
+def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.Dict[int, T]:
+    ...
+
+
+@t.overload
+def omit_by(obj: t.List[T], iteratee: None = None) -> t.Dict[int, T]:
+    ...
 
 
 def omit_by(obj, iteratee=None):
@@ -1025,7 +1543,7 @@ def omit_by(obj, iteratee=None):
     return ret
 
 
-def parse_int(value, radix=None):
+def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, None]:
     """
     Converts the given `value` into an integer of the specified `radix`. If `radix` is falsey, a
     radix of ``10`` is used unless the `value` is a hexadecimal, in which case a radix of 16 is
@@ -1072,6 +1590,20 @@ def parse_int(value, radix=None):
     return parsed
 
 
+@t.overload
+def pick(
+    obj: t.Mapping[T, T2], *properties: t.Union[str, int, t.List[t.Union[str, int]]]
+) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def pick(
+    obj: t.Iterable[T], *properties: t.Union[str, int, t.List[t.Union[str, int]]]
+) -> t.List[T]:
+    ...
+
+
 def pick(obj, *properties):
     """
     Creates an object composed of the picked object properties.
@@ -1094,6 +1626,36 @@ def pick(obj, *properties):
         Moved iteratee argument to :func:`pick_by`.
     """
     return pick_by(obj, pyd.flatten(properties))
+
+
+@t.overload
+def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def pick_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def pick_by(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def pick_by(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def pick_by(obj: t.List[T], iteratee: None = None) -> t.Dict[int, T]:
+    ...
 
 
 def pick_by(obj, iteratee=None):
@@ -1144,7 +1706,7 @@ def pick_by(obj, iteratee=None):
     return result
 
 
-def rename_keys(obj, key_map):
+def rename_keys(obj: t.Dict[T, T2], key_map: t.Dict[t.Any, T3]) -> t.Dict[t.Union[T, T3], T2]:
     """
     Rename the keys of `obj` using `key_map` and return new object.
 
@@ -1165,6 +1727,16 @@ def rename_keys(obj, key_map):
     .. versionadded:: 2.0.0
     """
     return {key_map.get(key, key): value for key, value in obj.items()}
+
+
+@t.overload
+def set_(obj: t.List, path: t.Union[str, int, t.List[t.Union[str, int]]], value: t.Any) -> t.List:
+    ...
+
+
+@t.overload
+def set_(obj: t.Dict, path: t.Union[str, int, t.List[t.Union[str, int]]], value: t.Any) -> t.Dict:
+    ...
 
 
 def set_(obj, path, value):
@@ -1209,6 +1781,26 @@ def set_(obj, path, value):
     return set_with(obj, path, value)
 
 
+@t.overload
+def set_with(
+    obj: t.List,
+    path: t.Union[str, int, t.List[t.Union[str, int]]],
+    value: t.Any,
+    customizer: t.Union[t.Callable, None] = None,
+) -> t.List:
+    ...
+
+
+@t.overload
+def set_with(
+    obj: t.Dict,
+    path: t.Union[str, int, t.List[t.Union[str, int]]],
+    value: t.Any,
+    customizer: t.Union[t.Callable, None] = None,
+) -> t.Dict:
+    ...
+
+
 def set_with(obj, path, value, customizer=None):
     """
     This method is like :func:`set_` except that it accepts customizer which is invoked to produce
@@ -1240,7 +1832,11 @@ def set_with(obj, path, value, customizer=None):
     return update_with(obj, path, pyd.constant(value), customizer=customizer)
 
 
-def to_boolean(obj, true_values=("true", "1"), false_values=("false", "0")):
+def to_boolean(
+    obj: t.Any,
+    true_values: t.Tuple[str, ...] = ("true", "1"),
+    false_values: t.Tuple[str, ...] = ("false", "0"),
+) -> t.Union[bool, None]:
     """
     Convert `obj` to boolean. This is not like the builtin ``bool`` function. By default commonly
     considered strings values are converted to their boolean equivalent, i.e., ``'0'`` and
@@ -1294,6 +1890,21 @@ def to_boolean(obj, true_values=("true", "1"), false_values=("false", "0")):
     return value
 
 
+@t.overload
+def to_dict(obj: t.Dict[T, T2]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def to_dict(obj: t.List[t.Tuple[T, T2]]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def to_dict(obj: t.Iterable) -> t.Dict:
+    ...
+
+
 def to_dict(obj):
     """
     Convert `obj` to ``dict`` by creating a new ``dict`` using `obj` keys and values.
@@ -1331,7 +1942,7 @@ def to_dict(obj):
         return dict(iterator(obj))
 
 
-def to_integer(obj):
+def to_integer(obj: t.Any) -> int:
     """
     Converts `obj` to an integer.
 
@@ -1362,6 +1973,21 @@ def to_integer(obj):
         num = 0
 
     return num
+
+
+@t.overload
+def to_list(obj: t.Dict[t.Any, T], split_strings: bool = True) -> t.List[T]:
+    ...
+
+
+@t.overload
+def to_list(obj: t.Iterable[T], split_strings: bool = True) -> t.List[T]:
+    ...
+
+
+@t.overload
+def to_list(obj: T, split_strings: bool = True) -> t.List[T]:
+    ...
 
 
 def to_list(obj, split_strings=True):
@@ -1423,7 +2049,7 @@ def to_list(obj, split_strings=True):
             return [obj]
 
 
-def to_number(obj, precision=0):
+def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
     """
     Convert `obj` to a number. All numbers are retuned as ``float``. If precision is negative, round
     `obj` to the nearest positive integer place. If `obj` can't be converted to a number, ``None``
@@ -1464,6 +2090,16 @@ def to_number(obj, precision=0):
     return num
 
 
+@t.overload
+def to_pairs(obj: t.Mapping[T, T2]) -> t.List[t.List[t.Union[T, T2]]]:
+    ...
+
+
+@t.overload
+def to_pairs(obj: t.Iterable[T]) -> t.List[t.List[t.Union[int, T]]]:
+    ...
+
+
 def to_pairs(obj):
     """
     Creates a two dimensional list of an object's key-value pairs, i.e. ``[[key1, value1], [key2,
@@ -1490,7 +2126,7 @@ def to_pairs(obj):
     return [[key, value] for key, value in iterator(obj)]
 
 
-def to_string(obj):
+def to_string(obj: t.Any) -> str:
     """
     Converts an object to string.
 
@@ -1523,6 +2159,132 @@ def to_string(obj):
     else:
         res = str(obj)
     return res
+
+
+@t.overload
+def transform(
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T3, T2, T, t.Dict[T, T2]], t.Any], accumulator: T3
+) -> T3:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T3, T2, T], t.Any], accumulator: T3
+) -> T3:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.Mapping[t.Any, T2], iteratee: t.Callable[[T3, T2], t.Any], accumulator: T3
+) -> T3:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.Mapping[t.Any, t.Any], iteratee: t.Callable[[T3], t.Any], accumulator: T3
+) -> T3:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.Mapping[T, T2],
+    iteratee: t.Callable[[t.List[T3], T2, T, t.Dict[T, T2]], t.List[T3]],
+    accumulator: None = None,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.Mapping[T, T2],
+    iteratee: t.Callable[[t.List[T3], T2, T], t.List[T3]],
+    accumulator: None = None,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.Mapping[t.Any, T2],
+    iteratee: t.Callable[[t.List[T3], T2], t.List[T3]],
+    accumulator: None = None,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.Mapping[t.Any, t.Any],
+    iteratee: t.Callable[[t.List[T3]], t.List[T3]],
+    accumulator: None = None,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.List[T], iteratee: t.Callable[[T3, T, int, t.List[T]], t.Any], accumulator: T3
+) -> T3:
+    ...
+
+
+@t.overload
+def transform(obj: t.List[T], iteratee: t.Callable[[T3, T, int], t.Any], accumulator: T3) -> T3:
+    ...
+
+
+@t.overload
+def transform(obj: t.List[T], iteratee: t.Callable[[T3, T], t.Any], accumulator: T3) -> T3:
+    ...
+
+
+@t.overload
+def transform(obj: t.List[t.Any], iteratee: t.Callable[[T3], t.Any], accumulator: T3) -> T3:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.List[T],
+    iteratee: t.Callable[[t.List[T3], T, int, t.List[T]], t.Any],
+    accumulator: None = None,
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.List[T], iteratee: t.Callable[[t.List[T3], T, int], t.Any], accumulator: None = None
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.List[T], iteratee: t.Callable[[t.List[T3], T], t.Any], accumulator: None = None
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def transform(
+    obj: t.List[t.Any], iteratee: t.Callable[[t.List[T3]], t.Any], accumulator: None = None
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def transform(obj: t.Any, iteratee: None = None, *, accumulator: T3) -> T3:
+    ...
+
+
+@t.overload
+def transform(obj: t.Any, iteratee: None = None, accumulator: None = None) -> t.List:
+    ...
 
 
 def transform(obj, iteratee=None, accumulator=None):
@@ -1567,6 +2329,24 @@ def transform(obj, iteratee=None, accumulator=None):
     return accumulator
 
 
+@t.overload
+def update(
+    obj: t.Mapping[t.Any, T2],
+    path: t.Union[int, str, t.List[t.Union[int, str]]],
+    updater: t.Callable[[T2], t.Any],
+) -> t.Dict:
+    ...
+
+
+@t.overload
+def update(
+    obj: t.List[T],
+    path: t.Union[int, str, t.List[t.Union[int, str]]],
+    updater: t.Callable[[T], t.Any],
+) -> t.List:
+    ...
+
+
 def update(obj, path, updater):
     """
     This method is like :func:`set_` except that accepts updater to produce the value to set. Use
@@ -1594,6 +2374,26 @@ def update(obj, path, updater):
     .. versionadded:: 4.0.0
     """
     return update_with(obj, path, updater)
+
+
+@t.overload
+def update_with(
+    obj: t.Mapping[t.Any, T2],
+    path: t.Union[int, str, t.List[t.Union[int, str]]],
+    updater: t.Callable[[T2], t.Any],
+    customizer: t.Union[t.Callable, None],
+) -> t.Dict:
+    ...
+
+
+@t.overload
+def update_with(
+    obj: t.List[T],
+    path: t.Union[int, str, t.List[t.Union[int, str]]],
+    updater: t.Callable[[T], t.Any],
+    customizer: t.Union[t.Callable, None] = None,
+) -> t.List:
+    ...
 
 
 def update_with(obj, path, updater, customizer=None):  # noqa: C901
@@ -1681,7 +2481,9 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
     return obj
 
 
-def unset(obj, path):  # noqa: C901
+def unset(  # noqa: C901
+    obj: t.Iterable, path: t.Union[str, int, t.List[t.Union[str, int]]]
+) -> bool:
     """
     Removes the property at `path` of `obj`.
 
@@ -1751,6 +2553,16 @@ def unset(obj, path):  # noqa: C901
             pass
 
     return did_unset
+
+
+@t.overload
+def values(obj: t.Mapping[t.Any, T2]) -> t.List[T2]:
+    ...
+
+
+@t.overload
+def values(obj: t.Iterable[T]) -> t.List[T]:
+    ...
 
 
 def values(obj):

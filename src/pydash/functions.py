@@ -234,7 +234,7 @@ class Curry(t.Generic[T1, T]):
 
 class CurryOne(Curry[T1, T]):
     def __call__(self, arg_one: T1) -> T:
-        return super().__call__(arg_one)
+        return super().__call__(arg_one)  # pragma: no cover
 
 
 class CurryTwo(Curry[T1, CurryOne[T2, T]]):
@@ -247,7 +247,7 @@ class CurryTwo(Curry[T1, CurryOne[T2, T]]):
         ...
 
     def __call__(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
 class CurryThree(Curry[T1, CurryTwo[T2, T3, T]]):
@@ -264,7 +264,7 @@ class CurryThree(Curry[T1, CurryTwo[T2, T3, T]]):
         ...
 
     def __call__(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
 class CurryFour(Curry[T1, CurryThree[T2, T3, T4, T]]):
@@ -285,7 +285,7 @@ class CurryFour(Curry[T1, CurryThree[T2, T3, T4, T]]):
         ...
 
     def __call__(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
 class CurryFive(Curry[T1, CurryFour[T2, T3, T4, T5, T]]):
@@ -310,7 +310,7 @@ class CurryFive(Curry[T1, CurryFour[T2, T3, T4, T5, T]]):
         ...
 
     def __call__(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
 class CurryRight(Curry[T5, T]):
@@ -322,7 +322,7 @@ class CurryRight(Curry[T5, T]):
 
 class CurryRightOne(CurryRight[T5, T]):
     def __call__(self, arg_one: T5) -> T:
-        return super().__call__(arg_one)
+        return super().__call__(arg_one)  # pragma: no cover
 
 
 class CurryRightTwo(CurryRight[T5, CurryRightOne[T4, T]]):
@@ -335,7 +335,7 @@ class CurryRightTwo(CurryRight[T5, CurryRightOne[T4, T]]):
         ...
 
     def __call__(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
 class CurryRightThree(CurryRight[T5, CurryRightTwo[T4, T3, T]]):
@@ -352,7 +352,7 @@ class CurryRightThree(CurryRight[T5, CurryRightTwo[T4, T3, T]]):
         ...
 
     def __call__(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
 class CurryRightFour(CurryRight[T5, CurryRightThree[T4, T3, T2, T]]):
@@ -373,7 +373,7 @@ class CurryRightFour(CurryRight[T5, CurryRightThree[T4, T3, T2, T]]):
         ...
 
     def __call__(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
 class CurryRightFive(CurryRight[T5, CurryRightFour[T4, T3, T2, T1, T]]):
@@ -400,7 +400,7 @@ class CurryRightFive(CurryRight[T5, CurryRightFour[T4, T3, T2, T1, T]]):
         ...
 
     def __call__(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
 class Debounce(t.Generic[P, T]):
