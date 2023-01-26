@@ -4,11 +4,11 @@ import typing as t
 if t.TYPE_CHECKING:
     from decimal import Decimal
 
-
 IterateeObjT = t.Union[int, str, t.List, t.Tuple, t.Dict]
 NumberT = t.Union[float, int, "Decimal"]
 
 
+_T_co = t.TypeVar("_T_co", covariant=True)
 _T_contra = t.TypeVar("_T_contra", contravariant=True)
 
 
@@ -39,4 +39,24 @@ SupportsComparison: t.TypeAlias = t.Union[
 
 class SupportsInt(t.Protocol):
     def __int__(self) -> int:
+        ...
+
+
+class Addable(t.Protocol[_T_contra, _T_co]):
+    def __add__(self, x: _T_contra, /) -> _T_co:
+        ...
+
+
+class Subable(t.Protocol[_T_contra, _T_co]):
+    def __sub__(self, x: _T_contra, /) -> _T_co:
+        ...
+
+
+class Multiplyable(t.Protocol[_T_contra, _T_co]):
+    def __mul__(self, x: _T_contra, /) -> _T_co:
+        ...
+
+
+class SupportsRound(t.Protocol[_T_co]):
+    def __round__(self) -> _T_co:
         ...
