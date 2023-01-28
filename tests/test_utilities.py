@@ -469,9 +469,9 @@ def test_result(case, expected):
 def test_retry(mock_sleep, case, delay_count, delay_times):
     @_.retry(**case)
     def func():
-        raise Exception()
+        raise KeyError()
 
-    with pytest.raises(Exception):
+    with pytest.raises(KeyError):
         func()
 
     assert delay_count == mock_sleep.call_count
@@ -512,9 +512,9 @@ def test_retry_success(mock_sleep, case, delay_count):
 def test_retry_jitter(mock_sleep, case, unexpected_delay_times):
     @_.retry(**case)
     def func():
-        raise Exception()
+        raise ValueError()
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         func()
 
     unexpected_delay_calls = [mock.call(time) for time in unexpected_delay_times]
@@ -551,9 +551,9 @@ def test_retry_on_exception(mock_sleep):
 
     @_.retry(attempts=attempts, on_exception=on_exception)
     def func():
-        raise Exception()
+        raise TypeError()
 
-    with pytest.raises(Exception):
+    with pytest.raises(TypeError):
         func()
 
     assert error_count[True] == attempts
