@@ -387,7 +387,7 @@ def test_get__should_not_populate_defaultdict():
     "obj,path",
     [
         (helpers.Object(), "__init__.__globals__"),
-        (namedtuple("a", ["a"])(a=1), "__globals__"),
+        (SomeNamedTuple(1, 2), "__globals__"),
         (helpers.Object(subobj=helpers.Object()), "subobj.__builtins__"),
         (helpers.Object(subobj=helpers.Object()), "__builtins__"),
     ],

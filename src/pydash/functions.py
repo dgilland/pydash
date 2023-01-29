@@ -430,7 +430,7 @@ class Debounce(t.Generic[P, T]):
         present = pyd.now()
 
         if (present - self.last_call) >= self.wait or (
-            self.max_wait and (present - self.last_execution) >= self.max_wait
+            self.max_wait and (present - t.cast(int, self.last_execution)) >= self.max_wait
         ):
             self.last_result = self.func(*args, **kwargs)
             self.last_execution = present

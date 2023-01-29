@@ -18,7 +18,6 @@ from typing_extensions import ParamSpec
 import pydash as pyd
 
 from .helpers import NUMBER_TYPES, UNSET, base_get, callit, getargcount, iterator
-from .types import IterateeObjT
 
 
 __all__ = (
@@ -61,6 +60,8 @@ __all__ = (
 )
 
 T = t.TypeVar("T")
+T2 = t.TypeVar("T2")
+CallableT = t.TypeVar("CallableT")
 P = ParamSpec("P")
 
 # These regexes are used in to_path() to parse deep path strings.
@@ -80,7 +81,7 @@ ID_COUNTER = 0
 PathToken = namedtuple("PathToken", ["key", "default_factory"])
 
 
-def attempt(func, *args, **kwargs):
+def attempt(func: t.Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> t.Union[T, Exception]:
     """
     Attempts to execute `func`, returning either the result or the caught error object.
 
@@ -100,9 +101,25 @@ def attempt(func, *args, **kwargs):
     try:
         ret = func(*args, **kwargs)
     except Exception as ex:
-        ret = ex
+        # allow different type reassignment
+        ret = ex  # type: ignore
 
     return ret
+
+
+@t.overload
+def cond(
+    pairs: t.List[t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]]],
+    *extra_pairs: t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]],
+) -> t.Callable[P, T]:
+    ...
+
+
+@t.overload
+def cond(
+    pairs: t.List[t.List[t.Callable[P, t.Any]]], *extra_pairs: t.List[t.Callable[P, t.Any]]
+) -> t.Callable[P, t.Any]:
+    ...
 
 
 def cond(pairs, *extra_pairs):
@@ -160,7 +177,17 @@ def cond(pairs, *extra_pairs):
     return _cond
 
 
-def conforms(source):
+@t.overload
+def conforms(source: t.Dict[T, t.Callable[[T2], t.Any]]) -> t.Callable[[t.Dict[T, T2]], bool]:
+    ...
+
+
+@t.overload
+def conforms(source: t.List[t.Callable[[T], t.Any]]) -> t.Callable[[t.List[T]], bool]:
+    ...
+
+
+def conforms(source: t.Union[t.List, t.Dict]) -> t.Callable:
     """
     Creates a function that invokes the predicate properties of `source` with the corresponding
     property values of a given object, returning ``True`` if all predicates return truthy, else
@@ -197,6 +224,16 @@ def conforms(source):
     return _conforms
 
 
+@t.overload
+def conforms_to(obj: t.Dict[T, T2], source: t.Dict[T, t.Callable[[T2], t.Any]]) -> bool:
+    ...
+
+
+@t.overload
+def conforms_to(obj: t.List[T], source: t.List[t.Callable[[T], t.Any]]) -> bool:
+    ...
+
+
 def conforms_to(obj, source):
     """
     Checks if `obj` conforms to `source` by invoking the predicate properties of `source` with the
@@ -222,7 +259,7 @@ def conforms_to(obj, source):
     return conforms(source)(obj)
 
 
-def constant(value):
+def constant(value: T) -> t.Callable[..., T]:
     """
     Creates a function that returns `value`.
 
@@ -246,7 +283,7 @@ def constant(value):
     return partial(identity, value)
 
 
-def default_to(value, default_value):
+def default_to(value: t.Union[T, None], default_value: T2) -> t.Union[T, T2]:
     """
     Checks `value` to determine whether a default value should be returned in its place. The
     `default_value` is returned if value is None.
@@ -268,6 +305,62 @@ def default_to(value, default_value):
     .. versionadded:: 4.0.0
     """
     return default_to_any(value, default_value)
+
+
+@t.overload
+def default_to_any(value: None, *default_values: None) -> None:
+    ...
+
+
+@t.overload
+def default_to_any(
+    value: t.Union[T, None],
+    default_value1: None,
+    default_value2: T2,
+    /,
+) -> t.Union[T, T2]:
+    ...
+
+
+@t.overload
+def default_to_any(
+    value: t.Union[T, None],
+    default_value1: None,
+    default_value2: None,
+    default_value3: T2,
+    /,
+) -> t.Union[T, T2]:
+    ...
+
+
+@t.overload
+def default_to_any(
+    value: t.Union[T, None],
+    default_value1: None,
+    default_value2: None,
+    default_value3: None,
+    default_value4: T2,
+    /,
+) -> t.Union[T, T2]:
+    ...
+
+
+@t.overload
+def default_to_any(
+    value: t.Union[T, None],
+    default_value1: None,
+    default_value2: None,
+    default_value3: None,
+    default_value4: None,
+    default_value5: T2,
+    /,
+) -> t.Union[T, T2]:
+    ...
+
+
+@t.overload
+def default_to_any(value: t.Union[T, None], *default_values: T2) -> t.Union[T, T2]:
+    ...
 
 
 def default_to_any(value, *default_values):
@@ -299,6 +392,16 @@ def default_to_any(value, *default_values):
     for val in values:
         if val is not None:
             return val
+
+
+@t.overload
+def identity(arg: T, *args: t.Any) -> T:
+    ...
+
+
+@t.overload
+def identity(arg: None = None, *args: t.Any) -> None:
+    ...
 
 
 def identity(arg=None, *args):
@@ -418,7 +521,7 @@ def iteratee(func):
     return cbk
 
 
-def matches(source):
+def matches(source: t.Any) -> t.Callable[[t.Any], bool]:
     """
     Creates a matches-style predicate function which performs a deep comparison between a given
     object and the `source` object, returning ``True`` if the given object has equivalent property
@@ -448,7 +551,7 @@ def matches(source):
     return lambda obj: pyd.is_match(obj, source)
 
 
-def matches_property(key, value):
+def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:
     """
     Creates a function that compares the property value of `key` on a given object to `value`.
 
@@ -473,6 +576,25 @@ def matches_property(key, value):
     """
     prop_accessor = property_(key)
     return lambda obj: matches(value)(prop_accessor(obj))
+
+
+class MemoizedFunc(t.Protocol[P, T, T2]):
+    cache: t.Dict[T2, T]
+
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
+        ...  # pragma: no cover
+
+
+@t.overload
+def memoize(func: t.Callable[P, T], resolver: None = None) -> MemoizedFunc[P, T, str]:
+    ...
+
+
+@t.overload
+def memoize(
+    func: t.Callable[P, T], resolver: t.Union[t.Callable[P, T2], None] = None
+) -> MemoizedFunc[P, T, T2]:
+    ...
 
 
 def memoize(func, resolver=None):
@@ -504,23 +626,25 @@ def memoize(func, resolver=None):
     .. versionadded:: 1.0.0
     """
 
-    def memoized(*args, **kwargs):
+    def memoized(*args: P.args, **kwargs: P.kwargs):
         if resolver:
             key = resolver(*args, **kwargs)
         else:
             key = f"{args}{kwargs}"
 
-        if key not in memoized.cache:
-            memoized.cache[key] = func(*args, **kwargs)
+        if key not in t.cast(MemoizedFunc, memoized).cache:
+            t.cast(MemoizedFunc, memoized).cache[key] = func(*args, **kwargs)
 
-        return memoized.cache[key]
+        return t.cast(MemoizedFunc, memoized).cache[key]
 
     memoized.cache = {}
 
-    return memoized
+    return t.cast(MemoizedFunc[P, T, T2], memoized)
 
 
-def method(path, *args, **kwargs):
+def method(
+    path: t.Union[str, int, t.List[t.Union[str, int]]], *args: t.Any, **kwargs: t.Any
+) -> t.Callable[..., t.Any]:
     """
     Creates a function that invokes the method at `path` on a given object. Any additional arguments
     are provided to the invoked method.
@@ -552,7 +676,7 @@ def method(path, *args, **kwargs):
     return _method
 
 
-def method_of(obj, *args, **kwargs):
+def method_of(obj: t.Any, *args: t.Any, **kwargs: t.Any) -> t.Callable[..., t.Any]:
     """
     The opposite of :func:`method`. This method creates a function that invokes the method at a
     given path on object. Any additional arguments are provided to the invoked method.
@@ -584,7 +708,7 @@ def method_of(obj, *args, **kwargs):
     return _method_of
 
 
-def noop(*args, **kwargs):  # pylint: disable=unused-argument
+def noop(*args: t.Any, **kwargs: t.Any) -> None:  # pylint: disable=unused-argument
     """
     A no-operation function.
 
@@ -593,7 +717,7 @@ def noop(*args, **kwargs):  # pylint: disable=unused-argument
     pass
 
 
-def nth_arg(pos=0):
+def nth_arg(pos: int = 0) -> t.Callable[..., t.Any]:
     """
     Creates a function that gets the argument at index n. If n is negative, the nth argument from
     the end is returned.
@@ -627,7 +751,7 @@ def nth_arg(pos=0):
     return _nth_arg
 
 
-def now():
+def now() -> int:
     """
     Return the number of milliseconds that have elapsed since the Unix epoch (1 January 1970
     00:00:00 UTC).
@@ -654,7 +778,7 @@ def now():
     return int(seconds * 1000)
 
 
-def over(funcs):
+def over(funcs: t.Iterable[t.Callable[P, T]]) -> t.Callable[P, t.List[T]]:
     """
     Creates a function that invokes all functions in `funcs` with the arguments it receives and
     returns their results.
@@ -674,13 +798,13 @@ def over(funcs):
     .. versionadded:: 4.0.0
     """
 
-    def _over(*args):
-        return [func(*args) for func in funcs]
+    def _over(*args: P.args, **kwargs: P.kwargs) -> t.List[T]:
+        return [func(*args, **kwargs) for func in funcs]
 
     return _over
 
 
-def over_every(funcs):
+def over_every(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     """
     Creates a function that checks if all of the functions in `funcs` return truthy when invoked
     with the arguments it receives.
@@ -700,13 +824,13 @@ def over_every(funcs):
     .. versionadded:: 4.0.0
     """
 
-    def _over_every(*args):
-        return all(func(*args) for func in funcs)
+    def _over_every(*args: P.args, **kwargs: P.kwargs) -> bool:
+        return all(func(*args, **kwargs) for func in funcs)
 
     return _over_every
 
 
-def over_some(funcs):
+def over_some(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     """
     Creates a function that checks if any of the functions in `funcs` return truthy when invoked
     with the arguments it receives.
@@ -726,13 +850,13 @@ def over_some(funcs):
     .. versionadded:: 4.0.0
     """
 
-    def _over_some(*args):
-        return any(func(*args) for func in funcs)
+    def _over_some(*args: P.args, **kwargs: P.kwargs) -> bool:
+        return any(func(*args, **kwargs) for func in funcs)
 
     return _over_some
 
 
-def property_(path):
+def property_(path: t.Union[int, str, t.List[t.Union[int, str]]]) -> t.Callable[[t.Any], t.Any]:
     """
     Creates a function that returns the value at path of a given object.
 
@@ -782,7 +906,7 @@ def properties(*paths: t.Any) -> t.Callable[[t.Any], t.Any]:
     return lambda obj: [getter(obj) for getter in (pyd.property_(path) for path in paths)]
 
 
-def property_of(obj):
+def property_of(obj: t.Any) -> t.Callable[[t.Union[int, str, t.List[t.Union[int, str]]]], t.Any]:
     """
     The inverse of :func:`property_`. This method creates a function that returns the key value of a
     given key on `obj`.
@@ -811,7 +935,34 @@ def property_of(obj):
     return lambda key: pyd.get(obj, key)
 
 
-def random(start=0, stop=1, floating=False):
+@t.overload
+def random(start: int = 0, stop: int = 1, *, floating: t.Literal[False] = False) -> int:
+    ...
+
+
+@t.overload
+def random(start: float, stop: int = 1, floating: bool = False) -> float:
+    ...
+
+
+@t.overload
+def random(start: int = 0, *, stop: float, floating: bool = False) -> float:
+    ...
+
+
+@t.overload
+def random(start: float, stop: float, floating: bool = False) -> float:
+    ...
+
+
+@t.overload
+def random(
+    start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, *, floating: t.Literal[True]
+) -> float:
+    ...
+
+
+def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floating: bool = False):
     """
     Produces a random number between `start` and `stop` (inclusive). If only one argument is
     provided a number between 0 and the given number will be returned. If floating is truthy or
@@ -846,9 +997,19 @@ def random(start=0, stop=1, floating=False):
     if floating:
         rnd = uniform(start, stop)
     else:
-        rnd = randint(start, stop)
+        rnd = randint(t.cast(int, start), t.cast(int, stop))
 
     return rnd
+
+
+@t.overload
+def range_(stop: int, /) -> t.Generator[int, None, None]:
+    ...
+
+
+@t.overload
+def range_(start: int, stop: int, step: int = 1, /) -> t.Generator[int, None, None]:
+    ...
 
 
 def range_(*args):
@@ -890,6 +1051,16 @@ def range_(*args):
     return base_range(*args)
 
 
+@t.overload
+def range_right(stop: int, /) -> t.Generator[int, None, None]:
+    ...
+
+
+@t.overload
+def range_right(start: int, stop: int, step: int = 1, /) -> t.Generator[int, None, None]:
+    ...
+
+
 def range_right(*args):
     """
     Similar to :func:`range_`, except that it populates the values in descending order.
@@ -915,6 +1086,22 @@ def range_right(*args):
     .. versionadded:: 4.0.0
     """
     return base_range(*args, from_right=True)
+
+
+# TODO
+@t.overload
+def result(obj: None, key: t.Any, default: None = None) -> None:
+    ...
+
+
+@t.overload
+def result(obj: None, key: t.Any, default: T) -> T:
+    ...
+
+
+@t.overload
+def result(obj: t.Any, key: t.Any, default: t.Any = None) -> t.Any:
+    ...
 
 
 def result(obj, key, default=None):
@@ -959,14 +1146,14 @@ def result(obj, key, default=None):
 
 
 def retry(  # noqa: C901
-    attempts=3,
-    delay=0.5,
-    max_delay=150.0,
-    scale=2.0,
-    jitter=0,
-    exceptions=(Exception,),
-    on_exception=None,
-):
+    attempts: int = 3,
+    delay: t.Union[int, float] = 0.5,
+    max_delay: t.Union[int, float] = 150.0,
+    scale: t.Union[int, float] = 2.0,
+    jitter: t.Union[int, float, t.Tuple[t.Union[int, float], t.Union[int, float]]] = 0,
+    exceptions: t.Iterable[type[Exception]] = (Exception,),
+    on_exception: t.Union[t.Callable[[Exception, int], t.Any], None] = None,
+) -> t.Callable[[CallableT], CallableT]:
     """
     Decorator that retries a function multiple times if it raises an exception with an optional
     delay between each attempt.
@@ -1084,7 +1271,7 @@ def retry(  # noqa: C901
     return decorator
 
 
-def stub_list():
+def stub_list() -> t.List:
     """
     Returns empty "list".
 
@@ -1101,7 +1288,7 @@ def stub_list():
     return []
 
 
-def stub_dict():
+def stub_dict() -> t.Dict:
     """
     Returns empty "dict".
 
@@ -1118,7 +1305,7 @@ def stub_dict():
     return {}
 
 
-def stub_false():
+def stub_false() -> t.Literal[False]:
     """
     Returns ``False``.
 
@@ -1135,7 +1322,7 @@ def stub_false():
     return False
 
 
-def stub_string():
+def stub_string() -> str:
     """
     Returns an empty string.
 
@@ -1152,7 +1339,7 @@ def stub_string():
     return ""
 
 
-def stub_true():
+def stub_true() -> t.Literal[True]:
     """
     Returns ``True``.
 
@@ -1169,7 +1356,17 @@ def stub_true():
     return True
 
 
-def times(n, iteratee=None):
+@t.overload
+def times(n: int, iteratee: t.Callable[..., T]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def times(n: int, iteratee: None = None) -> t.List[int]:
+    ...
+
+
+def times(n: int, iteratee=None):
     """
     Executes the iteratee `n` times, returning a list of the results of each iteratee execution. The
     iteratee is invoked with one argument: ``(index)``.
@@ -1205,7 +1402,7 @@ def times(n, iteratee=None):
     return [callit(iteratee, index, argcount=argcount) for index in range(n)]
 
 
-def to_path(value):
+def to_path(value: t.Union[str, int, t.List[t.Union[str, int]]]) -> t.List[t.Union[int, str]]:
     """
     Converts values to a property path array.
 
@@ -1239,7 +1436,7 @@ def to_path(value):
     return path
 
 
-def unique_id(prefix=None):
+def unique_id(prefix: t.Union[str, None] = None) -> str:
     """
     Generates a unique ID. If `prefix` is provided the ID will be appended to  it.
 
