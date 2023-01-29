@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v6.0.0 (2023-01-28)
+-------------------
+
 - Prevent access to object paths containing dunder-methods in functions like ``get()`` for non-dict/list objects. Attempting to access dunder-methods using get-path keys will raise a ``KeyError`` (e.g. ``get(SomeClass(), '__init__'`` will raise). Access to dict keys are unaffected (e.g. ``get({"__init__": True}, "__init__")`` will return ``True``). (**breaking change**)
 - Add support for Python 3.11.
 - Drop support for Python 3.6 (**breaking change**)
