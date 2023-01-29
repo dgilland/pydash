@@ -119,7 +119,7 @@ class JSRegExp:
                 results = []
         return results
 
-    def replace(self, text: str, repl: t.Union[str, t.Callable[[re.Match[str]], str]]) -> str:
+    def replace(self, text: str, repl: t.Union[str, t.Callable[[re.Match], str]]) -> str:
         """Replace parts of text that match the regular expression."""
         count = 0 if self._global else 1
         return self.pattern.sub(repl, text, count=count)
@@ -1185,7 +1185,7 @@ def reg_exp_js_match(text: t.Any, reg_exp: str) -> t.List[str]:
 
 
 def reg_exp_js_replace(
-    text: t.Any, reg_exp: str, repl: t.Union[str, t.Callable[[re.Match[str]], str]]
+    text: t.Any, reg_exp: str, repl: t.Union[str, t.Callable[[re.Match], str]]
 ) -> str:
     """
     Replace `text` with `repl` using Javascript style regular expression to find matches.
@@ -1226,7 +1226,7 @@ def reg_exp_js_replace(
 def reg_exp_replace(
     text: t.Any,
     pattern: t.Any,
-    repl: t.Union[str, t.Callable[[re.Match[str]], str]],
+    repl: t.Union[str, t.Callable[[re.Match], str]],
     ignore_case: bool = False,
     count: int = 0,
 ) -> str:
@@ -1291,7 +1291,7 @@ def repeat(text: t.Any, n: SupportsInt = 0) -> str:
 def replace(
     text: t.Any,
     pattern: t.Any,
-    repl: t.Union[str, t.Callable[[re.Match[str]], str]],
+    repl: t.Union[str, t.Callable[[re.Match], str]],
     ignore_case: bool = False,
     count: int = 0,
     escape: bool = True,
@@ -1371,7 +1371,7 @@ def replace(
 def replace_end(
     text: t.Any,
     pattern: t.Any,
-    repl: t.Union[str, t.Callable[[re.Match[str]], str]],
+    repl: t.Union[str, t.Callable[[re.Match], str]],
     ignore_case: bool = False,
     escape: bool = True,
 ) -> str:
@@ -1406,7 +1406,7 @@ def replace_end(
 def replace_start(
     text: t.Any,
     pattern: t.Any,
-    repl: t.Union[str, t.Callable[[re.Match[str]], str]],
+    repl: t.Union[str, t.Callable[[re.Match], str]],
     ignore_case: bool = False,
     escape: bool = True,
 ) -> str:

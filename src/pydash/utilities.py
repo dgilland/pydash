@@ -13,7 +13,7 @@ import re
 import time
 import typing as t
 
-from typing_extensions import ParamSpec
+from typing_extensions import Literal, ParamSpec, Protocol, Type
 
 import pydash as pyd
 
@@ -81,7 +81,7 @@ ID_COUNTER = 0
 PathToken = namedtuple("PathToken", ["key", "default_factory"])
 
 
-def attempt(func: t.Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> t.Union[T, Exception]:
+def attempt(func: t.Callable[P, T], *args: "P.args", **kwargs: "P.kwargs") -> t.Union[T, Exception]:
     """
     Attempts to execute `func`, returning either the result or the caught error object.
 
@@ -317,7 +317,6 @@ def default_to_any(
     value: t.Union[T, None],
     default_value1: None,
     default_value2: T2,
-    /,
 ) -> t.Union[T, T2]:
     ...
 
@@ -328,7 +327,6 @@ def default_to_any(
     default_value1: None,
     default_value2: None,
     default_value3: T2,
-    /,
 ) -> t.Union[T, T2]:
     ...
 
@@ -340,7 +338,6 @@ def default_to_any(
     default_value2: None,
     default_value3: None,
     default_value4: T2,
-    /,
 ) -> t.Union[T, T2]:
     ...
 
@@ -353,7 +350,6 @@ def default_to_any(
     default_value3: None,
     default_value4: None,
     default_value5: T2,
-    /,
 ) -> t.Union[T, T2]:
     ...
 
@@ -578,7 +574,7 @@ def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:
     return lambda obj: matches(value)(prop_accessor(obj))
 
 
-class MemoizedFunc(t.Protocol[P, T, T2]):
+class MemoizedFunc(Protocol[P, T, T2]):
     cache: t.Dict[T2, T]
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
@@ -936,7 +932,7 @@ def property_of(obj: t.Any) -> t.Callable[[t.Union[int, str, t.List[t.Union[int,
 
 
 @t.overload
-def random(start: int = 0, stop: int = 1, *, floating: t.Literal[False] = False) -> int:
+def random(start: int = 0, stop: int = 1, *, floating: Literal[False] = False) -> int:
     ...
 
 
@@ -957,7 +953,7 @@ def random(start: float, stop: float, floating: bool = False) -> float:
 
 @t.overload
 def random(
-    start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, *, floating: t.Literal[True]
+    start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, *, floating: Literal[True]
 ) -> float:
     ...
 
@@ -1003,12 +999,12 @@ def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floati
 
 
 @t.overload
-def range_(stop: int, /) -> t.Generator[int, None, None]:
+def range_(stop: int) -> t.Generator[int, None, None]:
     ...
 
 
 @t.overload
-def range_(start: int, stop: int, step: int = 1, /) -> t.Generator[int, None, None]:
+def range_(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]:
     ...
 
 
@@ -1052,12 +1048,12 @@ def range_(*args):
 
 
 @t.overload
-def range_right(stop: int, /) -> t.Generator[int, None, None]:
+def range_right(stop: int) -> t.Generator[int, None, None]:
     ...
 
 
 @t.overload
-def range_right(start: int, stop: int, step: int = 1, /) -> t.Generator[int, None, None]:
+def range_right(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]:
     ...
 
 
@@ -1151,7 +1147,7 @@ def retry(  # noqa: C901
     max_delay: t.Union[int, float] = 150.0,
     scale: t.Union[int, float] = 2.0,
     jitter: t.Union[int, float, t.Tuple[t.Union[int, float], t.Union[int, float]]] = 0,
-    exceptions: t.Iterable[type[Exception]] = (Exception,),
+    exceptions: t.Iterable[Type[Exception]] = (Exception,),
     on_exception: t.Union[t.Callable[[Exception, int], t.Any], None] = None,
 ) -> t.Callable[[CallableT], CallableT]:
     """
@@ -1305,7 +1301,7 @@ def stub_dict() -> t.Dict:
     return {}
 
 
-def stub_false() -> t.Literal[False]:
+def stub_false() -> Literal[False]:
     """
     Returns ``False``.
 
@@ -1339,7 +1335,7 @@ def stub_string() -> str:
     return ""
 
 
-def stub_true() -> t.Literal[True]:
+def stub_true() -> Literal[True]:
     """
     Returns ``True``.
 

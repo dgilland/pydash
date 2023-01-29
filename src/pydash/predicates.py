@@ -13,6 +13,8 @@ import re
 from types import BuiltinFunctionType
 import typing as t
 
+from typing_extensions import TypeGuard
+
 import pydash as pyd
 
 from .helpers import BUILTINS, NUMBER_TYPES, UNSET, base_get, callit, iterator
@@ -278,7 +280,7 @@ def is_associative(value: t.Any) -> bool:
     return hasattr(value, "__getitem__")
 
 
-def is_blank(text: t.Any) -> t.TypeGuard[str]:
+def is_blank(text: t.Any) -> TypeGuard[str]:
     r"""
     Checks if `text` contains only whitespace characters.
 
@@ -307,7 +309,7 @@ def is_blank(text: t.Any) -> t.TypeGuard[str]:
     return ret
 
 
-def is_boolean(value: t.Any) -> t.TypeGuard[bool]:
+def is_boolean(value: t.Any) -> TypeGuard[bool]:
     """
     Checks if `value` is a boolean value.
 
@@ -627,7 +629,7 @@ def is_even(value: t.Any) -> bool:
     return is_number(value) and value % 2 == 0
 
 
-def is_float(value: t.Any) -> t.TypeGuard[float]:
+def is_float(value: t.Any) -> TypeGuard[float]:
     """
     Checks if `value` is a float.
 
@@ -754,7 +756,7 @@ def is_instance_of(value: t.Any, types: t.Union[type, t.Tuple[type, ...]]) -> bo
     return isinstance(value, types)
 
 
-def is_integer(value: t.Any) -> t.TypeGuard[int]:
+def is_integer(value: t.Any) -> TypeGuard[int]:
     """
     Checks if `value` is a integer.
 
@@ -1053,7 +1055,7 @@ def is_negative(value: t.Any) -> bool:
     return is_number(value) and value < 0
 
 
-def is_none(value: t.Any) -> t.TypeGuard[None]:
+def is_none(value: t.Any) -> TypeGuard[None]:
     """
     Checks if `value` is `None`.
 
@@ -1183,7 +1185,7 @@ def is_positive(value: t.Any) -> bool:
     return is_number(value) and value > 0
 
 
-def is_reg_exp(value: t.Any) -> t.TypeGuard[re.Pattern]:
+def is_reg_exp(value: t.Any) -> TypeGuard[re.Pattern]:
     """
     Checks if `value` is a ``RegExp`` object.
 
@@ -1278,7 +1280,7 @@ def is_strictly_increasing(value: t.Union[SupportsComparison, t.List[SupportsCom
     return is_monotone(value, t.cast(t.Callable, operator.lt))
 
 
-def is_string(value: t.Any) -> t.TypeGuard[str]:
+def is_string(value: t.Any) -> TypeGuard[str]:
     """
     Checks if `value` is a string.
 
@@ -1324,7 +1326,7 @@ def is_tuple(value: t.Any) -> bool:
     return isinstance(value, tuple)
 
 
-def is_zero(value: t.Any) -> t.TypeGuard[int]:
+def is_zero(value: t.Any) -> TypeGuard[int]:
     """
     Checks if `value` is ``0``.
 

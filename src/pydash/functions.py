@@ -9,7 +9,7 @@ import itertools
 import time
 import typing as t
 
-from typing_extensions import Concatenate, ParamSpec
+from typing_extensions import Concatenate, Literal, ParamSpec
 
 import pydash as pyd
 
@@ -123,7 +123,6 @@ class Flow(t.Generic[P, T]):
         func3: t.Callable[[T3], T4],
         func4: t.Callable[[T4], T5],
         func5: t.Callable[[T5], T],
-        /,
         *,
         from_right: bool = True,
     ) -> None:
@@ -136,7 +135,6 @@ class Flow(t.Generic[P, T]):
         func2: t.Callable[[T2], T3],
         func3: t.Callable[[T3], T4],
         func4: t.Callable[[T4], T],
-        /,
         *,
         from_right: bool = True,
     ) -> None:
@@ -148,7 +146,6 @@ class Flow(t.Generic[P, T]):
         func1: t.Callable[P, T2],
         func2: t.Callable[[T2], T3],
         func3: t.Callable[[T3], T],
-        /,
         *,
         from_right: bool = True,
     ) -> None:
@@ -156,15 +153,15 @@ class Flow(t.Generic[P, T]):
 
     @t.overload
     def __init__(
-        self, func1: t.Callable[P, T2], func2: t.Callable[[T2], T], /, *, from_right: bool = True
+        self, func1: t.Callable[P, T2], func2: t.Callable[[T2], T], *, from_right: bool = True
     ) -> None:
         ...
 
     @t.overload
-    def __init__(self, func1: t.Callable[P, T], /, *, from_right: bool = True) -> None:
+    def __init__(self, func1: t.Callable[P, T], *, from_right: bool = True) -> None:
         ...
 
-    def __init__(self, *funcs, from_right: bool = True) -> None:
+    def __init__(self, *funcs, from_right: bool = True) -> None:  # type: ignore
         self.funcs = funcs
         self.from_right = from_right
 
@@ -407,7 +404,7 @@ class Debounce(t.Generic[P, T]):
     """Wrap a function in a debounce context."""
 
     def __init__(
-        self, func: t.Callable[P, T], wait: int, max_wait: t.Union[int, t.Literal[False]] = False
+        self, func: t.Callable[P, T], wait: int, max_wait: t.Union[int, Literal[False]] = False
     ) -> None:
         self.func = func
         self.wait = wait
@@ -881,7 +878,7 @@ def curry_right(func, arity=None):
 
 
 def debounce(
-    func: t.Callable[P, T], wait: int, max_wait: t.Union[int, t.Literal[False]] = False
+    func: t.Callable[P, T], wait: int, max_wait: t.Union[int, Literal[False]] = False
 ) -> Debounce[P, T]:
     """
     Creates a function that will delay the execution of `func` until after `wait` milliseconds have
@@ -901,7 +898,7 @@ def debounce(
     return Debounce(func, wait, max_wait=max_wait)
 
 
-def delay(func: t.Callable[P, T], wait: int, *args: P.args, **kwargs: P.kwargs) -> T:
+def delay(func: t.Callable[P, T], wait: int, *args: "P.args", **kwargs: "P.kwargs") -> T:
     """
     Executes the `func` function after `wait` milliseconds. Additional arguments will be provided to
     `func` when it is invoked.
@@ -1004,7 +1001,6 @@ def flow(
     func3: t.Callable[[T3], T4],
     func4: t.Callable[[T4], T5],
     func5: t.Callable[[T5], T],
-    /,
 ) -> Flow[P, T]:
     ...
 
@@ -1015,7 +1011,6 @@ def flow(
     func2: t.Callable[[T2], T3],
     func3: t.Callable[[T3], T4],
     func4: t.Callable[[T4], T],
-    /,
 ) -> Flow[P, T]:
     ...
 
@@ -1025,18 +1020,17 @@ def flow(
     func1: t.Callable[P, T2],
     func2: t.Callable[[T2], T3],
     func3: t.Callable[[T3], T],
-    /,
 ) -> Flow[P, T]:
     ...
 
 
 @t.overload
-def flow(func1: t.Callable[P, T2], func2: t.Callable[[T2], T], /) -> Flow[P, T]:
+def flow(func1: t.Callable[P, T2], func2: t.Callable[[T2], T]) -> Flow[P, T]:
     ...
 
 
 @t.overload
-def flow(func1: t.Callable[P, T], /) -> Flow[P, T]:
+def flow(func1: t.Callable[P, T]) -> Flow[P, T]:
     ...
 
 
@@ -1079,7 +1073,6 @@ def flow_right(
     func3: t.Callable[[T2], T3],
     func2: t.Callable[[T1], T2],
     func1: t.Callable[P, T1],
-    /,
 ) -> Flow[P, T]:
     ...
 
@@ -1090,7 +1083,6 @@ def flow_right(
     func3: t.Callable[[T2], T3],
     func2: t.Callable[[T1], T2],
     func1: t.Callable[P, T1],
-    /,
 ) -> Flow[P, T]:
     ...
 
@@ -1100,18 +1092,17 @@ def flow_right(
     func3: t.Callable[[T2], T],
     func2: t.Callable[[T1], T2],
     func1: t.Callable[P, T1],
-    /,
 ) -> Flow[P, T]:
     ...
 
 
 @t.overload
-def flow_right(func2: t.Callable[[T1], T], func1: t.Callable[P, T1], /) -> Flow[P, T]:
+def flow_right(func2: t.Callable[[T1], T], func1: t.Callable[P, T1]) -> Flow[P, T]:
     ...
 
 
 @t.overload
-def flow_right(func1: t.Callable[P, T], /) -> Flow[P, T]:
+def flow_right(func1: t.Callable[P, T]) -> Flow[P, T]:
     ...
 
 
@@ -1257,7 +1248,6 @@ def over_args(
     transform_three: t.Callable[[T3], T3],
     transform_four: t.Callable[[T4], T4],
     transform_five: t.Callable[[T5], T5],
-    /,
 ) -> t.Callable[[T1, T2, T3, T4, T5], T]:
     ...
 
@@ -1269,7 +1259,6 @@ def over_args(
     transform_two: t.Callable[[T2], T2],
     transform_three: t.Callable[[T3], T3],
     transform_four: t.Callable[[T4], T4],
-    /,
 ) -> t.Callable[[T1, T2, T3, T4], T]:
     ...
 
@@ -1280,7 +1269,6 @@ def over_args(
     transform_one: t.Callable[[T1], T1],
     transform_two: t.Callable[[T2], T2],
     transform_three: t.Callable[[T3], T3],
-    /,
 ) -> t.Callable[[T1, T2, T3], T]:
     ...
 
@@ -1290,7 +1278,6 @@ def over_args(
     func: t.Callable[[T1, T2], T],
     transform_one: t.Callable[[T1], T1],
     transform_two: t.Callable[[T2], T2],
-    /,
 ) -> t.Callable[[T1, T2], T]:
     ...
 
@@ -1299,12 +1286,11 @@ def over_args(
 def over_args(
     func: t.Callable[[T1], T],
     transform_one: t.Callable[[T1], T1],
-    /,
 ) -> t.Callable[[T1], T]:
     ...
 
 
-def over_args(func: t.Callable, *transforms: t.Callable) -> t.Callable:
+def over_args(func: t.Callable, *transforms: t.Callable) -> t.Callable:  # type: ignore
     """
     Creates a function that runs each argument through a corresponding transform function.
 
