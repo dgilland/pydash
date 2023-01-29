@@ -92,7 +92,7 @@ def lint(ctx):
 
     if failures:
         failed = ", ".join(failures)
-        raise Exit(f"ERROR: Linters that failed: {failed}")
+        raise Exit(f"ERROR: linters failed: {failed}")
 
 
 @task(help={"args": "Override default pytest arguments"})
