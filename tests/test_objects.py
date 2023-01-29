@@ -381,6 +381,30 @@ def test_get__should_not_populate_defaultdict():
 
 
 @parametrize(
+    "obj,path",
+    [
+        (helpers.Object(), "__init__"),
+        (helpers.Object(subobj=helpers.Object()), "subobj.__init__"),
+        (namedtuple("a", ["a"])(a=1), "__len__"),
+    ],
+)
+def test_get__raises_for_objects_when_path_restricted(obj, path):
+    with pytest.raises(KeyError, match="access to restricted key"):
+        _.get(obj, path)
+
+
+@parametrize(
+    "obj,path",
+    [
+        ({}, "__init__"),
+        ([], "__contains__"),
+    ],
+)
+def test_get__does_not_raise_for_dict_or_list_when_path_restricted(obj, path):
+    assert _.get(obj, path) is None
+
+
+@parametrize(
     "case,expected",
     [
         (({"a": 1, "b": 2, "c": 3}, "b"), True),

@@ -178,12 +178,20 @@ def _base_get_item(obj, key, default=UNSET):
 def _base_get_object(obj, key, default=UNSET):
     value = _base_get_item(obj, key, default=UNSET)
     if value is UNSET:
+        _raise_if_restricted_key(key)
         value = default
         try:
             value = getattr(obj, key)
         except Exception:
             pass
     return value
+
+
+def _raise_if_restricted_key(key):
+    # Prevent access to dunder-methods since this could expose access to globals through leaky
+    # attributes such as obj.__init__.__globals__.
+    if len(key) > 4 and key.isascii() and key.startswith("__") and key.endswith("__"):
+        raise KeyError(f"access to restricted key {key!r} is not allowed")
 
 
 def base_set(obj, key, value, allow_override=True):
@@ -213,6 +221,7 @@ def base_set(obj, key, value, allow_override=True):
                 obj[:] = (obj + [None] * key)[:key]
             obj.append(value)
     elif (allow_override or not hasattr(obj, key)) and obj is not None:
+        _raise_if_restricted_key(key)
         setattr(obj, key, value)
 
     return obj
