@@ -20,7 +20,6 @@ def test_mypy_compact() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_concat() -> None:
-    reveal_type(_.concat([1, 2], [3, 4], [[5], [6]]))  # R: builtins.list[Union[builtins.int, builtins.list[builtins.int]]]
     reveal_type(_.concat([1, 2], [3, 4]))  # R: builtins.list[builtins.int]
 
 
@@ -131,7 +130,7 @@ def test_mypy_initial() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_intercalate() -> None:
-    my_list: t.List[t.Union[int, t.List[int]]] = [1, [2], [3], 4]
+    my_list: t.List[t.List[int]] = [[2], [3]]
     reveal_type(_.intercalate(my_list, 'x'))  # R: builtins.list[Union[builtins.int, builtins.str]]
 
 

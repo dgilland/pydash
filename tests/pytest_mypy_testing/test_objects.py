@@ -291,7 +291,8 @@ def test_mypy_transform() -> None:
     def build_list(acc: t.List[t.Tuple[int, int]], v: int, k: int) -> None:
         return acc.append((k, v))
 
-    reveal_type(_.transform([1, 2, 3, 4], build_list))  # R: builtins.list[Tuple[builtins.int, builtins.int]]
+    base_list: t.List[t.Tuple[int, int]] = []
+    reveal_type(_.transform([1, 2, 3, 4], build_list, base_list))  # R: builtins.list[Tuple[builtins.int, builtins.int]]
 
 
 @pytest.mark.mypy_testing

@@ -1032,9 +1032,7 @@ def key_by(collection, iteratee=None):
 
 
 @t.overload
-def map_(
-    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
-) -> t.List[T3]:
+def map_(collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], T3]) -> t.List[T3]:
     ...
 
 
@@ -1044,12 +1042,14 @@ def map_(collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.L
 
 
 @t.overload
-def map_(collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], T3]) -> t.List[T3]:
+def map_(
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
+) -> t.List[T3]:
     ...
 
 
 @t.overload
-def map_(collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.List[T2]:
+def map_(collection: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.List[T2]:
     ...
 
 
@@ -1059,7 +1059,7 @@ def map_(collection: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Lis
 
 
 @t.overload
-def map_(collection: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.List[T2]:
+def map_(collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.List[T2]:
     ...
 
 

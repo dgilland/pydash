@@ -72,9 +72,21 @@ T5 = t.TypeVar("T5")
 SupportsComparisonT = t.TypeVar("SupportsComparisonT", bound=SupportsComparison)
 
 
+@t.overload
 def assign(
     obj: t.Mapping[T, T2], *sources: t.Mapping[T3, T4]
 ) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
+    ...
+
+
+@t.overload
+def assign(
+    obj: t.Union[t.Tuple[T, ...], t.List[T]], *sources: t.Mapping[int, T2]
+) -> t.List[t.Union[T, T2]]:
+    ...
+
+
+def assign(obj, *sources) -> t.Union[t.List, t.Dict]:
     """
     Assigns properties of source object(s) to the destination object.
 
@@ -113,7 +125,7 @@ def assign(
         - Moved `iteratee` argument to :func:`assign_with`.
         - Removed alias ``extend``.
     """
-    return assign_with(obj, *sources)
+    return assign_with(obj, *sources)  # type: ignore
 
 
 @t.overload
@@ -482,9 +494,9 @@ def defaults(
     """
     for source in sources:
         for key, value in source.items():
-            obj.setdefault(key, value)
+            t.cast(t.Dict[t.Union[T, T3], t.Union[T2, T4]], obj).setdefault(key, value)
 
-    return obj
+    return t.cast(t.Dict[t.Union[T, T3], t.Union[T2, T4]], obj)
 
 
 def defaults_deep(
@@ -694,22 +706,22 @@ def for_in(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
 
 
 @t.overload
-def for_in(obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
+def for_in(obj: t.List[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+def for_in(obj: t.List[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+def for_in(obj: t.List[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in(obj: t.Iterable[T], iteratee: None = None) -> t.List[T]:
+def for_in(obj: t.List[T], iteratee: None = None) -> t.List[T]:
     ...
 
 
@@ -768,22 +780,22 @@ def for_in_right(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
 
 
 @t.overload
-def for_in_right(obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
+def for_in_right(obj: t.List[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in_right(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+def for_in_right(obj: t.List[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in_right(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+def for_in_right(obj: t.List[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in_right(obj: t.Iterable[T], iteratee: None = None) -> t.List[T]:
+def for_in_right(obj: t.List[T], iteratee: None = None) -> t.List[T]:
     ...
 
 
@@ -1068,7 +1080,8 @@ def invoke(
     method_name = pyd.last(paths)
 
     try:
-        method = getattr(get(obj, target_path), method_name)
+        # potential error is caught
+        method = getattr(get(obj, target_path), method_name)  # type: ignore
     except AttributeError:
         ret = None
     else:
@@ -1275,7 +1288,7 @@ def map_values_deep(
         def deep_iteratee(value, key):
             return map_values_deep(value, iteratee, pyd.flatten([properties, key]))
 
-        return assign(obj, map_values(obj, deep_iteratee))
+        return assign(t.cast(t.Union[t.List, t.Dict], obj), map_values(obj, deep_iteratee))
     else:
         return callit(iteratee, obj, properties)
 
@@ -1372,20 +1385,20 @@ def merge_with(obj: t.Any, *sources: t.Any, **kwargs: t.Any) -> t.Any:
     if obj is None:
         return None
 
-    sources = list(sources)
+    list_sources = list(sources)
     iteratee = kwargs.pop("iteratee", None)
 
-    if iteratee is None and sources and callable(sources[-1]):
-        iteratee = sources.pop()
+    if iteratee is None and list_sources and callable(list_sources[-1]):
+        iteratee = list_sources.pop()
 
-    sources = [copy.deepcopy(source) for source in sources]
+    list_sources = [copy.deepcopy(source) for source in list_sources]
 
     if callable(iteratee):
         iteratee = partial(callit, iteratee, argcount=getargcount(iteratee, maxargs=5))
     else:
         iteratee = None
 
-    return _merge_with(obj, *sources, iteratee=iteratee, **kwargs)
+    return _merge_with(obj, *list_sources, iteratee=iteratee, **kwargs)
 
 
 def _merge_with(obj, *sources, **kwargs):
@@ -1431,7 +1444,7 @@ def omit(
     ...
 
 
-def omit(obj: t.Iterable, *properties):
+def omit(obj, *properties):
     """
     The opposite of :func:`pick`. This method creates an object composed of the property paths of
     `obj` that are not omitted.
@@ -1599,7 +1612,8 @@ def pick(
 
 @t.overload
 def pick(
-    obj: t.Iterable[T], *properties: t.Union[str, int, t.List[t.Union[str, int]]]
+    obj: t.Union[t.Tuple[T, ...], t.List[T]],
+    *properties: t.Union[str, int, t.List[t.Union[str, int]]],
 ) -> t.List[T]:
     ...
 
@@ -1629,12 +1643,12 @@ def pick(obj, *properties):
 
 
 @t.overload
-def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
     ...
 
 
 @t.overload
-def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
     ...
 
 
@@ -1644,12 +1658,16 @@ def pick_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
 
 
 @t.overload
-def pick_by(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+def pick_by(
+    obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: t.Callable[[T, int], t.Any]
+) -> t.List[T]:
     ...
 
 
 @t.overload
-def pick_by(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+def pick_by(
+    obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: t.Callable[[T], t.Any]
+) -> t.List[T]:
     ...
 
 
@@ -2079,7 +2097,7 @@ def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
         if precision < 0:
             # Round down since negative `precision` means we are going to the nearest positive
             # integer place.
-            rounder = math.floor
+            rounder: t.Callable = math.floor
         else:
             rounder = round
 
@@ -2191,42 +2209,6 @@ def transform(
 
 @t.overload
 def transform(
-    obj: t.Mapping[T, T2],
-    iteratee: t.Callable[[t.List[T3], T2, T, t.Dict[T, T2]], t.List[T3]],
-    accumulator: None = None,
-) -> t.List[T3]:
-    ...
-
-
-@t.overload
-def transform(
-    obj: t.Mapping[T, T2],
-    iteratee: t.Callable[[t.List[T3], T2, T], t.List[T3]],
-    accumulator: None = None,
-) -> t.List[T3]:
-    ...
-
-
-@t.overload
-def transform(
-    obj: t.Mapping[t.Any, T2],
-    iteratee: t.Callable[[t.List[T3], T2], t.List[T3]],
-    accumulator: None = None,
-) -> t.List[T3]:
-    ...
-
-
-@t.overload
-def transform(
-    obj: t.Mapping[t.Any, t.Any],
-    iteratee: t.Callable[[t.List[T3]], t.List[T3]],
-    accumulator: None = None,
-) -> t.List[T3]:
-    ...
-
-
-@t.overload
-def transform(
     obj: t.List[T], iteratee: t.Callable[[T3, T, int, t.List[T]], t.Any], accumulator: T3
 ) -> T3:
     ...
@@ -2248,42 +2230,7 @@ def transform(obj: t.List[t.Any], iteratee: t.Callable[[T3], t.Any], accumulator
 
 
 @t.overload
-def transform(
-    obj: t.List[T],
-    iteratee: t.Callable[[t.List[T3], T, int, t.List[T]], t.Any],
-    accumulator: None = None,
-) -> t.List[T3]:
-    ...
-
-
-@t.overload
-def transform(
-    obj: t.List[T], iteratee: t.Callable[[t.List[T3], T, int], t.Any], accumulator: None = None
-) -> t.List[T3]:
-    ...
-
-
-@t.overload
-def transform(
-    obj: t.List[T], iteratee: t.Callable[[t.List[T3], T], t.Any], accumulator: None = None
-) -> t.List[T3]:
-    ...
-
-
-@t.overload
-def transform(
-    obj: t.List[t.Any], iteratee: t.Callable[[t.List[T3]], t.Any], accumulator: None = None
-) -> t.List[T3]:
-    ...
-
-
-@t.overload
-def transform(obj: t.Any, iteratee: None = None, *, accumulator: T3) -> T3:
-    ...
-
-
-@t.overload
-def transform(obj: t.Any, iteratee: None = None, accumulator: None = None) -> t.List:
+def transform(obj: t.Any, iteratee: t.Any = None, accumulator: t.Any = None) -> t.Any:
     ...
 
 
@@ -2482,7 +2429,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
 
 
 def unset(  # noqa: C901
-    obj: t.Iterable, path: t.Union[str, int, t.List[t.Union[str, int]]]
+    obj: t.Union[t.List, t.Dict], path: t.Union[str, int, t.List[t.Union[str, int]]]
 ) -> bool:
     """
     Removes the property at `path` of `obj`.
@@ -2534,7 +2481,8 @@ def unset(  # noqa: C901
             except TypeError:
                 target = target[int(key)]
         except Exception:
-            target = UNSET
+            # Allow different types reassignment
+            target = UNSET  # type: ignore
 
         if target is UNSET:
             break

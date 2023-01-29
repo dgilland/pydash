@@ -949,7 +949,8 @@ def is_match_with(
         def cbk(obj_value, src_value):
             return obj_value == src_value
 
-        cbk._argcount = 2
+        # no attribute `_argcount`
+        cbk._argcount = 2  # type: ignore
     else:
         cbk = customizer
 
@@ -1182,7 +1183,7 @@ def is_positive(value: t.Any) -> bool:
     return is_number(value) and value > 0
 
 
-def is_reg_exp(value: t.Any) -> bool:
+def is_reg_exp(value: t.Any) -> t.TypeGuard[re.Pattern]:
     """
     Checks if `value` is a ``RegExp`` object.
 

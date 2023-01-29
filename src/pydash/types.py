@@ -6,6 +6,7 @@ if t.TYPE_CHECKING:
 
 IterateeObjT = t.Union[int, str, t.List, t.Tuple, t.Dict]
 NumberT = t.Union[float, int, "Decimal"]
+NumberNoDecimalT = t.Union[float, int]
 
 
 _T_co = t.TypeVar("_T_co", covariant=True)

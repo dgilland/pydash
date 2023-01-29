@@ -15,12 +15,17 @@ from .types import (
     Addable,
     IterateeObjT,
     Multiplyable,
+    NumberNoDecimalT,
     NumberT,
     Subable,
     SupportsComparison,
     SupportsInt,
     SupportsRound,
 )
+
+
+if t.TYPE_CHECKING:
+    from decimal import Decimal  # pragma: no cover
 
 
 __all__ = (
@@ -54,7 +59,7 @@ __all__ = (
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
-NumT = t.TypeVar("NumT", bound=NumberT)
+NumT = t.TypeVar("NumT", int, float)
 SupportsComparisonT = t.TypeVar("SupportsComparisonT", bound=SupportsComparison)
 
 
@@ -333,17 +338,7 @@ def ceil(x: NumberT, precision: int = 0) -> float:
     return rounder(math.ceil, x, precision)
 
 
-@t.overload
 def clamp(x: NumT, lower: NumT, upper: t.Union[NumT, None] = None) -> NumT:
-    ...
-
-
-@t.overload
-def clamp(x: NumberT, lower: NumberT, upper: t.Union[NumberT, None] = None) -> NumberT:
-    ...
-
-
-def clamp(x, lower, upper=None):
     """
     Clamps number within the inclusive lower and upper bounds.
 
@@ -547,12 +542,12 @@ def max_by(
 
 
 @t.overload
-def max_by(collection: t.Iterable[T], iteratee: IterateeObjT, default: T2) -> t.Union[T, T2]:
+def max_by(collection: t.Iterable[T], iteratee: IterateeObjT, default: Unset = UNSET) -> T:
     ...
 
 
 @t.overload
-def max_by(collection: t.Iterable[T], iteratee: IterateeObjT, default: Unset = UNSET) -> T:
+def max_by(collection: t.Iterable[T], iteratee: IterateeObjT, default: T2) -> t.Union[T, T2]:
     ...
 
 
@@ -778,12 +773,12 @@ def min_by(
 
 
 @t.overload
-def min_by(collection: t.Iterable[T], iteratee: IterateeObjT, default: T2) -> t.Union[T, T2]:
+def min_by(collection: t.Iterable[T], iteratee: IterateeObjT, default: Unset = UNSET) -> T:
     ...
 
 
 @t.overload
-def min_by(collection: t.Iterable[T], iteratee: IterateeObjT, default: Unset = UNSET) -> T:
+def min_by(collection: t.Iterable[T], iteratee: IterateeObjT, default: T2) -> t.Union[T, T2]:
     ...
 
 
@@ -924,11 +919,6 @@ def power(x: t.List[float], n: t.List[t.Union[int, float]]) -> t.List[float]:
     ...
 
 
-@t.overload
-def power(x: t.Any, n: t.Any) -> None:
-    ...
-
-
 def power(x, n):
     """
     Calculate exponentiation of `x` raised to the `n` power.
@@ -998,7 +988,22 @@ def round_(x, precision=0):
     return rounder(round, x, precision)
 
 
-def scale(array: t.Iterable[SupportsComparisonT], maximum: NumberT = 1) -> t.List[float]:
+@t.overload
+def scale(array: t.Iterable["Decimal"], maximum: "Decimal") -> t.List["Decimal"]:
+    ...
+
+
+@t.overload
+def scale(array: t.Iterable[NumT], maximum: NumT) -> t.List[float]:
+    ...
+
+
+@t.overload
+def scale(array: t.Iterable[NumberT], maximum: int = 1) -> t.List[float]:
+    ...
+
+
+def scale(array, maximum: t.Union["Decimal", NumberT] = 1):
     """
     Scale list of value to a maximum number.
 
@@ -1027,10 +1032,23 @@ def scale(array: t.Iterable[SupportsComparisonT], maximum: NumberT = 1) -> t.Lis
     return [item * factor for item in array]
 
 
+@t.overload
 def slope(
-    point1: t.Union[t.Tuple[NumberT, NumberT], t.List[NumberT]],
-    point2: t.Union[t.Tuple[NumberT, NumberT], t.List[NumberT]],
+    point1: t.Union[t.Tuple["Decimal", "Decimal"], t.List["Decimal"]],
+    point2: t.Union[t.Tuple["Decimal", "Decimal"], t.List["Decimal"]],
+) -> "Decimal":
+    ...
+
+
+@t.overload
+def slope(
+    point1: t.Union[t.Tuple[NumberNoDecimalT, NumberNoDecimalT], t.List[NumberNoDecimalT]],
+    point2: t.Union[t.Tuple[NumberNoDecimalT, NumberNoDecimalT], t.List[NumberNoDecimalT]],
 ) -> float:
+    ...
+
+
+def slope(point1, point2):
     """
     Calculate the slope between two points.
 
@@ -1134,7 +1152,7 @@ def transpose(array: t.Iterable[t.Iterable[T]]) -> t.List[t.List[T]]:
 
     .. versionadded:: 2.1.0
     """
-    trans = []
+    trans: t.List[t.List[T]] = []
 
     for y, row in iterator(array):
         for x, col in iterator(row):

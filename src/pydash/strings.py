@@ -2344,7 +2344,7 @@ def flatten_url_params(
     if isinstance(params, dict):
         params = list(params.items())
 
-    flattened = []
+    flattened: t.List = []
     for param, value in params:
         if isinstance(value, (list, tuple)):
             flattened += zip([param] * len(value), value)
