@@ -4,9 +4,13 @@ Method chaining interface.
 .. versionadded:: 1.0.0
 """
 
-import pydash as pyd
+import typing as t
 
-from .helpers import UNSET
+import pydash as pyd
+from pydash.exceptions import InvalidMethod
+
+from ..helpers import UNSET
+from .all_funcs import AllFuncs
 
 
 __all__ = (
@@ -15,17 +19,26 @@ __all__ = (
     "thru",
 )
 
+ValueT = t.TypeVar("ValueT", covariant=True)
+T = t.TypeVar("T")
+T2 = t.TypeVar("T2")
 
-class Chain(object):
+
+class Chain(AllFuncs, t.Generic[ValueT]):
     """Enables chaining of :attr:`module` functions."""
 
     #: Object that contains attribute references to available methods.
     module = pyd
+    invalid_method_exception = InvalidMethod
 
-    def __init__(self, value=UNSET):
+    def __init__(self, value: ValueT = UNSET) -> None:
         self._value = value
 
-    def value(self):
+    def _wrap(self, func) -> "ChainWrapper":
+        """Implement `AllFuncs` interface."""
+        return ChainWrapper(self._value, func)
+
+    def value(self) -> ValueT:
         """
         Return current value of the chain operations.
 
@@ -34,7 +47,7 @@ class Chain(object):
         """
         return self(self._value)
 
-    def to_string(self):
+    def to_string(self) -> str:
         """
         Return current value as string.
 
@@ -43,7 +56,7 @@ class Chain(object):
         """
         return self.module.to_string(self.value())
 
-    def commit(self):
+    def commit(self) -> "Chain[ValueT]":
         """
         Executes the chained sequence and returns the wrapped result.
 
@@ -53,7 +66,7 @@ class Chain(object):
         """
         return Chain(self.value())
 
-    def plant(self, value):
+    def plant(self, value: t.Any) -> "Chain[ValueT]":
         """
         Return a clone of the chained sequence planting `value` as the wrapped value.
 
@@ -78,55 +91,7 @@ class Chain(object):
 
         return clone
 
-    @classmethod
-    def get_method(cls, name):
-        """
-        Return valid :attr:`module` method.
-
-        Args:
-            name (str): Name of pydash method to get.
-
-        Returns:
-            function: :attr:`module` callable.
-
-        Raises:
-            InvalidMethod: Raised if `name` is not a valid :attr:`module` method.
-        """
-        # Python 3.5 issue with pytest doctest call where inspect module tries
-        # to unwrap this class. If we don't return here, we get an
-        # InvalidMethod exception.
-        if name in ("__wrapped__",):  # pragma: no cover
-            return cls
-
-        method = getattr(cls.module, name, None)
-
-        if not callable(method) and not name.endswith("_"):
-            # Alias method names not ending in underscore to their underscore
-            # counterpart. This allows chaining of functions like "map_()"
-            # using "map()" instead.
-            method = getattr(cls.module, name + "_", None)
-
-        if not callable(method):
-            raise cls.module.InvalidMethod(f"Invalid pydash method: {name}")
-
-        return method
-
-    def __getattr__(self, attr):
-        """
-        Proxy attribute access to :attr:`module`.
-
-        Args:
-            attr (str): Name of :attr:`module` function to chain.
-
-        Returns:
-            ChainWrapper: New instance of :class:`ChainWrapper` with value passed on.
-
-        Raises:
-            InvalidMethod: Raised if `attr` is not a valid function.
-        """
-        return ChainWrapper(self._value, self.get_method(attr))
-
-    def __call__(self, value):
+    def __call__(self, value) -> ValueT:
         """
         Return result of passing `value` through chained methods.
 
@@ -142,10 +107,10 @@ class Chain(object):
         return value
 
 
-class ChainWrapper(object):
+class ChainWrapper(t.Generic[ValueT]):
     """Wrap :class:`Chain` method call within a :class:`ChainWrapper` context."""
 
-    def __init__(self, value, method):
+    def __init__(self, value: ValueT, method) -> None:
         self._value = value
         self.method = method
         self.args = ()
@@ -206,12 +171,12 @@ class _Dash(object):
         """Proxy to :meth:`Chain.get_method`."""
         return Chain.get_method(attr)
 
-    def __call__(self, value=UNSET):
+    def __call__(self, value: ValueT = UNSET) -> Chain[ValueT]:
         """Return a new instance of :class:`Chain` with `value` as the seed."""
         return Chain(value)
 
 
-def chain(value=UNSET):
+def chain(value: T = UNSET) -> Chain[T]:
     """
     Creates a :class:`Chain` object which wraps the given value to enable intuitive method chaining.
     Chaining is lazy and won't compute a final value until :meth:`Chain.value` is called.
@@ -267,7 +232,7 @@ def chain(value=UNSET):
     return Chain(value)
 
 
-def tap(value, interceptor):
+def tap(value: T, interceptor: t.Callable[[T], t.Any]) -> T:
     """
     Invokes `interceptor` with the `value` as the first argument and then returns `value`. The
     purpose of this method is to "tap into" a method chain in order to perform operations on
@@ -295,7 +260,7 @@ def tap(value, interceptor):
     return value
 
 
-def thru(value, interceptor):
+def thru(value: T, interceptor: t.Callable[[T], T2]) -> T2:
     """
     Returns the result of calling `interceptor` on `value`. The purpose of this method is to pass
     `value` through a function during a method chain.
