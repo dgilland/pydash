@@ -13,9 +13,12 @@ import typing as t
 import pydash as pyd
 
 from .helpers import UNSET, base_get, base_set, callit, getargcount, iterator, iteriteratee
-from .types import IterateeObjT, SupportsComparison
+from .types import IterateeObjT
 from .utilities import PathToken, to_path, to_path_tokens
 
+
+if t.TYPE_CHECKING:
+    from _typeshed import SupportsRichComparisonT  # pragma: no cover
 
 __all__ = (
     "assign",
@@ -69,7 +72,6 @@ T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
 T4 = t.TypeVar("T4")
 T5 = t.TypeVar("T5")
-SupportsComparisonT = t.TypeVar("SupportsComparisonT", bound=SupportsComparison)
 
 
 @t.overload
@@ -234,7 +236,9 @@ def assign_with(obj, *sources, customizer=None):
 
 
 @t.overload
-def callables(obj: t.Mapping[SupportsComparisonT, t.Any]) -> t.List[SupportsComparisonT]:
+def callables(
+    obj: t.Mapping["SupportsRichComparisonT", t.Any]
+) -> t.List["SupportsRichComparisonT"]:
     ...
 
 

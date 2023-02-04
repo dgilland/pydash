@@ -12,7 +12,11 @@ import typing as t
 import pydash as pyd
 
 from .helpers import base_get, iteriteratee, parse_iteratee
-from .types import IterateeObjT, SupportsComparison
+from .types import IterateeObjT
+
+
+if t.TYPE_CHECKING:
+    from _typeshed import SupportsRichComparisonT  # pragma: no cover
 
 
 __all__ = (
@@ -96,7 +100,6 @@ T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
 SequenceT = t.TypeVar("SequenceT", bound=t.Sequence)
 MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence)
-SupportsComparisonT = t.TypeVar("SupportsComparisonT", bound=SupportsComparison)
 
 
 def chunk(array: t.List[T], size: int = 1) -> t.List[t.List[T]]:
@@ -1524,11 +1527,11 @@ def slice_(array: SequenceT, start: int = 0, end: t.Union[int, None] = None) -> 
 
 @t.overload
 def sort(
-    array: t.Iterable[SupportsComparisonT],
+    array: t.Iterable["SupportsRichComparisonT"],
     comparator: None = None,
     key: None = None,
     reverse: bool = False,
-) -> t.List[SupportsComparisonT]:
+) -> t.List["SupportsRichComparisonT"]:
     ...
 
 
@@ -1541,7 +1544,7 @@ def sort(
 
 @t.overload
 def sort(
-    array: t.Iterable[T], *, key: t.Callable[[T], SupportsComparisonT], reverse: bool = False
+    array: t.Iterable[T], *, key: t.Callable[[T], "SupportsRichComparisonT"], reverse: bool = False
 ) -> t.List[T]:
     ...
 
@@ -1600,7 +1603,7 @@ def sort(array, comparator=None, key=None, reverse=False):
     return array
 
 
-def sorted_index(array: t.List[SupportsComparisonT], value: SupportsComparisonT) -> int:
+def sorted_index(array: t.List["SupportsRichComparisonT"], value: "SupportsRichComparisonT") -> int:
     """
     Uses a binary search to determine the lowest index at which `value` should be inserted into
     `array` in order to maintain its sort order.
@@ -1629,14 +1632,16 @@ def sorted_index(array: t.List[SupportsComparisonT], value: SupportsComparisonT)
 def sorted_index_by(
     array: t.List[T],
     value: T,
-    iteratee: t.Union[IterateeObjT, t.Callable[[T], SupportsComparisonT]],
+    iteratee: t.Union[IterateeObjT, t.Callable[[T], "SupportsRichComparisonT"]],
 ) -> int:
     ...
 
 
 @t.overload
 def sorted_index_by(
-    array: t.List[SupportsComparisonT], value: SupportsComparisonT, iteratee: None = None
+    array: t.List["SupportsRichComparisonT"],
+    value: "SupportsRichComparisonT",
+    iteratee: None = None,
 ) -> int:
     ...
 
@@ -1674,7 +1679,9 @@ def sorted_index_by(array, value, iteratee=None):
     return bisect_left(array, value)
 
 
-def sorted_index_of(array: t.List[SupportsComparisonT], value: SupportsComparisonT) -> int:
+def sorted_index_of(
+    array: t.List["SupportsRichComparisonT"], value: "SupportsRichComparisonT"
+) -> int:
     """
     Returns the index of the matched `value` from the sorted `array`, else ``-1``.
 
@@ -1702,7 +1709,9 @@ def sorted_index_of(array: t.List[SupportsComparisonT], value: SupportsCompariso
         return -1
 
 
-def sorted_last_index(array: t.List[SupportsComparisonT], value: SupportsComparisonT) -> int:
+def sorted_last_index(
+    array: t.List["SupportsRichComparisonT"], value: "SupportsRichComparisonT"
+) -> int:
     """
     This method is like :func:`sorted_index` except that it returns the highest index at which
     `value` should be inserted into `array` in order to maintain its sort order.
@@ -1731,14 +1740,16 @@ def sorted_last_index(array: t.List[SupportsComparisonT], value: SupportsCompari
 def sorted_last_index_by(
     array: t.List[T],
     value: T,
-    iteratee: t.Union[IterateeObjT, t.Callable[[T], SupportsComparisonT]],
+    iteratee: t.Union[IterateeObjT, t.Callable[[T], "SupportsRichComparisonT"]],
 ) -> int:
     ...
 
 
 @t.overload
 def sorted_last_index_by(
-    array: t.List[SupportsComparisonT], value: SupportsComparisonT, iteratee: None = None
+    array: t.List["SupportsRichComparisonT"],
+    value: "SupportsRichComparisonT",
+    iteratee: None = None,
 ) -> int:
     ...
 
@@ -1774,7 +1785,9 @@ def sorted_last_index_by(array, value, iteratee=None):
     return bisect_right(array, value)
 
 
-def sorted_last_index_of(array: t.List[SupportsComparisonT], value: SupportsComparisonT) -> int:
+def sorted_last_index_of(
+    array: t.List["SupportsRichComparisonT"], value: "SupportsRichComparisonT"
+) -> int:
     """
     This method is like :func:`last_index_of` except that it performs a binary search on a sorted
     `array`.
@@ -1803,7 +1816,7 @@ def sorted_last_index_of(array: t.List[SupportsComparisonT], value: SupportsComp
         return -1
 
 
-def sorted_uniq(array: t.Iterable[SupportsComparisonT]) -> t.List[SupportsComparisonT]:
+def sorted_uniq(array: t.Iterable["SupportsRichComparisonT"]) -> t.List["SupportsRichComparisonT"]:
     """
     Return sorted array with unique elements.
 
@@ -1822,14 +1835,15 @@ def sorted_uniq(array: t.Iterable[SupportsComparisonT]) -> t.List[SupportsCompar
 
     .. versionadded:: 4.0.0
     """
-    # Typsheds have their own `SupportsRichComparisonT`
-    return sorted(uniq(array))  # type: ignore
+    return sorted(uniq(array))
 
 
 def sorted_uniq_by(
-    array: t.List[SupportsComparisonT],
-    iteratee: t.Union[t.Callable[[SupportsComparisonT], SupportsComparisonT], None] = None,
-) -> t.List[SupportsComparisonT]:
+    array: t.List["SupportsRichComparisonT"],
+    iteratee: t.Union[
+        t.Callable[["SupportsRichComparisonT"], "SupportsRichComparisonT"], None
+    ] = None,
+) -> t.List["SupportsRichComparisonT"]:
     """
     This method is like :func:`sorted_uniq` except that it accepts iteratee which is invoked for
     each element in array to generate the criterion by which uniqueness is computed. The order of
@@ -1851,8 +1865,7 @@ def sorted_uniq_by(
 
     .. versionadded:: 4.0.0
     """
-    # Typsheds have their own `SupportsRichComparisonT`
-    return sorted(uniq_by(array, iteratee=iteratee))  # type: ignore
+    return sorted(uniq_by(array, iteratee=iteratee))
 
 
 def splice(

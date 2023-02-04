@@ -13,8 +13,6 @@ from typing_extensions import Concatenate, Literal, ParamSpec
 
 import pydash as pyd
 
-from .types import SupportsInt
-
 
 __all__ = (
     "after",
@@ -55,7 +53,7 @@ P = ParamSpec("P")
 class After(t.Generic[P, T]):
     """Wrap a function in an after context."""
 
-    def __init__(self, func: t.Callable[P, T], n: SupportsInt) -> None:
+    def __init__(self, func: t.Callable[P, T], n: t.SupportsInt) -> None:
         try:
             n = int(n)
             assert n >= 0
@@ -78,7 +76,7 @@ class After(t.Generic[P, T]):
 class Ary(t.Generic[T]):
     """Wrap a function in an ary context."""
 
-    def __init__(self, func: t.Callable[..., T], n: t.Union[SupportsInt, None]) -> None:
+    def __init__(self, func: t.Callable[..., T], n: t.Union[t.SupportsInt, None]) -> None:
         try:
             # Type error would be caught
             n = int(n)  # type: ignore
@@ -636,7 +634,7 @@ class Throttle(t.Generic[P, T]):
         return self.last_result  # type: ignore
 
 
-def after(func: t.Callable[P, T], n: SupportsInt) -> After[P, T]:
+def after(func: t.Callable[P, T], n: t.SupportsInt) -> After[P, T]:
     """
     Creates a function that executes `func`, with the arguments of the created function, only after
     being called `n` times.
@@ -667,7 +665,7 @@ def after(func: t.Callable[P, T], n: SupportsInt) -> After[P, T]:
     return After(func, n)
 
 
-def ary(func: t.Callable[..., T], n: t.Union[SupportsInt, None]) -> Ary[T]:
+def ary(func: t.Callable[..., T], n: t.Union[t.SupportsInt, None]) -> Ary[T]:
     """
     Creates a function that accepts up to `n` arguments ignoring any additional arguments. Only
     positional arguments are capped. All keyword arguments are allowed through.
@@ -693,7 +691,7 @@ def ary(func: t.Callable[..., T], n: t.Union[SupportsInt, None]) -> Ary[T]:
     return Ary(func, n)
 
 
-def before(func: t.Callable[P, T], n: SupportsInt) -> Before[P, T]:
+def before(func: t.Callable[P, T], n: t.SupportsInt) -> Before[P, T]:
     """
     Creates a function that executes `func`, with the arguments of the created function, until it
     has been called `n` times.

@@ -15,7 +15,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 import pydash as pyd
 
 from .helpers import UNSET, Unset
-from .types import NumberT, SupportsInt
+from .types import NumberT
 
 
 __all__ = (
@@ -1267,7 +1267,7 @@ def reg_exp_replace(
     return replace(text, pattern, repl, ignore_case=ignore_case, count=count, escape=False)
 
 
-def repeat(text: t.Any, n: SupportsInt = 0) -> str:
+def repeat(text: t.Any, n: t.SupportsInt = 0) -> str:
     """
     Repeats the given string `n` times.
 

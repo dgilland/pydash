@@ -18,13 +18,16 @@ from typing_extensions import TypeGuard
 import pydash as pyd
 
 from .helpers import BUILTINS, NUMBER_TYPES, UNSET, base_get, callit, iterator
-from .types import (
-    SupportsComparison,
-    SupportsDunderGE,
-    SupportsDunderGT,
-    SupportsDunderLE,
-    SupportsDunderLT,
-)
+
+
+if t.TYPE_CHECKING:
+    from _typeshed import (  # pragma: no cover
+        SupportsDunderGE,
+        SupportsDunderGT,
+        SupportsDunderLE,
+        SupportsDunderLT,
+        SupportsRichComparison,
+    )
 
 
 __all__ = (
@@ -108,7 +111,7 @@ def eq(value: t.Any, other: t.Any) -> bool:
     return value is other
 
 
-def gt(value: SupportsDunderGT[T], other: T) -> bool:
+def gt(value: "SupportsDunderGT[T]", other: T) -> bool:
     """
     Checks if `value` is greater than `other`.
 
@@ -133,7 +136,7 @@ def gt(value: SupportsDunderGT[T], other: T) -> bool:
     return value > other
 
 
-def gte(value: SupportsDunderGE[T], other: T) -> bool:
+def gte(value: "SupportsDunderGE[T]", other: T) -> bool:
     """
     Checks if `value` is greater than or equal to `other`.
 
@@ -158,7 +161,7 @@ def gte(value: SupportsDunderGE[T], other: T) -> bool:
     return value >= other
 
 
-def lt(value: SupportsDunderLT[T], other: T) -> bool:
+def lt(value: "SupportsDunderLT[T]", other: T) -> bool:
     """
     Checks if `value` is less than `other`.
 
@@ -183,7 +186,7 @@ def lt(value: SupportsDunderLT[T], other: T) -> bool:
     return value < other
 
 
-def lte(value: SupportsDunderLE[T], other: T) -> bool:
+def lte(value: "SupportsDunderLE[T]", other: T) -> bool:
     """
     Checks if `value` is less than or equal to `other`.
 
@@ -397,7 +400,9 @@ def is_date(value: t.Any) -> bool:
     return isinstance(value, datetime.date)
 
 
-def is_decreasing(value: t.Union[SupportsComparison, t.List[SupportsComparison]]) -> bool:
+def is_decreasing(
+    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]]
+) -> bool:
     """
     Check if `value` is monotonically decreasing.
 
@@ -418,8 +423,8 @@ def is_decreasing(value: t.Union[SupportsComparison, t.List[SupportsComparison]]
 
     .. versionadded:: 2.0.0
     """
-    # seems mypy cannot match the custom `SupportsComparison`
-    # with `operator`'s `_SupportsComparison`
+    # seems mypy cannot match the custom `"SupportsRichComparison"`
+    # with `operator`'s `_"SupportsRichComparison"`
     return is_monotone(value, t.cast(t.Callable, operator.ge))
 
 
@@ -675,7 +680,9 @@ def is_function(value: t.Any) -> bool:
     return callable(value)
 
 
-def is_increasing(value: t.Union[SupportsComparison, t.List[SupportsComparison]]) -> bool:
+def is_increasing(
+    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]]
+) -> bool:
     """
     Check if `value` is monotonically increasing.
 
@@ -698,8 +705,8 @@ def is_increasing(value: t.Union[SupportsComparison, t.List[SupportsComparison]]
 
     .. versionadded:: 2.0.0
     """
-    # seems mypy cannot match the custom `SupportsComparison`
-    # with `operator`'s `_SupportsComparison`
+    # seems mypy cannot match the custom `"SupportsRichComparison"`
+    # with `operator`'s `_"SupportsRichComparison"`
     return is_monotone(value, t.cast(t.Callable, operator.le))
 
 
@@ -1232,7 +1239,9 @@ def is_set(value: t.Any) -> bool:
     return isinstance(value, set)
 
 
-def is_strictly_decreasing(value: t.Union[SupportsComparison, t.List[SupportsComparison]]) -> bool:
+def is_strictly_decreasing(
+    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]]
+) -> bool:
     """
     Check if `value` is strictly decreasing.
 
@@ -1251,12 +1260,14 @@ def is_strictly_decreasing(value: t.Union[SupportsComparison, t.List[SupportsCom
 
     .. versionadded:: 2.0.0
     """
-    # seems mypy cannot match the custom `SupportsComparison`
-    # with `operator`'s `_SupportsComparison`
+    # seems mypy cannot match the custom `"SupportsRichComparison"`
+    # with `operator`'s `_"SupportsRichComparison"`
     return is_monotone(value, t.cast(t.Callable, operator.gt))
 
 
-def is_strictly_increasing(value: t.Union[SupportsComparison, t.List[SupportsComparison]]) -> bool:
+def is_strictly_increasing(
+    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]]
+) -> bool:
     """
     Check if `value` is strictly increasing.
 
@@ -1275,8 +1286,8 @@ def is_strictly_increasing(value: t.Union[SupportsComparison, t.List[SupportsCom
 
     .. versionadded:: 2.0.0
     """
-    # seems mypy cannot match the custom `SupportsComparison`
-    # with `operator`'s `_SupportsComparison`
+    # seems mypy cannot match the custom `"SupportsRichComparison"`
+    # with `operator`'s `_"SupportsRichComparison"`
     return is_monotone(value, t.cast(t.Callable, operator.lt))
 
 
