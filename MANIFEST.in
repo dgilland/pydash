@@ -12,4 +12,6 @@ include tox.ini
 include pylintrc
 include tasks.py
 
+global-include py.typed
+
 global-exclude *.py[cod] __pycache__ *.so
