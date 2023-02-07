@@ -1081,7 +1081,7 @@ def pick(obj, *properties):
         properties (str): Property values to pick.
 
     Returns:
-        dict: Dict containg picked properties.
+        dict: Dict containing picked properties.
 
     Example:
 
@@ -1106,7 +1106,7 @@ def pick_by(obj, iteratee=None):
         iteratee (mixed, optional): Iteratee used to determine which properties to pick.
 
     Returns:
-        dict: Dict containg picked properties.
+        dict: Dict containing picked properties.
 
     Example:
 
