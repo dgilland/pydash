@@ -75,7 +75,10 @@ def test_mypy_max_() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_max_by() -> None:
-    reveal_type(_.max_by([1.0, 1.5, 1.8], math.floor))  # R: builtins.float
+    def floor(x: float) -> int:
+        return math.floor(x)
+
+    reveal_type(_.max_by([1.0, 1.5, 1.8], floor))  # R: builtins.float
     reveal_type(_.max_by([{'a': 1}, {'a': 2}, {'a': 3}], 'a'))  # R: builtins.dict[builtins.str, builtins.int]
 
     empty_int_list: t.List[int] = []
@@ -98,7 +101,10 @@ def test_mypy_min_() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_min_by() -> None:
-    reveal_type(_.min_by([1.8, 1.5, 1.0], math.floor))  # R: builtins.float
+    def floor(x: float) -> int:
+        return math.floor(x)
+
+    reveal_type(_.min_by([1.8, 1.5, 1.0], floor))  # R: builtins.float
     reveal_type(_.min_by([{'a': 1}, {'a': 2}, {'a': 3}], 'a'))  # R: builtins.dict[builtins.str, builtins.int]
 
     empty_int_list: t.List[int] = []
