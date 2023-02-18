@@ -13,7 +13,7 @@ import typing as t
 import pydash as pyd
 
 from .helpers import UNSET, base_get, base_set, callit, getargcount, iterator, iteriteratee
-from .types import IterateeObjT
+from .types import IterateeObjT, PathT
 from .utilities import PathToken, to_path, to_path_tokens
 
 
@@ -833,9 +833,7 @@ def for_in_right(obj, iteratee=None):
     return obj
 
 
-def get(
-    obj: t.Iterable, path: t.Union[str, int, t.List[t.Union[str, int]]], default: t.Any = None
-) -> t.Any:
+def get(obj: t.Iterable, path: PathT, default: t.Any = None) -> t.Any:
     """
     Get the value at any depth of a nested object based on the path described by `path`. If path
     doesn't exist, `default` is returned.
@@ -905,7 +903,7 @@ def get(
     return obj
 
 
-def has(obj: t.Iterable, path: t.Union[str, int, t.List[t.Union[str, int]]]) -> bool:
+def has(obj: t.Iterable, path: PathT) -> bool:
     """
     Checks if `path` exists as a key of `obj`.
 
@@ -1054,9 +1052,7 @@ def invert_by(obj, iteratee=None):
     return result
 
 
-def invoke(
-    obj: t.Dict, path: t.Union[str, int, t.List[t.Union[str, int]]], *args: t.Any, **kwargs: t.Any
-) -> t.Any:
+def invoke(obj: t.Dict, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
     """
     Invokes the method at path of object.
 
@@ -1435,16 +1431,12 @@ def _merge_with(obj, *sources, **kwargs):
 
 
 @t.overload
-def omit(
-    obj: t.Mapping[T, T2], *properties: t.Union[str, int, t.List[t.Union[str, int]]]
-) -> t.Dict[T, T2]:
+def omit(obj: t.Mapping[T, T2], *properties: PathT) -> t.Dict[T, T2]:
     ...
 
 
 @t.overload
-def omit(
-    obj: t.Iterable[T], *properties: t.Union[str, int, t.List[t.Union[str, int]]]
-) -> t.Dict[int, T]:
+def omit(obj: t.Iterable[T], *properties: PathT) -> t.Dict[int, T]:
     ...
 
 
@@ -1608,17 +1600,12 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
 
 
 @t.overload
-def pick(
-    obj: t.Mapping[T, T2], *properties: t.Union[str, int, t.List[t.Union[str, int]]]
-) -> t.Dict[T, T2]:
+def pick(obj: t.Mapping[T, T2], *properties: PathT) -> t.Dict[T, T2]:
     ...
 
 
 @t.overload
-def pick(
-    obj: t.Union[t.Tuple[T, ...], t.List[T]],
-    *properties: t.Union[str, int, t.List[t.Union[str, int]]],
-) -> t.List[T]:
+def pick(obj: t.Union[t.Tuple[T, ...], t.List[T]], *properties: PathT) -> t.List[T]:
     ...
 
 
@@ -1752,12 +1739,12 @@ def rename_keys(obj: t.Dict[T, T2], key_map: t.Dict[t.Any, T3]) -> t.Dict[t.Unio
 
 
 @t.overload
-def set_(obj: t.List, path: t.Union[str, int, t.List[t.Union[str, int]]], value: t.Any) -> t.List:
+def set_(obj: t.List, path: PathT, value: t.Any) -> t.List:
     ...
 
 
 @t.overload
-def set_(obj: t.Dict, path: t.Union[str, int, t.List[t.Union[str, int]]], value: t.Any) -> t.Dict:
+def set_(obj: t.Dict, path: PathT, value: t.Any) -> t.Dict:
     ...
 
 
@@ -1806,7 +1793,7 @@ def set_(obj, path, value):
 @t.overload
 def set_with(
     obj: t.List,
-    path: t.Union[str, int, t.List[t.Union[str, int]]],
+    path: PathT,
     value: t.Any,
     customizer: t.Union[t.Callable, None] = None,
 ) -> t.List:
@@ -1816,7 +1803,7 @@ def set_with(
 @t.overload
 def set_with(
     obj: t.Dict,
-    path: t.Union[str, int, t.List[t.Union[str, int]]],
+    path: PathT,
     value: t.Any,
     customizer: t.Union[t.Callable, None] = None,
 ) -> t.Dict:
@@ -2283,7 +2270,7 @@ def transform(obj, iteratee=None, accumulator=None):
 @t.overload
 def update(
     obj: t.Mapping[t.Any, T2],
-    path: t.Union[int, str, t.List[t.Union[int, str]]],
+    path: PathT,
     updater: t.Callable[[T2], t.Any],
 ) -> t.Dict:
     ...
@@ -2292,7 +2279,7 @@ def update(
 @t.overload
 def update(
     obj: t.List[T],
-    path: t.Union[int, str, t.List[t.Union[int, str]]],
+    path: PathT,
     updater: t.Callable[[T], t.Any],
 ) -> t.List:
     ...
@@ -2330,7 +2317,7 @@ def update(obj, path, updater):
 @t.overload
 def update_with(
     obj: t.Mapping[t.Any, T2],
-    path: t.Union[int, str, t.List[t.Union[int, str]]],
+    path: PathT,
     updater: t.Callable[[T2], t.Any],
     customizer: t.Union[t.Callable, None],
 ) -> t.Dict:
@@ -2340,7 +2327,7 @@ def update_with(
 @t.overload
 def update_with(
     obj: t.List[T],
-    path: t.Union[int, str, t.List[t.Union[int, str]]],
+    path: PathT,
     updater: t.Callable[[T], t.Any],
     customizer: t.Union[t.Callable, None] = None,
 ) -> t.List:
@@ -2432,9 +2419,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
     return obj
 
 
-def unset(  # noqa: C901
-    obj: t.Union[t.List, t.Dict], path: t.Union[str, int, t.List[t.Union[str, int]]]
-) -> bool:
+def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
     """
     Removes the property at `path` of `obj`.
 

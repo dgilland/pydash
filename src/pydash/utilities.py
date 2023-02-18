@@ -18,6 +18,7 @@ from typing_extensions import Literal, ParamSpec, Protocol, Type
 import pydash as pyd
 
 from .helpers import NUMBER_TYPES, UNSET, base_get, callit, getargcount, iterator
+from .types import PathT
 
 
 __all__ = (
@@ -638,9 +639,7 @@ def memoize(func, resolver=None):
     return t.cast(MemoizedFunc[P, T, T2], memoized)
 
 
-def method(
-    path: t.Union[str, int, t.List[t.Union[str, int]]], *args: t.Any, **kwargs: t.Any
-) -> t.Callable[..., t.Any]:
+def method(path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Callable[..., t.Any]:
     """
     Creates a function that invokes the method at `path` on a given object. Any additional arguments
     are provided to the invoked method.
@@ -852,7 +851,7 @@ def over_some(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     return _over_some
 
 
-def property_(path: t.Union[int, str, t.List[t.Union[int, str]]]) -> t.Callable[[t.Any], t.Any]:
+def property_(path: PathT) -> t.Callable[[t.Any], t.Any]:
     """
     Creates a function that returns the value at path of a given object.
 
@@ -902,7 +901,7 @@ def properties(*paths: t.Any) -> t.Callable[[t.Any], t.Any]:
     return lambda obj: [getter(obj) for getter in (pyd.property_(path) for path in paths)]
 
 
-def property_of(obj: t.Any) -> t.Callable[[t.Union[int, str, t.List[t.Union[int, str]]]], t.Any]:
+def property_of(obj: t.Any) -> t.Callable[[PathT], t.Any]:
     """
     The inverse of :func:`property_`. This method creates a function that returns the key value of a
     given key on `obj`.
@@ -1398,7 +1397,7 @@ def times(n: int, iteratee=None):
     return [callit(iteratee, index, argcount=argcount) for index in range(n)]
 
 
-def to_path(value: t.Union[str, int, t.List[t.Union[str, int]]]) -> t.List[t.Union[int, str]]:
+def to_path(value: PathT) -> t.List[t.Hashable]:
     """
     Converts values to a property path array.
 

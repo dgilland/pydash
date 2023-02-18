@@ -11,7 +11,7 @@ import typing as t
 import pydash as pyd
 
 from .helpers import callit, cmp, getargcount, iterator, iteriteratee
-from .types import IterateeObjT
+from .types import IterateeObjT, PathT
 
 
 __all__ = (
@@ -956,12 +956,7 @@ def includes(collection: t.Union[t.Sequence, t.Dict], target: t.Any, from_index:
     return target in collection_values
 
 
-def invoke_map(
-    collection: t.Iterable,
-    path: t.Union[str, int, t.List[t.Union[str, int]]],
-    *args: t.Any,
-    **kwargs: t.Any
-) -> t.List[t.Any]:
+def invoke_map(collection: t.Iterable, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.List[t.Any]:
     """
     Invokes the method at `path` of each element in `collection`, returning a list of the results of
     each invoked method. Any additional arguments are provided to each invoked method. If `path` is
@@ -1371,7 +1366,7 @@ def partition(collection, predicate=None):
     return [trues, falses]
 
 
-def pluck(collection: t.Iterable, path: t.Union[str, int, t.List[t.Union[str, int]]]) -> t.List:
+def pluck(collection: t.Iterable, path: PathT) -> t.List:
     """
     Retrieves the value of a specified property from all elements in the collection.
 

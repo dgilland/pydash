@@ -179,7 +179,7 @@ def test_mypy_properties() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_property_of() -> None:
-    reveal_type(_.property_of({'a': 1, 'b': 2, 'c': 3}))  # R: def (Union[builtins.int, builtins.str, builtins.list[Union[builtins.int, builtins.str]]]) -> Any
+    reveal_type(_.property_of({'a': 1, 'b': 2, 'c': 3}))  # R: def (Union[typing.Hashable, builtins.list[typing.Hashable]]) -> Any
 
 
 @pytest.mark.mypy_testing
@@ -260,7 +260,7 @@ def test_mypy_times() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_to_path() -> None:
-    reveal_type(_.to_path('a.b.c'))  # R: builtins.list[Union[builtins.int, builtins.str]]
+    reveal_type(_.to_path('a.b.c'))  # R: builtins.list[typing.Hashable]
 
 
 @pytest.mark.mypy_testing
