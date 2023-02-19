@@ -629,14 +629,14 @@ def memoize(func, resolver=None):
         else:
             key = f"{args}{kwargs}"
 
-        if key not in t.cast(MemoizedFunc, memoized).cache:
-            t.cast(MemoizedFunc, memoized).cache[key] = func(*args, **kwargs)
+        if key not in memoized.cache:  # type: ignore
+            memoized.cache[key] = func(*args, **kwargs)  # type:ignore
 
-        return t.cast(MemoizedFunc, memoized).cache[key]
+        return memoized.cache[key]  # type: ignore
 
     memoized.cache = {}
 
-    return t.cast(MemoizedFunc[P, T, T2], memoized)
+    return memoized
 
 
 def method(path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Callable[..., t.Any]:
@@ -992,7 +992,7 @@ def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floati
     if floating:
         rnd = uniform(start, stop)
     else:
-        rnd = randint(t.cast(int, start), t.cast(int, stop))
+        rnd = randint(start, stop)  # type: ignore
 
     return rnd
 

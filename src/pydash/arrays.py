@@ -535,8 +535,8 @@ def fill(
         end = min(end, len(array))
 
     # Use this style of assignment so that `array` is mutated.
-    array[:] = t.cast(t.List[T], array[:start] + [value] * len(array[start:end]) + array[end:])
-    return t.cast(t.List[t.Union[T, T2]], array)
+    array[:] = array[:start] + [value] * len(array[start:end]) + array[end:]  # type: ignore
+    return array  # type: ignore
 
 
 @t.overload
@@ -741,8 +741,7 @@ def from_pairs(pairs):
 
     .. versionadded:: 4.0.0
     """
-    # mypy doesn't allow list of lists to create a dict
-    return dict(t.cast(t.Iterable[t.Tuple[T, T2]], pairs))
+    return dict(pairs)
 
 
 def head(array: t.Sequence[T]) -> t.Union[T, None]:
@@ -1394,8 +1393,8 @@ def push(array: t.List[T], *items: T2) -> t.List[t.Union[T, T2]]:
         Removed alias ``append``.
     """
     for item in items:
-        t.cast(t.List[t.Union[T, T2]], array).append(item)
-    return t.cast(t.List[t.Union[T, T2]], array)
+        array.append(item)  # type: ignore
+    return array  # type: ignore
 
 
 def remove(
@@ -1466,7 +1465,7 @@ def reverse(array: SequenceT) -> SequenceT:
     """
     # NOTE: Using this method to reverse object since it works for both lists
     # and strings.
-    return t.cast(SequenceT, array[::-1])
+    return array[::-1]  # type: ignore
 
 
 def shift(array: t.List[T]) -> T:
@@ -1522,7 +1521,7 @@ def slice_(array: SequenceT, start: int = 0, end: t.Union[int, None] = None) -> 
     if end is None:
         end = (start + 1) if start >= 0 else (len(array) + start + 1)
 
-    return t.cast(SequenceT, array[start:end])
+    return array[start:end]  # type: ignore
 
 
 @t.overload
@@ -1928,9 +1927,9 @@ def splice(
         array.insert(start, item)
 
     if is_string:
-        return t.cast(MutableSequenceT, "".join(array))
+        return "".join(array)  # type: ignore
     else:
-        return t.cast(MutableSequenceT, removed)
+        return removed  # type: ignore
 
 
 def split_at(array: t.List[T], index: int) -> t.List[t.List[T]]:
@@ -2363,9 +2362,9 @@ def unshift(array: t.List[T], *items: T2) -> t.List[t.Union[T, T2]]:
     .. versionadded:: 2.2.0
     """
     for item in reverse(items):
-        t.cast(t.List[t.Union[T, T2]], array).insert(0, item)
+        array.insert(0, item)  # type: ignore
 
-    return t.cast(t.List[t.Union[T, T2]], array)
+    return array  # type: ignore
 
 
 def unzip(array: t.Iterable[t.Iterable[T]]) -> t.List[t.List[T]]:

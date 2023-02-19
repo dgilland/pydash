@@ -423,9 +423,7 @@ def is_decreasing(
 
     .. versionadded:: 2.0.0
     """
-    # seems mypy cannot match the custom `"SupportsRichComparison"`
-    # with `operator`'s `_"SupportsRichComparison"`
-    return is_monotone(value, t.cast(t.Callable, operator.ge))
+    return is_monotone(value, operator.ge)  # type: ignore
 
 
 def is_dict(value: t.Any) -> bool:
@@ -705,9 +703,7 @@ def is_increasing(
 
     .. versionadded:: 2.0.0
     """
-    # seems mypy cannot match the custom `"SupportsRichComparison"`
-    # with `operator`'s `_"SupportsRichComparison"`
-    return is_monotone(value, t.cast(t.Callable, operator.le))
+    return is_monotone(value, operator.le)  # type: ignore
 
 
 def is_indexed(value: t.Any) -> bool:
@@ -1005,11 +1001,13 @@ def is_monotone(value: t.Union[T, t.List[T]], op: t.Callable[[T, T], t.Any]) -> 
     .. versionadded:: 2.0.0
     """
     if not is_list(value):
-        l_value = t.cast(t.List[T], [value])
+        l_value = [value]
     else:
-        l_value = t.cast(t.List[T], value)
+        l_value = value  # type: ignore
 
-    search = (False for x, y in zip(l_value, islice(l_value, 1, None)) if not op(x, y))
+    search = (
+        False for x, y in zip(l_value, islice(l_value, 1, None)) if not op(x, y)  # type: ignore
+    )
 
     return next(search, True)
 
@@ -1260,9 +1258,7 @@ def is_strictly_decreasing(
 
     .. versionadded:: 2.0.0
     """
-    # seems mypy cannot match the custom `"SupportsRichComparison"`
-    # with `operator`'s `_"SupportsRichComparison"`
-    return is_monotone(value, t.cast(t.Callable, operator.gt))
+    return is_monotone(value, operator.gt)  # type: ignore
 
 
 def is_strictly_increasing(
@@ -1286,9 +1282,7 @@ def is_strictly_increasing(
 
     .. versionadded:: 2.0.0
     """
-    # seems mypy cannot match the custom `"SupportsRichComparison"`
-    # with `operator`'s `_"SupportsRichComparison"`
-    return is_monotone(value, t.cast(t.Callable, operator.lt))
+    return is_monotone(value, operator.lt)  # type: ignore
 
 
 def is_string(value: t.Any) -> TypeGuard[str]:

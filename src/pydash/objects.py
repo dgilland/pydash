@@ -498,9 +498,9 @@ def defaults(
     """
     for source in sources:
         for key, value in source.items():
-            t.cast(t.Dict[t.Union[T, T3], t.Union[T2, T4]], obj).setdefault(key, value)
+            obj.setdefault(key, value)  # type: ignore
 
-    return t.cast(t.Dict[t.Union[T, T3], t.Union[T2, T4]], obj)
+    return obj  # type: ignore
 
 
 def defaults_deep(
@@ -1288,7 +1288,7 @@ def map_values_deep(
         def deep_iteratee(value, key):
             return map_values_deep(value, iteratee, pyd.flatten([properties, key]))
 
-        return assign(t.cast(t.Union[t.List, t.Dict], obj), map_values(obj, deep_iteratee))
+        return assign(obj, map_values(obj, deep_iteratee))  # type: ignore
     else:
         return callit(iteratee, obj, properties)
 

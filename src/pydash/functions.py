@@ -425,7 +425,7 @@ class Debounce(t.Generic[P, T]):
         present = pyd.now()
 
         if (present - self.last_call) >= self.wait or (
-            self.max_wait and (present - t.cast(int, self.last_execution)) >= self.max_wait
+            self.max_wait and (present - self.last_execution) >= self.max_wait  # type: ignore
         ):
             self.last_result = self.func(*args, **kwargs)
             self.last_execution = present
@@ -433,7 +433,7 @@ class Debounce(t.Generic[P, T]):
         self.last_call = present
 
         # It will be set after first call, cannot be `None` anymore
-        return t.cast(T, self.last_result)
+        return self.last_result  # type: ignore
 
 
 class Disjoin(t.Generic[T]):
