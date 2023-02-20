@@ -3,6 +3,9 @@
 Changelog
 =========
 
+- Fix exception raised due to mishandling of non-string keys in functions like ``get()`` for non-dict/list objects that used integer index references like ``"[0]"``.
+
+
 v6.0.0 (2023-01-28)
 -------------------
 
