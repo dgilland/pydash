@@ -188,6 +188,8 @@ def _base_get_object(obj, key, default=UNSET):
 
 
 def _raise_if_restricted_key(key):
+    if not isinstance(key, str):
+        return
     # Prevent access to dunder-methods since this could expose access to globals through leaky
     # attributes such as obj.__init__.__globals__.
     if len(key) > 4 and key.isascii() and key.startswith("__") and key.endswith("__"):

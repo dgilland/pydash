@@ -368,6 +368,7 @@ def test_for_in_right(case, expected):
         (({object: 1}, object), 1),
         (({object: {object: 1}}, [object, object]), 1),
         (({1: {"name": "John Doe"}}, "1.name"), "John Doe"),
+        ((helpers.Object(), "[0].field"), None),
     ],
 )
 def test_get(case, expected):
