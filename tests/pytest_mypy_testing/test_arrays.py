@@ -7,7 +7,7 @@ import pydash as _
 
 @pytest.mark.mypy_testing
 def test_mypy_chunk() -> None:
-    reveal_type(_.chunk([1, 2, 3, 4, 5], 2))  # R: builtins.list[builtins.list[builtins.int]]
+    reveal_type(_.chunk([1, 2, 3, 4, 5], 2))  # R: builtins.list[typing.Sequence[builtins.int]]
 
 
 @pytest.mark.mypy_testing
