@@ -40,7 +40,7 @@ def generate_test_function(docstring: DocString) -> str:
     built_function += "@pytest.mark.mypy_testing\n"
     built_function += f"def test_mypy_{docstring.function_name}() -> None:\n"
 
-    for line in map(lambda l: l.strip(), example_block):
+    for line in map(lambda line_: line_.strip(), example_block):
         if not line:
             continue
 
@@ -55,7 +55,7 @@ def generate_test_function(docstring: DocString) -> str:
 
 def main(path: Path) -> str:
     imports = "import pytest\n\n"
-    imports += f"import pydash as _\n\n\n"
+    imports += "import pydash as _\n\n\n"
 
     return imports + "\n\n".join(map(generate_test_function, docstrings(path)))
 
@@ -65,10 +65,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", help="path to python file", type=Path)
+    parser.add_argument("output", help="path to output file", type=Path)
     args = parser.parse_args()
 
     if not args.filename.exists():
         print(f"`{args.filename}` does not exist")
         exit(1)
 
-    print(main(args.filename))
+    args.output.write_text(main(args.filename))

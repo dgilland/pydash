@@ -10,6 +10,7 @@ Where <task> is a function defined below with the @task decorator.
 
 from functools import partial
 import os
+from pathlib import Path
 
 from invoke import Exit, UnexpectedExit, run as _run, task
 
@@ -159,3 +160,12 @@ def clean(ctx):
 def release(ctx):
     """Release Python package."""
     run("twine upload dist/*")
+
+
+@task
+def generate_mypy_test(ctx, file: str) -> None:
+    """Generate base mypy test ready to be filled from doctests inside a python file."""
+    run(
+        "python scripts/mypy_doctests_generator.py"
+        f" {file} tests/pytest_mypy_testing/test_{Path(file).name}"
+    )
