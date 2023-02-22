@@ -710,22 +710,22 @@ def for_in(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
 
 
 @t.overload
-def for_in(obj: t.List[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
+def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in(obj: t.List[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in(obj: t.List[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in(obj: t.List[T], iteratee: None = None) -> t.List[T]:
+def for_in(obj: t.Sequence[T], iteratee: None = None) -> t.List[T]:
     ...
 
 
@@ -784,22 +784,22 @@ def for_in_right(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
 
 
 @t.overload
-def for_in_right(obj: t.List[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
+def for_in_right(obj: t.Sequence[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in_right(obj: t.List[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+def for_in_right(obj: t.Sequence[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in_right(obj: t.List[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+def for_in_right(obj: t.Sequence[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
     ...
 
 
 @t.overload
-def for_in_right(obj: t.List[T], iteratee: None = None) -> t.List[T]:
+def for_in_right(obj: t.Sequence[T], iteratee: None = None) -> t.List[T]:
     ...
 
 
@@ -956,7 +956,7 @@ def invert(obj: t.Mapping[T, T2]) -> t.Dict[T2, T]:
 
 
 @t.overload
-def invert(obj: t.List[T]) -> t.Dict[T, int]:
+def invert(obj: t.Iterable[T]) -> t.Dict[T, int]:
     ...
 
 
@@ -1001,12 +1001,12 @@ def invert_by(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T2, t.List
 
 
 @t.overload
-def invert_by(obj: t.List[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, t.List[int]]:
+def invert_by(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, t.List[int]]:
     ...
 
 
 @t.overload
-def invert_by(obj: t.List[T], iteratee: None = None) -> t.Dict[T, t.List[int]]:
+def invert_by(obj: t.Iterable[T], iteratee: None = None) -> t.Dict[T, t.List[int]]:
     ...
 
 
@@ -1301,7 +1301,7 @@ def merge(
 
 
 @t.overload
-def merge(obj: t.List[T], *sources: t.List[T2]) -> t.List[t.Union[T, T2]]:
+def merge(obj: t.Sequence[T], *sources: t.Sequence[T2]) -> t.List[t.Union[T, T2]]:
     ...
 
 
@@ -2200,23 +2200,23 @@ def transform(
 
 @t.overload
 def transform(
-    obj: t.List[T], iteratee: t.Callable[[T3, T, int, t.List[T]], t.Any], accumulator: T3
+    obj: t.Iterable[T], iteratee: t.Callable[[T3, T, int, t.List[T]], t.Any], accumulator: T3
 ) -> T3:
     ...
 
 
 @t.overload
-def transform(obj: t.List[T], iteratee: t.Callable[[T3, T, int], t.Any], accumulator: T3) -> T3:
+def transform(obj: t.Iterable[T], iteratee: t.Callable[[T3, T, int], t.Any], accumulator: T3) -> T3:
     ...
 
 
 @t.overload
-def transform(obj: t.List[T], iteratee: t.Callable[[T3, T], t.Any], accumulator: T3) -> T3:
+def transform(obj: t.Iterable[T], iteratee: t.Callable[[T3, T], t.Any], accumulator: T3) -> T3:
     ...
 
 
 @t.overload
-def transform(obj: t.List[t.Any], iteratee: t.Callable[[T3], t.Any], accumulator: T3) -> T3:
+def transform(obj: t.Iterable[t.Any], iteratee: t.Callable[[T3], t.Any], accumulator: T3) -> T3:
     ...
 
 
