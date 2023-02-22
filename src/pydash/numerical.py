@@ -51,7 +51,6 @@ __all__ = (
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
-NumT = t.TypeVar("NumT", int, float)
 
 
 INFINITY = float("inf")
@@ -339,7 +338,12 @@ def ceil(x: NumberT, precision: int = 0) -> float:
     return rounder(math.ceil, x, precision)
 
 
-def clamp(x: NumT, lower: NumT, upper: t.Union[NumT, None] = None) -> NumT:
+NumT = t.TypeVar("NumT", int, float, "Decimal")
+NumT2 = t.TypeVar("NumT2", int, float, "Decimal")
+NumT3 = t.TypeVar("NumT3", int, float, "Decimal")
+
+
+def clamp(x: NumT, lower: NumT2, upper: t.Union[NumT3, None] = None) -> t.Union[NumT, NumT2, NumT3]:
     """
     Clamps number within the inclusive lower and upper bounds.
 
@@ -365,13 +369,13 @@ def clamp(x: NumT, lower: NumT, upper: t.Union[NumT, None] = None) -> NumT:
     .. versionadded:: 4.0.0
     """
     if upper is None:
-        upper = lower
-        lower = x
+        upper = lower  # type: ignore
+        lower = x  # type: ignore
 
     if x < lower:
-        x = lower
-    elif x > upper:
-        x = upper
+        x = lower  # type: ignore
+    elif x > upper:  # type: ignore
+        x = upper  # type: ignore
 
     return x
 
@@ -588,44 +592,46 @@ def max_by(collection, iteratee=None, default=UNSET):
 
 @t.overload
 def median(
-    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], NumT]
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], NumberT]
 ) -> t.Union[float, int]:
     ...
 
 
 @t.overload
 def median(
-    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], NumT]
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], NumberT]
 ) -> t.Union[float, int]:
     ...
 
 
 @t.overload
 def median(
-    collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], NumT]
+    collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], NumberT]
 ) -> t.Union[float, int]:
     ...
 
 
 @t.overload
 def median(
-    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], NumT]
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], NumberT]
 ) -> t.Union[float, int]:
     ...
 
 
 @t.overload
-def median(collection: t.Iterable[T], iteratee: t.Callable[[T, int], NumT]) -> t.Union[float, int]:
+def median(
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int], NumberT]
+) -> t.Union[float, int]:
     ...
 
 
 @t.overload
-def median(collection: t.Iterable[T], iteratee: t.Callable[[T], NumT]) -> t.Union[float, int]:
+def median(collection: t.Iterable[T], iteratee: t.Callable[[T], NumberT]) -> t.Union[float, int]:
     ...
 
 
 @t.overload
-def median(collection: t.Iterable[NumT], iteratee: None = None) -> t.Union[float, int]:
+def median(collection: t.Iterable[NumberT], iteratee: None = None) -> t.Union[float, int]:
     ...
 
 
@@ -1005,7 +1011,7 @@ def scale(array: t.Iterable["Decimal"], maximum: "Decimal") -> t.List["Decimal"]
 
 
 @t.overload
-def scale(array: t.Iterable[NumT], maximum: NumT) -> t.List[float]:
+def scale(array: t.Iterable[NumberNoDecimalT], maximum: NumberNoDecimalT) -> t.List[float]:
     ...
 
 
@@ -1014,7 +1020,7 @@ def scale(array: t.Iterable[NumberT], maximum: int = 1) -> t.List[float]:
     ...
 
 
-def scale(array, maximum: t.Union["Decimal", NumberT] = 1):
+def scale(array, maximum: NumberT = 1):
     """
     Scale list of value to a maximum number.
 
@@ -1088,7 +1094,7 @@ def slope(point1, point2):
     return result
 
 
-def std_deviation(array: t.List[NumT]) -> float:
+def std_deviation(array: t.List[NumberT]) -> float:
     """
     Calculate standard deviation of list of numbers.
 
@@ -1209,40 +1215,40 @@ def variance(array):
 
 @t.overload
 def zscore(
-    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], NumT]
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], NumberT]
 ) -> t.List[float]:
     ...
 
 
 @t.overload
-def zscore(collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], NumT]) -> t.List[float]:
+def zscore(collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], NumberT]) -> t.List[float]:
     ...
 
 
 @t.overload
-def zscore(collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], NumT]) -> t.List[float]:
+def zscore(collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], NumberT]) -> t.List[float]:
     ...
 
 
 @t.overload
 def zscore(
-    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], NumT]
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], NumberT]
 ) -> t.List[float]:
     ...
 
 
 @t.overload
-def zscore(collection: t.Iterable[T], iteratee: t.Callable[[T, int], NumT]) -> t.List[float]:
+def zscore(collection: t.Iterable[T], iteratee: t.Callable[[T, int], NumberT]) -> t.List[float]:
     ...
 
 
 @t.overload
-def zscore(collection: t.Iterable[T], iteratee: t.Callable[[T], NumT]) -> t.List[float]:
+def zscore(collection: t.Iterable[T], iteratee: t.Callable[[T], NumberT]) -> t.List[float]:
     ...
 
 
 @t.overload
-def zscore(collection: t.Iterable[NumT], iteratee: None = None) -> t.List[float]:
+def zscore(collection: t.Iterable[NumberT], iteratee: None = None) -> t.List[float]:
     ...
 
 
