@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v6.0.2 (2023-02-23)
+-------------------
+
 - Only prevent access to object paths containing ``__globals__`` or ``__builtins__`` instead of all dunder-methods for non-dict/list objects.
 
 
