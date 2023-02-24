@@ -20,6 +20,9 @@ NUMBER_TYPES = (int, float, Decimal)
 #: Dictionary of builtins with keys as the builtin function and values as the string name.
 BUILTINS = {value: key for key, value in builtins.__dict__.items() if isinstance(value, Hashable)}
 
+#: Object keys that are restricted from access via path access.
+RESTRICTED_KEYS = ("__globals__", "__builtins__")
+
 
 def callit(iteratee, *args, **kwargs):
     """Inspect argspec of `iteratee` function and only pass the supported arguments when calling
@@ -188,11 +191,8 @@ def _base_get_object(obj, key, default=UNSET):
 
 
 def _raise_if_restricted_key(key):
-    if not isinstance(key, str):
-        return
-    # Prevent access to dunder-methods since this could expose access to globals through leaky
-    # attributes such as obj.__init__.__globals__.
-    if len(key) > 4 and key.isascii() and key.startswith("__") and key.endswith("__"):
+    # Prevent access to restricted keys for security reasons.
+    if key in RESTRICTED_KEYS:
         raise KeyError(f"access to restricted key {key!r} is not allowed")
 
 

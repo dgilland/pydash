@@ -384,9 +384,10 @@ def test_get__should_not_populate_defaultdict():
 @parametrize(
     "obj,path",
     [
-        (helpers.Object(), "__init__"),
-        (helpers.Object(subobj=helpers.Object()), "subobj.__init__"),
-        (namedtuple("a", ["a"])(a=1), "__len__"),
+        (helpers.Object(), "__init__.__globals__"),
+        (namedtuple("a", ["a"])(a=1), "__globals__"),
+        (helpers.Object(subobj=helpers.Object()), "subobj.__builtins__"),
+        (helpers.Object(subobj=helpers.Object()), "__builtins__"),
     ],
 )
 def test_get__raises_for_objects_when_path_restricted(obj, path):
@@ -397,11 +398,25 @@ def test_get__raises_for_objects_when_path_restricted(obj, path):
 @parametrize(
     "obj,path",
     [
-        ({}, "__init__"),
-        ([], "__contains__"),
+        ({}, "__globals__"),
+        ({}, "__builtins__"),
+        ([], "__globals__"),
+        ([], "__builtins__"),
     ],
 )
 def test_get__does_not_raise_for_dict_or_list_when_path_restricted(obj, path):
+    assert _.get(obj, path) is None
+
+
+@parametrize(
+    "obj,path",
+    [
+        (helpers.Object(), "__name__"),
+        (helpers.Object(), "foo.__dict__"),
+        (helpers.Object(), "__len__"),
+    ],
+)
+def test_get__does_not_raise_for_objects_when_path_is_unrestricted(obj, path):
     assert _.get(obj, path) is None
 
 
