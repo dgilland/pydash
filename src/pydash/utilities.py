@@ -61,11 +61,11 @@ __all__ = (
 # This is used to split a deep path string into dict keys or list indexes. This matches "." as
 # delimiter (unless it is escaped by "//") and "[<integer>]" as delimiter while keeping the
 # "[<integer>]" as an item.
-RE_PATH_KEY_DELIM = re.compile(r"(?<!\\)(?:\\\\)*\.|(\[\d+\])")
+RE_PATH_KEY_DELIM = re.compile(r"(?<!\\)(?:\\\\)*\.|(\[-?\d+\])")
 
 # Matches on path strings like "[<integer>]". This is used to test whether a path string part is a
 # list index.
-RE_PATH_LIST_INDEX = re.compile(r"^\[\d+\]$")
+RE_PATH_LIST_INDEX = re.compile(r"^\[-?\d+\]$")
 
 
 ID_COUNTER = 0
