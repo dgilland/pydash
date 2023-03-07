@@ -20,9 +20,21 @@ from pydash.chaining.chaining import Chain
 from pydash.types import *
 from pydash.helpers import Unset, UNSET
 from pydash.functions import After, Ary, Before, Once, Spread, Throttle
+
+from _typeshed import (
+    SupportsDunderGE,
+    SupportsDunderGT,
+    SupportsDunderLE,
+    SupportsDunderLT,
+    SupportsRichComparison,
+    SupportsAdd,
+    SupportsRichComparisonT,
+    SupportsSub,
+)
+
 {imports}
 
-ValueT = t.TypeVar("ValueT", covariant=True)
+Value_coT = t.TypeVar("Value_coT", covariant=True)
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
@@ -32,7 +44,6 @@ NumT = t.TypeVar("NumT", int, float)
 CallableT = t.TypeVar("CallableT", bound=t.Callable)
 SequenceT = t.TypeVar("SequenceT", bound=t.Sequence)
 MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence)
-SupportsComparisonT = t.TypeVar("SupportsComparisonT", bound=SupportsComparison)
 P = ParamSpec("P")
 
 
@@ -73,11 +84,7 @@ def is_overload(node: ast.FunctionDef) -> bool:
 
 def returns_typeguard(node: ast.FunctionDef) -> bool:
     def is_constant_typeguard(cst: ast.expr) -> bool:
-        return (
-            isinstance(cst, ast.Constant)
-            and cst.value is not None
-            and "TypeGuard" in cst.value
-        )
+        return isinstance(cst, ast.Constant) and cst.value is not None and "TypeGuard" in cst.value
 
     def is_subscript_typeguard(sub: ast.expr) -> bool:
         return (
@@ -86,12 +93,8 @@ def returns_typeguard(node: ast.FunctionDef) -> bool:
             and "TypeGuard" in sub.value.id
         )
 
-    return (
-        node.returns is not None
-        and (
-            is_constant_typeguard(node.returns)
-            or is_subscript_typeguard(node.returns)
-        )
+    return node.returns is not None and (
+        is_constant_typeguard(node.returns) or is_subscript_typeguard(node.returns)
     )
 
 
@@ -105,8 +108,7 @@ def chainwrapper_args(
     # TODO: handle posonlyargs
     args: list[ast.expr] = [ast.Name(id=arg.arg) for arg in node.args.args[1:]]
     kwargs: list[ast.keyword] = [
-        ast.keyword(arg=kw.arg, value=ast.Name(id=kw.arg))
-        for kw in node.args.kwonlyargs
+        ast.keyword(arg=kw.arg, value=ast.Name(id=kw.arg)) for kw in node.args.kwonlyargs
     ]
 
     if node.args.vararg:
@@ -122,9 +124,7 @@ def wrap_type(wrapper: ast.Subscript, to_wrap: ast.expr) -> ast.expr:
     if isinstance(wrapper.slice, ast.Tuple):
         slice = ast.Tuple(
             elts=[
-                s
-                if not (isinstance(s, ast.Name) and s.id == WRAPPER_KW)
-                else to_wrap
+                s if not (isinstance(s, ast.Name) and s.id == WRAPPER_KW) else to_wrap
                 for s in wrapper.slice.elts
             ]
         )
@@ -156,9 +156,7 @@ def transform_function(node: ast.FunctionDef, wrapper: ast.Subscript) -> ast.Fun
         if returns_typeguard(node):
             node.returns = ast.Name(id="bool")
 
-        node.returns = ast.Constant(
-            value=ast.unparse(wrap_type(wrapper, node.returns))
-        )
+        node.returns = ast.Constant(value=ast.unparse(wrap_type(wrapper, node.returns)))
 
     if not is_overload(node):
         node.body = [
@@ -179,11 +177,7 @@ def transform_function(node: ast.FunctionDef, wrapper: ast.Subscript) -> ast.Fun
 
 
 def filename_from_module(module: str) -> str:
-    return (
-        "src/pydash/chaining/chaining.py"
-        if module == "chaining"
-        else f"src/pydash/{module}.py"
-    )
+    return "src/pydash/chaining/chaining.py" if module == "chaining" else f"src/pydash/{module}.py"
 
 
 def main() -> int:
@@ -195,7 +189,7 @@ def main() -> int:
     parser.add_argument(
         "output",
         type=Path,
-        help="Path to the file to write the typed class to (probably a `.pyi` file)"
+        help="Path to the file to write the typed class to (probably a `.pyi` file)",
     )
     parser.add_argument(
         "wrapper",
@@ -212,7 +206,9 @@ def main() -> int:
     wrapper = ast.parse(wrapper).body[0]
     assert isinstance(wrapper, ast.Expr), "`wrapper` value should contain one expression"
     wrapper = wrapper.value
-    assert isinstance(wrapper, ast.Subscript), "`wrapper` value should contain one with one subscript"
+    assert isinstance(
+        wrapper, ast.Subscript
+    ), "`wrapper` value should contain one with one subscript"
 
     to_file = open(args.output, "w")
     to_file.write(build_header(args.class_name, args.imports or []))
@@ -229,9 +225,7 @@ def main() -> int:
 
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
-                class_methods.extend(
-                    f for f in node.body if isinstance(f, ast.FunctionDef)
-                )
+                class_methods.extend(f for f in node.body if isinstance(f, ast.FunctionDef))
 
             # skipping class methods
             if node in class_methods:
@@ -249,9 +243,7 @@ def main() -> int:
                 to_file.write(ast.unparse(new_node).replace("\n", f"\n{' ' * 4}"))
                 to_file.write("\n\n")
                 if new_node.name.endswith("_") and not is_overload(new_node):
-                    to_file.write(
-                        f"{' ' * 4}{new_node.name.rstrip('_')} = {new_node.name}"
-                    )
+                    to_file.write(f"{' ' * 4}{new_node.name.rstrip('_')} = {new_node.name}")
                     to_file.write("\n\n")
 
     to_file.close()

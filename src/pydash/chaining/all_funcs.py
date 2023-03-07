@@ -11,7 +11,7 @@ class AllFuncs(ABC):
     @abstractmethod
     def _wrap(self, func) -> t.Callable:
         """Proxy attribute access to :attr:`module`."""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
 
     @classmethod
     def get_method(cls, name: str) -> t.Callable:

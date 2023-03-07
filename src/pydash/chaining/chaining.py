@@ -9,7 +9,7 @@ import typing as t
 import pydash as pyd
 from pydash.exceptions import InvalidMethod
 
-from ..helpers import UNSET
+from ..helpers import UNSET, Unset
 from .all_funcs import AllFuncs
 
 
@@ -19,26 +19,26 @@ __all__ = (
     "thru",
 )
 
-ValueT = t.TypeVar("ValueT", covariant=True)
+Value_coT = t.TypeVar("Value_coT", covariant=True)
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
 
 
-class Chain(AllFuncs, t.Generic[ValueT]):
+class Chain(AllFuncs, t.Generic[Value_coT]):
     """Enables chaining of :attr:`module` functions."""
 
     #: Object that contains attribute references to available methods.
     module = pyd
     invalid_method_exception = InvalidMethod
 
-    def __init__(self, value: ValueT = UNSET) -> None:
+    def __init__(self, value: t.Union[Value_coT, Unset] = UNSET) -> None:
         self._value = value
 
     def _wrap(self, func) -> "ChainWrapper":
         """Implement `AllFuncs` interface."""
         return ChainWrapper(self._value, func)
 
-    def value(self) -> ValueT:
+    def value(self) -> Value_coT:
         """
         Return current value of the chain operations.
 
@@ -56,7 +56,7 @@ class Chain(AllFuncs, t.Generic[ValueT]):
         """
         return self.module.to_string(self.value())
 
-    def commit(self) -> "Chain[ValueT]":
+    def commit(self) -> "Chain[Value_coT]":
         """
         Executes the chained sequence and returns the wrapped result.
 
@@ -66,7 +66,7 @@ class Chain(AllFuncs, t.Generic[ValueT]):
         """
         return Chain(self.value())
 
-    def plant(self, value: t.Any) -> "Chain[ValueT]":
+    def plant(self, value: t.Any) -> "Chain[Value_coT]":
         """
         Return a clone of the chained sequence planting `value` as the wrapped value.
 
@@ -81,17 +81,19 @@ class Chain(AllFuncs, t.Generic[ValueT]):
             wrappers = [wrapper]
 
             while isinstance(wrapper._value, ChainWrapper):
-                wrapper = wrapper._value
+                wrapper = wrapper._value  # type: ignore
                 wrappers.insert(0, wrapper)
 
-        clone = Chain(value)
+        clone: Chain[t.Any] = Chain(value)
 
         for wrap in wrappers:
-            clone = ChainWrapper(clone._value, wrap.method)(*wrap.args, **wrap.kwargs)
+            clone = ChainWrapper(clone._value, wrap.method)(  # type: ignore
+                *wrap.args, **wrap.kwargs  # type: ignore
+            )
 
         return clone
 
-    def __call__(self, value) -> ValueT:
+    def __call__(self, value) -> Value_coT:
         """
         Return result of passing `value` through chained methods.
 
@@ -107,14 +109,14 @@ class Chain(AllFuncs, t.Generic[ValueT]):
         return value
 
 
-class ChainWrapper(t.Generic[ValueT]):
+class ChainWrapper(t.Generic[Value_coT]):
     """Wrap :class:`Chain` method call within a :class:`ChainWrapper` context."""
 
-    def __init__(self, value: ValueT, method) -> None:
+    def __init__(self, value: Value_coT, method) -> None:
         self._value = value
         self.method = method
         self.args = ()
-        self.kwargs = {}
+        self.kwargs: t.Dict = {}
 
     def _generate(self):
         """Generate a copy of this instance."""
@@ -171,12 +173,12 @@ class _Dash(object):
         """Proxy to :meth:`Chain.get_method`."""
         return Chain.get_method(attr)
 
-    def __call__(self, value: ValueT = UNSET) -> Chain[ValueT]:
+    def __call__(self, value: t.Union[Value_coT, Unset] = UNSET) -> Chain[Value_coT]:
         """Return a new instance of :class:`Chain` with `value` as the seed."""
         return Chain(value)
 
 
-def chain(value: T = UNSET) -> Chain[T]:
+def chain(value: t.Union[T, Unset] = UNSET) -> Chain[T]:
     """
     Creates a :class:`Chain` object which wraps the given value to enable intuitive method chaining.
     Chaining is lazy and won't compute a final value until :meth:`Chain.value` is called.
