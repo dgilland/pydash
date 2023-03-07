@@ -169,3 +169,12 @@ def generate_mypy_test(ctx, file: str) -> None:
         "python scripts/mypy_doctests_generator.py"
         f" {file} tests/pytest_mypy_testing/test_{Path(file).name}"
     )
+
+
+@task
+def generate_chaining_types(ctx) -> None:
+    """Generates `all_funcs.pyi` stub file that types the chaining interface."""
+    run(
+        "python scripts/chaining_type_generator.py"
+        " AllFuncs src/pydash/chaining/all_funcs.pyi Chain"
+    )
