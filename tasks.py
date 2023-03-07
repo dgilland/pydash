@@ -10,6 +10,7 @@ Where <task> is a function defined below with the @task decorator.
 
 from functools import partial
 import os
+from pathlib import Path
 
 from invoke import Exit, UnexpectedExit, run as _run, task
 
@@ -18,6 +19,7 @@ PACKAGE_NAME = "pydash"
 PACKAGE_SOURCE = f"src/{PACKAGE_NAME}"
 TEST_TARGETS = f"{PACKAGE_SOURCE} tests"
 LINT_TARGETS = f"{TEST_TARGETS} tasks.py"
+LINT_EXCLUDE = "tests/pytest_mypy_testing"
 EXIT_EXCEPTIONS = (Exit, UnexpectedExit, SystemExit)
 
 
@@ -28,7 +30,7 @@ run = partial(_run, pty=True)
 @task
 def black(ctx, quiet=False):
     """Autoformat code using black."""
-    run(f"black {LINT_TARGETS}", hide=quiet)
+    run(f"black --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}", hide=quiet)
 
 
 @task
@@ -62,13 +64,19 @@ def fmt(ctx):
 @task
 def flake8(ctx):
     """Check code for PEP8 violations using flake8."""
-    run(f"flake8 --format=pylint {LINT_TARGETS}")
+    run(f"flake8 --format=pylint --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
 def pylint(ctx):
     """Check code for static errors using pylint."""
-    run(f"pylint {LINT_TARGETS}")
+    run(f"pylint --ignore='{LINT_EXCLUDE}' {LINT_TARGETS}")
+
+
+@task
+def mypy(ctx):
+    """Check code using mypy type checker."""
+    run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
@@ -145,10 +153,19 @@ def build(ctx):
 def clean(ctx):
     """Remove temporary files related to development."""
     run("find . -type f -name '*.py[cod]' -delete -o -type d -name __pycache__ -delete")
-    run("rm -rf .tox .coverage .cache .pytest_cache **/.egg* **/*.egg* dist build")
+    run("rm -rf .tox .coverage .cache .pytest_cache **/.egg* **/*.egg* dist build .mypy_cache")
 
 
 @task(pre=[build])
 def release(ctx):
     """Release Python package."""
     run("twine upload dist/*")
+
+
+@task
+def generate_mypy_test(ctx, file: str) -> None:
+    """Generate base mypy test ready to be filled from doctests inside a python file."""
+    run(
+        "python scripts/mypy_doctests_generator.py"
+        f" {file} tests/pytest_mypy_testing/test_{Path(file).name}"
+    )

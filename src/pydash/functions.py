@@ -7,6 +7,9 @@ Functions that wrap other functions.
 from inspect import getfullargspec
 import itertools
 import time
+import typing as t
+
+from typing_extensions import Concatenate, Literal, ParamSpec
 
 import pydash as pyd
 
@@ -38,11 +41,19 @@ __all__ = (
     "wrap",
 )
 
+T = t.TypeVar("T")
+T1 = t.TypeVar("T1")
+T2 = t.TypeVar("T2")
+T3 = t.TypeVar("T3")
+T4 = t.TypeVar("T4")
+T5 = t.TypeVar("T5")
+P = ParamSpec("P")
 
-class After(object):
+
+class After(t.Generic[P, T]):
     """Wrap a function in an after context."""
 
-    def __init__(self, func, n):
+    def __init__(self, func: t.Callable[P, T], n: t.SupportsInt) -> None:
         try:
             n = int(n)
             assert n >= 0
@@ -52,20 +63,23 @@ class After(object):
         self.n = n
         self.func = func
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> t.Union[T, None]:
         """Return results of :attr:`func` after :attr:`n` calls."""
         self.n -= 1
 
         if self.n <= 0:
             return self.func(*args, **kwargs)
 
+        return None
 
-class Ary(object):
+
+class Ary(t.Generic[T]):
     """Wrap a function in an ary context."""
 
-    def __init__(self, func, n):
+    def __init__(self, func: t.Callable[..., T], n: t.Union[t.SupportsInt, None]) -> None:
         try:
-            n = int(n)
+            # Type error would be caught
+            n = int(n)  # type: ignore
             assert n >= 0
         except (ValueError, TypeError, AssertionError):
             n = None
@@ -73,36 +87,83 @@ class Ary(object):
         self.n = n
         self.func = func
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: t.Any, **kwargs: t.Any) -> T:
         """
         Return results of :attr:`func` with arguments capped to :attr:`n`.
 
         Only positional arguments are capped. Any number of keyword arguments are allowed.
         """
-        if self.n is not None:
-            args = args[: self.n]
+        cut_args = args[: self.n] if self.n is not None else args
 
-        return self.func(*args, **kwargs)
+        return self.func(*cut_args, **kwargs)  # type: ignore
 
 
-class Before(After):
+class Before(After, t.Generic[P, T]):
     """Wrap a function in a before context."""
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> t.Union[T, None]:
         self.n -= 1
 
         if self.n > 0:
             return self.func(*args, **kwargs)
 
+        return None
 
-class Flow(object):
+
+class Flow(t.Generic[P, T]):
     """Wrap a function in a flow context."""
 
-    def __init__(self, *funcs, **kwargs):
-        self.funcs = funcs
-        self.from_right = kwargs.get("from_right", True)
+    @t.overload
+    def __init__(
+        self,
+        func1: t.Callable[P, T2],
+        func2: t.Callable[[T2], T3],
+        func3: t.Callable[[T3], T4],
+        func4: t.Callable[[T4], T5],
+        func5: t.Callable[[T5], T],
+        *,
+        from_right: bool = True,
+    ) -> None:
+        ...
 
-    def __call__(self, *args, **kwargs):
+    @t.overload
+    def __init__(
+        self,
+        func1: t.Callable[P, T2],
+        func2: t.Callable[[T2], T3],
+        func3: t.Callable[[T3], T4],
+        func4: t.Callable[[T4], T],
+        *,
+        from_right: bool = True,
+    ) -> None:
+        ...
+
+    @t.overload
+    def __init__(
+        self,
+        func1: t.Callable[P, T2],
+        func2: t.Callable[[T2], T3],
+        func3: t.Callable[[T3], T],
+        *,
+        from_right: bool = True,
+    ) -> None:
+        ...
+
+    @t.overload
+    def __init__(
+        self, func1: t.Callable[P, T2], func2: t.Callable[[T2], T], *, from_right: bool = True
+    ) -> None:
+        ...
+
+    @t.overload
+    def __init__(self, func1: t.Callable[P, T], *, from_right: bool = True) -> None:
+        ...
+
+    def __init__(self, *funcs, from_right: bool = True) -> None:  # type: ignore
+        self.funcs = funcs
+        self.from_right = from_right
+
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results of composing :attr:`funcs`."""
         funcs = list(self.funcs)
         from_index = -1 if self.from_right else 0
@@ -111,31 +172,34 @@ class Flow(object):
 
         while funcs:
             result = funcs.pop(from_index)(*args, **kwargs)
-            args = (result,)
-            kwargs = {}
+            # Incompatible type in assignements but needed here
+            # type safety is ensured from the `__init__` signature
+            args = (result,)  # type: ignore
+            kwargs = {}  # type: ignore
 
-        return result
+        # type safety is ensured from the `__init__` signature
+        return result  # type: ignore
 
 
-class Conjoin(object):
+class Conjoin(t.Generic[T]):
     """Wrap a set of functions in a conjoin context."""
 
-    def __init__(self, *funcs):
+    def __init__(self, *funcs: t.Callable[[T], t.Any]) -> None:
         self.funcs = funcs
 
-    def __call__(self, obj):
+    def __call__(self, obj: t.Iterable[T]) -> bool:
         """Return result of conjoin `obj` with :attr:`funcs` predicates."""
 
-        def iteratee(item):
+        def iteratee(item: T) -> bool:
             return pyd.every(self.funcs, lambda func: func(item))
 
         return pyd.every(obj, iteratee)
 
 
-class Curry(object):
+class Curry(t.Generic[T1, T]):
     """Wrap a function in a curry context."""
 
-    def __init__(self, func, arity, args=None, kwargs=None):
+    def __init__(self, func, arity, args=None, kwargs=None) -> None:
         self.func = func
         self.arity = len(getfullargspec(func).args) if arity is None else arity
         self.args = () if args is None else args
@@ -163,29 +227,195 @@ class Curry(object):
         return tuple(list(self.args) + list(new_args))
 
 
-class CurryRight(Curry):
+class CurryOne(Curry[T1, T]):
+    def __call__(self, arg_one: T1) -> T:
+        return super().__call__(arg_one)  # pragma: no cover
+
+
+class CurryTwo(Curry[T1, CurryOne[T2, T]]):
+    @t.overload
+    def __call__(self, arg_one: T1) -> CurryOne[T2, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2) -> T:
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)  # pragma: no cover
+
+
+class CurryThree(Curry[T1, CurryTwo[T2, T3, T]]):
+    @t.overload
+    def __call__(self, arg_one: T1) -> CurryTwo[T2, T3, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2) -> CurryOne[T3, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> T:
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)  # pragma: no cover
+
+
+class CurryFour(Curry[T1, CurryThree[T2, T3, T4, T]]):
+    @t.overload
+    def __call__(self, arg_one: T1) -> CurryThree[T2, T3, T4, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2) -> CurryTwo[T3, T4, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> CurryOne[T4, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4) -> T:
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)  # pragma: no cover
+
+
+class CurryFive(Curry[T1, CurryFour[T2, T3, T4, T5, T]]):
+    @t.overload
+    def __call__(self, arg_one: T1) -> CurryFour[T2, T3, T4, T5, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2) -> CurryThree[T3, T4, T5, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> CurryTwo[T4, T5, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4) -> CurryOne[T5, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4, arg_five: T5) -> T:
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)  # pragma: no cover
+
+
+class CurryRight(Curry[T5, T]):
     """Wrap a function in a curry-right context."""
 
     def compose_args(self, new_args):
         return tuple(list(new_args) + list(self.args))
 
 
-class Debounce(object):
+class CurryRightOne(CurryRight[T5, T]):
+    def __call__(self, arg_one: T5) -> T:
+        return super().__call__(arg_one)  # pragma: no cover
+
+
+class CurryRightTwo(CurryRight[T5, CurryRightOne[T4, T]]):
+    @t.overload
+    def __call__(self, arg_one: T5) -> CurryRightOne[T4, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4) -> T:
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)  # pragma: no cover
+
+
+class CurryRightThree(CurryRight[T5, CurryRightTwo[T4, T3, T]]):
+    @t.overload
+    def __call__(self, arg_one: T5) -> CurryRightTwo[T4, T3, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightOne[T3, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> T:
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)  # pragma: no cover
+
+
+class CurryRightFour(CurryRight[T5, CurryRightThree[T4, T3, T2, T]]):
+    @t.overload
+    def __call__(self, arg_one: T5) -> CurryRightThree[T4, T3, T2, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightTwo[T3, T2, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> CurryRightOne[T2, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2) -> T:
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)  # pragma: no cover
+
+
+class CurryRightFive(CurryRight[T5, CurryRightFour[T4, T3, T2, T1, T]]):
+    @t.overload
+    def __call__(self, arg_one: T5) -> CurryRightFour[T4, T3, T2, T1, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightThree[T3, T2, T1, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> CurryRightTwo[T2, T1, T]:
+        ...
+
+    @t.overload
+    def __call__(
+        self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2
+    ) -> CurryRightOne[T1, T]:
+        ...
+
+    @t.overload
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2, arg_five: T1) -> T:
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)  # pragma: no cover
+
+
+class Debounce(t.Generic[P, T]):
     """Wrap a function in a debounce context."""
 
-    def __init__(self, func, wait, max_wait=False):
+    def __init__(
+        self, func: t.Callable[P, T], wait: int, max_wait: t.Union[int, Literal[False]] = False
+    ) -> None:
         self.func = func
         self.wait = wait
         self.max_wait = max_wait
 
-        self.last_result = None
+        self.last_result: t.Union[T, None] = None
 
         # Initialize last_* times to be prior to the wait periods so that func
         # is primed to be executed on first call.
         self.last_call = pyd.now() - self.wait
         self.last_execution = pyd.now() - max_wait if pyd.is_number(max_wait) else None
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """
         Execute :attr:`func` if function hasn't been called within last :attr:`wait` milliseconds or
         in last :attr:`max_wait` milliseconds.
@@ -195,26 +425,27 @@ class Debounce(object):
         present = pyd.now()
 
         if (present - self.last_call) >= self.wait or (
-            self.max_wait and (present - self.last_execution) >= self.max_wait
+            self.max_wait and (present - self.last_execution) >= self.max_wait  # type: ignore
         ):
             self.last_result = self.func(*args, **kwargs)
             self.last_execution = present
 
         self.last_call = present
 
-        return self.last_result
+        # It will be set after first call, cannot be `None` anymore
+        return self.last_result  # type: ignore
 
 
-class Disjoin(object):
+class Disjoin(t.Generic[T]):
     """Wrap a set of functions in a disjoin context."""
 
-    def __init__(self, *funcs):
+    def __init__(self, *funcs: t.Callable[[T], t.Any]) -> None:
         self.funcs = funcs
 
-    def __call__(self, obj):
+    def __call__(self, obj: t.Iterable[T]) -> bool:
         """Return result of disjoin `obj` with :attr:`funcs` predicates."""
 
-        def iteratee(item):
+        def iteratee(item: T) -> bool:
             return pyd.some(self.funcs, lambda func: func(item))
 
         return pyd.some(obj, iteratee)
@@ -223,27 +454,27 @@ class Disjoin(object):
 class Flip(object):
     """Wrap a function in a flip context."""
 
-    def __init__(self, func):
+    def __init__(self, func: t.Callable) -> None:
         self.func = func
 
     def __call__(self, *args, **kwargs):
         return self.func(*reversed(args), **kwargs)
 
 
-class Iterated(object):
+class Iterated(t.Generic[T]):
     """Wrap a function in an iterated context."""
 
-    def __init__(self, func):
+    def __init__(self, func: t.Callable[[T], T]) -> None:
         self.func = func
 
-    def _iteration(self, initial):
+    def _iteration(self, initial: T) -> t.Iterator[T]:
         """Iterator that composing :attr:`func` with itself."""
         value = initial
         while True:
             value = self.func(value)
             yield value
 
-    def __call__(self, initial, n):
+    def __call__(self, initial: T, n: int) -> T:
         """Return value of calling :attr:`func` `n` times using `initial` as seed value."""
         value = initial
         iteration = self._iteration(value)
@@ -254,20 +485,20 @@ class Iterated(object):
         return value
 
 
-class Juxtapose(object):
+class Juxtapose(t.Generic[P, T]):
     """Wrap a function in a juxtapose context."""
 
-    def __init__(self, *funcs):
+    def __init__(self, *funcs: t.Callable[P, T]) -> None:
         self.funcs = funcs
 
-    def __call__(self, *objs):
-        return [func(*objs) for func in self.funcs]
+    def __call__(self, *objs: P.args, **kwargs: P.kwargs) -> t.List[T]:
+        return [func(*objs, **kwargs) for func in self.funcs]
 
 
 class OverArgs(object):
     """Wrap a function in a over_args context."""
 
-    def __init__(self, func, *transforms):
+    def __init__(self, func: t.Callable, *transforms: t.Callable) -> None:
         self.func = func
         self.transforms = pyd.flatten(transforms)
 
@@ -276,63 +507,66 @@ class OverArgs(object):
         return self.func(*args)
 
 
-class Negate(object):
+class Negate(t.Generic[P]):
     """Wrap a function in a negate context."""
 
-    def __init__(self, func):
+    def __init__(self, func: t.Callable[P, t.Any]) -> None:
         self.func = func
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> bool:
         """Return negated results of calling :attr:`func`."""
         return not self.func(*args, **kwargs)
 
 
-class Once(object):
+class Once(t.Generic[P, T]):
     """Wrap a function in a once context."""
 
-    def __init__(self, func):
+    def __init__(self, func: t.Callable[P, T]) -> None:
         self.func = func
-        self.result = None
+        self.result: t.Union[T, None] = None
         self.called = False
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results from the first call of :attr:`func`."""
         if not self.called:
             self.result = self.func(*args, **kwargs)
             self.called = True
 
-        return self.result
+        # At this point the result will be set, cannot be `None` anymore
+        return self.result  # type: ignore
 
 
-class Partial(object):
+class Partial(t.Generic[T]):
     """Wrap a function in a partial context."""
 
-    def __init__(self, func, args, kwargs=None, from_right=False):
+    def __init__(
+        self, func: t.Callable[..., T], args: t.Any, kwargs: t.Any = None, from_right: bool = False
+    ) -> None:
         self.func = func
         self.args = args
         self.kwargs = kwargs or {}
         self.from_right = from_right
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: t.Any, **kwargs: t.Any) -> T:
         """
         Return results from :attr:`func` with :attr:`args` + `args`.
 
         Apply arguments from left or right depending on :attr:`from_right`.
         """
         if self.from_right:
-            args = itertools.chain(args, self.args)
+            args = itertools.chain(args, self.args)  # type: ignore
         else:
-            args = itertools.chain(self.args, args)
+            args = itertools.chain(self.args, args)  # type: ignore
 
         kwargs = {**self.kwargs, **kwargs}
 
         return self.func(*args, **kwargs)
 
 
-class Rearg(object):
+class Rearg(t.Generic[P, T]):
     """Wrap a function in a rearg context."""
 
-    def __init__(self, func, *indexes):
+    def __init__(self, func: t.Callable[P, T], *indexes: int) -> None:
         self.func = func
 
         # Index `indexes` by the index value so we can do a lookup mapping by walking the function
@@ -341,7 +575,7 @@ class Rearg(object):
             src_index: dest_index for dest_index, src_index in enumerate(pyd.flatten(indexes))
         }
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results from :attr:`func` using rearranged arguments."""
         reargs = {}
         rest = []
@@ -358,33 +592,33 @@ class Rearg(object):
                 # Argumnet index is not contained in `indexes` so stick in the back.
                 rest.append(arg)
 
-        args = itertools.chain((reargs[key] for key in sorted(reargs)), rest)
+        args = itertools.chain((reargs[key] for key in sorted(reargs)), rest)  # type: ignore
 
         return self.func(*args, **kwargs)
 
 
-class Spread(object):
+class Spread(t.Generic[T]):
     """Wrap a function in a spread context."""
 
-    def __init__(self, func):
+    def __init__(self, func: t.Callable[..., T]) -> None:
         self.func = func
 
-    def __call__(self, args):
+    def __call__(self, args: t.Iterable) -> T:
         """Return results from :attr:`func` using array of `args` provided."""
         return self.func(*args)
 
 
-class Throttle(object):
+class Throttle(t.Generic[P, T]):
     """Wrap a function in a throttle context."""
 
-    def __init__(self, func, wait):
+    def __init__(self, func: t.Callable[P, T], wait: int) -> None:
         self.func = func
         self.wait = wait
 
-        self.last_result = None
+        self.last_result: t.Union[T, None] = None
         self.last_execution = pyd.now() - self.wait
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """
         Execute :attr:`func` if function hasn't been called within last :attr:`wait` milliseconds.
 
@@ -396,10 +630,11 @@ class Throttle(object):
             self.last_result = self.func(*args, **kwargs)
             self.last_execution = present
 
-        return self.last_result
+        # The last result will be filled on first execution so it is always `T`
+        return self.last_result  # type: ignore
 
 
-def after(func, n):
+def after(func: t.Callable[P, T], n: t.SupportsInt) -> After[P, T]:
     """
     Creates a function that executes `func`, with the arguments of the created function, only after
     being called `n` times.
@@ -430,7 +665,7 @@ def after(func, n):
     return After(func, n)
 
 
-def ary(func, n):
+def ary(func: t.Callable[..., T], n: t.Union[t.SupportsInt, None]) -> Ary[T]:
     """
     Creates a function that accepts up to `n` arguments ignoring any additional arguments. Only
     positional arguments are capped. All keyword arguments are allowed through.
@@ -456,7 +691,7 @@ def ary(func, n):
     return Ary(func, n)
 
 
-def before(func, n):
+def before(func: t.Callable[P, T], n: t.SupportsInt) -> Before[P, T]:
     """
     Creates a function that executes `func`, with the arguments of the created function, until it
     has been called `n` times.
@@ -487,7 +722,7 @@ def before(func, n):
     return Before(func, n)
 
 
-def conjoin(*funcs):
+def conjoin(*funcs: t.Callable[[T], t.Any]) -> t.Callable[[t.Iterable[T]], bool]:
     """
     Creates a function that composes multiple predicate functions into a single predicate that tests
     whether **all** elements of an object pass each predicate.
@@ -513,6 +748,37 @@ def conjoin(*funcs):
     .. versionadded:: 2.0.0
     """
     return Conjoin(*funcs)
+
+
+@t.overload
+def curry(func: t.Callable[[T1], T], arity: t.Union[int, None] = None) -> CurryOne[T1, T]:
+    ...
+
+
+@t.overload
+def curry(func: t.Callable[[T1, T2], T], arity: t.Union[int, None] = None) -> CurryTwo[T1, T2, T]:
+    ...
+
+
+@t.overload
+def curry(
+    func: t.Callable[[T1, T2, T3], T], arity: t.Union[int, None] = None
+) -> CurryThree[T1, T2, T3, T]:
+    ...
+
+
+@t.overload
+def curry(
+    func: t.Callable[[T1, T2, T3, T4], T], arity: t.Union[int, None] = None
+) -> CurryFour[T1, T2, T3, T4, T]:
+    ...
+
+
+@t.overload
+def curry(
+    func: t.Callable[[T1, T2, T3, T4, T5], T], arity: t.Union[int, None] = None
+) -> CurryFive[T1, T2, T3, T4, T5, T]:
+    ...
 
 
 def curry(func, arity=None):
@@ -546,6 +812,39 @@ def curry(func, arity=None):
     return Curry(func, arity)
 
 
+@t.overload
+def curry_right(
+    func: t.Callable[[T1], T], arity: t.Union[int, None] = None
+) -> CurryRightOne[T1, T]:
+    ...
+
+
+@t.overload
+def curry_right(
+    func: t.Callable[[T1, T2], T], arity: t.Union[int, None] = None
+) -> CurryRightTwo[T2, T1, T]:
+    ...
+
+
+@t.overload
+def curry_right(
+    func: t.Callable[[T1, T2, T3], T], arity: t.Union[int, None] = None
+) -> CurryRightThree[T3, T2, T1, T]:
+    ...
+
+
+@t.overload
+def curry_right(
+    func: t.Callable[[T1, T2, T3, T4], T], arity: t.Union[int, None] = None
+) -> CurryRightFour[T4, T3, T2, T1, T]:
+    ...
+
+
+@t.overload
+def curry_right(func: t.Callable[[T1, T2, T3, T4, T5], T]) -> CurryRightFive[T5, T4, T3, T2, T1, T]:
+    ...
+
+
 def curry_right(func, arity=None):
     """
     This method is like :func:`curry` except that arguments are applied to `func` in the manner of
@@ -576,7 +875,9 @@ def curry_right(func, arity=None):
     return CurryRight(func, arity)
 
 
-def debounce(func, wait, max_wait=False):
+def debounce(
+    func: t.Callable[P, T], wait: int, max_wait: t.Union[int, Literal[False]] = False
+) -> Debounce[P, T]:
     """
     Creates a function that will delay the execution of `func` until after `wait` milliseconds have
     elapsed since the last time it was invoked. Subsequent calls to the debounced function will
@@ -595,7 +896,7 @@ def debounce(func, wait, max_wait=False):
     return Debounce(func, wait, max_wait=max_wait)
 
 
-def delay(func, wait, *args, **kwargs):
+def delay(func: t.Callable[P, T], wait: int, *args: "P.args", **kwargs: "P.kwargs") -> T:
     """
     Executes the `func` function after `wait` milliseconds. Additional arguments will be provided to
     `func` when it is invoked.
@@ -615,7 +916,7 @@ def delay(func, wait, *args, **kwargs):
     return func(*args, **kwargs)
 
 
-def disjoin(*funcs):
+def disjoin(*funcs: t.Callable[[T], t.Any]) -> Disjoin[T]:
     """
     Creates a function that composes multiple predicate functions into a single predicate that tests
     whether **any** elements of an object pass each predicate.
@@ -642,7 +943,32 @@ def disjoin(*funcs):
     return Disjoin(*funcs)
 
 
-def flip(func):
+@t.overload
+def flip(func: t.Callable[[T1, T2, T3, T4, T5], T]) -> t.Callable[[T5, T4, T3, T2, T1], T]:
+    ...
+
+
+@t.overload
+def flip(func: t.Callable[[T1, T2, T3, T4], T]) -> t.Callable[[T4, T3, T2, T1], T]:
+    ...
+
+
+@t.overload
+def flip(func: t.Callable[[T1, T2, T3], T]) -> t.Callable[[T3, T2, T1], T]:
+    ...
+
+
+@t.overload
+def flip(func: t.Callable[[T1, T2], T]) -> t.Callable[[T2, T1], T]:
+    ...
+
+
+@t.overload
+def flip(func: t.Callable[[T1], T]) -> t.Callable[[T1], T]:
+    ...
+
+
+def flip(func: t.Callable) -> t.Callable:
     """
     Creates a function that invokes the method with arguments reversed.
 
@@ -664,6 +990,46 @@ def flip(func):
     .. versionadded:: 4.0.0
     """
     return Flip(func)
+
+
+@t.overload
+def flow(
+    func1: t.Callable[P, T2],
+    func2: t.Callable[[T2], T3],
+    func3: t.Callable[[T3], T4],
+    func4: t.Callable[[T4], T5],
+    func5: t.Callable[[T5], T],
+) -> Flow[P, T]:
+    ...
+
+
+@t.overload
+def flow(
+    func1: t.Callable[P, T2],
+    func2: t.Callable[[T2], T3],
+    func3: t.Callable[[T3], T4],
+    func4: t.Callable[[T4], T],
+) -> Flow[P, T]:
+    ...
+
+
+@t.overload
+def flow(
+    func1: t.Callable[P, T2],
+    func2: t.Callable[[T2], T3],
+    func3: t.Callable[[T3], T],
+) -> Flow[P, T]:
+    ...
+
+
+@t.overload
+def flow(func1: t.Callable[P, T2], func2: t.Callable[[T2], T]) -> Flow[P, T]:
+    ...
+
+
+@t.overload
+def flow(func1: t.Callable[P, T]) -> Flow[P, T]:
+    ...
 
 
 def flow(*funcs):
@@ -696,6 +1062,46 @@ def flow(*funcs):
         Removed alias ``pipe``.
     """
     return Flow(*funcs, from_right=False)
+
+
+@t.overload
+def flow_right(
+    func5: t.Callable[[T4], T],
+    func4: t.Callable[[T3], T4],
+    func3: t.Callable[[T2], T3],
+    func2: t.Callable[[T1], T2],
+    func1: t.Callable[P, T1],
+) -> Flow[P, T]:
+    ...
+
+
+@t.overload
+def flow_right(
+    func4: t.Callable[[T3], T],
+    func3: t.Callable[[T2], T3],
+    func2: t.Callable[[T1], T2],
+    func1: t.Callable[P, T1],
+) -> Flow[P, T]:
+    ...
+
+
+@t.overload
+def flow_right(
+    func3: t.Callable[[T2], T],
+    func2: t.Callable[[T1], T2],
+    func1: t.Callable[P, T1],
+) -> Flow[P, T]:
+    ...
+
+
+@t.overload
+def flow_right(func2: t.Callable[[T1], T], func1: t.Callable[P, T1]) -> Flow[P, T]:
+    ...
+
+
+@t.overload
+def flow_right(func1: t.Callable[P, T]) -> Flow[P, T]:
+    ...
 
 
 def flow_right(*funcs):
@@ -733,7 +1139,7 @@ def flow_right(*funcs):
     return Flow(*funcs, from_right=True)
 
 
-def iterated(func):
+def iterated(func: t.Callable[[T], T]) -> Iterated[T]:
     """
     Creates a function that is composed with itself. Each call to the iterated function uses the
     previous function call's result as input. Returned :class:`Iterated` instance can be called with
@@ -759,7 +1165,7 @@ def iterated(func):
     return Iterated(func)
 
 
-def juxtapose(*funcs):
+def juxtapose(*funcs: t.Callable[P, T]) -> Juxtapose[P, T]:
     """
     Creates a function whose return value is a list of the results of calling each `funcs` with the
     supplied arguments.
@@ -784,7 +1190,7 @@ def juxtapose(*funcs):
     return Juxtapose(*funcs)
 
 
-def negate(func):
+def negate(func: t.Callable[P, t.Any]) -> Negate[P]:
     """
     Creates a function that negates the result of the predicate `func`. The `func` function is
     executed with the arguments of the created function.
@@ -808,7 +1214,7 @@ def negate(func):
     return Negate(func)
 
 
-def once(func):
+def once(func: t.Callable[P, T]) -> Once[P, T]:
     """
     Creates a function that is restricted to execute `func` once. Repeat calls to the function will
     return the value of the first call.
@@ -832,7 +1238,57 @@ def once(func):
     return Once(func)
 
 
-def over_args(func, *transforms):
+@t.overload
+def over_args(
+    func: t.Callable[[T1, T2, T3, T4, T5], T],
+    transform_one: t.Callable[[T1], T1],
+    transform_two: t.Callable[[T2], T2],
+    transform_three: t.Callable[[T3], T3],
+    transform_four: t.Callable[[T4], T4],
+    transform_five: t.Callable[[T5], T5],
+) -> t.Callable[[T1, T2, T3, T4, T5], T]:
+    ...
+
+
+@t.overload
+def over_args(
+    func: t.Callable[[T1, T2, T3, T4], T],
+    transform_one: t.Callable[[T1], T1],
+    transform_two: t.Callable[[T2], T2],
+    transform_three: t.Callable[[T3], T3],
+    transform_four: t.Callable[[T4], T4],
+) -> t.Callable[[T1, T2, T3, T4], T]:
+    ...
+
+
+@t.overload
+def over_args(
+    func: t.Callable[[T1, T2, T3], T],
+    transform_one: t.Callable[[T1], T1],
+    transform_two: t.Callable[[T2], T2],
+    transform_three: t.Callable[[T3], T3],
+) -> t.Callable[[T1, T2, T3], T]:
+    ...
+
+
+@t.overload
+def over_args(
+    func: t.Callable[[T1, T2], T],
+    transform_one: t.Callable[[T1], T1],
+    transform_two: t.Callable[[T2], T2],
+) -> t.Callable[[T1, T2], T]:
+    ...
+
+
+@t.overload
+def over_args(
+    func: t.Callable[[T1], T],
+    transform_one: t.Callable[[T1], T1],
+) -> t.Callable[[T1], T]:
+    ...
+
+
+def over_args(func: t.Callable, *transforms: t.Callable) -> t.Callable:  # type: ignore
     """
     Creates a function that runs each argument through a corresponding transform function.
 
@@ -860,7 +1316,7 @@ def over_args(func, *transforms):
     return OverArgs(func, *transforms)
 
 
-def partial(func, *args, **kwargs):
+def partial(func: t.Callable[..., T], *args: t.Any, **kwargs: t.Any) -> Partial[T]:
     """
     Creates a function that, when called, invokes `func` with any additional partial arguments
     prepended to those provided to the new function.
@@ -889,7 +1345,7 @@ def partial(func, *args, **kwargs):
     return Partial(func, args, kwargs)
 
 
-def partial_right(func, *args, **kwargs):
+def partial_right(func: t.Callable[..., T], *args: t.Any, **kwargs: t.Any) -> Partial[T]:
     """
     This method is like :func:`partial` except that partial arguments are appended to those provided
     to the new function.
@@ -913,7 +1369,7 @@ def partial_right(func, *args, **kwargs):
     return Partial(func, args, kwargs, from_right=True)
 
 
-def rearg(func, *indexes):
+def rearg(func: t.Callable[P, T], *indexes: int) -> Rearg[P, T]:
     """
     Creates a function that invokes `func` with arguments arranged according to the specified
     indexes where the argument value at the first index is provided as the first argument, the
@@ -939,7 +1395,7 @@ def rearg(func, *indexes):
     return Rearg(func, *indexes)
 
 
-def spread(func):
+def spread(func: t.Callable[..., T]) -> Spread[T]:
     """
     Creates a function that invokes `func` with the array of arguments provided to the created
     function.
@@ -961,7 +1417,7 @@ def spread(func):
     return Spread(func)
 
 
-def throttle(func, wait):
+def throttle(func: t.Callable[P, T], wait: int) -> Throttle[P, T]:
     """
     Creates a function that, when executed, will only call the `func` function at most once per
     every `wait` milliseconds. Subsequent calls to the throttled function will return the result of
@@ -979,7 +1435,7 @@ def throttle(func, wait):
     return Throttle(func, wait)
 
 
-def unary(func):
+def unary(func: t.Callable[..., T]) -> Ary[T]:
     """
     Creates a function that accepts up to one argument, ignoring any additional arguments.
 
@@ -1003,7 +1459,7 @@ def unary(func):
     return Ary(func, 1)
 
 
-def wrap(value, func):
+def wrap(value: T1, func: t.Callable[Concatenate[T1, P], T]) -> Partial[T]:
     """
     Creates a function that provides value to the wrapper function as its first argument. Additional
     arguments provided to the function are appended to those provided to the wrapper function.

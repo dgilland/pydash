@@ -12,7 +12,12 @@ import pydash as pyd
 
 
 #: Singleton object that differentiates between an explicit ``None`` value and an unset value.
-UNSET = object()
+#: As a class so it has its own type
+class Unset:
+    ...
+
+
+UNSET = Unset()
 
 #: Tuple of number types.
 NUMBER_TYPES = (int, float, Decimal)

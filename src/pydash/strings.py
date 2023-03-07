@@ -8,12 +8,14 @@ import html
 import math
 import re
 import typing
+import typing as t
 import unicodedata
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import pydash as pyd
 
-from .helpers import UNSET
+from .helpers import UNSET, Unset
+from .types import NumberT
 
 
 __all__ = (
@@ -85,6 +87,9 @@ __all__ = (
     "words",
 )
 
+T = t.TypeVar("T")
+T2 = t.TypeVar("T2")
+
 
 class JSRegExp:
     """
@@ -93,7 +98,7 @@ class JSRegExp:
     Converts a Javascript-style regular expression to the equivalent Python version.
     """
 
-    def __init__(self, reg_exp):
+    def __init__(self, reg_exp: str) -> None:
         pattern, options = reg_exp[1:].rsplit("/", 1)
 
         self._global = "g" in options
@@ -102,7 +107,7 @@ class JSRegExp:
         flags = re.I if self._ignore_case else 0
         self.pattern = re.compile(pattern, flags=flags)
 
-    def find(self, text):
+    def find(self, text: str) -> t.List[str]:
         """Return list of regular expression matches."""
         if self._global:
             results = self.pattern.findall(text)
@@ -114,7 +119,7 @@ class JSRegExp:
                 results = []
         return results
 
-    def replace(self, text, repl):
+    def replace(self, text: str, repl: t.Union[str, t.Callable[[re.Match], str]]) -> str:
         """Replace parts of text that match the regular expression."""
         count = 0 if self._global else 1
         return self.pattern.sub(repl, text, count=count)
@@ -281,7 +286,7 @@ RE_APOS = re.compile(RS_APOS)
 RE_HTML_TAGS = re.compile(r"<\/?[^>]+>")
 
 
-def camel_case(text):
+def camel_case(text: t.Any) -> str:
     """
     Converts `text` to camel case.
 
@@ -305,7 +310,7 @@ def camel_case(text):
     return text[:1].lower() + text[1:]
 
 
-def capitalize(text, strict=True):
+def capitalize(text: t.Any, strict: bool = True) -> str:
     """
     Capitalizes the first character of `text`.
 
@@ -332,7 +337,7 @@ def capitalize(text, strict=True):
     return text.capitalize() if strict else text[:1].upper() + text[1:]
 
 
-def chars(text):
+def chars(text: t.Any) -> t.List[str]:
     """
     Split `text` into a list of single characters.
 
@@ -352,7 +357,7 @@ def chars(text):
     return list(pyd.to_string(text))
 
 
-def chop(text, step):
+def chop(text: t.Any, step: int) -> t.List[str]:
     """
     Break up `text` into intervals of length `step`.
 
@@ -383,7 +388,7 @@ def chop(text, step):
     return chopped
 
 
-def chop_right(text, step):
+def chop_right(text: t.Any, step: int) -> t.List[str]:
     """
     Like :func:`chop` except `text` is chopped from right.
 
@@ -415,7 +420,7 @@ def chop_right(text, step):
     return chopped
 
 
-def clean(text):
+def clean(text: t.Any) -> str:
     """
     Trim and replace multiple spaces with a single space.
 
@@ -436,7 +441,7 @@ def clean(text):
     return " ".join(pyd.compact(text.split()))
 
 
-def count_substr(text, subtext):
+def count_substr(text: t.Any, subtext: t.Any) -> int:
     """
     Count the occurrences of `subtext` in `text`.
 
@@ -463,7 +468,7 @@ def count_substr(text, subtext):
     return text.count(subtext)
 
 
-def deburr(text):
+def deburr(text: t.Any) -> str:
     """
     Deburrs `text` by converting latin-1 supplementary letters to basic latin letters.
 
@@ -488,7 +493,7 @@ def deburr(text):
     )
 
 
-def decapitalize(text):
+def decapitalize(text: t.Any) -> str:
     """
     Decaptitalizes the first character of `text`.
 
@@ -509,7 +514,7 @@ def decapitalize(text):
     return text[:1].lower() + text[1:]
 
 
-def ends_with(text, target, position=None):
+def ends_with(text: t.Any, target: t.Any, position: t.Union[int, None] = None) -> bool:
     """
     Checks if `text` ends with a given target string.
 
@@ -539,7 +544,7 @@ def ends_with(text, target, position=None):
     return text[:position].endswith(target)
 
 
-def ensure_ends_with(text, suffix):
+def ensure_ends_with(text: t.Any, suffix: t.Any) -> str:
     """
     Append a given suffix to a string, but only if the source string does not end with that suffix.
 
@@ -567,7 +572,7 @@ def ensure_ends_with(text, suffix):
     return f"{text}{suffix}"
 
 
-def ensure_starts_with(text, prefix):
+def ensure_starts_with(text: t.Any, prefix: t.Any) -> str:
     """
     Prepend a given prefix to a string, but only if the source string does not start with that
     prefix.
@@ -596,7 +601,7 @@ def ensure_starts_with(text, prefix):
     return f"{prefix}{text}"
 
 
-def escape(text):
+def escape(text: t.Any) -> str:
     r"""
     Converts the characters ``&``, ``<``, ``>``, ``"``, ``'``, and ``\``` in `text` to their
     corresponding HTML entities.
@@ -623,7 +628,7 @@ def escape(text):
     return "".join(HTML_ESCAPES.get(char, char) for char in text)
 
 
-def escape_reg_exp(text):
+def escape_reg_exp(text: t.Any) -> str:
     """
     Escapes the RegExp special characters in `text`.
 
@@ -647,7 +652,7 @@ def escape_reg_exp(text):
     return re.escape(text)
 
 
-def has_substr(text, subtext):
+def has_substr(text: t.Any, subtext: t.Any) -> bool:
     """
     Returns whether `subtext` is included in `text`.
 
@@ -672,7 +677,7 @@ def has_substr(text, subtext):
     return text.find(subtext) >= 0
 
 
-def human_case(text):
+def human_case(text: t.Any) -> str:
     """
     Converts `text` to human case which has only the first letter capitalized and each word
     separated by a space.
@@ -705,7 +710,7 @@ def human_case(text):
     )
 
 
-def insert_substr(text, index, subtext):
+def insert_substr(text: t.Any, index: int, subtext: t.Any) -> str:
     """
     Insert `subtext` in `text` starting at position `index`.
 
@@ -729,7 +734,7 @@ def insert_substr(text, index, subtext):
     return text[:index] + subtext + text[index:]
 
 
-def join(array, separator=""):
+def join(array: t.Iterable[t.Any], separator: t.Any = "") -> str:
     """
     Joins an iterable into a string using `separator` between each element.
 
@@ -757,7 +762,7 @@ def join(array, separator=""):
     return pyd.to_string(separator).join(pyd.map_(array or (), pyd.to_string))
 
 
-def kebab_case(text):
+def kebab_case(text: t.Any) -> str:
     """
     Converts `text` to kebab case (a.k.a. spinal case).
 
@@ -780,7 +785,7 @@ def kebab_case(text):
     return "-".join(word.lower() for word in compounder(text) if word)
 
 
-def lines(text):
+def lines(text: t.Any) -> t.List[str]:
     r"""
     Split lines in `text` into an array.
 
@@ -801,7 +806,7 @@ def lines(text):
     return text.splitlines()
 
 
-def lower_case(text):
+def lower_case(text: t.Any) -> str:
     """
     Converts string to lower case as space separated words.
 
@@ -828,7 +833,7 @@ def lower_case(text):
     return " ".join(compounder(text)).lower()
 
 
-def lower_first(text):
+def lower_first(text: str) -> str:
     """
     Converts the first character of string to lower case.
 
@@ -854,7 +859,9 @@ def lower_first(text):
     return text[:1].lower() + text[1:]
 
 
-def number_format(number, scale=0, decimal_separator=".", order_separator=","):
+def number_format(
+    number: NumberT, scale: int = 0, decimal_separator: str = ".", order_separator: str = ","
+) -> str:
     """
     Format a number to scale with custom decimal and order separators.
 
@@ -896,7 +903,7 @@ def number_format(number, scale=0, decimal_separator=".", order_separator=","):
     return text
 
 
-def pad(text, length, chars=" "):
+def pad(text: t.Any, length: int, chars: t.Any = " ") -> str:
     """
     Pads `text` on the left and right sides if it is shorter than the given padding length. The
     `chars` string may be truncated if the number of padding characters can't be evenly divided by
@@ -939,7 +946,7 @@ def pad(text, length, chars=" "):
     return chars[:left_len] + text + chars
 
 
-def pad_end(text, length, chars=" "):
+def pad_end(text: t.Any, length: int, chars: t.Any = " ") -> str:
     """
     Pads `text` on the right side if it is shorter than the given padding length. The `chars` string
     may be truncated if the number of padding characters can't be evenly divided by the padding
@@ -971,7 +978,7 @@ def pad_end(text, length, chars=" "):
     return (text + repeat(chars, length))[:length]
 
 
-def pad_start(text, length, chars=" "):
+def pad_start(text: t.Any, length: int, chars: t.Any = " ") -> str:
     """
     Pads `text` on the left side if it is shorter than the given padding length. The `chars` string
     may be truncated if the number of padding characters can't be evenly divided by the padding
@@ -1003,7 +1010,7 @@ def pad_start(text, length, chars=" "):
     return (repeat(chars, length) + text)[-length:]
 
 
-def pascal_case(text, strict=True):
+def pascal_case(text: t.Any, strict: bool = True) -> str:
     """
     Like :func:`camel_case` except the first letter is capitalized.
 
@@ -1034,7 +1041,7 @@ def pascal_case(text, strict=True):
     return capitalize(camel_case(text), strict=False)
 
 
-def predecessor(char):
+def predecessor(char: t.Any) -> str:
     """
     Return the predecessor character of `char`.
 
@@ -1059,7 +1066,7 @@ def predecessor(char):
     return chr(ord(char) - 1)
 
 
-def prune(text, length=0, omission="..."):
+def prune(text: t.Any, length: int = 0, omission: str = "...") -> str:
     """
     Like :func:`truncate` except it ensures that the pruned string doesn't exceed the original
     length, i.e., it avoids half-chopped words when truncating. If the pruned text + `omission` text
@@ -1120,7 +1127,7 @@ def prune(text, length=0, omission="..."):
     return text
 
 
-def quote(text, quote_char='"'):
+def quote(text: t.Any, quote_char: t.Any = '"') -> str:
     """
     Quote a string with another string.
 
@@ -1143,7 +1150,7 @@ def quote(text, quote_char='"'):
     return surround(text, quote_char)
 
 
-def reg_exp_js_match(text, reg_exp):
+def reg_exp_js_match(text: t.Any, reg_exp: str) -> t.List[str]:
     """
     Return list of matches using Javascript style regular expression.
 
@@ -1177,7 +1184,9 @@ def reg_exp_js_match(text, reg_exp):
     return JSRegExp(reg_exp).find(text)
 
 
-def reg_exp_js_replace(text, reg_exp, repl):
+def reg_exp_js_replace(
+    text: t.Any, reg_exp: str, repl: t.Union[str, t.Callable[[re.Match], str]]
+) -> str:
     """
     Replace `text` with `repl` using Javascript style regular expression to find matches.
 
@@ -1214,7 +1223,13 @@ def reg_exp_js_replace(text, reg_exp, repl):
     return JSRegExp(reg_exp).replace(text, repl)
 
 
-def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
+def reg_exp_replace(
+    text: t.Any,
+    pattern: t.Any,
+    repl: t.Union[str, t.Callable[[re.Match], str]],
+    ignore_case: bool = False,
+    count: int = 0,
+) -> str:
     """
     Replace occurrences of regex `pattern` with `repl` in `text`. Optionally, ignore case when
     replacing. Optionally, set `count` to limit number of replacements.
@@ -1252,7 +1267,7 @@ def reg_exp_replace(text, pattern, repl, ignore_case=False, count=0):
     return replace(text, pattern, repl, ignore_case=ignore_case, count=count, escape=False)
 
 
-def repeat(text, n=0):
+def repeat(text: t.Any, n: t.SupportsInt = 0) -> str:
     """
     Repeats the given string `n` times.
 
@@ -1274,8 +1289,15 @@ def repeat(text, n=0):
 
 
 def replace(
-    text, pattern, repl, ignore_case=False, count=0, escape=True, from_start=False, from_end=False
-):
+    text: t.Any,
+    pattern: t.Any,
+    repl: t.Union[str, t.Callable[[re.Match], str]],
+    ignore_case: bool = False,
+    count: int = 0,
+    escape: bool = True,
+    from_start: bool = False,
+    from_end: bool = False,
+) -> str:
     """
     Replace occurrences of `pattern` with `repl` in `text`. Optionally, ignore case when replacing.
     Optionally, set `count` to limit number of replacements.
@@ -1346,7 +1368,13 @@ def replace(
     return pat.sub(repl, text, count=count)
 
 
-def replace_end(text, pattern, repl, ignore_case=False, escape=True):
+def replace_end(
+    text: t.Any,
+    pattern: t.Any,
+    repl: t.Union[str, t.Callable[[re.Match], str]],
+    ignore_case: bool = False,
+    escape: bool = True,
+) -> str:
     """
     Like :func:`replace` except it only replaces `text` with `repl` if `pattern` mathces the end of
     `text`.
@@ -1375,7 +1403,13 @@ def replace_end(text, pattern, repl, ignore_case=False, escape=True):
     return replace(text, pattern, repl, ignore_case=ignore_case, escape=escape, from_end=True)
 
 
-def replace_start(text, pattern, repl, ignore_case=False, escape=True):
+def replace_start(
+    text: t.Any,
+    pattern: t.Any,
+    repl: t.Union[str, t.Callable[[re.Match], str]],
+    ignore_case: bool = False,
+    escape: bool = True,
+) -> str:
     """
     Like :func:`replace` except it only replaces `text` with `repl` if `pattern` mathces the start
     of `text`.
@@ -1404,7 +1438,7 @@ def replace_start(text, pattern, repl, ignore_case=False, escape=True):
     return replace(text, pattern, repl, ignore_case=ignore_case, escape=escape, from_start=True)
 
 
-def separator_case(text, separator):
+def separator_case(text: t.Any, separator: str) -> str:
     """
     Splits `text` on words and joins with `separator`.
 
@@ -1428,7 +1462,12 @@ def separator_case(text, separator):
     return separator.join(word.lower() for word in words(text) if word)
 
 
-def series_phrase(items, separator=", ", last_separator=" and ", serial=False):
+def series_phrase(
+    items: t.List[t.Any],
+    separator: t.Any = ", ",
+    last_separator: t.Any = " and ",
+    serial: bool = False,
+) -> str:
     """
     Join items into a grammatical series phrase, e.g., ``"item1, item2, item3 and item4"``.
 
@@ -1469,7 +1508,9 @@ def series_phrase(items, separator=", ", last_separator=" and ", serial=False):
     return separator.join(items)
 
 
-def series_phrase_serial(items, separator=", ", last_separator=" and "):
+def series_phrase_serial(
+    items: t.List[t.Any], separator: t.Any = ", ", last_separator: t.Any = " and "
+) -> str:
     """
     Join items into a grammatical series phrase using a serial separator, e.g., ``"item1, item2,
     item3, and item4"``.
@@ -1492,7 +1533,7 @@ def series_phrase_serial(items, separator=", ", last_separator=" and "):
     return series_phrase(items, separator, last_separator, serial=True)
 
 
-def slugify(text, separator="-"):
+def slugify(text: t.Any, separator: str = "-") -> str:
     """
     Convert `text` into an ASCII slug which can be used safely in URLs. Incoming `text` is converted
     to unicode and noramlzied using the ``NFKD`` form. This results in some accented characters
@@ -1526,7 +1567,7 @@ def slugify(text, separator="-"):
     return separator_case(normalized, separator)
 
 
-def snake_case(text):
+def snake_case(text: t.Any) -> str:
     """
     Converts `text` to snake case.
 
@@ -1552,7 +1593,7 @@ def snake_case(text):
     return "_".join(word.lower() for word in compounder(text) if word)
 
 
-def split(text, separator=UNSET):
+def split(text: t.Any, separator: t.Union[str, Unset, None] = UNSET) -> t.List[str]:
     """
     Splits `text` on `separator`. If `separator` not provided, then `text` is split on whitespace.
     If `separator` is falsey, then `text` is split on every character.
@@ -1591,7 +1632,7 @@ def split(text, separator=UNSET):
     return ret
 
 
-def start_case(text):
+def start_case(text: t.Any) -> str:
     """
     Convert `text` to start case.
 
@@ -1614,7 +1655,7 @@ def start_case(text):
     return " ".join(capitalize(word, strict=False) for word in compounder(text))
 
 
-def starts_with(text, target, position=0):
+def starts_with(text: t.Any, target: t.Any, position: int = 0) -> bool:
     """
     Checks if `text` starts with a given target string.
 
@@ -1642,7 +1683,7 @@ def starts_with(text, target, position=0):
     return text[position:].startswith(target)
 
 
-def strip_tags(text):
+def strip_tags(text: t.Any) -> str:
     """
     Removes all HTML tags from `text`.
 
@@ -1662,7 +1703,7 @@ def strip_tags(text):
     return RE_HTML_TAGS.sub("", pyd.to_string(text))
 
 
-def substr_left(text, subtext):
+def substr_left(text: t.Any, subtext: str) -> str:
     """
     Searches `text` from left-to-right for `subtext` and returns a substring consisting of the
     characters in `text` that are to the left of `subtext` or all string if no match found.
@@ -1685,7 +1726,7 @@ def substr_left(text, subtext):
     return text.partition(subtext)[0] if subtext else text
 
 
-def substr_left_end(text, subtext):
+def substr_left_end(text: t.Any, subtext: str) -> str:
     """
     Searches `text` from right-to-left for `subtext` and returns a substring consisting of the
     characters in `text` that are to the left of `subtext` or all string if no match found.
@@ -1708,7 +1749,7 @@ def substr_left_end(text, subtext):
     return text.rpartition(subtext)[0] or text if subtext else text
 
 
-def substr_right(text, subtext):
+def substr_right(text: t.Any, subtext: str) -> str:
     """
     Searches `text` from right-to-left for `subtext` and returns a substring consisting of the
     characters in `text` that are to the right of `subtext` or all string if no match found.
@@ -1731,7 +1772,7 @@ def substr_right(text, subtext):
     return text.partition(subtext)[2] or text if subtext else text
 
 
-def substr_right_end(text, subtext):
+def substr_right_end(text: t.Any, subtext: str) -> str:
     """
     Searches `text` from left-to-right for `subtext` and returns a substring consisting of the
     characters in `text` that are to the right of `subtext` or all string if no match found.
@@ -1754,7 +1795,7 @@ def substr_right_end(text, subtext):
     return text.rpartition(subtext)[2] if subtext else text
 
 
-def successor(char):
+def successor(char: t.Any) -> str:
     """
     Return the successor character of `char`.
 
@@ -1779,7 +1820,7 @@ def successor(char):
     return chr(ord(char) + 1)
 
 
-def surround(text, wrapper):
+def surround(text: t.Any, wrapper: t.Any) -> str:
     """
     Surround a string with another string.
 
@@ -1804,7 +1845,7 @@ def surround(text, wrapper):
     return f"{wrapper}{text}{wrapper}"
 
 
-def swap_case(text):
+def swap_case(text: t.Any) -> str:
     """
     Swap case of `text` characters.
 
@@ -1825,7 +1866,7 @@ def swap_case(text):
     return text.swapcase()
 
 
-def title_case(text):
+def title_case(text: t.Any) -> str:
     """
     Convert `text` to title case.
 
@@ -1847,7 +1888,7 @@ def title_case(text):
     return " ".join(word.capitalize() for word in re.split(" ", text))
 
 
-def to_lower(text):
+def to_lower(text: t.Any) -> str:
     """
     Converts the given :attr:`text` to lower text.
 
@@ -1871,7 +1912,7 @@ def to_lower(text):
     return pyd.to_string(text).lower()
 
 
-def to_upper(text):
+def to_upper(text: t.Any) -> str:
     """
     Converts the given :attr:`text` to upper text.
 
@@ -1895,7 +1936,7 @@ def to_upper(text):
     return pyd.to_string(text).upper()
 
 
-def trim(text, chars=None):
+def trim(text: t.Any, chars: t.Union[str, None] = None) -> str:
     r"""
     Removes leading and trailing whitespace or specified characters from `text`.
 
@@ -1918,7 +1959,7 @@ def trim(text, chars=None):
     return text.strip(chars)
 
 
-def trim_end(text, chars=None):
+def trim_end(text: t.Any, chars: t.Union[str, None] = None) -> str:
     r"""
     Removes trailing whitespace or specified characters from `text`.
 
@@ -1943,7 +1984,7 @@ def trim_end(text, chars=None):
     return text.rstrip(chars)
 
 
-def trim_start(text, chars=None):
+def trim_start(text: t.Any, chars: t.Union[str, None] = None) -> str:
     r"""
     Removes leading  whitespace or specified characters from `text`.
 
@@ -1968,7 +2009,12 @@ def trim_start(text, chars=None):
     return text.lstrip(chars)
 
 
-def truncate(text, length=30, omission="...", separator=None):
+def truncate(
+    text: t.Any,
+    length: int = 30,
+    omission: str = "...",
+    separator: t.Union[str, re.Pattern, None] = None,
+) -> str:
     """
     Truncates `text` if it is longer than the given maximum string length. The last characters of
     the truncated string are replaced with the omission string which defaults to ``...``.
@@ -2022,7 +2068,7 @@ def truncate(text, length=30, omission="...", separator=None):
     return text[:trunc_len] + omission
 
 
-def unescape(text):
+def unescape(text: t.Any) -> str:
     """
     The inverse of :func:`escape`. This method converts the HTML entities ``&amp;``, ``&lt;``,
     ``&gt;``, ``&quot;``, ``&#39;``, and ``&#96;`` in `text` to their corresponding characters.
@@ -2048,7 +2094,7 @@ def unescape(text):
     return html.unescape(text)
 
 
-def upper_case(text):
+def upper_case(text: t.Any) -> str:
     """
     Converts string to upper case, as space separated words.
 
@@ -2075,7 +2121,7 @@ def upper_case(text):
     return " ".join(compounder(text)).upper()
 
 
-def upper_first(text):
+def upper_first(text: str) -> str:
     """
     Converts the first character of string to upper case.
 
@@ -2101,7 +2147,7 @@ def upper_first(text):
     return text[:1].upper() + text[1:]
 
 
-def unquote(text, quote_char='"'):
+def unquote(text: t.Any, quote_char: t.Any = '"') -> str:
     """
     Unquote `text` by removing `quote_char` if `text` begins and ends with it.
 
@@ -2134,7 +2180,7 @@ def unquote(text, quote_char='"'):
     return text
 
 
-def url(*paths, **params):
+def url(*paths: t.Any, **params: t.Any) -> str:
     """
     Combines a series of URL paths into a single URL. Optionally, pass in keyword arguments to
     append query parameters.
@@ -2176,7 +2222,7 @@ def url(*paths, **params):
     return urlunsplit((scheme, netloc, path, query, fragment))
 
 
-def words(text, pattern=None):
+def words(text: t.Any, pattern: t.Union[str, None] = None) -> t.List[str]:
     """
     Return list of words contained in `text`.
 
@@ -2280,7 +2326,12 @@ def delimitedpathjoin(delimiter, *paths):
     return path
 
 
-def flatten_url_params(params):
+def flatten_url_params(
+    params: t.Union[
+        t.Dict[T, t.Union[T2, t.Iterable[T2]]],
+        t.List[t.Tuple[T, t.Union[T2, t.Iterable[T2]]]],
+    ],
+) -> t.List[t.Tuple[T, T2]]:
     """
     Flatten URL params into list of tuples. If any param value is a list or tuple, then map each
     value to the param key.
@@ -2293,7 +2344,7 @@ def flatten_url_params(params):
     if isinstance(params, dict):
         params = list(params.items())
 
-    flattened = []
+    flattened: t.List = []
     for param, value in params:
         if isinstance(value, (list, tuple)):
             flattened += zip([param] * len(value), value)

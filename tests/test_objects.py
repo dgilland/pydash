@@ -13,6 +13,8 @@ parametrize = pytest.mark.parametrize
 
 today = dt.date.today()
 
+SomeNamedTuple = namedtuple("SomeNamedTuple", ["a", "b"])
+
 
 @parametrize(
     "case,expected",
@@ -358,9 +360,9 @@ def test_for_in_right(case, expected):
         ),
         (({"one": ["hello", "there"]}, "one.bad.hello", []), []),
         (({"one": ["hello", None]}, "one.1.hello"), None),
-        ((namedtuple("a", ["a", "b"])(1, 2), "a"), 1),
-        ((namedtuple("a", ["a", "b"])(1, 2), 0), 1),
-        ((namedtuple("a", ["a", "b"])({"c": {"d": 1}}, 2), "a.c.d"), 1),
+        ((SomeNamedTuple(1, 2), "a"), 1),
+        ((SomeNamedTuple(1, 2), 0), 1),
+        ((SomeNamedTuple({"c": {"d": 1}}, 2), "a.c.d"), 1),
         (({}, "update"), None),
         (([], "extend"), None),
         (({(1,): {(2,): 3}}, (1,)), {(2,): 3}),
@@ -385,7 +387,7 @@ def test_get__should_not_populate_defaultdict():
     "obj,path",
     [
         (helpers.Object(), "__init__.__globals__"),
-        (namedtuple("a", ["a"])(a=1), "__globals__"),
+        (SomeNamedTuple(1, 2), "__globals__"),
         (helpers.Object(subobj=helpers.Object()), "subobj.__builtins__"),
         (helpers.Object(subobj=helpers.Object()), "__builtins__"),
     ],

@@ -1,0 +1,26 @@
+import typing as t
+
+from typing_extensions import Protocol
+
+
+if t.TYPE_CHECKING:
+    from decimal import Decimal
+
+IterateeObjT = t.Union[int, str, t.List, t.Tuple, t.Dict]
+NumberT = t.Union[float, int, "Decimal"]
+NumberNoDecimalT = t.Union[float, int]
+PathT = t.Union[t.Hashable, t.List[t.Hashable]]
+
+
+_T_co = t.TypeVar("_T_co", covariant=True)
+_T_contra = t.TypeVar("_T_contra", contravariant=True)
+
+
+class SupportsMul(Protocol[_T_contra, _T_co]):
+    def __mul__(self, x: _T_contra) -> _T_co:
+        ...
+
+
+class SupportsRound(Protocol[_T_co]):
+    def __round__(self) -> _T_co:
+        ...
