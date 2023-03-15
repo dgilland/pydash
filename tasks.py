@@ -176,5 +176,5 @@ def generate_chaining_types(ctx) -> None:
     """Generates `all_funcs.pyi` stub file that types the chaining interface."""
     run(
         "python scripts/chaining_type_generator.py"
-        " AllFuncs src/pydash/chaining/all_funcs.pyi Chain"
+        " --class_name AllFuncs --output src/pydash/chaining/all_funcs.pyi --wrapper Chain"
     )

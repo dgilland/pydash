@@ -218,17 +218,20 @@ def filename_from_module(module: str) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "class_name",
+        "--class_name",
         help="Name of the output class to put typed methods in",
+        required=True,
     )
     parser.add_argument(
-        "output",
+        "--output",
         type=Path,
         help="Path to the file to write the typed class to (probably a `.pyi` file)",
+        required=True,
     )
     parser.add_argument(
-        "wrapper",
+        "--wrapper",
         help="The main generic class (eg. `Chain`)",
+        required=True,
     )
     args = parser.parse_args()
 
