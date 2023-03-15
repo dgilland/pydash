@@ -2205,7 +2205,8 @@ def url(*paths: t.Any, **params: t.Any) -> str:
 
     .. versionadded:: 2.2.0
     """
-    paths = pyd.chain(paths).flatten_deep().map(pyd.to_string).value()
+    # allow reassignment different type
+    paths = pyd.chain(paths).flatten_deep().map(pyd.to_string).value()  # type: ignore
     paths_list = []
     params_list = flatten_url_params(params)
 

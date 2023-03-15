@@ -9,17 +9,42 @@ import pydash
 WRAPPER_KW = "RES"
 INIT_FILE = "src/pydash/__init__.py"
 BASE_MODULE = """
+# mypy: disable-error-code=misc
 '''Generated from the `scripts/chaining_type_generator.py` script'''
 
 import re
 import typing as t
-from typing_extensions import ParamSpec, Type
+from typing_extensions import Concatenate, Literal, ParamSpec, Type
 
 import pydash as pyd
 from pydash.chaining.chaining import Chain
 from pydash.types import *
 from pydash.helpers import Unset, UNSET
-from pydash.functions import After, Ary, Before, Once, Spread, Throttle
+from pydash.functions import (
+    After,
+    Ary,
+    Before,
+    CurryOne,
+    CurryTwo,
+    CurryThree,
+    CurryFour,
+    CurryFive,
+    CurryRightOne,
+    CurryRightTwo,
+    CurryRightThree,
+    CurryRightFour,
+    CurryRightFive,
+    Debounce,
+    Flow,
+    Iterated,
+    Negate,
+    Once,
+    Partial,
+    Rearg,
+    Spread,
+    Throttle,
+)
+from pydash.utilities import MemoizedFunc
 
 from _typeshed import (
     SupportsDunderGE,
@@ -36,11 +61,14 @@ from _typeshed import (
 
 Value_coT = t.TypeVar("Value_coT", covariant=True)
 T = t.TypeVar("T")
+T1 = t.TypeVar("T1")
 T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
 T4 = t.TypeVar("T4")
 T5 = t.TypeVar("T5")
-NumT = t.TypeVar("NumT", int, float)
+NumT = t.TypeVar("NumT", int, float, "Decimal")
+NumT2 = t.TypeVar("NumT2", int, float, "Decimal")
+NumT3 = t.TypeVar("NumT3", int, float, "Decimal")
 CallableT = t.TypeVar("CallableT", bound=t.Callable)
 SequenceT = t.TypeVar("SequenceT", bound=t.Sequence)
 MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence)
@@ -49,6 +77,11 @@ P = ParamSpec("P")
 
 class {class_name}:
 """
+
+FUNCTIONS_TO_SKIP = [
+    # this is already a method of `Chain`
+    "to_string",
+]
 
 
 def build_header(class_name: str, imports: list[str]) -> str:
@@ -148,6 +181,10 @@ def transform_function(node: ast.FunctionDef, wrapper: ast.Subscript) -> ast.Fun
 
     first_arg.arg = "self"
 
+    # we need to remove the first default arg as it is now the self argument
+    if len(node.args.args) == len(node.args.defaults):
+        node.args.defaults = node.args.defaults[1:]
+
     if node.returns:
         # TODO: `(some_arg: T) -> TypeGuard[T]` to `(some_arg: Any) -> bool`
         # TODO: otherwise we would get a `T` alone
@@ -237,6 +274,7 @@ def main() -> int:
                 and node.name in module_to_funcs[module]
                 and node.args.args  # skipping funcs without args for now
                 and not has_single_default_arg(node)  # skipping 1 default arg funcs
+                and node.name not in FUNCTIONS_TO_SKIP
             ):
                 new_node = transform_function(node, wrapper)
                 to_file.write(" " * 4)

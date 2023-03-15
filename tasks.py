@@ -76,7 +76,7 @@ def pylint(ctx):
 @task
 def mypy(ctx):
     """Check code using mypy type checker."""
-    run(f"mypy --exclude='{LINT_EXCLUDE}|src/pydash/chaining/all_funcs.pyi' {LINT_TARGETS}")
+    run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task

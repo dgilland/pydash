@@ -1,3 +1,4 @@
+# mypy: disable-error-code=misc
 """Generated from the `scripts/chaining_type_generator.py` script"""
 
 import re
@@ -13,21 +14,48 @@ from _typeshed import (
     SupportsRichComparisonT,
     SupportsSub,
 )
-from typing_extensions import ParamSpec, Type
+from typing_extensions import Concatenate, Literal, ParamSpec, Type
 
 import pydash as pyd
 from pydash.chaining.chaining import Chain
-from pydash.functions import After, Ary, Before, Once, Spread, Throttle
+from pydash.functions import (
+    After,
+    Ary,
+    Before,
+    CurryFive,
+    CurryFour,
+    CurryOne,
+    CurryRightFive,
+    CurryRightFour,
+    CurryRightOne,
+    CurryRightThree,
+    CurryRightTwo,
+    CurryThree,
+    CurryTwo,
+    Debounce,
+    Flow,
+    Iterated,
+    Negate,
+    Once,
+    Partial,
+    Rearg,
+    Spread,
+    Throttle,
+)
 from pydash.helpers import UNSET, Unset
 from pydash.types import *
+from pydash.utilities import MemoizedFunc
 
 Value_coT = t.TypeVar("Value_coT", covariant=True)
 T = t.TypeVar("T")
+T1 = t.TypeVar("T1")
 T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
 T4 = t.TypeVar("T4")
 T5 = t.TypeVar("T5")
-NumT = t.TypeVar("NumT", int, float)
+NumT = t.TypeVar("NumT", int, float, "Decimal")
+NumT2 = t.TypeVar("NumT2", int, float, "Decimal")
+NumT3 = t.TypeVar("NumT3", int, float, "Decimal")
 CallableT = t.TypeVar("CallableT", bound=t.Callable)
 SequenceT = t.TypeVar("SequenceT", bound=t.Sequence)
 MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence)
@@ -2399,8 +2427,6 @@ class AllFuncs:
     def to_pairs(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[t.List[t.Union[int, T]]]]": ...
     def to_pairs(self):
         return self._wrap(pyd.to_pairs)()
-    def to_string(self: "Chain[t.Any]") -> "Chain[str]":
-        return self._wrap(pyd.to_string)()
     @t.overload
     def transform(
         self: "Chain[t.Mapping[T, T2]]",
@@ -2896,7 +2922,7 @@ class AllFuncs:
         return self._wrap(pyd.property_of)()
     @t.overload
     def random(
-        self: "Chain[int]" = 0, stop: int = 1, *, floating: Literal[False] = False
+        self: "Chain[int]", stop: int = 1, *, floating: Literal[False] = False
     ) -> "Chain[int]": ...
     @t.overload
     def random(self: "Chain[float]", stop: int = 1, floating: bool = False) -> "Chain[float]": ...
@@ -2904,15 +2930,13 @@ class AllFuncs:
     def random(self: "Chain[float]", stop: float, floating: bool = False) -> "Chain[float]": ...
     @t.overload
     def random(
-        self: "Chain[t.Union[float, int]]" = 0,
+        self: "Chain[t.Union[float, int]]",
         stop: t.Union[float, int] = 1,
         *,
         floating: Literal[True]
     ) -> "Chain[float]": ...
     def random(
-        self: "Chain[t.Union[float, int]]" = 0,
-        stop: t.Union[float, int] = 1,
-        floating: bool = False,
+        self: "Chain[t.Union[float, int]]", stop: t.Union[float, int] = 1, floating: bool = False
     ):
         return self._wrap(pyd.random)(stop, floating)
     @t.overload
@@ -2936,7 +2960,7 @@ class AllFuncs:
     def result(self, key, default=None):
         return self._wrap(pyd.result)(key, default)
     def retry(
-        self: "Chain[int]" = 3,
+        self: "Chain[int]",
         delay: t.Union[int, float] = 0.5,
         max_delay: t.Union[int, float] = 150.0,
         scale: t.Union[int, float] = 2.0,
