@@ -57,8 +57,6 @@ from _typeshed import (
     SupportsSub,
 )
 
-{imports}
-
 Value_coT = t.TypeVar("Value_coT", covariant=True)
 T = t.TypeVar("T")
 T1 = t.TypeVar("T1")
@@ -84,8 +82,8 @@ FUNCTIONS_TO_SKIP = [
 ]
 
 
-def build_header(class_name: str, imports: list[str]) -> str:
-    return BASE_MODULE.format(class_name=class_name, imports="\n".join(imports))
+def build_header(class_name: str) -> str:
+    return BASE_MODULE.format(class_name=class_name)
 
 
 def modules_and_api_funcs() -> dict[str, list[str]]:
@@ -232,11 +230,6 @@ def main() -> int:
         "wrapper",
         help="The main generic class (eg. `Chain`)",
     )
-    parser.add_argument(
-        "--imports",
-        nargs="+",
-        help="List of imports to add to the file",
-    )
     args = parser.parse_args()
 
     wrapper = args.wrapper + f"[{WRAPPER_KW}]"
@@ -248,7 +241,7 @@ def main() -> int:
     ), "`wrapper` value should contain one with one subscript"
 
     to_file = open(args.output, "w")
-    to_file.write(build_header(args.class_name, args.imports or []))
+    to_file.write(build_header(args.class_name))
 
     module_to_funcs = modules_and_api_funcs()
 
