@@ -10,7 +10,7 @@ WRAPPER_KW = "RES"
 INIT_FILE = "src/pydash/__init__.py"
 BASE_MODULE = """
 # mypy: disable-error-code=misc
-'''Generated from the `scripts/chaining_type_generator.py` script'''
+'''Generated from the `scripts/chaining_type_generator.py` script.'''
 
 import re
 import typing as t

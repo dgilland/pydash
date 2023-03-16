@@ -1,5 +1,5 @@
 # mypy: disable-error-code=misc
-"""Generated from the `scripts/chaining_type_generator.py` script"""
+"""Generated from the `scripts/chaining_type_generator.py` script."""
 
 import re
 import typing as t

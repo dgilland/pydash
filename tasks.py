@@ -11,6 +11,9 @@ Where <task> is a function defined below with the @task decorator.
 from functools import partial
 import os
 from pathlib import Path
+import sys
+import tempfile
+import typing as t
 
 from invoke import Exit, UnexpectedExit, run as _run, task
 
@@ -28,37 +31,40 @@ run = partial(_run, pty=True)
 
 
 @task
-def black(ctx, quiet=False):
+def black(ctx, target: t.Optional[str] = None, quiet=False):
     """Autoformat code using black."""
-    run(f"black --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}", hide=quiet)
+    run(f"black --exclude='{LINT_EXCLUDE}' {target or LINT_TARGETS}", hide=quiet)
 
 
 @task
-def isort(ctx, quiet=False):
+def isort(ctx, target: t.Optional[str] = None, quiet=False):
     """Autoformat Python imports."""
-    run(f"isort {LINT_TARGETS}", hide=quiet)
+    run(f"isort {target or LINT_TARGETS}", hide=quiet)
 
 
 @task
-def docformatter(ctx):
+def docformatter(ctx, target: t.Optional[str] = None):
     """Autoformat docstrings using docformatter."""
     run(
-        f"docformatter -r {LINT_TARGETS} "
+        f"docformatter -r {target or LINT_TARGETS} "
         f"--in-place --pre-summary-newline --wrap-descriptions 100 --wrap-summaries 100"
     )
 
 
 @task
-def fmt(ctx):
+def fmt(ctx, target: t.Optional[str] = None, quiet: bool = False):
     """Autoformat code and docstrings."""
-    print("Running docformatter")
-    docformatter(ctx)
+    if not quiet:
+        print("Running docformatter")
+    docformatter(ctx, target)
 
-    print("Running isort")
-    isort(ctx, quiet=True)
+    if not quiet:
+        print("Running isort")
+    isort(ctx, target, quiet=True)
 
-    print("Running black")
-    black(ctx, quiet=True)
+    if not quiet:
+        print("Running black")
+    black(ctx, target, quiet=True)
 
 
 @task
@@ -82,7 +88,11 @@ def mypy(ctx):
 @task
 def lint(ctx):
     """Run linters."""
-    linters = {"flake8": flake8, "pylint": pylint}
+    linters = {
+        "flake8": flake8,
+        "pylint": pylint,
+        "chaining_types_update_required": chaining_types_update_required,
+    }
     failures = []
 
     print(f"Preparing to run linters: {', '.join(linters)}\n")
@@ -172,9 +182,29 @@ def generate_mypy_test(ctx, file: str) -> None:
 
 
 @task
-def generate_chaining_types(ctx) -> None:
+def generate_chaining_types(ctx, output: str = "src/pydash/chaining/all_funcs.pyi") -> None:
     """Generates `all_funcs.pyi` stub file that types the chaining interface."""
     run(
         "python scripts/chaining_type_generator.py"
-        " --class_name AllFuncs --output src/pydash/chaining/all_funcs.pyi --wrapper Chain"
+        f" --class_name AllFuncs --output {output} --wrapper Chain"
     )
+    fmt(ctx, output, quiet=True)
+
+
+@task
+def chaining_types_update_required(ctx) -> None:
+    with tempfile.NamedTemporaryFile(suffix=".pyi", dir=".") as tmp_file:
+        generate_chaining_types(ctx, tmp_file.name)
+
+        with open("src/pydash/chaining/all_funcs.pyi", "rb") as current_file:
+            current = current_file.read()
+        with open(tmp_file.name, "rb") as formatted_tmp_file:
+            new = formatted_tmp_file.read()
+
+        if current != new:
+            err_msg = (
+                "ERROR: src/pydash/chaining/all_funcs.pyi is out of date. Please run "
+                "`inv generate-chaining-types` and commit the changes."
+            )
+            print(err_msg, file=sys.stderr)
+            raise Exit()
