@@ -105,6 +105,8 @@ def test_mypy_get() -> None:
     reveal_type(_.get({}, 'a.b.c'))  # R: Any
     reveal_type(_.get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c[1]'))  # R: Any
     reveal_type(_.get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2'))  # R: Any
+    reveal_type(_.get(['a', 'b'], 0))  # R: Union[builtins.str, None]
+    reveal_type(_.get(['a', 'b'], 0, 'c'))  # R: builtins.str
 
 
 @pytest.mark.mypy_testing
