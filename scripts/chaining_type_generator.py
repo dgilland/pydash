@@ -1,5 +1,6 @@
 import ast
 import argparse
+import typing as t
 from pathlib import Path
 from collections import defaultdict, deque
 
@@ -86,7 +87,7 @@ def build_header(class_name: str) -> str:
     return BASE_MODULE.format(class_name=class_name)
 
 
-def modules_and_api_funcs() -> dict[str, list[str]]:
+def modules_and_api_funcs() -> t.Dict[str, t.List[str]]:
     """This is mostly so we don't have to import `pydash`"""
 
     with open(INIT_FILE, "r", encoding="utf-8") as source:
@@ -135,10 +136,10 @@ def has_single_default_arg(node: ast.FunctionDef) -> bool:
 
 def chainwrapper_args(
     node: ast.FunctionDef,
-) -> tuple[list[ast.expr], list[ast.keyword]]:
+) -> t.Tuple[t.List[ast.expr], t.List[ast.keyword]]:
     # TODO: handle posonlyargs
-    args: list[ast.expr] = [ast.Name(id=arg.arg) for arg in node.args.args[1:]]
-    kwargs: list[ast.keyword] = [
+    args: t.List[ast.expr] = [ast.Name(id=arg.arg) for arg in node.args.args[1:]]
+    kwargs: t.List[ast.keyword] = [
         ast.keyword(arg=kw.arg, value=ast.Name(id=kw.arg)) for kw in node.args.kwonlyargs
     ]
 

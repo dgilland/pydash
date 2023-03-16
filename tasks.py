@@ -91,8 +91,12 @@ def lint(ctx):
     linters = {
         "flake8": flake8,
         "pylint": pylint,
-        "chaining_types_update_required": chaining_types_update_required,
     }
+    # in python 3.8 and before the ast module doesn't have the `unparse` function
+    # which is needed for the generation
+    if sys.version_info >= (3, 9):
+        linters["chaining_types_update_required"] = chaining_types_update_required
+
     failures = []
 
     print(f"Preparing to run linters: {', '.join(linters)}\n")
