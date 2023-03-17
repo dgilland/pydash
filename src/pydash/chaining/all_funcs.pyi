@@ -2193,6 +2193,14 @@ class AllFuncs:
     def for_in_right(self: "Chain[t.Sequence[T]]", iteratee: None = None) -> "Chain[t.List[T]]": ...
     def for_in_right(self, iteratee=None):
         return self._wrap(pyd.for_in_right)(iteratee)
+    @t.overload
+    def get(self: "Chain[t.List[T]]", path: int, default: T2) -> "Chain[t.Union[T, T2]]": ...
+    @t.overload
+    def get(
+        self: "Chain[t.List[T]]", path: int, default: None = None
+    ) -> "Chain[t.Union[T, None]]": ...
+    @t.overload
+    def get(self: "Chain[t.Iterable]", path: PathT, default: t.Any = None) -> "Chain[t.Any]": ...
     def get(self: "Chain[t.Iterable]", path: PathT, default: t.Any = None) -> "Chain[t.Any]":
         return self._wrap(pyd.get)(path, default)
     def has(self: "Chain[t.Iterable]", path: PathT) -> "Chain[bool]":
