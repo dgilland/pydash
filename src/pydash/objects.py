@@ -833,6 +833,21 @@ def for_in_right(obj, iteratee=None):
     return obj
 
 
+@t.overload
+def get(obj: t.List[T], path: int, default: T2) -> t.Union[T, T2]:
+    ...
+
+
+@t.overload
+def get(obj: t.List[T], path: int, default: None = None) -> t.Union[T, None]:
+    ...
+
+
+@t.overload
+def get(obj: t.Iterable, path: PathT, default: t.Any = None) -> t.Any:
+    ...
+
+
 def get(obj: t.Iterable, path: PathT, default: t.Any = None) -> t.Any:
     """
     Get the value at any depth of a nested object based on the path described by `path`. If path
