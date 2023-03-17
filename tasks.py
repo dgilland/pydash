@@ -15,7 +15,7 @@ import sys
 import tempfile
 import typing as t
 
-from invoke import Exit, UnexpectedExit, run as _run, task
+from invoke import Context, Exit, UnexpectedExit, run as _run, task
 
 
 PACKAGE_NAME = "pydash"
@@ -31,19 +31,19 @@ run = partial(_run, pty=True)
 
 
 @task
-def black(ctx, target: t.Optional[str] = None, quiet=False):
+def black(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat code using black."""
     run(f"black --exclude='{LINT_EXCLUDE}' {target or LINT_TARGETS}", hide=quiet)
 
 
 @task
-def isort(ctx, target: t.Optional[str] = None, quiet=False):
+def isort(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat Python imports."""
     run(f"isort {target or LINT_TARGETS}", hide=quiet)
 
 
 @task
-def docformatter(ctx, target: t.Optional[str] = None):
+def docformatter(ctx: Context, target: t.Optional[str] = None) -> None:
     """Autoformat docstrings using docformatter."""
     run(
         f"docformatter -r {target or LINT_TARGETS} "
@@ -52,7 +52,7 @@ def docformatter(ctx, target: t.Optional[str] = None):
 
 
 @task
-def fmt(ctx, target: t.Optional[str] = None, quiet: bool = False):
+def fmt(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat code and docstrings."""
     if not quiet:
         print("Running docformatter")
@@ -68,25 +68,25 @@ def fmt(ctx, target: t.Optional[str] = None, quiet: bool = False):
 
 
 @task
-def flake8(ctx):
+def flake8(ctx: Context) -> None:
     """Check code for PEP8 violations using flake8."""
     run(f"flake8 --format=pylint --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
-def pylint(ctx):
+def pylint(ctx: Context) -> None:
     """Check code for static errors using pylint."""
     run(f"pylint --ignore='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
-def mypy(ctx):
+def mypy(ctx: Context) -> None:
     """Check code using mypy type checker."""
     run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
-def lint(ctx):
+def lint(ctx: Context) -> None:
     """Run linters."""
     linters = {
         "flake8": flake8,
@@ -118,7 +118,7 @@ def lint(ctx):
 
 
 @task(help={"args": "Override default pytest arguments"})
-def test(ctx, args=f"{TEST_TARGETS} --cov={PACKAGE_NAME}"):
+def test(ctx: Context, args: str = f"{TEST_TARGETS} --cov={PACKAGE_NAME}") -> None:
     """Run unit tests using pytest."""
     tox_env_site_packages_dir = os.getenv("TOX_ENV_SITE_PACKAGES_DIR")
     if tox_env_site_packages_dir:
@@ -130,7 +130,7 @@ def test(ctx, args=f"{TEST_TARGETS} --cov={PACKAGE_NAME}"):
 
 
 @task
-def ci(ctx):
+def ci(ctx: Context) -> None:
     """Run linters and tests."""
     print("Building package")
     build(ctx)
@@ -146,7 +146,7 @@ def ci(ctx):
 
 
 @task
-def docs(ctx, serve=False, bind="127.0.0.1", port=8000):
+def docs(ctx: Context, serve: bool = False, bind: str = "127.0.0.1", port: int = 8000) -> None:
     """Build docs."""
     run("rm -rf docs/_build")
     run("sphinx-build -q -W -b html docs docs/_build/html")
@@ -157,27 +157,27 @@ def docs(ctx, serve=False, bind="127.0.0.1", port=8000):
 
 
 @task
-def build(ctx):
+def build(ctx: Context) -> None:
     """Build Python package."""
     run("rm -rf dist build docs/_build")
     run("python -m build")
 
 
 @task
-def clean(ctx):
+def clean(ctx: Context) -> None:
     """Remove temporary files related to development."""
     run("find . -type f -name '*.py[cod]' -delete -o -type d -name __pycache__ -delete")
     run("rm -rf .tox .coverage .cache .pytest_cache **/.egg* **/*.egg* dist build .mypy_cache")
 
 
 @task(pre=[build])
-def release(ctx):
+def release(ctx: Context) -> None:
     """Release Python package."""
     run("twine upload dist/*")
 
 
 @task
-def generate_mypy_test(ctx, file: str) -> None:
+def generate_mypy_test(ctx: Context, file: str) -> None:
     """Generate base mypy test ready to be filled from doctests inside a python file."""
     run(
         "python scripts/mypy_doctests_generator.py"
@@ -186,7 +186,9 @@ def generate_mypy_test(ctx, file: str) -> None:
 
 
 @task
-def generate_chaining_types(ctx, output: str = "src/pydash/chaining/all_funcs.pyi") -> None:
+def generate_chaining_types(
+    ctx: Context, output: str = "src/pydash/chaining/all_funcs.pyi"
+) -> None:
     """Generates `all_funcs.pyi` stub file that types the chaining interface."""
     run(
         "python scripts/chaining_type_generator.py"
@@ -196,7 +198,7 @@ def generate_chaining_types(ctx, output: str = "src/pydash/chaining/all_funcs.py
 
 
 @task
-def chaining_types_update_required(ctx) -> None:
+def chaining_types_update_required(ctx: Context) -> None:
     with tempfile.NamedTemporaryFile(suffix=".pyi", dir=".") as tmp_file:
         generate_chaining_types(ctx, tmp_file.name)
 
