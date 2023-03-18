@@ -2200,10 +2200,10 @@ class AllFuncs:
         self: "Chain[t.List[T]]", path: int, default: None = None
     ) -> "Chain[t.Union[T, None]]": ...
     @t.overload
-    def get(self: "Chain[t.Iterable]", path: PathT, default: t.Any = None) -> "Chain[t.Any]": ...
-    def get(self: "Chain[t.Iterable]", path: PathT, default: t.Any = None) -> "Chain[t.Any]":
+    def get(self: "Chain[t.Any]", path: PathT, default: t.Any = None) -> "Chain[t.Any]": ...
+    def get(self: "Chain[t.Any]", path: PathT, default: t.Any = None) -> "Chain[t.Any]":
         return self._wrap(pyd.get)(path, default)
-    def has(self: "Chain[t.Iterable]", path: PathT) -> "Chain[bool]":
+    def has(self: "Chain[t.Any]", path: PathT) -> "Chain[bool]":
         return self._wrap(pyd.has)(path)
     @t.overload
     def invert(self: "Chain[t.Mapping[T, T2]]") -> "Chain[t.Dict[T2, T]]": ...
@@ -2229,9 +2229,13 @@ class AllFuncs:
     ) -> "Chain[t.Dict[T, t.List[int]]]": ...
     def invert_by(self, iteratee=None):
         return self._wrap(pyd.invert_by)(iteratee)
-    def invoke(self: "Chain[t.Dict]", path: PathT, *args: t.Any, **kwargs: t.Any) -> "Chain[t.Any]":
+    def invoke(self: "Chain[t.Any]", path: PathT, *args: t.Any, **kwargs: t.Any) -> "Chain[t.Any]":
         return self._wrap(pyd.invoke)(path, *args, **kwargs)
-    def keys(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[T]]":
+    @t.overload
+    def keys(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[T]]": ...
+    @t.overload
+    def keys(self: "Chain[t.Any]") -> "Chain[t.List]": ...
+    def keys(self):
         return self._wrap(pyd.keys)()
     @t.overload
     def map_keys(
@@ -2315,6 +2319,8 @@ class AllFuncs:
     def omit(self: "Chain[t.Mapping[T, T2]]", *properties: PathT) -> "Chain[t.Dict[T, T2]]": ...
     @t.overload
     def omit(self: "Chain[t.Iterable[T]]", *properties: PathT) -> "Chain[t.Dict[int, T]]": ...
+    @t.overload
+    def omit(self: "Chain[t.Any]", *properties: PathT) -> "Chain[t.Dict]": ...
     def omit(self, *properties):
         return self._wrap(pyd.omit)(*properties)
     @t.overload
@@ -2337,6 +2343,10 @@ class AllFuncs:
     ) -> "Chain[t.Dict[int, T]]": ...
     @t.overload
     def omit_by(self: "Chain[t.List[T]]", iteratee: None = None) -> "Chain[t.Dict[int, T]]": ...
+    @t.overload
+    def omit_by(
+        self: "Chain[t.Any]", iteratee: t.Union[t.Callable, None] = None
+    ) -> "Chain[t.Dict]": ...
     def omit_by(self, iteratee=None):
         return self._wrap(pyd.omit_by)(iteratee)
     def parse_int(
@@ -2348,7 +2358,9 @@ class AllFuncs:
     @t.overload
     def pick(
         self: "Chain[t.Union[t.Tuple[T, ...], t.List[T]]]", *properties: PathT
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.Dict[int, T]]": ...
+    @t.overload
+    def pick(self: "Chain[t.Any]", *properties: PathT) -> "Chain[t.Dict]": ...
     def pick(self, *properties):
         return self._wrap(pyd.pick)(*properties)
     @t.overload
@@ -2364,42 +2376,32 @@ class AllFuncs:
     @t.overload
     def pick_by(
         self: "Chain[t.Union[t.Tuple[T, ...], t.List[T]]]", iteratee: t.Callable[[T, int], t.Any]
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.Dict[int, T]]": ...
     @t.overload
     def pick_by(
         self: "Chain[t.Union[t.Tuple[T, ...], t.List[T]]]", iteratee: t.Callable[[T], t.Any]
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.Dict[int, T]]": ...
     @t.overload
-    def pick_by(self: "Chain[t.List[T]]", iteratee: None = None) -> "Chain[t.Dict[int, T]]": ...
+    def pick_by(
+        self: "Chain[t.Union[t.Tuple[T, ...], t.List[T]]]", iteratee: None = None
+    ) -> "Chain[t.Dict[int, T]]": ...
+    @t.overload
+    def pick_by(
+        self: "Chain[t.Any]", iteratee: t.Union[t.Callable, None] = None
+    ) -> "Chain[t.Dict]": ...
     def pick_by(self, iteratee=None):
         return self._wrap(pyd.pick_by)(iteratee)
     def rename_keys(
         self: "Chain[t.Dict[T, T2]]", key_map: t.Dict[t.Any, T3]
     ) -> "Chain[t.Dict[t.Union[T, T3], T2]]":
         return self._wrap(pyd.rename_keys)(key_map)
-    @t.overload
-    def set_(self: "Chain[t.List]", path: PathT, value: t.Any) -> "Chain[t.List]": ...
-    @t.overload
-    def set_(self: "Chain[t.Dict]", path: PathT, value: t.Any) -> "Chain[t.Dict]": ...
-    def set_(self, path, value):
+    def set_(self: "Chain[T]", path: PathT, value: t.Any) -> "Chain[T]":
         return self._wrap(pyd.set_)(path, value)
     set = set_
 
-    @t.overload
     def set_with(
-        self: "Chain[t.List]",
-        path: PathT,
-        value: t.Any,
-        customizer: t.Union[t.Callable, None] = None,
-    ) -> "Chain[t.List]": ...
-    @t.overload
-    def set_with(
-        self: "Chain[t.Dict]",
-        path: PathT,
-        value: t.Any,
-        customizer: t.Union[t.Callable, None] = None,
-    ) -> "Chain[t.Dict]": ...
-    def set_with(self, path, value, customizer=None):
+        self: "Chain[T]", path: PathT, value: t.Any, customizer: t.Union[t.Callable, None] = None
+    ) -> "Chain[T]":
         return self._wrap(pyd.set_with)(path, value, customizer)
     def to_boolean(
         self: "Chain[t.Any]",
@@ -2412,7 +2414,7 @@ class AllFuncs:
     @t.overload
     def to_dict(self: "Chain[t.List[t.Tuple[T, T2]]]") -> "Chain[t.Dict[T, T2]]": ...
     @t.overload
-    def to_dict(self: "Chain[t.Iterable]") -> "Chain[t.Dict]": ...
+    def to_dict(self: "Chain[t.Any]") -> "Chain[t.Dict]": ...
     def to_dict(self):
         return self._wrap(pyd.to_dict)()
     def to_integer(self: "Chain[t.Any]") -> "Chain[int]":
@@ -2433,6 +2435,8 @@ class AllFuncs:
     def to_pairs(self: "Chain[t.Mapping[T, T2]]") -> "Chain[t.List[t.List[t.Union[T, T2]]]]": ...
     @t.overload
     def to_pairs(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[t.List[t.Union[int, T]]]]": ...
+    @t.overload
+    def to_pairs(self: "Chain[t.Any]") -> "Chain[t.List]": ...
     def to_pairs(self):
         return self._wrap(pyd.to_pairs)()
     @t.overload
@@ -2479,17 +2483,19 @@ class AllFuncs:
         return self._wrap(pyd.transform)(iteratee, accumulator)
     @t.overload
     def update(
-        self: "Chain[t.Mapping[t.Any, T2]]", path: PathT, updater: t.Callable[[T2], t.Any]
+        self: "Chain[t.Dict[t.Any, T2]]", path: PathT, updater: t.Callable[[T2], t.Any]
     ) -> "Chain[t.Dict]": ...
     @t.overload
     def update(
         self: "Chain[t.List[T]]", path: PathT, updater: t.Callable[[T], t.Any]
     ) -> "Chain[t.List]": ...
+    @t.overload
+    def update(self: "Chain[T]", path: PathT, updater: t.Callable) -> "Chain[T]": ...
     def update(self, path, updater):
         return self._wrap(pyd.update)(path, updater)
     @t.overload
     def update_with(
-        self: "Chain[t.Mapping[t.Any, T2]]",
+        self: "Chain[t.Dict[t.Any, T2]]",
         path: PathT,
         updater: t.Callable[[T2], t.Any],
         customizer: t.Union[t.Callable, None],
@@ -2501,6 +2507,13 @@ class AllFuncs:
         updater: t.Callable[[T], t.Any],
         customizer: t.Union[t.Callable, None] = None,
     ) -> "Chain[t.List]": ...
+    @t.overload
+    def update_with(
+        self: "Chain[T]",
+        path: PathT,
+        updater: t.Callable,
+        customizer: t.Union[t.Callable, None] = None,
+    ) -> "Chain[T]": ...
     def update_with(self, path, updater, customizer=None):
         return self._wrap(pyd.update_with)(path, updater, customizer)
     def unset(self: "Chain[t.Union[t.List, t.Dict]]", path: PathT) -> "Chain[bool]":
@@ -2509,6 +2522,8 @@ class AllFuncs:
     def values(self: "Chain[t.Mapping[t.Any, T2]]") -> "Chain[t.List[T2]]": ...
     @t.overload
     def values(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[T]]": ...
+    @t.overload
+    def values(self: "Chain[t.Any]") -> "Chain[t.List]": ...
     def values(self):
         return self._wrap(pyd.values)()
     def eq(self: "Chain[t.Any]", other: t.Any) -> "Chain[bool]":

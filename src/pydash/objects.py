@@ -844,11 +844,11 @@ def get(obj: t.List[T], path: int, default: None = None) -> t.Union[T, None]:
 
 
 @t.overload
-def get(obj: t.Iterable, path: PathT, default: t.Any = None) -> t.Any:
+def get(obj: t.Any, path: PathT, default: t.Any = None) -> t.Any:
     ...
 
 
-def get(obj: t.Iterable, path: PathT, default: t.Any = None) -> t.Any:
+def get(obj: t.Any, path: PathT, default: t.Any = None) -> t.Any:
     """
     Get the value at any depth of a nested object based on the path described by `path`. If path
     doesn't exist, `default` is returned.
@@ -918,7 +918,7 @@ def get(obj: t.Iterable, path: PathT, default: t.Any = None) -> t.Any:
     return obj
 
 
-def has(obj: t.Iterable, path: PathT) -> bool:
+def has(obj: t.Any, path: PathT) -> bool:
     """
     Checks if `path` exists as a key of `obj`.
 
@@ -1067,7 +1067,7 @@ def invert_by(obj, iteratee=None):
     return result
 
 
-def invoke(obj: t.Dict, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
+def invoke(obj: t.Any, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
     """
     Invokes the method at path of object.
 
@@ -1105,7 +1105,17 @@ def invoke(obj: t.Dict, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
     return ret
 
 
+@t.overload
 def keys(obj: t.Iterable[T]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def keys(obj: t.Any) -> t.List:
+    ...
+
+
+def keys(obj):
     """
     Creates a list composed of the keys of `obj`.
 
@@ -1455,6 +1465,11 @@ def omit(obj: t.Iterable[T], *properties: PathT) -> t.Dict[int, T]:
     ...
 
 
+@t.overload
+def omit(obj: t.Any, *properties: PathT) -> t.Dict:
+    ...
+
+
 def omit(obj, *properties):
     """
     The opposite of :func:`pick`. This method creates an object composed of the property paths of
@@ -1516,6 +1531,11 @@ def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.Dict[int,
 
 @t.overload
 def omit_by(obj: t.List[T], iteratee: None = None) -> t.Dict[int, T]:
+    ...
+
+
+@t.overload
+def omit_by(obj: t.Any, iteratee: t.Union[t.Callable, None] = None) -> t.Dict:
     ...
 
 
@@ -1620,7 +1640,12 @@ def pick(obj: t.Mapping[T, T2], *properties: PathT) -> t.Dict[T, T2]:
 
 
 @t.overload
-def pick(obj: t.Union[t.Tuple[T, ...], t.List[T]], *properties: PathT) -> t.List[T]:
+def pick(obj: t.Union[t.Tuple[T, ...], t.List[T]], *properties: PathT) -> t.Dict[int, T]:
+    ...
+
+
+@t.overload
+def pick(obj: t.Any, *properties: PathT) -> t.Dict:
     ...
 
 
@@ -1666,19 +1691,24 @@ def pick_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
 @t.overload
 def pick_by(
     obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: t.Callable[[T, int], t.Any]
-) -> t.List[T]:
+) -> t.Dict[int, T]:
     ...
 
 
 @t.overload
 def pick_by(
     obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: t.Callable[[T], t.Any]
-) -> t.List[T]:
+) -> t.Dict[int, T]:
     ...
 
 
 @t.overload
-def pick_by(obj: t.List[T], iteratee: None = None) -> t.Dict[int, T]:
+def pick_by(obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: None = None) -> t.Dict[int, T]:
+    ...
+
+
+@t.overload
+def pick_by(obj: t.Any, iteratee: t.Union[t.Callable, None] = None) -> t.Dict:
     ...
 
 
@@ -1753,17 +1783,7 @@ def rename_keys(obj: t.Dict[T, T2], key_map: t.Dict[t.Any, T3]) -> t.Dict[t.Unio
     return {key_map.get(key, key): value for key, value in obj.items()}
 
 
-@t.overload
-def set_(obj: t.List, path: PathT, value: t.Any) -> t.List:
-    ...
-
-
-@t.overload
-def set_(obj: t.Dict, path: PathT, value: t.Any) -> t.Dict:
-    ...
-
-
-def set_(obj, path, value):
+def set_(obj: T, path: PathT, value: t.Any) -> T:
     """
     Sets the value of an object described by `path`. If any part of the object path doesn't exist,
     it will be created.
@@ -1805,27 +1825,7 @@ def set_(obj, path, value):
     return set_with(obj, path, value)
 
 
-@t.overload
-def set_with(
-    obj: t.List,
-    path: PathT,
-    value: t.Any,
-    customizer: t.Union[t.Callable, None] = None,
-) -> t.List:
-    ...
-
-
-@t.overload
-def set_with(
-    obj: t.Dict,
-    path: PathT,
-    value: t.Any,
-    customizer: t.Union[t.Callable, None] = None,
-) -> t.Dict:
-    ...
-
-
-def set_with(obj, path, value, customizer=None):
+def set_with(obj: T, path: PathT, value: t.Any, customizer: t.Union[t.Callable, None] = None) -> T:
     """
     This method is like :func:`set_` except that it accepts customizer which is invoked to produce
     the objects of path. If customizer returns undefined path creation is handled by the method
@@ -1925,7 +1925,7 @@ def to_dict(obj: t.List[t.Tuple[T, T2]]) -> t.Dict[T, T2]:
 
 
 @t.overload
-def to_dict(obj: t.Iterable) -> t.Dict:
+def to_dict(obj: t.Any) -> t.Dict:
     ...
 
 
@@ -2124,6 +2124,11 @@ def to_pairs(obj: t.Iterable[T]) -> t.List[t.List[t.Union[int, T]]]:
     ...
 
 
+@t.overload
+def to_pairs(obj: t.Any) -> t.List:
+    ...
+
+
 def to_pairs(obj):
     """
     Creates a two dimensional list of an object's key-value pairs, i.e. ``[[key1, value1], [key2,
@@ -2284,7 +2289,7 @@ def transform(obj, iteratee=None, accumulator=None):
 
 @t.overload
 def update(
-    obj: t.Mapping[t.Any, T2],
+    obj: t.Dict[t.Any, T2],
     path: PathT,
     updater: t.Callable[[T2], t.Any],
 ) -> t.Dict:
@@ -2297,6 +2302,15 @@ def update(
     path: PathT,
     updater: t.Callable[[T], t.Any],
 ) -> t.List:
+    ...
+
+
+@t.overload
+def update(
+    obj: T,
+    path: PathT,
+    updater: t.Callable,
+) -> T:
     ...
 
 
@@ -2331,7 +2345,7 @@ def update(obj, path, updater):
 
 @t.overload
 def update_with(
-    obj: t.Mapping[t.Any, T2],
+    obj: t.Dict[t.Any, T2],
     path: PathT,
     updater: t.Callable[[T2], t.Any],
     customizer: t.Union[t.Callable, None],
@@ -2346,6 +2360,16 @@ def update_with(
     updater: t.Callable[[T], t.Any],
     customizer: t.Union[t.Callable, None] = None,
 ) -> t.List:
+    ...
+
+
+@t.overload
+def update_with(
+    obj: T,
+    path: PathT,
+    updater: t.Callable,
+    customizer: t.Union[t.Callable, None] = None,
+) -> T:
     ...
 
 
@@ -2514,6 +2538,11 @@ def values(obj: t.Mapping[t.Any, T2]) -> t.List[T2]:
 
 @t.overload
 def values(obj: t.Iterable[T]) -> t.List[T]:
+    ...
+
+
+@t.overload
+def values(obj: t.Any) -> t.List:
     ...
 
 
