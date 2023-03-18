@@ -127,12 +127,12 @@ def base_get(obj, key, default=UNSET):
     Safely get an item by `key` from a sequence or mapping object when `default` provided.
 
     Args:
-        obj (list|dict): Sequence or mapping to retrieve item from.
-        key (mixed): Key or index identifying which item to retrieve.
-        default (mixed, optional): Default value to return if `key` not found in `obj`.
+        obj: Sequence or mapping to retrieve item from.
+        key: Key or index identifying which item to retrieve.
+        default: Default value to return if `key` not found in `obj`.
 
     Returns:
-        mixed: `obj[key]`, `obj.key`, or `default`.
+        `obj[key]`, `obj.key`, or `default`.
 
     Raises:
         KeyError: If `obj` is missing key, index, or attribute and no default value provided.
@@ -207,10 +207,10 @@ def base_set(obj, key, value, allow_override=True):
     index position, append to list; otherwise, pad the list of ``None`` and then append to the list.
 
     Args:
-        obj (list|dict): Object to assign value to.
-        key (mixed): Key or index to assign to.
-        value (mixed): Value to assign.
-        allow_override (bool): Whether to allow overriding a previously set key.
+        obj: Object to assign value to.
+        key: Key or index to assign to.
+        value: Value to assign.
+        allow_override: Whether to allow overriding a previously set key.
     """
     if isinstance(obj, dict):
         if allow_override or key not in obj:
