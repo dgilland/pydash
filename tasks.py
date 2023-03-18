@@ -11,8 +11,11 @@ Where <task> is a function defined below with the @task decorator.
 from functools import partial
 import os
 from pathlib import Path
+import sys
+import tempfile
+import typing as t
 
-from invoke import Exit, UnexpectedExit, run as _run, task
+from invoke import Context, Exit, UnexpectedExit, run as _run, task
 
 
 PACKAGE_NAME = "pydash"
@@ -28,61 +31,72 @@ run = partial(_run, pty=True)
 
 
 @task
-def black(ctx, quiet=False):
+def black(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat code using black."""
-    run(f"black --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}", hide=quiet)
+    run(f"black --exclude='{LINT_EXCLUDE}' {target or LINT_TARGETS}", hide=quiet)
 
 
 @task
-def isort(ctx, quiet=False):
+def isort(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat Python imports."""
-    run(f"isort {LINT_TARGETS}", hide=quiet)
+    run(f"isort {target or LINT_TARGETS}", hide=quiet)
 
 
 @task
-def docformatter(ctx):
+def docformatter(ctx: Context, target: t.Optional[str] = None) -> None:
     """Autoformat docstrings using docformatter."""
     run(
-        f"docformatter -r {LINT_TARGETS} "
+        f"docformatter -r {target or LINT_TARGETS} "
         f"--in-place --pre-summary-newline --wrap-descriptions 100 --wrap-summaries 100"
     )
 
 
 @task
-def fmt(ctx):
+def fmt(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat code and docstrings."""
-    print("Running docformatter")
-    docformatter(ctx)
+    if not quiet:
+        print("Running docformatter")
+    docformatter(ctx, target)
 
-    print("Running isort")
-    isort(ctx, quiet=True)
+    if not quiet:
+        print("Running isort")
+    isort(ctx, target, quiet=True)
 
-    print("Running black")
-    black(ctx, quiet=True)
+    if not quiet:
+        print("Running black")
+    black(ctx, target, quiet=True)
 
 
 @task
-def flake8(ctx):
+def flake8(ctx: Context) -> None:
     """Check code for PEP8 violations using flake8."""
     run(f"flake8 --format=pylint --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
-def pylint(ctx):
+def pylint(ctx: Context) -> None:
     """Check code for static errors using pylint."""
     run(f"pylint --ignore='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
-def mypy(ctx):
+def mypy(ctx: Context) -> None:
     """Check code using mypy type checker."""
     run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
 @task
-def lint(ctx):
+def lint(ctx: Context) -> None:
     """Run linters."""
-    linters = {"flake8": flake8, "pylint": pylint}
+    linters = {
+        "flake8": flake8,
+        "pylint": pylint,
+    }
+    # in python 3.8 and before the ast module doesn't have the `unparse` function
+    # which is needed for the generation
+    if sys.version_info >= (3, 9):
+        linters["chaining_types_update_required"] = chaining_types_update_required
+
     failures = []
 
     print(f"Preparing to run linters: {', '.join(linters)}\n")
@@ -104,7 +118,7 @@ def lint(ctx):
 
 
 @task(help={"args": "Override default pytest arguments"})
-def test(ctx, args=f"{TEST_TARGETS} --cov={PACKAGE_NAME}"):
+def test(ctx: Context, args: str = f"{TEST_TARGETS} --cov={PACKAGE_NAME}") -> None:
     """Run unit tests using pytest."""
     tox_env_site_packages_dir = os.getenv("TOX_ENV_SITE_PACKAGES_DIR")
     if tox_env_site_packages_dir:
@@ -116,7 +130,7 @@ def test(ctx, args=f"{TEST_TARGETS} --cov={PACKAGE_NAME}"):
 
 
 @task
-def ci(ctx):
+def ci(ctx: Context) -> None:
     """Run linters and tests."""
     print("Building package")
     build(ctx)
@@ -132,7 +146,7 @@ def ci(ctx):
 
 
 @task
-def docs(ctx, serve=False, bind="127.0.0.1", port=8000):
+def docs(ctx: Context, serve: bool = False, bind: str = "127.0.0.1", port: int = 8000) -> None:
     """Build docs."""
     run("rm -rf docs/_build")
     run("sphinx-build -q -W -b html docs docs/_build/html")
@@ -143,29 +157,60 @@ def docs(ctx, serve=False, bind="127.0.0.1", port=8000):
 
 
 @task
-def build(ctx):
+def build(ctx: Context) -> None:
     """Build Python package."""
     run("rm -rf dist build docs/_build")
     run("python -m build")
 
 
 @task
-def clean(ctx):
+def clean(ctx: Context) -> None:
     """Remove temporary files related to development."""
     run("find . -type f -name '*.py[cod]' -delete -o -type d -name __pycache__ -delete")
     run("rm -rf .tox .coverage .cache .pytest_cache **/.egg* **/*.egg* dist build .mypy_cache")
 
 
 @task(pre=[build])
-def release(ctx):
+def release(ctx: Context) -> None:
     """Release Python package."""
     run("twine upload dist/*")
 
 
 @task
-def generate_mypy_test(ctx, file: str) -> None:
+def generate_mypy_test(ctx: Context, file: str) -> None:
     """Generate base mypy test ready to be filled from doctests inside a python file."""
     run(
         "python scripts/mypy_doctests_generator.py"
         f" {file} tests/pytest_mypy_testing/test_{Path(file).name}"
     )
+
+
+@task
+def generate_chaining_types(
+    ctx: Context, output: str = "src/pydash/chaining/all_funcs.pyi"
+) -> None:
+    """Generates `all_funcs.pyi` stub file that types the chaining interface."""
+    run(
+        "python scripts/chaining_type_generator.py"
+        f" --class_name AllFuncs --output {output} --wrapper Chain"
+    )
+    fmt(ctx, output, quiet=True)
+
+
+@task
+def chaining_types_update_required(ctx: Context) -> None:
+    with tempfile.NamedTemporaryFile(suffix=".pyi", dir=".") as tmp_file:
+        generate_chaining_types(ctx, tmp_file.name)
+
+        with open("src/pydash/chaining/all_funcs.pyi", "rb") as current_file:
+            current = current_file.read()
+        with open(tmp_file.name, "rb") as formatted_tmp_file:
+            new = formatted_tmp_file.read()
+
+        if current != new:
+            err_msg = (
+                "ERROR: src/pydash/chaining/all_funcs.pyi is out of date. Please run "
+                "`inv generate-chaining-types` and commit the changes."
+            )
+            print(err_msg, file=sys.stderr)
+            raise Exit()

@@ -95,7 +95,7 @@ def test_chaining_plant():
     square_sum1 = _.chain(value).power(2).sum()
 
     def root_value(wrapper):
-        if isinstance(wrapper._value, _.chaining.ChainWrapper):
+        if isinstance(wrapper._value, _.chaining.chaining.ChainWrapper):
             return root_value(wrapper._value)
         return wrapper._value
 

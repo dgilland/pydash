@@ -62,7 +62,7 @@ __all__ = (
 
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
-CallableT = t.TypeVar("CallableT")
+CallableT = t.TypeVar("CallableT", bound=t.Callable)
 P = ParamSpec("P")
 
 # These regexes are used in to_path() to parse deep path strings.
