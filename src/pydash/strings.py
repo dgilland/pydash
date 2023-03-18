@@ -291,10 +291,10 @@ def camel_case(text: t.Any) -> str:
     Converts `text` to camel case.
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to camel case.
+        String converted to camel case.
 
     Example:
 
@@ -315,11 +315,11 @@ def capitalize(text: t.Any, strict: bool = True) -> str:
     Capitalizes the first character of `text`.
 
     Args:
-        text (str): String to capitalize.
-        strict (bool, optional): Whether to cast rest of string to lower case. Defaults to ``True``.
+        text: String to capitalize.
+        strict: Whether to cast rest of string to lower case. Defaults to ``True``.
 
     Returns:
-        str: Capitalized string.
+        Capitalized string.
 
     Example:
 
@@ -342,10 +342,10 @@ def chars(text: t.Any) -> t.List[str]:
     Split `text` into a list of single characters.
 
     Args:
-        text (str): String to split up.
+        text: String to split up.
 
     Returns:
-        list: List of individual characters.
+        List of individual characters.
 
     Example:
 
@@ -362,11 +362,11 @@ def chop(text: t.Any, step: int) -> t.List[str]:
     Break up `text` into intervals of length `step`.
 
     Args:
-        text (str): String to chop.
-        step (int): Interval to chop `text`.
+        text: String to chop.
+        step: Interval to chop `text`.
 
     Returns:
-        list: List of chopped characters. If `text` is `None` an empty list is returned.
+        List of chopped characters. If `text` is `None` an empty list is returned.
 
     Example:
 
@@ -393,11 +393,11 @@ def chop_right(text: t.Any, step: int) -> t.List[str]:
     Like :func:`chop` except `text` is chopped from right.
 
     Args:
-        text (str): String to chop.
-        step (int): Interval to chop `text`.
+        text: String to chop.
+        step: Interval to chop `text`.
 
     Returns:
-        list: List of chopped characters.
+        List of chopped characters.
 
     Example:
 
@@ -425,10 +425,10 @@ def clean(text: t.Any) -> str:
     Trim and replace multiple spaces with a single space.
 
     Args:
-        text (str): String to clean.
+        text: String to clean.
 
     Returns:
-        str: Cleaned string.
+        Cleaned string.
 
     Example:
 
@@ -446,11 +446,11 @@ def count_substr(text: t.Any, subtext: t.Any) -> int:
     Count the occurrences of `subtext` in `text`.
 
     Args:
-        text (str): Source string to count from.
-        subtext (str): String to count.
+        text: Source string to count from.
+        subtext: String to count.
 
     Returns:
-        int: Number of occurrences of `subtext` in `text`.
+        Number of occurrences of `subtext` in `text`.
 
     Example:
 
@@ -473,10 +473,10 @@ def deburr(text: t.Any) -> str:
     Deburrs `text` by converting latin-1 supplementary letters to basic latin letters.
 
     Args:
-        text (str): String to deburr.
+        text: String to deburr.
 
     Returns:
-        str: Deburred string.
+        Deburred string.
 
     Example:
 
@@ -498,10 +498,10 @@ def decapitalize(text: t.Any) -> str:
     Decaptitalizes the first character of `text`.
 
     Args:
-        text (str): String to decapitalize.
+        text: String to decapitalize.
 
     Returns:
-        str: Decapitalized string.
+        Decapitalized string.
 
     Example:
 
@@ -519,12 +519,12 @@ def ends_with(text: t.Any, target: t.Any, position: t.Union[int, None] = None) -
     Checks if `text` ends with a given target string.
 
     Args:
-        text (str): String to check.
-        target (str): String to check for.
-        position (int, optional): Position to search from. Defaults to end of `text`.
+        text: String to check.
+        target: String to check for.
+        position: Position to search from. Defaults to end of `text`.
 
     Returns:
-        bool: Whether `text` ends with `target`.
+        Whether `text` ends with `target`.
 
     Example:
 
@@ -549,12 +549,12 @@ def ensure_ends_with(text: t.Any, suffix: t.Any) -> str:
     Append a given suffix to a string, but only if the source string does not end with that suffix.
 
     Args:
-        text (str): Source string to append `suffix` to.
-        suffix (str): String to append to the source string if the source string does not end with
+        text: Source string to append `suffix` to.
+        suffix: String to append to the source string if the source string does not end with
             `suffix`.
 
     Returns:
-        str: source string possibly extended by `suffix`.
+        source string possibly extended by `suffix`.
 
     Example:
 
@@ -578,12 +578,12 @@ def ensure_starts_with(text: t.Any, prefix: t.Any) -> str:
     prefix.
 
     Args:
-        text (str): Source string to prepend `prefix` to.
-        prefix (str): String to prepend to the source string if the source string does not start
+        text: Source string to prepend `prefix` to.
+        prefix: String to prepend to the source string if the source string does not start
             with `prefix`.
 
     Returns:
-        str: source string possibly prefixed by `prefix`
+        source string possibly prefixed by `prefix`
 
     Example:
 
@@ -607,10 +607,10 @@ def escape(text: t.Any) -> str:
     corresponding HTML entities.
 
     Args:
-        text (str): String to escape.
+        text: String to escape.
 
     Returns:
-        str: HTML escaped string.
+        HTML escaped string.
 
     Example:
 
@@ -633,10 +633,10 @@ def escape_reg_exp(text: t.Any) -> str:
     Escapes the RegExp special characters in `text`.
 
     Args:
-        text (str): String to escape.
+        text: String to escape.
 
     Returns:
-        str: RegExp escaped string.
+        RegExp escaped string.
 
     Example:
 
@@ -657,11 +657,11 @@ def has_substr(text: t.Any, subtext: t.Any) -> bool:
     Returns whether `subtext` is included in `text`.
 
     Args:
-        text (str): String to search.
-        subtext (str): String to search for.
+        text: String to search.
+        subtext: String to search for.
 
     Returns:
-        bool: Whether `subtext` is found in `text`.
+        Whether `subtext` is found in `text`.
 
     Example:
 
@@ -683,10 +683,10 @@ def human_case(text: t.Any) -> str:
     separated by a space.
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to human case.
+        String converted to human case.
 
     Example:
 
@@ -715,12 +715,12 @@ def insert_substr(text: t.Any, index: int, subtext: t.Any) -> str:
     Insert `subtext` in `text` starting at position `index`.
 
     Args:
-        text (str): String to add substring to.
-        index (int): String index to insert into.
-        subtext (str): String to insert.
+        text: String to add substring to.
+        index: String index to insert into.
+        subtext: String to insert.
 
     Returns:
-        str: Modified string.
+        Modified string.
 
     Example:
 
@@ -739,11 +739,11 @@ def join(array: t.Iterable[t.Any], separator: t.Any = "") -> str:
     Joins an iterable into a string using `separator` between each element.
 
     Args:
-        array (iterable): Iterable to implode.
-        separator (str, optional): Separator to using when joining. Defaults to ``''``.
+        array: Iterable to implode.
+        separator: Separator to using when joining. Defaults to ``''``.
 
     Returns:
-        str: Joined string.
+        Joined string.
 
     Example:
 
@@ -767,10 +767,10 @@ def kebab_case(text: t.Any) -> str:
     Converts `text` to kebab case (a.k.a. spinal case).
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to kebab case.
+        String converted to kebab case.
 
     Example:
 
@@ -790,10 +790,10 @@ def lines(text: t.Any) -> t.List[str]:
     Split lines in `text` into an array.
 
     Args:
-        text (str): String to split.
+        text: String to split.
 
     Returns:
-        list: String split by lines.
+        String split by lines.
 
     Example:
 
@@ -811,10 +811,10 @@ def lower_case(text: t.Any) -> str:
     Converts string to lower case as space separated words.
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to lower case as space separated words.
+        String converted to lower case as space separated words.
 
     Example:
 
@@ -838,10 +838,10 @@ def lower_first(text: str) -> str:
     Converts the first character of string to lower case.
 
     Args:
-        text (str): String passed in by the user.
+        text: String passed in by the user.
 
     Returns:
-        str: String in which the first character is converted to lower case.
+        String in which the first character is converted to lower case.
 
     Example:
 
@@ -866,13 +866,13 @@ def number_format(
     Format a number to scale with custom decimal and order separators.
 
     Args:
-        number (int|float): Number to format.
-        scale (int, optional): Number of decimals to include. Defaults to ``0``.
-        decimal_separator (str, optional): Decimal separator to use. Defaults to ``'.'``.
-        order_separator (str, optional): Order separator to use. Defaults to ``','``.
+        number: Number to format.
+        scale: Number of decimals to include. Defaults to ``0``.
+        decimal_separator: Decimal separator to use. Defaults to ``'.'``.
+        order_separator: Order separator to use. Defaults to ``','``.
 
     Returns:
-        str: Formatted number as string.
+        Formatted number as string.
 
     Example:
 
@@ -910,12 +910,12 @@ def pad(text: t.Any, length: int, chars: t.Any = " ") -> str:
     the padding length.
 
     Args:
-        text (str): String to pad.
-        length (int): Amount to pad.
-        chars (str, optional): Characters to pad with. Defaults to ``" "``.
+        text: String to pad.
+        length: Amount to pad.
+        chars: Characters to pad with. Defaults to ``" "``.
 
     Returns:
-        str: Padded string.
+        Padded string.
 
     Example:
 
@@ -953,12 +953,12 @@ def pad_end(text: t.Any, length: int, chars: t.Any = " ") -> str:
     length.
 
     Args:
-        text (str): String to pad.
-        length (int): Amount to pad.
-        chars (str, optional): Characters to pad with. Defaults to ``" "``.
+        text: String to pad.
+        length: Amount to pad.
+        chars: Characters to pad with. Defaults to ``" "``.
 
     Returns:
-        str: Padded string.
+        Padded string.
 
     Example:
 
@@ -985,12 +985,12 @@ def pad_start(text: t.Any, length: int, chars: t.Any = " ") -> str:
     length.
 
     Args:
-        text (str): String to pad.
-        length (int): Amount to pad.
-        chars (str, optional): Characters to pad with. Defaults to ``" "``.
+        text: String to pad.
+        length: Amount to pad.
+        chars: Characters to pad with. Defaults to ``" "``.
 
     Returns:
-        str: Padded string.
+        Padded string.
 
     Example:
 
@@ -1015,11 +1015,11 @@ def pascal_case(text: t.Any, strict: bool = True) -> str:
     Like :func:`camel_case` except the first letter is capitalized.
 
     Args:
-        text (str): String to convert.
-        strict (bool, optional): Whether to cast rest of string to lower case. Defaults to ``True``.
+        text: String to convert.
+        strict: Whether to cast rest of string to lower case. Defaults to ``True``.
 
     Returns:
-        str: String converted to class case.
+        String converted to class case.
 
     Example:
 
@@ -1046,10 +1046,10 @@ def predecessor(char: t.Any) -> str:
     Return the predecessor character of `char`.
 
     Args:
-        char (str): Character to find the predecessor of.
+        char: Character to find the predecessor of.
 
     Returns:
-        str: Predecessor character.
+        Predecessor character.
 
     Example:
 
@@ -1073,13 +1073,13 @@ def prune(text: t.Any, length: int = 0, omission: str = "...") -> str:
     is longer than the original text, then the original text is returned.
 
     Args:
-        text (str): String to prune.
-        length (int, optional): Target prune length. Defaults to ``0``.
-        omission (str, optional): Omission text to append to the end of the pruned string. Defaults
+        text: String to prune.
+        length: Target prune length. Defaults to ``0``.
+        omission: Omission text to append to the end of the pruned string. Defaults
             to ``'...'``.
 
     Returns:
-        str: Pruned string.
+        Pruned string.
 
     Example:
 
@@ -1132,11 +1132,11 @@ def quote(text: t.Any, quote_char: t.Any = '"') -> str:
     Quote a string with another string.
 
     Args:
-        text (str): String to be quoted.
-        quote_char (str, optional): the quote character. Defaults to ``"``.
+        text: String to be quoted.
+        quote_char: the quote character. Defaults to ``"``.
 
     Returns:
-        str: the quoted string.
+        the quoted string.
 
     Example:
 
@@ -1155,11 +1155,11 @@ def reg_exp_js_match(text: t.Any, reg_exp: str) -> t.List[str]:
     Return list of matches using Javascript style regular expression.
 
     Args:
-        text (str): String to evaluate.
-        reg_exp (str): Javascript style regular expression.
+        text: String to evaluate.
+        reg_exp: Javascript style regular expression.
 
     Returns:
-        list: List of matches.
+        List of matches.
 
     Example:
 
@@ -1191,12 +1191,12 @@ def reg_exp_js_replace(
     Replace `text` with `repl` using Javascript style regular expression to find matches.
 
     Args:
-        text (str): String to evaluate.
-        reg_exp (str): Javascript style regular expression.
-        repl (str|callable): Replacement string or callable.
+        text: String to evaluate.
+        reg_exp: Javascript style regular expression.
+        repl: Replacement string or callable.
 
     Returns:
-        str: Modified string.
+        Modified string.
 
     Example:
 
@@ -1235,15 +1235,15 @@ def reg_exp_replace(
     replacing. Optionally, set `count` to limit number of replacements.
 
     Args:
-        text (str): String to replace.
-        pattern (str|typing.Pattern): Pattern to find and replace.
-        repl (str): String to substitute `pattern` with.
-        ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
-        count (int, optional): Maximum number of occurrences to replace. Defaults to ``0`` which
+        text: String to replace.
+        pattern: Pattern to find and replace.
+        repl: String to substitute `pattern` with.
+        ignore_case: Whether to ignore case when replacing. Defaults to ``False``.
+        count: Maximum number of occurrences to replace. Defaults to ``0`` which
             replaces all.
 
     Returns:
-        str: Replaced string.
+        Replaced string.
 
     Example:
 
@@ -1272,11 +1272,11 @@ def repeat(text: t.Any, n: t.SupportsInt = 0) -> str:
     Repeats the given string `n` times.
 
     Args:
-        text (str): String to repeat.
-        n (int, optional): Number of times to repeat the string.
+        text: String to repeat.
+        n: Number of times to repeat the string.
 
     Returns:
-        str: Repeated string.
+        Repeated string.
 
     Example:
 
@@ -1303,20 +1303,20 @@ def replace(
     Optionally, set `count` to limit number of replacements.
 
     Args:
-        text (str): String to replace.
-        pattern (str|typing.Pattern): Pattern to find and replace.
-        repl (str): String to substitute `pattern` with.
-        ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
-        count (int, optional): Maximum number of occurrences to replace. Defaults to ``0`` which
+        text: String to replace.
+        pattern: Pattern to find and replace.
+        repl: String to substitute `pattern` with.
+        ignore_case: Whether to ignore case when replacing. Defaults to ``False``.
+        count: Maximum number of occurrences to replace. Defaults to ``0`` which
             replaces all.
-        escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
+        escape: Whether to escape `pattern` when searching. This is needed if a
             literal replacement is desired when `pattern` may contain special regular expression
             characters. Defaults to ``True``.
-        from_start (bool, optional): Whether to limit replacement to start of string.
-        from_end (bool, optional): Whether to limit replacement to end of string.
+        from_start: Whether to limit replacement to start of string.
+        from_end: Whether to limit replacement to end of string.
 
     Returns:
-        str: Replaced string.
+        Replaced string.
 
     Example:
 
@@ -1380,16 +1380,16 @@ def replace_end(
     `text`.
 
     Args:
-        text (str): String to replace.
-        pattern (str|typing.Pattern): Pattern to find and replace.
-        repl (str): String to substitute `pattern` with.
-        ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
-        escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
+        text: String to replace.
+        pattern: Pattern to find and replace.
+        repl: String to substitute `pattern` with.
+        ignore_case: Whether to ignore case when replacing. Defaults to ``False``.
+        escape: Whether to escape `pattern` when searching. This is needed if a
             literal replacement is desired when `pattern` may contain special regular expression
             characters. Defaults to ``True``.
 
     Returns:
-        str: Replaced string.
+        Replaced string.
 
     Example:
 
@@ -1415,16 +1415,16 @@ def replace_start(
     of `text`.
 
     Args:
-        text (str): String to replace.
-        pattern (str|typing.Pattern): Pattern to find and replace.
-        repl (str): String to substitute `pattern` with.
-        ignore_case (bool, optional): Whether to ignore case when replacing. Defaults to ``False``.
-        escape (bool, optional): Whether to escape `pattern` when searching. This is needed if a
+        text: String to replace.
+        pattern: Pattern to find and replace.
+        repl: String to substitute `pattern` with.
+        ignore_case: Whether to ignore case when replacing. Defaults to ``False``.
+        escape: Whether to escape `pattern` when searching. This is needed if a
             literal replacement is desired when `pattern` may contain special regular expression
             characters. Defaults to ``True``.
 
     Returns:
-        str: Replaced string.
+        Replaced string.
 
     Example:
 
@@ -1443,11 +1443,11 @@ def separator_case(text: t.Any, separator: str) -> str:
     Splits `text` on words and joins with `separator`.
 
     Args:
-        text (str): String to convert.
-        separator (str): Separator to join words with.
+        text: String to convert.
+        separator: Separator to join words with.
 
     Returns:
-        str: Converted string.
+        Converted string.
 
     Example:
 
@@ -1472,14 +1472,14 @@ def series_phrase(
     Join items into a grammatical series phrase, e.g., ``"item1, item2, item3 and item4"``.
 
     Args:
-        items (list): List of string items to join.
-        separator (str, optional): Item separator. Defaults to ``', '``.
-        last_separator (str, optional): Last item separator. Defaults to ``' and '``.
-        serial (bool, optional): Whether to include `separator` with `last_separator` when number of
+        items: List of string items to join.
+        separator: Item separator. Defaults to ``', '``.
+        last_separator: Last item separator. Defaults to ``' and '``.
+        serial: Whether to include `separator` with `last_separator` when number of
             items is greater than 2. Defaults to ``False``.
 
     Returns:
-        str: Joined string.
+        Joined string.
 
     Example:
 
@@ -1516,12 +1516,12 @@ def series_phrase_serial(
     item3, and item4"``.
 
     Args:
-        items (list): List of string items to join.
-        separator (str, optional): Item separator. Defaults to ``', '``.
-        last_separator (str, optional): Last item separator. Defaults to ``' and '``.
+        items: List of string items to join.
+        separator: Item separator. Defaults to ``', '``.
+        last_separator: Last item separator. Defaults to ``' and '``.
 
     Returns:
-        str: Joined string.
+        Joined string.
 
     Example:
 
@@ -1542,11 +1542,11 @@ def slugify(text: t.Any, separator: str = "-") -> str:
     an ASCII equivalent are replaced with ``-``.
 
     Args:
-        text (str): String to slugify.
-        separator (str, optional): Separator to use. Defaults to ``'-'``.
+        text: String to slugify.
+        separator: Separator to use. Defaults to ``'-'``.
 
     Returns:
-        str: Slugified string.
+        Slugified string.
 
     Example:
 
@@ -1572,10 +1572,10 @@ def snake_case(text: t.Any) -> str:
     Converts `text` to snake case.
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to snake case.
+        String converted to snake case.
 
     Example:
 
@@ -1599,11 +1599,11 @@ def split(text: t.Any, separator: t.Union[str, Unset, None] = UNSET) -> t.List[s
     If `separator` is falsey, then `text` is split on every character.
 
     Args:
-        text (str): String to explode.
-        separator (str, optional): Separator string to split on. Defaults to ``NoValue``.
+        text: String to explode.
+        separator: Separator string to split on. Defaults to ``NoValue``.
 
     Returns:
-        list: Split string.
+        Split string.
 
     Example:
 
@@ -1637,10 +1637,10 @@ def start_case(text: t.Any) -> str:
     Convert `text` to start case.
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to start case.
+        String converted to start case.
 
     Example:
 
@@ -1660,12 +1660,12 @@ def starts_with(text: t.Any, target: t.Any, position: int = 0) -> bool:
     Checks if `text` starts with a given target string.
 
     Args:
-        text (str): String to check.
-        target (str): String to check for.
-        position (int, optional): Position to search from. Defaults to beginning of `text`.
+        text: String to check.
+        target: String to check for.
+        position: Position to search from. Defaults to beginning of `text`.
 
     Returns:
-        bool: Whether `text` starts with `target`.
+        Whether `text` starts with `target`.
 
     Example:
 
@@ -1688,10 +1688,10 @@ def strip_tags(text: t.Any) -> str:
     Removes all HTML tags from `text`.
 
     Args:
-        text (str): String to strip.
+        text: String to strip.
 
     Returns:
-        str: String without HTML tags.
+        String without HTML tags.
 
     Example:
 
@@ -1709,11 +1709,11 @@ def substr_left(text: t.Any, subtext: str) -> str:
     characters in `text` that are to the left of `subtext` or all string if no match found.
 
     Args:
-        text (str): String to partition.
-        subtext (str): String to search for.
+        text: String to partition.
+        subtext: String to search for.
 
     Returns:
-        str: Substring to left of `subtext`.
+        Substring to left of `subtext`.
 
     Example:
 
@@ -1732,11 +1732,11 @@ def substr_left_end(text: t.Any, subtext: str) -> str:
     characters in `text` that are to the left of `subtext` or all string if no match found.
 
     Args:
-        text (str): String to partition.
-        subtext (str): String to search for.
+        text: String to partition.
+        subtext: String to search for.
 
     Returns:
-        str: Substring to left of `subtext`.
+        Substring to left of `subtext`.
 
     Example:
 
@@ -1755,11 +1755,11 @@ def substr_right(text: t.Any, subtext: str) -> str:
     characters in `text` that are to the right of `subtext` or all string if no match found.
 
     Args:
-        text (str): String to partition.
-        subtext (str): String to search for.
+        text: String to partition.
+        subtext: String to search for.
 
     Returns:
-        str: Substring to right of `subtext`.
+        Substring to right of `subtext`.
 
     Example:
 
@@ -1778,11 +1778,11 @@ def substr_right_end(text: t.Any, subtext: str) -> str:
     characters in `text` that are to the right of `subtext` or all string if no match found.
 
     Args:
-        text (str): String to partition.
-        subtext (str): String to search for.
+        text: String to partition.
+        subtext: String to search for.
 
     Returns:
-        str: Substring to right of `subtext`.
+        Substring to right of `subtext`.
 
     Example:
 
@@ -1800,10 +1800,10 @@ def successor(char: t.Any) -> str:
     Return the successor character of `char`.
 
     Args:
-        char (str): Character to find the successor of.
+        char: Character to find the successor of.
 
     Returns:
-        str: Successor character.
+        Successor character.
 
     Example:
 
@@ -1825,11 +1825,11 @@ def surround(text: t.Any, wrapper: t.Any) -> str:
     Surround a string with another string.
 
     Args:
-        text (str): String to surround with `wrapper`.
-        wrapper (str): String by which `text` is to be surrounded.
+        text: String to surround with `wrapper`.
+        wrapper: String by which `text` is to be surrounded.
 
     Returns:
-        str: Surrounded string.
+        Surrounded string.
 
     Example:
 
@@ -1850,10 +1850,10 @@ def swap_case(text: t.Any) -> str:
     Swap case of `text` characters.
 
     Args:
-        text (str): String to swap case.
+        text: String to swap case.
 
     Returns:
-        str: String with swapped case.
+        String with swapped case.
 
     Example:
 
@@ -1871,10 +1871,10 @@ def title_case(text: t.Any) -> str:
     Convert `text` to title case.
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to title case.
+        String converted to title case.
 
     Example:
 
@@ -1893,10 +1893,10 @@ def to_lower(text: t.Any) -> str:
     Converts the given :attr:`text` to lower text.
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to lower case.
+        String converted to lower case.
 
     Example:
 
@@ -1917,10 +1917,10 @@ def to_upper(text: t.Any) -> str:
     Converts the given :attr:`text` to upper text.
 
     Args:
-        text (str): String to convert.
+        text: String to convert.
 
     Returns:
-        str: String converted to upper case.
+        String converted to upper case.
 
     Example:
 
@@ -1941,11 +1941,11 @@ def trim(text: t.Any, chars: t.Union[str, None] = None) -> str:
     Removes leading and trailing whitespace or specified characters from `text`.
 
     Args:
-        text (str): String to trim.
-        chars (str, optional): Specific characters to remove.
+        text: String to trim.
+        chars: Specific characters to remove.
 
     Returns:
-        str: Trimmed string.
+        Trimmed string.
 
     Example:
 
@@ -1964,11 +1964,11 @@ def trim_end(text: t.Any, chars: t.Union[str, None] = None) -> str:
     Removes trailing whitespace or specified characters from `text`.
 
     Args:
-        text (str): String to trim.
-        chars (str, optional): Specific characters to remove.
+        text: String to trim.
+        chars: Specific characters to remove.
 
     Returns:
-        str: Trimmed string.
+        Trimmed string.
 
     Example:
 
@@ -1989,11 +1989,11 @@ def trim_start(text: t.Any, chars: t.Union[str, None] = None) -> str:
     Removes leading  whitespace or specified characters from `text`.
 
     Args:
-        text (str): String to trim.
-        chars (str, optional): Specific characters to remove.
+        text: String to trim.
+        chars: Specific characters to remove.
 
     Returns:
-        str: Trimmed string.
+        Trimmed string.
 
     Example:
 
@@ -2020,13 +2020,13 @@ def truncate(
     the truncated string are replaced with the omission string which defaults to ``...``.
 
     Args:
-        text (str): String to truncate.
-        length (int, optional): Maximum string length. Defaults to ``30``.
-        omission (str, optional): String to indicate text is omitted.
-        separator (mixed, optional): Separator pattern to truncate to.
+        text: String to truncate.
+        length: Maximum string length. Defaults to ``30``.
+        omission: String to indicate text is omitted.
+        separator: Separator pattern to truncate to.
 
     Returns:
-        str: Truncated string.
+        Truncated string.
 
     Example:
 
@@ -2074,10 +2074,10 @@ def unescape(text: t.Any) -> str:
     ``&gt;``, ``&quot;``, ``&#39;``, and ``&#96;`` in `text` to their corresponding characters.
 
     Args:
-        text (str): String to unescape.
+        text: String to unescape.
 
     Returns:
-        str: HTML unescaped string.
+        HTML unescaped string.
 
     Example:
 
@@ -2099,10 +2099,10 @@ def upper_case(text: t.Any) -> str:
     Converts string to upper case, as space separated words.
 
     Args:
-        text (str): String to be converted to uppercase.
+        text: String to be converted to uppercase.
 
     Returns:
-        str: String converted to uppercase, as space separated words.
+        String converted to uppercase, as space separated words.
 
     Example:
 
@@ -2126,10 +2126,10 @@ def upper_first(text: str) -> str:
     Converts the first character of string to upper case.
 
     Args:
-        text (str): String passed in by the user.
+        text: String passed in by the user.
 
     Returns:
-        str: String in which the first character is converted to upper case.
+        String in which the first character is converted to upper case.
 
     Example:
 
@@ -2152,11 +2152,11 @@ def unquote(text: t.Any, quote_char: t.Any = '"') -> str:
     Unquote `text` by removing `quote_char` if `text` begins and ends with it.
 
     Args:
-        text (str): String to unquote.
-        quote_char (str, optional): Quote character to remove. Defaults to `"`.
+        text: String to unquote.
+        quote_char: Quote character to remove. Defaults to `"`.
 
     Returns:
-        str: Unquoted string.
+        Unquoted string.
 
     Example:
 
@@ -2186,13 +2186,13 @@ def url(*paths: t.Any, **params: t.Any) -> str:
     append query parameters.
 
     Args:
-        paths (str): URL paths to combine.
+        paths: URL paths to combine.
 
     Keyword Args:
-        params (str, optional): Query parameters.
+        params: Query parameters.
 
     Returns:
-        str: URL string.
+        URL string.
 
     Example:
 
@@ -2231,11 +2231,11 @@ def words(text: t.Any, pattern: t.Union[str, None] = None) -> t.List[str]:
         https://github.com/lodash/lodash/blob/master/words.js#L30
 
     Args:
-        text (str): String to split.
-        pattern (str, optional): Custom pattern to split words on. Defaults to ``None``.
+        text: String to split.
+        pattern: Custom pattern to split words on. Defaults to ``None``.
 
     Returns:
-        list: List of words.
+        List of words.
 
     Example:
 

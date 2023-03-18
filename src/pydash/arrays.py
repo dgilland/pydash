@@ -108,11 +108,11 @@ def chunk(array: t.Sequence[T], size: int = 1) -> t.List[t.Sequence[T]]:
     evenly, the final chunk will be the remaining elements.
 
     Args:
-        array (list): List to chunk.
-        size (int, optional): Chunk size. Defaults to ``1``.
+        array: List to chunk.
+        size: Chunk size. Defaults to ``1``.
 
     Returns:
-        list: New list containing chunks of `array`.
+        New list containing chunks of `array`.
 
     Example:
 
@@ -130,10 +130,10 @@ def compact(array: t.Iterable[t.Union[T, None]]) -> t.List[T]:
     Creates a list with all falsey values of array removed.
 
     Args:
-        array (list): List to compact.
+        array: List to compact.
 
     Returns:
-        list: Compacted list.
+        Compacted list.
 
     Example:
 
@@ -150,10 +150,10 @@ def concat(*arrays: t.Iterable[T]) -> t.List[T]:
     Concatenates zero or more lists into one.
 
     Args:
-        arrays (list): Lists to concatenate.
+        arrays: Lists to concatenate.
 
     Returns:
-        list: Concatenated list.
+        Concatenated list.
 
     Example:
 
@@ -173,11 +173,11 @@ def difference(array: t.Iterable[T], *others: t.Iterable[T]) -> t.List[T]:
     Creates a list of list elements not present in others.
 
     Args:
-        array (list): List to process.
-        others (list): Lists to check.
+        array: List to process.
+        others: Lists to check.
 
     Returns:
-        list: Difference between `others`.
+        Difference between `others`.
 
     Example:
 
@@ -213,15 +213,15 @@ def difference_by(array, *others, **kwargs):
     argument: ``(value)``.
 
     Args:
-        array (list): The array to find the difference of.
-        others (list): Lists to check for difference with `array`.
+        array: The array to find the difference of.
+        others: Lists to check for difference with `array`.
 
     Keyword Args:
-        iteratee (mixed, optional): Function to transform the elements of the arrays. Defaults to
+        iteratee: Function to transform the elements of the arrays. Defaults to
             :func:`.identity`.
 
     Returns:
-        list: Difference between `others`.
+        Difference between `others`.
 
     Example:
 
@@ -269,15 +269,15 @@ def difference_with(array, *others, **kwargs):
     the first array. The comparator is invoked with two arguments: ``(arr_val, oth_val)``.
 
     Args:
-        array (list): The array to find the difference of.
-        others (list): Lists to check for difference with `array`.
+        array: The array to find the difference of.
+        others: Lists to check for difference with `array`.
 
     Keyword Args:
-        comparator (callable, optional): Function to compare the elements of the arrays. Defaults to
+        comparator: Function to compare the elements of the arrays. Defaults to
             :func:`.is_equal`.
 
     Returns:
-        list: Difference between `others`.
+        Difference between `others`.
 
     Example:
 
@@ -315,11 +315,11 @@ def drop(array: t.Sequence[T], n: int = 1) -> t.List[T]:
     Creates a slice of `array` with `n` elements dropped from the beginning.
 
     Args:
-        array (list): List to process.
-        n (int, optional): Number of elements to drop. Defaults to ``1``.
+        array: List to process.
+        n: Number of elements to drop. Defaults to ``1``.
 
     Returns:
-        list: Dropped list.
+        Dropped list.
 
     Example:
 
@@ -342,11 +342,11 @@ def drop_right(array: t.Sequence[T], n: int = 1) -> t.List[T]:
     Creates a slice of `array` with `n` elements dropped from the end.
 
     Args:
-        array (list): List to process.
-        n (int, optional): Number of elements to drop. Defaults to ``1``.
+        array: List to process.
+        n: Number of elements to drop. Defaults to ``1``.
 
     Returns:
-        list: Dropped list.
+        Dropped list.
 
     Example:
 
@@ -391,11 +391,11 @@ def drop_right_while(array, predicate=None):
     index, array)``.
 
     Args:
-        array (list): List to process.
-        predicate (mixed): Predicate called per iteration
+        array: List to process.
+        predicate: Predicate called per iteration
 
     Returns:
-        list: Dropped list.
+        Dropped list.
 
     Example:
 
@@ -443,11 +443,11 @@ def drop_while(array, predicate=None):
     index, array)``.
 
     Args:
-        array (list): List to process.
-        predicate (mixed): Predicate called per iteration
+        array: List to process.
+        predicate: Predicate called per iteration
 
     Returns:
-        list: Dropped list.
+        Dropped list.
 
     Example:
 
@@ -478,11 +478,11 @@ def duplicates(
     properties of the given object, else ``False``.
 
     Args:
-        array (list): List to process.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        array: List to process.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list: List of duplicates.
+        List of duplicates.
 
     Example:
 
@@ -511,13 +511,13 @@ def fill(
     Fills elements of array with value from `start` up to, but not including, `end`.
 
     Args:
-        array (list): List to fill.
-        value (mixed): Value to fill with.
-        start (int, optional): Index to start filling. Defaults to ``0``.
-        end (int, optional): Index to end filling. Defaults to ``len(array)``.
+        array: List to fill.
+        value: Value to fill with.
+        start: Index to start filling. Defaults to ``0``.
+        end: Index to end filling. Defaults to ``len(array)``.
 
     Returns:
-        list: Filled `array`.
+        Filled `array`.
 
     Example:
 
@@ -569,11 +569,11 @@ def find_index(array, predicate=None):
     the element that passes the predicate check, instead of the element itself.
 
     Args:
-        array (list): List to process.
-        predicate (mixed, optional): Predicate applied per iteration.
+        array: List to process.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        int: Index of found item or ``-1`` if not found.
+        Index of found item or ``-1`` if not found.
 
     Example:
 
@@ -614,11 +614,11 @@ def find_last_index(array, predicate=None):
     to left.
 
     Args:
-        array (list): List to process.
-        predicate (mixed, optional): Predicate applied per iteration.
+        array: List to process.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        int: Index of found item or ``-1`` if not found.
+        Index of found item or ``-1`` if not found.
 
     Example:
 
@@ -648,10 +648,10 @@ def flatten(array):
     Flattens array a single level deep.
 
     Args:
-        array (list): List to flatten.
+        array: List to flatten.
 
     Returns:
-        list: Flattened list.
+        Flattened list.
 
     Example:
 
@@ -676,10 +676,10 @@ def flatten_deep(array: t.Iterable) -> t.List:
     Flattens an array recursively.
 
     Args:
-        array (list): List to flatten.
+        array: List to flatten.
 
     Returns:
-        list: Flattened list.
+        Flattened list.
 
     Example:
 
@@ -696,11 +696,11 @@ def flatten_depth(array: t.Iterable, depth: int = 1) -> t.List:
     Recursively flatten `array` up to `depth` times.
 
     Args:
-        array (list): List to flatten.
-        depth (int, optional): Depth to flatten to. Defaults to ``1``.
+        array: List to flatten.
+        depth: Depth to flatten to. Defaults to ``1``.
 
     Returns:
-        list: Flattened list.
+        Flattened list.
 
     Example:
 
@@ -733,7 +733,7 @@ def from_pairs(pairs):
     Returns a dict from the given list of pairs.
 
     Args:
-        pairs (list): List of key-value pairs.
+        pairs: List of key-value pairs.
 
     Returns:
         dict
@@ -753,10 +753,10 @@ def head(array: t.Sequence[T]) -> t.Union[T, None]:
     Return the first element of `array`.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        mixed: First element of list.
+        First element of list.
 
     Example:
 
@@ -776,12 +776,12 @@ def index_of(array: t.Sequence[T], value: T, from_index: int = 0) -> int:
     Gets the index at which the first occurrence of value is found.
 
     Args:
-        array (list): List to search.
-        value (mixed): Value to search for.
-        from_index (int, optional): Index to search from.
+        array: List to search.
+        value: Value to search for.
+        from_index: Index to search from.
 
     Returns:
-        int: Index of found item or ``-1`` if not found.
+        Index of found item or ``-1`` if not found.
 
     Example:
 
@@ -803,10 +803,10 @@ def initial(array: t.List[T]) -> t.List[T]:
     Return all but the last element of `array`.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        list: Initial part of `array`.
+        Initial part of `array`.
 
     Example:
 
@@ -833,11 +833,11 @@ def intercalate(array, separator):
     Like :func:`intersperse` for lists of lists but shallowly flattening the result.
 
     Args:
-        array (list): List to intercalate.
-        separator (mixed): Element to insert.
+        array: List to intercalate.
+        separator: Element to insert.
 
     Returns:
-        list: Intercalated list.
+        Intercalated list.
 
     Example:
 
@@ -856,10 +856,10 @@ def interleave(*arrays: t.Iterable[T]) -> t.List[T]:
     round-robin into the new list.
 
     Args:
-        arrays (list): Lists to interleave.
+        arrays: Lists to interleave.
 
     Returns:
-        list: Interleaved list.
+        Interleaved list.
 
     Example:
 
@@ -876,11 +876,11 @@ def intersection(array: t.Sequence[T], *others: t.Iterable[t.Any]) -> t.List[T]:
     Computes the intersection of all the passed-in arrays.
 
     Args:
-        array (list): The array to find the intersection of.
-        others (list): Lists to check for intersection with `array`.
+        array: The array to find the intersection of.
+        others: Lists to check for intersection with `array`.
 
     Returns:
-        list: Intersection of provided lists.
+        Intersection of provided lists.
 
     Example:
 
@@ -922,15 +922,15 @@ def intersection_by(array, *others, **kwargs):
     argument: ``(value)``.
 
     Args:
-        array (list): The array to find the intersection of.
-        others (list): Lists to check for intersection with `array`.
+        array: The array to find the intersection of.
+        others: Lists to check for intersection with `array`.
 
     Keyword Args:
-        iteratee (mixed, optional): Function to transform the elements of the arrays. Defaults to
+        iteratee: Function to transform the elements of the arrays. Defaults to
             :func:`.identity`.
 
     Returns:
-        list: Intersection of provided lists.
+        Intersection of provided lists.
 
     Example:
 
@@ -978,15 +978,15 @@ def intersection_with(array, *others, **kwargs):
     the first array. The comparator is invoked with two arguments: ``(arr_val, oth_val)``.
 
     Args:
-        array (list): The array to find the intersection of.
-        others (list): Lists to check for intersection with `array`.
+        array: The array to find the intersection of.
+        others: Lists to check for intersection with `array`.
 
     Keyword Args:
-        comparator (callable, optional): Function to compare the elements of the arrays. Defaults to
+        comparator: Function to compare the elements of the arrays. Defaults to
             :func:`.is_equal`.
 
     Returns:
-        list: Intersection of provided lists.
+        Intersection of provided lists.
 
     Example:
 
@@ -1021,11 +1021,11 @@ def intersperse(array: t.Iterable[T], separator: T2) -> t.List[t.Union[T, T2]]:
     Insert a separating element between the elements of `array`.
 
     Args:
-        array (list): List to intersperse.
-        separator (mixed): Element to insert.
+        array: List to intersperse.
+        separator: Element to insert.
 
     Returns:
-        list: Interspersed list.
+        Interspersed list.
 
     Example:
 
@@ -1042,10 +1042,10 @@ def last(array: t.Sequence[T]) -> t.Union[T, None]:
     Return the last element of `array`.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        mixed: Last part of `array`.
+        Last part of `array`.
 
     Example:
 
@@ -1064,12 +1064,12 @@ def last_index_of(
     Gets the index at which the last occurrence of value is found.
 
     Args:
-        array (list): List to search.
-        value (mixed): Value to search for.
-        from_index (int, optional): Index to search from.
+        array: List to search.
+        value: Value to search for.
+        from_index: Index to search from.
 
     Returns:
-        int: Index of found item or ``-1`` if not found.
+        Index of found item or ``-1`` if not found.
 
     Example:
 
@@ -1148,11 +1148,11 @@ def mapcat(array, iteratee=None):
     :func:`concat`.
 
     Args:
-        array (list): List to map and concatenate.
-        iteratee (mixed): Iteratee to apply to each element.
+        array: List to map and concatenate.
+        iteratee: Iteratee to apply to each element.
 
     Returns:
-        list: Mapped and concatenated list.
+        Mapped and concatenated list.
 
     Example:
 
@@ -1169,11 +1169,11 @@ def nth(array: t.Iterable[T], pos: int = 0) -> t.Union[T, None]:
     Gets the element at index n of array.
 
     Args:
-        array (list): List passed in by the user.
-        pos (int): Index of element to return.
+        array: List passed in by the user.
+        pos: Index of element to return.
 
     Returns:
-        mixed: Returns the element at :attr:`pos`.
+        Returns the element at :attr:`pos`.
 
     Example:
 
@@ -1196,11 +1196,11 @@ def pop(array: t.List[T], index: int = -1) -> T:
     Remove element of array at `index` and return element.
 
     Args:
-        array (list): List to pop from.
-        index (int, optional): Index to remove element from. Defaults to ``-1``.
+        array: List to pop from.
+        index: Index to remove element from. Defaults to ``-1``.
 
     Returns:
-        mixed: Value at `index`.
+        Value at `index`.
 
     Warning:
         `array` is modified in place.
@@ -1229,11 +1229,11 @@ def pull(array: t.List[T], *values: T) -> t.List[T]:
     Removes all provided values from the given array.
 
     Args:
-        array (list): List to pull from.
-        values (mixed): Values to remove.
+        array: List to pull from.
+        values: Values to remove.
 
     Returns:
-        list: Modified `array`.
+        Modified `array`.
 
     Warning:
         `array` is modified in place.
@@ -1257,11 +1257,11 @@ def pull_all(array: t.List[T], values: t.Iterable[T]) -> t.List[T]:
     Removes all provided values from the given array.
 
     Args:
-        array (list): Array to modify.
-        values (list): Values to remove.
+        array: Array to modify.
+        values: Values to remove.
 
     Returns:
-        list: Modified `array`.
+        Modified `array`.
 
     Example:
 
@@ -1286,13 +1286,13 @@ def pull_all_by(
     invoked with one argument: ``(value)``.
 
     Args:
-        array (list): Array to modify.
-        values (list): Values to remove.
-        iteratee (mixed, optional): Function to transform the elements of the arrays. Defaults to
+        array: Array to modify.
+        values: Values to remove.
+        iteratee: Function to transform the elements of the arrays. Defaults to
             :func:`.identity`.
 
     Returns:
-        list: Modified `array`.
+        Modified `array`.
 
     Example:
 
@@ -1317,13 +1317,13 @@ def pull_all_with(
     oth_val)``.
 
     Args:
-        array (list): Array to modify.
-        values (list): Values to remove.
-        comparator (callable, optional): Function to compare the elements of the arrays. Defaults to
+        array: Array to modify.
+        values: Values to remove.
+        comparator: Function to compare the elements of the arrays. Defaults to
             :func:`.is_equal`.
 
     Returns:
-        list: Modified `array`.
+        Modified `array`.
 
     Example:
 
@@ -1348,11 +1348,11 @@ def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
     removed elements. Indexes may be specified as a list of indexes or as individual arguments.
 
     Args:
-        array (list): List to pull from.
-        indexes (int): Indexes to pull.
+        array: List to pull from.
+        indexes: Indexes to pull.
 
     Returns:
-        list: Modified `array`.
+        Modified `array`.
 
     Warning:
         `array` is modified in place.
@@ -1376,11 +1376,11 @@ def push(array: t.List[T], *items: T2) -> t.List[t.Union[T, T2]]:
     Push items onto the end of `array` and return modified `array`.
 
     Args:
-        array (list): List to push to.
-        items (mixed): Items to append.
+        array: List to push to.
+        items: Items to append.
 
     Returns:
-        list: Modified `array`.
+        Modified `array`.
 
     Warning:
         `array` is modified in place.
@@ -1415,11 +1415,11 @@ def remove(
     removed elements.
 
     Args:
-        array (list): List to remove elements from.
-        predicate (mixed, optional): Predicate applied per iteration.
+        array: List to remove elements from.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        list: Removed elements of `array`.
+        Removed elements of `array`.
 
     Warning:
         `array` is modified in place.
@@ -1455,10 +1455,10 @@ def reverse(array: SequenceT) -> SequenceT:
     Return `array` in reverse order.
 
     Args:
-        array (list|string): Object to process.
+        array: Object to process.
 
     Returns:
-        list|string: Reverse of object.
+        Reverse of object.
 
     Example:
 
@@ -1477,10 +1477,10 @@ def shift(array: t.List[T]) -> T:
     Remove the first element of `array` and return it.
 
     Args:
-        array (list): List to shift.
+        array: List to shift.
 
     Returns:
-        mixed: First element of `array`.
+        First element of `array`.
 
     Warning:
         `array` is modified in place.
@@ -1504,12 +1504,12 @@ def slice_(array: SequenceT, start: int = 0, end: t.Union[int, None] = None) -> 
     Slices `array` from the `start` index up to, but not including, the `end` index.
 
     Args:
-        array (list): Array to slice.
-        start (int, optional): Start index. Defaults to ``0``.
-        end (int, optional): End index. Defaults to selecting the value at ``start`` index.
+        array: Array to slice.
+        start: Start index. Defaults to ``0``.
+        end: End index. Defaults to selecting the value at ``start`` index.
 
     Returns:
-        list: Sliced list.
+        Sliced list.
 
     Example:
 
@@ -1563,19 +1563,19 @@ def sort(array, comparator=None, key=None, reverse=False):
         key function automatically using ``functools.cmp_to_key``.
 
     Args:
-        array (list): List to sort.
-        comparator (callable, optional): A custom comparator function used to sort the list.
+        array: List to sort.
+        comparator: A custom comparator function used to sort the list.
             Function should accept two arguments and return a negative, zero, or position number
             depending on whether the first argument is considered smaller than, equal to, or larger
             than the second argument. Defaults to ``None``. This argument is mutually exclusive with
             `key`.
-        key (iteratee, optional): A function of one argument used to extract a a comparator key from
+        key: A function of one argument used to extract a a comparator key from
             each list element. Defaults to ``None``. This argument is mutually exclusive with
             `comparator`.
-        reverse (bool, optional): Whether to reverse the sort. Defaults to ``False``.
+        reverse: Whether to reverse the sort. Defaults to ``False``.
 
     Returns:
-        list: Sorted list.
+        Sorted list.
 
     Warning:
         `array` is modified in place.
@@ -1614,11 +1614,11 @@ def sorted_index(
     `array` in order to maintain its sort order.
 
     Args:
-        array (list): List to inspect.
-        value (mixed): Value to evaluate.
+        array: List to inspect.
+        value: Value to evaluate.
 
     Returns:
-        int: Returns the index at which `value` should be inserted into `array`.
+        Returns the index at which `value` should be inserted into `array`.
 
     Example:
 
@@ -1658,12 +1658,12 @@ def sorted_index_by(array, value, iteratee=None):
     one argument: ``(value)``.
 
     Args:
-        array (list): List to inspect.
-        value (mixed): Value to evaluate.
-        iteratee (mixed, optional): The iteratee invoked per element. Defaults to :func:`.identity`.
+        array: List to inspect.
+        value: Value to evaluate.
+        iteratee: The iteratee invoked per element. Defaults to :func:`.identity`.
 
     Returns:
-        int: Returns the index at which `value` should be inserted into `array`.
+        Returns the index at which `value` should be inserted into `array`.
 
     Example:
 
@@ -1691,11 +1691,11 @@ def sorted_index_of(
     Returns the index of the matched `value` from the sorted `array`, else ``-1``.
 
     Args:
-        array (list): Array to inspect.
-        value (mixed): Value to search for.
+        array: Array to inspect.
+        value: Value to search for.
 
     Returns:
-        int: Returns the index of the first matched value, else ``-1``.
+        Returns the index of the first matched value, else ``-1``.
 
     Example:
 
@@ -1722,11 +1722,11 @@ def sorted_last_index(
     `value` should be inserted into `array` in order to maintain its sort order.
 
     Args:
-        array (list): List to inspect.
-        value (mixed): Value to evaluate.
+        array: List to inspect.
+        value: Value to evaluate.
 
     Returns:
-        int: Returns the index at which `value` should be inserted into `array`.
+        Returns the index at which `value` should be inserted into `array`.
 
     Example:
 
@@ -1766,12 +1766,12 @@ def sorted_last_index_by(array, value, iteratee=None):
     with one argument: ``(value)``.
 
     Args:
-        array (list): List to inspect.
-        value (mixed): Value to evaluate.
-        iteratee (mixed, optional): The iteratee invoked per element. Defaults to :func:`.identity`.
+        array: List to inspect.
+        value: Value to evaluate.
+        iteratee: The iteratee invoked per element. Defaults to :func:`.identity`.
 
     Returns:
-        int: Returns the index at which `value` should be inserted into `array`.
+        Returns the index at which `value` should be inserted into `array`.
 
     Example:
 
@@ -1798,11 +1798,11 @@ def sorted_last_index_of(
     `array`.
 
     Args:
-        array (list): Array to inspect.
-        value (mixed): Value to search for.
+        array: Array to inspect.
+        value: Value to search for.
 
     Returns:
-        int: Returns the index of the matched value, else ``-1``.
+        Returns the index of the matched value, else ``-1``.
 
     Example:
 
@@ -1826,10 +1826,10 @@ def sorted_uniq(array: t.Iterable["SupportsRichComparisonT"]) -> t.List["Support
     Return sorted array with unique elements.
 
     Args:
-        array (list): List of values to be sorted.
+        array: List of values to be sorted.
 
     Returns:
-        list: List of unique elements in a sorted fashion.
+        List of unique elements in a sorted fashion.
 
     Example:
 
@@ -1856,12 +1856,12 @@ def sorted_uniq_by(
     one argument: ``(value)``.
 
     Args:
-        array (list): List of values to be sorted.
-        iteratee (mixed, optional): Function to transform the elements of the arrays. Defaults to
+        array: List of values to be sorted.
+        iteratee: Function to transform the elements of the arrays. Defaults to
             :func:`.identity`.
 
     Returns:
-        list: Unique list.
+        Unique list.
 
     Example:
 
@@ -1881,15 +1881,15 @@ def splice(
     `count` number of elements after.
 
     Args:
-        array (list|str): List to splice.
-        start (int): Start to splice at.
-        count (int, optional): Number of items to remove starting at `start`. If ``None`` then all
+        array: List to splice.
+        start: Start to splice at.
+        count: Number of items to remove starting at `start`. If ``None`` then all
             items after `start` are removed. Defaults to ``None``.
-        items (mixed): Elements to insert starting at `start`. Each item is inserted in the order
+        items: Elements to insert starting at `start`. Each item is inserted in the order
             given.
 
     Returns:
-        list|str: The removed elements of `array` or the spliced string.
+        The removed elements of `array` or the spliced string.
 
     Warning:
         `array` is modified in place if ``list``.
@@ -1943,11 +1943,11 @@ def split_at(array: t.List[T], index: int) -> t.List[t.List[T]]:
     Returns a list of two lists composed of the split of `array` at `index`.
 
     Args:
-        array (list): List to split.
-        index (int): Index to split at.
+        array: List to split.
+        index: Index to split at.
 
     Returns:
-        list: Split list.
+        Split list.
 
     Example:
 
@@ -1964,10 +1964,10 @@ def tail(array: t.List[T]) -> t.List[T]:
     Return all but the first element of `array`.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        list: Rest of the list.
+        Rest of the list.
 
     Example:
 
@@ -1987,11 +1987,11 @@ def take(array: t.Sequence[T], n: int = 1) -> t.List[T]:
     Creates a slice of `array` with `n` elements taken from the beginning.
 
     Args:
-        array (list): List to process.
-        n (int, optional): Number of elements to take. Defaults to ``1``.
+        array: List to process.
+        n: Number of elements to take. Defaults to ``1``.
 
     Returns:
-        list: Taken list.
+        Taken list.
 
     Example:
 
@@ -2014,11 +2014,11 @@ def take_right(array: t.Sequence[T], n: int = 1) -> t.List[T]:
     Creates a slice of `array` with `n` elements taken from the end.
 
     Args:
-        array (list): List to process.
-        n (int, optional): Number of elements to take. Defaults to ``1``.
+        array: List to process.
+        n: Number of elements to take. Defaults to ``1``.
 
     Returns:
-        list: Taken list.
+        Taken list.
 
     Example:
 
@@ -2063,11 +2063,11 @@ def take_right_while(array, predicate=None):
     array)``.
 
     Args:
-        array (list): List to process.
-        predicate (mixed): Predicate called per iteration
+        array: List to process.
+        predicate: Predicate called per iteration
 
     Returns:
-        list: Dropped list.
+        Dropped list.
 
     Example:
 
@@ -2115,11 +2115,11 @@ def take_while(array, predicate=None):
     array)``.
 
     Args:
-        array (list): List to process.
-        predicate (mixed): Predicate called per iteration
+        array: List to process.
+        predicate: Predicate called per iteration
 
     Returns:
-        list: Taken list.
+        Taken list.
 
     Example:
 
@@ -2153,11 +2153,11 @@ def union(array, *others):
     Computes the union of the passed-in arrays.
 
     Args:
-        array (list): List to union with.
-        others (list): Lists to unionize with `array`.
+        array: List to union with.
+        others: Lists to unionize with `array`.
 
     Returns:
-        list: Unionized list.
+        Unionized list.
 
     Example:
 
@@ -2192,14 +2192,14 @@ def union_by(array, *others, **kwargs):
     each element of each arrays to generate the criterion by which uniqueness is computed.
 
     Args:
-        array (list): List to unionize with.
-        others (list): Lists to unionize with `array`.
+        array: List to unionize with.
+        others: Lists to unionize with `array`.
 
     Keyword Args:
-        iteratee (callable): Function to invoke on each element.
+        iteratee: Function to invoke on each element.
 
     Returns:
-        list: Unionized list.
+        Unionized list.
 
     Example:
 
@@ -2238,15 +2238,15 @@ def union_with(array, *others, **kwargs):
     elements of arrays. Result values are chosen from the first array in which the value occurs.
 
     Args:
-        array (list): List to unionize with.
-        others (list): Lists to unionize with `array`.
+        array: List to unionize with.
+        others: Lists to unionize with `array`.
 
     Keyword Args:
-        comparator (callable, optional): Function to compare the elements of the arrays. Defaults to
+        comparator: Function to compare the elements of the arrays. Defaults to
             :func:`.is_equal`.
 
     Returns:
-        list: Unionized list.
+        Unionized list.
 
     Example:
 
@@ -2276,10 +2276,10 @@ def uniq(array: t.Iterable[T]) -> t.List[T]:
     properties of the given object, else ``False``.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        list: Unique list.
+        Unique list.
 
     Example:
 
@@ -2304,12 +2304,12 @@ def uniq_by(array: t.Iterable[T], iteratee: t.Union[t.Callable[[T], T], None] = 
     argument: ``(value)``.
 
     Args:
-        array (list): List to process.
-        iteratee (mixed, optional): Function to transform the elements of the arrays. Defaults to
+        array: List to process.
+        iteratee: Function to transform the elements of the arrays. Defaults to
             :func:`.identity`.
 
     Returns:
-        list: Unique list.
+        Unique list.
 
     Example:
 
@@ -2330,12 +2330,12 @@ def uniq_with(
     array.The comparator is invoked with two arguments: ``(value, other)``.
 
     Args:
-        array (list): List to process.
-        comparator (callable, optional): Function to compare the elements of the arrays. Defaults to
+        array: List to process.
+        comparator: Function to compare the elements of the arrays. Defaults to
             :func:`.is_equal`.
 
     Returns:
-        list: Unique list.
+        Unique list.
 
     Example:
 
@@ -2352,11 +2352,11 @@ def unshift(array: t.List[T], *items: T2) -> t.List[t.Union[T, T2]]:
     Insert the given elements at the beginning of `array` and return the modified list.
 
     Args:
-        array (list): List to modify.
-        items (mixed): Items to insert.
+        array: List to modify.
+        items: Items to insert.
 
     Returns:
-        list: Modified list.
+        Modified list.
 
     Warning:
         `array` is modified in place.
@@ -2383,10 +2383,10 @@ def unzip(array: t.Iterable[t.Iterable[T]]) -> t.List[t.List[T]]:
     elements from each group at their corresponding indexes.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        list: Unzipped list.
+        Unzipped list.
 
     Example:
 
@@ -2426,11 +2426,11 @@ def unzip_with(array, iteratee=None):
     index, group)``.
 
     Args:
-        array (list): List to process.
-        iteratee (callable, optional): Function to combine regrouped values.
+        array: List to process.
+        iteratee: Function to combine regrouped values.
 
     Returns:
-        list: Unzipped list.
+        Unzipped list.
 
     Example:
 
@@ -2459,11 +2459,11 @@ def without(array: t.Iterable[T], *values: T) -> t.List[T]:
     Creates an array with all occurrences of the passed values removed.
 
     Args:
-        array (list): List to filter.
-        values (mixed): Values to remove.
+        array: List to filter.
+        values: Values to remove.
 
     Returns:
-        list: Filtered list.
+        Filtered list.
 
     Example:
 
@@ -2480,11 +2480,11 @@ def xor(array: t.Iterable[T], *lists: t.Iterable[T]) -> t.List[T]:
     Creates a list that is the symmetric difference of the provided lists.
 
     Args:
-        array (list): List to process.
-        *lists (list): Lists to xor with.
+        array: List to process.
+        *lists: Lists to xor with.
 
     Returns:
-        list: XOR'd list.
+        XOR'd list.
 
     Example:
 
@@ -2516,15 +2516,15 @@ def xor_by(array, *lists, **kwargs):
     with one argument: ``(value)``.
 
     Args:
-        array (list): List to process.
-        *lists (list): Lists to xor with.
+        array: List to process.
+        *lists: Lists to xor with.
 
     Keyword Args:
-        iteratee (mixed, optional): Function to transform the elements of the arrays. Defaults to
+        iteratee: Function to transform the elements of the arrays. Defaults to
             :func:`.identity`.
 
     Returns:
-        list: XOR'd list.
+        XOR'd list.
 
     Example:
 
@@ -2573,15 +2573,15 @@ def xor_with(array, *lists, **kwargs):
     arrays. The comparator is invoked with two arguments: ``(arr_val, oth_val)``.
 
     Args:
-        array (list): List to process.
-        *lists (list): Lists to xor with.
+        array: List to process.
+        *lists: Lists to xor with.
 
     Keyword Args:
-        comparator (callable, optional): Function to compare the elements of the arrays. Defaults to
+        comparator: Function to compare the elements of the arrays. Defaults to
             :func:`.is_equal`.
 
     Returns:
-        list: XOR'd list.
+        XOR'd list.
 
     Example:
 
@@ -2616,10 +2616,10 @@ def zip_(*arrays: t.Iterable[T]) -> t.List[t.List[T]]:
     sources that are coordinated through matching array indexes.
 
     Args:
-        arrays (list): Lists to process.
+        arrays: Lists to process.
 
     Returns:
-        list: Zipped list.
+        Zipped list.
 
     Example:
 
@@ -2656,11 +2656,11 @@ def zip_object(keys, values=None):
     corresponding values.
 
     Args:
-        keys (list): Either a list of keys or a list of ``[key, value]`` pairs.
-        values (list, optional): List of values to zip.
+        keys: Either a list of keys or a list of ``[key, value]`` pairs.
+        values: List of values to zip.
 
     Returns:
-        dict: Zipped dict.
+        Zipped dict.
 
     Example:
 
@@ -2684,11 +2684,11 @@ def zip_object_deep(keys: t.Iterable[t.Any], values: t.Union[t.List[t.Any], None
     This method is like :func:`zip_object` except that it supports property paths.
 
     Args:
-        keys (list): Either a list of keys or a list of ``[key, value]`` pairs.
-        values (list, optional): List of values to zip.
+        keys: Either a list of keys or a list of ``[key, value]`` pairs.
+        values: List of values to zip.
 
     Returns:
-        dict: Zipped dict.
+        Zipped dict.
 
     Example:
 
@@ -2746,13 +2746,13 @@ def zip_with(*arrays, **kwargs):
     group)``.
 
     Args:
-        *arrays (list): Lists to process.
+        *arrays: Lists to process.
 
     Keyword Args:
         iteratee (callable): Function to combine grouped values.
 
     Returns:
-        list: Zipped list of grouped elements.
+        Zipped list of grouped elements.
 
     Example:
 

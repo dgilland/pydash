@@ -43,7 +43,7 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
         Return current value of the chain operations.
 
         Returns:
-            mixed: Current value of chain operations.
+            Current value of chain operations.
         """
         return self(self._value)
 
@@ -52,7 +52,7 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
         Return current value as string.
 
         Returns:
-            str: Current value of chain operations casted to ``str``.
+            Current value of chain operations casted to ``str``.
         """
         return self.module.to_string(self.value())
 
@@ -61,7 +61,7 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
         Executes the chained sequence and returns the wrapped result.
 
         Returns:
-            Chain: New instance of :class:`Chain` with resolved value from
+            New instance of :class:`Chain` with resolved value from
                 previous :class:`Class`.
         """
         return Chain(self.value())
@@ -71,7 +71,7 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
         Return a clone of the chained sequence planting `value` as the wrapped value.
 
         Args:
-            value (mixed): Value to plant as the initial chain value.
+            value: Value to plant as the initial chain value.
         """
         # pylint: disable=no-member,maybe-no-member
         wrapper = self._value
@@ -98,10 +98,10 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
         Return result of passing `value` through chained methods.
 
         Args:
-            value (mixed): Initial value to pass through chained methods.
+            value: Initial value to pass through chained methods.
 
         Returns:
-            mixed: Result of method chain evaluation of `value`.
+            Result of method chain evaluation of `value`.
         """
         if isinstance(self._value, ChainWrapper):
             # pylint: disable=maybe-no-member
@@ -157,7 +157,7 @@ class ChainWrapper(t.Generic[Value_coT]):
         :class:`Chain` object with the return value.
 
         Returns:
-            Chain: New instance of :class:`Chain` with the results of :attr:`method` passed in as
+            New instance of :class:`Chain` with the results of :attr:`method` passed in as
                 value.
         """
         self.args = args
@@ -184,10 +184,10 @@ def chain(value: t.Union[T, Unset] = UNSET) -> Chain[T]:
     Chaining is lazy and won't compute a final value until :meth:`Chain.value` is called.
 
     Args:
-        value (mixed): Value to initialize chain operations with.
+        value: Value to initialize chain operations with.
 
     Returns:
-        :class:`Chain`: Instance of :class:`Chain` initialized with `value`.
+        Instance of :class:`Chain` initialized with `value`.
 
     Example:
 
@@ -241,11 +241,11 @@ def tap(value: T, interceptor: t.Callable[[T], t.Any]) -> T:
     intermediate results within the chain.
 
     Args:
-        value (mixed): Current value of chain operation.
-        interceptor (callable): Function called on `value`.
+        value: Current value of chain operation.
+        interceptor: Function called on `value`.
 
     Returns:
-        mixed: `value` after `interceptor` call.
+        `value` after `interceptor` call.
 
     Example:
 
@@ -268,11 +268,11 @@ def thru(value: T, interceptor: t.Callable[[T], T2]) -> T2:
     `value` through a function during a method chain.
 
     Args:
-        value (mixed): Current value of chain operation.
-        interceptor (callable): Function called with `value`.
+        value: Current value of chain operation.
+        interceptor: Function called with `value`.
 
     Returns:
-        mixed: Results of ``interceptor(value)``.
+        Results of ``interceptor(value)``.
 
     Example:
 

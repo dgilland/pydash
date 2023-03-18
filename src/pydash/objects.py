@@ -93,11 +93,11 @@ def assign(obj, *sources) -> t.Union[t.List, t.Dict]:
     Assigns properties of source object(s) to the destination object.
 
     Args:
-        obj (dict): Destination object whose properties will be modified.
-        sources (dict): Source objects to assign to `obj`.
+        obj: Destination object whose properties will be modified.
+        sources: Source objects to assign to `obj`.
 
     Returns:
-        dict: Modified `obj`.
+        Modified `obj`.
 
     Warning:
         `obj` is modified in place.
@@ -190,14 +190,14 @@ def assign_with(obj, *sources, customizer=None):
     source)``.
 
     Args:
-        obj (dict): Destination object whose properties will be modified.
-        sources (dict): Source objects to assign to `obj`.
+        obj: Destination object whose properties will be modified.
+        sources: Source objects to assign to `obj`.
 
     Keyword Args:
-        customizer (mixed, optional): Customizer applied per iteration.
+        customizer: Customizer applied per iteration.
 
     Returns:
-        dict: Modified `obj`.
+        Modified `obj`.
 
     Warning:
         `obj` is modified in place.
@@ -252,10 +252,10 @@ def callables(obj) -> t.List:
     Creates a sorted list of keys of an object that are callable.
 
     Args:
-        obj (list|dict): Object to inspect.
+        obj: Object to inspect.
 
     Returns:
-        list: All keys whose values are callable.
+        All keys whose values are callable.
 
     Example:
 
@@ -278,7 +278,7 @@ def clone(value: T) -> T:
     Creates a clone of `value`.
 
     Args:
-        value (list|dict): Object to clone.
+        value: Object to clone.
 
     Example:
 
@@ -292,7 +292,7 @@ def clone(value: T) -> T:
         True
 
     Returns:
-        list|dict: Cloned object.
+        Cloned object.
 
     .. versionadded:: 1.0.0
 
@@ -357,11 +357,11 @@ def clone_with(value, customizer=None):
     customizer is invoked with up to three arguments: ``(value, index|key, object)``.
 
     Args:
-        value (list|dict): Object to clone.
-        customizer (callable, optional): Function to customize cloning.
+        value: Object to clone.
+        customizer: Function to customize cloning.
 
     Returns:
-        list|dict: Cloned object.
+        Cloned object.
 
     Example:
 
@@ -380,10 +380,10 @@ def clone_deep(value: T) -> T:
     cloned values.
 
     Args:
-        value (list|dict): Object to clone.
+        value: Object to clone.
 
     Returns:
-        list|dict: Cloned object.
+        Cloned object.
 
     Example:
 
@@ -459,11 +459,11 @@ def clone_deep_with(value, customizer=None):
     This method is like :func:`clone_with` except that it recursively clones `value`.
 
     Args:
-        value (list|dict): Object to clone.
-        customizer (callable, optional): Function to customize cloning.
+        value: Object to clone.
+        customizer: Function to customize cloning.
 
     Returns:
-        list|dict: Cloned object.
+        Cloned object.
     """
     return base_clone(value, is_deep=True, customizer=customizer)
 
@@ -476,11 +476,11 @@ def defaults(
     that resolve to undefined.
 
     Args:
-        obj (dict): Destination object whose properties will be modified.
-        sources (dict): Source objects to assign to `obj`.
+        obj: Destination object whose properties will be modified.
+        sources: Source objects to assign to `obj`.
 
     Returns:
-        dict: Modified `obj`.
+        Modified `obj`.
 
     Warning:
         `obj` is modified in place.
@@ -510,11 +510,11 @@ def defaults_deep(
     This method is like :func:`defaults` except that it recursively assigns default properties.
 
     Args:
-        obj (dict): Destination object whose properties will be modified.
-        sources (dict): Source objects to assign to `obj`.
+        obj: Destination object whose properties will be modified.
+        sources: Source objects to assign to `obj`.
 
     Returns:
-        dict: Modified `obj`.
+        Modified `obj`.
 
     Warning:
         `obj` is modified in place.
@@ -590,11 +590,11 @@ def find_key(obj, predicate=None):
     element that passes the predicate check, instead of the element itself.
 
     Args:
-        obj (list|dict): Object to search.
-        predicate (mixed): Predicate applied per iteration.
+        obj: Object to search.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        mixed: Found key or ``None``.
+        Found key or ``None``.
 
     Example:
 
@@ -664,11 +664,11 @@ def find_last_key(obj, predicate=None):
     the opposite order.
 
     Args:
-        obj (list|dict): Object to search.
-        predicate (mixed): Predicate applied per iteration.
+        obj: Object to search.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        mixed: Found key or ``None``.
+        Found key or ``None``.
 
     Example:
 
@@ -735,11 +735,11 @@ def for_in(obj, iteratee=None):
     property.
 
     Args:
-        obj (list|dict): Object to process.
-        iteratee (mixed): Iteratee applied per iteration.
+        obj: Object to process.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list|dict: `obj`.
+        `obj`.
 
     Example:
 
@@ -808,11 +808,11 @@ def for_in_right(obj, iteratee=None):
     This function is like :func:`for_in` except it iterates over the properties in reverse order.
 
     Args:
-        obj (list|dict): Object to process.
-        iteratee (mixed): Iteratee applied per iteration.
+        obj: Object to process.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list|dict: `obj`.
+        `obj`.
 
     Example:
 
@@ -854,12 +854,12 @@ def get(obj: t.Any, path: PathT, default: t.Any = None) -> t.Any:
     doesn't exist, `default` is returned.
 
     Args:
-        obj (list|dict|Sequence|Mapping): Object to process.
-        path (str|list): List or ``.`` delimited string of path describing path.
-        default (mixed): Default value to return if path doesn't exist. Defaults to ``None``.
+        obj: Object to process.
+        path: List or ``.`` delimited string of path describing path.
+        default: Default value to return if path doesn't exist. Defaults to ``None``.
 
     Returns:
-        mixed: Value of `obj` at path.
+        Value of `obj` at path.
 
     Example:
 
@@ -923,12 +923,12 @@ def has(obj: t.Any, path: PathT) -> bool:
     Checks if `path` exists as a key of `obj`.
 
     Args:
-        obj (mixed): Object to test.
-        path (mixed): Path to test for. Can be a list of nested keys or a ``.`` delimited string of
+        obj: Object to test.
+        path: Path to test for. Can be a list of nested keys or a ``.`` delimited string of
             path describing the path.
 
     Returns:
-        bool: Whether `obj` has `path`.
+        Whether `obj` has `path`.
 
     Example:
 
@@ -980,10 +980,10 @@ def invert(obj) -> t.Dict:
     Creates an object composed of the inverted keys and values of the given object.
 
     Args:
-        obj (dict): Dict to invert.
+        obj: Dict to invert.
 
     Returns:
-        dict: Inverted dict.
+        Inverted dict.
 
     Example:
 
@@ -1033,11 +1033,11 @@ def invert_by(obj, iteratee=None):
     invoked with one argument: ``(value)``.
 
     Args:
-        obj (dict): Object to invert.
-        iteratee (mixed): Iteratee applied per iteration.
+        obj: Object to invert.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        dict: Inverted dict.
+        Inverted dict.
 
     Example:
 
@@ -1072,13 +1072,13 @@ def invoke(obj: t.Any, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
     Invokes the method at path of object.
 
     Args:
-        obj (dict): The object to query.
-        path (list|str): The path of the method to invoke.
-        args (optional): Arguments to pass to method call.
-        kwargs (optional): Keyword arguments to pass to method call.
+        obj: The object to query.
+        path: The path of the method to invoke.
+        args: Arguments to pass to method call.
+        kwargs: Keyword arguments to pass to method call.
 
     Returns:
-        mixed: Result of the invoked method.
+        Result of the invoked method.
 
     Example:
 
@@ -1120,10 +1120,10 @@ def keys(obj):
     Creates a list composed of the keys of `obj`.
 
     Args:
-        obj (mixed): Object to extract keys from.
+        obj: Object to extract keys from.
 
     Returns:
-        list: List of keys.
+        List of keys.
 
     Example:
 
@@ -1187,11 +1187,11 @@ def map_keys(obj, iteratee=None):
     The iteratee is invoked with three arguments: ``(value, key, object)``.
 
     Args:
-        obj (list|dict): Object to map.
-        iteratee (mixed): Iteratee applied per iteration.
+        obj: Object to map.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list|dict: Results of running `obj` through `iteratee`.
+        Results of running `obj` through `iteratee`.
 
     Example:
 
@@ -1249,11 +1249,11 @@ def map_values(obj, iteratee=None):
     object)``.
 
     Args:
-        obj (list|dict): Object to map.
-        iteratee (mixed): Iteratee applied per iteration.
+        obj: Object to map.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list|dict: Results of running `obj` through `iteratee`.
+        Results of running `obj` through `iteratee`.
 
     Example:
 
@@ -1278,12 +1278,12 @@ def map_values_deep(
     path keys corresponding to the path of ``obj_value``.
 
     Args:
-        obj (list|dict): Object to map.
-        iteratee (callable): Iteratee applied to each value.
-        property_path (mixed, optional): Path key(s) to access.
+        obj: Object to map.
+        iteratee: Iteratee applied to each value.
+        property_path: Path key(s) to access.
 
     Returns:
-        mixed: The modified object.
+        The modified object.
 
     Warning:
         `obj` is modified in place.
@@ -1336,11 +1336,11 @@ def merge(obj, *sources):
     sources will overwrite property assignments of previous sources.
 
     Args:
-        obj (dict): Destination object to merge source(s) into.
-        sources (dict): Source objects to merge from. subsequent sources overwrite previous ones.
+        obj: Destination object to merge source(s) into.
+        sources: Source objects to merge from. subsequent sources overwrite previous ones.
 
     Returns:
-        dict: Merged object.
+        Merged object.
 
     Warning:
         `obj` is modified in place.
@@ -1379,16 +1379,16 @@ def merge_with(obj: t.Any, *sources: t.Any, **kwargs: t.Any) -> t.Any:
     ``(obj_value, src_value, key, obj, source)``.
 
     Args:
-        obj (dict): Destination object to merge source(s) into.
-        sources (dict): Source objects to merge from. subsequent sources
+        obj: Destination object to merge source(s) into.
+        sources: Source objects to merge from. subsequent sources
             overwrite previous ones.
 
     Keyword Args:
-        iteratee (callable, optional): Iteratee function to handle merging
+        iteratee: Iteratee function to handle merging
             (must be passed in as keyword argument).
 
     Returns:
-        dict: Merged object.
+        Merged object.
 
     Warning:
         `obj` is modified in place.
@@ -1476,11 +1476,11 @@ def omit(obj, *properties):
     `obj` that are not omitted.
 
     Args:
-        obj (mixed): Object to process.
-        *properties (str): Property values to omit.
+        obj: Object to process.
+        *properties: Property values to omit.
 
     Returns:
-        dict: Results of omitting properties.
+        Results of omitting properties.
 
     Example:
 
@@ -1546,11 +1546,11 @@ def omit_by(obj, iteratee=None):
     arguments: ``(value, key)``.
 
     Args:
-        obj (mixed): Object to process.
-        iteratee (mixed, optional): Iteratee used to determine which properties to omit.
+        obj: Object to process.
+        iteratee: Iteratee used to determine which properties to omit.
 
     Returns:
-        dict: Results of omitting properties.
+        Results of omitting properties.
 
     Example:
 
@@ -1594,11 +1594,11 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
     used.
 
     Args:
-        value (mixed): Value to parse.
-        radix (int, optional): Base to convert to.
+        value: Value to parse.
+        radix: Base to convert to.
 
     Returns:
-        mixed: Integer if parsable else ``None``.
+        Integer if parsable else ``None``.
 
     Example:
 
@@ -1654,11 +1654,11 @@ def pick(obj, *properties):
     Creates an object composed of the picked object properties.
 
     Args:
-        obj (list|dict): Object to pick from.
-        properties (str): Property values to pick.
+        obj: Object to pick from.
+        properties: Property values to pick.
 
     Returns:
-        dict: Dict containing picked properties.
+        Dict containing picked properties.
 
     Example:
 
@@ -1718,11 +1718,11 @@ def pick_by(obj, iteratee=None):
     is invoked with two arguments: ``(value, key)``.
 
     Args:
-        obj (list|dict): Object to pick from.
-        iteratee (mixed, optional): Iteratee used to determine which properties to pick.
+        obj: Object to pick from.
+        iteratee: Iteratee used to determine which properties to pick.
 
     Returns:
-        dict: Dict containing picked properties.
+        Dict containing picked properties.
 
     Example:
 
@@ -1765,12 +1765,12 @@ def rename_keys(obj: t.Dict[T, T2], key_map: t.Dict[t.Any, T3]) -> t.Dict[t.Unio
     Rename the keys of `obj` using `key_map` and return new object.
 
     Args:
-        obj (dict): Object to rename.
-        key_map (dict): Renaming map whose keys correspond to existing keys in `obj` and whose
+        obj: Object to rename.
+        key_map: Renaming map whose keys correspond to existing keys in `obj` and whose
             values are the new key name.
 
     Returns:
-        dict: Renamed `obj`.
+        Renamed `obj`.
 
     Example:
 
@@ -1789,12 +1789,12 @@ def set_(obj: T, path: PathT, value: t.Any) -> T:
     it will be created.
 
     Args:
-        obj (list|dict): Object to modify.
-        path (str | list): Target path to set value to.
-        value (mixed): Value to set.
+        obj: Object to modify.
+        path: Target path to set value to.
+        value: Value to set.
 
     Returns:
-        mixed: Modified `obj`.
+        Modified `obj`.
 
     Warning:
         `obj` is modified in place.
@@ -1832,13 +1832,13 @@ def set_with(obj: T, path: PathT, value: t.Any, customizer: t.Union[t.Callable, 
     instead. The customizer is invoked with three arguments: ``(nested_value, key, nested_object)``.
 
     Args:
-        obj (list|dict): Object to modify.
-        path (str | list): Target path to set value to.
-        value (mixed): Value to set.
-        customizer (callable, optional): The function to customize assigned values.
+        obj: Object to modify.
+        path: Target path to set value to.
+        value: Value to set.
+        customizer: The function to customize assigned values.
 
     Returns:
-        mixed: Modified `obj`.
+        Modified `obj`.
 
     Warning:
         `obj` is modified in place.
@@ -1870,14 +1870,14 @@ def to_boolean(
     Optionally, `true_values` and `false_values` can be overridden but each value must be a string.
 
     Args:
-        obj (mixed): Object to convert.
-        true_values (tuple, optional): Values to consider ``True``. Each value must be a string.
+        obj: Object to convert.
+        true_values: Values to consider ``True``. Each value must be a string.
             Comparision is case-insensitive. Defaults to ``('true', '1')``.
-        false_values (tuple, optional): Values to consider ``False``. Each value must be a string.
+        false_values: Values to consider ``False``. Each value must be a string.
             Comparision is case-insensitive. Defaults to ``('false', '0')``.
 
     Returns:
-        bool: Boolean value of `obj`.
+        Boolean value of `obj`.
 
     Example:
 
@@ -1934,10 +1934,10 @@ def to_dict(obj):
     Convert `obj` to ``dict`` by creating a new ``dict`` using `obj` keys and values.
 
     Args:
-        obj: (mixed): Object to convert.
+        obj:: Object to convert.
 
     Returns:
-        dict: Object converted to ``dict``.
+        Object converted to ``dict``.
 
     Example:
 
@@ -1971,10 +1971,10 @@ def to_integer(obj: t.Any) -> int:
     Converts `obj` to an integer.
 
     Args:
-        obj (str|int|float): Object to convert.
+        obj: Object to convert.
 
     Returns:
-        int: Converted integer or ``0`` if it can't be converted.
+        Converted integer or ``0`` if it can't be converted.
 
     Example:
 
@@ -2019,12 +2019,12 @@ def to_list(obj, split_strings=True):
     Converts a obj, an iterable or a single item to a list.
 
     Args:
-        obj (mixed): Object to convert item or wrap.
-        split_strings (bool, optional): Whether to split strings into single chars. Defaults to
+        obj: Object to convert item or wrap.
+        split_strings: Whether to split strings into single chars. Defaults to
             ``True``.
 
     Returns:
-        list: Converted obj or wrapped item.
+        Converted obj or wrapped item.
 
     Example:
 
@@ -2080,11 +2080,11 @@ def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
     is returned.
 
     Args:
-        obj (str|int|float): Object to convert.
-        precision (int, optional): Precision to round number to. Defaults to ``0``.
+        obj: Object to convert.
+        precision: Precision to round number to. Defaults to ``0``.
 
     Returns:
-        float: Converted number or ``None`` if can't be converted.
+        Converted number or ``None`` if can't be converted.
 
     Example:
 
@@ -2135,10 +2135,10 @@ def to_pairs(obj):
     value2]]``.
 
     Args:
-        obj (mixed): Object to process.
+        obj: Object to process.
 
     Returns:
-        list: Two dimensional list of object's key-value pairs.
+        Two dimensional list of object's key-value pairs.
 
     Example:
 
@@ -2160,10 +2160,10 @@ def to_string(obj: t.Any) -> str:
     Converts an object to string.
 
     Args:
-        obj (mixed): Object to convert.
+        obj: Object to convert.
 
     Returns:
-        str: String representation of `obj`.
+        String representation of `obj`.
 
     Example:
 
@@ -2254,12 +2254,12 @@ def transform(obj, iteratee=None, accumulator=None):
     early by explicitly returning ``False``.
 
     Args:
-        obj (list|dict): Object to process.
-        iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Accumulated object. Defaults to ``list``.
+        obj: Object to process.
+        iteratee: Iteratee applied per iteration.
+        accumulator: Accumulated object. Defaults to ``list``.
 
     Returns:
-        mixed: Accumulated object.
+        Accumulated object.
 
     Example:
 
@@ -2321,12 +2321,12 @@ def update(obj, path, updater):
     ``(value)``.
 
     Args:
-        obj (list|dict): Object to modify.
-        path (str|list): A string or list of keys that describe the object path to modify.
-        updater (callable): Function that returns updated value.
+        obj: Object to modify.
+        path: A string or list of keys that describe the object path to modify.
+        updater: Function that returns updated value.
 
     Returns:
-        mixed: Updated `obj`.
+        Updated `obj`.
 
     Warning:
         `obj` is modified in place.
@@ -2380,13 +2380,13 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
     instead. The customizer is invoked with three arguments: ``(nested_value, key, nested_object)``.
 
     Args:
-        obj (list|dict): Object to modify.
-        path (str|list): A string or list of keys that describe the object path to modify.
-        updater (callable): Function that returns updated value.
-        customizer (callable, optional): The function to customize assigned values.
+        obj: Object to modify.
+        path: A string or list of keys that describe the object path to modify.
+        updater: Function that returns updated value.
+        customizer: The function to customize assigned values.
 
     Returns:
-        mixed: Updated `obj`.
+        Updated `obj`.
 
     Warning:
         `obj` is modified in place.
@@ -2466,11 +2466,11 @@ def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
         Only ``list``, ``dict``, or objects with a ``pop()`` method can be unset by this function.
 
     Args:
-        obj (mixed): The object to modify.
-        path (mixed): The path of the property to unset.
+        obj: The object to modify.
+        path: The path of the property to unset.
 
     Returns:
-        bool: Whether the property was deleted.
+        Whether the property was deleted.
 
     Warning:
         `obj` is modified in place.
@@ -2551,10 +2551,10 @@ def values(obj):
     Creates a list composed of the values of `obj`.
 
     Args:
-        obj (mixed): Object to extract values from.
+        obj: Object to extract values from.
 
     Returns:
-        list: List of values.
+        List of values.
 
     Example:
 
