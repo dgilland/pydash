@@ -1920,7 +1920,17 @@ def to_dict(obj: t.Dict[T, T2]) -> t.Dict[T, T2]:
 
 
 @t.overload
-def to_dict(obj: t.List[t.Tuple[T, T2]]) -> t.Dict[T, T2]:
+def to_dict(obj: t.Iterable[t.Tuple[T, T2]]) -> t.Dict[T, T2]:
+    ...
+
+
+@t.overload
+def to_dict(obj: t.Iterable[t.List[str]]) -> t.Dict[str, str]:  # type: ignore
+    ...
+
+
+@t.overload
+def to_dict(obj: t.Iterable[T]) -> t.Dict[int, T]:
     ...
 
 
