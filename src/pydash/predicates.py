@@ -89,11 +89,11 @@ def eq(value: t.Any, other: t.Any) -> bool:
     Checks if :attr:`value` is equal to :attr:`other`.
 
     Args:
-        value (mixed): Value to compare.
-        other (mixed): Other value to compare.
+        value: Value to compare.
+        other: Other value to compare.
 
     Returns:
-        bool: Whether :attr:`value` is equal to :attr:`other`.
+        Whether :attr:`value` is equal to :attr:`other`.
 
     Example:
 
@@ -116,11 +116,11 @@ def gt(value: "SupportsDunderGT[T]", other: T) -> bool:
     Checks if `value` is greater than `other`.
 
     Args:
-        value (number): Value to compare.
-        other (number): Other value to compare.
+        value: Value to compare.
+        other: Other value to compare.
 
     Returns:
-        bool: Whether `value` is greater than `other`.
+        Whether `value` is greater than `other`.
 
     Example:
 
@@ -141,11 +141,11 @@ def gte(value: "SupportsDunderGE[T]", other: T) -> bool:
     Checks if `value` is greater than or equal to `other`.
 
     Args:
-        value (number): Value to compare.
-        other (number): Other value to compare.
+        value: Value to compare.
+        other: Other value to compare.
 
     Returns:
-        bool: Whether `value` is greater than or equal to `other`.
+        Whether `value` is greater than or equal to `other`.
 
     Example:
 
@@ -166,11 +166,11 @@ def lt(value: "SupportsDunderLT[T]", other: T) -> bool:
     Checks if `value` is less than `other`.
 
     Args:
-        value (number): Value to compare.
-        other (number): Other value to compare.
+        value: Value to compare.
+        other: Other value to compare.
 
     Returns:
-        bool: Whether `value` is less than `other`.
+        Whether `value` is less than `other`.
 
     Example:
 
@@ -191,11 +191,11 @@ def lte(value: "SupportsDunderLE[T]", other: T) -> bool:
     Checks if `value` is less than or equal to `other`.
 
     Args:
-        value (number): Value to compare.
-        other (number): Other value to compare.
+        value: Value to compare.
+        other: Other value to compare.
 
     Returns:
-        bool: Whether `value` is less than or equal to `other`.
+        Whether `value` is less than or equal to `other`.
 
     Example:
 
@@ -218,12 +218,12 @@ def in_range(value: t.Any, start: t.Any = 0, end: t.Any = None) -> bool:
 
     Args:
 
-        value (int|float): Number to check.
-        start (int|float, optional): Start of range inclusive. Defaults to ``0``.
-        end (int|float, optional): End of range exclusive. Defaults to `start`.
+        value: Number to check.
+        start: Start of range inclusive. Defaults to ``0``.
+        end: End of range exclusive. Defaults to `start`.
 
     Returns:
-        bool: Whether `value` is in range.
+        Whether `value` is in range.
 
     Example:
 
@@ -262,10 +262,10 @@ def is_associative(value: t.Any) -> bool:
     Checks if `value` is an associative object meaning that it can be accessed via an index or key.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is associative.
+        Whether `value` is associative.
 
     Example:
 
@@ -288,10 +288,10 @@ def is_blank(text: t.Any) -> TypeGuard[str]:
     Checks if `text` contains only whitespace characters.
 
     Args:
-        text (str): String to test.
+        text: String to test.
 
     Returns:
-        bool: Whether `text` is blank.
+        Whether `text` is blank.
 
     Example:
 
@@ -317,10 +317,10 @@ def is_boolean(value: t.Any) -> TypeGuard[bool]:
     Checks if `value` is a boolean value.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a boolean.
+        Whether `value` is a boolean.
 
     Example:
 
@@ -347,10 +347,10 @@ def is_builtin(value: t.Any) -> bool:
     Checks if `value` is a Python builtin function or method.
 
     Args:
-        value (callable): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a Python builtin function or method.
+        Whether `value` is a Python builtin function or method.
 
     Example:
 
@@ -377,10 +377,10 @@ def is_date(value: t.Any) -> bool:
     Check if `value` is a date object.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a date object.
+        Whether `value` is a date object.
 
     Example:
 
@@ -407,10 +407,10 @@ def is_decreasing(
     Check if `value` is monotonically decreasing.
 
     Args:
-        value (list): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is monotonically decreasing.
+        Whether `value` is monotonically decreasing.
 
     Example:
 
@@ -431,10 +431,10 @@ def is_dict(value: t.Any) -> bool:
     Checks if `value` is a ``dict``.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a ``dict``.
+        Whether `value` is a ``dict``.
 
     Example:
 
@@ -459,10 +459,10 @@ def is_empty(value: t.Any) -> bool:
     Checks if `value` is empty.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is empty.
+        Whether `value` is empty.
 
     Example:
 
@@ -492,11 +492,11 @@ def is_equal(value: t.Any, other: t.Any) -> bool:
     Performs a comparison between two values to determine if they are equivalent to each other.
 
     Args:
-        value (list|dict): Object to compare.
-        other (list|dict): Object to compare.
+        value: Object to compare.
+        other: Object to compare.
 
     Returns:
-        bool: Whether `value` and `other` are equal.
+        Whether `value` and `other` are equal.
 
     Example:
 
@@ -537,12 +537,12 @@ def is_equal_with(value, other, customizer):
     is invoked with two arguments: ``(value, other)``.
 
     Args:
-        value (list|dict): Object to compare.
-        other (list|dict): Object to compare.
-        customizer (mixed, optional): Customizer used to compare values from `value` and `other`.
+        value: Object to compare.
+        other: Object to compare.
+        customizer: Customizer used to compare values from `value` and `other`.
 
     Returns:
-        bool: Whether `value` and `other` are equal.
+        Whether `value` and `other` are equal.
 
     Example:
 
@@ -589,10 +589,10 @@ def is_error(value: t.Any) -> bool:
     Checks if `value` is an ``Exception``.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is an exception.
+        Whether `value` is an exception.
 
     Example:
 
@@ -613,10 +613,10 @@ def is_even(value: t.Any) -> bool:
     Checks if `value` is even.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is even.
+        Whether `value` is even.
 
     Example:
 
@@ -637,10 +637,10 @@ def is_float(value: t.Any) -> TypeGuard[float]:
     Checks if `value` is a float.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a float.
+        Whether `value` is a float.
 
     Example:
 
@@ -659,10 +659,10 @@ def is_function(value: t.Any) -> bool:
     Checks if `value` is a function.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is callable.
+        Whether `value` is callable.
 
     Example:
 
@@ -685,10 +685,10 @@ def is_increasing(
     Check if `value` is monotonically increasing.
 
     Args:
-        value (list): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is monotonically increasing.
+        Whether `value` is monotonically increasing.
 
     Example:
 
@@ -711,10 +711,10 @@ def is_indexed(value: t.Any) -> bool:
     Checks if `value` is integer indexed, i.e., ``list``, ``str`` or ``tuple``.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is integer indexed.
+        Whether `value` is integer indexed.
 
     Example:
 
@@ -740,12 +740,12 @@ def is_instance_of(value: t.Any, types: t.Union[type, t.Tuple[type, ...]]) -> bo
     Checks if `value` is an instance of `types`.
 
     Args:
-        value (mixed): Value to check.
-        types (mixed): Types to check against. Pass as ``tuple`` to check if `value` is one of
+        value: Value to check.
+        types: Types to check against. Pass as ``tuple`` to check if `value` is one of
             multiple types.
 
     Returns:
-        bool: Whether `value` is an instance of `types`.
+        Whether `value` is an instance of `types`.
 
     Example:
 
@@ -764,10 +764,10 @@ def is_integer(value: t.Any) -> TypeGuard[int]:
     Checks if `value` is a integer.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is an integer.
+        Whether `value` is an integer.
 
     Example:
 
@@ -794,10 +794,10 @@ def is_iterable(value: t.Any) -> bool:
     Checks if `value` is an iterable.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is an iterable.
+        Whether `value` is an iterable.
 
     Example:
 
@@ -827,10 +827,10 @@ def is_json(value: t.Any) -> bool:
     Checks if `value` is a valid JSON string.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is JSON.
+        Whether `value` is JSON.
 
     Example:
 
@@ -857,10 +857,10 @@ def is_list(value: t.Any) -> bool:
     Checks if `value` is a list.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a list.
+        Whether `value` is a list.
 
     Example:
 
@@ -882,11 +882,11 @@ def is_match(obj: t.Any, source: t.Any) -> bool:
     equivalent property values.
 
     Args:
-        obj (list|dict): Object to compare.
-        source (list|dict): Object of property values to match.
+        obj: Object to compare.
+        source: Object of property values to match.
 
     Returns:
-        bool: Whether `obj` is a match or not.
+        Whether `obj` is a match or not.
 
     Example:
 
@@ -925,12 +925,12 @@ def is_match_with(
     source)``.
 
     Args:
-        obj (list|dict): Object to compare.
-        source (list|dict): Object of property values to match.
-        customizer (mixed, optional): Customizer used to compare values from `obj` and `source`.
+        obj: Object to compare.
+        source: Object of property values to match.
+        customizer: Customizer used to compare values from `obj` and `source`.
 
     Returns:
-        bool: Whether `obj` is a match or not.
+        Whether `obj` is a match or not.
 
     Example:
 
@@ -985,11 +985,11 @@ def is_monotone(value: t.Union[T, t.List[T]], op: t.Callable[[T, T], t.Any]) -> 
     Checks if `value` is monotonic when `operator` used for comparison.
 
     Args:
-        value (list): Value to check.
-        op (callable): Operation to used for comparison.
+        value: Value to check.
+        op: Operation to used for comparison.
 
     Returns:
-        bool: Whether `value` is monotone.
+        Whether `value` is monotone.
 
     Example:
 
@@ -1017,10 +1017,10 @@ def is_nan(value: t.Any) -> bool:
     Checks if `value` is not a number.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is not a number.
+        Whether `value` is not a number.
 
     Example:
 
@@ -1041,10 +1041,10 @@ def is_negative(value: t.Any) -> bool:
     Checks if `value` is negative.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is negative.
+        Whether `value` is negative.
 
     Example:
 
@@ -1065,10 +1065,10 @@ def is_none(value: t.Any) -> TypeGuard[None]:
     Checks if `value` is `None`.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is ``None``.
+        Whether `value` is ``None``.
 
     Example:
 
@@ -1087,10 +1087,10 @@ def is_number(value: t.Any) -> bool:
     Checks if `value` is a number.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a number.
+        Whether `value` is a number.
 
     Note:
         Returns ``True`` for ``int``, ``long`` (PY2), ``float``, and
@@ -1121,10 +1121,10 @@ def is_object(value: t.Any) -> bool:
     Checks if `value` is a ``list`` or ``dict``.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is ``list`` or ``dict``.
+        Whether `value` is ``list`` or ``dict``.
 
     Example:
 
@@ -1147,10 +1147,10 @@ def is_odd(value: t.Any) -> bool:
     Checks if `value` is odd.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is odd.
+        Whether `value` is odd.
 
     Example:
 
@@ -1171,10 +1171,10 @@ def is_positive(value: t.Any) -> bool:
     Checks if `value` is positive.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is positive.
+        Whether `value` is positive.
 
     Example:
 
@@ -1195,10 +1195,10 @@ def is_reg_exp(value: t.Any) -> TypeGuard[re.Pattern]:
     Checks if `value` is a ``RegExp`` object.
 
     Args:
-        value (mxied): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a RegExp object.
+        Whether `value` is a RegExp object.
 
     Example:
 
@@ -1220,10 +1220,10 @@ def is_set(value: t.Any) -> bool:
     Checks if the given value is a set object or not.
 
     Args:
-        value (mixed): Value passed in by the user.
+        value: Value passed in by the user.
 
     Returns:
-        bool: True if the given value is a set else False.
+        True if the given value is a set else False.
 
     Example:
 
@@ -1244,10 +1244,10 @@ def is_strictly_decreasing(
     Check if `value` is strictly decreasing.
 
     Args:
-        value (list): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is strictly decreasing.
+        Whether `value` is strictly decreasing.
 
     Example:
 
@@ -1268,10 +1268,10 @@ def is_strictly_increasing(
     Check if `value` is strictly increasing.
 
     Args:
-        value (list): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is strictly increasing.
+        Whether `value` is strictly increasing.
 
     Example:
 
@@ -1290,10 +1290,10 @@ def is_string(value: t.Any) -> TypeGuard[str]:
     Checks if `value` is a string.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a string.
+        Whether `value` is a string.
 
     Example:
 
@@ -1312,10 +1312,10 @@ def is_tuple(value: t.Any) -> bool:
     Checks if `value` is a tuple.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is a tuple.
+        Whether `value` is a tuple.
 
     Example:
 
@@ -1336,10 +1336,10 @@ def is_zero(value: t.Any) -> TypeGuard[int]:
     Checks if `value` is ``0``.
 
     Args:
-        value (mixed): Value to check.
+        value: Value to check.
 
     Returns:
-        bool: Whether `value` is ``0``.
+        Whether `value` is ``0``.
 
     Example:
 

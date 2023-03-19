@@ -640,11 +640,11 @@ def after(func: t.Callable[P, T], n: t.SupportsInt) -> After[P, T]:
     being called `n` times.
 
     Args:
-        func (callable): Function to execute.
-        n (int): Number of times `func` must be called before it is executed.
+        func: Function to execute.
+        n: Number of times `func` must be called before it is executed.
 
     Returns:
-        After: Function wrapped in an :class:`After` context.
+        Function wrapped in an :class:`After` context.
 
     Example:
 
@@ -671,11 +671,11 @@ def ary(func: t.Callable[..., T], n: t.Union[t.SupportsInt, None]) -> Ary[T]:
     positional arguments are capped. All keyword arguments are allowed through.
 
     Args:
-        func (callable): Function to cap arguments for.
-        n (int): Number of arguments to accept.
+        func: Function to cap arguments for.
+        n: Number of arguments to accept.
 
     Returns:
-        Ary: Function wrapped in an :class:`Ary` context.
+        Function wrapped in an :class:`Ary` context.
 
     Example:
 
@@ -697,11 +697,11 @@ def before(func: t.Callable[P, T], n: t.SupportsInt) -> Before[P, T]:
     has been called `n` times.
 
     Args:
-        func (callable): Function to execute.
-        n (int): Number of times `func` may be executed.
+        func: Function to execute.
+        n: Number of times `func` may be executed.
 
     Returns:
-        Before: Function wrapped in an :class:`Before` context.
+        Function wrapped in an :class:`Before` context.
 
     Example:
 
@@ -728,10 +728,10 @@ def conjoin(*funcs: t.Callable[[T], t.Any]) -> t.Callable[[t.Iterable[T]], bool]
     whether **all** elements of an object pass each predicate.
 
     Args:
-        *funcs (callable): Function(s) to conjoin.
+        *funcs: Function(s) to conjoin.
 
     Returns:
-        Conjoin: Function(s) wrapped in a :class:`Conjoin` context.
+        Function(s) wrapped in a :class:`Conjoin` context.
 
     Example:
 
@@ -788,12 +788,12 @@ def curry(func, arity=None):
     function that accepts one or more of the remaining `func` arguments, and so on.
 
     Args:
-        func (callable): Function to curry.
-        arity (int, optional): Number of function arguments that can be accepted by curried
+        func: Function to curry.
+        arity: Number of function arguments that can be accepted by curried
             function. Default is to use the number of arguments that are accepted by `func`.
 
     Returns:
-        Curry: Function wrapped in a :class:`Curry` context.
+        Function wrapped in a :class:`Curry` context.
 
     Example:
 
@@ -851,12 +851,12 @@ def curry_right(func, arity=None):
     :func:`partial_right` instead of :func:`partial`.
 
     Args:
-        func (callable): Function to curry.
-        arity (int, optional): Number of function arguments that can be accepted by curried
+        func: Function to curry.
+        arity: Number of function arguments that can be accepted by curried
             function. Default is to use the number of arguments that are accepted by `func`.
 
     Returns:
-        CurryRight: Function wrapped in a :class:`CurryRight` context.
+        Function wrapped in a :class:`CurryRight` context.
 
     Example:
 
@@ -884,12 +884,12 @@ def debounce(
     return the result of the last `func` call.
 
     Args:
-        func (callable): Function to execute.
-        wait (int): Milliseconds to wait before executing `func`.
+        func: Function to execute.
+        wait: Milliseconds to wait before executing `func`.
         max_wait (optional): Maximum time to wait before executing `func`.
 
     Returns:
-        Debounce: Function wrapped in a :class:`Debounce` context.
+        Function wrapped in a :class:`Debounce` context.
 
     .. versionadded:: 1.0.0
     """
@@ -902,13 +902,13 @@ def delay(func: t.Callable[P, T], wait: int, *args: "P.args", **kwargs: "P.kwarg
     `func` when it is invoked.
 
     Args:
-        func (callable): Function to execute.
-        wait (int): Milliseconds to wait before executing `func`.
-        *args (optional): Arguments to pass to `func`.
-        **kwargs (optional): Keyword arguments to pass to `func`.
+        func: Function to execute.
+        wait: Milliseconds to wait before executing `func`.
+        *args: Arguments to pass to `func`.
+        **kwargs: Keyword arguments to pass to `func`.
 
     Returns:
-        mixed: Return from `func`.
+        Return from `func`.
 
     .. versionadded:: 1.0.0
     """
@@ -922,10 +922,10 @@ def disjoin(*funcs: t.Callable[[T], t.Any]) -> Disjoin[T]:
     whether **any** elements of an object pass each predicate.
 
     Args:
-        *funcs (callable): Function(s) to disjoin.
+        *funcs: Function(s) to disjoin.
 
     Returns:
-        Disjoin: Function(s) wrapped in a :class:`Disjoin` context.
+        Function(s) wrapped in a :class:`Disjoin` context.
 
     Example:
 
@@ -973,10 +973,10 @@ def flip(func: t.Callable) -> t.Callable:
     Creates a function that invokes the method with arguments reversed.
 
     Args:
-        func (callable): Function to flip arguments for.
+        func: Function to flip arguments for.
 
     Returns:
-        function: Function wrapped in a :class:`Flip` context.
+        Function wrapped in a :class:`Flip` context.
 
     Example:
 
@@ -1039,10 +1039,10 @@ def flow(*funcs):
     ``f()``, ``g()``, and ``h()`` produces ``h(g(f()))``.
 
     Args:
-        *funcs (callable): Function(s) to compose.
+        *funcs: Function(s) to compose.
 
     Returns:
-        Flow: Function(s) wrapped in a :class:`Flow` context.
+        Function(s) wrapped in a :class:`Flow` context.
 
     Example:
 
@@ -1111,10 +1111,10 @@ def flow_right(*funcs):
     produces ``f(g(h()))``.
 
     Args:
-        *funcs (callable): Function(s) to compose.
+        *funcs: Function(s) to compose.
 
     Returns:
-        Flow: Function(s) wrapped in a :class:`Flow` context.
+        Function(s) wrapped in a :class:`Flow` context.
 
     Example:
 
@@ -1147,10 +1147,10 @@ def iterated(func: t.Callable[[T], T]) -> Iterated[T]:
     of times to call `func`.
 
     Args:
-        func (callable): Function to iterate.
+        func: Function to iterate.
 
     Returns:
-        Iterated: Function wrapped in a :class:`Iterated` context.
+        Function wrapped in a :class:`Iterated` context.
 
     Example:
 
@@ -1171,10 +1171,10 @@ def juxtapose(*funcs: t.Callable[P, T]) -> Juxtapose[P, T]:
     supplied arguments.
 
     Args:
-        *funcs (callable): Function(s) to juxtapose.
+        *funcs: Function(s) to juxtapose.
 
     Returns:
-        Juxtapose: Function wrapped in a :class:`Juxtapose` context.
+        Function wrapped in a :class:`Juxtapose` context.
 
     Example:
 
@@ -1196,10 +1196,10 @@ def negate(func: t.Callable[P, t.Any]) -> Negate[P]:
     executed with the arguments of the created function.
 
     Args:
-        func (callable): Function to negate execute.
+        func: Function to negate execute.
 
     Returns:
-        Negate: Function wrapped in a :class:`Negate` context.
+        Function wrapped in a :class:`Negate` context.
 
     Example:
 
@@ -1220,10 +1220,10 @@ def once(func: t.Callable[P, T]) -> Once[P, T]:
     return the value of the first call.
 
     Args:
-        func (callable): Function to execute.
+        func: Function to execute.
 
     Returns:
-        Once: Function wrapped in a :class:`Once` context.
+        Function wrapped in a :class:`Once` context.
 
     Example:
 
@@ -1293,12 +1293,12 @@ def over_args(func: t.Callable, *transforms: t.Callable) -> t.Callable:  # type:
     Creates a function that runs each argument through a corresponding transform function.
 
     Args:
-        func (callable): Function to wrap.
-        *transforms (callable): Functions to transform arguments, specified as individual functions
+        func: Function to wrap.
+        *transforms: Functions to transform arguments, specified as individual functions
             or lists of functions.
 
     Returns:
-        OverArgs: Function wrapped in a :class:`OverArgs` context.
+        Function wrapped in a :class:`OverArgs` context.
 
     Example:
 
@@ -1322,12 +1322,12 @@ def partial(func: t.Callable[..., T], *args: t.Any, **kwargs: t.Any) -> Partial[
     prepended to those provided to the new function.
 
     Args:
-        func (callable): Function to execute.
-        *args (optional): Partial arguments to prepend to function call.
-        **kwargs (optional): Partial keyword arguments to bind to function call.
+        func: Function to execute.
+        *args: Partial arguments to prepend to function call.
+        **kwargs: Partial keyword arguments to bind to function call.
 
     Returns:
-        Partial: Function wrapped in a :class:`Partial` context.
+        Function wrapped in a :class:`Partial` context.
 
     Example:
 
@@ -1351,12 +1351,12 @@ def partial_right(func: t.Callable[..., T], *args: t.Any, **kwargs: t.Any) -> Pa
     to the new function.
 
     Args:
-        func (callable): Function to execute.
-        *args (optional): Partial arguments to append to function call.
-        **kwargs (optional): Partial keyword arguments to bind to function call.
+        func: Function to execute.
+        *args: Partial arguments to append to function call.
+        **kwargs: Partial keyword arguments to bind to function call.
 
     Returns:
-        Partial: Function wrapped in a :class:`Partial` context.
+        Function wrapped in a :class:`Partial` context.
 
     Example:
 
@@ -1376,11 +1376,11 @@ def rearg(func: t.Callable[P, T], *indexes: int) -> Rearg[P, T]:
     argument value at the second index is provided as the second argument, and so on.
 
     Args:
-        func (callable): Function to rearrange arguments for.
-        *indexes (int): The arranged argument indexes.
+        func: Function to rearrange arguments for.
+        *indexes: The arranged argument indexes.
 
     Returns:
-        Rearg: Function wrapped in a :class:`Rearg` context.
+        Function wrapped in a :class:`Rearg` context.
 
     Example:
 
@@ -1401,10 +1401,10 @@ def spread(func: t.Callable[..., T]) -> Spread[T]:
     function.
 
     Args:
-        func (callable): Function to spread.
+        func: Function to spread.
 
     Returns:
-        Spread: Function wrapped in a :class:`Spread` context.
+        Function wrapped in a :class:`Spread` context.
 
     Example:
 
@@ -1424,11 +1424,11 @@ def throttle(func: t.Callable[P, T], wait: int) -> Throttle[P, T]:
     the last `func` call.
 
     Args:
-        func (callable): Function to throttle.
-        wait (int): Milliseconds to wait before calling `func` again.
+        func: Function to throttle.
+        wait: Milliseconds to wait before calling `func` again.
 
     Returns:
-        mixed: Results of last `func` call.
+        Results of last `func` call.
 
     .. versionadded:: 1.0.0
     """
@@ -1440,10 +1440,10 @@ def unary(func: t.Callable[..., T]) -> Ary[T]:
     Creates a function that accepts up to one argument, ignoring any additional arguments.
 
     Args:
-        func (callable): Function to cap arguments for.
+        func: Function to cap arguments for.
 
     Returns:
-        Ary: Function wrapped in an :class:`Ary` context.
+        Function wrapped in an :class:`Ary` context.
 
     Example:
 
@@ -1465,11 +1465,11 @@ def wrap(value: T1, func: t.Callable[Concatenate[T1, P], T]) -> Partial[T]:
     arguments provided to the function are appended to those provided to the wrapper function.
 
     Args:
-        value (mixed): Value provided as first argument to function call.
-        func (callable): Function to execute.
+        value: Value provided as first argument to function call.
+        func: Function to execute.
 
     Returns:
-        Partial: Function wrapped in a :class:`Partial` context.
+        Function wrapped in a :class:`Partial` context.
 
     Example:
 

@@ -87,10 +87,10 @@ def attempt(func: t.Callable[P, T], *args: "P.args", **kwargs: "P.kwargs") -> t.
     Attempts to execute `func`, returning either the result or the caught error object.
 
     Args:
-        func (callable): The function to attempt.
+        func: The function to attempt.
 
     Returns:
-        mixed: Returns the `func` result or error object.
+        Returns the `func` result or error object.
 
     Example:
 
@@ -129,10 +129,10 @@ def cond(pairs, *extra_pairs):
     first predicate to return truthy.
 
     Args:
-        pairs (list): A list of predicate-function pairs.
+        pairs: A list of predicate-function pairs.
 
     Returns:
-        callable: Returns the new composite function.
+        Returns the new composite function.
 
     Example:
 
@@ -195,10 +195,10 @@ def conforms(source: t.Union[t.List, t.Dict]) -> t.Callable:
     ``False``.
 
     Args:
-        source (dict|list): The object of property predicates to conform to.
+        source: The object of property predicates to conform to.
 
     Returns:
-        callable: Returns the new spec function.
+        Returns the new spec function.
 
     Example:
 
@@ -241,8 +241,8 @@ def conforms_to(obj, source):
     corresponding property values of `obj`.
 
     Args:
-        obj (dict|list): The object to inspect.
-        source (dict|list): The object of property predicates to conform to.
+        obj: The object to inspect.
+        source: The object of property predicates to conform to.
 
     Example:
 
@@ -265,10 +265,10 @@ def constant(value: T) -> t.Callable[..., T]:
     Creates a function that returns `value`.
 
     Args:
-        value (mixed): Constant value to return.
+        value: Constant value to return.
 
     Returns:
-        callable: Function that always returns `value`.
+        Function that always returns `value`.
 
     Example:
 
@@ -290,11 +290,10 @@ def default_to(value: t.Union[T, None], default_value: T2) -> t.Union[T, T2]:
     `default_value` is returned if value is None.
 
     Args:
-        value (mixed): Value passed in by the user.
-        default_value (mixed): Default value passed in by the user.
+        default_value: Default value passed in by the user.
 
     Returns:
-        mixed: Returns `value` if :attr:`value` is given otherwise returns `default_value`.
+        Returns `value` if :attr:`value` is given otherwise returns `default_value`.
 
     Example:
 
@@ -366,11 +365,11 @@ def default_to_any(value, *default_values):
     item that is not None of the `default_values` is returned.
 
     Args:
-        value (mixed): Value passed in by the user.
-        *default_values (mixed): Default values passed in by the user.
+        value: Value passed in by the user.
+        *default_values: Default values passed in by the user.
 
     Returns:
-        mixed: Returns `value` if :attr:`value` is given otherwise returns the first not None value
+        Returns `value` if :attr:`value` is given otherwise returns the first not None value
             of `default_values`.
 
     Example:
@@ -406,10 +405,10 @@ def identity(arg=None, *args):
     Return the first argument provided to it.
 
     Args:
-        *args (mixed): Arguments.
+        *args: Arguments.
 
     Returns:
-        mixed: First argument or ``None``.
+        First argument or ``None``.
 
     Example:
 
@@ -443,10 +442,10 @@ def iteratee(func):
     ``False``.
 
     Args:
-        func (mixed): Object to create iteratee function from.
+        func: Object to create iteratee function from.
 
     Returns:
-        callable: Iteratee function.
+        Iteratee function.
 
     Example:
 
@@ -525,10 +524,10 @@ def matches(source: t.Any) -> t.Callable[[t.Any], bool]:
     values, else ``False``.
 
     Args:
-        source (dict): Source object used for comparision.
+        source: Source object used for comparision.
 
     Returns:
-        callable: Function that compares an object to `source` and returns whether the two objects
+        Function that compares an object to `source` and returns whether the two objects
             contain the same items.
 
     Example:
@@ -553,11 +552,11 @@ def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:
     Creates a function that compares the property value of `key` on a given object to `value`.
 
     Args:
-        key (str): Object key to match against.
-        value (mixed): Value to compare to.
+        key: Object key to match against.
+        value: Value to compare to.
 
     Returns:
-        callable: Function that compares `value` to an object's `key` and returns whether they are
+        Function that compares `value` to an object's `key` and returns whether they are
             equal.
 
     Example:
@@ -602,11 +601,11 @@ def memoize(func, resolver=None):
     cache key. The result cache is exposed as the cache property on the memoized function.
 
     Args:
-        func (callable): Function to memoize.
-        resolver (callable, optional): Function that returns the cache key to use.
+        func: Function to memoize.
+        resolver: Function that returns the cache key to use.
 
     Returns:
-        callable: Memoized function.
+        Memoized function.
 
     Example:
 
@@ -645,12 +644,12 @@ def method(path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Callable[..., t.Any]
     are provided to the invoked method.
 
     Args:
-        path (str): Object path of method to invoke.
-        *args (mixed): Global arguments to apply to method when invoked.
-        **kwargs (mixed): Global keyword argument to apply to method when invoked.
+        path: Object path of method to invoke.
+        *args: Global arguments to apply to method when invoked.
+        **kwargs: Global keyword argument to apply to method when invoked.
 
     Returns:
-        callable: Function that invokes method located at path for object.
+        Function that invokes method located at path for object.
 
     Example:
 
@@ -677,12 +676,12 @@ def method_of(obj: t.Any, *args: t.Any, **kwargs: t.Any) -> t.Callable[..., t.An
     given path on object. Any additional arguments are provided to the invoked method.
 
     Args:
-        obj (mixed): The object to query.
-        *args (mixed): Global arguments to apply to method when invoked.
-        **kwargs (mixed): Global keyword argument to apply to method when invoked.
+        obj: The object to query.
+        *args: Global arguments to apply to method when invoked.
+        **kwargs: Global keyword argument to apply to method when invoked.
 
     Returns:
-        callable: Function that invokes method located at path for object.
+        Function that invokes method located at path for object.
 
     Example:
 
@@ -718,10 +717,10 @@ def nth_arg(pos: int = 0) -> t.Callable[..., t.Any]:
     the end is returned.
 
     Args:
-        pos (int): The index of the argument to return.
+        pos: The index of the argument to return.
 
     Returns:
-        callable: Returns the new pass-thru function.
+        Returns the new pass-thru function.
 
     Example:
 
@@ -752,7 +751,7 @@ def now() -> int:
     00:00:00 UTC).
 
     Returns:
-        int: Milliseconds since Unix epoch.
+        Milliseconds since Unix epoch.
 
     .. versionadded:: 1.0.0
 
@@ -779,10 +778,10 @@ def over(funcs: t.Iterable[t.Callable[P, T]]) -> t.Callable[P, t.List[T]]:
     returns their results.
 
     Args:
-        funcs (list): List of functions to be invoked.
+        funcs: List of functions to be invoked.
 
     Returns:
-        callable: Returns the new pass-thru function.
+        Returns the new pass-thru function.
 
     Example:
 
@@ -805,10 +804,10 @@ def over_every(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     with the arguments it receives.
 
     Args:
-        funcs (list): List of functions to be invoked.
+        funcs: List of functions to be invoked.
 
     Returns:
-        callable: Returns the new pass-thru function.
+        Returns the new pass-thru function.
 
     Example:
 
@@ -831,10 +830,10 @@ def over_some(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     with the arguments it receives.
 
     Args:
-        funcs (list): List of functions to be invoked.
+        funcs: List of functions to be invoked.
 
     Returns:
-        callable: Returns the new pass-thru function.
+        Returns the new pass-thru function.
 
     Example:
 
@@ -856,10 +855,10 @@ def property_(path: PathT) -> t.Callable[[t.Any], t.Any]:
     Creates a function that returns the value at path of a given object.
 
     Args:
-        path (str|list): Path value to fetch from object.
+        path: Path value to fetch from object.
 
     Returns:
-        callable: Function that returns object's path value.
+        Function that returns object's path value.
 
     Example:
 
@@ -885,10 +884,10 @@ def properties(*paths: t.Any) -> t.Callable[[t.Any], t.Any]:
     Like :func:`property_` except that it returns a list of values at each path in `paths`.
 
     Args:
-        *path (str|list): Path values to fetch from object.
+        *path: Path values to fetch from object.
 
     Returns:
-        callable: Function that returns object's path value.
+        Function that returns object's path value.
 
     Example:
 
@@ -907,10 +906,10 @@ def property_of(obj: t.Any) -> t.Callable[[PathT], t.Any]:
     given key on `obj`.
 
     Args:
-        obj (dict|list): Object to fetch values from.
+        obj: Object to fetch values from.
 
     Returns:
-        callable: Function that returns object's key value.
+        Function that returns object's key value.
 
     Example:
 
@@ -965,13 +964,13 @@ def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floati
     integer.
 
     Args:
-        start (int): Minimum value.
-        stop (int): Maximum value.
-        floating (bool, optional): Whether to force random value to ``float``. Defaults to
+        start: Minimum value.
+        stop: Maximum value.
+        floating: Whether to force random value to ``float``. Defaults to
             ``False``.
 
     Returns:
-        int|float: Random value.
+        Random value.
 
     Example:
 
@@ -1014,12 +1013,12 @@ def range_(*args):
     `step` is specified.
 
     Args:
-        start (int, optional): Integer to start with. Defaults to ``0``.
-        stop (int): Integer to stop at.
-        step (int, optional): The value to increment or decrement by. Defaults to ``1``.
+        start: Integer to start with. Defaults to ``0``.
+        stop: Integer to stop at.
+        step: The value to increment or decrement by. Defaults to ``1``.
 
     Yields:
-        int: Next integer in range.
+        Next integer in range.
 
     Example:
 
@@ -1061,13 +1060,13 @@ def range_right(*args):
     Similar to :func:`range_`, except that it populates the values in descending order.
 
     Args:
-        start (int, optional): Integer to start with. Defaults to ``0``.
-        stop (int): Integer to stop at.
-        step (int, optional): The value to increment or decrement by. Defaults to ``1`` if `start`
+        start: Integer to start with. Defaults to ``0``.
+        stop: Integer to stop at.
+        step: The value to increment or decrement by. Defaults to ``1`` if `start`
             < `stop` else ``-1``.
 
     Yields:
-        int: Next integer in range.
+        Next integer in range.
 
     Example:
 
@@ -1106,12 +1105,12 @@ def result(obj, key, default=None):
     returned.
 
     Args:
-        obj (list|dict): Object to retrieve result from.
-        key (mixed): Key or index to get result from.
-        default (mixed, optional): Default value to return if `obj` is falsey. Defaults to ``None``.
+        obj: Object to retrieve result from.
+        key: Key or index to get result from.
+        default: Default value to return if `obj` is falsey. Defaults to ``None``.
 
     Returns:
-        mixed: Result of ``obj[key]`` or ``None``.
+        Result of ``obj[key]`` or ``None``.
 
     Example:
 
@@ -1159,21 +1158,21 @@ def retry(  # noqa: C901
     `max_delay`. If `max_delay` is ``0``, then `delay` can increase unbounded.
 
     Args:
-        attempts (int, optional): Number of retry attempts. Defaults to ``3``.
-        delay (int|float, optional): Base amount of seconds to sleep between retry attempts.
+        attempts: Number of retry attempts. Defaults to ``3``.
+        delay: Base amount of seconds to sleep between retry attempts.
             Defaults to ``0.5``.
-        max_delay (int|float, optional): Maximum number of seconds to sleep between retries. Is
+        max_delay: Maximum number of seconds to sleep between retries. Is
             ignored when equal to ``0``. Defaults to ``150.0`` (2.5 minutes).
-        scale (int|float, optional): Scale factor to increase `delay` after first retry fails.
+        scale: Scale factor to increase `delay` after first retry fails.
             Defaults to ``2.0``.
-        jitter (int|float|tuple, optional): Random jitter to add to `delay` time. Can be a positive
+        jitter: Random jitter to add to `delay` time. Can be a positive
             number or 2-item tuple of numbers representing the random range to choose from. When a
             number is given, the random range will be from ``[0, jitter]``. When jitter is a float
             or contains a float, then a random float will be chosen; otherwise, a random integer
             will be selected. Defaults to ``0`` which disables jitter.
-        exceptions (tuple, optional): Tuple of exceptions that trigger a retry attempt. Exceptions
+        exceptions: Tuple of exceptions that trigger a retry attempt. Exceptions
             not in the tuple will be ignored. Defaults to ``(Exception,)`` (all exceptions).
-        on_exception (callable, optional): Function that is called when a retryable exception is
+        on_exception: Function that is called when a retryable exception is
             caught. It is invoked with ``on_exception(exc, attempt)`` where ``exc`` is the caught
             exception and ``attempt`` is the attempt count. All arguments are optional. Defaults to
             ``None``.
@@ -1271,7 +1270,7 @@ def stub_list() -> t.List:
     Returns empty "list".
 
     Returns:
-        list: Empty list.
+        Empty list.
 
     Example:
 
@@ -1288,7 +1287,7 @@ def stub_dict() -> t.Dict:
     Returns empty "dict".
 
     Returns:
-        dict: Empty dict.
+        Empty dict.
 
     Example:
 
@@ -1305,7 +1304,7 @@ def stub_false() -> Literal[False]:
     Returns ``False``.
 
     Returns:
-        bool: False
+        False
 
     Example:
 
@@ -1322,7 +1321,7 @@ def stub_string() -> str:
     Returns an empty string.
 
     Returns:
-        str: Empty string
+        Empty string
 
     Example:
 
@@ -1339,7 +1338,7 @@ def stub_true() -> Literal[True]:
     Returns ``True``.
 
     Returns:
-        bool: True
+        True
 
     Example:
 
@@ -1367,11 +1366,11 @@ def times(n: int, iteratee=None):
     iteratee is invoked with one argument: ``(index)``.
 
     Args:
-        n (int): Number of times to execute `iteratee`.
-        iteratee (callable): Function to execute.
+        n: Number of times to execute `iteratee`.
+        iteratee: Function to execute.
 
     Returns:
-        list: A list of results from calling `iteratee`.
+        A list of results from calling `iteratee`.
 
     Example:
 
@@ -1402,10 +1401,10 @@ def to_path(value: PathT) -> t.List[t.Hashable]:
     Converts values to a property path array.
 
     Args:
-        value (mixed): Value to convert.
+        value: Value to convert.
 
     Returns:
-        list: Returns the new property path array.
+        Returns the new property path array.
 
     Example:
 
@@ -1436,10 +1435,10 @@ def unique_id(prefix: t.Union[str, None] = None) -> str:
     Generates a unique ID. If `prefix` is provided the ID will be appended to  it.
 
     Args:
-        prefix (str, optional): String prefix to prepend to ID value.
+        prefix: String prefix to prepend to ID value.
 
     Returns:
-        str: ID value.
+        ID value.
 
     Example:
 

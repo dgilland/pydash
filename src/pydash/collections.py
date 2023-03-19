@@ -80,12 +80,12 @@ def at(collection, *paths):
     be specified as individual arguments or as arrays of indexes.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        *paths (mixed): The indexes of `collection` to retrieve, specified as individual indexes or
+        collection: Collection to iterate over.
+        *paths: The indexes of `collection` to retrieve, specified as individual indexes or
             arrays of indexes.
 
     Returns:
-        list: filtered list
+        filtered list
 
     Example:
 
@@ -154,11 +154,11 @@ def count_by(collection, iteratee=None):
     `collection` through the iteratee.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        dict: Dict containing counts by key.
+        Dict containing counts by key.
 
     Example:
 
@@ -192,11 +192,11 @@ def every(
     ``False``.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        predicate (mixed, optional): Predicate applied per iteration.
+        collection: Collection to iterate over.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        bool: Whether all elements are truthy.
+        Whether all elements are truthy.
 
     Example:
 
@@ -279,11 +279,11 @@ def filter_(collection, predicate=None):
     truthy for.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        predicate (mixed, optional): Predicate applied per iteration.
+        collection: Collection to iterate over.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        list: Filtered list.
+        Filtered list.
 
     Example:
 
@@ -354,11 +354,11 @@ def find(collection, predicate=None):
     truthy for.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        predicate (mixed, optional): Predicate applied per iteration.
+        collection: Collection to iterate over.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        mixed: First element found or ``None``.
+        First element found or ``None``.
 
     Example:
 
@@ -430,11 +430,11 @@ def find_last(collection, predicate=None):
     right to left.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        predicate (mixed, optional): Predicate applied per iteration.
+        collection: Collection to iterate over.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        mixed: Last element found or ``None``.
+        Last element found or ``None``.
 
     Example:
 
@@ -555,11 +555,11 @@ def flat_map(collection, iteratee=None):
     index|key, collection)``.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list: Flattened mapped list.
+        Flattened mapped list.
 
     Example:
 
@@ -621,11 +621,11 @@ def flat_map_deep(collection: t.Iterable, iteratee=None):
     This method is like :func:`flat_map` except that it recursively flattens the mapped results.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list: Flattened mapped list.
+        Flattened mapped list.
 
     Example:
 
@@ -698,11 +698,11 @@ def flat_map_depth(collection, iteratee=None, depth=1):
     to `depth` times.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list: Flattened mapped list.
+        Flattened mapped list.
 
     Example:
 
@@ -770,11 +770,11 @@ def for_each(collection, iteratee=None):
     Iterates over elements of a collection, executing the iteratee for each element.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list|dict: `collection`
+        `collection`
 
     Example:
 
@@ -847,11 +847,11 @@ def for_each_right(collection, iteratee):
     from right to left.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list|dict: `collection`
+        `collection`
 
     Example:
 
@@ -891,11 +891,11 @@ def group_by(collection, iteratee=None):
     `collection` through the iteratee.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        dict: Results of grouping by `iteratee`.
+        Results of grouping by `iteratee`.
 
     Example:
 
@@ -924,12 +924,12 @@ def includes(collection: t.Union[t.Sequence, t.Dict], target: t.Any, from_index:
     the offset from the end of the collection.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        target (mixed): Target value to compare to.
-        from_index (int, optional): Offset to start search from.
+        collection: Collection to iterate over.
+        target: Target value to compare to.
+        from_index: Offset to start search from.
 
     Returns:
-        bool: Whether `target` is in `collection`.
+        Whether `target` is in `collection`.
 
     Example:
 
@@ -963,14 +963,14 @@ def invoke_map(collection: t.Iterable, path: PathT, *args: t.Any, **kwargs: t.An
     a function, it's invoked for each element in `collection`.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        path (str|func): String path to method to invoke or callable to invoke for each element in
+        collection: Collection to iterate over.
+        path: String path to method to invoke or callable to invoke for each element in
             `collection`.
-        args (optional): Arguments to pass to method call.
-        kwargs (optional): Keyword arguments to pass to method call.
+        args: Arguments to pass to method call.
+        kwargs: Keyword arguments to pass to method call.
 
     Returns:
-        list: List of results of invoking method of each item.
+        List of results of invoking method of each item.
 
     Example:
 
@@ -1000,11 +1000,11 @@ def key_by(collection, iteratee=None):
     collection through the given iteratee.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        dict: Results of indexing by `iteratee`.
+        Results of indexing by `iteratee`.
 
     Example:
 
@@ -1073,11 +1073,11 @@ def map_(collection, iteratee=None):
     ``False``.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        list: Mapped list.
+        Mapped list.
 
     Example:
 
@@ -1106,11 +1106,11 @@ def nest(collection: t.Iterable, *properties: t.Any) -> t.Any:
     `properties`. If only a single key is given, it is like calling ``group_by(collection, prop)``.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        *properties (str): Properties to nest by.
+        collection: Collection to iterate over.
+        *properties: Properties to nest by.
 
     Returns:
-        dict: Results of nested grouping by `properties`.
+        Results of nested grouping by `properties`.
 
     Example:
 
@@ -1190,16 +1190,16 @@ def order_by(collection, keys, orders=None, reverse=False):
     where ``True`` is ascending and ``False`` is descending.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        keys (list): List of keys to sort by. By default, keys will be sorted in ascending order. To
+        collection: Collection to iterate over.
+        keys: List of keys to sort by. By default, keys will be sorted in ascending order. To
             sort a key in descending order, prepend a ``"-"`` to the key name. For example, to sort
             the key value for ``"name"`` in descending order, use ``"-name"``.
-        orders (list, optional): List of boolean sort orders to apply for each key. ``True``
+        orders: List of boolean sort orders to apply for each key. ``True``
             corresponds to ascending order while ``False`` is descending. Defaults to ``None``.
         reverse (bool, optional): Whether to reverse the sort. Defaults to ``False``.
 
     Returns:
-        list: Sorted list.
+        Sorted list.
 
     Example:
 
@@ -1341,11 +1341,11 @@ def partition(collection, predicate=None):
     ``True`` for elements that have the properties of the given object, else ``False``.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        predicate (mixed, optional): Predicate applied per iteration.
+        collection: Collection to iterate over.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        list: List of grouped elements.
+        List of grouped elements.
 
     Example:
 
@@ -1371,11 +1371,11 @@ def pluck(collection: t.Iterable, path: PathT) -> t.List:
     Retrieves the value of a specified property from all elements in the collection.
 
     Args:
-        collection (list): List of dicts.
-        path (str|list): Collection's path to pluck
+        collection: List of dicts.
+        path: Collection's path to pluck
 
     Returns:
-        list: Plucked list.
+        Plucked list.
 
     Example:
 
@@ -1523,13 +1523,13 @@ def reduce_(collection, iteratee=None, accumulator=None):
     value of the previous execution.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Initial value of aggregator. Default is to use the result of
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
+        accumulator: Initial value of aggregator. Default is to use the result of
             the first iteration.
 
     Returns:
-        mixed: Accumulator object containing results of reduction.
+        Accumulator object containing results of reduction.
 
     Example:
 
@@ -1684,13 +1684,13 @@ def reduce_right(collection, iteratee=None, accumulator=None):
     right to left.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Initial value of aggregator. Default is to use the result of
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
+        accumulator: Initial value of aggregator. Default is to use the result of
             the first iteration.
 
     Returns:
-        mixed: Accumulator object containing results of reduction.
+        Accumulator object containing results of reduction.
 
     Example:
 
@@ -1847,13 +1847,13 @@ def reductions(collection, iteratee=None, accumulator=None, from_right=False):
     in the reduction operation.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Initial value of aggregator. Default is to use the result of
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
+        accumulator: Initial value of aggregator. Default is to use the result of
             the first iteration.
 
     Returns:
-        list: Results of each reduction operation.
+        Results of each reduction operation.
 
     Example:
 
@@ -2006,13 +2006,13 @@ def reductions_right(collection, iteratee=None, accumulator=None):
     from right to left.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed): Iteratee applied per iteration.
-        accumulator (mixed, optional): Initial value of aggregator. Default is to use the result of
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
+        accumulator: Initial value of aggregator. Default is to use the result of
             the first iteration.
 
     Returns:
-        list: Results of each reduction operation.
+        Results of each reduction operation.
 
     Example:
 
@@ -2082,11 +2082,11 @@ def reject(collection, predicate=None):
     predicate does **not** return truthy for.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        predicate (mixed, optional): Predicate applied per iteration.
+        collection: Collection to iterate over.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        list: Rejected elements of `collection`.
+        Rejected elements of `collection`.
 
     Example:
 
@@ -2107,10 +2107,10 @@ def sample(collection: t.Sequence[T]) -> T:
     Retrieves a random element from a given `collection`.
 
     Args:
-        collection (list|dict): Collection to iterate over.
+        collection: Collection to iterate over.
 
     Returns:
-        mixed: Random element from the given collection.
+        Random element from the given collection.
 
     Example:
 
@@ -2132,11 +2132,11 @@ def sample_size(collection: t.Sequence[T], n: t.Union[int, None] = None) -> t.Li
     Retrieves list of `n` random elements from a collection.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        n (int, optional): Number of random samples to return.
+        collection: Collection to iterate over.
+        n: Number of random samples to return.
 
     Returns:
-        list: List of `n` sampled collection values.
+        List of `n` sampled collection values.
 
     Examples:
 
@@ -2166,10 +2166,10 @@ def shuffle(collection):
     Creates a list of shuffled values, using a version of the Fisher-Yates shuffle.
 
     Args:
-        collection (list|dict): Collection to iterate over.
+        collection: Collection to iterate over.
 
     Returns:
-        list: Shuffled list of values.
+        Shuffled list of values.
 
     Example:
 
@@ -2197,10 +2197,10 @@ def size(collection: t.Sized) -> int:
     Gets the size of the `collection` by returning `len(collection)` for iterable objects.
 
     Args:
-        collection (list|dict): Collection to iterate over.
+        collection: Collection to iterate over.
 
     Returns:
-        int: Collection length.
+        Collection length.
 
     Example:
 
@@ -2224,11 +2224,11 @@ def some(
     ``False``.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        predicate (mixed, optional): Predicate applied per iteration.
+        collection: Collection to iterate over.
+        predicate: Predicate applied per iteration.
 
     Returns:
-        bool: Whether any of the elements are truthy.
+        Whether any of the elements are truthy.
 
     Example:
 
@@ -2277,12 +2277,12 @@ def sort_by(collection, iteratee=None, reverse=False):
     a `collection` through the iteratee.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
-        reverse (bool, optional): Whether to reverse the sort. Defaults to ``False``.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
+        reverse: Whether to reverse the sort. Defaults to ``False``.
 
     Returns:
-        list: Sorted list.
+        Sorted list.
 
     Example:
 

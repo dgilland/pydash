@@ -71,8 +71,8 @@ def add(a, b):
     Adds two numbers.
 
     Args:
-        a (number): First number to add.
-        b (number): Second number to add.
+        a: First number to add.
+        b: Second number to add.
 
     Returns:
         number
@@ -108,10 +108,10 @@ def sum_(collection):
     Sum each element in `collection`.
 
     Args:
-        collection (list|dict|number): Collection to process or first number to add.
+        collection: Collection to process or first number to add.
 
     Returns:
-        number: Result of summation.
+        Result of summation.
 
     Example:
 
@@ -185,11 +185,11 @@ def sum_by(collection, iteratee=None):
     through a iteratee before the summation is computed.
 
     Args:
-        collection (list|dict|number): Collection to process or first number to add.
-        iteratee (mixed|number, optional): Iteratee applied per iteration or second number to add.
+        collection: Collection to process or first number to add.
+        iteratee: Iteratee applied per iteration or second number to add.
 
     Returns:
-        number: Result of summation.
+        Result of summation.
 
     Example:
 
@@ -216,10 +216,10 @@ def mean(collection):
     Calculate arithmetic mean of each element in `collection`.
 
     Args:
-        collection (list|dict): Collection to process.
+        collection: Collection to process.
 
     Returns:
-        float: Result of mean.
+        Result of mean.
 
     Example:
 
@@ -297,11 +297,11 @@ def mean_by(collection, iteratee=None):
     of `collection` is passed through a iteratee before the mean is computed.
 
     Args:
-        collection (list|dict): Collection to process.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to process.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        float: Result of mean.
+        Result of mean.
 
     Example:
 
@@ -318,11 +318,11 @@ def ceil(x: NumberT, precision: int = 0) -> float:
     Round number up to precision.
 
     Args:
-        x (number): Number to round up.
-        precision (int, optional): Rounding precision. Defaults to ``0``.
+        x: Number to round up.
+        precision: Rounding precision. Defaults to ``0``.
 
     Returns:
-        int: Number rounded up.
+        Number rounded up.
 
     Example:
 
@@ -348,9 +348,9 @@ def clamp(x: NumT, lower: NumT2, upper: t.Union[NumT3, None] = None) -> t.Union[
     Clamps number within the inclusive lower and upper bounds.
 
     Args:
-        x (number): Number to clamp.
-        lower (number, optional): Lower bound.
-        upper (number): Upper bound
+        x: Number to clamp.
+        lower: Lower bound.
+        upper: Upper bound
 
     Returns:
         number
@@ -385,11 +385,11 @@ def divide(dividend: t.Union[NumberT, None], divisor: t.Union[NumberT, None]) ->
     Divide two numbers.
 
     Args:
-        dividend (int/float): The first number in a division.
-        divisor (int/float): The second number in a division.
+        dividend: The first number in a division.
+        divisor: The second number in a division.
 
     Returns:
-        int/float: Returns the quotient.
+        Returns the quotient.
 
     Example:
 
@@ -412,11 +412,11 @@ def floor(x: NumberT, precision: int = 0) -> float:
     Round number down to precision.
 
     Args:
-        x (number): Number to round down.
-        precision (int, optional): Rounding precision. Defaults to ``0``.
+        x: Number to round down.
+        precision: Rounding precision. Defaults to ``0``.
 
     Returns:
-        int: Number rounded down.
+        Number rounded down.
 
     Example:
 
@@ -465,11 +465,11 @@ def max_(collection, default=UNSET):
     Retrieves the maximum value of a `collection`.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        default (mixed, optional): Value to return if `collection` is empty.
+        collection: Collection to iterate over.
+        default: Value to return if `collection` is empty.
 
     Returns:
-        mixed: Maximum value.
+        Maximum value.
 
     Example:
 
@@ -566,12 +566,12 @@ def max_by(collection, iteratee=None, default=UNSET):
     Retrieves the maximum value of a `collection`.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
-        default (mixed, optional): Value to return if `collection` is empty.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
+        default: Value to return if `collection` is empty.
 
     Returns:
-        mixed: Maximum value.
+        Maximum value.
 
     Example:
 
@@ -641,11 +641,11 @@ def median(collection, iteratee=None):
     `collection` is passed through a iteratee before the median is computed.
 
     Args:
-        collection (list|dict): Collection to process.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to process.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        float: Result of median.
+        Result of median.
 
     Example:
 
@@ -703,11 +703,11 @@ def min_(collection, default=UNSET):
     Retrieves the minimum value of a `collection`.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        default (mixed, optional): Value to return if `collection` is empty.
+        collection: Collection to iterate over.
+        default: Value to return if `collection` is empty.
 
     Returns:
-        mixed: Minimum value.
+        Minimum value.
 
     Example:
 
@@ -804,12 +804,12 @@ def min_by(collection, iteratee=None, default=UNSET):
     Retrieves the minimum value of a `collection`.
 
     Args:
-        collection (list|dict): Collection to iterate over.
-        iteratee (mixed, optional): Iteratee applied per iteration.
-        default (mixed, optional): Value to return if `collection` is empty.
+        collection: Collection to iterate over.
+        iteratee: Iteratee applied per iteration.
+        default: Value to return if `collection` is empty.
 
     Returns:
-        mixed: Minimum value.
+        Minimum value.
 
     Example:
 
@@ -832,11 +832,11 @@ def moving_mean(array: t.Sequence["SupportsAdd[int, t.Any]"], size: t.SupportsIn
     Calculate moving mean of each element of `array`.
 
     Args:
-        array (list): List to process.
-        size (int): Window size.
+        array: List to process.
+        size: Window size.
 
     Returns:
-        list: Result of moving average.
+        Result of moving average.
 
     Example:
 
@@ -894,11 +894,11 @@ def multiply(multiplier, multiplicand):
     Multiply two numbers.
 
     Args:
-        multiplier (int/float): The first number in a multiplication.
-        multiplicand (int/float): The second number in a multiplication.
+        multiplier: The first number in a multiplication.
+        multiplicand: The second number in a multiplication.
 
     Returns:
-        int/float: Returns the product.
+        Returns the product.
 
     Example:
 
@@ -941,11 +941,11 @@ def power(x, n):
     Calculate exponentiation of `x` raised to the `n` power.
 
     Args:
-        x (number): Base number.
-        n (number): Exponent.
+        x: Base number.
+        n: Exponent.
 
     Returns:
-        number: Result of calculation.
+        Result of calculation.
 
     Example:
 
@@ -984,11 +984,11 @@ def round_(x, precision=0):
     Round number to precision.
 
     Args:
-        x (number): Number to round.
-        precision (int, optional): Rounding precision. Defaults to ``0``.
+        x: Number to round.
+        precision: Rounding precision. Defaults to ``0``.
 
     Returns:
-        int: Rounded number.
+        Rounded number.
 
     Example:
 
@@ -1025,11 +1025,11 @@ def scale(array, maximum: NumberT = 1):
     Scale list of value to a maximum number.
 
     Args:
-        array (list): Numbers to scale.
-        maximum (number): Maximum scale value.
+        array: Numbers to scale.
+        maximum: Maximum scale value.
 
     Returns:
-        list: Scaled numbers.
+        Scaled numbers.
 
     Example:
 
@@ -1070,11 +1070,11 @@ def slope(point1, point2):
     Calculate the slope between two points.
 
     Args:
-        point1 (list|tuple): X and Y coordinates of first point.
-        point2 (list|tuple): X and Y cooredinates of second point.
+        point1: X and Y coordinates of first point.
+        point2: X and Y cooredinates of second point.
 
     Returns:
-        float: Calculated slope.
+        Calculated slope.
 
     Example:
 
@@ -1099,10 +1099,10 @@ def std_deviation(array: t.List[NumberT]) -> float:
     Calculate standard deviation of list of numbers.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        float: Calculated standard deviation.
+        Calculated standard deviation.
 
     Example:
 
@@ -1132,11 +1132,11 @@ def subtract(minuend, subtrahend):
     Subtracts two numbers.
 
     Args:
-        minuend (int/float): Value passed in by the user.
-        subtrahend (int/float): Value passed in by the user.
+        minuend: Value passed in by the user.
+        subtrahend: Value passed in by the user.
 
     Returns:
-        int/float: Result of the difference from the given values.
+        Result of the difference from the given values.
 
     Example:
 
@@ -1157,10 +1157,10 @@ def transpose(array: t.Iterable[t.Iterable[T]]) -> t.List[t.List[T]]:
     Transpose the elements of `array`.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        list: Transposed list.
+        Transposed list.
 
     Example:
 
@@ -1193,10 +1193,10 @@ def variance(array):
     Calculate the variance of the elements in `array`.
 
     Args:
-        array (list): List to process.
+        array: List to process.
 
     Returns:
-        float: Calculated variance.
+        Calculated variance.
 
     Example:
 
@@ -1258,11 +1258,11 @@ def zscore(collection, iteratee=None):
     of `collection` is passed through a iteratee before the standard score is computed.
 
     Args:
-        collection (list|dict): Collection to process.
-        iteratee (mixed, optional): Iteratee applied per iteration.
+        collection: Collection to process.
+        iteratee: Iteratee applied per iteration.
 
     Returns:
-        float: Calculated standard score.
+        Calculated standard score.
 
     Example:
 

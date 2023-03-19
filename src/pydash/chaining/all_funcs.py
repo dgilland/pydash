@@ -19,10 +19,10 @@ class AllFuncs(ABC):
         Return valid :attr:`module` method.
 
         Args:
-            name (str): Name of pydash method to get.
+            name: Name of pydash method to get.
 
         Returns:
-            function: :attr:`module` callable.
+            :attr:`module` callable.
 
         Raises:
             InvalidMethod: Raised if `name` is not a valid :attr:`module` method.
