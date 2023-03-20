@@ -82,7 +82,7 @@ def pylint(ctx: Context) -> None:
 @task
 def mypy(ctx: Context) -> None:
     """Check code using mypy type checker."""
-    run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
+    run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS} --no-error-summary")
 
 
 @task
@@ -91,6 +91,7 @@ def lint(ctx: Context) -> None:
     linters = {
         "flake8": flake8,
         "pylint": pylint,
+        "mypy": mypy,
     }
     # in python 3.8 and before the ast module doesn't have the `unparse` function
     # which is needed for the generation
