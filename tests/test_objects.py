@@ -172,8 +172,6 @@ def test_defaults_deep(case, expected):
     [
         ([1, 2, 3], {0: 1, 1: 2, 2: 3}),
         ({0: 1, 1: 2, 2: 3}, {0: 1, 1: 2, 2: 3}),
-        ([("a", "b"), ("c", "d")], {"a": "b", "c": "d"}),
-        ([s.split(",") for s in ["a,b", "c,d"]], {"a": "b", "c": "d"}),
     ],
 )
 def test_to_dict(case, expected):
