@@ -1915,12 +1915,12 @@ def to_boolean(
 
 
 @t.overload
-def to_dict(obj: t.Dict[T, T2]) -> t.Dict[T, T2]:
+def to_dict(obj: t.Mapping[T, T2]) -> t.Dict[T, T2]:
     ...
 
 
 @t.overload
-def to_dict(obj: t.List[t.Tuple[T, T2]]) -> t.Dict[T, T2]:
+def to_dict(obj: t.Iterable[T]) -> t.Dict[int, T]:
     ...
 
 
@@ -1934,7 +1934,7 @@ def to_dict(obj):
     Convert `obj` to ``dict`` by creating a new ``dict`` using `obj` keys and values.
 
     Args:
-        obj:: Object to convert.
+        obj: Object to convert.
 
     Returns:
         Object converted to ``dict``.
@@ -1960,10 +1960,7 @@ def to_dict(obj):
         Try to convert to ``dict`` using ``dict()`` first, then fallback to using
         ``pydash.helpers.iterator``.
     """
-    try:
-        return dict(obj)
-    except Exception:
-        return dict(iterator(obj))
+    return dict(iterator(obj))
 
 
 def to_integer(obj: t.Any) -> int:

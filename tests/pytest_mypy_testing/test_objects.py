@@ -267,6 +267,8 @@ def test_mypy_to_dict() -> None:
     obj = {'a': 1, 'b': 2}
     reveal_type(_.to_dict(obj))  # R: builtins.dict[builtins.str, builtins.int]
     reveal_type(_.to_dict(MyClass()))  # R: builtins.dict[Any, Any]
+    reveal_type(_.to_dict([1, 2, 3, 4]))  # R: builtins.dict[builtins.int, builtins.int]
+    reveal_type(_.to_dict([(1, 2), (3, 4)]))  # R: builtins.dict[builtins.int, Tuple[builtins.int, builtins.int]]
 
 
 @pytest.mark.mypy_testing
