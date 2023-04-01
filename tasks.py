@@ -20,9 +20,10 @@ from invoke import Context, Exit, UnexpectedExit, run as _run, task
 
 PACKAGE_NAME = "pydash"
 PACKAGE_SOURCE = f"src/{PACKAGE_NAME}"
+MYPY_TESTS_DIR = "tests/pytest_mypy_testing"
 TEST_TARGETS = f"{PACKAGE_SOURCE} tests"
 LINT_TARGETS = f"{TEST_TARGETS} tasks.py"
-LINT_EXCLUDE = "tests/pytest_mypy_testing"
+LINT_EXCLUDE = MYPY_TESTS_DIR
 EXIT_EXCEPTIONS = (Exit, UnexpectedExit, SystemExit)
 
 
@@ -119,7 +120,9 @@ def lint(ctx: Context) -> None:
 
 
 @task(help={"args": "Override default pytest arguments"})
-def test(ctx: Context, args: str = f"{TEST_TARGETS} --cov={PACKAGE_NAME}") -> None:
+def test(
+    ctx: Context, args: str = f"{TEST_TARGETS} --cov={PACKAGE_NAME}", with_mypy_tests: bool = False
+) -> None:
     """Run unit tests using pytest."""
     tox_env_site_packages_dir = os.getenv("TOX_ENV_SITE_PACKAGES_DIR")
     if tox_env_site_packages_dir:
@@ -127,7 +130,9 @@ def test(ctx: Context, args: str = f"{TEST_TARGETS} --cov={PACKAGE_NAME}") -> No
         tox_env_pkg_src = os.path.join(tox_env_site_packages_dir, os.path.basename(PACKAGE_SOURCE))
         args = args.replace(PACKAGE_SOURCE, tox_env_pkg_src)
 
-    run(f"pytest {args}")
+    ignored_dirs = f"--ignore={MYPY_TESTS_DIR}" if with_mypy_tests is False else ""
+
+    run(f"pytest {args} {ignored_dirs}")
 
 
 @task
