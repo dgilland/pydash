@@ -3,6 +3,12 @@
 Changelog
 =========
 
+- Add type annotations to package. Raise an issue for any typing issues at https://github.com/dgilland/pydash/issues. Thanks DeviousStoat_! (**breaking change**)
+- Change behavior of ``to_dict`` to not using ``dict()`` internally. Previous behavior would be for something like ``to_dict([["k", "v"], ["x", "y"]])`` to return ``{"k": "v", "x": "y"}`` (equivalent to calling ``dict(...)``) but ``to_dict([["k"], ["v"], ["x"], ["y"]])`` would return ``{0: ["x"], 1: ["v"], 2: ["x"], 3: ["y"]}``. The new behavior is to always return iterables as dictionaries with their indexes as keys like ``{0: ["k", "v"], 1: ["x", "y"]}``. This is consistent with how iterable objects are iterated over and means that ``to_dict`` will have more reliable output. (**breaking change**)
+- Change behavior of ``slugify`` to remove single-quotes from output. Instead of ``slugify("the cat's meow") == "the-cat's-meow"``, the new behavior is to return ``"the-cats-meow"``. (**breaking change**)
+- Add support for negative indexes in ``get`` path keys. Thanks bl4ckst0ne_!
+
+
 v6.0.2 (2023-02-23)
 -------------------
 
@@ -1216,3 +1222,5 @@ v0.0.0 (2014-07-22)
 .. _zhaowb: https://github.com/zhaowb
 .. _mervynlee94: https://github.com/mervynlee94
 .. _weineel: https://github.com/weineel
+.. _bl4ckst0ne: https://github.com/bl4ckst0ne
+.. _DeviousStoat: https://github.com/DeviousStoat
