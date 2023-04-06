@@ -4,14 +4,12 @@ import typing as t
 from pathlib import Path
 from collections import defaultdict, deque
 
-import pydash
-
 
 WRAPPER_KW = "RES"
 INIT_FILE = "src/pydash/__init__.py"
-BASE_MODULE = """
+BASE_MODULE = '''
 # mypy: disable-error-code=misc
-'''Generated from the `scripts/chaining_type_generator.py` script.'''
+"""Generated from the `scripts/chaining_type_generator.py` script."""
 
 import re
 import typing as t
@@ -75,7 +73,7 @@ P = ParamSpec("P")
 
 
 class {class_name}:
-"""
+'''
 
 FUNCTIONS_TO_SKIP = [
     # this is already a method of `Chain`
