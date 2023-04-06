@@ -1559,9 +1559,15 @@ def slugify(text: t.Any, separator: str = "-") -> str:
 
     .. versionchanged:: 5.0.0
         Improved unicode word support.
+
+    .. versionchanged:: 7.0.0
+        Remove single quotes from output.
     """
     normalized = (
-        unicodedata.normalize("NFKD", pyd.to_string(text)).encode("ascii", "ignore").decode("utf8")
+        unicodedata.normalize("NFKD", pyd.to_string(text))
+        .encode("ascii", "ignore")
+        .decode("utf8")
+        .replace("'", "")
     )
 
     return separator_case(normalized, separator)
