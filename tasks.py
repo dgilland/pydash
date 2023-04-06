@@ -31,19 +31,19 @@ EXIT_EXCEPTIONS = (Exit, UnexpectedExit, SystemExit)
 run = partial(_run, pty=True)
 
 
-@task
+@task()
 def black(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat code using black."""
     run(f"black --exclude='{LINT_EXCLUDE}' {target or LINT_TARGETS}", hide=quiet)
 
 
-@task
+@task()
 def isort(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat Python imports."""
     run(f"isort {target or LINT_TARGETS}", hide=quiet)
 
 
-@task
+@task()
 def docformatter(ctx: Context, target: t.Optional[str] = None) -> None:
     """Autoformat docstrings using docformatter."""
     run(
@@ -52,7 +52,7 @@ def docformatter(ctx: Context, target: t.Optional[str] = None) -> None:
     )
 
 
-@task
+@task()
 def fmt(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat code and docstrings."""
     if not quiet:
@@ -68,25 +68,25 @@ def fmt(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> No
     black(ctx, target, quiet=True)
 
 
-@task
+@task()
 def flake8(ctx: Context) -> None:
     """Check code for PEP8 violations using flake8."""
     run(f"flake8 --format=pylint --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
-@task
+@task()
 def pylint(ctx: Context) -> None:
     """Check code for static errors using pylint."""
     run(f"pylint --ignore='{LINT_EXCLUDE}' {LINT_TARGETS}")
 
 
-@task
+@task()
 def mypy(ctx: Context) -> None:
     """Check code using mypy type checker."""
     run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS} --no-error-summary")
 
 
-@task
+@task()
 def lint(ctx: Context) -> None:
     """Run linters."""
     linters = {
@@ -135,7 +135,7 @@ def test(
     run(f"pytest {args} {ignored_dirs}")
 
 
-@task
+@task()
 def ci(ctx: Context) -> None:
     """Run linters and tests."""
     print("Building package")
@@ -151,7 +151,7 @@ def ci(ctx: Context) -> None:
     test(ctx)
 
 
-@task
+@task()
 def docs(ctx: Context, serve: bool = False, bind: str = "127.0.0.1", port: int = 8000) -> None:
     """Build docs."""
     run("rm -rf docs/_build")
@@ -162,14 +162,14 @@ def docs(ctx: Context, serve: bool = False, bind: str = "127.0.0.1", port: int =
         run(f"python -m http.server -b {bind} --directory docs/_build/html {port}", hide=True)
 
 
-@task
+@task()
 def build(ctx: Context) -> None:
     """Build Python package."""
     run("rm -rf dist build docs/_build")
     run("python -m build")
 
 
-@task
+@task()
 def clean(ctx: Context) -> None:
     """Remove temporary files related to development."""
     run("find . -type f -name '*.py[cod]' -delete -o -type d -name __pycache__ -delete")
@@ -182,7 +182,7 @@ def release(ctx: Context) -> None:
     run("twine upload dist/*")
 
 
-@task
+@task()
 def generate_mypy_test(ctx: Context, file: str) -> None:
     """Generate base mypy test ready to be filled from doctests inside a python file."""
     run(
@@ -191,7 +191,7 @@ def generate_mypy_test(ctx: Context, file: str) -> None:
     )
 
 
-@task
+@task()
 def generate_chaining_types(
     ctx: Context, output: str = "src/pydash/chaining/all_funcs.pyi"
 ) -> None:
@@ -203,7 +203,7 @@ def generate_chaining_types(
     fmt(ctx, output, quiet=True)
 
 
-@task
+@task()
 def chaining_types_update_required(ctx: Context) -> None:
     with tempfile.NamedTemporaryFile(suffix=".pyi", dir=".") as tmp_file:
         generate_chaining_types(ctx, tmp_file.name)
