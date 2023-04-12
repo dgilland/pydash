@@ -550,7 +550,7 @@ def flat_map(collection: t.Iterable[T], iteratee: None = None) -> t.List[T]:
 
 def flat_map(collection, iteratee=None):
     """
-    Creates a flattened list of values by running each element in collection thru `iteratee` and
+    Creates a flattened list of values by running each element in collection through `iteratee` and
     flattening the mapped results. The `iteratee` is invoked with three arguments: ``(value,
     index|key, collection)``.
 

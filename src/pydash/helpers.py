@@ -223,7 +223,7 @@ def base_set(obj, key, value, allow_override=True):
                 obj[key] = value
         else:
             if key > len(obj):
-                # Pad list object with None values up to the index key so we can append the value
+                # Pad list object with None values up to the index key, so we can append the value
                 # into the key index.
                 obj[:] = (obj + [None] * key)[:key]
             obj.append(value)

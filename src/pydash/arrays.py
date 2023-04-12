@@ -471,7 +471,7 @@ def duplicates(
 ) -> t.List[T]:
     """
     Creates a unique list of duplicate values from `array`. If iteratee is passed, each element of
-    array is passed through a iteratee before duplicates are computed. The iteratee is invoked with
+    array is passed through an iteratee before duplicates are computed. The iteratee is invoked with
     three arguments: ``(value, index, array)``. If an object path is passed for iteratee, the
     created iteratee will return the path value of the given element. If an object is passed for
     iteratee, the created filter style iteratee will return ``True`` for elements that have the
@@ -1144,7 +1144,7 @@ def mapcat(
 
 def mapcat(array, iteratee=None):
     """
-    Map a iteratee to each element of a list and concatenate the results into a single list using
+    Map an iteratee to each element of a list and concatenate the results into a single list using
     :func:`concat`.
 
     Args:
@@ -1467,8 +1467,7 @@ def reverse(array: SequenceT) -> SequenceT:
 
     .. versionadded:: 2.2.0
     """
-    # NOTE: Using this method to reverse object since it works for both lists
-    # and strings.
+    # NOTE: Using this method to reverse object since it works for both lists and strings.
     return array[::-1]  # type: ignore
 
 
@@ -1569,9 +1568,8 @@ def sort(array, comparator=None, key=None, reverse=False):
             depending on whether the first argument is considered smaller than, equal to, or larger
             than the second argument. Defaults to ``None``. This argument is mutually exclusive with
             `key`.
-        key: A function of one argument used to extract a a comparator key from
-            each list element. Defaults to ``None``. This argument is mutually exclusive with
-            `comparator`.
+        key: A function of one argument used to extract a comparator key from each list element.
+            Defaults to ``None``. This argument is mutually exclusive with `comparator`.
         reverse: Whether to reverse the sort. Defaults to ``False``.
 
     Returns:
@@ -1923,7 +1921,7 @@ def splice(
     is_string = pyd.is_string(array)
 
     if is_string:
-        # allow reassignement with different type
+        # allow reassignment with different type
         array = list(array)  # type: ignore
 
     removed = array[start : start + count]
@@ -2189,7 +2187,7 @@ def union_by(
 def union_by(array, *others, **kwargs):
     """
     This method is similar to :func:`union` except that it accepts iteratee which is invoked for
-    each element of each arrays to generate the criterion by which uniqueness is computed.
+    each element of each array to generate the criterion by which uniqueness is computed.
 
     Args:
         array: List to unionize with.
@@ -2269,7 +2267,7 @@ def union_with(array, *others, **kwargs):
 def uniq(array: t.Iterable[T]) -> t.List[T]:
     """
     Creates a duplicate-value-free version of the array. If iteratee is passed, each element of
-    array is passed through a iteratee before uniqueness is computed. The iteratee is invoked with
+    array is passed through an iteratee before uniqueness is computed. The iteratee is invoked with
     three arguments: ``(value, index, array)``. If an object path is passed for iteratee, the
     created iteratee will return the path value of the given element. If an object is passed for
     iteratee, the created filter style iteratee will return ``True`` for elements that have the
@@ -2421,7 +2419,7 @@ def unzip_with(
 
 def unzip_with(array, iteratee=None):
     """
-    This method is like :func:`unzip` except that it accepts a iteratee to specify how regrouped
+    This method is like :func:`unzip` except that it accepts an iteratee to specify how regrouped
     values should be combined. The iteratee is invoked with four arguments: ``(accumulator, value,
     index, group)``.
 
@@ -2511,9 +2509,9 @@ def xor_by(array: t.Iterable[T], *lists: t.Union[t.Iterable[T], t.Callable[[T], 
 def xor_by(array, *lists, **kwargs):
     """
     This method is like :func:`xor` except that it accepts iteratee which is invoked for each
-    element of each arrays to generate the criterion by which by which they're compared. The order
-    of result values is determined by the order they occur in the arrays. The iteratee is invoked
-    with one argument: ``(value)``.
+    element of each arras to generate the criterion by which they're compared. The order of result
+    values is determined by the order they occur in the arrays. The iteratee is invoked with one
+    argument: ``(value)``.
 
     Args:
         array: List to process.
@@ -2651,9 +2649,9 @@ def zip_object(keys: t.Iterable[T], values: t.List[T2]) -> t.Dict[T, T2]:
 
 def zip_object(keys, values=None):
     """
-    Creates a dict composed from lists of keys and values. Pass either a single two dimensional
-    list, i.e. ``[[key1, value1], [key2, value2]]``, or two lists, one of keys and one of
-    corresponding values.
+    Creates a dict composed of lists of keys and values. Pass either a single two-dimensional list,
+    i.e. ``[[key1, value1], [key2, value2]]``, or two lists, one of keys and one of corresponding
+    values.
 
     Args:
         keys: Either a list of keys or a list of ``[key, value]`` pairs.
@@ -2741,7 +2739,7 @@ def zip_with(
 
 def zip_with(*arrays, **kwargs):
     """
-    This method is like :func:`zip` except that it accepts a iteratee to specify how grouped values
+    This method is like :func:`zip` except that it accepts an iteratee to specify how grouped values
     should be combined. The iteratee is invoked with four arguments: ``(accumulator, value, index,
     group)``.
 

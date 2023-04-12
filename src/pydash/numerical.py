@@ -182,7 +182,7 @@ def sum_by(collection: t.Iterable["SupportsAdd[int, T]"], iteratee: None = None)
 def sum_by(collection, iteratee=None):
     """
     Sum each element in `collection`. If iteratee is passed, each element of `collection` is passed
-    through a iteratee before the summation is computed.
+    through an iteratee before the summation is computed.
 
     Args:
         collection: Collection to process or first number to add.
@@ -294,7 +294,7 @@ def mean_by(collection: t.Iterable["SupportsAdd[int, t.Any]"], iteratee: None = 
 def mean_by(collection, iteratee=None):
     """
     Calculate arithmetic mean of each element in `collection`. If iteratee is passed, each element
-    of `collection` is passed through a iteratee before the mean is computed.
+    of `collection` is passed through an iteratee before the mean is computed.
 
     Args:
         collection: Collection to process.
@@ -638,7 +638,7 @@ def median(collection: t.Iterable[NumberT], iteratee: None = None) -> t.Union[fl
 def median(collection, iteratee=None):
     """
     Calculate median of each element in `collection`. If iteratee is passed, each element of
-    `collection` is passed through a iteratee before the median is computed.
+    `collection` is passed through an iteratee before the median is computed.
 
     Args:
         collection: Collection to process.
@@ -1255,7 +1255,7 @@ def zscore(collection: t.Iterable[NumberT], iteratee: None = None) -> t.List[flo
 def zscore(collection, iteratee=None):
     """
     Calculate the standard score assuming normal distribution. If iteratee is passed, each element
-    of `collection` is passed through a iteratee before the standard score is computed.
+    of `collection` is passed through an iteratee before the standard score is computed.
 
     Args:
         collection: Collection to process.

@@ -623,7 +623,7 @@ def escape(text: t.Any) -> str:
         Moved function to :mod:`pydash.strings`.
     """
     text = pyd.to_string(text)
-    # NOTE: Not using html.escape because Lo-Dash escapes certain chars differently (e.g. "'" isn't
+    # NOTE: Not using html.escape because Lo-Dash escapes certain chars differently (e.g. `'` isn't
     # escaped by html.escape() but is by Lo-Dash).
     return "".join(HTML_ESCAPES.get(char, char) for char in text)
 
@@ -872,7 +872,7 @@ def number_format(
         order_separator: Order separator to use. Defaults to ``','``.
 
     Returns:
-        Formatted number as string.
+        Number formatted as string.
 
     Example:
 
@@ -1119,8 +1119,8 @@ def prune(text: t.Any, length: int = 0, omission: str = "...") -> str:
 
     subtext_len = len(subtext)
 
-    # Only add omission text if doing so will result in a string that is equal two or smaller in
-    # length than the original.
+    # Only add omission text if doing so will result in a string that is equal to or smaller than
+    # the original.
     if (subtext_len + omission_len) <= text_len:
         text = text[:subtext_len] + omission
 
@@ -1133,7 +1133,7 @@ def quote(text: t.Any, quote_char: t.Any = '"') -> str:
 
     Args:
         text: String to be quoted.
-        quote_char: the quote character. Defaults to ``"``.
+        quote_char: the quote character. Defaults to ``'"'``.
 
     Returns:
         the quoted string.

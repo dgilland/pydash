@@ -496,7 +496,7 @@ class Juxtapose(t.Generic[P, T]):
 
 
 class OverArgs(object):
-    """Wrap a function in a over_args context."""
+    """Wrap a function in an over_args context."""
 
     def __init__(self, func: t.Callable, *transforms: t.Callable) -> None:
         self.func = func
@@ -569,7 +569,7 @@ class Rearg(t.Generic[P, T]):
     def __init__(self, func: t.Callable[P, T], *indexes: int) -> None:
         self.func = func
 
-        # Index `indexes` by the index value so we can do a lookup mapping by walking the function
+        # Index `indexes` by the index value, so we can do a lookup mapping by walking the function
         # arguments.
         self.indexes = {
             src_index: dest_index for dest_index, src_index in enumerate(pyd.flatten(indexes))
@@ -630,7 +630,7 @@ class Throttle(t.Generic[P, T]):
             self.last_result = self.func(*args, **kwargs)
             self.last_execution = present
 
-        # The last result will be filled on first execution so it is always `T`
+        # The last result will be filled on first execution, so it is always `T`
         return self.last_result  # type: ignore
 
 

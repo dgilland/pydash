@@ -800,8 +800,8 @@ def over(funcs: t.Iterable[t.Callable[P, T]]) -> t.Callable[P, t.List[T]]:
 
 def over_every(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     """
-    Creates a function that checks if all of the functions in `funcs` return truthy when invoked
-    with the arguments it receives.
+    Creates a function that checks if all the functions in `funcs` return truthy when invoked with
+    the arguments it receives.
 
     Args:
         funcs: List of functions to be invoked.
