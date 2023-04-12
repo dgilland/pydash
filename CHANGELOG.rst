@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v7.0.0 (2023-04-11)
+-------------------
+
 - Add type annotations to package. Raise an issue for any typing issues at https://github.com/dgilland/pydash/issues. Thanks DeviousStoat_! (**breaking change**)
 - Change behavior of ``to_dict`` to not using ``dict()`` internally. Previous behavior would be for something like ``to_dict([["k", "v"], ["x", "y"]])`` to return ``{"k": "v", "x": "y"}`` (equivalent to calling ``dict(...)``) but ``to_dict([["k"], ["v"], ["x"], ["y"]])`` would return ``{0: ["x"], 1: ["v"], 2: ["x"], 3: ["y"]}``. The new behavior is to always return iterables as dictionaries with their indexes as keys like ``{0: ["k", "v"], 1: ["x", "y"]}``. This is consistent with how iterable objects are iterated over and means that ``to_dict`` will have more reliable output. (**breaking change**)
 - Change behavior of ``slugify`` to remove single-quotes from output. Instead of ``slugify("the cat's meow") == "the-cat's-meow"``, the new behavior is to return ``"the-cats-meow"``. (**breaking change**)
