@@ -196,7 +196,7 @@ class AllFuncs:
         return self._wrap(pyd.head)()
     def index_of(self: "Chain[t.Sequence[T]]", value: T, from_index: int = 0) -> "Chain[int]":
         return self._wrap(pyd.index_of)(value, from_index)
-    def initial(self: "Chain[t.List[T]]") -> "Chain[t.List[T]]":
+    def initial(self: "Chain[t.Sequence[T]]") -> "Chain[t.Sequence[T]]":
         return self._wrap(pyd.initial)()
     @t.overload
     def intercalate(
@@ -247,31 +247,34 @@ class AllFuncs:
         return self._wrap(pyd.last_index_of)(value, from_index)
     @t.overload
     def mapcat(
-        self: "Chain[t.List[T]]",
+        self: "Chain[t.Iterable[T]]",
         iteratee: t.Callable[[T, int, t.List[T]], t.Union[t.List[T2], t.List[t.List[T2]]]],
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def mapcat(
-        self: "Chain[t.List[T]]", iteratee: t.Callable[[T, int, t.List[T]], T2]
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int, t.List[T]], T2]
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def mapcat(
-        self: "Chain[t.List[T]]",
+        self: "Chain[t.Iterable[T]]",
         iteratee: t.Callable[[T, int], t.Union[t.List[T2], t.List[t.List[T2]]]],
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def mapcat(
-        self: "Chain[t.List[T]]", iteratee: t.Callable[[T, int], T2]
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int], T2]
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def mapcat(
-        self: "Chain[t.List[T]]", iteratee: t.Callable[[T], t.Union[t.List[T2], t.List[t.List[T2]]]]
+        self: "Chain[t.Iterable[T]]",
+        iteratee: t.Callable[[T], t.Union[t.List[T2], t.List[t.List[T2]]]],
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
-    def mapcat(self: "Chain[t.List[T]]", iteratee: t.Callable[[T], T2]) -> "Chain[t.List[T2]]": ...
+    def mapcat(
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T], T2]
+    ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def mapcat(
-        self: "Chain[t.List[t.Union[t.List[T], t.List[t.List[T]]]]]", iteratee: None = None
+        self: "Chain[t.Iterable[t.Union[t.List[T], t.List[t.List[T]]]]]", iteratee: None = None
     ) -> "Chain[t.List[t.Union[T, t.List[T]]]]": ...
     def mapcat(self, iteratee=None):
         return self._wrap(pyd.mapcat)(iteratee)
@@ -321,18 +324,18 @@ class AllFuncs:
 
     @t.overload
     def sort(
-        self: "Chain[t.Iterable['SupportsRichComparisonT']]",
+        self: "Chain[t.List['SupportsRichComparisonT']]",
         comparator: None = None,
         key: None = None,
         reverse: bool = False,
     ) -> "Chain[t.List['SupportsRichComparisonT']]": ...
     @t.overload
     def sort(
-        self: "Chain[t.Iterable[T]]", comparator: t.Callable[[T, T], int], *, reverse: bool = False
+        self: "Chain[t.List[T]]", comparator: t.Callable[[T, T], int], *, reverse: bool = False
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def sort(
-        self: "Chain[t.Iterable[T]]",
+        self: "Chain[t.List[T]]",
         *,
         key: t.Callable[[T], "SupportsRichComparisonT"],
         reverse: bool = False
@@ -362,25 +365,25 @@ class AllFuncs:
     ) -> "Chain[int]":
         return self._wrap(pyd.sorted_index_of)(value)
     def sorted_last_index(
-        self: "Chain[t.List['SupportsRichComparisonT']]", value: "SupportsRichComparisonT"
+        self: "Chain[t.Sequence['SupportsRichComparisonT']]", value: "SupportsRichComparisonT"
     ) -> "Chain[int]":
         return self._wrap(pyd.sorted_last_index)(value)
     @t.overload
     def sorted_last_index_by(
-        self: "Chain[t.List[T]]",
+        self: "Chain[t.Sequence[T]]",
         value: T,
         iteratee: t.Union[IterateeObjT, t.Callable[[T], "SupportsRichComparisonT"]],
     ) -> "Chain[int]": ...
     @t.overload
     def sorted_last_index_by(
-        self: "Chain[t.List['SupportsRichComparisonT']]",
+        self: "Chain[t.Sequence['SupportsRichComparisonT']]",
         value: "SupportsRichComparisonT",
         iteratee: None = None,
     ) -> "Chain[int]": ...
     def sorted_last_index_by(self, value, iteratee=None):
         return self._wrap(pyd.sorted_last_index_by)(value, iteratee)
     def sorted_last_index_of(
-        self: "Chain[t.List['SupportsRichComparisonT']]", value: "SupportsRichComparisonT"
+        self: "Chain[t.Sequence['SupportsRichComparisonT']]", value: "SupportsRichComparisonT"
     ) -> "Chain[int]":
         return self._wrap(pyd.sorted_last_index_of)(value)
     def sorted_uniq(
@@ -398,30 +401,30 @@ class AllFuncs:
         self: "Chain[MutableSequenceT]", start: int, count: t.Union[int, None] = None, *items: t.Any
     ) -> "Chain[MutableSequenceT]":
         return self._wrap(pyd.splice)(start, count, *items)
-    def split_at(self: "Chain[t.List[T]]", index: int) -> "Chain[t.List[t.List[T]]]":
+    def split_at(self: "Chain[t.Sequence[T]]", index: int) -> "Chain[t.List[t.Sequence[T]]]":
         return self._wrap(pyd.split_at)(index)
-    def tail(self: "Chain[t.List[T]]") -> "Chain[t.List[T]]":
+    def tail(self: "Chain[t.Sequence[T]]") -> "Chain[t.Sequence[T]]":
         return self._wrap(pyd.tail)()
-    def take(self: "Chain[t.Sequence[T]]", n: int = 1) -> "Chain[t.List[T]]":
+    def take(self: "Chain[t.Sequence[T]]", n: int = 1) -> "Chain[t.Sequence[T]]":
         return self._wrap(pyd.take)(n)
-    def take_right(self: "Chain[t.Sequence[T]]", n: int = 1) -> "Chain[t.List[T]]":
+    def take_right(self: "Chain[t.Sequence[T]]", n: int = 1) -> "Chain[t.Sequence[T]]":
         return self._wrap(pyd.take_right)(n)
     @t.overload
     def take_right_while(
         self: "Chain[t.Sequence[T]]", predicate: t.Callable[[T, int, t.List[T]], t.Any]
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.Sequence[T]]": ...
     @t.overload
     def take_right_while(
         self: "Chain[t.Sequence[T]]", predicate: t.Callable[[T, int], t.Any]
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.Sequence[T]]": ...
     @t.overload
     def take_right_while(
         self: "Chain[t.Sequence[T]]", predicate: t.Callable[[T], t.Any]
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.Sequence[T]]": ...
     @t.overload
     def take_right_while(
         self: "Chain[t.Sequence[T]]", predicate: None = None
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.Sequence[T]]": ...
     def take_right_while(self, predicate=None):
         return self._wrap(pyd.take_right_while)(predicate)
     @t.overload

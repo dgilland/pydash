@@ -798,7 +798,7 @@ def index_of(array: t.Sequence[T], value: T, from_index: int = 0) -> int:
         return -1
 
 
-def initial(array: t.List[T]) -> t.List[T]:
+def initial(array: t.Sequence[T]) -> t.Sequence[T]:
     """
     Return all but the last element of `array`.
 
@@ -1100,44 +1100,44 @@ def last_index_of(
 
 @t.overload
 def mapcat(
-    array: t.List[T],
+    array: t.Iterable[T],
     iteratee: t.Callable[[T, int, t.List[T]], t.Union[t.List[T2], t.List[t.List[T2]]]],
 ) -> t.List[T2]:
     ...
 
 
 @t.overload
-def mapcat(array: t.List[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.List[T2]:
+def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.List[T2]:
     ...
 
 
 @t.overload
 def mapcat(
-    array: t.List[T], iteratee: t.Callable[[T, int], t.Union[t.List[T2], t.List[t.List[T2]]]]
+    array: t.Iterable[T], iteratee: t.Callable[[T, int], t.Union[t.List[T2], t.List[t.List[T2]]]]
 ) -> t.List[T2]:
     ...
 
 
 @t.overload
-def mapcat(array: t.List[T], iteratee: t.Callable[[T, int], T2]) -> t.List[T2]:
+def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.List[T2]:
     ...
 
 
 @t.overload
 def mapcat(
-    array: t.List[T], iteratee: t.Callable[[T], t.Union[t.List[T2], t.List[t.List[T2]]]]
+    array: t.Iterable[T], iteratee: t.Callable[[T], t.Union[t.List[T2], t.List[t.List[T2]]]]
 ) -> t.List[T2]:
     ...
 
 
 @t.overload
-def mapcat(array: t.List[T], iteratee: t.Callable[[T], T2]) -> t.List[T2]:
+def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.List[T2]:
     ...
 
 
 @t.overload
 def mapcat(
-    array: t.List[t.Union[t.List[T], t.List[t.List[T]]]], iteratee: None = None
+    array: t.Iterable[t.Union[t.List[T], t.List[t.List[T]]]], iteratee: None = None
 ) -> t.List[t.Union[T, t.List[T]]]:
     ...
 
@@ -1529,7 +1529,7 @@ def slice_(array: SequenceT, start: int = 0, end: t.Union[int, None] = None) -> 
 
 @t.overload
 def sort(
-    array: t.Iterable["SupportsRichComparisonT"],
+    array: t.List["SupportsRichComparisonT"],
     comparator: None = None,
     key: None = None,
     reverse: bool = False,
@@ -1539,14 +1539,14 @@ def sort(
 
 @t.overload
 def sort(
-    array: t.Iterable[T], comparator: t.Callable[[T, T], int], *, reverse: bool = False
+    array: t.List[T], comparator: t.Callable[[T, T], int], *, reverse: bool = False
 ) -> t.List[T]:
     ...
 
 
 @t.overload
 def sort(
-    array: t.Iterable[T], *, key: t.Callable[[T], "SupportsRichComparisonT"], reverse: bool = False
+    array: t.List[T], *, key: t.Callable[[T], "SupportsRichComparisonT"], reverse: bool = False
 ) -> t.List[T]:
     ...
 
@@ -1713,7 +1713,7 @@ def sorted_index_of(
 
 
 def sorted_last_index(
-    array: t.List["SupportsRichComparisonT"], value: "SupportsRichComparisonT"
+    array: t.Sequence["SupportsRichComparisonT"], value: "SupportsRichComparisonT"
 ) -> int:
     """
     This method is like :func:`sorted_index` except that it returns the highest index at which
@@ -1741,7 +1741,7 @@ def sorted_last_index(
 
 @t.overload
 def sorted_last_index_by(
-    array: t.List[T],
+    array: t.Sequence[T],
     value: T,
     iteratee: t.Union[IterateeObjT, t.Callable[[T], "SupportsRichComparisonT"]],
 ) -> int:
@@ -1750,7 +1750,7 @@ def sorted_last_index_by(
 
 @t.overload
 def sorted_last_index_by(
-    array: t.List["SupportsRichComparisonT"],
+    array: t.Sequence["SupportsRichComparisonT"],
     value: "SupportsRichComparisonT",
     iteratee: None = None,
 ) -> int:
@@ -1789,7 +1789,7 @@ def sorted_last_index_by(array, value, iteratee=None):
 
 
 def sorted_last_index_of(
-    array: t.List["SupportsRichComparisonT"], value: "SupportsRichComparisonT"
+    array: t.Sequence["SupportsRichComparisonT"], value: "SupportsRichComparisonT"
 ) -> int:
     """
     This method is like :func:`last_index_of` except that it performs a binary search on a sorted
@@ -1936,7 +1936,7 @@ def splice(
         return removed  # type: ignore
 
 
-def split_at(array: t.List[T], index: int) -> t.List[t.List[T]]:
+def split_at(array: t.Sequence[T], index: int) -> t.List[t.Sequence[T]]:
     """
     Returns a list of two lists composed of the split of `array` at `index`.
 
@@ -1957,7 +1957,7 @@ def split_at(array: t.List[T], index: int) -> t.List[t.List[T]]:
     return [array[:index], array[index:]]
 
 
-def tail(array: t.List[T]) -> t.List[T]:
+def tail(array: t.Sequence[T]) -> t.Sequence[T]:
     """
     Return all but the first element of `array`.
 
@@ -1980,7 +1980,7 @@ def tail(array: t.List[T]) -> t.List[T]:
     return array[1:]
 
 
-def take(array: t.Sequence[T], n: int = 1) -> t.List[T]:
+def take(array: t.Sequence[T], n: int = 1) -> t.Sequence[T]:
     """
     Creates a slice of `array` with `n` elements taken from the beginning.
 
@@ -2007,7 +2007,7 @@ def take(array: t.Sequence[T], n: int = 1) -> t.List[T]:
     return take_while(array, lambda _, index: index < n)
 
 
-def take_right(array: t.Sequence[T], n: int = 1) -> t.List[T]:
+def take_right(array: t.Sequence[T], n: int = 1) -> t.Sequence[T]:
     """
     Creates a slice of `array` with `n` elements taken from the end.
 
@@ -2035,22 +2035,22 @@ def take_right(array: t.Sequence[T], n: int = 1) -> t.List[T]:
 @t.overload
 def take_right_while(
     array: t.Sequence[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]
-) -> t.List[T]:
+) -> t.Sequence[T]:
     ...
 
 
 @t.overload
-def take_right_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.List[T]:
+def take_right_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.Sequence[T]:
     ...
 
 
 @t.overload
-def take_right_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.List[T]:
+def take_right_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.Sequence[T]:
     ...
 
 
 @t.overload
-def take_right_while(array: t.Sequence[T], predicate: None = None) -> t.List[T]:
+def take_right_while(array: t.Sequence[T], predicate: None = None) -> t.Sequence[T]:
     ...
 
 

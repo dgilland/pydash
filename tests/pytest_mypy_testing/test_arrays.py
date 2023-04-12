@@ -125,7 +125,7 @@ def test_mypy_index_of() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_initial() -> None:
-    reveal_type(_.initial([1, 2, 3, 4]))  # R: builtins.list[builtins.int]
+    reveal_type(_.initial([1, 2, 3, 4]))  # R: typing.Sequence[builtins.int]
 
 
 @pytest.mark.mypy_testing
@@ -329,27 +329,27 @@ def test_mypy_splice() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_split_at() -> None:
-    reveal_type(_.split_at([1, 2, 3, 4], 2))  # R: builtins.list[builtins.list[builtins.int]]
+    reveal_type(_.split_at([1, 2, 3, 4], 2))  # R: builtins.list[typing.Sequence[builtins.int]]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_tail() -> None:
-    reveal_type(_.tail([1, 2, 3, 4]))  # R: builtins.list[builtins.int]
+    reveal_type(_.tail([1, 2, 3, 4]))  # R: typing.Sequence[builtins.int]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_take() -> None:
-    reveal_type(_.take([1, 2, 3, 4], 2))  # R: builtins.list[builtins.int]
+    reveal_type(_.take([1, 2, 3, 4], 2))  # R: typing.Sequence[builtins.int]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_take_right() -> None:
-    reveal_type(_.take_right([1, 2, 3, 4], 2))  # R: builtins.list[builtins.int]
+    reveal_type(_.take_right([1, 2, 3, 4], 2))  # R: typing.Sequence[builtins.int]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_take_right_while() -> None:
-    reveal_type(_.take_right_while([1, 2, 3, 4], lambda x: x >= 3))  # R: builtins.list[builtins.int]
+    reveal_type(_.take_right_while([1, 2, 3, 4], lambda x: x >= 3))  # R: typing.Sequence[builtins.int]
 
 
 @pytest.mark.mypy_testing
@@ -443,7 +443,7 @@ def test_mypy_zip_() -> None:
 def test_mypy_zip_object() -> None:
     reveal_type(_.zip_object([1, 2, 3], [4, 5, 6]))  # R: builtins.dict[builtins.int, builtins.int]
     reveal_type(_.zip_object([1, 2, 3], ["hello", "good", "friend"]))  # R: builtins.dict[builtins.int, builtins.str]
-    
+
     my_list: t.List[t.Tuple[int, str]] = [(1, "hello"), (2, "good"), (3, "friend")]
     reveal_type(_.zip_object(my_list))  # R: builtins.dict[builtins.int, builtins.str]
 
