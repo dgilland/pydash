@@ -140,7 +140,7 @@ def test_mypy_is_even() -> None:
 def test_mypy_is_float() -> None:
     reveal_type(_.is_float(1.0))  # R: builtins.bool
     reveal_type(_.is_float(1))  # R: builtins.bool
-    
+
     x: t.Any = ...
     if _.is_float(x):
         reveal_type(x)  # R: builtins.float
@@ -181,7 +181,7 @@ def test_mypy_is_integer() -> None:
     x: t.Any = ...
     if _.is_integer(x):
         reveal_type(x)  # R: builtins.int
-    
+
 
 @pytest.mark.mypy_testing
 def test_mypy_is_iterable() -> None:

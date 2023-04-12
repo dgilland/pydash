@@ -175,7 +175,7 @@ def test_mypy_juxtapose() -> None:
         return x * 4
 
     f = _.juxtapose(double, triple, quadruple)
-    reveal_type(f)  # R: pydash.functions.Juxtapose[[x: builtins.int], builtins.int] 
+    reveal_type(f)  # R: pydash.functions.Juxtapose[[x: builtins.int], builtins.int]
     reveal_type(f(5))  # R: builtins.list[builtins.int]
 
 

@@ -396,12 +396,3 @@ def test_mypy_url() -> None:
 def test_mypy_words() -> None:
     reveal_type(_.words('a b, c; d-e'))  # R: builtins.list[builtins.str]
     reveal_type(_.words('fred, barney, & pebbles', '/[^, ]+/g'))  # R: builtins.list[builtins.str]
-
-
-
-
-
-
-
-
-

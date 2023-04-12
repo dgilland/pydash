@@ -76,7 +76,7 @@ def test_mypy_iteratee() -> None:
         return x + y
 
     reveal_type(_.iteratee('data'))  # R: def (*Any, **Any) -> Any
-    reveal_type(_.iteratee({'active': True})) # R: def (*Any, **Any) -> Any 
+    reveal_type(_.iteratee({'active': True})) # R: def (*Any, **Any) -> Any
     reveal_type(_.iteratee(add))  # R: def (x: builtins.int, y: builtins.int) -> builtins.int
 
 
