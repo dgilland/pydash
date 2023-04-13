@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v7.0.1 (2023-04-13)
+-------------------
+
 - Fix missing install dependency, ``typing-extensions``, for package.
 
 
