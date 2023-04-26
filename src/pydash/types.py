@@ -4,7 +4,9 @@ from typing_extensions import Protocol
 
 
 if t.TYPE_CHECKING:
-    from decimal import Decimal
+    # F401: imported but unused
+    # py3.7 flake8 doesn't get it for type aliases
+    from decimal import Decimal  # noqa: F401
 
 IterateeObjT = t.Union[int, str, t.List, t.Tuple, t.Dict]
 NumberT = t.Union[float, int, "Decimal"]
