@@ -3,6 +3,9 @@
 Changelog
 =========
 
+- Fix issue where using ``pyright`` as a type checker with ``reportPrivateUsage=true`` would report errors that objects are not exported from ``pydash``. Thanks DeviousStoat_!
+
+
 v7.0.1 (2023-04-13)
 -------------------
 
