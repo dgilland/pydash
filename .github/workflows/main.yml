@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip setuptools
-          pip install tox-gh-actions coveralls
+          pip install --upgrade tox-gh-actions coveralls
 
       - name: Run tests
         run: |
@@ -30,12 +30,11 @@ jobs:
 
       - name: Send coverage report
         run: |
-          coveralls
+          coveralls --service=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
           COVERALLS_PARALLEL: true
-          COVERALLS_SERVICE_NAME: github
 
   coveralls:
     name: Finish Coveralls
@@ -47,6 +46,6 @@ jobs:
       - name: Finished
         run: |
           pip install --upgrade coveralls
-          coveralls --finish
+          coveralls --service=github --finish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
