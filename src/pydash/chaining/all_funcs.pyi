@@ -476,7 +476,7 @@ class AllFuncs:
     def uniq(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[T]]":
         return self._wrap(pyd.uniq)()
     def uniq_by(
-        self: "Chain[t.Iterable[T]]", iteratee: t.Union[t.Callable[[T], T], None] = None
+        self: "Chain[t.Iterable[T]]", iteratee: t.Union[t.Callable[[T], t.Any], None] = None
     ) -> "Chain[t.List[T]]":
         return self._wrap(pyd.uniq_by)(iteratee)
     def uniq_with(

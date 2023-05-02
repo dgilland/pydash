@@ -2294,7 +2294,9 @@ def uniq(array: t.Iterable[T]) -> t.List[T]:
     return uniq_by(array)
 
 
-def uniq_by(array: t.Iterable[T], iteratee: t.Union[t.Callable[[T], T], None] = None) -> t.List[T]:
+def uniq_by(
+    array: t.Iterable[T], iteratee: t.Union[t.Callable[[T], t.Any], None] = None
+) -> t.List[T]:
     """
     This method is like :func:`uniq` except that it accepts iteratee which is invoked for each
     element in array to generate the criterion by which uniqueness is computed. The order of result

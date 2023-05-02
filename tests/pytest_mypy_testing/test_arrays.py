@@ -383,6 +383,7 @@ def test_mypy_uniq() -> None:
 @pytest.mark.mypy_testing
 def test_mypy_uniq_by() -> None:
     reveal_type(_.uniq_by([1, 2, 3, 1, 2, 3], lambda val: val % 2))  # R: builtins.list[builtins.int]
+    reveal_type(_.uniq_by([{"hello": 1}, {"hello": 1}], lambda val: val["hello"]))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
 
 
 @pytest.mark.mypy_testing
