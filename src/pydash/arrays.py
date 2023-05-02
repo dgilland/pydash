@@ -2498,13 +2498,17 @@ def xor(array: t.Iterable[T], *lists: t.Iterable[T]) -> t.List[T]:
 
 @t.overload
 def xor_by(
-    array: t.Iterable[T], *lists: t.Iterable[T], iteratee: t.Union[t.Callable[[T], T], IterateeObjT]
+    array: t.Iterable[T],
+    *lists: t.Iterable[T],
+    iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
 ) -> t.List[T]:
     ...
 
 
 @t.overload
-def xor_by(array: t.Iterable[T], *lists: t.Union[t.Iterable[T], t.Callable[[T], T]]) -> t.List[T]:
+def xor_by(
+    array: t.Iterable[T], *lists: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
+) -> t.List[T]:
     ...
 
 

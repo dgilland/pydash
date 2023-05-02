@@ -511,11 +511,11 @@ class AllFuncs:
     def xor_by(
         self: "Chain[t.Iterable[T]]",
         *lists: t.Iterable[T],
-        iteratee: t.Union[t.Callable[[T], T], IterateeObjT]
+        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT]
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def xor_by(
-        self: "Chain[t.Iterable[T]]", *lists: t.Union[t.Iterable[T], t.Callable[[T], T]]
+        self: "Chain[t.Iterable[T]]", *lists: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
     ) -> "Chain[t.List[T]]": ...
     def xor_by(self, *lists, **kwargs):
         return self._wrap(pyd.xor_by)(*lists, **kwargs)

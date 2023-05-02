@@ -433,6 +433,8 @@ def test_mypy_xor_by() -> None:
     reveal_type(_.xor_by([2.1, 1.2], [2.3, 3.4], round))  # R: builtins.list[builtins.float]
     reveal_type(_.xor_by([{'x': 1}], [{'x': 2}, {'x': 1}], iteratee='x'))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
 
+    reveal_type(_.xor_by([{"hello": 1}], [{"hello": 2}], lambda d: d["hello"]))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
+
 
 @pytest.mark.mypy_testing
 def test_mypy_xor_with() -> None:
