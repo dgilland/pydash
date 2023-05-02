@@ -151,6 +151,8 @@ def test_mypy_intersection() -> None:
 def test_mypy_intersection_by() -> None:
     reveal_type(_.intersection_by([1.2, 1.5, 1.7, 2.8], [0.9, 3.2], round))  # R: builtins.list[builtins.float]
 
+    reveal_type(_.intersection_by([{"hello": 1}], [{"hello": 2}], lambda d: d["hello"]))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
+
 
 @pytest.mark.mypy_testing
 def test_mypy_intersection_with() -> None:

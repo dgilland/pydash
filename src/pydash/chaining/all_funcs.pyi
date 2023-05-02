@@ -216,12 +216,12 @@ class AllFuncs:
     def intersection_by(
         self: "Chain[t.Sequence[T]]",
         *others: t.Iterable[t.Any],
-        iteratee: t.Union[t.Callable[[T], T], IterateeObjT]
+        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT]
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def intersection_by(
         self: "Chain[t.Sequence[T]]",
-        *others: t.Union[t.Iterable[t.Any], t.Callable[[T], T], IterateeObjT]
+        *others: t.Union[t.Iterable[t.Any], t.Callable[[T], t.Any], IterateeObjT]
     ) -> "Chain[t.List[T]]": ...
     def intersection_by(self, *others, **kwargs):
         return self._wrap(pyd.intersection_by)(*others, **kwargs)

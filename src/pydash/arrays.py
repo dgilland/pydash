@@ -902,14 +902,14 @@ def intersection(array: t.Sequence[T], *others: t.Iterable[t.Any]) -> t.List[T]:
 def intersection_by(
     array: t.Sequence[T],
     *others: t.Iterable[t.Any],
-    iteratee: t.Union[t.Callable[[T], T], IterateeObjT],
+    iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
 ) -> t.List[T]:
     ...
 
 
 @t.overload
 def intersection_by(
-    array: t.Sequence[T], *others: t.Union[t.Iterable[t.Any], t.Callable[[T], T], IterateeObjT]
+    array: t.Sequence[T], *others: t.Union[t.Iterable[t.Any], t.Callable[[T], t.Any], IterateeObjT]
 ) -> t.List[T]:
     ...
 
