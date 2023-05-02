@@ -72,12 +72,12 @@ class AllFuncs:
     def difference_by(
         self: "Chain[t.Iterable[T]]",
         *others: t.Iterable[T],
-        iteratee: t.Union[IterateeObjT, t.Callable[[T], T], None]
+        iteratee: t.Union[IterateeObjT, t.Callable[[T], t.Any], None]
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def difference_by(
         self: "Chain[t.Iterable[T]]",
-        *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], T]]
+        *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], t.Any]]
     ) -> "Chain[t.List[T]]": ...
     def difference_by(self, *others, **kwargs):
         return self._wrap(pyd.difference_by)(*others, **kwargs)

@@ -193,14 +193,14 @@ def difference(array: t.Iterable[T], *others: t.Iterable[T]) -> t.List[T]:
 def difference_by(
     array: t.Iterable[T],
     *others: t.Iterable[T],
-    iteratee: t.Union[IterateeObjT, t.Callable[[T], T], None],
+    iteratee: t.Union[IterateeObjT, t.Callable[[T], t.Any], None],
 ) -> t.List[T]:
     ...
 
 
 @t.overload
 def difference_by(
-    array: t.Iterable[T], *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], T]]
+    array: t.Iterable[T], *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], t.Any]]
 ) -> t.List[T]:
     ...
 
