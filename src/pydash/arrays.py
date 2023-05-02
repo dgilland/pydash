@@ -2179,7 +2179,7 @@ def union_by(
 
 @t.overload
 def union_by(
-    array: t.Sequence[T], *others: t.Union[t.Iterable[T], t.Callable[[T], T]]
+    array: t.Sequence[T], *others: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
 ) -> t.List[T]:
     ...
 

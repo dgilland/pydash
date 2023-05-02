@@ -371,6 +371,8 @@ def test_mypy_union() -> None:
 def test_mypy_union_by() -> None:
     reveal_type(_.union_by([1, 2, 3], [2, 3, 4], iteratee=lambda x: x % 2))  # R: builtins.list[builtins.int]
 
+    reveal_type(_.union_by([{"hello": 1}], [{"hello": 2}], lambda d: d["hello"]))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
+
 
 @pytest.mark.mypy_testing
 def test_mypy_union_with() -> None:

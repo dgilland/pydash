@@ -457,7 +457,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def union_by(
-        self: "Chain[t.Sequence[T]]", *others: t.Union[t.Iterable[T], t.Callable[[T], T]]
+        self: "Chain[t.Sequence[T]]", *others: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
     ) -> "Chain[t.List[T]]": ...
     def union_by(self, *others, **kwargs):
         return self._wrap(pyd.union_by)(*others, **kwargs)
