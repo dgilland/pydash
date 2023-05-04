@@ -72,12 +72,12 @@ class AllFuncs:
     def difference_by(
         self: "Chain[t.Iterable[T]]",
         *others: t.Iterable[T],
-        iteratee: t.Union[IterateeObjT, t.Callable[[T], T], None]
+        iteratee: t.Union[IterateeObjT, t.Callable[[T], t.Any], None]
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def difference_by(
         self: "Chain[t.Iterable[T]]",
-        *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], T]]
+        *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], t.Any]]
     ) -> "Chain[t.List[T]]": ...
     def difference_by(self, *others, **kwargs):
         return self._wrap(pyd.difference_by)(*others, **kwargs)
@@ -216,12 +216,12 @@ class AllFuncs:
     def intersection_by(
         self: "Chain[t.Sequence[T]]",
         *others: t.Iterable[t.Any],
-        iteratee: t.Union[t.Callable[[T], T], IterateeObjT]
+        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT]
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def intersection_by(
         self: "Chain[t.Sequence[T]]",
-        *others: t.Union[t.Iterable[t.Any], t.Callable[[T], T], IterateeObjT]
+        *others: t.Union[t.Iterable[t.Any], t.Callable[[T], t.Any], IterateeObjT]
     ) -> "Chain[t.List[T]]": ...
     def intersection_by(self, *others, **kwargs):
         return self._wrap(pyd.intersection_by)(*others, **kwargs)
@@ -457,7 +457,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def union_by(
-        self: "Chain[t.Sequence[T]]", *others: t.Union[t.Iterable[T], t.Callable[[T], T]]
+        self: "Chain[t.Sequence[T]]", *others: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
     ) -> "Chain[t.List[T]]": ...
     def union_by(self, *others, **kwargs):
         return self._wrap(pyd.union_by)(*others, **kwargs)
@@ -511,11 +511,11 @@ class AllFuncs:
     def xor_by(
         self: "Chain[t.Iterable[T]]",
         *lists: t.Iterable[T],
-        iteratee: t.Union[t.Callable[[T], T], IterateeObjT]
+        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT]
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def xor_by(
-        self: "Chain[t.Iterable[T]]", *lists: t.Union[t.Iterable[T], t.Callable[[T], T]]
+        self: "Chain[t.Iterable[T]]", *lists: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
     ) -> "Chain[t.List[T]]": ...
     def xor_by(self, *lists, **kwargs):
         return self._wrap(pyd.xor_by)(*lists, **kwargs)

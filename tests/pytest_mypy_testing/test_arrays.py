@@ -32,6 +32,8 @@ def test_mypy_difference() -> None:
 def test_mypy_difference_by() -> None:
     reveal_type(_.difference_by([1.2, 1.5, 1.7, 2.8], [0.9, 3.2], round))  # R: builtins.list[builtins.float]
 
+    reveal_type(_.difference_by([{"hello": 1}], [{"hello": 2}], lambda d: d["hello"]))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
+
 
 @pytest.mark.mypy_testing
 def test_mypy_difference_with() -> None:
@@ -148,6 +150,8 @@ def test_mypy_intersection() -> None:
 @pytest.mark.mypy_testing
 def test_mypy_intersection_by() -> None:
     reveal_type(_.intersection_by([1.2, 1.5, 1.7, 2.8], [0.9, 3.2], round))  # R: builtins.list[builtins.float]
+
+    reveal_type(_.intersection_by([{"hello": 1}], [{"hello": 2}], lambda d: d["hello"]))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
 
 
 @pytest.mark.mypy_testing
@@ -367,6 +371,8 @@ def test_mypy_union() -> None:
 def test_mypy_union_by() -> None:
     reveal_type(_.union_by([1, 2, 3], [2, 3, 4], iteratee=lambda x: x % 2))  # R: builtins.list[builtins.int]
 
+    reveal_type(_.union_by([{"hello": 1}], [{"hello": 2}], lambda d: d["hello"]))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
+
 
 @pytest.mark.mypy_testing
 def test_mypy_union_with() -> None:
@@ -426,6 +432,8 @@ def test_mypy_xor() -> None:
 def test_mypy_xor_by() -> None:
     reveal_type(_.xor_by([2.1, 1.2], [2.3, 3.4], round))  # R: builtins.list[builtins.float]
     reveal_type(_.xor_by([{'x': 1}], [{'x': 2}, {'x': 1}], iteratee='x'))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
+
+    reveal_type(_.xor_by([{"hello": 1}], [{"hello": 2}], lambda d: d["hello"]))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
 
 
 @pytest.mark.mypy_testing

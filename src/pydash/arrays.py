@@ -193,14 +193,14 @@ def difference(array: t.Iterable[T], *others: t.Iterable[T]) -> t.List[T]:
 def difference_by(
     array: t.Iterable[T],
     *others: t.Iterable[T],
-    iteratee: t.Union[IterateeObjT, t.Callable[[T], T], None],
+    iteratee: t.Union[IterateeObjT, t.Callable[[T], t.Any], None],
 ) -> t.List[T]:
     ...
 
 
 @t.overload
 def difference_by(
-    array: t.Iterable[T], *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], T]]
+    array: t.Iterable[T], *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], t.Any]]
 ) -> t.List[T]:
     ...
 
@@ -902,14 +902,14 @@ def intersection(array: t.Sequence[T], *others: t.Iterable[t.Any]) -> t.List[T]:
 def intersection_by(
     array: t.Sequence[T],
     *others: t.Iterable[t.Any],
-    iteratee: t.Union[t.Callable[[T], T], IterateeObjT],
+    iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
 ) -> t.List[T]:
     ...
 
 
 @t.overload
 def intersection_by(
-    array: t.Sequence[T], *others: t.Union[t.Iterable[t.Any], t.Callable[[T], T], IterateeObjT]
+    array: t.Sequence[T], *others: t.Union[t.Iterable[t.Any], t.Callable[[T], t.Any], IterateeObjT]
 ) -> t.List[T]:
     ...
 
@@ -2179,7 +2179,7 @@ def union_by(
 
 @t.overload
 def union_by(
-    array: t.Sequence[T], *others: t.Union[t.Iterable[T], t.Callable[[T], T]]
+    array: t.Sequence[T], *others: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
 ) -> t.List[T]:
     ...
 
@@ -2498,13 +2498,17 @@ def xor(array: t.Iterable[T], *lists: t.Iterable[T]) -> t.List[T]:
 
 @t.overload
 def xor_by(
-    array: t.Iterable[T], *lists: t.Iterable[T], iteratee: t.Union[t.Callable[[T], T], IterateeObjT]
+    array: t.Iterable[T],
+    *lists: t.Iterable[T],
+    iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
 ) -> t.List[T]:
     ...
 
 
 @t.overload
-def xor_by(array: t.Iterable[T], *lists: t.Union[t.Iterable[T], t.Callable[[T], T]]) -> t.List[T]:
+def xor_by(
+    array: t.Iterable[T], *lists: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
+) -> t.List[T]:
     ...
 
 
