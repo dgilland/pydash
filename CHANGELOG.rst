@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v7.0.3 (2023-05-04)
+-------------------
+
 - Fix typing for ``difference_by``, ``intersection_by``, ``union_by``, ``uniq_by``, and ``xor_by`` by allowing ``iteratee`` argument to be `Any`.  Thanks DeviousStoat_!
 
 
