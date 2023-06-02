@@ -35,7 +35,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
           COVERALLS_PARALLEL: true
-        if: ${{ false }} # disable coveralls until this is resolved: https://github.com/TheKevJames/coveralls-python/issues/252
 
   coveralls:
     name: Finish Coveralls
@@ -50,4 +49,3 @@ jobs:
           coveralls --service=github --finish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ false }} # disable coveralls until this is resolved: https://github.com/TheKevJames/coveralls-python/issues/252
