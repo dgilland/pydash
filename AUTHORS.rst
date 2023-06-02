@@ -25,3 +25,5 @@ Contributors
 - Wenbo Zhao, zhaowb@gmail.com, `zhaowb@github <https://github.com/zhaowb>`_
 - Mervyn Lee, `mervynlee94@github <https://github.com/mervynlee94>`_
 - Weineel Lee, `weineel@github <https://github.com/weineel>`_
+- bl4ckst0ne@github `bl4ckst0ne@github <https://github.com/bl4ckst0ne>`_
+- Thomas `DeviousStoat@github <https://github.com/DeviousStoat>`_
