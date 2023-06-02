@@ -3,6 +3,9 @@
 Changelog
 =========
 
+- Exclude incompatible ``typing-extensions`` version ``4.6.0`` from install requirements. Incompatibility was fixed in ``4.6.1``.
+
+
 v7.0.3 (2023-05-04)
 -------------------
 
