@@ -172,6 +172,10 @@ class AllFuncs:
     ) -> "Chain[int]": ...
     @t.overload
     def find_last_index(
+        self: "Chain[t.Iterable[t.Any]]", predicate: IterateeObjT
+    ) -> "Chain[int]": ...
+    @t.overload
+    def find_last_index(
         self: "Chain[t.Iterable[t.Any]]", predicate: None = None
     ) -> "Chain[int]": ...
     def find_last_index(self, predicate=None):
