@@ -3,6 +3,9 @@
 Changelog
 =========
 
+- Fix typing for ``find_index`` and ``find_last_index`` by allowing ``predicate`` argument to be callback shorthand values.
+
+
 v7.0.4 (2023-06-02)
 -------------------
 
