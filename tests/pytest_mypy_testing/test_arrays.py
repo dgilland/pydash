@@ -81,12 +81,14 @@ def test_mypy_fill() -> None:
 def test_mypy_find_index() -> None:
     reveal_type(_.find_index([1, 2, 3, 4], lambda x: x >= 3))  # R: builtins.int
     reveal_type(_.find_index([1, 2, 3, 4], lambda x: x > 4))  # R: builtins.int
+    reveal_type(_.find_index([{"a": 0, "b": 3}, {"a": "1", "c": 5}], {"a": 0}))  # R: builtins.int
 
 
 @pytest.mark.mypy_testing
 def test_mypy_find_last_index() -> None:
     reveal_type(_.find_last_index([1, 2, 3, 4], lambda x: x >= 3))  # R: builtins.int
     reveal_type(_.find_last_index([1, 2, 3, 4], lambda x: x > 4))  # R: builtins.int
+    reveal_type(_.find_last_index([{"a": 0, "b": 3}, {"a": "1", "c": 5}], {"a": 0}))  # R: builtins.int
 
 
 @pytest.mark.mypy_testing

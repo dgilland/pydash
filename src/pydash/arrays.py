@@ -559,6 +559,11 @@ def find_index(array: t.Iterable[T], predicate: t.Callable[[T], t.Any]) -> int:
 
 
 @t.overload
+def find_index(array: t.Iterable[t.Any], predicate: IterateeObjT) -> int:
+    ...
+
+
+@t.overload
 def find_index(array: t.Iterable[t.Any], predicate: None = None) -> int:
     ...
 
@@ -600,6 +605,11 @@ def find_last_index(array: t.Iterable[T], predicate: t.Callable[[T, int], t.Any]
 
 @t.overload
 def find_last_index(array: t.Iterable[T], predicate: t.Callable[[T], t.Any]) -> int:
+    ...
+
+
+@t.overload
+def find_last_index(array: t.Iterable[t.Any], predicate: IterateeObjT) -> int:
     ...
 
 
