@@ -33,8 +33,10 @@ from pydash.functions import (
     CurryThree,
     CurryTwo,
     Debounce,
+    Disjoin,
     Flow,
     Iterated,
+    Juxtapose,
     Negate,
     Once,
     Partial,
@@ -66,6 +68,8 @@ class AllFuncs:
         return self._wrap(pyd.chunk)(size)
     def compact(self: "Chain[t.Iterable[t.Union[T, None]]]") -> "Chain[t.List[T]]":
         return self._wrap(pyd.compact)()
+    def concat(self: "Chain[t.Iterable[T]]", *arrays: t.Iterable[T]) -> "Chain[t.List[T]]":
+        return self._wrap(pyd.concat)(*arrays)
     def difference(self: "Chain[t.Iterable[T]]", *others: t.Iterable[T]) -> "Chain[t.List[T]]":
         return self._wrap(pyd.difference)(*others)
     @t.overload
@@ -214,6 +218,8 @@ class AllFuncs:
     ) -> "Chain[t.List[t.Union[T, T2]]]": ...
     def intercalate(self, separator):
         return self._wrap(pyd.intercalate)(separator)
+    def interleave(self: "Chain[t.Iterable[T]]", *arrays: t.Iterable[T]) -> "Chain[t.List[T]]":
+        return self._wrap(pyd.interleave)(*arrays)
     def intersection(
         self: "Chain[t.Sequence[T]]", *others: t.Iterable[t.Any]
     ) -> "Chain[t.List[T]]":
@@ -535,6 +541,10 @@ class AllFuncs:
     ) -> "Chain[t.List[T]]": ...
     def xor_with(self, *lists, **kwargs):
         return self._wrap(pyd.xor_with)(*lists, **kwargs)
+    def zip_(self: "Chain[t.Iterable[T]]", *arrays: t.Iterable[T]) -> "Chain[t.List[t.List[T]]]":
+        return self._wrap(pyd.zip_)(*arrays)
+    zip = zip_
+
     @t.overload
     def zip_object(
         self: "Chain[t.Iterable[t.Tuple[T, T2]]]", values: None = None
@@ -551,6 +561,34 @@ class AllFuncs:
         self: "Chain[t.Iterable[t.Any]]", values: t.Union[t.List[t.Any], None] = None
     ) -> "Chain[t.Dict]":
         return self._wrap(pyd.zip_object_deep)(values)
+    @t.overload
+    def zip_with(
+        self: "Chain[t.Iterable[T]]",
+        *arrays: t.Iterable[T],
+        iteratee: t.Union[
+            t.Callable[[T, T, int, t.List[T]], T2],
+            t.Callable[[T, T, int], T2],
+            t.Callable[[T, T], T2],
+            t.Callable[[T], T2],
+        ]
+    ) -> "Chain[t.List[T2]]": ...
+    @t.overload
+    def zip_with(
+        self: "Chain[t.Iterable[T]]", *arrays: t.Iterable[T]
+    ) -> "Chain[t.List[t.List[T]]]": ...
+    @t.overload
+    def zip_with(
+        self: "Chain[t.Union[t.Iterable[T], t.Callable[[T, T, int, t.List[T]], T2], t.Callable[[T, T, int], T2], t.Callable[[T, T], T2], t.Callable[[T], T2]]]",
+        *arrays: t.Union[
+            t.Iterable[T],
+            t.Callable[[T, T, int, t.List[T]], T2],
+            t.Callable[[T, T, int], T2],
+            t.Callable[[T, T], T2],
+            t.Callable[[T], T2],
+        ]
+    ) -> "Chain[t.List[t.Union[t.List[T], T2]]]": ...
+    def zip_with(self, *arrays, **kwargs):
+        return self._wrap(pyd.zip_with)(*arrays, **kwargs)
     def tap(self: "Chain[T]", interceptor: t.Callable[[T], t.Any]) -> "Chain[T]":
         return self._wrap(pyd.tap)(interceptor)
     def thru(self: "Chain[T]", interceptor: t.Callable[[T], T2]) -> "Chain[T2]":
@@ -1364,6 +1402,10 @@ class AllFuncs:
         return self._wrap(pyd.ary)(n)
     def before(self: "Chain[t.Callable[P, T]]", n: t.SupportsInt) -> "Chain[Before[P, T]]":
         return self._wrap(pyd.before)(n)
+    def conjoin(
+        self: "Chain[t.Callable[[T], t.Any]]", *funcs: t.Callable[[T], t.Any]
+    ) -> "Chain[t.Callable[[t.Iterable[T]], bool]]":
+        return self._wrap(pyd.conjoin)(*funcs)
     @t.overload
     def curry(
         self: "Chain[t.Callable[[T1], T]]", arity: t.Union[int, None] = None
@@ -1416,6 +1458,10 @@ class AllFuncs:
         self: "Chain[t.Callable[P, T]]", wait: int, *args: "P.args", **kwargs: "P.kwargs"
     ) -> "Chain[T]":
         return self._wrap(pyd.delay)(wait, *args, **kwargs)
+    def disjoin(
+        self: "Chain[t.Callable[[T], t.Any]]", *funcs: t.Callable[[T], t.Any]
+    ) -> "Chain[Disjoin[T]]":
+        return self._wrap(pyd.disjoin)(*funcs)
     @t.overload
     def flip(
         self: "Chain[t.Callable[[T1, T2, T3, T4, T5], T]]",
@@ -1459,6 +1505,8 @@ class AllFuncs:
     ) -> "Chain[Flow[P, T]]": ...
     @t.overload
     def flow(self: "Chain[t.Callable[P, T]]") -> "Chain[Flow[P, T]]": ...
+    def flow(self, *funcs):
+        return self._wrap(pyd.flow)(*funcs)
     @t.overload
     def flow_right(
         self: "Chain[t.Callable[[T4], T]]",
@@ -1484,8 +1532,14 @@ class AllFuncs:
     ) -> "Chain[Flow[P, T]]": ...
     @t.overload
     def flow_right(self: "Chain[t.Callable[P, T]]") -> "Chain[Flow[P, T]]": ...
+    def flow_right(self, *funcs):
+        return self._wrap(pyd.flow_right)(*funcs)
     def iterated(self: "Chain[t.Callable[[T], T]]") -> "Chain[Iterated[T]]":
         return self._wrap(pyd.iterated)()
+    def juxtapose(
+        self: "Chain[t.Callable[P, T]]", *funcs: t.Callable[P, T]
+    ) -> "Chain[Juxtapose[P, T]]":
+        return self._wrap(pyd.juxtapose)(*funcs)
     def negate(self: "Chain[t.Callable[P, t.Any]]") -> "Chain[Negate[P]]":
         return self._wrap(pyd.negate)()
     def once(self: "Chain[t.Callable[P, T]]") -> "Chain[Once[P, T]]":
@@ -2832,6 +2886,8 @@ class AllFuncs:
         return self._wrap(pyd.upper_first)()
     def unquote(self: "Chain[t.Any]", quote_char: t.Any = '"') -> "Chain[str]":
         return self._wrap(pyd.unquote)(quote_char)
+    def url(self: "Chain[t.Any]", *paths: t.Any, **params: t.Any) -> "Chain[str]":
+        return self._wrap(pyd.url)(*paths, **params)
     def words(self: "Chain[t.Any]", pattern: t.Union[str, None] = None) -> "Chain[t.List[str]]":
         return self._wrap(pyd.words)(pattern)
     def attempt(
@@ -2940,6 +2996,8 @@ class AllFuncs:
         self: "Chain[t.Any]", *args: t.Any, **kwargs: t.Any
     ) -> "Chain[t.Callable[..., t.Any]]":
         return self._wrap(pyd.method_of)(*args, **kwargs)
+    def noop(self: "Chain[t.Any]", *args: t.Any, **kwargs: t.Any) -> "Chain[None]":
+        return self._wrap(pyd.noop)(*args, **kwargs)
     def over(self: "Chain[t.Iterable[t.Callable[P, T]]]") -> "Chain[t.Callable[P, t.List[T]]]":
         return self._wrap(pyd.over)()
     def over_every(self: "Chain[t.Iterable[t.Callable[P, t.Any]]]") -> "Chain[t.Callable[P, bool]]":
@@ -2950,6 +3008,8 @@ class AllFuncs:
         return self._wrap(pyd.property_)()
     property = property_
 
+    def properties(self: "Chain[t.Any]", *paths: t.Any) -> "Chain[t.Callable[[t.Any], t.Any]]":
+        return self._wrap(pyd.properties)(*paths)
     def property_of(self: "Chain[t.Any]") -> "Chain[t.Callable[[PathT], t.Any]]":
         return self._wrap(pyd.property_of)()
     @t.overload
@@ -2977,12 +3037,18 @@ class AllFuncs:
     def range_(
         self: "Chain[int]", stop: int, step: int = 1
     ) -> "Chain[t.Generator[int, None, None]]": ...
+    def range_(self, *args):
+        return self._wrap(pyd.range_)(*args)
+    range = range_
+
     @t.overload
     def range_right(self: "Chain[int]") -> "Chain[t.Generator[int, None, None]]": ...
     @t.overload
     def range_right(
         self: "Chain[int]", stop: int, step: int = 1
     ) -> "Chain[t.Generator[int, None, None]]": ...
+    def range_right(self, *args):
+        return self._wrap(pyd.range_right)(*args)
     @t.overload
     def result(self: "Chain[None]", key: t.Any, default: None = None) -> "Chain[None]": ...
     @t.overload
