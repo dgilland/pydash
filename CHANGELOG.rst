@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v7.0.6 (2023-07-29)
+-------------------
+
 - Fix typing for chaining interface for methods that use varargs. Thanks DeviousStoat_!
 
 
