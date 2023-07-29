@@ -34,8 +34,10 @@ from pydash.functions import (
     CurryRightFour,
     CurryRightFive,
     Debounce,
+    Disjoin,
     Flow,
     Iterated,
+    Juxtapose,
     Negate,
     Once,
     Partial,
@@ -167,9 +169,23 @@ def wrap_type(wrapper: ast.Subscript, to_wrap: ast.expr) -> ast.expr:
     )
 
 
+def get_first_arg(node: ast.FunctionDef) -> ast.arg:
+    if node.args.args:
+        return node.args.args[0]
+
+    if node.args.vararg:
+        return ast.arg(arg=node.args.vararg.arg, annotation=node.args.vararg.annotation)
+
+    raise RuntimeError("Node should have a first argument")
+
+
 def transform_function(node: ast.FunctionDef, wrapper: ast.Subscript) -> ast.FunctionDef:
-    first_arg = node.args.args[0]
+    first_arg = get_first_arg(node)
     cw_args, cw_kwargs = chainwrapper_args(node)
+
+    # case where we only have a vararg argument
+    if not node.args.args:
+        node.args.args.append(first_arg)
 
     if first_arg.annotation:
         first_arg.annotation = ast.Constant(
@@ -267,7 +283,7 @@ def main() -> int:
             if (
                 isinstance(node, ast.FunctionDef)
                 and node.name in module_to_funcs[module]
-                and node.args.args  # skipping funcs without args for now
+                and (node.args.args or node.args.vararg)  # skipping funcs without args for now
                 and not has_single_default_arg(node)  # skipping 1 default arg funcs
                 and node.name not in FUNCTIONS_TO_SKIP
             ):
