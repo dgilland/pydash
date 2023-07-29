@@ -3,10 +3,13 @@
 Changelog
 =========
 
+- Fix typing for chaining interface for methods that use varargs. Thanks DeviousStoat_!
+
+
 v7.0.5 (2023-07-06)
 -------------------
 
-- Fix typing for ``find_index`` and ``find_last_index`` by allowing ``predicate`` argument to be callback shorthand values.
+- Fix typing for ``find_index`` and ``find_last_index`` by allowing ``predicate`` argument to be callback shorthand values. Thanks DeviousStoat_!
 
 
 v7.0.4 (2023-06-02)
