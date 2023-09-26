@@ -2310,7 +2310,7 @@ class AllFuncs:
     ) -> "Chain[t.Dict[T3, T2]]": ...
     @t.overload
     def map_keys(
-        self: "Chain[t.Mapping[t.Any, T2]]", iteratee: t.Callable[[T2], T3]
+        self: "Chain[t.Mapping[T, T2]]", iteratee: t.Callable[[T], T3]
     ) -> "Chain[t.Dict[T3, T2]]": ...
     @t.overload
     def map_keys(
