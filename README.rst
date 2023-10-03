@@ -23,7 +23,7 @@ Links
 .. |version| image:: http://img.shields.io/pypi/v/pydash.svg?style=flat-square
     :target: https://pypi.python.org/pypi/pydash/
 
-.. |build| image:: https://img.shields.io/github/workflow/status/dgilland/pydash/Main/master?style=flat-square
+.. |build| image:: https://img.shields.io/github/actions/workflow/status/dgilland/pydash/main.yml?branch=master&style=flat-square
     :target: https://github.com/dgilland/pydash/actions
 
 .. |coveralls| image:: http://img.shields.io/coveralls/dgilland/pydash/master.svg?style=flat-square
