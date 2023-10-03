@@ -30,11 +30,12 @@ jobs:
 
       - name: Send coverage report
         run: |
-          coveralls --service=github
+          coveralls
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
           COVERALLS_PARALLEL: true
+          COVERALLS_SERVICE_NAME: github
 
   coveralls:
     name: Finish Coveralls
@@ -46,6 +47,6 @@ jobs:
       - name: Finished
         run: |
           pip install --upgrade coveralls
-          coveralls --service=github --finish
+          coveralls --finish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
