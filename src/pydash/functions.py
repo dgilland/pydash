@@ -237,6 +237,11 @@ class Curry(t.Generic[T1, T]):
         """Combine `self.args` with `new_args` and return."""
         return tuple(list(self.args) + list(new_args))
 
+    @property
+    def _argcount(self) -> t.Optional[int]:
+        argcount = self.arity - len(self.args) - len(self.kwargs)
+        return argcount if argcount >= 0 else None
+
 
 class CurryOne(Curry[T1, T]):
     def __call__(self, arg_one: T1) -> T:

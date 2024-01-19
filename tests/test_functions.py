@@ -410,6 +410,14 @@ def test_partial_right_argcount():
     assert _.partial_right(lambda x, y, z: x + y + z, 1, 2)._argcount == 1
 
 
+def test_curry_argcount():
+    assert _.curry(lambda x, y, z: x + y + z)(1)._argcount == 2
+
+
+def test_curry_right_argcount():
+    assert _.curry_right(lambda x, y, z: x + y + z)(1)._argcount == 2
+
+
 def test_can_be_used_as_predicate_argcount_is_known():
     def is_positive(x: int) -> bool:
         return x > 0
