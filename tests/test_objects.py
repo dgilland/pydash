@@ -760,6 +760,17 @@ def test_set_(case, expected):
     assert _.set_(*case) == expected
 
 
+def test_set_on_class_works_the_same_with_string_and_list():
+    class A:
+        def __init__(self):
+            self.x = {}
+
+    a1 = A()
+    a2 = A()
+
+    assert _.set_(a1, "x.a.b", 1).x == _.set_(a2, ["x", "a", "b"], 1).x
+
+
 @parametrize(
     "case,expected",
     [

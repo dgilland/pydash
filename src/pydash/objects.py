@@ -2309,7 +2309,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
         if isinstance(token, PathToken):
             key = token.key
             default_factory = pyd.get(tokens, [idx + 1, "default_factory"], default=default_type)
-        else:
+        else:  # pragma: no cover
             key = token
             default_factory = default_type
 
@@ -2384,7 +2384,7 @@ def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
     for token in pyd.initial(tokens):
         if isinstance(token, PathToken):
             key = token.key
-        else:
+        else:  # pragma: no cover
             key = token
 
         try:
