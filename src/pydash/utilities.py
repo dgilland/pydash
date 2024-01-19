@@ -1425,24 +1425,37 @@ def unique_id(prefix: t.Union[str, None] = None) -> str:
 #
 
 
+def _maybe_list_index(key):
+    if isinstance(key, int):
+        return key
+    if pyd.is_string(key) and RE_PATH_LIST_INDEX.match(key):
+        return int(key[1:-1])
+    return None
+
+
+def _to_path_token(key) -> PathToken:
+    list_index = _maybe_list_index(key)
+    if list_index is not None:
+        return PathToken(list_index, default_factory=list)
+    return PathToken(
+        unescape_path_key(key) if pyd.is_string(key) else key,
+        default_factory=dict,
+    )
+
+
 def to_path_tokens(value):
     """Parse `value` into :class:`PathToken` objects."""
     if pyd.is_string(value) and ("." in value or "[" in value):
         # Since we can't tell whether a bare number is supposed to be dict key or a list index, we
         # support a special syntax where any string-integer surrounded by brackets is treated as a
         # list index and converted to an integer.
-        keys = [
-            (
-                PathToken(int(key[1:-1]), default_factory=list)
-                if RE_PATH_LIST_INDEX.match(key)
-                else PathToken(unescape_path_key(key), default_factory=dict)
-            )
-            for key in filter(None, RE_PATH_KEY_DELIM.split(value))
-        ]
+        keys = [_to_path_token(key) for key in filter(None, RE_PATH_KEY_DELIM.split(value))]
     elif pyd.is_string(value) or pyd.is_number(value):
         keys = [PathToken(value, default_factory=dict)]
     elif value is UNSET:
         keys = []
+    elif pyd.is_list(value):
+        keys = [_to_path_token(key) for key in value]
     else:
         keys = value
 
