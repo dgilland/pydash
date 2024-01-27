@@ -123,8 +123,7 @@ class Flow(t.Generic[P, T]):
         func5: t.Callable[[T5], T],
         *,
         from_right: bool = True,
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @t.overload
     def __init__(
@@ -135,8 +134,7 @@ class Flow(t.Generic[P, T]):
         func4: t.Callable[[T4], T],
         *,
         from_right: bool = True,
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @t.overload
     def __init__(
@@ -146,18 +144,15 @@ class Flow(t.Generic[P, T]):
         func3: t.Callable[[T3], T],
         *,
         from_right: bool = True,
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @t.overload
     def __init__(
         self, func1: t.Callable[P, T2], func2: t.Callable[[T2], T], *, from_right: bool = True
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @t.overload
-    def __init__(self, func1: t.Callable[P, T], *, from_right: bool = True) -> None:
-        ...
+    def __init__(self, func1: t.Callable[P, T], *, from_right: bool = True) -> None: ...
 
     def __init__(self, *funcs, from_right: bool = True) -> None:  # type: ignore
         self.funcs = funcs
@@ -234,12 +229,10 @@ class CurryOne(Curry[T1, T]):
 
 class CurryTwo(Curry[T1, CurryOne[T2, T]]):
     @t.overload
-    def __call__(self, arg_one: T1) -> CurryOne[T2, T]:
-        ...
+    def __call__(self, arg_one: T1) -> CurryOne[T2, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2) -> T:
-        ...
+    def __call__(self, arg_one: T1, arg_two: T2) -> T: ...
 
     def __call__(self, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
@@ -247,16 +240,13 @@ class CurryTwo(Curry[T1, CurryOne[T2, T]]):
 
 class CurryThree(Curry[T1, CurryTwo[T2, T3, T]]):
     @t.overload
-    def __call__(self, arg_one: T1) -> CurryTwo[T2, T3, T]:
-        ...
+    def __call__(self, arg_one: T1) -> CurryTwo[T2, T3, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2) -> CurryOne[T3, T]:
-        ...
+    def __call__(self, arg_one: T1, arg_two: T2) -> CurryOne[T3, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> T:
-        ...
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> T: ...
 
     def __call__(self, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
@@ -264,20 +254,16 @@ class CurryThree(Curry[T1, CurryTwo[T2, T3, T]]):
 
 class CurryFour(Curry[T1, CurryThree[T2, T3, T4, T]]):
     @t.overload
-    def __call__(self, arg_one: T1) -> CurryThree[T2, T3, T4, T]:
-        ...
+    def __call__(self, arg_one: T1) -> CurryThree[T2, T3, T4, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2) -> CurryTwo[T3, T4, T]:
-        ...
+    def __call__(self, arg_one: T1, arg_two: T2) -> CurryTwo[T3, T4, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> CurryOne[T4, T]:
-        ...
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> CurryOne[T4, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4) -> T:
-        ...
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4) -> T: ...
 
     def __call__(self, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
@@ -285,24 +271,23 @@ class CurryFour(Curry[T1, CurryThree[T2, T3, T4, T]]):
 
 class CurryFive(Curry[T1, CurryFour[T2, T3, T4, T5, T]]):
     @t.overload
-    def __call__(self, arg_one: T1) -> CurryFour[T2, T3, T4, T5, T]:
-        ...
+    def __call__(self, arg_one: T1) -> CurryFour[T2, T3, T4, T5, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2) -> CurryThree[T3, T4, T5, T]:
-        ...
+    def __call__(self, arg_one: T1, arg_two: T2) -> CurryThree[T3, T4, T5, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> CurryTwo[T4, T5, T]:
-        ...
+    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> CurryTwo[T4, T5, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4) -> CurryOne[T5, T]:
-        ...
+    def __call__(
+        self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4
+    ) -> CurryOne[T5, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4, arg_five: T5) -> T:
-        ...
+    def __call__(
+        self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4, arg_five: T5
+    ) -> T: ...
 
     def __call__(self, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
@@ -322,12 +307,10 @@ class CurryRightOne(CurryRight[T5, T]):
 
 class CurryRightTwo(CurryRight[T5, CurryRightOne[T4, T]]):
     @t.overload
-    def __call__(self, arg_one: T5) -> CurryRightOne[T4, T]:
-        ...
+    def __call__(self, arg_one: T5) -> CurryRightOne[T4, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4) -> T:
-        ...
+    def __call__(self, arg_one: T5, arg_two: T4) -> T: ...
 
     def __call__(self, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
@@ -335,16 +318,13 @@ class CurryRightTwo(CurryRight[T5, CurryRightOne[T4, T]]):
 
 class CurryRightThree(CurryRight[T5, CurryRightTwo[T4, T3, T]]):
     @t.overload
-    def __call__(self, arg_one: T5) -> CurryRightTwo[T4, T3, T]:
-        ...
+    def __call__(self, arg_one: T5) -> CurryRightTwo[T4, T3, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightOne[T3, T]:
-        ...
+    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightOne[T3, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> T:
-        ...
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> T: ...
 
     def __call__(self, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
@@ -352,20 +332,16 @@ class CurryRightThree(CurryRight[T5, CurryRightTwo[T4, T3, T]]):
 
 class CurryRightFour(CurryRight[T5, CurryRightThree[T4, T3, T2, T]]):
     @t.overload
-    def __call__(self, arg_one: T5) -> CurryRightThree[T4, T3, T2, T]:
-        ...
+    def __call__(self, arg_one: T5) -> CurryRightThree[T4, T3, T2, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightTwo[T3, T2, T]:
-        ...
+    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightTwo[T3, T2, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> CurryRightOne[T2, T]:
-        ...
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> CurryRightOne[T2, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2) -> T:
-        ...
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2) -> T: ...
 
     def __call__(self, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
@@ -373,26 +349,23 @@ class CurryRightFour(CurryRight[T5, CurryRightThree[T4, T3, T2, T]]):
 
 class CurryRightFive(CurryRight[T5, CurryRightFour[T4, T3, T2, T1, T]]):
     @t.overload
-    def __call__(self, arg_one: T5) -> CurryRightFour[T4, T3, T2, T1, T]:
-        ...
+    def __call__(self, arg_one: T5) -> CurryRightFour[T4, T3, T2, T1, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightThree[T3, T2, T1, T]:
-        ...
+    def __call__(self, arg_one: T5, arg_two: T4) -> CurryRightThree[T3, T2, T1, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> CurryRightTwo[T2, T1, T]:
-        ...
+    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> CurryRightTwo[T2, T1, T]: ...
 
     @t.overload
     def __call__(
         self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2
-    ) -> CurryRightOne[T1, T]:
-        ...
+    ) -> CurryRightOne[T1, T]: ...
 
     @t.overload
-    def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2, arg_five: T1) -> T:
-        ...
+    def __call__(
+        self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2, arg_five: T1
+    ) -> T: ...
 
     def __call__(self, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
@@ -751,34 +724,31 @@ def conjoin(*funcs: t.Callable[[T], t.Any]) -> t.Callable[[t.Iterable[T]], bool]
 
 
 @t.overload
-def curry(func: t.Callable[[T1], T], arity: t.Union[int, None] = None) -> CurryOne[T1, T]:
-    ...
+def curry(func: t.Callable[[T1], T], arity: t.Union[int, None] = None) -> CurryOne[T1, T]: ...
 
 
 @t.overload
-def curry(func: t.Callable[[T1, T2], T], arity: t.Union[int, None] = None) -> CurryTwo[T1, T2, T]:
-    ...
+def curry(
+    func: t.Callable[[T1, T2], T], arity: t.Union[int, None] = None
+) -> CurryTwo[T1, T2, T]: ...
 
 
 @t.overload
 def curry(
     func: t.Callable[[T1, T2, T3], T], arity: t.Union[int, None] = None
-) -> CurryThree[T1, T2, T3, T]:
-    ...
+) -> CurryThree[T1, T2, T3, T]: ...
 
 
 @t.overload
 def curry(
     func: t.Callable[[T1, T2, T3, T4], T], arity: t.Union[int, None] = None
-) -> CurryFour[T1, T2, T3, T4, T]:
-    ...
+) -> CurryFour[T1, T2, T3, T4, T]: ...
 
 
 @t.overload
 def curry(
     func: t.Callable[[T1, T2, T3, T4, T5], T], arity: t.Union[int, None] = None
-) -> CurryFive[T1, T2, T3, T4, T5, T]:
-    ...
+) -> CurryFive[T1, T2, T3, T4, T5, T]: ...
 
 
 def curry(func, arity=None):
@@ -815,34 +785,31 @@ def curry(func, arity=None):
 @t.overload
 def curry_right(
     func: t.Callable[[T1], T], arity: t.Union[int, None] = None
-) -> CurryRightOne[T1, T]:
-    ...
+) -> CurryRightOne[T1, T]: ...
 
 
 @t.overload
 def curry_right(
     func: t.Callable[[T1, T2], T], arity: t.Union[int, None] = None
-) -> CurryRightTwo[T2, T1, T]:
-    ...
+) -> CurryRightTwo[T2, T1, T]: ...
 
 
 @t.overload
 def curry_right(
     func: t.Callable[[T1, T2, T3], T], arity: t.Union[int, None] = None
-) -> CurryRightThree[T3, T2, T1, T]:
-    ...
+) -> CurryRightThree[T3, T2, T1, T]: ...
 
 
 @t.overload
 def curry_right(
     func: t.Callable[[T1, T2, T3, T4], T], arity: t.Union[int, None] = None
-) -> CurryRightFour[T4, T3, T2, T1, T]:
-    ...
+) -> CurryRightFour[T4, T3, T2, T1, T]: ...
 
 
 @t.overload
-def curry_right(func: t.Callable[[T1, T2, T3, T4, T5], T]) -> CurryRightFive[T5, T4, T3, T2, T1, T]:
-    ...
+def curry_right(
+    func: t.Callable[[T1, T2, T3, T4, T5], T]
+) -> CurryRightFive[T5, T4, T3, T2, T1, T]: ...
 
 
 def curry_right(func, arity=None):
@@ -944,28 +911,23 @@ def disjoin(*funcs: t.Callable[[T], t.Any]) -> Disjoin[T]:
 
 
 @t.overload
-def flip(func: t.Callable[[T1, T2, T3, T4, T5], T]) -> t.Callable[[T5, T4, T3, T2, T1], T]:
-    ...
+def flip(func: t.Callable[[T1, T2, T3, T4, T5], T]) -> t.Callable[[T5, T4, T3, T2, T1], T]: ...
 
 
 @t.overload
-def flip(func: t.Callable[[T1, T2, T3, T4], T]) -> t.Callable[[T4, T3, T2, T1], T]:
-    ...
+def flip(func: t.Callable[[T1, T2, T3, T4], T]) -> t.Callable[[T4, T3, T2, T1], T]: ...
 
 
 @t.overload
-def flip(func: t.Callable[[T1, T2, T3], T]) -> t.Callable[[T3, T2, T1], T]:
-    ...
+def flip(func: t.Callable[[T1, T2, T3], T]) -> t.Callable[[T3, T2, T1], T]: ...
 
 
 @t.overload
-def flip(func: t.Callable[[T1, T2], T]) -> t.Callable[[T2, T1], T]:
-    ...
+def flip(func: t.Callable[[T1, T2], T]) -> t.Callable[[T2, T1], T]: ...
 
 
 @t.overload
-def flip(func: t.Callable[[T1], T]) -> t.Callable[[T1], T]:
-    ...
+def flip(func: t.Callable[[T1], T]) -> t.Callable[[T1], T]: ...
 
 
 def flip(func: t.Callable) -> t.Callable:
@@ -999,8 +961,7 @@ def flow(
     func3: t.Callable[[T3], T4],
     func4: t.Callable[[T4], T5],
     func5: t.Callable[[T5], T],
-) -> Flow[P, T]:
-    ...
+) -> Flow[P, T]: ...
 
 
 @t.overload
@@ -1009,8 +970,7 @@ def flow(
     func2: t.Callable[[T2], T3],
     func3: t.Callable[[T3], T4],
     func4: t.Callable[[T4], T],
-) -> Flow[P, T]:
-    ...
+) -> Flow[P, T]: ...
 
 
 @t.overload
@@ -1018,18 +978,15 @@ def flow(
     func1: t.Callable[P, T2],
     func2: t.Callable[[T2], T3],
     func3: t.Callable[[T3], T],
-) -> Flow[P, T]:
-    ...
+) -> Flow[P, T]: ...
 
 
 @t.overload
-def flow(func1: t.Callable[P, T2], func2: t.Callable[[T2], T]) -> Flow[P, T]:
-    ...
+def flow(func1: t.Callable[P, T2], func2: t.Callable[[T2], T]) -> Flow[P, T]: ...
 
 
 @t.overload
-def flow(func1: t.Callable[P, T]) -> Flow[P, T]:
-    ...
+def flow(func1: t.Callable[P, T]) -> Flow[P, T]: ...
 
 
 def flow(*funcs):
@@ -1071,8 +1028,7 @@ def flow_right(
     func3: t.Callable[[T2], T3],
     func2: t.Callable[[T1], T2],
     func1: t.Callable[P, T1],
-) -> Flow[P, T]:
-    ...
+) -> Flow[P, T]: ...
 
 
 @t.overload
@@ -1081,8 +1037,7 @@ def flow_right(
     func3: t.Callable[[T2], T3],
     func2: t.Callable[[T1], T2],
     func1: t.Callable[P, T1],
-) -> Flow[P, T]:
-    ...
+) -> Flow[P, T]: ...
 
 
 @t.overload
@@ -1090,18 +1045,15 @@ def flow_right(
     func3: t.Callable[[T2], T],
     func2: t.Callable[[T1], T2],
     func1: t.Callable[P, T1],
-) -> Flow[P, T]:
-    ...
+) -> Flow[P, T]: ...
 
 
 @t.overload
-def flow_right(func2: t.Callable[[T1], T], func1: t.Callable[P, T1]) -> Flow[P, T]:
-    ...
+def flow_right(func2: t.Callable[[T1], T], func1: t.Callable[P, T1]) -> Flow[P, T]: ...
 
 
 @t.overload
-def flow_right(func1: t.Callable[P, T]) -> Flow[P, T]:
-    ...
+def flow_right(func1: t.Callable[P, T]) -> Flow[P, T]: ...
 
 
 def flow_right(*funcs):
@@ -1246,8 +1198,7 @@ def over_args(
     transform_three: t.Callable[[T3], T3],
     transform_four: t.Callable[[T4], T4],
     transform_five: t.Callable[[T5], T5],
-) -> t.Callable[[T1, T2, T3, T4, T5], T]:
-    ...
+) -> t.Callable[[T1, T2, T3, T4, T5], T]: ...
 
 
 @t.overload
@@ -1257,8 +1208,7 @@ def over_args(
     transform_two: t.Callable[[T2], T2],
     transform_three: t.Callable[[T3], T3],
     transform_four: t.Callable[[T4], T4],
-) -> t.Callable[[T1, T2, T3, T4], T]:
-    ...
+) -> t.Callable[[T1, T2, T3, T4], T]: ...
 
 
 @t.overload
@@ -1267,8 +1217,7 @@ def over_args(
     transform_one: t.Callable[[T1], T1],
     transform_two: t.Callable[[T2], T2],
     transform_three: t.Callable[[T3], T3],
-) -> t.Callable[[T1, T2, T3], T]:
-    ...
+) -> t.Callable[[T1, T2, T3], T]: ...
 
 
 @t.overload
@@ -1276,16 +1225,14 @@ def over_args(
     func: t.Callable[[T1, T2], T],
     transform_one: t.Callable[[T1], T1],
     transform_two: t.Callable[[T2], T2],
-) -> t.Callable[[T1, T2], T]:
-    ...
+) -> t.Callable[[T1, T2], T]: ...
 
 
 @t.overload
 def over_args(
     func: t.Callable[[T1], T],
     transform_one: t.Callable[[T1], T1],
-) -> t.Callable[[T1], T]:
-    ...
+) -> t.Callable[[T1], T]: ...
 
 
 def over_args(func: t.Callable, *transforms: t.Callable) -> t.Callable:  # type: ignore

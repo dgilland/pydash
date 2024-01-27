@@ -3,7 +3,7 @@ This module provides the CLI interface for invoke tasks.
 
 All tasks can be executed from this file's directory using:
 
-    $ inv <task>
+$ inv <task>
 
 Where <task> is a function defined below with the @task decorator.
 """
