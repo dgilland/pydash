@@ -5,6 +5,7 @@ Functions that wrap other functions.
 """
 
 from inspect import getfullargspec
+from functools import cached_property
 import itertools
 import time
 import typing as t
@@ -54,7 +55,7 @@ P = ParamSpec("P")
 class _WithArgCount(Protocol):
     func: t.Callable
 
-    @property
+    @cached_property
     def _argcount(self) -> t.Optional[int]:
         return getargcount(self.func, None)
 
@@ -183,7 +184,7 @@ class Flow(t.Generic[P, T]):
         # type safety is ensured from the `__init__` signature
         return result  # type: ignore
 
-    @property
+    @cached_property
     def _argcount(self) -> t.Optional[int]:
         return getargcount(self.funcs[self._from_index], None)
 
@@ -233,7 +234,7 @@ class Curry(t.Generic[T1, T]):
         """Combine `self.args` with `new_args` and return."""
         return tuple(list(self.args) + list(new_args))
 
-    @property
+    @cached_property
     def _argcount(self) -> t.Optional[int]:
         argcount = self.arity - len(self.args) - len(self.kwargs)
         return argcount if argcount >= 0 else None
@@ -484,7 +485,7 @@ class Juxtapose(t.Generic[P, T]):
     def __call__(self, *objs: P.args, **kwargs: P.kwargs) -> t.List[T]:
         return [func(*objs, **kwargs) for func in self.funcs]
 
-    @property
+    @cached_property
     def _argcount(self) -> t.Optional[int]:
         return getargcount(self.funcs[0], None) if self.funcs else None
 
@@ -556,7 +557,7 @@ class Partial(_WithArgCount, t.Generic[T]):
 
         return self.func(*args, **kwargs)
 
-    @property
+    @cached_property
     def _argcount(self) -> t.Optional[int]:
         func_argcount = getargcount(self.func, None)
         if func_argcount is None:
