@@ -1378,13 +1378,7 @@ def to_path(value: PathT) -> t.List[t.Hashable]:
     .. versionchanged:: 4.2.1
         Ensure returned path is always a list.
     """
-    tokens = to_path_tokens(value)
-    if isinstance(tokens, list):
-        path = [
-            token.key if isinstance(token, PathToken) else token for token in to_path_tokens(value)
-        ]
-    else:
-        path = [tokens]
+    path = [token.key for token in to_path_tokens(value)]
     return path
 
 
@@ -1443,7 +1437,7 @@ def _to_path_token(key) -> PathToken:
     )
 
 
-def to_path_tokens(value):
+def to_path_tokens(value) -> list[PathToken]:
     """Parse `value` into :class:`PathToken` objects."""
     if pyd.is_string(value) and ("." in value or "[" in value):
         # Since we can't tell whether a bare number is supposed to be dict key or a list index, we
@@ -1457,7 +1451,7 @@ def to_path_tokens(value):
     elif pyd.is_list(value):
         keys = [_to_path_token(key) for key in value]
     else:
-        keys = value
+        keys = [_to_path_token(value)]
 
     return keys
 

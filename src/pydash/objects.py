@@ -2295,9 +2295,6 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
     default_type = dict if isinstance(obj, dict) else list
     tokens = to_path_tokens(path)
 
-    if not pyd.is_list(tokens):  # pragma: no cover
-        tokens = [tokens]
-
     last_key = pyd.last(tokens)
 
     if isinstance(last_key, PathToken):
@@ -2367,9 +2364,6 @@ def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
     """
     tokens = to_path_tokens(path)
 
-    if not pyd.is_list(tokens):  # pragma: no cover
-        tokens = [tokens]
-
     last_key = pyd.last(tokens)
 
     if isinstance(last_key, PathToken):
@@ -2397,10 +2391,12 @@ def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
     if target is not UNSET:
         try:
             try:
-                target.pop(last_key)
+                # last_key can be a lot of things
+                # safe as everything wrapped in try/except
+                target.pop(last_key)  # type: ignore
                 did_unset = True
             except TypeError:
-                target.pop(int(last_key))
+                target.pop(int(last_key))  # type: ignore
                 did_unset = True
         except Exception:
             pass
