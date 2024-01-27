@@ -1,15 +1,11 @@
+from decimal import Decimal
 import typing as t
 
 from typing_extensions import Protocol
 
 
-if t.TYPE_CHECKING:
-    # F401: imported but unused
-    # py3.7 flake8 doesn't get it for type aliases
-    from decimal import Decimal  # noqa: F401
-
 IterateeObjT = t.Union[int, str, t.List, t.Tuple, t.Dict]
-NumberT = t.Union[float, int, "Decimal"]
+NumberT = t.Union[float, int, Decimal]
 NumberNoDecimalT = t.Union[float, int]
 PathT = t.Union[t.Hashable, t.List[t.Hashable]]
 

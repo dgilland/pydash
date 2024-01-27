@@ -1,5 +1,4 @@
 import re
-import sys
 from urllib.parse import parse_qsl, urlsplit
 
 import pytest
@@ -228,37 +227,13 @@ def test_escape(case, expected):
         ("abc", "abc"),
         ("", ""),
         (None, ""),
-    ],
-)
-def test_escape_reg_exp(case, expected):
-    assert _.escape_reg_exp(case) == expected
-
-
-@pytest.mark.skipif(sys.version_info < (3, 7), reason="requires python3.7 or higher")
-@parametrize(
-    "case,expected",
-    [  # noqa
         (
             "[pydash](http://pydash.readthedocs.org/)",
             "\\[pydash\\]\\(http://pydash\\.readthedocs\\.org/\\)",
         ),
     ],
 )
-def test_escape_reg_exp_gte_py37(case, expected):
-    assert _.escape_reg_exp(case) == expected
-
-
-@pytest.mark.skipif(sys.version_info >= (3, 7), reason="requires python3.6 or lower")
-@parametrize(
-    "case,expected",
-    [  # noqa
-        (
-            "[pydash](http://pydash.readthedocs.org/)",  # noqa
-            r"\[pydash\]\(http\:\/\/pydash\.readthedocs\.org\/\)",
-        ),
-    ],
-)
-def test_escape_reg_exp_lte_py36(case, expected):
+def test_escape_reg_exp(case, expected):
     assert _.escape_reg_exp(case) == expected
 
 

@@ -5,7 +5,7 @@ Utility functions.
 """
 
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timezone
 from functools import partial, wraps
 import math
 from random import randint, uniform
@@ -739,16 +739,9 @@ def now() -> int:
     .. versionchanged:: 3.0.0
         Use ``datetime`` module for calculating elapsed time.
     """
-    epoch = datetime.utcfromtimestamp(0)
-    delta = datetime.utcnow() - epoch
-
-    if hasattr(delta, "total_seconds"):
-        seconds = delta.total_seconds()
-    else:  # pragma: no cover
-        # PY26
-        seconds = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10**6) / 10**6
-
-    return int(seconds * 1000)
+    epoch = datetime.fromtimestamp(0, timezone.utc)
+    delta = datetime.now(timezone.utc) - epoch
+    return int(delta.total_seconds() * 1000)
 
 
 def over(funcs: t.Iterable[t.Callable[P, T]]) -> t.Callable[P, t.List[T]]:
