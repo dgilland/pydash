@@ -1437,7 +1437,7 @@ def _to_path_token(key) -> PathToken:
     )
 
 
-def to_path_tokens(value) -> list[PathToken]:
+def to_path_tokens(value) -> t.List[PathToken]:
     """Parse `value` into :class:`PathToken` objects."""
     if pyd.is_string(value) and ("." in value or "[" in value):
         # Since we can't tell whether a bare number is supposed to be dict key or a list index, we
