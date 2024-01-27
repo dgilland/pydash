@@ -165,7 +165,7 @@ class Flow(t.Generic[P, T]):
 
     def __init__(self, *funcs, from_right: bool = True) -> None:  # type: ignore
         self.funcs = funcs
-        self.from_right = from_right
+        self._from_index = -1 if from_right else 0
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results of composing :attr:`funcs`."""
@@ -182,10 +182,6 @@ class Flow(t.Generic[P, T]):
 
         # type safety is ensured from the `__init__` signature
         return result  # type: ignore
-
-    @property
-    def _from_index(self) -> int:
-        return -1 if self.from_right else 0
 
     @property
     def _argcount(self) -> t.Optional[int]:
