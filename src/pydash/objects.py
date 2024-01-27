@@ -2306,12 +2306,8 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
     target = obj
 
     for idx, token in enumerate(pyd.initial(tokens)):
-        if isinstance(token, PathToken):
-            key = token.key
-            default_factory = pyd.get(tokens, [idx + 1, "default_factory"], default=default_type)
-        else:  # pragma: no cover
-            key = token
-            default_factory = default_type
+        key = token.key
+        default_factory = pyd.get(tokens, [idx + 1, "default_factory"], default=default_type)
 
         obj_val = base_get(target, key, default=None)
         path_obj = None
@@ -2382,10 +2378,7 @@ def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
     target = obj
 
     for token in pyd.initial(tokens):
-        if isinstance(token, PathToken):
-            key = token.key
-        else:  # pragma: no cover
-            key = token
+        key = token.key
 
         try:
             try:
