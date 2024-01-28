@@ -4,8 +4,8 @@ Functions that wrap other functions.
 .. versionadded:: 1.0.0
 """
 
-from inspect import getfullargspec
 from functools import cached_property
+from inspect import getfullargspec
 import itertools
 import time
 import typing as t
