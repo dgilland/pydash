@@ -388,3 +388,38 @@ def test_unary(case, args, kwargs, expected):
 )
 def test_wrap(case, args, expected):
     assert _.wrap(*case)(*args) == expected
+
+
+def test_flow_argcount():
+    assert _.flow(lambda x, y: x + y, lambda x: x * 2)._argcount == 2
+
+
+def test_flow_right_argcount():
+    assert _.flow_right(lambda x: x * 2, lambda x, y: x + y)._argcount == 2
+
+
+def test_juxtapose_argcount():
+    assert _.juxtapose(lambda x, y, z: x + y + z, lambda x, y, z: x * y * z)._argcount == 3
+
+
+def test_partial_argcount():
+    assert _.partial(lambda x, y, z: x + y + z, 1, 2)._argcount == 1
+
+
+def test_partial_right_argcount():
+    assert _.partial_right(lambda x, y, z: x + y + z, 1, 2)._argcount == 1
+
+
+def test_curry_argcount():
+    assert _.curry(lambda x, y, z: x + y + z)(1)._argcount == 2
+
+
+def test_curry_right_argcount():
+    assert _.curry_right(lambda x, y, z: x + y + z)(1)._argcount == 2
+
+
+def test_can_be_used_as_predicate_argcount_is_known():
+    def is_positive(x: int) -> bool:
+        return x > 0
+
+    assert _.filter_([-1, 0, 1], _.negate(is_positive)) == [-1, 0]

@@ -43,7 +43,11 @@ def getargcount(iteratee, maxargs):
     if hasattr(iteratee, "_argcount"):
         # Optimization feature where argcount of iteratee is known and properly
         # set by initiator.
-        return iteratee._argcount
+        # It should always be right, but it can be `None` for the function wrappers
+        # in `pydash.function` as the wrapped functions are out of our control and
+        # can support an unknown number of arguments.
+        argcount = iteratee._argcount
+        return argcount if argcount is not None else maxargs
 
     if isinstance(iteratee, type) or pyd.is_builtin(iteratee):
         # Only pass single argument to type iteratees or builtins.

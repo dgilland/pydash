@@ -4,14 +4,16 @@ Functions that wrap other functions.
 .. versionadded:: 1.0.0
 """
 
+from functools import cached_property
 from inspect import getfullargspec
 import itertools
 import time
 import typing as t
 
-from typing_extensions import Concatenate, Literal, ParamSpec
+from typing_extensions import Concatenate, Literal, ParamSpec, Protocol
 
 import pydash as pyd
+from pydash.helpers import getargcount
 
 
 __all__ = (
@@ -50,7 +52,15 @@ T5 = t.TypeVar("T5")
 P = ParamSpec("P")
 
 
-class After(t.Generic[P, T]):
+class _WithArgCount(Protocol):
+    func: t.Callable
+
+    @cached_property
+    def _argcount(self) -> t.Optional[int]:
+        return getargcount(self.func, None)
+
+
+class After(_WithArgCount, t.Generic[P, T]):
     """Wrap a function in an after context."""
 
     def __init__(self, func: t.Callable[P, T], n: t.SupportsInt) -> None:
@@ -73,7 +83,7 @@ class After(t.Generic[P, T]):
         return None
 
 
-class Ary(t.Generic[T]):
+class Ary(_WithArgCount, t.Generic[T]):
     """Wrap a function in an ary context."""
 
     def __init__(self, func: t.Callable[..., T], n: t.Union[t.SupportsInt, None]) -> None:
@@ -156,17 +166,16 @@ class Flow(t.Generic[P, T]):
 
     def __init__(self, *funcs, from_right: bool = True) -> None:  # type: ignore
         self.funcs = funcs
-        self.from_right = from_right
+        self._from_index = -1 if from_right else 0
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results of composing :attr:`funcs`."""
         funcs = list(self.funcs)
-        from_index = -1 if self.from_right else 0
 
         result = None
 
         while funcs:
-            result = funcs.pop(from_index)(*args, **kwargs)
+            result = funcs.pop(self._from_index)(*args, **kwargs)
             # Incompatible type in assignements but needed here
             # type safety is ensured from the `__init__` signature
             args = (result,)  # type: ignore
@@ -174,6 +183,10 @@ class Flow(t.Generic[P, T]):
 
         # type safety is ensured from the `__init__` signature
         return result  # type: ignore
+
+    @cached_property
+    def _argcount(self) -> t.Optional[int]:
+        return getargcount(self.funcs[self._from_index], None)
 
 
 class Conjoin(t.Generic[T]):
@@ -220,6 +233,11 @@ class Curry(t.Generic[T1, T]):
     def compose_args(self, new_args):
         """Combine `self.args` with `new_args` and return."""
         return tuple(list(self.args) + list(new_args))
+
+    @cached_property
+    def _argcount(self) -> t.Optional[int]:
+        argcount = self.arity - len(self.args) - len(self.kwargs)
+        return argcount if argcount >= 0 else None
 
 
 class CurryOne(Curry[T1, T]):
@@ -371,7 +389,7 @@ class CurryRightFive(CurryRight[T5, CurryRightFour[T4, T3, T2, T1, T]]):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
-class Debounce(t.Generic[P, T]):
+class Debounce(_WithArgCount, t.Generic[P, T]):
     """Wrap a function in a debounce context."""
 
     def __init__(
@@ -424,7 +442,7 @@ class Disjoin(t.Generic[T]):
         return pyd.some(obj, iteratee)
 
 
-class Flip(object):
+class Flip(_WithArgCount):
     """Wrap a function in a flip context."""
 
     def __init__(self, func: t.Callable) -> None:
@@ -467,8 +485,12 @@ class Juxtapose(t.Generic[P, T]):
     def __call__(self, *objs: P.args, **kwargs: P.kwargs) -> t.List[T]:
         return [func(*objs, **kwargs) for func in self.funcs]
 
+    @cached_property
+    def _argcount(self) -> t.Optional[int]:
+        return getargcount(self.funcs[0], None) if self.funcs else None
 
-class OverArgs(object):
+
+class OverArgs(_WithArgCount):
     """Wrap a function in an over_args context."""
 
     def __init__(self, func: t.Callable, *transforms: t.Callable) -> None:
@@ -480,7 +502,7 @@ class OverArgs(object):
         return self.func(*args)
 
 
-class Negate(t.Generic[P]):
+class Negate(_WithArgCount, t.Generic[P]):
     """Wrap a function in a negate context."""
 
     def __init__(self, func: t.Callable[P, t.Any]) -> None:
@@ -491,7 +513,7 @@ class Negate(t.Generic[P]):
         return not self.func(*args, **kwargs)
 
 
-class Once(t.Generic[P, T]):
+class Once(_WithArgCount, t.Generic[P, T]):
     """Wrap a function in a once context."""
 
     def __init__(self, func: t.Callable[P, T]) -> None:
@@ -509,7 +531,7 @@ class Once(t.Generic[P, T]):
         return self.result  # type: ignore
 
 
-class Partial(t.Generic[T]):
+class Partial(_WithArgCount, t.Generic[T]):
     """Wrap a function in a partial context."""
 
     def __init__(
@@ -535,8 +557,16 @@ class Partial(t.Generic[T]):
 
         return self.func(*args, **kwargs)
 
+    @cached_property
+    def _argcount(self) -> t.Optional[int]:
+        func_argcount = getargcount(self.func, None)
+        if func_argcount is None:
+            return None
+        argcount = func_argcount - len(self.args) - len(self.kwargs)
+        return argcount if argcount >= 0 else None
 
-class Rearg(t.Generic[P, T]):
+
+class Rearg(_WithArgCount, t.Generic[P, T]):
     """Wrap a function in a rearg context."""
 
     def __init__(self, func: t.Callable[P, T], *indexes: int) -> None:
@@ -581,7 +611,7 @@ class Spread(t.Generic[T]):
         return self.func(*args)
 
 
-class Throttle(t.Generic[P, T]):
+class Throttle(_WithArgCount, t.Generic[P, T]):
     """Wrap a function in a throttle context."""
 
     def __init__(self, func: t.Callable[P, T], wait: int) -> None:
