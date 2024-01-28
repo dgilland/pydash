@@ -3,6 +3,11 @@
 Changelog
 =========
 
+- Fix bug in function wrappers that incorrectly computed the number of arguments the wrapped function could handle. Thanks DeviousStoat_!
+- Fix bug in ``set_`` where the incorrect object type, list instead of dict, was initialized on class attributes. Thanks DeviousStoat_!
+- Drop support for Python 3.7.
+
+
 v7.0.6 (2023-07-29)
 -------------------
 
