@@ -32,17 +32,17 @@ if t.TYPE_CHECKING:
 
 __all__ = (
     "eq",
-    "eq_pred",
+    "eq_cmp",
     "gt",
-    "gt_pred",
+    "gt_cmp",
     "gte",
-    "gte_pred",
+    "gte_cmp",
     "lt",
-    "lt_pred",
+    "lt_cmp",
     "lte",
-    "lte_pred",
+    "lte_cmp",
     "in_range",
-    "in_range_pred",
+    "in_range_cmp",
     "is_associative",
     "is_blank",
     "is_boolean",
@@ -52,9 +52,9 @@ __all__ = (
     "is_dict",
     "is_empty",
     "is_equal",
-    "is_equal_pred",
+    "is_equal_cmp",
     "is_equal_with",
-    "is_equal_with_pred",
+    "is_equal_with_cmp",
     "is_error",
     "is_even",
     "is_float",
@@ -62,17 +62,17 @@ __all__ = (
     "is_increasing",
     "is_indexed",
     "is_instance_of",
-    "is_instance_of_pred",
+    "is_instance_of_cmp",
     "is_integer",
     "is_iterable",
     "is_json",
     "is_list",
     "is_match",
-    "is_match_pred",
+    "is_match_cmp",
     "is_match_with",
-    "is_match_with_pred",
+    "is_match_with_cmp",
     "is_monotone",
-    "is_monotone_pred",
+    "is_monotone_cmp",
     "is_nan",
     "is_negative",
     "is_none",
@@ -123,7 +123,7 @@ def eq(value: t.Any, other: t.Any) -> bool:
     return value is other
 
 
-def eq_pred(other: T) -> t.Callable[[T], bool]:
+def eq_cmp(other: T) -> t.Callable[[T], bool]:
     """
     Curried version of :func:`eq`.
 
@@ -135,13 +135,13 @@ def eq_pred(other: T) -> t.Callable[[T], bool]:
 
     Example:
 
-        >>> eq_pred(None)(None)
+        >>> eq_cmp(None)(None)
         True
-        >>> eq_pred(None)('')
+        >>> eq_cmp(None)('')
         False
-        >>> eq_pred('a')('a')
+        >>> eq_cmp('a')('a')
         True
-        >>> eq_pred(1)(str(1))
+        >>> eq_cmp(1)(str(1))
         False
 
     .. versionadded:: 7.1.0
@@ -174,7 +174,7 @@ def gt(value: "SupportsDunderGT[T]", other: T) -> bool:
     return value > other
 
 
-def gt_pred(other: T) -> t.Callable[["SupportsDunderGT[T]"], bool]:
+def gt_cmp(other: T) -> t.Callable[["SupportsDunderGT[T]"], bool]:
     """
     Curried version of :func:`gt`.
 
@@ -186,11 +186,11 @@ def gt_pred(other: T) -> t.Callable[["SupportsDunderGT[T]"], bool]:
 
     Example:
 
-        >>> gt_pred(3)(5)
+        >>> gt_cmp(3)(5)
         True
-        >>> gt_pred(5)(3)
+        >>> gt_cmp(5)(3)
         False
-        >>> gt_pred(5)(5)
+        >>> gt_cmp(5)(5)
         False
 
     .. versionadded:: 7.1.0
@@ -223,7 +223,7 @@ def gte(value: "SupportsDunderGE[T]", other: T) -> bool:
     return value >= other
 
 
-def gte_pred(other: T) -> t.Callable[["SupportsDunderGE[T]"], bool]:
+def gte_cmp(other: T) -> t.Callable[["SupportsDunderGE[T]"], bool]:
     """
     Curried version of :func:`gte`.
 
@@ -235,11 +235,11 @@ def gte_pred(other: T) -> t.Callable[["SupportsDunderGE[T]"], bool]:
 
     Example:
 
-        >>> gte_pred(3)(5)
+        >>> gte_cmp(3)(5)
         True
-        >>> gte_pred(5)(3)
+        >>> gte_cmp(5)(3)
         False
-        >>> gte_pred(5)(5)
+        >>> gte_cmp(5)(5)
         True
 
     .. versionadded:: 7.1.0
@@ -272,7 +272,7 @@ def lt(value: "SupportsDunderLT[T]", other: T) -> bool:
     return value < other
 
 
-def lt_pred(other: T) -> t.Callable[["SupportsDunderLT[T]"], bool]:
+def lt_cmp(other: T) -> t.Callable[["SupportsDunderLT[T]"], bool]:
     """
     Curried version of :func:`lt`.
 
@@ -284,11 +284,11 @@ def lt_pred(other: T) -> t.Callable[["SupportsDunderLT[T]"], bool]:
 
     Example:
 
-        >>> lt_pred(3)(5)
+        >>> lt_cmp(3)(5)
         False
-        >>> lt_pred(5)(3)
+        >>> lt_cmp(5)(3)
         True
-        >>> lt_pred(5)(5)
+        >>> lt_cmp(5)(5)
         False
 
     .. versionadded:: 7.1.0
@@ -321,7 +321,7 @@ def lte(value: "SupportsDunderLE[T]", other: T) -> bool:
     return value <= other
 
 
-def lte_pred(other: T) -> t.Callable[["SupportsDunderLE[T]"], bool]:
+def lte_cmp(other: T) -> t.Callable[["SupportsDunderLE[T]"], bool]:
     """
     Curried version of :func:`lte`.
 
@@ -333,11 +333,11 @@ def lte_pred(other: T) -> t.Callable[["SupportsDunderLE[T]"], bool]:
 
     Example:
 
-        >>> lte_pred(3)(5)
+        >>> lte_cmp(3)(5)
         False
-        >>> lte_pred(5)(3)
+        >>> lte_cmp(5)(3)
         True
-        >>> lte_pred(5)(5)
+        >>> lte_cmp(5)(5)
         True
 
     .. versionadded:: 7.1.0
@@ -391,7 +391,7 @@ def in_range(value: t.Any, start: t.Any = 0, end: t.Any = None) -> bool:
     return start <= value < end
 
 
-def in_range_pred(start: t.Any = 0, end: t.Any = None) -> t.Callable[[t.Any], bool]:
+def in_range_cmp(start: t.Any = 0, end: t.Any = None) -> t.Callable[[t.Any], bool]:
     """
     Curried version of :func:`in_range`.
 
@@ -404,17 +404,17 @@ def in_range_pred(start: t.Any = 0, end: t.Any = None) -> t.Callable[[t.Any], bo
 
     Example:
 
-        >>> in_range_pred(4)(2)
+        >>> in_range_cmp(4)(2)
         True
-        >>> in_range_pred(2)(4)
+        >>> in_range_cmp(2)(4)
         False
-        >>> in_range_pred(1, 3)(2)
+        >>> in_range_cmp(1, 3)(2)
         True
-        >>> in_range_pred(1, 2)(3)
+        >>> in_range_cmp(1, 2)(3)
         False
-        >>> in_range_pred(3.5)(2.5)
+        >>> in_range_cmp(3.5)(2.5)
         True
-        >>> in_range_pred(2.5)(3.5)
+        >>> in_range_cmp(2.5)(3.5)
         False
 
     .. versionadded:: 7.1.0
@@ -679,7 +679,7 @@ def is_equal(value: t.Any, other: t.Any) -> bool:
     return is_equal_with(value, other, customizer=None)
 
 
-def is_equal_pred(other: T) -> t.Callable[[T], bool]:
+def is_equal_cmp(other: T) -> t.Callable[[T], bool]:
     """
     Curried version of :func:`is_equal`.
 
@@ -691,9 +691,9 @@ def is_equal_pred(other: T) -> t.Callable[[T], bool]:
 
     Example:
 
-        >>> is_equal_pred([1, 2, 3])([1, 2, 3])
+        >>> is_equal_cmp([1, 2, 3])([1, 2, 3])
         True
-        >>> is_equal_pred('a')('A')
+        >>> is_equal_cmp('a')('A')
         False
 
     .. versionadded:: 7.1.0
@@ -768,7 +768,7 @@ def is_equal_with(value, other, customizer):
     return equal
 
 
-def is_equal_with_pred(other: T, customizer: t.Callable[[T, T], T3]) -> t.Callable[[T], T3]:
+def is_equal_with_cmp(other: T, customizer: t.Callable[[T, T], T3]) -> t.Callable[[T], T3]:
     """
     Curried version of :func:`is_equal_with`.
 
@@ -781,11 +781,11 @@ def is_equal_with_pred(other: T, customizer: t.Callable[[T, T], T3]) -> t.Callab
 
     Example:
 
-        >>> is_equal_with_pred([1, 2, 3], None)([1, 2, 3])
+        >>> is_equal_with_cmp([1, 2, 3], None)([1, 2, 3])
         True
-        >>> is_equal_with_pred('a', None)('A')
+        >>> is_equal_with_cmp('a', None)('A')
         False
-        >>> is_equal_with_pred('a', lambda a, b: a.lower() == b.lower())('A')
+        >>> is_equal_with_cmp('a', lambda a, b: a.lower() == b.lower())('A')
         True
 
     .. versionadded:: 7.1.0
@@ -968,7 +968,7 @@ def is_instance_of(value: t.Any, types: t.Union[type, t.Tuple[type, ...]]) -> bo
     return isinstance(value, types)
 
 
-def is_instance_of_pred(
+def is_instance_of_cmp(
     types: t.Union[type, t.Tuple[type, ...]],
 ) -> t.Callable[[t.Any], bool]:
     """
@@ -983,9 +983,9 @@ def is_instance_of_pred(
 
     Example:
 
-        >>> is_instance_of_pred(dict)({})
+        >>> is_instance_of_cmp(dict)({})
         True
-        >>> is_instance_of_pred(list)({})
+        >>> is_instance_of_cmp(list)({})
         False
 
     .. versionadded:: 7.1.0
@@ -1144,7 +1144,7 @@ def is_match(obj: t.Any, source: t.Any) -> bool:
     return is_match_with(obj, source)
 
 
-def is_match_pred(source: t.Any) -> t.Callable[[t.Any], bool]:
+def is_match_cmp(source: t.Any) -> t.Callable[[t.Any], bool]:
     """
     Curried version of :func:`is_match`.
 
@@ -1156,11 +1156,11 @@ def is_match_pred(source: t.Any) -> t.Callable[[t.Any], bool]:
 
     Example:
 
-        >>> is_match_pred({'b': 2})({'a': 1, 'b': 2})
+        >>> is_match_cmp({'b': 2})({'a': 1, 'b': 2})
         True
-        >>> is_match_pred({'b': 3})({'a': 1, 'b': 2})
+        >>> is_match_cmp({'b': 3})({'a': 1, 'b': 2})
         False
-        >>> is_match_pred({'a': [{'b': [{'d': 4}]}]})({'a': [{'b': [{'c': 3, 'd': 4}]}]})
+        >>> is_match_cmp({'a': [{'b': [{'d': 4}]}]})({'a': [{'b': [{'c': 3, 'd': 4}]}]})
         True
 
     .. versionadded:: 7.1.0
@@ -1238,7 +1238,7 @@ def is_match_with(
     return equal
 
 
-def is_match_with_pred(source: t.Any, customizer: t.Any = None) -> t.Callable[[t.Any], bool]:
+def is_match_with_cmp(source: t.Any, customizer: t.Any = None) -> t.Callable[[t.Any], bool]:
     """
     Curried version of :func:`is_match_with`.
 
@@ -1255,7 +1255,7 @@ def is_match_with_pred(source: t.Any, customizer: t.Any = None) -> t.Callable[[t
         >>> customizer = lambda ov, sv: is_greeting(ov) and is_greeting(sv)
         >>> obj = {'greeting': 'hello'}
         >>> src = {'greeting': 'hi'}
-        >>> is_match_with_pred(src, customizer)(obj)
+        >>> is_match_with_cmp(src, customizer)(obj)
         True
 
     .. versionadded:: 7.1.0
@@ -1295,7 +1295,7 @@ def is_monotone(value: t.Union[T, t.List[T]], op: t.Callable[[T, T], t.Any]) -> 
     return next(search, True)
 
 
-def is_monotone_pred(
+def is_monotone_cmp(
     op: t.Callable[[T, T], t.Any],
 ) -> t.Callable[[t.Union[T, t.List[T]]], bool]:
     """
@@ -1309,9 +1309,9 @@ def is_monotone_pred(
 
     Example:
 
-        >>> is_monotone_pred(operator.le)([1, 1, 2, 3])
+        >>> is_monotone_cmp(operator.le)([1, 1, 2, 3])
         True
-        >>> is_monotone_pred(operator.lt)([1, 1, 2, 3])
+        >>> is_monotone_cmp(operator.lt)([1, 1, 2, 3])
         False
 
     .. versionadded:: 7.1.0

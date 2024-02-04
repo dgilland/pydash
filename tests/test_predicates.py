@@ -19,7 +19,7 @@ parametrize = pytest.mark.parametrize
 )
 def test_eq(value, other, expected):
     assert _.eq(value, other) == expected
-    assert _.eq_pred(other)(value) == expected
+    assert _.eq_cmp(other)(value) == expected
 
 
 @parametrize(
@@ -34,7 +34,7 @@ def test_eq(value, other, expected):
 )
 def test_gt(case, expected):
     assert _.gt(*case) == expected
-    assert _.gt_pred(case[1])(case[0]) == expected
+    assert _.gt_cmp(case[1])(case[0]) == expected
 
 
 @parametrize(
@@ -49,7 +49,7 @@ def test_gt(case, expected):
 )
 def test_gte(case, expected):
     assert _.gte(*case) == expected
-    assert _.gte_pred(case[1])(case[0]) == expected
+    assert _.gte_cmp(case[1])(case[0]) == expected
 
 
 @parametrize(
@@ -64,7 +64,7 @@ def test_gte(case, expected):
 )
 def test_lt(case, expected):
     assert _.lt(*case) == expected
-    assert _.lt_pred(case[1])(case[0]) == expected
+    assert _.lt_cmp(case[1])(case[0]) == expected
 
 
 @parametrize(
@@ -79,7 +79,7 @@ def test_lt(case, expected):
 )
 def test_lte(case, expected):
     assert _.lte(*case) == expected
-    assert _.lte_pred(case[1])(case[0]) == expected
+    assert _.lte_cmp(case[1])(case[0]) == expected
 
 
 @parametrize(
@@ -98,7 +98,7 @@ def test_lte(case, expected):
 )
 def test_in_range(case, expected):
     assert _.in_range(*case) == expected
-    assert _.in_range_pred(*case[1:])(case[0]) == expected
+    assert _.in_range_cmp(*case[1:])(case[0]) == expected
 
 
 @parametrize(
@@ -238,7 +238,7 @@ def test_is_empty(case, expected):
 )
 def test_is_equal(case, expected):
     assert _.is_equal(*case) == expected
-    assert _.is_equal_pred(*case[1:])(case[0]) == expected
+    assert _.is_equal_cmp(*case[1:])(case[0]) == expected
 
 
 @parametrize(
@@ -262,7 +262,7 @@ def test_is_equal(case, expected):
 )
 def test_is_equal_with(case, expected):
     assert _.is_equal_with(*case) == expected
-    assert _.is_equal_with_pred(*case[1:])(case[0]) == expected
+    assert _.is_equal_with_cmp(*case[1:])(case[0]) == expected
 
 
 @parametrize("case,expected", [(Exception(), True), ({}, False), ([], False)])
@@ -351,7 +351,7 @@ def test_is_indexed(case, expected):
 )
 def test_is_instance_of(case, expected):
     assert _.is_instance_of(*case) == expected
-    assert _.is_instance_of_pred(case[1])(case[0]) == expected
+    assert _.is_instance_of_cmp(case[1])(case[0]) == expected
 
 
 @parametrize(
@@ -424,7 +424,7 @@ def test_is_list(case, expected):
 )
 def test_is_match(case, expected):
     assert _.is_match(*case) == expected
-    assert _.is_match_pred(case[1])(case[0]) == expected
+    assert _.is_match_cmp(case[1])(case[0]) == expected
 
 
 @parametrize(
@@ -437,7 +437,7 @@ def test_is_match(case, expected):
 )
 def test_is_match_with(case, expected):
     assert _.is_match_with(*case) == expected
-    assert _.is_match_with_pred(*case[1:])(case[0]) == expected
+    assert _.is_match_with_cmp(*case[1:])(case[0]) == expected
 
 
 @parametrize(
@@ -451,7 +451,7 @@ def test_is_match_with(case, expected):
 )
 def test_is_monotone(case, expected):
     assert _.is_monotone(*case) == expected
-    assert _.is_monotone_pred(case[1])(case[0]) == expected
+    assert _.is_monotone_cmp(case[1])(case[0]) == expected
 
 
 @parametrize(

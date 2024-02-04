@@ -2782,40 +2782,38 @@ class AllFuncs:
     def eq(self: "Chain[t.Any]", other: t.Any) -> "Chain[bool]":
         return self._wrap(pyd.eq)(other)
 
-    def eq_pred(self: "Chain[T]") -> "Chain[t.Callable[[T], bool]]":
-        return self._wrap(pyd.eq_pred)()
+    def eq_cmp(self: "Chain[T]") -> "Chain[t.Callable[[T], bool]]":
+        return self._wrap(pyd.eq_cmp)()
 
     def gt(self: "Chain['SupportsDunderGT[T]']", other: T) -> "Chain[bool]":
         return self._wrap(pyd.gt)(other)
 
-    def gt_pred(self: "Chain[T]") -> "Chain[t.Callable[['SupportsDunderGT[T]'], bool]]":
-        return self._wrap(pyd.gt_pred)()
+    def gt_cmp(self: "Chain[T]") -> "Chain[t.Callable[['SupportsDunderGT[T]'], bool]]":
+        return self._wrap(pyd.gt_cmp)()
 
     def gte(self: "Chain['SupportsDunderGE[T]']", other: T) -> "Chain[bool]":
         return self._wrap(pyd.gte)(other)
 
-    def gte_pred(self: "Chain[T]") -> "Chain[t.Callable[['SupportsDunderGE[T]'], bool]]":
-        return self._wrap(pyd.gte_pred)()
+    def gte_cmp(self: "Chain[T]") -> "Chain[t.Callable[['SupportsDunderGE[T]'], bool]]":
+        return self._wrap(pyd.gte_cmp)()
 
     def lt(self: "Chain['SupportsDunderLT[T]']", other: T) -> "Chain[bool]":
         return self._wrap(pyd.lt)(other)
 
-    def lt_pred(self: "Chain[T]") -> "Chain[t.Callable[['SupportsDunderLT[T]'], bool]]":
-        return self._wrap(pyd.lt_pred)()
+    def lt_cmp(self: "Chain[T]") -> "Chain[t.Callable[['SupportsDunderLT[T]'], bool]]":
+        return self._wrap(pyd.lt_cmp)()
 
     def lte(self: "Chain['SupportsDunderLE[T]']", other: T) -> "Chain[bool]":
         return self._wrap(pyd.lte)(other)
 
-    def lte_pred(self: "Chain[T]") -> "Chain[t.Callable[['SupportsDunderLE[T]'], bool]]":
-        return self._wrap(pyd.lte_pred)()
+    def lte_cmp(self: "Chain[T]") -> "Chain[t.Callable[['SupportsDunderLE[T]'], bool]]":
+        return self._wrap(pyd.lte_cmp)()
 
     def in_range(self: "Chain[t.Any]", start: t.Any = 0, end: t.Any = None) -> "Chain[bool]":
         return self._wrap(pyd.in_range)(start, end)
 
-    def in_range_pred(
-        self: "Chain[t.Any]", end: t.Any = None
-    ) -> "Chain[t.Callable[[t.Any], bool]]":
-        return self._wrap(pyd.in_range_pred)(end)
+    def in_range_cmp(self: "Chain[t.Any]", end: t.Any = None) -> "Chain[t.Callable[[t.Any], bool]]":
+        return self._wrap(pyd.in_range_cmp)(end)
 
     def is_associative(self: "Chain[t.Any]") -> "Chain[bool]":
         return self._wrap(pyd.is_associative)()
@@ -2846,8 +2844,8 @@ class AllFuncs:
     def is_equal(self: "Chain[t.Any]", other: t.Any) -> "Chain[bool]":
         return self._wrap(pyd.is_equal)(other)
 
-    def is_equal_pred(self: "Chain[T]") -> "Chain[t.Callable[[T], bool]]":
-        return self._wrap(pyd.is_equal_pred)()
+    def is_equal_cmp(self: "Chain[T]") -> "Chain[t.Callable[[T], bool]]":
+        return self._wrap(pyd.is_equal_cmp)()
 
     @t.overload
     def is_equal_with(
@@ -2862,10 +2860,10 @@ class AllFuncs:
     def is_equal_with(self, other, customizer):
         return self._wrap(pyd.is_equal_with)(other, customizer)
 
-    def is_equal_with_pred(
+    def is_equal_with_cmp(
         self: "Chain[T]", customizer: t.Callable[[T, T], T3]
     ) -> "Chain[t.Callable[[T], T3]]":
-        return self._wrap(pyd.is_equal_with_pred)(customizer)
+        return self._wrap(pyd.is_equal_with_cmp)(customizer)
 
     def is_error(self: "Chain[t.Any]") -> "Chain[bool]":
         return self._wrap(pyd.is_error)()
@@ -2892,10 +2890,10 @@ class AllFuncs:
     ) -> "Chain[bool]":
         return self._wrap(pyd.is_instance_of)(types)
 
-    def is_instance_of_pred(
+    def is_instance_of_cmp(
         self: "Chain[t.Union[type, t.Tuple[type, ...]]]",
     ) -> "Chain[t.Callable[[t.Any], bool]]":
-        return self._wrap(pyd.is_instance_of_pred)()
+        return self._wrap(pyd.is_instance_of_cmp)()
 
     def is_integer(self: "Chain[t.Any]") -> "Chain[bool]":
         return self._wrap(pyd.is_integer)()
@@ -2912,8 +2910,8 @@ class AllFuncs:
     def is_match(self: "Chain[t.Any]", source: t.Any) -> "Chain[bool]":
         return self._wrap(pyd.is_match)(source)
 
-    def is_match_pred(self: "Chain[t.Any]") -> "Chain[t.Callable[[t.Any], bool]]":
-        return self._wrap(pyd.is_match_pred)()
+    def is_match_cmp(self: "Chain[t.Any]") -> "Chain[t.Callable[[t.Any], bool]]":
+        return self._wrap(pyd.is_match_cmp)()
 
     def is_match_with(
         self: "Chain[t.Any]",
@@ -2925,20 +2923,20 @@ class AllFuncs:
     ) -> "Chain[bool]":
         return self._wrap(pyd.is_match_with)(source, customizer, _key, _obj, _source)
 
-    def is_match_with_pred(
+    def is_match_with_cmp(
         self: "Chain[t.Any]", customizer: t.Any = None
     ) -> "Chain[t.Callable[[t.Any], bool]]":
-        return self._wrap(pyd.is_match_with_pred)(customizer)
+        return self._wrap(pyd.is_match_with_cmp)(customizer)
 
     def is_monotone(
         self: "Chain[t.Union[T, t.List[T]]]", op: t.Callable[[T, T], t.Any]
     ) -> "Chain[bool]":
         return self._wrap(pyd.is_monotone)(op)
 
-    def is_monotone_pred(
+    def is_monotone_cmp(
         self: "Chain[t.Callable[[T, T], t.Any]]",
     ) -> "Chain[t.Callable[[t.Union[T, t.List[T]]], bool]]":
-        return self._wrap(pyd.is_monotone_pred)()
+        return self._wrap(pyd.is_monotone_cmp)()
 
     def is_nan(self: "Chain[t.Any]") -> "Chain[bool]":
         return self._wrap(pyd.is_nan)()
