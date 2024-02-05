@@ -32,11 +32,17 @@ if t.TYPE_CHECKING:
 
 __all__ = (
     "eq",
+    "eq_cmp",
     "gt",
+    "gt_cmp",
     "gte",
+    "gte_cmp",
     "lt",
+    "lt_cmp",
     "lte",
+    "lte_cmp",
     "in_range",
+    "in_range_cmp",
     "is_associative",
     "is_blank",
     "is_boolean",
@@ -46,7 +52,9 @@ __all__ = (
     "is_dict",
     "is_empty",
     "is_equal",
+    "is_equal_cmp",
     "is_equal_with",
+    "is_equal_with_cmp",
     "is_error",
     "is_even",
     "is_float",
@@ -54,13 +62,17 @@ __all__ = (
     "is_increasing",
     "is_indexed",
     "is_instance_of",
+    "is_instance_of_cmp",
     "is_integer",
     "is_iterable",
     "is_json",
     "is_list",
     "is_match",
+    "is_match_cmp",
     "is_match_with",
+    "is_match_with_cmp",
     "is_monotone",
+    "is_monotone_cmp",
     "is_nan",
     "is_negative",
     "is_none",
@@ -111,6 +123,32 @@ def eq(value: t.Any, other: t.Any) -> bool:
     return value is other
 
 
+def eq_cmp(other: T) -> t.Callable[[T], bool]:
+    """
+    Curried version of :func:`eq`.
+
+    Args:
+        other: Value to compare.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is equal to :attr:`other`.
+
+    Example:
+
+        >>> eq_cmp(None)(None)
+        True
+        >>> eq_cmp(None)('')
+        False
+        >>> eq_cmp('a')('a')
+        True
+        >>> eq_cmp(1)(str(1))
+        False
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: eq(value, other)
+
+
 def gt(value: "SupportsDunderGT[T]", other: T) -> bool:
     """
     Checks if `value` is greater than `other`.
@@ -134,6 +172,30 @@ def gt(value: "SupportsDunderGT[T]", other: T) -> bool:
     .. versionadded:: 3.3.0
     """
     return value > other
+
+
+def gt_cmp(other: T) -> t.Callable[["SupportsDunderGT[T]"], bool]:
+    """
+    Curried version of :func:`gt`.
+
+    Args:
+        other: Value to compare.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is greater than :attr:`other`.
+
+    Example:
+
+        >>> gt_cmp(3)(5)
+        True
+        >>> gt_cmp(5)(3)
+        False
+        >>> gt_cmp(5)(5)
+        False
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: gt(value, other)
 
 
 def gte(value: "SupportsDunderGE[T]", other: T) -> bool:
@@ -161,6 +223,30 @@ def gte(value: "SupportsDunderGE[T]", other: T) -> bool:
     return value >= other
 
 
+def gte_cmp(other: T) -> t.Callable[["SupportsDunderGE[T]"], bool]:
+    """
+    Curried version of :func:`gte`.
+
+    Args:
+        other: Value to compare.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is greater than or equal to :attr:`other`.
+
+    Example:
+
+        >>> gte_cmp(3)(5)
+        True
+        >>> gte_cmp(5)(3)
+        False
+        >>> gte_cmp(5)(5)
+        True
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: gte(value, other)
+
+
 def lt(value: "SupportsDunderLT[T]", other: T) -> bool:
     """
     Checks if `value` is less than `other`.
@@ -186,6 +272,30 @@ def lt(value: "SupportsDunderLT[T]", other: T) -> bool:
     return value < other
 
 
+def lt_cmp(other: T) -> t.Callable[["SupportsDunderLT[T]"], bool]:
+    """
+    Curried version of :func:`lt`.
+
+    Args:
+        other: Value to compare.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is less than :attr:`other`.
+
+    Example:
+
+        >>> lt_cmp(3)(5)
+        False
+        >>> lt_cmp(5)(3)
+        True
+        >>> lt_cmp(5)(5)
+        False
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: lt(value, other)
+
+
 def lte(value: "SupportsDunderLE[T]", other: T) -> bool:
     """
     Checks if `value` is less than or equal to `other`.
@@ -209,6 +319,30 @@ def lte(value: "SupportsDunderLE[T]", other: T) -> bool:
     .. versionadded:: 3.3.0
     """
     return value <= other
+
+
+def lte_cmp(other: T) -> t.Callable[["SupportsDunderLE[T]"], bool]:
+    """
+    Curried version of :func:`lte`.
+
+    Args:
+        other: Value to compare.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is less than or equal to :attr:`other`.
+
+    Example:
+
+        >>> lte_cmp(3)(5)
+        False
+        >>> lte_cmp(5)(3)
+        True
+        >>> lte_cmp(5)(5)
+        True
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: lte(value, other)
 
 
 def in_range(value: t.Any, start: t.Any = 0, end: t.Any = None) -> bool:
@@ -255,6 +389,37 @@ def in_range(value: t.Any, start: t.Any = 0, end: t.Any = None) -> bool:
         end = 0
 
     return start <= value < end
+
+
+def in_range_cmp(start: t.Any = 0, end: t.Any = None) -> t.Callable[[t.Any], bool]:
+    """
+    Curried version of :func:`in_range`.
+
+    Args:
+        start: Start of range inclusive. Defaults to ``0``.
+        end: End of range exclusive. Defaults to `start`.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is in range.
+
+    Example:
+
+        >>> in_range_cmp(4)(2)
+        True
+        >>> in_range_cmp(2)(4)
+        False
+        >>> in_range_cmp(1, 3)(2)
+        True
+        >>> in_range_cmp(1, 2)(3)
+        False
+        >>> in_range_cmp(3.5)(2.5)
+        True
+        >>> in_range_cmp(2.5)(3.5)
+        False
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: in_range(value, start, end)
 
 
 def is_associative(value: t.Any) -> bool:
@@ -514,6 +679,28 @@ def is_equal(value: t.Any, other: t.Any) -> bool:
     return is_equal_with(value, other, customizer=None)
 
 
+def is_equal_cmp(other: T) -> t.Callable[[T], bool]:
+    """
+    Curried version of :func:`is_equal`.
+
+    Args:
+        other: Value to compare.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is equal to :attr:`other`.
+
+    Example:
+
+        >>> is_equal_cmp([1, 2, 3])([1, 2, 3])
+        True
+        >>> is_equal_cmp('a')('A')
+        False
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: is_equal(value, other)
+
+
 @t.overload
 def is_equal_with(value: T, other: T2, customizer: t.Callable[[T, T2], T3]) -> T3: ...
 
@@ -579,6 +766,31 @@ def is_equal_with(value, other, customizer):
         equal = value == other
 
     return equal
+
+
+def is_equal_with_cmp(other: T, customizer: t.Callable[[T, T], T3]) -> t.Callable[[T], T3]:
+    """
+    Curried version of :func:`is_equal_with`.
+
+    Args:
+        other: Value to compare.
+        customizer: Customizer used to compare values from `value` and `other`.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` and :attr:`other` are equal.
+
+    Example:
+
+        >>> is_equal_with_cmp([1, 2, 3], None)([1, 2, 3])
+        True
+        >>> is_equal_with_cmp('a', None)('A')
+        False
+        >>> is_equal_with_cmp('a', lambda a, b: a.lower() == b.lower())('A')
+        True
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: is_equal_with(value, other, customizer)
 
 
 def is_error(value: t.Any) -> bool:
@@ -756,6 +968,31 @@ def is_instance_of(value: t.Any, types: t.Union[type, t.Tuple[type, ...]]) -> bo
     return isinstance(value, types)
 
 
+def is_instance_of_cmp(
+    types: t.Union[type, t.Tuple[type, ...]],
+) -> t.Callable[[t.Any], bool]:
+    """
+    Curried version of :func:`is_instance_of`.
+
+    Args:
+        types: Types to check against. Pass as ``tuple`` to check if `value` is one of
+            multiple types.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is an instance of :attr:`types`.
+
+    Example:
+
+        >>> is_instance_of_cmp(dict)({})
+        True
+        >>> is_instance_of_cmp(list)({})
+        False
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: is_instance_of(value, types)
+
+
 def is_integer(value: t.Any) -> TypeGuard[int]:
     """
     Checks if `value` is a integer.
@@ -907,6 +1144,30 @@ def is_match(obj: t.Any, source: t.Any) -> bool:
     return is_match_with(obj, source)
 
 
+def is_match_cmp(source: t.Any) -> t.Callable[[t.Any], bool]:
+    """
+    Curried version of :func:`is_match`.
+
+    Args:
+        source: Object of property values to match.
+
+    Returns:
+        A predicate checking whether passed :attr:`obj` is a match or not.
+
+    Example:
+
+        >>> is_match_cmp({'b': 2})({'a': 1, 'b': 2})
+        True
+        >>> is_match_cmp({'b': 3})({'a': 1, 'b': 2})
+        False
+        >>> is_match_cmp({'a': [{'b': [{'d': 4}]}]})({'a': [{'b': [{'c': 3, 'd': 4}]}]})
+        True
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda obj: is_match(obj, source)
+
+
 def is_match_with(
     obj: t.Any,
     source: t.Any,
@@ -977,6 +1238,31 @@ def is_match_with(
     return equal
 
 
+def is_match_with_cmp(source: t.Any, customizer: t.Any = None) -> t.Callable[[t.Any], bool]:
+    """
+    Curried version of :func:`is_match_with`.
+
+    Args:
+        source: Object of property values to match.
+        customizer: Customizer used to compare values from `obj` and `source`.
+
+    Returns:
+        A predicate checking whether passed :attr:`obj` is a match or not.
+
+    Example:
+
+        >>> is_greeting = lambda val: val in ('hello', 'hi')
+        >>> customizer = lambda ov, sv: is_greeting(ov) and is_greeting(sv)
+        >>> obj = {'greeting': 'hello'}
+        >>> src = {'greeting': 'hi'}
+        >>> is_match_with_cmp(src, customizer)(obj)
+        True
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda obj: is_match_with(obj, source, customizer)
+
+
 def is_monotone(value: t.Union[T, t.List[T]], op: t.Callable[[T, T], t.Any]) -> bool:
     """
     Checks if `value` is monotonic when `operator` used for comparison.
@@ -1007,6 +1293,30 @@ def is_monotone(value: t.Union[T, t.List[T]], op: t.Callable[[T, T], t.Any]) -> 
     )
 
     return next(search, True)
+
+
+def is_monotone_cmp(
+    op: t.Callable[[T, T], t.Any],
+) -> t.Callable[[t.Union[T, t.List[T]]], bool]:
+    """
+    Curried version of :func:`is_monotone`.
+
+    Args:
+        op: Operation to used for comparison.
+
+    Returns:
+        A predicate checking whether passed :attr:`value` is monotone.
+
+    Example:
+
+        >>> is_monotone_cmp(operator.le)([1, 1, 2, 3])
+        True
+        >>> is_monotone_cmp(operator.lt)([1, 1, 2, 3])
+        False
+
+    .. versionadded:: 7.1.0
+    """
+    return lambda value: is_monotone(value, op)
 
 
 def is_nan(value: t.Any) -> bool:
