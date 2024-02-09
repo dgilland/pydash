@@ -200,7 +200,7 @@ def test_moving_mean(case, expected):
 
 @parametrize(
     "multiplier,multiplicand,expected",
-    [(10, 5, 50), (None, 1, 1), (None, None, 1), (1.5, 3, 4.5), (-10, 2, -20)],
+    [(10, 5, 50), (None, 1, 1), (None, None, 1), (1.5, 3, 4.5), (-10, 2, -20), (0, 1, 0)],
 )
 def test_multiply(multiplier, multiplicand, expected):
     assert _.multiply(multiplier, multiplicand) == expected
