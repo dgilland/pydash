@@ -19,7 +19,7 @@ import importlib.metadata
 pkg_info = importlib.metadata.metadata("pydash")
 
 project = pkg_info["Name"]
-author = pkg_info["Author"]
+author = pkg_info["Author-email"]
 description = pkg_info["Summary"]
 copyright = "2013, " + author
 
