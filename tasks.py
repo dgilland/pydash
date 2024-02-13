@@ -15,15 +15,16 @@ import sys
 import tempfile
 import typing as t
 
-from invoke import Context, Exit, UnexpectedExit, run as _run, task
+from invoke import run as _run
+from invoke.context import Context
+from invoke.exceptions import Exit, UnexpectedExit
+from invoke.tasks import task
 
 
 PACKAGE_NAME = "pydash"
 PACKAGE_SOURCE = f"src/{PACKAGE_NAME}"
 MYPY_TESTS_DIR = "tests/pytest_mypy_testing"
 TEST_TARGETS = f"{PACKAGE_SOURCE} tests"
-LINT_TARGETS = f"{TEST_TARGETS} tasks.py"
-LINT_EXCLUDE = MYPY_TESTS_DIR
 EXIT_EXCEPTIONS = (Exit, UnexpectedExit, SystemExit)
 
 
@@ -32,66 +33,46 @@ run = partial(_run, pty=True)
 
 
 @task()
-def black(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
-    """Autoformat code using black."""
-    run(f"black --exclude='{LINT_EXCLUDE}' {target or LINT_TARGETS}", hide=quiet)
+def ruff_format(ctx: Context, target: str, quiet: bool = False) -> None:
+    """Autoformat code and docstrings using ruff."""
+    run(f"ruff format {target}", hide=quiet)
 
 
 @task()
-def isort(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
-    """Autoformat Python imports."""
-    run(f"isort {target or LINT_TARGETS}", hide=quiet)
-
-
-@task()
-def docformatter(ctx: Context, target: t.Optional[str] = None) -> None:
-    """Autoformat docstrings using docformatter."""
-    run(
-        f"docformatter -r {target or LINT_TARGETS} "
-        f"--in-place --pre-summary-newline --wrap-descriptions 100 --wrap-summaries 100"
-    )
+def ruff_lint_fix(ctx: Context, target: str, quiet: bool = False) -> None:
+    """Autofix fixable lint issues using ruff."""
+    run(f"ruff check {target} --fix", hide=quiet)
 
 
 @task()
 def fmt(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
     """Autoformat code and docstrings."""
     if not quiet:
-        print("Running docformatter")
-    docformatter(ctx, target)
+        print("Running ruff format")
+    ruff_format(ctx, target or ".", quiet=quiet)
 
     if not quiet:
-        print("Running isort")
-    isort(ctx, target, quiet=True)
-
-    if not quiet:
-        print("Running black")
-    black(ctx, target, quiet=True)
+        print("Running ruff lint fixes")
+    ruff_lint_fix(ctx, target or ".", quiet=quiet)
 
 
 @task()
-def flake8(ctx: Context) -> None:
-    """Check code for PEP8 violations using flake8."""
-    run(f"flake8 --format=pylint --exclude='{LINT_EXCLUDE}' {LINT_TARGETS}")
-
-
-@task()
-def pylint(ctx: Context) -> None:
+def ruff_lint(ctx: Context) -> None:
     """Check code for static errors using pylint."""
-    run(f"pylint --ignore='{LINT_EXCLUDE}' {LINT_TARGETS}")
+    run(f"ruff check .")
 
 
 @task()
 def mypy(ctx: Context) -> None:
     """Check code using mypy type checker."""
-    run(f"mypy --exclude='{LINT_EXCLUDE}' {LINT_TARGETS} --no-error-summary")
+    run(f"mypy . --no-error-summary")
 
 
 @task()
 def lint(ctx: Context) -> None:
     """Run linters."""
     linters = {
-        "flake8": flake8,
-        "pylint": pylint,
+        "ruff_lint": ruff_lint,
         "mypy": mypy,
     }
     # in python 3.8 and before the ast module doesn't have the `unparse` function
