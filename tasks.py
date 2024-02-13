@@ -25,6 +25,7 @@ PACKAGE_NAME = "pydash"
 PACKAGE_SOURCE = f"src/{PACKAGE_NAME}"
 MYPY_TESTS_DIR = "tests/pytest_mypy_testing"
 TEST_TARGETS = f"{PACKAGE_SOURCE} tests"
+LINT_TARGETS = f"{TEST_TARGETS} tasks.py"
 EXIT_EXCEPTIONS = (Exit, UnexpectedExit, SystemExit)
 
 
@@ -65,7 +66,7 @@ def ruff_lint(ctx: Context) -> None:
 @task()
 def mypy(ctx: Context) -> None:
     """Check code using mypy type checker."""
-    run("mypy . --no-error-summary")
+    run(f"mypy {LINT_TARGETS} --no-error-summary")
 
 
 @task()

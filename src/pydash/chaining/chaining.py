@@ -88,7 +88,7 @@ class Chain(AllFuncs, t.Generic[ValueT_co]):
 
         for wrap in wrappers:
             clone = ChainWrapper(clone._value, wrap.method)(  # type: ignore
-                *wrap.args,
+                *wrap.args,  # type: ignore
                 **wrap.kwargs,  # type: ignore
             )
 

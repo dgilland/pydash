@@ -104,6 +104,13 @@ docstring-code-format = true
 
 [tool.mypy]
 mypy_path = ["src"]
+exclude = [
+    "tests/pytest_mypy_testing",
+]
+files = [
+    "src/**/*.py",
+    "tests/**/*.py",
+]
 show_column_numbers = true
 show_error_context = false
 ignore_missing_imports = true
