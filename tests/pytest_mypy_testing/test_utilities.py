@@ -7,7 +7,10 @@ import pydash as _
 
 @pytest.mark.mypy_testing
 def test_mypy_attempt() -> None:
-    reveal_type(_.attempt(lambda x: x/0, 1))  # R: Union[Any, builtins.Exception]
+    def divide_by_zero(n: int) -> float:
+        return n/0
+
+    reveal_type(_.attempt(divide_by_zero, 1))  # R: Union[builtins.float, builtins.Exception]
 
 
 @pytest.mark.mypy_testing
@@ -19,7 +22,7 @@ def test_mypy_cond() -> None:
             (is_1, _.constant("matches 1")),
         ]
     )
-    reveal_type(func)  # R: def (n: builtins.int) -> builtins.str
+    reveal_type(func)  # R: def (*Any, **Any) -> builtins.str
 
 
 @pytest.mark.mypy_testing

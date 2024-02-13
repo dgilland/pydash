@@ -104,6 +104,7 @@ docstring-code-format = true
 
 [tool.mypy]
 mypy_path = ["src"]
+python_version = "3.8"
 exclude = [
     "tests/pytest_mypy_testing",
 ]
