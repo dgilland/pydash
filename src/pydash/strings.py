@@ -298,7 +298,7 @@ def camel_case(text: t.Any) -> str:
 
     Example:
 
-        >>> camel_case('FOO BAR_bAz')
+        >>> camel_case("FOO BAR_bAz")
         'fooBarBAz'
 
     .. versionadded:: 1.1.0
@@ -323,9 +323,9 @@ def capitalize(text: t.Any, strict: bool = True) -> str:
 
     Example:
 
-        >>> capitalize('once upon a TIME')
+        >>> capitalize("once upon a TIME")
         'Once upon a time'
-        >>> capitalize('once upon a TIME', False)
+        >>> capitalize("once upon a TIME", False)
         'Once upon a TIME'
 
     .. versionadded:: 1.1.0
@@ -349,7 +349,7 @@ def chars(text: t.Any) -> t.List[str]:
 
     Example:
 
-        >>> chars('onetwo')
+        >>> chars("onetwo")
         ['o', 'n', 'e', 't', 'w', 'o']
 
     .. versionadded:: 3.0.0
@@ -370,7 +370,7 @@ def chop(text: t.Any, step: int) -> t.List[str]:
 
     Example:
 
-        >>> chop('abcdefg', 3)
+        >>> chop("abcdefg", 3)
         ['abc', 'def', 'g']
 
     .. versionadded:: 3.0.0
@@ -401,7 +401,7 @@ def chop_right(text: t.Any, step: int) -> t.List[str]:
 
     Example:
 
-        >>> chop_right('abcdefg', 3)
+        >>> chop_right("abcdefg", 3)
         ['a', 'bcd', 'efg']
 
     .. versionadded:: 3.0.0
@@ -432,7 +432,7 @@ def clean(text: t.Any) -> str:
 
     Example:
 
-        >>> clean('a  b   c    d')
+        >>> clean("a  b   c    d")
         'a b c d'
 
     .. versionadded:: 3.0.0
@@ -454,7 +454,7 @@ def count_substr(text: t.Any, subtext: t.Any) -> int:
 
     Example:
 
-        >>> count_substr('aabbccddaabbccdd', 'bc')
+        >>> count_substr("aabbccddaabbccdd", "bc")
         2
 
     .. versionadded:: 3.0.0
@@ -480,9 +480,9 @@ def deburr(text: t.Any) -> str:
 
     Example:
 
-        >>> deburr('déjà vu')
+        >>> deburr("déjà vu")
         '...
-        >>> 'deja vu'
+        >>> "deja vu"
         'deja vu'
 
     .. versionadded:: 2.0.0
@@ -505,7 +505,7 @@ def decapitalize(text: t.Any) -> str:
 
     Example:
 
-        >>> decapitalize('FOO BAR')
+        >>> decapitalize("FOO BAR")
         'fOO BAR'
 
     .. versionadded:: 3.0.0
@@ -528,9 +528,9 @@ def ends_with(text: t.Any, target: t.Any, position: t.Union[int, None] = None) -
 
     Example:
 
-        >>> ends_with('abc def', 'def')
+        >>> ends_with("abc def", "def")
         True
-        >>> ends_with('abc def', 4)
+        >>> ends_with("abc def", 4)
         False
 
     .. versionadded:: 1.1.0
@@ -558,9 +558,9 @@ def ensure_ends_with(text: t.Any, suffix: t.Any) -> str:
 
     Example:
 
-        >>> ensure_ends_with('foo bar', '!')
+        >>> ensure_ends_with("foo bar", "!")
         'foo bar!'
-        >>> ensure_ends_with('foo bar!', '!')
+        >>> ensure_ends_with("foo bar!", "!")
         'foo bar!'
 
     .. versionadded:: 2.4.0
@@ -587,9 +587,9 @@ def ensure_starts_with(text: t.Any, prefix: t.Any) -> str:
 
     Example:
 
-        >>> ensure_starts_with('foo bar', 'Oh my! ')
+        >>> ensure_starts_with("foo bar", "Oh my! ")
         'Oh my! foo bar'
-        >>> ensure_starts_with('Oh my! foo bar', 'Oh my! ')
+        >>> ensure_starts_with("Oh my! foo bar", "Oh my! ")
         'Oh my! foo bar'
 
     .. versionadded:: 2.4.0
@@ -640,7 +640,7 @@ def escape_reg_exp(text: t.Any) -> str:
 
     Example:
 
-        >>> escape_reg_exp('[()]')
+        >>> escape_reg_exp("[()]")
         '\\\\[\\\\(\\\\)\\\\]'
 
     .. versionadded:: 1.1.0
@@ -665,9 +665,9 @@ def has_substr(text: t.Any, subtext: t.Any) -> bool:
 
     Example:
 
-        >>> has_substr('abcdef', 'bc')
+        >>> has_substr("abcdef", "bc")
         True
-        >>> has_substr('abcdef', 'bb')
+        >>> has_substr("abcdef", "bb")
         False
 
     .. versionadded:: 3.0.0
@@ -690,9 +690,9 @@ def human_case(text: t.Any) -> str:
 
     Example:
 
-        >>> human_case('abc-def_hij lmn')
+        >>> human_case("abc-def_hij lmn")
         'Abc def hij lmn'
-        >>> human_case('user_id')
+        >>> human_case("user_id")
         'User'
 
     .. versionadded:: 3.0.0
@@ -724,7 +724,7 @@ def insert_substr(text: t.Any, index: int, subtext: t.Any) -> str:
 
     Example:
 
-        >>> insert_substr('abcdef', 3, '--')
+        >>> insert_substr("abcdef", 3, "--")
         'abc--def'
 
     .. versionadded:: 3.0.0
@@ -747,11 +747,11 @@ def join(array: t.Iterable[t.Any], separator: t.Any = "") -> str:
 
     Example:
 
-        >>> join(['a', 'b', 'c']) == 'abc'
+        >>> join(["a", "b", "c"]) == "abc"
         True
-        >>> join([1, 2, 3, 4], '&') == '1&2&3&4'
+        >>> join([1, 2, 3, 4], "&") == "1&2&3&4"
         True
-        >>> join('abcdef', '-') == 'a-b-c-d-e-f'
+        >>> join("abcdef", "-") == "a-b-c-d-e-f"
         True
 
     .. versionadded:: 2.0.0
@@ -774,7 +774,7 @@ def kebab_case(text: t.Any) -> str:
 
     Example:
 
-        >>> kebab_case('a b c_d-e!f')
+        >>> kebab_case("a b c_d-e!f")
         'a-b-c-d-e-f'
 
     .. versionadded:: 1.1.0
@@ -797,7 +797,7 @@ def lines(text: t.Any) -> t.List[str]:
 
     Example:
 
-        >>> lines('a\nb\r\nc')
+        >>> lines("a\nb\r\nc")
         ['a', 'b', 'c']
 
     .. versionadded:: 3.0.0
@@ -818,9 +818,9 @@ def lower_case(text: t.Any) -> str:
 
     Example:
 
-        >>> lower_case('fooBar')
+        >>> lower_case("fooBar")
         'foo bar'
-        >>> lower_case('--foo-Bar--')
+        >>> lower_case("--foo-Bar--")
         'foo bar'
         >>> lower_case('/?*Foo10/;"B*Ar')
         'foo 10 b ar'
@@ -845,13 +845,13 @@ def lower_first(text: str) -> str:
 
     Example:
 
-        >>> lower_first('FRED')
+        >>> lower_first("FRED")
         'fRED'
-        >>> lower_first('Foo Bar')
+        >>> lower_first("Foo Bar")
         'foo Bar'
-        >>> lower_first('1foobar')
+        >>> lower_first("1foobar")
         '1foobar'
-        >>> lower_first(';foobar')
+        >>> lower_first(";foobar")
         ';foobar'
 
     .. versionadded:: 4.0.0
@@ -878,7 +878,7 @@ def number_format(
 
         >>> number_format(1234.5678)
         '1,235'
-        >>> number_format(1234.5678, 2, ',', '.')
+        >>> number_format(1234.5678, 2, ",", ".")
         '1.234,57'
 
     .. versionadded:: 3.0.0
@@ -919,11 +919,11 @@ def pad(text: t.Any, length: int, chars: t.Any = " ") -> str:
 
     Example:
 
-        >>> pad('abc', 5)
+        >>> pad("abc", 5)
         ' abc '
-        >>> pad('abc', 6, 'x')
+        >>> pad("abc", 6, "x")
         'xabcxx'
-        >>> pad('abc', 5, '...')
+        >>> pad("abc", 5, "...")
         '.abc.'
 
     .. versionadded:: 1.1.0
@@ -962,9 +962,9 @@ def pad_end(text: t.Any, length: int, chars: t.Any = " ") -> str:
 
     Example:
 
-        >>> pad_end('abc', 5)
+        >>> pad_end("abc", 5)
         'abc  '
-        >>> pad_end('abc', 5, '.')
+        >>> pad_end("abc", 5, ".")
         'abc..'
 
     .. versionadded:: 1.1.0
@@ -994,9 +994,9 @@ def pad_start(text: t.Any, length: int, chars: t.Any = " ") -> str:
 
     Example:
 
-        >>> pad_start('abc', 5)
+        >>> pad_start("abc", 5)
         '  abc'
-        >>> pad_start('abc', 5, '.')
+        >>> pad_start("abc", 5, ".")
         '..abc'
 
     .. versionadded:: 1.1.0
@@ -1023,9 +1023,9 @@ def pascal_case(text: t.Any, strict: bool = True) -> str:
 
     Example:
 
-        >>> pascal_case('FOO BAR_bAz')
+        >>> pascal_case("FOO BAR_bAz")
         'FooBarBaz'
-        >>> pascal_case('FOO BAR_bAz', False)
+        >>> pascal_case("FOO BAR_bAz", False)
         'FooBarBAz'
 
     .. versionadded:: 3.0.0
@@ -1053,11 +1053,11 @@ def predecessor(char: t.Any) -> str:
 
     Example:
 
-        >>> predecessor('c')
+        >>> predecessor("c")
         'b'
-        >>> predecessor('C')
+        >>> predecessor("C")
         'B'
-        >>> predecessor('3')
+        >>> predecessor("3")
         '2'
 
     .. versionadded:: 3.0.0
@@ -1083,13 +1083,13 @@ def prune(text: t.Any, length: int = 0, omission: str = "...") -> str:
 
     Example:
 
-        >>> prune('Fe fi fo fum', 5)
+        >>> prune("Fe fi fo fum", 5)
         'Fe fi...'
-        >>> prune('Fe fi fo fum', 6)
+        >>> prune("Fe fi fo fum", 6)
         'Fe fi...'
-        >>> prune('Fe fi fo fum', 7)
+        >>> prune("Fe fi fo fum", 7)
         'Fe fi...'
-        >>> prune('Fe fi fo fum', 8, ',,,')
+        >>> prune("Fe fi fo fum", 8, ",,,")
         'Fe fi fo,,,'
 
     .. versionadded:: 3.0.0
@@ -1140,9 +1140,9 @@ def quote(text: t.Any, quote_char: t.Any = '"') -> str:
 
     Example:
 
-        >>> quote('To be or not to be')
+        >>> quote("To be or not to be")
         '"To be or not to be"'
-        >>> quote('To be or not to be', "'")
+        >>> quote("To be or not to be", "'")
         "'To be or not to be'"
 
     .. versionadded:: 2.4.0
@@ -1163,13 +1163,13 @@ def reg_exp_js_match(text: t.Any, reg_exp: str) -> t.List[str]:
 
     Example:
 
-        >>> reg_exp_js_match('aaBBcc', '/bb/')
+        >>> reg_exp_js_match("aaBBcc", "/bb/")
         []
-        >>> reg_exp_js_match('aaBBcc', '/bb/i')
+        >>> reg_exp_js_match("aaBBcc", "/bb/i")
         ['BB']
-        >>> reg_exp_js_match('aaBBccbb', '/bb/i')
+        >>> reg_exp_js_match("aaBBccbb", "/bb/i")
         ['BB']
-        >>> reg_exp_js_match('aaBBccbb', '/bb/gi')
+        >>> reg_exp_js_match("aaBBccbb", "/bb/gi")
         ['BB', 'bb']
 
     .. versionadded:: 2.0.0
@@ -1200,13 +1200,13 @@ def reg_exp_js_replace(
 
     Example:
 
-        >>> reg_exp_js_replace('aaBBcc', '/bb/', 'X')
+        >>> reg_exp_js_replace("aaBBcc", "/bb/", "X")
         'aaBBcc'
-        >>> reg_exp_js_replace('aaBBcc', '/bb/i', 'X')
+        >>> reg_exp_js_replace("aaBBcc", "/bb/i", "X")
         'aaXcc'
-        >>> reg_exp_js_replace('aaBBccbb', '/bb/i', 'X')
+        >>> reg_exp_js_replace("aaBBccbb", "/bb/i", "X")
         'aaXccbb'
-        >>> reg_exp_js_replace('aaBBccbb', '/bb/gi', 'X')
+        >>> reg_exp_js_replace("aaBBccbb", "/bb/gi", "X")
         'aaXccX'
 
     .. versionadded:: 2.0.0
@@ -1247,13 +1247,13 @@ def reg_exp_replace(
 
     Example:
 
-        >>> reg_exp_replace('aabbcc', 'b', 'X')
+        >>> reg_exp_replace("aabbcc", "b", "X")
         'aaXXcc'
-        >>> reg_exp_replace('aabbcc', 'B', 'X', ignore_case=True)
+        >>> reg_exp_replace("aabbcc", "B", "X", ignore_case=True)
         'aaXXcc'
-        >>> reg_exp_replace('aabbcc', 'b', 'X', count=1)
+        >>> reg_exp_replace("aabbcc", "b", "X", count=1)
         'aaXbcc'
-        >>> reg_exp_replace('aabbcc', '[ab]', 'X')
+        >>> reg_exp_replace("aabbcc", "[ab]", "X")
         'XXXXcc'
 
     .. versionadded:: 3.0.0
@@ -1280,7 +1280,7 @@ def repeat(text: t.Any, n: t.SupportsInt = 0) -> str:
 
     Example:
 
-        >>> repeat('.', 5)
+        >>> repeat(".", 5)
         '.....'
 
     .. versionadded:: 1.1.0
@@ -1288,7 +1288,7 @@ def repeat(text: t.Any, n: t.SupportsInt = 0) -> str:
     return pyd.to_string(text) * int(n)
 
 
-def replace(
+def replace(  # noqa: PLR0913
     text: t.Any,
     pattern: t.Any,
     repl: t.Union[str, t.Callable[[re.Match], str]],
@@ -1320,15 +1320,15 @@ def replace(
 
     Example:
 
-        >>> replace('aabbcc', 'b', 'X')
+        >>> replace("aabbcc", "b", "X")
         'aaXXcc'
-        >>> replace('aabbcc', 'B', 'X', ignore_case=True)
+        >>> replace("aabbcc", "B", "X", ignore_case=True)
         'aaXXcc'
-        >>> replace('aabbcc', 'b', 'X', count=1)
+        >>> replace("aabbcc", "b", "X", count=1)
         'aaXbcc'
-        >>> replace('aabbcc', '[ab]', 'X')
+        >>> replace("aabbcc", "[ab]", "X")
         'aabbcc'
-        >>> replace('aabbcc', '[ab]', 'X', escape=False)
+        >>> replace("aabbcc", "[ab]", "X", escape=False)
         'XXXXcc'
 
     .. versionadded:: 3.0.0
@@ -1393,9 +1393,9 @@ def replace_end(
 
     Example:
 
-        >>> replace_end('aabbcc', 'b', 'X')
+        >>> replace_end("aabbcc", "b", "X")
         'aabbcc'
-        >>> replace_end('aabbcc', 'c', 'X')
+        >>> replace_end("aabbcc", "c", "X")
         'aabbcX'
 
     .. versionadded:: 4.1.0
@@ -1428,9 +1428,9 @@ def replace_start(
 
     Example:
 
-        >>> replace_start('aabbcc', 'b', 'X')
+        >>> replace_start("aabbcc", "b", "X")
         'aabbcc'
-        >>> replace_start('aabbcc', 'a', 'X')
+        >>> replace_start("aabbcc", "a", "X")
         'Xabbcc'
 
     .. versionadded:: 4.1.0
@@ -1451,7 +1451,7 @@ def separator_case(text: t.Any, separator: str) -> str:
 
     Example:
 
-        >>> separator_case('a!!b___c.d', '-')
+        >>> separator_case("a!!b___c.d", "-")
         'a-b-c-d'
 
     .. versionadded:: 3.0.0
@@ -1483,11 +1483,11 @@ def series_phrase(
 
     Example:
 
-        >>> series_phrase(['apples', 'bananas', 'peaches'])
+        >>> series_phrase(["apples", "bananas", "peaches"])
         'apples, bananas and peaches'
-        >>> series_phrase(['apples', 'bananas', 'peaches'], serial=True)
+        >>> series_phrase(["apples", "bananas", "peaches"], serial=True)
         'apples, bananas, and peaches'
-        >>> series_phrase(['apples', 'bananas', 'peaches'], '; ', ', or ')
+        >>> series_phrase(["apples", "bananas", "peaches"], "; ", ", or ")
         'apples; bananas, or peaches'
 
 
@@ -1525,7 +1525,7 @@ def series_phrase_serial(
 
     Example:
 
-        >>> series_phrase_serial(['apples', 'bananas', 'peaches'])
+        >>> series_phrase_serial(["apples", "bananas", "peaches"])
         'apples, bananas, and peaches'
 
     .. versionadded:: 3.0.0
@@ -1550,9 +1550,9 @@ def slugify(text: t.Any, separator: str = "-") -> str:
 
     Example:
 
-        >>> slugify('This is a slug.') == 'this-is-a-slug'
+        >>> slugify("This is a slug.") == "this-is-a-slug"
         True
-        >>> slugify('This is a slug.', '+') == 'this+is+a+slug'
+        >>> slugify("This is a slug.", "+") == "this+is+a+slug"
         True
 
     .. versionadded:: 3.0.0
@@ -1585,7 +1585,7 @@ def snake_case(text: t.Any) -> str:
 
     Example:
 
-        >>> snake_case('This is Snake Case!')
+        >>> snake_case("This is Snake Case!")
         'this_is_snake_case'
 
     .. versionadded:: 1.1.0
@@ -1613,9 +1613,9 @@ def split(text: t.Any, separator: t.Union[str, Unset, None] = UNSET) -> t.List[s
 
     Example:
 
-        >>> split('one potato, two potatoes, three potatoes, four!')
+        >>> split("one potato, two potatoes, three potatoes, four!")
         ['one', 'potato,', 'two', 'potatoes,', 'three', 'potatoes,', 'four!']
-        >>> split('one potato, two potatoes, three potatoes, four!', ',')
+        >>> split("one potato, two potatoes, three potatoes, four!", ",")
         ['one potato', ' two potatoes', ' three potatoes', ' four!']
 
     .. versionadded:: 2.0.0
@@ -1675,11 +1675,11 @@ def starts_with(text: t.Any, target: t.Any, position: int = 0) -> bool:
 
     Example:
 
-        >>> starts_with('abcdef', 'a')
+        >>> starts_with("abcdef", "a")
         True
-        >>> starts_with('abcdef', 'b')
+        >>> starts_with("abcdef", "b")
         False
-        >>> starts_with('abcdef', 'a', 1)
+        >>> starts_with("abcdef", "a", 1)
         False
 
     .. versionadded:: 1.1.0
@@ -1723,7 +1723,7 @@ def substr_left(text: t.Any, subtext: str) -> str:
 
     Example:
 
-        >>> substr_left('abcdefcdg', 'cd')
+        >>> substr_left("abcdefcdg", "cd")
         'ab'
 
     .. versionadded:: 3.0.0
@@ -1746,7 +1746,7 @@ def substr_left_end(text: t.Any, subtext: str) -> str:
 
     Example:
 
-        >>> substr_left_end('abcdefcdg', 'cd')
+        >>> substr_left_end("abcdefcdg", "cd")
         'abcdef'
 
     .. versionadded:: 3.0.0
@@ -1769,7 +1769,7 @@ def substr_right(text: t.Any, subtext: str) -> str:
 
     Example:
 
-        >>> substr_right('abcdefcdg', 'cd')
+        >>> substr_right("abcdefcdg", "cd")
         'efcdg'
 
     .. versionadded:: 3.0.0
@@ -1792,7 +1792,7 @@ def substr_right_end(text: t.Any, subtext: str) -> str:
 
     Example:
 
-        >>> substr_right_end('abcdefcdg', 'cd')
+        >>> substr_right_end("abcdefcdg", "cd")
         'g'
 
     .. versionadded:: 3.0.0
@@ -1813,11 +1813,11 @@ def successor(char: t.Any) -> str:
 
     Example:
 
-        >>> successor('b')
+        >>> successor("b")
         'c'
-        >>> successor('B')
+        >>> successor("B")
         'C'
-        >>> successor('2')
+        >>> successor("2")
         '3'
 
     .. versionadded:: 3.0.0
@@ -1839,9 +1839,9 @@ def surround(text: t.Any, wrapper: t.Any) -> str:
 
     Example:
 
-        >>> surround('abc', '"')
+        >>> surround("abc", '"')
         '"abc"'
-        >>> surround('abc', '!')
+        >>> surround("abc", "!")
         '!abc!'
 
     .. versionadded:: 2.4.0
@@ -1863,7 +1863,7 @@ def swap_case(text: t.Any) -> str:
 
     Example:
 
-        >>> swap_case('aBcDeF')
+        >>> swap_case("aBcDeF")
         'AbCdEf'
 
     .. versionadded:: 3.0.0
@@ -1906,11 +1906,11 @@ def to_lower(text: t.Any) -> str:
 
     Example:
 
-        >>> to_lower('--Foo-Bar--')
+        >>> to_lower("--Foo-Bar--")
         '--foo-bar--'
-        >>> to_lower('fooBar')
+        >>> to_lower("fooBar")
         'foobar'
-        >>> to_lower('__FOO_BAR__')
+        >>> to_lower("__FOO_BAR__")
         '__foo_bar__'
 
     .. versionadded:: 4.0.0
@@ -1930,11 +1930,11 @@ def to_upper(text: t.Any) -> str:
 
     Example:
 
-        >>> to_upper('--Foo-Bar--')
+        >>> to_upper("--Foo-Bar--")
         '--FOO-BAR--'
-        >>> to_upper('fooBar')
+        >>> to_upper("fooBar")
         'FOOBAR'
-        >>> to_upper('__FOO_BAR__')
+        >>> to_upper("__FOO_BAR__")
         '__FOO_BAR__'
 
     .. versionadded:: 4.0.0
@@ -1955,7 +1955,7 @@ def trim(text: t.Any, chars: t.Union[str, None] = None) -> str:
 
     Example:
 
-        >>> trim('  abc efg\r\n ')
+        >>> trim("  abc efg\r\n ")
         'abc efg'
 
     .. versionadded:: 1.1.0
@@ -1978,7 +1978,7 @@ def trim_end(text: t.Any, chars: t.Union[str, None] = None) -> str:
 
     Example:
 
-        >>> trim_end('  abc efg\r\n ')
+        >>> trim_end("  abc efg\r\n ")
         '  abc efg'
 
     .. versionadded:: 1.1.0
@@ -2003,7 +2003,7 @@ def trim_start(text: t.Any, chars: t.Union[str, None] = None) -> str:
 
     Example:
 
-        >>> trim_start('  abc efg\r\n ')
+        >>> trim_start("  abc efg\r\n ")
         'abc efg\r\n '
 
     .. versionadded:: 1.1.0
@@ -2036,13 +2036,13 @@ def truncate(
 
     Example:
 
-        >>> truncate('hello world', 5)
+        >>> truncate("hello world", 5)
         'he...'
-        >>> truncate('hello world', 5, '..')
+        >>> truncate("hello world", 5, "..")
         'hel..'
-        >>> truncate('hello world', 10)
+        >>> truncate("hello world", 10)
         'hello w...'
-        >>> truncate('hello world', 10, separator=' ')
+        >>> truncate("hello world", 10, separator=" ")
         'hello...'
 
     .. versionadded:: 1.1.0
@@ -2087,7 +2087,7 @@ def unescape(text: t.Any) -> str:
 
     Example:
 
-        >>> results = unescape('&quot;1 &gt; 2 &amp;&amp; 3 &lt; 4&quot;')
+        >>> results = unescape("&quot;1 &gt; 2 &amp;&amp; 3 &lt; 4&quot;")
         >>> results == '"1 > 2 && 3 < 4"'
         True
 
@@ -2112,9 +2112,9 @@ def upper_case(text: t.Any) -> str:
 
     Example:
 
-        >>> upper_case('--foo-bar--')
+        >>> upper_case("--foo-bar--")
         'FOO BAR'
-        >>> upper_case('fooBar')
+        >>> upper_case("fooBar")
         'FOO BAR'
         >>> upper_case('/?*Foo10/;"B*Ar')
         'FOO 10 B AR'
@@ -2139,13 +2139,13 @@ def upper_first(text: str) -> str:
 
     Example:
 
-        >>> upper_first('fred')
+        >>> upper_first("fred")
         'Fred'
-        >>> upper_first('foo bar')
+        >>> upper_first("foo bar")
         'Foo bar'
-        >>> upper_first('1foobar')
+        >>> upper_first("1foobar")
         '1foobar'
-        >>> upper_first(';foobar')
+        >>> upper_first(";foobar")
         ';foobar'
 
     .. versionadded:: 4.0.0
@@ -2168,11 +2168,11 @@ def unquote(text: t.Any, quote_char: t.Any = '"') -> str:
 
         >>> unquote('"abc"')
         'abc'
-        >>> unquote('"abc"', '#')
+        >>> unquote('"abc"', "#")
         '"abc"'
-        >>> unquote('#abc', '#')
+        >>> unquote("#abc", "#")
         '#abc'
-        >>> unquote('#abc#', '#')
+        >>> unquote("#abc#", "#")
         'abc'
 
     .. versionadded:: 3.0.0
@@ -2202,11 +2202,11 @@ def url(*paths: t.Any, **params: t.Any) -> str:
 
     Example:
 
-        >>> link = url('a', 'b', ['c', 'd'], '/', q='X', y='Z')
-        >>> path, params = link.split('?')
-        >>> path == 'a/b/c/d/'
+        >>> link = url("a", "b", ["c", "d"], "/", q="X", y="Z")
+        >>> path, params = link.split("?")
+        >>> path == "a/b/c/d/"
         True
-        >>> set(params.split('&')) == set(['q=X', 'y=Z'])
+        >>> set(params.split("&")) == set(["q=X", "y=Z"])
         True
 
     .. versionadded:: 2.2.0
@@ -2245,9 +2245,9 @@ def words(text: t.Any, pattern: t.Union[str, None] = None) -> t.List[str]:
 
     Example:
 
-        >>> words('a b, c; d-e')
+        >>> words("a b, c; d-e")
         ['a', 'b', 'c', 'd', 'e']
-        >>> words('fred, barney, & pebbles', '/[^, ]+/g')
+        >>> words("fred, barney, & pebbles", "/[^, ]+/g")
         ['fred', 'barney', '&', 'pebbles']
 
     .. versionadded:: 2.0.0
@@ -2304,19 +2304,19 @@ def delimitedpathjoin(delimiter, *paths):
     """
     Join delimited path using specified delimiter.
 
-    >>> assert delimitedpathjoin('.', '') == ''
-    >>> assert delimitedpathjoin('.', '.') == '.'
-    >>> assert delimitedpathjoin('.', ['', '.a']) == '.a'
-    >>> assert delimitedpathjoin('.', ['a', '.']) == 'a.'
-    >>> assert delimitedpathjoin('.', ['', '.a', '', '', 'b']) == '.a.b'
-    >>> ret = '.a.b.c.d.e.'
-    >>> assert delimitedpathjoin('.', ['.a.', 'b.', '.c', 'd', 'e.']) == ret
-    >>> assert delimitedpathjoin('.', ['a', 'b', 'c']) == 'a.b.c'
-    >>> ret = 'a.b.c.d.e.f'
-    >>> assert delimitedpathjoin('.', ['a.b', '.c.d.', '.e.f']) == ret
-    >>> ret = '.a.b.c.1.'
-    >>> assert delimitedpathjoin('.', '.', 'a', 'b', 'c', 1, '.') == ret
-    >>> assert delimitedpathjoin('.', []) == ''
+    >>> assert delimitedpathjoin(".", "") == ""
+    >>> assert delimitedpathjoin(".", ".") == "."
+    >>> assert delimitedpathjoin(".", ["", ".a"]) == ".a"
+    >>> assert delimitedpathjoin(".", ["a", "."]) == "a."
+    >>> assert delimitedpathjoin(".", ["", ".a", "", "", "b"]) == ".a.b"
+    >>> ret = ".a.b.c.d.e."
+    >>> assert delimitedpathjoin(".", [".a.", "b.", ".c", "d", "e."]) == ret
+    >>> assert delimitedpathjoin(".", ["a", "b", "c"]) == "a.b.c"
+    >>> ret = "a.b.c.d.e.f"
+    >>> assert delimitedpathjoin(".", ["a.b", ".c.d.", ".e.f"]) == ret
+    >>> ret = ".a.b.c.1."
+    >>> assert delimitedpathjoin(".", ".", "a", "b", "c", 1, ".") == ret
+    >>> assert delimitedpathjoin(".", []) == ""
     """
     paths = [pyd.to_string(path) for path in pyd.flatten_deep(paths) if path]
 
@@ -2343,10 +2343,10 @@ def flatten_url_params(
     Flatten URL params into list of tuples. If any param value is a list or tuple, then map each
     value to the param key.
 
-    >>> params = [('a', 1), ('a', [2, 3])]
-    >>> assert flatten_url_params(params) == [('a', 1), ('a', 2), ('a', 3)]
-    >>> params = {'a': [1, 2, 3]}
-    >>> assert flatten_url_params(params) == [('a', 1), ('a', 2), ('a', 3)]
+    >>> params = [("a", 1), ("a", [2, 3])]
+    >>> assert flatten_url_params(params) == [("a", 1), ("a", 2), ("a", 3)]
+    >>> params = {"a": [1, 2, 3]}
+    >>> assert flatten_url_params(params) == [("a", 1), ("a", 2), ("a", 3)]
     """
     if isinstance(params, dict):
         params = list(params.items())

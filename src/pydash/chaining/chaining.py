@@ -19,26 +19,26 @@ __all__ = (
     "thru",
 )
 
-Value_coT = t.TypeVar("Value_coT", covariant=True)
+ValueT_co = t.TypeVar("ValueT_co", covariant=True)
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
 
 
-class Chain(AllFuncs, t.Generic[Value_coT]):
+class Chain(AllFuncs, t.Generic[ValueT_co]):
     """Enables chaining of :attr:`module` functions."""
 
     #: Object that contains attribute references to available methods.
     module = pyd
     invalid_method_exception = InvalidMethod
 
-    def __init__(self, value: t.Union[Value_coT, Unset] = UNSET) -> None:
+    def __init__(self, value: t.Union[ValueT_co, Unset] = UNSET) -> None:
         self._value = value
 
     def _wrap(self, func) -> "ChainWrapper":
         """Implement `AllFuncs` interface."""
         return ChainWrapper(self._value, func)
 
-    def value(self) -> Value_coT:
+    def value(self) -> ValueT_co:
         """
         Return current value of the chain operations.
 
@@ -56,7 +56,7 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
         """
         return self.module.to_string(self.value())
 
-    def commit(self) -> "Chain[Value_coT]":
+    def commit(self) -> "Chain[ValueT_co]":
         """
         Executes the chained sequence and returns the wrapped result.
 
@@ -66,7 +66,7 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
         """
         return Chain(self.value())
 
-    def plant(self, value: t.Any) -> "Chain[Value_coT]":
+    def plant(self, value: t.Any) -> "Chain[ValueT_co]":
         """
         Return a clone of the chained sequence planting `value` as the wrapped value.
 
@@ -88,12 +88,13 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
 
         for wrap in wrappers:
             clone = ChainWrapper(clone._value, wrap.method)(  # type: ignore
-                *wrap.args, **wrap.kwargs  # type: ignore
+                *wrap.args,
+                **wrap.kwargs,  # type: ignore
             )
 
         return clone
 
-    def __call__(self, value) -> Value_coT:
+    def __call__(self, value) -> ValueT_co:
         """
         Return result of passing `value` through chained methods.
 
@@ -109,10 +110,10 @@ class Chain(AllFuncs, t.Generic[Value_coT]):
         return value
 
 
-class ChainWrapper(t.Generic[Value_coT]):
+class ChainWrapper(t.Generic[ValueT_co]):
     """Wrap :class:`Chain` method call within a :class:`ChainWrapper` context."""
 
-    def __init__(self, value: Value_coT, method) -> None:
+    def __init__(self, value: ValueT_co, method) -> None:
         self._value = value
         self.method = method
         self.args = ()
@@ -173,7 +174,7 @@ class _Dash(object):
         """Proxy to :meth:`Chain.get_method`."""
         return Chain.get_method(attr)
 
-    def __call__(self, value: t.Union[Value_coT, Unset] = UNSET) -> Chain[Value_coT]:
+    def __call__(self, value: t.Union[ValueT_co, Unset] = UNSET) -> Chain[ValueT_co]:
         """Return a new instance of :class:`Chain` with `value` as the seed."""
         return Chain(value)
 
@@ -203,7 +204,8 @@ def chain(value: t.Union[T, Unset] = UNSET) -> Chain[T]:
         >>> summer.value()
         10
 
-        >>> def echo(item): print(item)
+        >>> def echo(item):
+        ...     print(item)
         >>> summer = chain([1, 2, 3, 4]).for_each(echo).sum()
         >>> committed = summer.commit()
         1
@@ -250,7 +252,8 @@ def tap(value: T, interceptor: t.Callable[[T], t.Any]) -> T:
     Example:
 
         >>> data = []
-        >>> def log(value): data.append(value)
+        >>> def log(value):
+        ...     data.append(value)
         >>> chain([1, 2, 3, 4]).map(lambda x: x * 2).tap(log).value()
         [2, 4, 6, 8]
         >>> data

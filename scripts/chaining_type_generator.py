@@ -58,7 +58,7 @@ from _typeshed import (
     SupportsSub,
 )
 
-Value_coT = t.TypeVar("Value_coT", covariant=True)
+ValueT_co = t.TypeVar("ValueT_co", covariant=True)
 T = t.TypeVar("T")
 T1 = t.TypeVar("T1")
 T2 = t.TypeVar("T2")

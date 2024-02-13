@@ -137,7 +137,7 @@ def compact(array: t.Iterable[t.Union[T, None]]) -> t.List[T]:
 
     Example:
 
-        >>> compact(['', 1, 0, True, False, None])
+        >>> compact(["", 1, 0, True, False, None])
         [1, True]
 
     .. versionadded:: 1.0.0
@@ -194,13 +194,15 @@ def difference_by(
     array: t.Iterable[T],
     *others: t.Iterable[T],
     iteratee: t.Union[IterateeObjT, t.Callable[[T], t.Any], None],
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def difference_by(
     array: t.Iterable[T], *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], t.Any]]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def difference_by(array, *others, **kwargs):
@@ -249,13 +251,15 @@ def difference_with(
     array: t.Iterable[T],
     *others: t.Iterable[T2],
     comparator: t.Union[t.Callable[[T, T2], t.Any], None],
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def difference_with(
     array: t.Iterable[T], *others: t.Union[t.Iterable[T2], t.Callable[[T, T2], t.Any]]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def difference_with(array, *others, **kwargs):
@@ -277,8 +281,8 @@ def difference_with(array, *others, **kwargs):
 
     Example:
 
-        >>> array = ['apple', 'banana', 'pear']
-        >>> others = (['avocado', 'pumpkin'], ['peach'])
+        >>> array = ["apple", "banana", "pear"]
+        >>> others = (["avocado", "pumpkin"], ["peach"])
         >>> comparator = lambda a, b: a[0] == b[0]
         >>> difference_with(array, *others, comparator=comparator)
         ['banana']
@@ -361,19 +365,23 @@ def drop_right(array: t.Sequence[T], n: int = 1) -> t.List[T]:
 @t.overload
 def drop_right_while(
     array: t.Sequence[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
-def drop_right_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.List[T]: ...
+def drop_right_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def drop_right_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.List[T]: ...
+def drop_right_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def drop_right_while(array: t.Sequence[T], predicate: None = None) -> t.List[T]: ...
+def drop_right_while(array: t.Sequence[T], predicate: None = None) -> t.List[T]:
+    ...
 
 
 def drop_right_while(array, predicate=None):
@@ -409,19 +417,23 @@ def drop_right_while(array, predicate=None):
 @t.overload
 def drop_while(
     array: t.Sequence[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
-def drop_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.List[T]: ...
+def drop_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def drop_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.List[T]: ...
+def drop_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def drop_while(array: t.Sequence[T], predicate: None = None) -> t.List[T]: ...
+def drop_while(array: t.Sequence[T], predicate: None = None) -> t.List[T]:
+    ...
 
 
 def drop_while(array, predicate=None):
@@ -532,23 +544,28 @@ def fill(
 
 
 @t.overload
-def find_index(array: t.Iterable[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]) -> int: ...
+def find_index(array: t.Iterable[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]) -> int:
+    ...
 
 
 @t.overload
-def find_index(array: t.Iterable[T], predicate: t.Callable[[T, int], t.Any]) -> int: ...
+def find_index(array: t.Iterable[T], predicate: t.Callable[[T, int], t.Any]) -> int:
+    ...
 
 
 @t.overload
-def find_index(array: t.Iterable[T], predicate: t.Callable[[T], t.Any]) -> int: ...
+def find_index(array: t.Iterable[T], predicate: t.Callable[[T], t.Any]) -> int:
+    ...
 
 
 @t.overload
-def find_index(array: t.Iterable[t.Any], predicate: IterateeObjT) -> int: ...
+def find_index(array: t.Iterable[t.Any], predicate: IterateeObjT) -> int:
+    ...
 
 
 @t.overload
-def find_index(array: t.Iterable[t.Any], predicate: None = None) -> int: ...
+def find_index(array: t.Iterable[t.Any], predicate: None = None) -> int:
+    ...
 
 
 def find_index(array, predicate=None):
@@ -577,25 +594,28 @@ def find_index(array, predicate=None):
 
 
 @t.overload
-def find_last_index(
-    array: t.Iterable[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]
-) -> int: ...
+def find_last_index(array: t.Iterable[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]) -> int:
+    ...
 
 
 @t.overload
-def find_last_index(array: t.Iterable[T], predicate: t.Callable[[T, int], t.Any]) -> int: ...
+def find_last_index(array: t.Iterable[T], predicate: t.Callable[[T, int], t.Any]) -> int:
+    ...
 
 
 @t.overload
-def find_last_index(array: t.Iterable[T], predicate: t.Callable[[T], t.Any]) -> int: ...
+def find_last_index(array: t.Iterable[T], predicate: t.Callable[[T], t.Any]) -> int:
+    ...
 
 
 @t.overload
-def find_last_index(array: t.Iterable[t.Any], predicate: IterateeObjT) -> int: ...
+def find_last_index(array: t.Iterable[t.Any], predicate: IterateeObjT) -> int:
+    ...
 
 
 @t.overload
-def find_last_index(array: t.Iterable[t.Any], predicate: None = None) -> int: ...
+def find_last_index(array: t.Iterable[t.Any], predicate: None = None) -> int:
+    ...
 
 
 def find_last_index(array, predicate=None):
@@ -624,11 +644,13 @@ def find_last_index(array, predicate=None):
 
 
 @t.overload
-def flatten(array: t.Iterable[t.Iterable[T]]) -> t.List[T]: ...
+def flatten(array: t.Iterable[t.Iterable[T]]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def flatten(array: t.Iterable[T]) -> t.List[T]: ...
+def flatten(array: t.Iterable[T]) -> t.List[T]:
+    ...
 
 
 def flatten(array):
@@ -707,13 +729,13 @@ def flatten_depth(array: t.Iterable, depth: int = 1) -> t.List:
 
 
 @t.overload
-def from_pairs(pairs: t.Iterable[t.Tuple[T, T2]]) -> t.Dict[T, T2]: ...
+def from_pairs(pairs: t.Iterable[t.Tuple[T, T2]]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def from_pairs(
-    pairs: t.Iterable[t.List[t.Union[T, T2]]]
-) -> t.Dict[t.Union[T, T2], t.Union[T, T2]]: ...
+def from_pairs(pairs: t.Iterable[t.List[t.Union[T, T2]]]) -> t.Dict[t.Union[T, T2], t.Union[T, T2]]:
+    ...
 
 
 def from_pairs(pairs):
@@ -728,7 +750,7 @@ def from_pairs(pairs):
 
     Example:
 
-        >>> from_pairs([['a', 1], ['b', 2]]) == {'a': 1, 'b': 2}
+        >>> from_pairs([["a", 1], ["b", 2]]) == {"a": 1, "b": 2}
         True
 
     .. versionadded:: 4.0.0
@@ -807,11 +829,13 @@ def initial(array: t.Sequence[T]) -> t.Sequence[T]:
 
 
 @t.overload
-def intercalate(array: t.Iterable[t.Iterable[T]], separator: T2) -> t.List[t.Union[T, T2]]: ...
+def intercalate(array: t.Iterable[t.Iterable[T]], separator: T2) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 @t.overload
-def intercalate(array: t.Iterable[T], separator: T2) -> t.List[t.Union[T, T2]]: ...
+def intercalate(array: t.Iterable[T], separator: T2) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 def intercalate(array, separator):
@@ -827,7 +851,7 @@ def intercalate(array, separator):
 
     Example:
 
-        >>> intercalate([1, [2], [3], 4], 'x')
+        >>> intercalate([1, [2], [3], 4], "x")
         [1, 'x', 2, 'x', 3, 'x', 4]
 
 
@@ -889,13 +913,15 @@ def intersection_by(
     array: t.Sequence[T],
     *others: t.Iterable[t.Any],
     iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def intersection_by(
     array: t.Sequence[T], *others: t.Union[t.Iterable[t.Any], t.Callable[[T], t.Any], IterateeObjT]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def intersection_by(array, *others, **kwargs):
@@ -944,13 +970,15 @@ def intersection_by(array, *others, **kwargs):
 @t.overload
 def intersection_with(
     array: t.Sequence[T], *others: t.Iterable[T2], comparator: t.Callable[[T, T2], t.Any]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def intersection_with(
     array: t.Sequence[T], *others: t.Union[t.Iterable[T2], t.Callable[[T, T2], t.Any]]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def intersection_with(array, *others, **kwargs):
@@ -972,8 +1000,8 @@ def intersection_with(array, *others, **kwargs):
 
     Example:
 
-        >>> array = ['apple', 'banana', 'pear']
-        >>> others = (['avocado', 'pumpkin'], ['peach'])
+        >>> array = ["apple", "banana", "pear"]
+        >>> others = (["avocado", "pumpkin"], ["peach"])
         >>> comparator = lambda a, b: a[0] == b[0]
         >>> intersection_with(array, *others, comparator=comparator)
         ['pear']
@@ -1011,7 +1039,7 @@ def intersperse(array: t.Iterable[T], separator: T2) -> t.List[t.Union[T, T2]]:
 
     Example:
 
-        >>> intersperse([1, [2], [3], 4], 'x')
+        >>> intersperse([1, [2], [3], 4], "x")
         [1, 'x', [2], 'x', [3], 'x', 4]
 
     .. versionadded:: 2.0.0
@@ -1084,37 +1112,44 @@ def last_index_of(
 def mapcat(
     array: t.Iterable[T],
     iteratee: t.Callable[[T, int, t.List[T]], t.Union[t.List[T2], t.List[t.List[T2]]]],
-) -> t.List[T2]: ...
+) -> t.List[T2]:
+    ...
 
 
 @t.overload
-def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.List[T2]: ...
+def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.List[T2]:
+    ...
 
 
 @t.overload
 def mapcat(
     array: t.Iterable[T], iteratee: t.Callable[[T, int], t.Union[t.List[T2], t.List[t.List[T2]]]]
-) -> t.List[T2]: ...
+) -> t.List[T2]:
+    ...
 
 
 @t.overload
-def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.List[T2]: ...
+def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.List[T2]:
+    ...
 
 
 @t.overload
 def mapcat(
     array: t.Iterable[T], iteratee: t.Callable[[T], t.Union[t.List[T2], t.List[t.List[T2]]]]
-) -> t.List[T2]: ...
+) -> t.List[T2]:
+    ...
 
 
 @t.overload
-def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.List[T2]: ...
+def mapcat(array: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.List[T2]:
+    ...
 
 
 @t.overload
 def mapcat(
     array: t.Iterable[t.Union[t.List[T], t.List[t.List[T]]]], iteratee: None = None
-) -> t.List[t.Union[T, t.List[T]]]: ...
+) -> t.List[t.Union[T, t.List[T]]]:
+    ...
 
 
 def mapcat(array, iteratee=None):
@@ -1271,8 +1306,8 @@ def pull_all_by(
 
     Example:
 
-        >>> array = [{'x': 1}, {'x': 2}, {'x': 3}, {'x': 1}]
-        >>> pull_all_by(array, [{'x': 1}, {'x': 3}], 'x')
+        >>> array = [{"x": 1}, {"x": 2}, {"x": 3}, {"x": 1}]
+        >>> pull_all_by(array, [{"x": 1}, {"x": 3}], "x")
         [{'x': 2}]
 
     .. versionadded:: 4.0.0
@@ -1302,13 +1337,13 @@ def pull_all_with(
 
     Example:
 
-        >>> array = [{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]
-        >>> res = pull_all_with(array, [{'x': 3, 'y': 4}], lambda a, b: a == b)
-        >>> res == [{'x': 1, 'y': 2}, {'x': 5, 'y': 6}]
+        >>> array = [{"x": 1, "y": 2}, {"x": 3, "y": 4}, {"x": 5, "y": 6}]
+        >>> res = pull_all_with(array, [{"x": 3, "y": 4}], lambda a, b: a == b)
+        >>> res == [{"x": 1, "y": 2}, {"x": 5, "y": 6}]
         True
-        >>> array = [{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]
-        >>> res = pull_all_with(array, [{'x': 3, 'y': 4}], lambda a, b: a != b)
-        >>> res == [{'x': 3, 'y': 4}]
+        >>> array = [{"x": 1, "y": 2}, {"x": 3, "y": 4}, {"x": 5, "y": 6}]
+        >>> res = pull_all_with(array, [{"x": 3, "y": 4}], lambda a, b: a != b)
+        >>> res == [{"x": 3, "y": 4}]
         True
 
     .. versionadded:: 4.0.0
@@ -1508,19 +1543,22 @@ def sort(
     comparator: None = None,
     key: None = None,
     reverse: bool = False,
-) -> t.List["SupportsRichComparisonT"]: ...
+) -> t.List["SupportsRichComparisonT"]:
+    ...
 
 
 @t.overload
 def sort(
     array: t.List[T], comparator: t.Callable[[T, T], int], *, reverse: bool = False
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def sort(
     array: t.List[T], *, key: t.Callable[[T], "SupportsRichComparisonT"], reverse: bool = False
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def sort(array, comparator=None, key=None, reverse=False):
@@ -1608,7 +1646,8 @@ def sorted_index_by(
     array: t.Sequence[T],
     value: T,
     iteratee: t.Union[IterateeObjT, t.Callable[[T], "SupportsRichComparisonT"]],
-) -> int: ...
+) -> int:
+    ...
 
 
 @t.overload
@@ -1616,7 +1655,8 @@ def sorted_index_by(
     array: t.Sequence["SupportsRichComparisonT"],
     value: "SupportsRichComparisonT",
     iteratee: None = None,
-) -> int: ...
+) -> int:
+    ...
 
 
 def sorted_index_by(array, value, iteratee=None):
@@ -1635,10 +1675,10 @@ def sorted_index_by(array, value, iteratee=None):
 
     Example:
 
-        >>> array = [{'x': 4}, {'x': 5}]
-        >>> sorted_index_by(array, {'x': 4}, lambda o: o['x'])
+        >>> array = [{"x": 4}, {"x": 5}]
+        >>> sorted_index_by(array, {"x": 4}, lambda o: o["x"])
         0
-        >>> sorted_index_by(array, {'x': 4}, 'x')
+        >>> sorted_index_by(array, {"x": 4}, "x")
         0
 
     .. versionadded:: 4.0.0
@@ -1714,7 +1754,8 @@ def sorted_last_index_by(
     array: t.Sequence[T],
     value: T,
     iteratee: t.Union[IterateeObjT, t.Callable[[T], "SupportsRichComparisonT"]],
-) -> int: ...
+) -> int:
+    ...
 
 
 @t.overload
@@ -1722,7 +1763,8 @@ def sorted_last_index_by(
     array: t.Sequence["SupportsRichComparisonT"],
     value: "SupportsRichComparisonT",
     iteratee: None = None,
-) -> int: ...
+) -> int:
+    ...
 
 
 def sorted_last_index_by(array, value, iteratee=None):
@@ -1741,10 +1783,10 @@ def sorted_last_index_by(array, value, iteratee=None):
 
     Example:
 
-        >>> array = [{'x': 4}, {'x': 5}]
-        >>> sorted_last_index_by(array, {'x': 4}, lambda o: o['x'])
+        >>> array = [{"x": 4}, {"x": 5}]
+        >>> sorted_last_index_by(array, {"x": 4}, lambda o: o["x"])
         1
-        >>> sorted_last_index_by(array, {'x': 4}, 'x')
+        >>> sorted_last_index_by(array, {"x": 4}, "x")
         1
     """
     if iteratee:
@@ -2003,21 +2045,23 @@ def take_right(array: t.Sequence[T], n: int = 1) -> t.Sequence[T]:
 @t.overload
 def take_right_while(
     array: t.Sequence[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]
-) -> t.Sequence[T]: ...
+) -> t.Sequence[T]:
+    ...
 
 
 @t.overload
-def take_right_while(
-    array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]
-) -> t.Sequence[T]: ...
+def take_right_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.Sequence[T]:
+    ...
 
 
 @t.overload
-def take_right_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.Sequence[T]: ...
+def take_right_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.Sequence[T]:
+    ...
 
 
 @t.overload
-def take_right_while(array: t.Sequence[T], predicate: None = None) -> t.Sequence[T]: ...
+def take_right_while(array: t.Sequence[T], predicate: None = None) -> t.Sequence[T]:
+    ...
 
 
 def take_right_while(array, predicate=None):
@@ -2053,19 +2097,23 @@ def take_right_while(array, predicate=None):
 @t.overload
 def take_while(
     array: t.Sequence[T], predicate: t.Callable[[T, int, t.List[T]], t.Any]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
-def take_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.List[T]: ...
+def take_while(array: t.Sequence[T], predicate: t.Callable[[T, int], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def take_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.List[T]: ...
+def take_while(array: t.Sequence[T], predicate: t.Callable[[T], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def take_while(array: t.Sequence[T], predicate: None = None) -> t.List[T]: ...
+def take_while(array: t.Sequence[T], predicate: None = None) -> t.List[T]:
+    ...
 
 
 def take_while(array, predicate=None):
@@ -2099,11 +2147,13 @@ def take_while(array, predicate=None):
 
 
 @t.overload
-def union(array: t.Sequence[T]) -> t.List[T]: ...
+def union(array: t.Sequence[T]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def union(array: t.Sequence[T], *others: t.Sequence[T2]) -> t.List[t.Union[T, T2]]: ...
+def union(array: t.Sequence[T], *others: t.Sequence[T2]) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 def union(array, *others):
@@ -2133,13 +2183,15 @@ def union(array, *others):
 @t.overload
 def union_by(
     array: t.Sequence[T], *others: t.Iterable[T], iteratee: t.Callable[[T], t.Any]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def union_by(
     array: t.Sequence[T], *others: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def union_by(array, *others, **kwargs):
@@ -2177,13 +2229,15 @@ def union_by(array, *others, **kwargs):
 @t.overload
 def union_with(
     array: t.Sequence[T], *others: t.Iterable[T2], comparator: t.Callable[[T, T2], t.Any]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def union_with(
     array: t.Sequence[T], *others: t.Union[t.Iterable[T2], t.Callable[[T, T2], t.Any]]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def union_with(array, *others, **kwargs):
@@ -2363,14 +2417,16 @@ def unzip_with(
         t.Callable[[T, T], T2],
         t.Callable[[T], T2],
     ],
-) -> t.List[T2]: ...
+) -> t.List[T2]:
+    ...
 
 
 @t.overload
 def unzip_with(
     array: t.Iterable[t.Iterable[T]],
     iteratee: None = None,
-) -> t.List[t.List[T]]: ...
+) -> t.List[t.List[T]]:
+    ...
 
 
 def unzip_with(array, iteratee=None):
@@ -2455,13 +2511,15 @@ def xor_by(
     array: t.Iterable[T],
     *lists: t.Iterable[T],
     iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def xor_by(
     array: t.Iterable[T], *lists: t.Union[t.Iterable[T], t.Callable[[T], t.Any]]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def xor_by(array, *lists, **kwargs):
@@ -2486,7 +2544,7 @@ def xor_by(array, *lists, **kwargs):
 
         >>> xor_by([2.1, 1.2], [2.3, 3.4], round)
         [1.2, 3.4]
-        >>> xor_by([{'x': 1}], [{'x': 2}, {'x': 1}], 'x')
+        >>> xor_by([{"x": 1}], [{"x": 2}, {"x": 1}], "x")
         [{'x': 2}]
 
     .. versionadded:: 4.0.0
@@ -2511,13 +2569,15 @@ def xor_by(array, *lists, **kwargs):
 @t.overload
 def xor_with(
     array: t.Sequence[T], *lists: t.Iterable[T2], comparator: t.Callable[[T, T2], t.Any]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 @t.overload
 def xor_with(
     array: t.Sequence[T], *lists: t.Union[t.Iterable[T2], t.Callable[[T, T2], t.Any]]
-) -> t.List[T]: ...
+) -> t.List[T]:
+    ...
 
 
 def xor_with(array, *lists, **kwargs):
@@ -2539,9 +2599,9 @@ def xor_with(array, *lists, **kwargs):
 
     Example:
 
-        >>> objects = [{'x': 1, 'y': 2}, {'x': 2, 'y': 1}]
-        >>> others = [{'x': 1, 'y': 1}, {'x': 1, 'y': 2}]
-        >>> expected = [{'y': 1, 'x': 2}, {'y': 1, 'x': 1}]
+        >>> objects = [{"x": 1, "y": 2}, {"x": 2, "y": 1}]
+        >>> others = [{"x": 1, "y": 1}, {"x": 1, "y": 2}]
+        >>> expected = [{"y": 1, "x": 2}, {"y": 1, "x": 1}]
         >>> xor_with(objects, others, lambda a, b: a == b) == expected
         True
 
@@ -2587,17 +2647,20 @@ def zip_(*arrays: t.Iterable[T]) -> t.List[t.List[T]]:
 
 
 @t.overload
-def zip_object(keys: t.Iterable[t.Tuple[T, T2]], values: None = None) -> t.Dict[T, T2]: ...
+def zip_object(keys: t.Iterable[t.Tuple[T, T2]], values: None = None) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
 def zip_object(
     keys: t.Iterable[t.List[t.Union[T, T2]]], values: None = None
-) -> t.Dict[t.Union[T, T2], t.Union[T, T2]]: ...
+) -> t.Dict[t.Union[T, T2], t.Union[T, T2]]:
+    ...
 
 
 @t.overload
-def zip_object(keys: t.Iterable[T], values: t.List[T2]) -> t.Dict[T, T2]: ...
+def zip_object(keys: t.Iterable[T], values: t.List[T2]) -> t.Dict[T, T2]:
+    ...
 
 
 def zip_object(keys, values=None):
@@ -2643,8 +2706,8 @@ def zip_object_deep(keys: t.Iterable[t.Any], values: t.Union[t.List[t.Any], None
 
     Example:
 
-        >>> expected = {'a': {'b': {'c': 1, 'd': 2}}}
-        >>> zip_object_deep(['a.b.c', 'a.b.d'], [1, 2]) == expected
+        >>> expected = {"a": {"b": {"c": 1, "d": 2}}}
+        >>> zip_object_deep(["a.b.c", "a.b.d"], [1, 2]) == expected
         True
 
     .. versionadded:: 4.0.0
@@ -2668,11 +2731,13 @@ def zip_with(
         t.Callable[[T, T], T2],
         t.Callable[[T], T2],
     ],
-) -> t.List[T2]: ...
+) -> t.List[T2]:
+    ...
 
 
 @t.overload
-def zip_with(*arrays: t.Iterable[T]) -> t.List[t.List[T]]: ...
+def zip_with(*arrays: t.Iterable[T]) -> t.List[t.List[T]]:
+    ...
 
 
 @t.overload
@@ -2684,7 +2749,8 @@ def zip_with(
         t.Callable[[T, T], T2],
         t.Callable[[T], T2],
     ],
-) -> t.List[t.Union[t.List[T], T2]]: ...
+) -> t.List[t.Union[t.List[T], T2]]:
+    ...
 
 
 def zip_with(*arrays, **kwargs):
@@ -2763,7 +2829,7 @@ def iterintersperse(iterable, separator):
         yield item
 
 
-def iterunique(array, comparator=None, iteratee=None):  # noqa: C901
+def iterunique(array, comparator=None, iteratee=None):  # noqa: PLR0912
     """Yield each unique item in array."""
     if not array:  # pragma: no cover
         return

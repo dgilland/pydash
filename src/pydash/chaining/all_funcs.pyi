@@ -3,35 +3,26 @@
 
 import re
 import typing as t
-
-from _typeshed import (
-    SupportsAdd,
-    SupportsDunderGE,
-    SupportsDunderGT,
-    SupportsDunderLE,
-    SupportsDunderLT,
-    SupportsRichComparison,
-    SupportsRichComparisonT,
-    SupportsSub,
-)
 from typing_extensions import Concatenate, Literal, ParamSpec, Type
 
 import pydash as pyd
 from pydash.chaining.chaining import Chain
+from pydash.types import *
+from pydash.helpers import Unset, UNSET
 from pydash.functions import (
     After,
     Ary,
     Before,
-    CurryFive,
-    CurryFour,
     CurryOne,
-    CurryRightFive,
-    CurryRightFour,
-    CurryRightOne,
-    CurryRightThree,
-    CurryRightTwo,
-    CurryThree,
     CurryTwo,
+    CurryThree,
+    CurryFour,
+    CurryFive,
+    CurryRightOne,
+    CurryRightTwo,
+    CurryRightThree,
+    CurryRightFour,
+    CurryRightFive,
     Debounce,
     Disjoin,
     Flow,
@@ -44,11 +35,20 @@ from pydash.functions import (
     Spread,
     Throttle,
 )
-from pydash.helpers import UNSET, Unset
-from pydash.types import *
 from pydash.utilities import MemoizedFunc
 
-Value_coT = t.TypeVar("Value_coT", covariant=True)
+from _typeshed import (
+    SupportsDunderGE,
+    SupportsDunderGT,
+    SupportsDunderLE,
+    SupportsDunderLT,
+    SupportsRichComparison,
+    SupportsAdd,
+    SupportsRichComparisonT,
+    SupportsSub,
+)
+
+ValueT_co = t.TypeVar("ValueT_co", covariant=True)
 T = t.TypeVar("T")
 T1 = t.TypeVar("T1")
 T2 = t.TypeVar("T2")
@@ -80,12 +80,12 @@ class AllFuncs:
     def difference_by(
         self: "Chain[t.Iterable[T]]",
         *others: t.Iterable[T],
-        iteratee: t.Union[IterateeObjT, t.Callable[[T], t.Any], None]
+        iteratee: t.Union[IterateeObjT, t.Callable[[T], t.Any], None],
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def difference_by(
         self: "Chain[t.Iterable[T]]",
-        *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], t.Any]]
+        *others: t.Union[IterateeObjT, t.Iterable[T], t.Callable[[T], t.Any]],
     ) -> "Chain[t.List[T]]": ...
     def difference_by(self, *others, **kwargs):
         return self._wrap(pyd.difference_by)(*others, **kwargs)
@@ -94,7 +94,7 @@ class AllFuncs:
     def difference_with(
         self: "Chain[t.Iterable[T]]",
         *others: t.Iterable[T2],
-        comparator: t.Union[t.Callable[[T, T2], t.Any], None]
+        comparator: t.Union[t.Callable[[T, T2], t.Any], None],
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def difference_with(
@@ -252,12 +252,12 @@ class AllFuncs:
     def intersection_by(
         self: "Chain[t.Sequence[T]]",
         *others: t.Iterable[t.Any],
-        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT]
+        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def intersection_by(
         self: "Chain[t.Sequence[T]]",
-        *others: t.Union[t.Iterable[t.Any], t.Callable[[T], t.Any], IterateeObjT]
+        *others: t.Union[t.Iterable[t.Any], t.Callable[[T], t.Any], IterateeObjT],
     ) -> "Chain[t.List[T]]": ...
     def intersection_by(self, *others, **kwargs):
         return self._wrap(pyd.intersection_by)(*others, **kwargs)
@@ -266,7 +266,7 @@ class AllFuncs:
     def intersection_with(
         self: "Chain[t.Sequence[T]]",
         *others: t.Iterable[T2],
-        comparator: t.Callable[[T, T2], t.Any]
+        comparator: t.Callable[[T, T2], t.Any],
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def intersection_with(
@@ -373,6 +373,7 @@ class AllFuncs:
         self: "Chain[SequenceT]", start: int = 0, end: t.Union[int, None] = None
     ) -> "Chain[SequenceT]":
         return self._wrap(pyd.slice_)(start, end)
+
     slice = slice_
 
     @t.overload
@@ -391,7 +392,7 @@ class AllFuncs:
         self: "Chain[t.List[T]]",
         *,
         key: t.Callable[[T], "SupportsRichComparisonT"],
-        reverse: bool = False
+        reverse: bool = False,
     ) -> "Chain[t.List[T]]": ...
     def sort(self, comparator=None, key=None, reverse=False):
         return self._wrap(pyd.sort)(comparator, key, reverse)
@@ -536,7 +537,7 @@ class AllFuncs:
     def union_with(
         self: "Chain[t.Sequence[T]]",
         *others: t.Iterable[T2],
-        comparator: t.Callable[[T, T2], t.Any]
+        comparator: t.Callable[[T, T2], t.Any],
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def union_with(
@@ -591,7 +592,7 @@ class AllFuncs:
     def xor_by(
         self: "Chain[t.Iterable[T]]",
         *lists: t.Iterable[T],
-        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT]
+        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT],
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def xor_by(
@@ -613,6 +614,7 @@ class AllFuncs:
 
     def zip_(self: "Chain[t.Iterable[T]]", *arrays: t.Iterable[T]) -> "Chain[t.List[t.List[T]]]":
         return self._wrap(pyd.zip_)(*arrays)
+
     zip = zip_
 
     @t.overload
@@ -642,7 +644,7 @@ class AllFuncs:
             t.Callable[[T, T, int], T2],
             t.Callable[[T, T], T2],
             t.Callable[[T], T2],
-        ]
+        ],
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def zip_with(
@@ -657,7 +659,7 @@ class AllFuncs:
             t.Callable[[T, T, int], T2],
             t.Callable[[T, T], T2],
             t.Callable[[T], T2],
-        ]
+        ],
     ) -> "Chain[t.List[t.Union[t.List[T], T2]]]": ...
     def zip_with(self, *arrays, **kwargs):
         return self._wrap(pyd.zip_with)(*arrays, **kwargs)
@@ -756,6 +758,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T]]": ...
     def filter_(self, predicate=None):
         return self._wrap(pyd.filter_)(predicate)
+
     filter = filter_
 
     @t.overload
@@ -1082,6 +1085,7 @@ class AllFuncs:
     ) -> "Chain[t.List]": ...
     def map_(self, iteratee=None):
         return self._wrap(pyd.map_)(iteratee)
+
     map = map_
 
     def nest(self: "Chain[t.Iterable]", *properties: t.Any) -> "Chain[t.Any]":
@@ -1214,6 +1218,7 @@ class AllFuncs:
     ) -> "Chain[T]": ...
     def reduce_(self, iteratee=None, accumulator=None):
         return self._wrap(pyd.reduce_)(iteratee, accumulator)
+
     reduce = reduce_
 
     @t.overload
@@ -1738,6 +1743,7 @@ class AllFuncs:
     def sum_(self: "Chain[t.Iterable['SupportsAdd[int, T]']]") -> "Chain[T]": ...
     def sum_(self):
         return self._wrap(pyd.sum_)()
+
     sum = sum_
 
     @t.overload
@@ -1855,6 +1861,7 @@ class AllFuncs:
     ) -> "Chain[t.Union['SupportsRichComparisonT', T]]": ...
     def max_(self, default=UNSET):
         return self._wrap(pyd.max_)(default)
+
     max = max_
 
     @t.overload
@@ -1874,14 +1881,14 @@ class AllFuncs:
         self: "Chain[t.Mapping[t.Any, T2]]",
         iteratee: t.Callable[[T2], "SupportsRichComparisonT"],
         *,
-        default: T
+        default: T,
     ) -> "Chain[t.Union[T2, T]]": ...
     @t.overload
     def max_by(
         self: "Chain[t.Mapping[t.Any, 'SupportsRichComparisonT']]",
         iteratee: None = None,
         *,
-        default: T
+        default: T,
     ) -> "Chain[t.Union['SupportsRichComparisonT', T]]": ...
     @t.overload
     def max_by(
@@ -1900,7 +1907,7 @@ class AllFuncs:
         self: "Chain[t.Iterable[T2]]",
         iteratee: t.Callable[[T2], "SupportsRichComparisonT"],
         *,
-        default: T
+        default: T,
     ) -> "Chain[t.Union[T2, T]]": ...
     @t.overload
     def max_by(
@@ -1966,6 +1973,7 @@ class AllFuncs:
     ) -> "Chain[t.Union['SupportsRichComparisonT', T]]": ...
     def min_(self, default=UNSET):
         return self._wrap(pyd.min_)(default)
+
     min = min_
 
     @t.overload
@@ -1985,14 +1993,14 @@ class AllFuncs:
         self: "Chain[t.Mapping[t.Any, T2]]",
         iteratee: t.Callable[[T2], "SupportsRichComparisonT"],
         *,
-        default: T
+        default: T,
     ) -> "Chain[t.Union[T2, T]]": ...
     @t.overload
     def min_by(
         self: "Chain[t.Mapping[t.Any, 'SupportsRichComparisonT']]",
         iteratee: None = None,
         *,
-        default: T
+        default: T,
     ) -> "Chain[t.Union['SupportsRichComparisonT', T]]": ...
     @t.overload
     def min_by(
@@ -2011,7 +2019,7 @@ class AllFuncs:
         self: "Chain[t.Iterable[T2]]",
         iteratee: t.Callable[[T2], "SupportsRichComparisonT"],
         *,
-        default: T
+        default: T,
     ) -> "Chain[t.Union[T2, T]]": ...
     @t.overload
     def min_by(
@@ -2067,6 +2075,7 @@ class AllFuncs:
     def round_(self: "Chain[SupportsRound[NumberT]]", precision: int = 0) -> "Chain[float]": ...
     def round_(self, precision=0):
         return self._wrap(pyd.round_)(precision)
+
     round = round_
 
     @t.overload
@@ -2161,31 +2170,31 @@ class AllFuncs:
     def assign_with(
         self: "Chain[t.Mapping[T, T2]]",
         *sources: t.Mapping[T3, t.Any],
-        customizer: t.Callable[[t.Union[T2, None]], T5]
+        customizer: t.Callable[[t.Union[T2, None]], T5],
     ) -> "Chain[t.Dict[t.Union[T, T3], t.Union[T2, T5]]]": ...
     @t.overload
     def assign_with(
         self: "Chain[t.Mapping[T, T2]]",
         *sources: t.Mapping[T3, T4],
-        customizer: t.Callable[[t.Union[T2, None], T4], T5]
+        customizer: t.Callable[[t.Union[T2, None], T4], T5],
     ) -> "Chain[t.Dict[t.Union[T, T3], t.Union[T2, T5]]]": ...
     @t.overload
     def assign_with(
         self: "Chain[t.Mapping[T, T2]]",
         *sources: t.Mapping[T3, T4],
-        customizer: t.Callable[[t.Union[T2, None], T4, T3], T5]
+        customizer: t.Callable[[t.Union[T2, None], T4, T3], T5],
     ) -> "Chain[t.Dict[t.Union[T, T3], t.Union[T2, T5]]]": ...
     @t.overload
     def assign_with(
         self: "Chain[t.Mapping[T, T2]]",
         *sources: t.Mapping[T3, T4],
-        customizer: t.Callable[[t.Union[T2, None], T4, T3, t.Dict[T, T2]], T5]
+        customizer: t.Callable[[t.Union[T2, None], T4, T3, t.Dict[T, T2]], T5],
     ) -> "Chain[t.Dict[t.Union[T, T3], t.Union[T2, T5]]]": ...
     @t.overload
     def assign_with(
         self: "Chain[t.Mapping[T, T2]]",
         *sources: t.Mapping[T3, T4],
-        customizer: t.Callable[[t.Union[T2, None], T4, T3, t.Dict[T, T2], t.Dict[T3, T4]], T5]
+        customizer: t.Callable[[t.Union[T2, None], T4, T3, t.Dict[T, T2], t.Dict[T3, T4]], T5],
     ) -> "Chain[t.Dict[t.Union[T, T3], t.Union[T2, T5]]]": ...
     @t.overload
     def assign_with(
@@ -2638,6 +2647,7 @@ class AllFuncs:
 
     def set_(self: "Chain[T]", path: PathT, value: t.Any) -> "Chain[T]":
         return self._wrap(pyd.set_)(path, value)
+
     set = set_
 
     def set_with(
@@ -3242,12 +3252,12 @@ class AllFuncs:
     @t.overload
     def cond(
         self: "Chain[t.List[t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]]]]",
-        *extra_pairs: t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]]
+        *extra_pairs: t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]],
     ) -> "Chain[t.Callable[P, T]]": ...
     @t.overload
     def cond(
         self: "Chain[t.List[t.List[t.Callable[P, t.Any]]]]",
-        *extra_pairs: t.List[t.Callable[P, t.Any]]
+        *extra_pairs: t.List[t.Callable[P, t.Any]],
     ) -> "Chain[t.Callable[P, t.Any]]": ...
     def cond(self, *extra_pairs):
         return self._wrap(pyd.cond)(*extra_pairs)
@@ -3367,6 +3377,7 @@ class AllFuncs:
 
     def property_(self: "Chain[PathT]") -> "Chain[t.Callable[[t.Any], t.Any]]":
         return self._wrap(pyd.property_)()
+
     property = property_
 
     def properties(self: "Chain[t.Any]", *paths: t.Any) -> "Chain[t.Callable[[t.Any], t.Any]]":
@@ -3388,7 +3399,7 @@ class AllFuncs:
         self: "Chain[t.Union[float, int]]",
         stop: t.Union[float, int] = 1,
         *,
-        floating: Literal[True]
+        floating: Literal[True],
     ) -> "Chain[float]": ...
     def random(
         self: "Chain[t.Union[float, int]]", stop: t.Union[float, int] = 1, floating: bool = False
@@ -3403,6 +3414,7 @@ class AllFuncs:
     ) -> "Chain[t.Generator[int, None, None]]": ...
     def range_(self, *args):
         return self._wrap(pyd.range_)(*args)
+
     range = range_
 
     @t.overload

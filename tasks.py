@@ -59,13 +59,13 @@ def fmt(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> No
 @task()
 def ruff_lint(ctx: Context) -> None:
     """Check code for static errors using pylint."""
-    run(f"ruff check .")
+    run("ruff check .")
 
 
 @task()
 def mypy(ctx: Context) -> None:
     """Check code using mypy type checker."""
-    run(f"mypy . --no-error-summary")
+    run("mypy . --no-error-summary")
 
 
 @task()

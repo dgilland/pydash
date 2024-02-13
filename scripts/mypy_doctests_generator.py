@@ -1,4 +1,5 @@
 import re
+import sys
 import typing as t
 from pathlib import Path
 
@@ -70,6 +71,6 @@ if __name__ == "__main__":
 
     if not args.filename.exists():
         print(f"`{args.filename}` does not exist")
-        exit(1)
+        sys.exit(1)
 
     args.output.write_text(main(args.filename))
