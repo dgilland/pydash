@@ -259,7 +259,9 @@ def parse_iteratee(iteratee_keyword, *args, **kwargs):
     iteratee = kwargs.get(iteratee_keyword)
     last_arg = args[-1]
 
-    if iteratee is None and (isinstance(last_arg, (dict, str))):
+    if iteratee is None and (
+        callable(last_arg) or isinstance(last_arg, (dict, str)) or last_arg is None
+    ):
         iteratee = last_arg
         args = args[:-1]
 
