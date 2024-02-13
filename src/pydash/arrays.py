@@ -98,6 +98,9 @@ __all__ = (
 
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
+T3 = t.TypeVar("T3")
+T4 = t.TypeVar("T4")
+T5 = t.TypeVar("T5")
 SequenceT = t.TypeVar("SequenceT", bound=t.Sequence)
 MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence)
 
@@ -2387,9 +2390,34 @@ def unshift(array: t.List[T], *items: T2) -> t.List[t.Union[T, T2]]:
     return array  # type: ignore
 
 
-def unzip(array: t.Iterable[t.Iterable[T]]) -> t.List[t.List[T]]:
+@t.overload
+def unzip(array: t.Iterable[t.Tuple[T, T2]]) -> t.List[t.Tuple[T, T2]]:
+    ...
+
+
+@t.overload
+def unzip(array: t.Iterable[t.Tuple[T, T2, T3]]) -> t.List[t.Tuple[T, T2, T3]]:
+    ...
+
+
+@t.overload
+def unzip(array: t.Iterable[t.Tuple[T, T2, T3, T4]]) -> t.List[t.Tuple[T, T2, T3, T4]]:
+    ...
+
+
+@t.overload
+def unzip(array: t.Iterable[t.Tuple[T, T2, T3, T4, T5]]) -> t.List[t.Tuple[T, T2, T3, T4, T5]]:
+    ...
+
+
+@t.overload
+def unzip(array: t.Iterable[t.Iterable[t.Any]]) -> t.List[t.Tuple[t.Any, ...]]:
+    ...
+
+
+def unzip(array):
     """
-    The inverse of :func:`zip_`, this method splits groups of elements into lists composed of
+    The inverse of :func:`zip_`, this method splits groups of elements into tuples composed of
     elements from each group at their corresponding indexes.
 
     Args:
@@ -2400,24 +2428,38 @@ def unzip(array: t.Iterable[t.Iterable[T]]) -> t.List[t.List[T]]:
 
     Example:
 
-        >>> unzip([[1, 4, 7], [2, 5, 8], [3, 6, 9]])
-        [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        >>> unzip([(1, 4, 7), (2, 5, 8), (3, 6, 9)])
+        [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 8.0.0
+        Support list of tuples instead.
     """
     return zip_(*array)
 
 
 @t.overload
 def unzip_with(
-    array: t.Iterable[t.Iterable[T]],
+    array: t.Iterable[t.Tuple[T, T2]],
     iteratee: t.Union[
-        t.Callable[[T, T, int, t.List[T]], T2],
-        t.Callable[[T, T, int], T2],
-        t.Callable[[T, T], T2],
-        t.Callable[[T], T2],
+        t.Callable[[t.Union[T, T2, T3], t.Union[T, T2], int], T3],
+        t.Callable[[t.Union[T, T2, T3], t.Union[T, T2]], T3],
+        t.Callable[[t.Union[T, T2, T3]], T3],
     ],
-) -> t.List[T2]:
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def unzip_with(
+    array: t.Iterable[t.Iterable[t.Any]],
+    iteratee: t.Union[
+        t.Callable[[t.Any, t.Any, int], T3],
+        t.Callable[[t.Any, t.Any], T3],
+        t.Callable[[t.Any], T3],
+    ],
+) -> t.List[T3]:
     ...
 
 
@@ -2425,15 +2467,15 @@ def unzip_with(
 def unzip_with(
     array: t.Iterable[t.Iterable[T]],
     iteratee: None = None,
-) -> t.List[t.List[T]]:
+) -> t.List[t.Tuple[T]]:
     ...
 
 
 def unzip_with(array, iteratee=None):
     """
     This method is like :func:`unzip` except that it accepts an iteratee to specify how regrouped
-    values should be combined. The iteratee is invoked with four arguments: ``(accumulator, value,
-    index, group)``.
+    values should be combined. The iteratee is invoked with three arguments: ``(accumulator, value,
+    index)``.
 
     Args:
         array: List to process.
@@ -2445,7 +2487,7 @@ def unzip_with(array, iteratee=None):
     Example:
 
         >>> from pydash import add
-        >>> unzip_with([[1, 10, 100], [2, 20, 200]], add)
+        >>> unzip_with([(1, 10, 100), (2, 20, 200)], add)
         [3, 30, 300]
 
     .. versionadded:: 3.3.0
@@ -2624,7 +2666,43 @@ def xor_with(array, *lists, **kwargs):
     )
 
 
-def zip_(*arrays: t.Iterable[T]) -> t.List[t.List[T]]:
+@t.overload
+def zip_(array1: t.Iterable[T], array2: t.Iterable[T2], /) -> t.List[t.Tuple[T, T2]]:
+    ...
+
+
+@t.overload
+def zip_(
+    array1: t.Iterable[T], array2: t.Iterable[T2], array3: t.Iterable[T3], /
+) -> t.List[t.Tuple[T, T2, T3]]:
+    ...
+
+
+@t.overload
+def zip_(
+    array1: t.Iterable[T], array2: t.Iterable[T2], array3: t.Iterable[T3], array4: t.Iterable[T4], /
+) -> t.List[t.Tuple[T, T2, T3, T4]]:
+    ...
+
+
+@t.overload
+def zip_(
+    array1: t.Iterable[T],
+    array2: t.Iterable[T2],
+    array3: t.Iterable[T3],
+    array4: t.Iterable[T4],
+    array5: t.Iterable[T5],
+    /,
+) -> t.List[t.Tuple[T, T2, T3, T4, T5]]:
+    ...
+
+
+@t.overload
+def zip_(*arrays: t.Iterable[t.Any]) -> t.List[t.Tuple[t.Any, ...]]:
+    ...
+
+
+def zip_(*arrays):
     """
     Groups the elements of each array at their corresponding indexes. Useful for separate data
     sources that are coordinated through matching array indexes.
@@ -2638,12 +2716,14 @@ def zip_(*arrays: t.Iterable[T]) -> t.List[t.List[T]]:
     Example:
 
         >>> zip_([1, 2, 3], [4, 5, 6], [7, 8, 9])
-        [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+        [(1, 4, 7), (2, 5, 8), (3, 6, 9)]
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 8.0.0
+        Return list of tuples instead of list of lists.
     """
-    # zip returns as a list of tuples so convert to list of lists
-    return [list(item) for item in zip(*arrays)]
+    return list(zip(*arrays))
 
 
 @t.overload
@@ -2724,40 +2804,47 @@ def zip_object_deep(keys: t.Iterable[t.Any], values: t.Union[t.List[t.Any], None
 
 @t.overload
 def zip_with(
-    *arrays: t.Iterable[T],
+    array1: t.Iterable[T],
+    array2: t.Iterable[T2],
+    *,
     iteratee: t.Union[
-        t.Callable[[T, T, int, t.List[T]], T2],
-        t.Callable[[T, T, int], T2],
-        t.Callable[[T, T], T2],
-        t.Callable[[T], T2],
+        t.Callable[[T, T2, int], T3],
+        t.Callable[[T, T2], T3],
+        t.Callable[[T], T3],
+    ],
+) -> t.List[T3]:
+    ...
+
+
+@t.overload
+def zip_with(
+    *arrays: t.Iterable[t.Any],
+    iteratee: t.Union[
+        t.Callable[[t.Any, t.Any, int], T2],
+        t.Callable[[t.Any, t.Any], T2],
+        t.Callable[[t.Any], T2],
     ],
 ) -> t.List[T2]:
     ...
 
 
 @t.overload
-def zip_with(*arrays: t.Iterable[T]) -> t.List[t.List[T]]:
-    ...
-
-
-@t.overload
 def zip_with(
     *arrays: t.Union[
-        t.Iterable[T],
-        t.Callable[[T, T, int, t.List[T]], T2],
-        t.Callable[[T, T, int], T2],
-        t.Callable[[T, T], T2],
-        t.Callable[[T], T2],
+        t.Iterable[t.Any],
+        t.Callable[[t.Any, t.Any, int], T2],
+        t.Callable[[t.Any, t.Any], T2],
+        t.Callable[[t.Any], T2],
     ],
-) -> t.List[t.Union[t.List[T], T2]]:
+) -> t.List[T2]:
     ...
 
 
 def zip_with(*arrays, **kwargs):
     """
     This method is like :func:`zip` except that it accepts an iteratee to specify how grouped values
-    should be combined. The iteratee is invoked with four arguments: ``(accumulator, value, index,
-    group)``.
+    should be combined. The iteratee is invoked with three arguments:
+    ``(accumulator, value, index)``.
 
     Args:
         *arrays: Lists to process.
