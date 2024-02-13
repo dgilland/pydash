@@ -1210,10 +1210,10 @@ def zscore(collection, iteratee=None):
 
 def call_math_operator(value1, value2, op, default):
     """Return the result of the math operation on the given values."""
-    if not value1:
+    if value1 is None:
         value1 = default
 
-    if not value2:
+    if value2 is None:
         value2 = default
 
     if not pyd.is_number(value1):
