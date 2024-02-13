@@ -137,4 +137,7 @@ omit = [
 ]
 
 [tool.coverage.report]
-exclude_also = ["@t.overload"]
+exclude_lines = [
+    "pragma: no cover",
+    "@t.overload"
+]
