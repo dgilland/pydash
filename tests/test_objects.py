@@ -847,8 +847,8 @@ def test_to_number(case, expected):
 @parametrize(
     "case,expected",
     [
-        ({"a": 1, "b": 2, "c": 3}, [["a", 1], ["b", 2], ["c", 3]]),
-        ([1, 2, 3], [[0, 1], [1, 2], [2, 3]]),
+        ({"a": 1, "b": 2, "c": 3}, [("a", 1), ("b", 2), ("c", 3)]),
+        ([1, 2, 3], [(0, 1), (1, 2), (2, 3)]),
     ],
 )
 def test_to_pairs(case, expected):
