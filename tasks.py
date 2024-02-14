@@ -37,7 +37,7 @@ def ruff_format(ctx: Context, target: str, quiet: bool = False) -> None:
 
 
 @task()
-def ruff_lint_fix(ctx: Context, target: str, quiet: bool = False) -> None:
+def ruff_fix(ctx: Context, target: str, quiet: bool = False) -> None:
     """Autofix fixable lint issues using ruff."""
     run(f"ruff check {target} --fix", hide=quiet)
 
@@ -51,7 +51,7 @@ def fmt(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> No
 
     if not quiet:
         print("Running ruff lint fixes")
-    ruff_lint_fix(ctx, target or ".", quiet=quiet)
+    ruff_fix(ctx, target or ".", quiet=quiet)
 
 
 @task()
@@ -70,7 +70,7 @@ def mypy(ctx: Context) -> None:
 def lint(ctx: Context) -> None:
     """Run linters."""
     linters = {
-        "ruff_lint": ruff_lint,
+        "ruff-lint": ruff_lint,
         "mypy": mypy,
     }
     # in python 3.8 and before the ast module doesn't have the `unparse` function
