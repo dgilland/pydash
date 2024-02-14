@@ -15,10 +15,7 @@ import sys
 import tempfile
 import typing as t
 
-from invoke import run as _run
-from invoke.context import Context
-from invoke.exceptions import Exit, UnexpectedExit
-from invoke.tasks import task
+from invoke import Context, Exit, UnexpectedExit, run as _run, task
 
 
 PACKAGE_NAME = "pydash"
