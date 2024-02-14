@@ -84,15 +84,15 @@ select = [
 # E701 - multiple statements on one line (colon)
 # PLR2004 - Magic value used in comparison, consider replacing `...` with a constant variable
 # PLW2901 - `...` loop variable `...` overwritten by assignment target
-ignore = ["F811", "E203", "E701", "PLR2004", "PLW2901"]
+# PLR0913 - Too many arguments in function definition
+ignore = ["F811", "E203", "E701", "PLR2004", "PLW2901", "PLR0913"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 # Exceptions for the type stub
 # F403 - `from module import *` used; unable to detect undefined names
 # F405 - name may be undefined, or defined from star imports
 # E501 - line too long
-# PLR0913 - Too many arguments in function definition
-"*.pyi" = ["F403", "F405", "E501", "PLR0913"]
+"*.pyi" = ["F403", "F405", "E501"]
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2

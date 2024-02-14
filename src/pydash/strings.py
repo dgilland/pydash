@@ -1288,7 +1288,7 @@ def repeat(text: t.Any, n: t.SupportsInt = 0) -> str:
     return pyd.to_string(text) * int(n)
 
 
-def replace(  # noqa: PLR0913
+def replace(
     text: t.Any,
     pattern: t.Any,
     repl: t.Union[str, t.Callable[[re.Match], str]],

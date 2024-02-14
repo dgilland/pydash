@@ -178,7 +178,7 @@ def test_debounce_max_wait():
     "func,wait,args,kwargs,expected",
     [(lambda a, b, c: (a, b, c), 250, (1, 2), {"c": 3}, (1, 2, 3))],
 )
-def test_delay(mock_sleep, func, wait, args, kwargs, expected):  # noqa: PLR0913
+def test_delay(mock_sleep, func, wait, args, kwargs, expected):
     result = _.delay(func, wait, *args, **kwargs)
     assert result == expected
     assert mock_sleep.call_args_list == [mock.call(pytest.approx(wait / 1000.0))]
