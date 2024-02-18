@@ -2578,6 +2578,11 @@ class AllFuncs:
     ) -> "Chain[t.Any]":
         return self._wrap(pyd.map_values_deep)(iteratee, property_path)
 
+    def maybe_apply(
+        self: "Chain[t.Optional[T]]", func: t.Callable[[T], T2]
+    ) -> "Chain[t.Optional[T2]]":
+        return self._wrap(pyd.maybe_apply)(func)
+
     @t.overload
     def merge(
         self: "Chain[t.Mapping[T, T2]]", *sources: t.Mapping[T3, T4]

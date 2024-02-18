@@ -43,6 +43,7 @@ __all__ = (
     "map_keys",
     "map_values",
     "map_values_deep",
+    "maybe_apply",
     "merge",
     "merge_with",
     "omit",
@@ -1249,6 +1250,29 @@ def map_values_deep(
         return assign(obj, map_values(obj, deep_iteratee))  # type: ignore
     else:
         return callit(iteratee, obj, properties)
+
+
+def maybe_apply(obj: t.Optional[T], func: t.Callable[[T], T2]) -> t.Optional[T2]:
+    """
+    Apply `func` to `obj` if `obj` is not ``None``.
+
+    Args:
+        obj: Object to apply `func` to.
+        func: Function to apply to `obj`.
+
+    Returns:
+        Result of applying `func` to `obj` or ``None``.
+
+    Example:
+
+        >>> maybe_apply(2, lambda x: x * 2)
+        4
+        >>> maybe_apply(None, lambda x: x * 2) is None
+        True
+
+    .. versionadded:: 8.0.0
+    """
+    return func(obj) if obj is not None else None
 
 
 @t.overload

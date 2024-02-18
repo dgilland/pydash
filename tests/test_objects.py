@@ -944,3 +944,8 @@ def test_unset(obj, path, expected, new_obj):
 @parametrize("case,expected", [({"a": 1, "b": 2, "c": 3}, [1, 2, 3]), ([1, 2, 3], [1, 2, 3])])
 def test_values(case, expected):
     assert set(_.values(case)) == set(expected)
+
+
+@parametrize("case,expected", [((5, lambda x: x * 2), 10), ((None, lambda x: x * 2), None)])
+def test_maybe_apply(case, expected):
+    assert _.maybe_apply(*case) == expected

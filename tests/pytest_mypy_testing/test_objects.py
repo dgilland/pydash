@@ -345,3 +345,10 @@ def test_mypy_values() -> None:
     reveal_type(_.values({'a': 1, 'b': 2, 'c': 3}))  # R: builtins.list[builtins.int]
     reveal_type(_.values([2, 4, 6, 8]))  # R: builtins.list[builtins.int]
     reveal_type(_.values(MyClass()))  # R: builtins.list[Any]
+
+
+@pytest.mark.mypy_testing
+def test_mypy_maybe_apply() -> None:
+    reveal_type(_.maybe_apply(1, lambda x: x + 1))  # R: Union[builtins.int, None]
+    reveal_type(_.maybe_apply(None, lambda x: x + 1))  # R: Union[builtins.int, None]
+    reveal_type(_.maybe_apply("hello", lambda x: x.upper()))  # R: Union[builtins.str, None]
