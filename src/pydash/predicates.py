@@ -111,9 +111,9 @@ def eq(value: t.Any, other: t.Any) -> bool:
 
         >>> eq(None, None)
         True
-        >>> eq(None, '')
+        >>> eq(None, "")
         False
-        >>> eq('a', 'a')
+        >>> eq("a", "a")
         True
         >>> eq(1, str(1))
         False
@@ -137,9 +137,9 @@ def eq_cmp(other: T) -> t.Callable[[T], bool]:
 
         >>> eq_cmp(None)(None)
         True
-        >>> eq_cmp(None)('')
+        >>> eq_cmp(None)("")
         False
-        >>> eq_cmp('a')('a')
+        >>> eq_cmp("a")("a")
         True
         >>> eq_cmp(1)(str(1))
         False
@@ -460,9 +460,9 @@ def is_blank(text: t.Any) -> TypeGuard[str]:
 
     Example:
 
-        >>> is_blank('')
+        >>> is_blank("")
         True
-        >>> is_blank(' \r\n ')
+        >>> is_blank(" \r\n ")
         True
         >>> is_blank(False)
         False
@@ -523,7 +523,7 @@ def is_builtin(value: t.Any) -> bool:
         True
         >>> is_builtin(list)
         True
-        >>> is_builtin('foo')
+        >>> is_builtin("foo")
         False
 
     .. versionadded:: 3.0.0
@@ -554,7 +554,7 @@ def is_date(value: t.Any) -> bool:
         True
         >>> is_date(datetime.datetime.today())
         True
-        >>> is_date('2014-01-01')
+        >>> is_date("2014-01-01")
         False
 
     Note:
@@ -566,7 +566,7 @@ def is_date(value: t.Any) -> bool:
 
 
 def is_decreasing(
-    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]]
+    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]],
 ) -> bool:
     """
     Check if `value` is monotonically decreasing.
@@ -637,7 +637,7 @@ def is_empty(value: t.Any) -> bool:
         True
         >>> is_empty(True)
         True
-        >>> is_empty('foo')
+        >>> is_empty("foo")
         False
         >>> is_empty(None)
         True
@@ -667,7 +667,7 @@ def is_equal(value: t.Any, other: t.Any) -> bool:
 
         >>> is_equal([1, 2, 3], [1, 2, 3])
         True
-        >>> is_equal('a', 'A')
+        >>> is_equal("a", "A")
         False
 
     .. versionadded:: 1.0.0
@@ -693,7 +693,7 @@ def is_equal_cmp(other: T) -> t.Callable[[T], bool]:
 
         >>> is_equal_cmp([1, 2, 3])([1, 2, 3])
         True
-        >>> is_equal_cmp('a')('A')
+        >>> is_equal_cmp("a")("A")
         False
 
     .. versionadded:: 7.1.0
@@ -702,15 +702,18 @@ def is_equal_cmp(other: T) -> t.Callable[[T], bool]:
 
 
 @t.overload
-def is_equal_with(value: T, other: T2, customizer: t.Callable[[T, T2], T3]) -> T3: ...
+def is_equal_with(value: T, other: T2, customizer: t.Callable[[T, T2], T3]) -> T3:
+    ...
 
 
 @t.overload
-def is_equal_with(value: t.Any, other: t.Any, customizer: t.Callable) -> bool: ...
+def is_equal_with(value: t.Any, other: t.Any, customizer: t.Callable) -> bool:
+    ...
 
 
 @t.overload
-def is_equal_with(value: t.Any, other: t.Any, customizer: None) -> bool: ...
+def is_equal_with(value: t.Any, other: t.Any, customizer: None) -> bool:
+    ...
 
 
 def is_equal_with(value, other, customizer):
@@ -732,9 +735,9 @@ def is_equal_with(value, other, customizer):
 
         >>> is_equal_with([1, 2, 3], [1, 2, 3], None)
         True
-        >>> is_equal_with('a', 'A', None)
+        >>> is_equal_with("a", "A", None)
         False
-        >>> is_equal_with('a', 'A', lambda a, b: a.lower() == b.lower())
+        >>> is_equal_with("a", "A", lambda a, b: a.lower() == b.lower())
         True
 
     .. versionadded:: 4.0.0
@@ -783,9 +786,9 @@ def is_equal_with_cmp(other: T, customizer: t.Callable[[T, T], T3]) -> t.Callabl
 
         >>> is_equal_with_cmp([1, 2, 3], None)([1, 2, 3])
         True
-        >>> is_equal_with_cmp('a', None)('A')
+        >>> is_equal_with_cmp("a", None)("A")
         False
-        >>> is_equal_with_cmp('a', lambda a, b: a.lower() == b.lower())('A')
+        >>> is_equal_with_cmp("a", lambda a, b: a.lower() == b.lower())("A")
         True
 
     .. versionadded:: 7.1.0
@@ -888,7 +891,7 @@ def is_function(value: t.Any) -> bool:
 
 
 def is_increasing(
-    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]]
+    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]],
 ) -> bool:
     """
     Check if `value` is monotonically increasing.
@@ -927,7 +930,7 @@ def is_indexed(value: t.Any) -> bool:
 
     Example:
 
-        >>> is_indexed('')
+        >>> is_indexed("")
         True
         >>> is_indexed([])
         True
@@ -1070,7 +1073,7 @@ def is_json(value: t.Any) -> bool:
 
         >>> is_json({})
         False
-        >>> is_json('{}')
+        >>> is_json("{}")
         True
         >>> is_json({"hello": 1, "world": 2})
         False
@@ -1156,11 +1159,11 @@ def is_match_cmp(source: t.Any) -> t.Callable[[t.Any], bool]:
 
     Example:
 
-        >>> is_match_cmp({'b': 2})({'a': 1, 'b': 2})
+        >>> is_match_cmp({"b": 2})({"a": 1, "b": 2})
         True
-        >>> is_match_cmp({'b': 3})({'a': 1, 'b': 2})
+        >>> is_match_cmp({"b": 3})({"a": 1, "b": 2})
         False
-        >>> is_match_cmp({'a': [{'b': [{'d': 4}]}]})({'a': [{'b': [{'c': 3, 'd': 4}]}]})
+        >>> is_match_cmp({"a": [{"b": [{"d": 4}]}]})({"a": [{"b": [{"c": 3, "d": 4}]}]})
         True
 
     .. versionadded:: 7.1.0
@@ -1192,10 +1195,10 @@ def is_match_with(
 
     Example:
 
-        >>> is_greeting = lambda val: val in ('hello', 'hi')
+        >>> is_greeting = lambda val: val in ("hello", "hi")
         >>> customizer = lambda ov, sv: is_greeting(ov) and is_greeting(sv)
-        >>> obj = {'greeting': 'hello'}
-        >>> src = {'greeting': 'hi'}
+        >>> obj = {"greeting": "hello"}
+        >>> src = {"greeting": "hi"}
         >>> is_match_with(obj, src, customizer)
         True
 
@@ -1251,10 +1254,10 @@ def is_match_with_cmp(source: t.Any, customizer: t.Any = None) -> t.Callable[[t.
 
     Example:
 
-        >>> is_greeting = lambda val: val in ('hello', 'hi')
+        >>> is_greeting = lambda val: val in ("hello", "hi")
         >>> customizer = lambda ov, sv: is_greeting(ov) and is_greeting(sv)
-        >>> obj = {'greeting': 'hello'}
-        >>> src = {'greeting': 'hi'}
+        >>> obj = {"greeting": "hello"}
+        >>> src = {"greeting": "hi"}
         >>> is_match_with_cmp(src, customizer)(obj)
         True
 
@@ -1289,7 +1292,9 @@ def is_monotone(value: t.Union[T, t.List[T]], op: t.Callable[[T, T], t.Any]) -> 
         l_value = value  # type: ignore
 
     search = (
-        False for x, y in zip(l_value, islice(l_value, 1, None)) if not op(x, y)  # type: ignore
+        False
+        for x, y in zip(l_value, islice(l_value, 1, None))
+        if not op(x, y)  # type: ignore
     )
 
     return next(search, True)
@@ -1331,7 +1336,7 @@ def is_nan(value: t.Any) -> bool:
 
     Example:
 
-        >>> is_nan('a')
+        >>> is_nan("a")
         True
         >>> is_nan(1)
         False
@@ -1409,7 +1414,7 @@ def is_number(value: t.Any) -> bool:
         True
         >>> is_number(1.0)
         True
-        >>> is_number('a')
+        >>> is_number("a")
         False
 
     .. versionadded:: 1.0.0
@@ -1465,7 +1470,7 @@ def is_odd(value: t.Any) -> bool:
         True
         >>> is_odd(2)
         False
-        >>> is_odd('a')
+        >>> is_odd("a")
         False
 
     .. versionadded:: 2.0.0
@@ -1509,9 +1514,9 @@ def is_reg_exp(value: t.Any) -> TypeGuard[re.Pattern]:
 
     Example:
 
-        >>> is_reg_exp(re.compile(''))
+        >>> is_reg_exp(re.compile(""))
         True
-        >>> is_reg_exp('')
+        >>> is_reg_exp("")
         False
 
     .. versionadded:: 1.1.0
@@ -1545,7 +1550,7 @@ def is_set(value: t.Any) -> bool:
 
 
 def is_strictly_decreasing(
-    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]]
+    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]],
 ) -> bool:
     """
     Check if `value` is strictly decreasing.
@@ -1569,7 +1574,7 @@ def is_strictly_decreasing(
 
 
 def is_strictly_increasing(
-    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]]
+    value: t.Union["SupportsRichComparison", t.List["SupportsRichComparison"]],
 ) -> bool:
     """
     Check if `value` is strictly increasing.
@@ -1604,7 +1609,7 @@ def is_string(value: t.Any) -> TypeGuard[str]:
 
     Example:
 
-        >>> is_string('')
+        >>> is_string("")
         True
         >>> is_string(1)
         False

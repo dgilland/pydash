@@ -77,13 +77,15 @@ T5 = t.TypeVar("T5")
 @t.overload
 def assign(
     obj: t.Mapping[T, T2], *sources: t.Mapping[T3, T4]
-) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]: ...
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
+    ...
 
 
 @t.overload
 def assign(
     obj: t.Union[t.Tuple[T, ...], t.List[T]], *sources: t.Mapping[int, T2]
-) -> t.List[t.Union[T, T2]]: ...
+) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 def assign(obj, *sources) -> t.Union[t.List, t.Dict]:
@@ -103,8 +105,8 @@ def assign(obj, *sources) -> t.Union[t.List, t.Dict]:
     Example:
 
         >>> obj = {}
-        >>> obj2 = assign(obj, {'a': 1}, {'b': 2}, {'c': 3})
-        >>> obj == {'a': 1, 'b': 2, 'c': 3}
+        >>> obj2 = assign(obj, {"a": 1}, {"b": 2}, {"c": 3})
+        >>> obj == {"a": 1, "b": 2, "c": 3}
         True
         >>> obj is obj2
         True
@@ -133,7 +135,8 @@ def assign_with(
     obj: t.Mapping[T, T2],
     *sources: t.Mapping[T3, t.Any],
     customizer: t.Callable[[t.Union[T2, None]], T5],
-) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]: ...
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
 
 
 @t.overload
@@ -141,7 +144,8 @@ def assign_with(
     obj: t.Mapping[T, T2],
     *sources: t.Mapping[T3, T4],
     customizer: t.Callable[[t.Union[T2, None], T4], T5],
-) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]: ...
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
 
 
 @t.overload
@@ -149,7 +153,8 @@ def assign_with(
     obj: t.Mapping[T, T2],
     *sources: t.Mapping[T3, T4],
     customizer: t.Callable[[t.Union[T2, None], T4, T3], T5],
-) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]: ...
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
 
 
 @t.overload
@@ -157,7 +162,8 @@ def assign_with(
     obj: t.Mapping[T, T2],
     *sources: t.Mapping[T3, T4],
     customizer: t.Callable[[t.Union[T2, None], T4, T3, t.Dict[T, T2]], T5],
-) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]: ...
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
 
 
 @t.overload
@@ -165,13 +171,15 @@ def assign_with(
     obj: t.Mapping[T, T2],
     *sources: t.Mapping[T3, T4],
     customizer: t.Callable[[t.Union[T2, None], T4, T3, t.Dict[T, T2], t.Dict[T3, T4]], T5],
-) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]: ...
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T5]]:
+    ...
 
 
 @t.overload
 def assign_with(
     obj: t.Mapping[T, T2], *sources: t.Mapping[T3, T4], customizer: None = None
-) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]: ...
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
+    ...
 
 
 def assign_with(obj, *sources, customizer=None):
@@ -197,8 +205,8 @@ def assign_with(obj, *sources, customizer=None):
     Example:
 
         >>> customizer = lambda o, s: s if o is None else o
-        >>> results = assign_with({'a': 1}, {'b': 2}, {'a': 3}, customizer)
-        >>> results == {'a': 1, 'b': 2}
+        >>> results = assign_with({"a": 1}, {"b": 2}, {"a": 3}, customizer)
+        >>> results == {"a": 1, "b": 2}
         True
 
     .. versionadded:: 4.0.0
@@ -229,12 +237,14 @@ def assign_with(obj, *sources, customizer=None):
 
 @t.overload
 def callables(
-    obj: t.Mapping["SupportsRichComparisonT", t.Any]
-) -> t.List["SupportsRichComparisonT"]: ...
+    obj: t.Mapping["SupportsRichComparisonT", t.Any],
+) -> t.List["SupportsRichComparisonT"]:
+    ...
 
 
 @t.overload
-def callables(obj: t.Iterable[T]) -> t.List[T]: ...
+def callables(obj: t.Iterable[T]) -> t.List[T]:
+    ...
 
 
 def callables(obj) -> t.List:
@@ -249,7 +259,7 @@ def callables(obj) -> t.List:
 
     Example:
 
-        >>> callables({'a': 1, 'b': lambda: 2, 'c': lambda: 3})
+        >>> callables({"a": 1, "b": lambda: 2, "c": lambda: 3})
         ['b', 'c']
 
     .. versionadded:: 1.0.0
@@ -272,13 +282,13 @@ def clone(value: T) -> T:
 
     Example:
 
-        >>> x = {'a': 1, 'b': 2, 'c': {'d': 3}}
+        >>> x = {"a": 1, "b": 2, "c": {"d": 3}}
         >>> y = clone(x)
         >>> y == y
         True
         >>> x is y
         False
-        >>> x['c'] is y['c']
+        >>> x["c"] is y["c"]
         True
 
     Returns:
@@ -295,43 +305,49 @@ def clone(value: T) -> T:
 @t.overload
 def clone_with(
     value: t.Mapping[T, T2], customizer: t.Callable[[T2, T, t.Mapping[T, T2]], T3]
-) -> t.Dict[T, t.Union[T2, T3]]: ...
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
 
 
 @t.overload
 def clone_with(
     value: t.Mapping[T, T2], customizer: t.Callable[[T2, T], T3]
-) -> t.Dict[T, t.Union[T2, T3]]: ...
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
 
 
 @t.overload
 def clone_with(
     value: t.Mapping[T, T2], customizer: t.Callable[[T2], T3]
-) -> t.Dict[T, t.Union[T2, T3]]: ...
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
 
 
 @t.overload
 def clone_with(
     value: t.List[T], customizer: t.Callable[[T, int, t.List[T]], T2]
-) -> t.List[t.Union[T, T2]]: ...
+) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 @t.overload
-def clone_with(
-    value: t.List[T], customizer: t.Callable[[T, int], T2]
-) -> t.List[t.Union[T, T2]]: ...
+def clone_with(value: t.List[T], customizer: t.Callable[[T, int], T2]) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 @t.overload
-def clone_with(value: t.List[T], customizer: t.Callable[[T], T2]) -> t.List[t.Union[T, T2]]: ...
+def clone_with(value: t.List[T], customizer: t.Callable[[T], T2]) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 @t.overload
-def clone_with(value: T, customizer: None = None) -> T: ...
+def clone_with(value: T, customizer: None = None) -> T:
+    ...
 
 
 @t.overload
-def clone_with(value: t.Any, customizer: t.Callable) -> t.Any: ...
+def clone_with(value: t.Any, customizer: t.Callable) -> t.Any:
+    ...
 
 
 def clone_with(value, customizer=None):
@@ -349,10 +365,10 @@ def clone_with(value, customizer=None):
 
     Example:
 
-        >>> x = {'a': 1, 'b': 2, 'c': {'d': 3}}
+        >>> x = {"a": 1, "b": 2, "c": {"d": 3}}
         >>> cbk = lambda v, k: v + 2 if isinstance(v, int) and k else None
         >>> y = clone_with(x, cbk)
-        >>> y == {'a': 3, 'b': 4, 'c': {'d': 3}}
+        >>> y == {"a": 3, "b": 4, "c": {"d": 3}}
         True
     """
     return base_clone(value, customizer=customizer)
@@ -371,13 +387,13 @@ def clone_deep(value: T) -> T:
 
     Example:
 
-        >>> x = {'a': 1, 'b': 2, 'c': {'d': 3}}
+        >>> x = {"a": 1, "b": 2, "c": {"d": 3}}
         >>> y = clone_deep(x)
         >>> y == y
         True
         >>> x is y
         False
-        >>> x['c'] is y['c']
+        >>> x["c"] is y["c"]
         False
 
     .. versionadded:: 1.0.0
@@ -391,45 +407,51 @@ def clone_deep(value: T) -> T:
 @t.overload
 def clone_deep_with(
     value: t.Mapping[T, T2], customizer: t.Callable[[T2, T, t.Mapping[T, T2]], T3]
-) -> t.Dict[T, t.Union[T2, T3]]: ...
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
 
 
 @t.overload
 def clone_deep_with(
     value: t.Mapping[T, T2], customizer: t.Callable[[T2, T], T3]
-) -> t.Dict[T, t.Union[T2, T3]]: ...
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
 
 
 @t.overload
 def clone_deep_with(
     value: t.Mapping[T, T2], customizer: t.Callable[[T2], T3]
-) -> t.Dict[T, t.Union[T2, T3]]: ...
+) -> t.Dict[T, t.Union[T2, T3]]:
+    ...
 
 
 @t.overload
 def clone_deep_with(
     value: t.List[T], customizer: t.Callable[[T, int, t.List[T]], T2]
-) -> t.List[t.Union[T, T2]]: ...
+) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 @t.overload
 def clone_deep_with(
     value: t.List[T], customizer: t.Callable[[T, int], T2]
-) -> t.List[t.Union[T, T2]]: ...
+) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 @t.overload
-def clone_deep_with(
-    value: t.List[T], customizer: t.Callable[[T], T2]
-) -> t.List[t.Union[T, T2]]: ...
+def clone_deep_with(value: t.List[T], customizer: t.Callable[[T], T2]) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 @t.overload
-def clone_deep_with(value: T, customizer: None = None) -> T: ...
+def clone_deep_with(value: T, customizer: None = None) -> T:
+    ...
 
 
 @t.overload
-def clone_deep_with(value: t.Any, customizer: t.Callable) -> t.Any: ...
+def clone_deep_with(value: t.Any, customizer: t.Callable) -> t.Any:
+    ...
 
 
 def clone_deep_with(value, customizer=None):
@@ -465,11 +487,11 @@ def defaults(
 
     Example:
 
-        >>> obj = {'a': 1}
-        >>> obj2 = defaults(obj, {'b': 2}, {'c': 3}, {'a': 4})
+        >>> obj = {"a": 1}
+        >>> obj2 = defaults(obj, {"b": 2}, {"c": 3}, {"a": 4})
         >>> obj is obj2
         True
-        >>> obj == {'a': 1, 'b': 2, 'c': 3}
+        >>> obj == {"a": 1, "b": 2, "c": 3}
         True
 
     .. versionadded:: 1.0.0
@@ -499,11 +521,11 @@ def defaults_deep(
 
     Example:
 
-        >>> obj = {'a': {'b': 1}}
-        >>> obj2 = defaults_deep(obj, {'a': {'b': 2, 'c': 3}})
+        >>> obj = {"a": {"b": 1}}
+        >>> obj2 = defaults_deep(obj, {"a": {"b": 2, "c": 3}})
         >>> obj is obj2
         True
-        >>> obj == {'a': {'b': 1, 'c': 3}}
+        >>> obj == {"a": {"b": 1, "c": 3}}
         True
 
     .. versionadded:: 3.3.0
@@ -519,39 +541,47 @@ def defaults_deep(
 @t.overload
 def find_key(
     obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
-) -> t.Union[T, None]: ...
+) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
-def find_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]) -> t.Union[T, None]: ...
+def find_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
-def find_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2], t.Any]) -> t.Union[T, None]: ...
+def find_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2], t.Any]) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
-def find_key(obj: t.Mapping[T, t.Any], predicate: None = None) -> t.Union[T, None]: ...
+def find_key(obj: t.Mapping[T, t.Any], predicate: None = None) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
 def find_key(
     collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]
-) -> t.Union[int, None]: ...
+) -> t.Union[int, None]:
+    ...
 
 
 @t.overload
 def find_key(
     collection: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]
-) -> t.Union[int, None]: ...
+) -> t.Union[int, None]:
+    ...
 
 
 @t.overload
-def find_key(collection: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.Union[int, None]: ...
+def find_key(collection: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.Union[int, None]:
+    ...
 
 
 @t.overload
-def find_key(collection: t.Iterable[t.Any], iteratee: None = None) -> t.Union[int, None]: ...
+def find_key(collection: t.Iterable[t.Any], iteratee: None = None) -> t.Union[int, None]:
+    ...
 
 
 def find_key(obj, predicate=None):
@@ -568,7 +598,7 @@ def find_key(obj, predicate=None):
 
     Example:
 
-        >>> find_key({'a': 1, 'b': 2, 'c': 3}, lambda x: x == 1)
+        >>> find_key({"a": 1, "b": 2, "c": 3}, lambda x: x == 1)
         'a'
         >>> find_key([1, 2, 3, 4], lambda x: x == 1)
         0
@@ -583,45 +613,49 @@ def find_key(obj, predicate=None):
 @t.overload
 def find_last_key(
     obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
-) -> t.Union[T, None]: ...
+) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
-def find_last_key(
-    obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]
-) -> t.Union[T, None]: ...
+def find_last_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
-def find_last_key(
-    obj: t.Mapping[T, T2], predicate: t.Callable[[T2], t.Any]
-) -> t.Union[T, None]: ...
+def find_last_key(obj: t.Mapping[T, T2], predicate: t.Callable[[T2], t.Any]) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
-def find_last_key(obj: t.Mapping[T, t.Any], predicate: None = None) -> t.Union[T, None]: ...
+def find_last_key(obj: t.Mapping[T, t.Any], predicate: None = None) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
 def find_last_key(
     collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]
-) -> t.Union[int, None]: ...
+) -> t.Union[int, None]:
+    ...
 
 
 @t.overload
 def find_last_key(
     collection: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]
-) -> t.Union[int, None]: ...
+) -> t.Union[int, None]:
+    ...
 
 
 @t.overload
 def find_last_key(
     collection: t.Iterable[T], iteratee: t.Callable[[T], t.Any]
-) -> t.Union[int, None]: ...
+) -> t.Union[int, None]:
+    ...
 
 
 @t.overload
-def find_last_key(collection: t.Iterable[t.Any], iteratee: None = None) -> t.Union[int, None]: ...
+def find_last_key(collection: t.Iterable[t.Any], iteratee: None = None) -> t.Union[int, None]:
+    ...
 
 
 def find_last_key(obj, predicate=None):
@@ -638,7 +672,7 @@ def find_last_key(obj, predicate=None):
 
     Example:
 
-        >>> find_last_key({'a': 1, 'b': 2, 'c': 3}, lambda x: x == 1)
+        >>> find_last_key({"a": 1, "b": 2, "c": 3}, lambda x: x == 1)
         'a'
         >>> find_last_key([1, 2, 3, 1], lambda x: x == 1)
         3
@@ -656,35 +690,43 @@ def find_last_key(obj, predicate=None):
 @t.overload
 def for_in(
     obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
-) -> t.Dict[T, T2]: ...
+) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def for_in(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]: ...
+def for_in(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def for_in(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]: ...
+def for_in(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def for_in(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]: ...
+def for_in(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]: ...
+def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]: ...
+def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]: ...
+def for_in(obj: t.Sequence[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def for_in(obj: t.Sequence[T], iteratee: None = None) -> t.List[T]: ...
+def for_in(obj: t.Sequence[T], iteratee: None = None) -> t.List[T]:
+    ...
 
 
 def for_in(obj, iteratee=None):
@@ -702,11 +744,12 @@ def for_in(obj, iteratee=None):
     Example:
 
         >>> obj = {}
-        >>> def cb(v, k): obj[k] = v
-        >>> results = for_in({'a': 1, 'b': 2, 'c': 3}, cb)
-        >>> results == {'a': 1, 'b': 2, 'c': 3}
+        >>> def cb(v, k):
+        ...     obj[k] = v
+        >>> results = for_in({"a": 1, "b": 2, "c": 3}, cb)
+        >>> results == {"a": 1, "b": 2, "c": 3}
         True
-        >>> obj == {'a': 1, 'b': 2, 'c': 3}
+        >>> obj == {"a": 1, "b": 2, "c": 3}
         True
 
     .. versionadded:: 1.0.0
@@ -722,37 +765,43 @@ def for_in(obj, iteratee=None):
 @t.overload
 def for_in_right(
     obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], t.Any]
-) -> t.Dict[T, T2]: ...
+) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def for_in_right(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]: ...
+def for_in_right(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def for_in_right(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]: ...
+def for_in_right(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def for_in_right(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]: ...
+def for_in_right(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def for_in_right(
-    obj: t.Sequence[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]
-) -> t.List[T]: ...
+def for_in_right(obj: t.Sequence[T], iteratee: t.Callable[[T, int, t.List[T]], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def for_in_right(obj: t.Sequence[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]: ...
+def for_in_right(obj: t.Sequence[T], iteratee: t.Callable[[T, int], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def for_in_right(obj: t.Sequence[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]: ...
+def for_in_right(obj: t.Sequence[T], iteratee: t.Callable[[T], t.Any]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def for_in_right(obj: t.Sequence[T], iteratee: None = None) -> t.List[T]: ...
+def for_in_right(obj: t.Sequence[T], iteratee: None = None) -> t.List[T]:
+    ...
 
 
 def for_in_right(obj, iteratee=None):
@@ -768,11 +817,12 @@ def for_in_right(obj, iteratee=None):
 
     Example:
 
-        >>> data = {'product': 1}
-        >>> def cb(v): data['product'] *= v
+        >>> data = {"product": 1}
+        >>> def cb(v):
+        ...     data["product"] *= v
         >>> for_in_right([1, 2, 3, 4], cb)
         [1, 2, 3, 4]
-        >>> data['product'] == 24
+        >>> data["product"] == 24
         True
 
     .. versionadded:: 1.0.0
@@ -786,15 +836,18 @@ def for_in_right(obj, iteratee=None):
 
 
 @t.overload
-def get(obj: t.List[T], path: int, default: T2) -> t.Union[T, T2]: ...
+def get(obj: t.List[T], path: int, default: T2) -> t.Union[T, T2]:
+    ...
 
 
 @t.overload
-def get(obj: t.List[T], path: int, default: None = None) -> t.Union[T, None]: ...
+def get(obj: t.List[T], path: int, default: None = None) -> t.Union[T, None]:
+    ...
 
 
 @t.overload
-def get(obj: t.Any, path: PathT, default: t.Any = None) -> t.Any: ...
+def get(obj: t.Any, path: PathT, default: t.Any = None) -> t.Any:
+    ...
 
 
 def get(obj: t.Any, path: PathT, default: t.Any = None) -> t.Any:
@@ -812,17 +865,17 @@ def get(obj: t.Any, path: PathT, default: t.Any = None) -> t.Any:
 
     Example:
 
-        >>> get({}, 'a.b.c') is None
+        >>> get({}, "a.b.c") is None
         True
-        >>> get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c[1]')
+        >>> get({"a": {"b": {"c": [1, 2, 3, 4]}}}, "a.b.c[1]")
         2
-        >>> get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1')
+        >>> get({"a": {"b": {"c": [1, 2, 3, 4]}}}, "a.b.c.1")
         2
-        >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
+        >>> get({"a": {"b": [0, {"c": [1, 2]}]}}, "a.b.1.c.1")
         2
-        >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, ['a', 'b', 1, 'c', 1])
+        >>> get({"a": {"b": [0, {"c": [1, 2]}]}}, ["a", "b", 1, "c", 1])
         2
-        >>> get({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2') is None
+        >>> get({"a": {"b": [0, {"c": [1, 2]}]}}, "a.b.1.c.2") is None
         True
 
     .. versionadded:: 2.0.0
@@ -883,13 +936,13 @@ def has(obj: t.Any, path: PathT) -> bool:
 
         >>> has([1, 2, 3], 1)
         True
-        >>> has({'a': 1, 'b': 2}, 'b')
+        >>> has({"a": 1, "b": 2}, "b")
         True
-        >>> has({'a': 1, 'b': 2}, 'c')
+        >>> has({"a": 1, "b": 2}, "c")
         False
-        >>> has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.1')
+        >>> has({"a": {"b": [0, {"c": [1, 2]}]}}, "a.b.1.c.1")
         True
-        >>> has({'a': {'b': [0, {'c': [1, 2]}]}}, 'a.b.1.c.2')
+        >>> has({"a": {"b": [0, {"c": [1, 2]}]}}, "a.b.1.c.2")
         False
 
     .. versionadded:: 1.0.0
@@ -915,11 +968,13 @@ def has(obj: t.Any, path: PathT) -> bool:
 
 
 @t.overload
-def invert(obj: t.Mapping[T, T2]) -> t.Dict[T2, T]: ...
+def invert(obj: t.Mapping[T, T2]) -> t.Dict[T2, T]:
+    ...
 
 
 @t.overload
-def invert(obj: t.Iterable[T]) -> t.Dict[T, int]: ...
+def invert(obj: t.Iterable[T]) -> t.Dict[T, int]:
+    ...
 
 
 def invert(obj) -> t.Dict:
@@ -934,8 +989,8 @@ def invert(obj) -> t.Dict:
 
     Example:
 
-        >>> results = invert({'a': 1, 'b': 2, 'c': 3})
-        >>> results == {1: 'a', 2: 'b', 3: 'c'}
+        >>> results = invert({"a": 1, "b": 2, "c": 3})
+        >>> results == {1: "a", 2: "b", 3: "c"}
         True
 
     Note:
@@ -953,19 +1008,23 @@ def invert(obj) -> t.Dict:
 
 
 @t.overload
-def invert_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T3, t.List[T]]: ...
+def invert_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T3, t.List[T]]:
+    ...
 
 
 @t.overload
-def invert_by(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T2, t.List[T]]: ...
+def invert_by(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T2, t.List[T]]:
+    ...
 
 
 @t.overload
-def invert_by(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, t.List[int]]: ...
+def invert_by(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, t.List[int]]:
+    ...
 
 
 @t.overload
-def invert_by(obj: t.Iterable[T], iteratee: None = None) -> t.Dict[T, t.List[int]]: ...
+def invert_by(obj: t.Iterable[T], iteratee: None = None) -> t.Dict[T, t.List[int]]:
+    ...
 
 
 def invert_by(obj, iteratee=None):
@@ -984,16 +1043,16 @@ def invert_by(obj, iteratee=None):
 
     Example:
 
-        >>> obj = {'a': 1, 'b': 2, 'c': 1}
+        >>> obj = {"a": 1, "b": 2, "c": 1}
         >>> results = invert_by(obj)  # {1: ['a', 'c'], 2: ['b']}
-        >>> set(results[1]) == set(['a', 'c'])
+        >>> set(results[1]) == set(["a", "c"])
         True
-        >>> set(results[2]) == set(['b'])
+        >>> set(results[2]) == set(["b"])
         True
-        >>> results2 = invert_by(obj, lambda value: 'group' + str(value))
-        >>> results2['group1'] == results[1]
+        >>> results2 = invert_by(obj, lambda value: "group" + str(value))
+        >>> results2["group1"] == results[1]
         True
-        >>> results2['group2'] == results[2]
+        >>> results2["group2"] == results[2]
         True
 
     Note:
@@ -1025,8 +1084,8 @@ def invoke(obj: t.Any, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
 
     Example:
 
-        >>> obj = {'a': [{'b': {'c': [1, 2, 3, 4]}}]}
-        >>> invoke(obj, 'a[0].b.c.pop', 1)
+        >>> obj = {"a": [{"b": {"c": [1, 2, 3, 4]}}]}
+        >>> invoke(obj, "a[0].b.c.pop", 1)
         2
         >>> obj
         {'a': [{'b': {'c': [1, 3, 4]}}]}
@@ -1049,11 +1108,13 @@ def invoke(obj: t.Any, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
 
 
 @t.overload
-def keys(obj: t.Iterable[T]) -> t.List[T]: ...
+def keys(obj: t.Iterable[T]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def keys(obj: t.Any) -> t.List: ...
+def keys(obj: t.Any) -> t.List:
+    ...
 
 
 def keys(obj):
@@ -1070,7 +1131,7 @@ def keys(obj):
 
         >>> keys([1, 2, 3])
         [0, 1, 2]
-        >>> set(keys({'a': 1, 'b': 2, 'c': 3})) == set(['a', 'b', 'c'])
+        >>> set(keys({"a": 1, "b": 2, "c": 3})) == set(["a", "b", "c"])
         True
 
     .. versionadded:: 1.0.0
@@ -1087,33 +1148,38 @@ def keys(obj):
 @t.overload
 def map_keys(
     obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
-) -> t.Dict[T3, T2]: ...
+) -> t.Dict[T3, T2]:
+    ...
 
 
 @t.overload
-def map_keys(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T3, T2]: ...
+def map_keys(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T3, T2]:
+    ...
 
 
 @t.overload
-def map_keys(obj: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T3, T2]: ...
+def map_keys(obj: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T3, T2]:
+    ...
 
 
 @t.overload
-def map_keys(
-    obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]
-) -> t.Dict[T2, T]: ...
+def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.Dict[T2, T]:
+    ...
 
 
 @t.overload
-def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T2, T]: ...
+def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T2, T]:
+    ...
 
 
 @t.overload
-def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, T]: ...
+def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, T]:
+    ...
 
 
 @t.overload
-def map_keys(obj: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict: ...
+def map_keys(obj: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict:
+    ...
 
 
 def map_keys(obj, iteratee=None):
@@ -1132,8 +1198,8 @@ def map_keys(obj, iteratee=None):
     Example:
 
         >>> callback = lambda value, key: key * 2
-        >>> results = map_keys({'a': 1, 'b': 2, 'c': 3}, callback)
-        >>> results == {'aa': 1, 'bb': 2, 'cc': 3}
+        >>> results = map_keys({"a": 1, "b": 2, "c": 3}, callback)
+        >>> results == {"aa": 1, "bb": 2, "cc": 3}
         True
 
     .. versionadded:: 3.3.0
@@ -1144,33 +1210,38 @@ def map_keys(obj, iteratee=None):
 @t.overload
 def map_values(
     obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], T3]
-) -> t.Dict[T, T3]: ...
+) -> t.Dict[T, T3]:
+    ...
 
 
 @t.overload
-def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T, T3]: ...
+def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T, T3]:
+    ...
 
 
 @t.overload
-def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T, T3]: ...
+def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T, T3]:
+    ...
 
 
 @t.overload
-def map_values(
-    obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]
-) -> t.Dict[T, T2]: ...
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T, T2]: ...
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T, T2]: ...
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def map_values(obj: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict: ...
+def map_values(obj: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict:
+    ...
 
 
 def map_values(obj, iteratee=None):
@@ -1188,11 +1259,11 @@ def map_values(obj, iteratee=None):
 
     Example:
 
-        >>> results = map_values({'a': 1, 'b': 2, 'c': 3}, lambda x: x * 2)
-        >>> results == {'a': 2, 'b': 4, 'c': 6}
+        >>> results = map_values({"a": 1, "b": 2, "c": 3}, lambda x: x * 2)
+        >>> results == {"a": 2, "b": 4, "c": 6}
         True
-        >>> results = map_values({'a': 1, 'b': {'d': 4}, 'c': 3}, {'d': 4})
-        >>> results == {'a': False, 'b': True, 'c': False}
+        >>> results = map_values({"a": 1, "b": {"d": 4}, "c": 3}, {"d": 4})
+        >>> results == {"a": False, "b": True, "c": False}
         True
 
     .. versionadded:: 1.0.0
@@ -1221,12 +1292,12 @@ def map_values_deep(
 
     Example:
 
-        >>> x = {'a': 1, 'b': {'c': 2}}
+        >>> x = {"a": 1, "b": {"c": 2}}
         >>> y = map_values_deep(x, lambda val: val * 2)
-        >>> y == {'a': 2, 'b': {'c': 4}}
+        >>> y == {"a": 2, "b": {"c": 4}}
         True
         >>> z = map_values_deep(x, lambda val, props: props)
-        >>> z == {'a': ['a'], 'b': {'c': ['b', 'c']}}
+        >>> z == {"a": ["a"], "b": {"c": ["b", "c"]}}
         True
 
     .. versionadded: 2.2.0
@@ -1252,11 +1323,13 @@ def map_values_deep(
 @t.overload
 def merge(
     obj: t.Mapping[T, T2], *sources: t.Mapping[T3, T4]
-) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]: ...
+) -> t.Dict[t.Union[T, T3], t.Union[T2, T4]]:
+    ...
 
 
 @t.overload
-def merge(obj: t.Sequence[T], *sources: t.Sequence[T2]) -> t.List[t.Union[T, T2]]: ...
+def merge(obj: t.Sequence[T], *sources: t.Sequence[T2]) -> t.List[t.Union[T, T2]]:
+    ...
 
 
 def merge(obj, *sources):
@@ -1276,9 +1349,9 @@ def merge(obj, *sources):
 
     Example:
 
-        >>> obj = {'a': 2}
-        >>> obj2 = merge(obj, {'a': 1}, {'b': 2, 'c': 3}, {'d': 4})
-        >>> obj2 == {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+        >>> obj = {"a": 2}
+        >>> obj2 = merge(obj, {"a": 1}, {"b": 2, "c": 3}, {"d": 4})
+        >>> obj2 == {"a": 1, "b": 2, "c": 3, "d": 4}
         True
         >>> obj is obj2
         True
@@ -1325,10 +1398,10 @@ def merge_with(obj: t.Any, *sources: t.Any, **kwargs: t.Any) -> t.Any:
     Example:
 
         >>> cbk = lambda obj_val, src_val: obj_val + src_val
-        >>> obj1 = {'a': [1], 'b': [2]}
-        >>> obj2 = {'a': [3], 'b': [4]}
+        >>> obj1 = {"a": [1], "b": [2]}
+        >>> obj2 = {"a": [3], "b": [4]}
         >>> res = merge_with(obj1, obj2, cbk)
-        >>> obj1 == {'a': [1, 3], 'b': [2, 4]}
+        >>> obj1 == {"a": [1, 3], "b": [2, 4]}
         True
 
     .. versionadded:: 4.0.0
@@ -1385,15 +1458,18 @@ def _merge_with(obj, *sources, **kwargs):
 
 
 @t.overload
-def omit(obj: t.Mapping[T, T2], *properties: PathT) -> t.Dict[T, T2]: ...
+def omit(obj: t.Mapping[T, T2], *properties: PathT) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def omit(obj: t.Iterable[T], *properties: PathT) -> t.Dict[int, T]: ...
+def omit(obj: t.Iterable[T], *properties: PathT) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
-def omit(obj: t.Any, *properties: PathT) -> t.Dict: ...
+def omit(obj: t.Any, *properties: PathT) -> t.Dict:
+    ...
 
 
 def omit(obj, *properties):
@@ -1410,13 +1486,13 @@ def omit(obj, *properties):
 
     Example:
 
-        >>> omit({'a': 1, 'b': 2, 'c': 3}, 'b', 'c') == {'a': 1}
+        >>> omit({"a": 1, "b": 2, "c": 3}, "b", "c") == {"a": 1}
         True
-        >>> omit({'a': 1, 'b': 2, 'c': 3 }, ['a', 'c']) == {'b': 2}
+        >>> omit({"a": 1, "b": 2, "c": 3}, ["a", "c"]) == {"b": 2}
         True
         >>> omit([1, 2, 3, 4], 0, 3) == {1: 2, 2: 3}
         True
-        >>> omit({'a': {'b': {'c': 'd'}}}, 'a.b.c') == {'a': {'b': {}}}
+        >>> omit({"a": {"b": {"c": "d"}}}, "a.b.c") == {"a": {"b": {}}}
         True
 
     .. versionadded:: 1.0.0
@@ -1431,31 +1507,38 @@ def omit(obj, *properties):
 
 
 @t.overload
-def omit_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]: ...
+def omit_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def omit_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]: ...
+def omit_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def omit_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]: ...
+def omit_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.Dict[int, T]: ...
+def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
-def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.Dict[int, T]: ...
+def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
-def omit_by(obj: t.List[T], iteratee: None = None) -> t.Dict[int, T]: ...
+def omit_by(obj: t.List[T], iteratee: None = None) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
-def omit_by(obj: t.Any, iteratee: t.Union[t.Callable, None] = None) -> t.Dict: ...
+def omit_by(obj: t.Any, iteratee: t.Union[t.Callable, None] = None) -> t.Dict:
+    ...
 
 
 def omit_by(obj, iteratee=None):
@@ -1473,7 +1556,7 @@ def omit_by(obj, iteratee=None):
 
     Example:
 
-        >>> omit_by({'a': 1, 'b': '2', 'c': 3}, lambda v: isinstance(v, int))
+        >>> omit_by({"a": 1, "b": "2", "c": 3}, lambda v: isinstance(v, int))
         {'b': '2'}
 
     .. versionadded:: 4.0.0
@@ -1521,11 +1604,11 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
 
     Example:
 
-        >>> parse_int('5')
+        >>> parse_int("5")
         5
-        >>> parse_int('12', 8)
+        >>> parse_int("12", 8)
         10
-        >>> parse_int('x') is None
+        >>> parse_int("x") is None
         True
 
     .. versionadded:: 1.0.0
@@ -1554,15 +1637,18 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
 
 
 @t.overload
-def pick(obj: t.Mapping[T, T2], *properties: PathT) -> t.Dict[T, T2]: ...
+def pick(obj: t.Mapping[T, T2], *properties: PathT) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def pick(obj: t.Union[t.Tuple[T, ...], t.List[T]], *properties: PathT) -> t.Dict[int, T]: ...
+def pick(obj: t.Union[t.Tuple[T, ...], t.List[T]], *properties: PathT) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
-def pick(obj: t.Any, *properties: PathT) -> t.Dict: ...
+def pick(obj: t.Any, *properties: PathT) -> t.Dict:
+    ...
 
 
 def pick(obj, *properties):
@@ -1578,7 +1664,7 @@ def pick(obj, *properties):
 
     Example:
 
-        >>> pick({'a': 1, 'b': 2, 'c': 3}, 'a', 'b') == {'a': 1, 'b': 2}
+        >>> pick({"a": 1, "b": 2, "c": 3}, "a", "b") == {"a": 1, "b": 2}
         True
 
     .. versionadded:: 1.0.0
@@ -1590,35 +1676,42 @@ def pick(obj, *properties):
 
 
 @t.overload
-def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]: ...
+def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], t.Any]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]: ...
+def pick_by(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], t.Any]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def pick_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]: ...
+def pick_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
 def pick_by(
     obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: t.Callable[[T, int], t.Any]
-) -> t.Dict[int, T]: ...
+) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
 def pick_by(
     obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: t.Callable[[T], t.Any]
-) -> t.Dict[int, T]: ...
+) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
-def pick_by(obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: None = None) -> t.Dict[int, T]: ...
+def pick_by(obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: None = None) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
-def pick_by(obj: t.Any, iteratee: t.Union[t.Callable, None] = None) -> t.Dict: ...
+def pick_by(obj: t.Any, iteratee: t.Union[t.Callable, None] = None) -> t.Dict:
+    ...
 
 
 def pick_by(obj, iteratee=None):
@@ -1635,8 +1728,8 @@ def pick_by(obj, iteratee=None):
 
     Example:
 
-        >>> obj = {'a': 1, 'b': '2', 'c': 3 }
-        >>> pick_by(obj, lambda v: isinstance(v, int)) == {'a': 1, 'c': 3}
+        >>> obj = {"a": 1, "b": "2", "c": 3}
+        >>> pick_by(obj, lambda v: isinstance(v, int)) == {"a": 1, "c": 3}
         True
 
     .. versionadded:: 4.0.0
@@ -1683,8 +1776,8 @@ def rename_keys(obj: t.Dict[T, T2], key_map: t.Dict[t.Any, T3]) -> t.Dict[t.Unio
 
     Example:
 
-        >>> obj = rename_keys({'a': 1, 'b': 2, 'c': 3}, {'a': 'A', 'b': 'B'})
-        >>> obj == {'A': 1, 'B': 2, 'c': 3}
+        >>> obj = rename_keys({"a": 1, "b": 2, "c": 3}, {"a": "A", "b": "B"})
+        >>> obj == {"A": 1, "B": 2, "c": 3}
         True
 
     .. versionadded:: 2.0.0
@@ -1710,13 +1803,13 @@ def set_(obj: T, path: PathT, value: t.Any) -> T:
 
     Example:
 
-        >>> set_({}, 'a.b.c', 1)
+        >>> set_({}, "a.b.c", 1)
         {'a': {'b': {'c': 1}}}
-        >>> set_({}, 'a.0.c', 1)
+        >>> set_({}, "a.0.c", 1)
         {'a': {'0': {'c': 1}}}
-        >>> set_([1, 2], '[2][0]', 1)
+        >>> set_([1, 2], "[2][0]", 1)
         [1, 2, [1]]
-        >>> set_({}, 'a.b[0].c', 1)
+        >>> set_({}, "a.b[0].c", 1)
         {'a': {'b': [{'c': 1}]}}
 
     .. versionadded:: 2.2.0
@@ -1754,7 +1847,7 @@ def set_with(obj: T, path: PathT, value: t.Any, customizer: t.Union[t.Callable, 
 
     Example:
 
-        >>> set_with({}, '[0][1]', 'a', lambda: {})
+        >>> set_with({}, "[0][1]", "a", lambda: {})
         {0: {1: 'a'}}
 
     .. versionadded:: 4.0.0
@@ -1790,15 +1883,15 @@ def to_boolean(
 
     Example:
 
-        >>> to_boolean('true')
+        >>> to_boolean("true")
         True
-        >>> to_boolean('1')
+        >>> to_boolean("1")
         True
-        >>> to_boolean('false')
+        >>> to_boolean("false")
         False
-        >>> to_boolean('0')
+        >>> to_boolean("0")
         False
-        >>> assert to_boolean('a') is None
+        >>> assert to_boolean("a") is None
 
     .. versionadded:: 3.0.0
     """
@@ -1824,15 +1917,18 @@ def to_boolean(
 
 
 @t.overload
-def to_dict(obj: t.Mapping[T, T2]) -> t.Dict[T, T2]: ...
+def to_dict(obj: t.Mapping[T, T2]) -> t.Dict[T, T2]:
+    ...
 
 
 @t.overload
-def to_dict(obj: t.Iterable[T]) -> t.Dict[int, T]: ...
+def to_dict(obj: t.Iterable[T]) -> t.Dict[int, T]:
+    ...
 
 
 @t.overload
-def to_dict(obj: t.Any) -> t.Dict: ...
+def to_dict(obj: t.Any) -> t.Dict:
+    ...
 
 
 def to_dict(obj):
@@ -1847,7 +1943,7 @@ def to_dict(obj):
 
     Example:
 
-        >>> obj = {'a': 1, 'b': 2}
+        >>> obj = {"a": 1, "b": 2}
         >>> obj2 = to_dict(obj)
         >>> obj2 == obj
         True
@@ -1883,11 +1979,11 @@ def to_integer(obj: t.Any) -> int:
 
         >>> to_integer(3.2)
         3
-        >>> to_integer('3.2')
+        >>> to_integer("3.2")
         3
-        >>> to_integer('3.9')
+        >>> to_integer("3.9")
         3
-        >>> to_integer('invalid')
+        >>> to_integer("invalid")
         0
 
     .. versionadded:: 4.0.0
@@ -1903,15 +1999,18 @@ def to_integer(obj: t.Any) -> int:
 
 
 @t.overload
-def to_list(obj: t.Dict[t.Any, T], split_strings: bool = True) -> t.List[T]: ...
+def to_list(obj: t.Dict[t.Any, T], split_strings: bool = True) -> t.List[T]:
+    ...
 
 
 @t.overload
-def to_list(obj: t.Iterable[T], split_strings: bool = True) -> t.List[T]: ...
+def to_list(obj: t.Iterable[T], split_strings: bool = True) -> t.List[T]:
+    ...
 
 
 @t.overload
-def to_list(obj: T, split_strings: bool = True) -> t.List[T]: ...
+def to_list(obj: T, split_strings: bool = True) -> t.List[T]:
+    ...
 
 
 def to_list(obj, split_strings=True):
@@ -1928,7 +2027,7 @@ def to_list(obj, split_strings=True):
 
     Example:
 
-        >>> results = to_list({'a': 1, 'b': 2, 'c': 3})
+        >>> results = to_list({"a": 1, "b": 2, "c": 3})
         >>> assert set(results) == set([1, 2, 3])
 
         >>> to_list((1, 2, 3, 4))
@@ -1943,10 +2042,10 @@ def to_list(obj, split_strings=True):
         >>> to_list(a for a in [1, 2, 3])
         [1, 2, 3]
 
-        >>> to_list('cat')
+        >>> to_list("cat")
         ['c', 'a', 't']
 
-        >>> to_list('cat', split_strings=False)
+        >>> to_list("cat", split_strings=False)
         ['cat']
 
     .. versionadded:: 1.0.0
@@ -1988,9 +2087,9 @@ def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
 
     Example:
 
-        >>> to_number('1234.5678')
+        >>> to_number("1234.5678")
         1235.0
-        >>> to_number('1234.5678', 4)
+        >>> to_number("1234.5678", 4)
         1234.5678
         >>> to_number(1, 2)
         1.0
@@ -2015,15 +2114,18 @@ def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
 
 
 @t.overload
-def to_pairs(obj: t.Mapping[T, T2]) -> t.List[t.List[t.Union[T, T2]]]: ...
+def to_pairs(obj: t.Mapping[T, T2]) -> t.List[t.List[t.Union[T, T2]]]:
+    ...
 
 
 @t.overload
-def to_pairs(obj: t.Iterable[T]) -> t.List[t.List[t.Union[int, T]]]: ...
+def to_pairs(obj: t.Iterable[T]) -> t.List[t.List[t.Union[int, T]]]:
+    ...
 
 
 @t.overload
-def to_pairs(obj: t.Any) -> t.List: ...
+def to_pairs(obj: t.Any) -> t.List:
+    ...
 
 
 def to_pairs(obj):
@@ -2041,7 +2143,7 @@ def to_pairs(obj):
 
         >>> to_pairs([1, 2, 3, 4])
         [[0, 1], [1, 2], [2, 3], [3, 4]]
-        >>> to_pairs({'a': 1})
+        >>> to_pairs({"a": 1})
         [['a', 1]]
 
     .. versionadded:: 1.0.0
@@ -2064,13 +2166,13 @@ def to_string(obj: t.Any) -> str:
 
     Example:
 
-        >>> to_string(1) == '1'
+        >>> to_string(1) == "1"
         True
-        >>> to_string(None) == ''
+        >>> to_string(None) == ""
         True
-        >>> to_string([1, 2, 3]) == '[1, 2, 3]'
+        >>> to_string([1, 2, 3]) == "[1, 2, 3]"
         True
-        >>> to_string('a') == 'a'
+        >>> to_string("a") == "a"
         True
 
     .. versionadded:: 2.0.0
@@ -2090,49 +2192,56 @@ def to_string(obj: t.Any) -> str:
 @t.overload
 def transform(
     obj: t.Mapping[T, T2], iteratee: t.Callable[[T3, T2, T, t.Dict[T, T2]], t.Any], accumulator: T3
-) -> T3: ...
+) -> T3:
+    ...
 
 
 @t.overload
 def transform(
     obj: t.Mapping[T, T2], iteratee: t.Callable[[T3, T2, T], t.Any], accumulator: T3
-) -> T3: ...
+) -> T3:
+    ...
 
 
 @t.overload
 def transform(
     obj: t.Mapping[t.Any, T2], iteratee: t.Callable[[T3, T2], t.Any], accumulator: T3
-) -> T3: ...
+) -> T3:
+    ...
 
 
 @t.overload
 def transform(
     obj: t.Mapping[t.Any, t.Any], iteratee: t.Callable[[T3], t.Any], accumulator: T3
-) -> T3: ...
+) -> T3:
+    ...
 
 
 @t.overload
 def transform(
     obj: t.Iterable[T], iteratee: t.Callable[[T3, T, int, t.List[T]], t.Any], accumulator: T3
-) -> T3: ...
+) -> T3:
+    ...
 
 
 @t.overload
-def transform(
-    obj: t.Iterable[T], iteratee: t.Callable[[T3, T, int], t.Any], accumulator: T3
-) -> T3: ...
+def transform(obj: t.Iterable[T], iteratee: t.Callable[[T3, T, int], t.Any], accumulator: T3) -> T3:
+    ...
 
 
 @t.overload
-def transform(obj: t.Iterable[T], iteratee: t.Callable[[T3, T], t.Any], accumulator: T3) -> T3: ...
+def transform(obj: t.Iterable[T], iteratee: t.Callable[[T3, T], t.Any], accumulator: T3) -> T3:
+    ...
 
 
 @t.overload
-def transform(obj: t.Iterable[t.Any], iteratee: t.Callable[[T3], t.Any], accumulator: T3) -> T3: ...
+def transform(obj: t.Iterable[t.Any], iteratee: t.Callable[[T3], t.Any], accumulator: T3) -> T3:
+    ...
 
 
 @t.overload
-def transform(obj: t.Any, iteratee: t.Any = None, accumulator: t.Any = None) -> t.Any: ...
+def transform(obj: t.Any, iteratee: t.Any = None, accumulator: t.Any = None) -> t.Any:
+    ...
 
 
 def transform(obj, iteratee=None, accumulator=None):
@@ -2182,7 +2291,8 @@ def update(
     obj: t.Dict[t.Any, T2],
     path: PathT,
     updater: t.Callable[[T2], t.Any],
-) -> t.Dict: ...
+) -> t.Dict:
+    ...
 
 
 @t.overload
@@ -2190,7 +2300,8 @@ def update(
     obj: t.List[T],
     path: PathT,
     updater: t.Callable[[T], t.Any],
-) -> t.List: ...
+) -> t.List:
+    ...
 
 
 @t.overload
@@ -2198,7 +2309,8 @@ def update(
     obj: T,
     path: PathT,
     updater: t.Callable,
-) -> T: ...
+) -> T:
+    ...
 
 
 def update(obj, path, updater):
@@ -2220,7 +2332,7 @@ def update(obj, path, updater):
 
     Example:
 
-        >>> update({}, ['a', 'b'], lambda value: value)
+        >>> update({}, ["a", "b"], lambda value: value)
         {'a': {'b': None}}
         >>> update([], [0, 0], lambda value: 1)
         [[1]]
@@ -2236,7 +2348,8 @@ def update_with(
     path: PathT,
     updater: t.Callable[[T2], t.Any],
     customizer: t.Union[t.Callable, None],
-) -> t.Dict: ...
+) -> t.Dict:
+    ...
 
 
 @t.overload
@@ -2245,7 +2358,8 @@ def update_with(
     path: PathT,
     updater: t.Callable[[T], t.Any],
     customizer: t.Union[t.Callable, None] = None,
-) -> t.List: ...
+) -> t.List:
+    ...
 
 
 @t.overload
@@ -2254,10 +2368,11 @@ def update_with(
     path: PathT,
     updater: t.Callable,
     customizer: t.Union[t.Callable, None] = None,
-) -> T: ...
+) -> T:
+    ...
 
 
-def update_with(obj, path, updater, customizer=None):  # noqa: C901
+def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
     """
     This method is like :func:`update` except that it accepts customizer which is invoked to produce
     the objects of path. If customizer returns ``None``, path creation is handled by the method
@@ -2277,7 +2392,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
 
     Example:
 
-        >>> update_with({}, '[0][1]', lambda: 'a', lambda: {})
+        >>> update_with({}, "[0][1]", lambda: "a", lambda: {})
         {0: {1: 'a'}}
 
     .. versionadded:: 4.0.0
@@ -2327,7 +2442,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: C901
                 _failed = True
 
             if _failed:
-                raise TypeError(f"Unable to update object at index {key!r}. {exc}")
+                raise TypeError(f"Unable to update object at index {key!r}. {exc}") from exc
 
     value = base_get(target, last_key, default=None)
     base_set(target, last_key, callit(updater, value))
@@ -2354,12 +2469,12 @@ def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
 
     Example:
 
-        >>> obj = {'a': [{'b': {'c': 7}}]}
-        >>> unset(obj, 'a[0].b.c')
+        >>> obj = {"a": [{"b": {"c": 7}}]}
+        >>> unset(obj, "a[0].b.c")
         True
         >>> obj
         {'a': [{'b': {}}]}
-        >>> unset(obj, 'a[0].b.c')
+        >>> unset(obj, "a[0].b.c")
         False
     """
     tokens = to_path_tokens(path)
@@ -2405,15 +2520,18 @@ def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
 
 
 @t.overload
-def values(obj: t.Mapping[t.Any, T2]) -> t.List[T2]: ...
+def values(obj: t.Mapping[t.Any, T2]) -> t.List[T2]:
+    ...
 
 
 @t.overload
-def values(obj: t.Iterable[T]) -> t.List[T]: ...
+def values(obj: t.Iterable[T]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def values(obj: t.Any) -> t.List: ...
+def values(obj: t.Any) -> t.List:
+    ...
 
 
 def values(obj):
@@ -2428,7 +2546,7 @@ def values(obj):
 
     Example:
 
-        >>> results = values({'a': 1, 'b': 2, 'c': 3})
+        >>> results = values({"a": 1, "b": 2, "c": 3})
         >>> set(results) == set([1, 2, 3])
         True
         >>> values([2, 4, 6, 8])

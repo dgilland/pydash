@@ -247,13 +247,13 @@ def test_mypy_rename_keys() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_set_() -> None:
-    reveal_type(_.set_({}, 'a.b.c', 1))  # R: builtins.dict[<nothing>, <nothing>]
+    reveal_type(_.set_({}, 'a.b.c', 1))  # R: builtins.dict[Never, Never]
     reveal_type(_.set_(MyClass(), "x", 10))  # R: tests.pytest_mypy_testing.test_objects.MyClass
 
 
 @pytest.mark.mypy_testing
 def test_mypy_set_with() -> None:
-    reveal_type(_.set_with({}, '[0][1]', 'a', lambda: {}))  # R: builtins.dict[<nothing>, <nothing>]
+    reveal_type(_.set_with({}, '[0][1]', 'a', lambda: {}))  # R: builtins.dict[Never, Never]
     reveal_type(_.set_with(MyClass(), "x", lambda: 10))  # R: tests.pytest_mypy_testing.test_objects.MyClass
 
 

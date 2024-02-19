@@ -94,7 +94,7 @@ def attempt(func: t.Callable[P, T], *args: "P.args", **kwargs: "P.kwargs") -> t.
 
     Example:
 
-        >>> results = attempt(lambda x: x/0, 1)
+        >>> results = attempt(lambda x: x / 0, 1)
         >>> assert isinstance(results, ZeroDivisionError)
 
     .. versionadded:: 1.1.0
@@ -112,13 +112,15 @@ def attempt(func: t.Callable[P, T], *args: "P.args", **kwargs: "P.kwargs") -> t.
 def cond(
     pairs: t.List[t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]]],
     *extra_pairs: t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]],
-) -> t.Callable[P, T]: ...
+) -> t.Callable[P, T]:
+    ...
 
 
 @t.overload
 def cond(
     pairs: t.List[t.List[t.Callable[P, t.Any]]], *extra_pairs: t.List[t.Callable[P, t.Any]]
-) -> t.Callable[P, t.Any]: ...
+) -> t.Callable[P, t.Any]:
+    ...
 
 
 def cond(pairs, *extra_pairs):
@@ -177,11 +179,13 @@ def cond(pairs, *extra_pairs):
 
 
 @t.overload
-def conforms(source: t.Dict[T, t.Callable[[T2], t.Any]]) -> t.Callable[[t.Dict[T, T2]], bool]: ...
+def conforms(source: t.Dict[T, t.Callable[[T2], t.Any]]) -> t.Callable[[t.Dict[T, T2]], bool]:
+    ...
 
 
 @t.overload
-def conforms(source: t.List[t.Callable[[T], t.Any]]) -> t.Callable[[t.List[T]], bool]: ...
+def conforms(source: t.List[t.Callable[[T], t.Any]]) -> t.Callable[[t.List[T]], bool]:
+    ...
 
 
 def conforms(source: t.Union[t.List, t.Dict]) -> t.Callable:
@@ -198,10 +202,10 @@ def conforms(source: t.Union[t.List, t.Dict]) -> t.Callable:
 
     Example:
 
-        >>> func = conforms({'b': lambda n: n > 1})
-        >>> func({'b': 2})
+        >>> func = conforms({"b": lambda n: n > 1})
+        >>> func({"b": 2})
         True
-        >>> func({'b': 0})
+        >>> func({"b": 0})
         False
         >>> func = conforms([lambda n: n > 1, lambda n: n == 0])
         >>> func([2, 0])
@@ -222,11 +226,13 @@ def conforms(source: t.Union[t.List, t.Dict]) -> t.Callable:
 
 
 @t.overload
-def conforms_to(obj: t.Dict[T, T2], source: t.Dict[T, t.Callable[[T2], t.Any]]) -> bool: ...
+def conforms_to(obj: t.Dict[T, T2], source: t.Dict[T, t.Callable[[T2], t.Any]]) -> bool:
+    ...
 
 
 @t.overload
-def conforms_to(obj: t.List[T], source: t.List[t.Callable[[T], t.Any]]) -> bool: ...
+def conforms_to(obj: t.List[T], source: t.List[t.Callable[[T], t.Any]]) -> bool:
+    ...
 
 
 def conforms_to(obj, source):
@@ -240,9 +246,9 @@ def conforms_to(obj, source):
 
     Example:
 
-        >>> conforms_to({'b': 2}, {'b': lambda n: n > 1})
+        >>> conforms_to({"b": 2}, {"b": lambda n: n > 1})
         True
-        >>> conforms_to({'b': 0}, {'b': lambda n: n > 1})
+        >>> conforms_to({"b": 0}, {"b": lambda n: n > 1})
         False
         >>> conforms_to([2, 0], [lambda n: n > 1, lambda n: n == 0])
         True
@@ -302,7 +308,8 @@ def default_to(value: t.Union[T, None], default_value: T2) -> t.Union[T, T2]:
 
 
 @t.overload
-def default_to_any(value: None, *default_values: None) -> None: ...
+def default_to_any(value: None, *default_values: None) -> None:
+    ...
 
 
 @t.overload
@@ -310,7 +317,8 @@ def default_to_any(
     value: t.Union[T, None],
     default_value1: None,
     default_value2: T2,
-) -> t.Union[T, T2]: ...
+) -> t.Union[T, T2]:
+    ...
 
 
 @t.overload
@@ -319,7 +327,8 @@ def default_to_any(
     default_value1: None,
     default_value2: None,
     default_value3: T2,
-) -> t.Union[T, T2]: ...
+) -> t.Union[T, T2]:
+    ...
 
 
 @t.overload
@@ -329,7 +338,8 @@ def default_to_any(
     default_value2: None,
     default_value3: None,
     default_value4: T2,
-) -> t.Union[T, T2]: ...
+) -> t.Union[T, T2]:
+    ...
 
 
 @t.overload
@@ -340,11 +350,13 @@ def default_to_any(
     default_value3: None,
     default_value4: None,
     default_value5: T2,
-) -> t.Union[T, T2]: ...
+) -> t.Union[T, T2]:
+    ...
 
 
 @t.overload
-def default_to_any(value: t.Union[T, None], *default_values: T2) -> t.Union[T, T2]: ...
+def default_to_any(value: t.Union[T, None], *default_values: T2) -> t.Union[T, T2]:
+    ...
 
 
 def default_to_any(value, *default_values):
@@ -379,11 +391,13 @@ def default_to_any(value, *default_values):
 
 
 @t.overload
-def identity(arg: T, *args: t.Any) -> T: ...
+def identity(arg: T, *args: t.Any) -> T:
+    ...
 
 
 @t.overload
-def identity(arg: None = None, *args: t.Any) -> None: ...
+def identity(arg: None = None, *args: t.Any) -> None:
+    ...
 
 
 def identity(arg=None, *args):
@@ -411,11 +425,13 @@ def identity(arg=None, *args):
 
 
 @t.overload
-def iteratee(func: t.Callable[P, T]) -> t.Callable[P, T]: ...
+def iteratee(func: t.Callable[P, T]) -> t.Callable[P, T]:
+    ...
 
 
 @t.overload
-def iteratee(func: t.Any) -> t.Callable: ...
+def iteratee(func: t.Any) -> t.Callable:
+    ...
 
 
 def iteratee(func):
@@ -433,26 +449,26 @@ def iteratee(func):
 
     Example:
 
-        >>> get_data = iteratee('data')
-        >>> get_data({'data': [1, 2, 3]})
+        >>> get_data = iteratee("data")
+        >>> get_data({"data": [1, 2, 3]})
         [1, 2, 3]
-        >>> is_active = iteratee({'active': True})
-        >>> is_active({'active': True})
+        >>> is_active = iteratee({"active": True})
+        >>> is_active({"active": True})
         True
-        >>> is_active({'active': 0})
+        >>> is_active({"active": 0})
         False
-        >>> iteratee(['a', 5])({'a': 5})
+        >>> iteratee(["a", 5])({"a": 5})
         True
-        >>> iteratee(['a.b'])({'a.b': 5})
+        >>> iteratee(["a.b"])({"a.b": 5})
         5
-        >>> iteratee('a.b')({'a': {'b': 5}})
+        >>> iteratee("a.b")({"a": {"b": 5}})
         5
-        >>> iteratee(('a', ['c', 'd', 'e']))({'a': 1, 'c': {'d': {'e': 3}}})
+        >>> iteratee(("a", ["c", "d", "e"]))({"a": 1, "c": {"d": {"e": 3}}})
         [1, 3]
         >>> iteratee(lambda a, b: a + b)(1, 2)
         3
         >>> ident = iteratee(None)
-        >>> ident('a')
+        >>> ident("a")
         'a'
         >>> ident(1, 2, 3)
         1
@@ -516,11 +532,11 @@ def matches(source: t.Any) -> t.Callable[[t.Any], bool]:
 
     Example:
 
-        >>> matches({'a': {'b': 2}})({'a': {'b': 2, 'c':3}})
+        >>> matches({"a": {"b": 2}})({"a": {"b": 2, "c": 3}})
         True
-        >>> matches({'a': 1})({'b': 2, 'a': 1})
+        >>> matches({"a": 1})({"b": 2, "a": 1})
         True
-        >>> matches({'a': 1})({'b': 2, 'a': 2})
+        >>> matches({"a": 1})({"b": 2, "a": 2})
         False
 
     .. versionadded:: 1.0.0
@@ -545,11 +561,11 @@ def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:
 
     Example:
 
-        >>> matches_property('a', 1)({'a': 1, 'b': 2})
+        >>> matches_property("a", 1)({"a": 1, "b": 2})
         True
         >>> matches_property(0, 1)([1, 2, 3])
         True
-        >>> matches_property('a', 2)({'a': 1, 'b': 2})
+        >>> matches_property("a", 2)({"a": 1, "b": 2})
         False
 
     .. versionadded:: 3.1.0
@@ -561,17 +577,20 @@ def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:
 class MemoizedFunc(Protocol[P, T, T2]):
     cache: t.Dict[T2, T]
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T: ...  # pragma: no cover
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
+        ...  # pragma: no cover
 
 
 @t.overload
-def memoize(func: t.Callable[P, T], resolver: None = None) -> MemoizedFunc[P, T, str]: ...
+def memoize(func: t.Callable[P, T], resolver: None = None) -> MemoizedFunc[P, T, str]:
+    ...
 
 
 @t.overload
 def memoize(
     func: t.Callable[P, T], resolver: t.Union[t.Callable[P, T2], None] = None
-) -> MemoizedFunc[P, T, T2]: ...
+) -> MemoizedFunc[P, T, T2]:
+    ...
 
 
 def memoize(func, resolver=None):
@@ -593,11 +612,11 @@ def memoize(func, resolver=None):
         >>> ident = memoize(identity)
         >>> ident(1)
         1
-        >>> ident.cache['(1,){}'] == 1
+        >>> ident.cache["(1,){}"] == 1
         True
         >>> ident(1, 2, 3)
         1
-        >>> ident.cache['(1, 2, 3){}'] == 1
+        >>> ident.cache["(1, 2, 3){}"] == 1
         True
 
     .. versionadded:: 1.0.0
@@ -634,11 +653,11 @@ def method(path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Callable[..., t.Any]
 
     Example:
 
-        >>> obj = {'a': {'b': [None, lambda x: x]}}
-        >>> echo = method('a.b.1')
+        >>> obj = {"a": {"b": [None, lambda x: x]}}
+        >>> echo = method("a.b.1")
         >>> echo(obj, 1) == 1
         True
-        >>> echo(obj, 'one') == 'one'
+        >>> echo(obj, "one") == "one"
         True
 
     .. versionadded:: 3.3.0
@@ -666,11 +685,11 @@ def method_of(obj: t.Any, *args: t.Any, **kwargs: t.Any) -> t.Callable[..., t.An
 
     Example:
 
-        >>> obj = {'a': {'b': [None, lambda x: x]}}
+        >>> obj = {"a": {"b": [None, lambda x: x]}}
         >>> dispatch = method_of(obj)
-        >>> dispatch('a.b.1', 1) == 1
+        >>> dispatch("a.b.1", 1) == 1
         True
-        >>> dispatch('a.b.1', 'one') == 'one'
+        >>> dispatch("a.b.1", "one") == "one"
         True
 
     .. versionadded:: 3.3.0
@@ -834,8 +853,8 @@ def property_(path: PathT) -> t.Callable[[t.Any], t.Any]:
 
     Example:
 
-        >>> get_data = property_('data')
-        >>> get_data({'data': 1})
+        >>> get_data = property_("data")
+        >>> get_data({"data": 1})
         1
         >>> get_data({}) is None
         True
@@ -863,8 +882,8 @@ def properties(*paths: t.Any) -> t.Callable[[t.Any], t.Any]:
 
     Example:
 
-        >>> getter = properties('a', 'b', ['c', 'd', 'e'])
-        >>> getter({'a': 1, 'b': 2, 'c': {'d': {'e': 3}}})
+        >>> getter = properties("a", "b", ["c", "d", "e"])
+        >>> getter({"a": 1, "b": 2, "c": {"d": {"e": 3}}})
         [1, 2, 3]
 
     .. versionadded:: 4.1.0
@@ -885,12 +904,12 @@ def property_of(obj: t.Any) -> t.Callable[[PathT], t.Any]:
 
     Example:
 
-        >>> getter = property_of({'a': 1, 'b': 2, 'c': 3})
-        >>> getter('a')
+        >>> getter = property_of({"a": 1, "b": 2, "c": 3})
+        >>> getter("a")
         1
-        >>> getter('b')
+        >>> getter("b")
         2
-        >>> getter('x') is None
+        >>> getter("x") is None
         True
 
     .. versionadded:: 3.0.0
@@ -902,25 +921,30 @@ def property_of(obj: t.Any) -> t.Callable[[PathT], t.Any]:
 
 
 @t.overload
-def random(start: int = 0, stop: int = 1, *, floating: Literal[False] = False) -> int: ...
+def random(start: int = 0, stop: int = 1, *, floating: Literal[False] = False) -> int:
+    ...
 
 
 @t.overload
-def random(start: float, stop: int = 1, floating: bool = False) -> float: ...
+def random(start: float, stop: int = 1, floating: bool = False) -> float:
+    ...
 
 
 @t.overload
-def random(start: int = 0, *, stop: float, floating: bool = False) -> float: ...
+def random(start: int = 0, *, stop: float, floating: bool = False) -> float:
+    ...
 
 
 @t.overload
-def random(start: float, stop: float, floating: bool = False) -> float: ...
+def random(start: float, stop: float, floating: bool = False) -> float:
+    ...
 
 
 @t.overload
 def random(
     start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, *, floating: Literal[True]
-) -> float: ...
+) -> float:
+    ...
 
 
 def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floating: bool = False):
@@ -964,11 +988,13 @@ def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floati
 
 
 @t.overload
-def range_(stop: int) -> t.Generator[int, None, None]: ...
+def range_(stop: int) -> t.Generator[int, None, None]:
+    ...
 
 
 @t.overload
-def range_(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]: ...
+def range_(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]:
+    ...
 
 
 def range_(*args):
@@ -1011,11 +1037,13 @@ def range_(*args):
 
 
 @t.overload
-def range_right(stop: int) -> t.Generator[int, None, None]: ...
+def range_right(stop: int) -> t.Generator[int, None, None]:
+    ...
 
 
 @t.overload
-def range_right(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]: ...
+def range_right(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]:
+    ...
 
 
 def range_right(*args):
@@ -1047,15 +1075,18 @@ def range_right(*args):
 
 # TODO
 @t.overload
-def result(obj: None, key: t.Any, default: None = None) -> None: ...
+def result(obj: None, key: t.Any, default: None = None) -> None:
+    ...
 
 
 @t.overload
-def result(obj: None, key: t.Any, default: T) -> T: ...
+def result(obj: None, key: t.Any, default: T) -> T:
+    ...
 
 
 @t.overload
-def result(obj: t.Any, key: t.Any, default: t.Any = None) -> t.Any: ...
+def result(obj: t.Any, key: t.Any, default: t.Any = None) -> t.Any:
+    ...
 
 
 def result(obj, key, default=None):
@@ -1074,13 +1105,13 @@ def result(obj, key, default=None):
 
     Example:
 
-        >>> result({'a': 1, 'b': lambda: 2}, 'a')
+        >>> result({"a": 1, "b": lambda: 2}, "a")
         1
-        >>> result({'a': 1, 'b': lambda: 2}, 'b')
+        >>> result({"a": 1, "b": lambda: 2}, "b")
         2
-        >>> result({'a': 1, 'b': lambda: 2}, 'c') is None
+        >>> result({"a": 1, "b": lambda: 2}, "c") is None
         True
-        >>> result({'a': 1, 'b': lambda: 2}, 'c', default=False)
+        >>> result({"a": 1, "b": lambda: 2}, "c", default=False)
         False
 
     .. versionadded:: 1.0.0
@@ -1099,7 +1130,7 @@ def result(obj, key, default=None):
     return ret
 
 
-def retry(  # noqa: C901
+def retry(
     attempts: int = 3,
     delay: t.Union[int, float] = 0.5,
     max_delay: t.Union[int, float] = 150.0,
@@ -1141,10 +1172,12 @@ def retry(  # noqa: C901
 
         >>> @retry(attempts=3, delay=0)
         ... def do_something():
-        ...     print('something')
-        ...     raise Exception('something went wrong')
-        >>> try: do_something()
-        ... except Exception: print('caught something')
+        ...     print("something")
+        ...     raise Exception("something went wrong")
+        >>> try:
+        ...     do_something()
+        ... except Exception:
+        ...     print("caught something")
         something
         something
         something
@@ -1311,11 +1344,13 @@ def stub_true() -> Literal[True]:
 
 
 @t.overload
-def times(n: int, iteratee: t.Callable[..., T]) -> t.List[T]: ...
+def times(n: int, iteratee: t.Callable[..., T]) -> t.List[T]:
+    ...
 
 
 @t.overload
-def times(n: int, iteratee: None = None) -> t.List[int]: ...
+def times(n: int, iteratee: None = None) -> t.List[int]:
+    ...
 
 
 def times(n: int, iteratee=None):
@@ -1366,11 +1401,11 @@ def to_path(value: PathT) -> t.List[t.Hashable]:
 
     Example:
 
-        >>> to_path('a.b.c')
+        >>> to_path("a.b.c")
         ['a', 'b', 'c']
-        >>> to_path('a[0].b.c')
+        >>> to_path("a[0].b.c")
         ['a', 0, 'b', 'c']
-        >>> to_path('a[0][1][2].b.c')
+        >>> to_path("a[0][1][2].b.c")
         ['a', 0, 1, 2, 'b', 'c']
 
     .. versionadded:: 4.0.0
@@ -1396,7 +1431,7 @@ def unique_id(prefix: t.Union[str, None] = None) -> str:
 
         >>> unique_id()
         '1'
-        >>> unique_id('id_')
+        >>> unique_id("id_")
         'id_2'
         >>> unique_id()
         '3'
@@ -1404,7 +1439,7 @@ def unique_id(prefix: t.Union[str, None] = None) -> str:
     .. versionadded:: 1.0.0
     """
     # pylint: disable=global-statement
-    global ID_COUNTER
+    global ID_COUNTER  # noqa: PLW0603
     ID_COUNTER += 1
 
     if prefix is None:

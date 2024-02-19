@@ -40,7 +40,7 @@ def test_chaining_invalid_method():
     raised = False
 
     try:
-        _.chain([]).foobar
+        _.chain([]).foobar  # noqa: B018
     except _.InvalidMethod:
         raised = True
 

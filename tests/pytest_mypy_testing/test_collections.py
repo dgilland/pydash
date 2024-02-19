@@ -1,3 +1,5 @@
+import typing as t
+
 import pytest
 
 import pydash as _
@@ -48,7 +50,10 @@ def test_mypy_find_last() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_flat_map() -> None:
-    reveal_type(_.flat_map([1, 2], lambda n: [[n, n]]))  # R: builtins.list[builtins.list[builtins.int]]
+    def listify(n: int) -> t.List[t.List[int]]:
+        return [[n, n]]
+
+    reveal_type(_.flat_map([1, 2], listify))  # R: builtins.list[builtins.list[builtins.int]]
 
 
 @pytest.mark.mypy_testing

@@ -13,7 +13,8 @@ import pydash as pyd
 
 #: Singleton object that differentiates between an explicit ``None`` value and an unset value.
 #: As a class so it has its own type
-class Unset: ...
+class Unset:
+    ...
 
 
 UNSET = Unset()
@@ -259,10 +260,7 @@ def parse_iteratee(iteratee_keyword, *args, **kwargs):
     last_arg = args[-1]
 
     if iteratee is None and (
-        callable(last_arg)
-        or isinstance(last_arg, str)
-        or isinstance(last_arg, dict)
-        or last_arg is None
+        callable(last_arg) or isinstance(last_arg, (dict, str)) or last_arg is None
     ):
         iteratee = last_arg
         args = args[:-1]

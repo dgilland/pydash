@@ -1,23 +1,144 @@
 [build-system]
-requires = [
-    "setuptools>=46.4",
-    "wheel",
-]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "pydash"
+dynamic = ["version"]
+authors = [{ name = "Derrick Gilland", email = "dgilland@gmail.com" }]
+description = 'The kitchen sink of Python utility libraries for doing "stuff" in a functional way. Based on the Lo-Dash Javascript library.'
+readme = "README.rst"
+license = { file = "LICENSE.rst" }
+keywords = ["pydash", "utility", "functional", "lodash", "underscore"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: MIT License",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = ["typing-extensions>3.10,!=4.6.0"]
 
-[tool.black]
+[project.urls]
+Homepage = "https://github.com/dgilland/pydash"
+Documentation = "https://pydash.readthedocs.org"
+Repository = "https://github.com/dgilland/pydash"
+Issues = "https://github.com/dgilland/pydash/issues"
+Changelog = "https://github.com/dgilland/pydash/blob/develop/CHANGELOG.rst"
+
+[project.optional-dependencies]
+dev = [
+  "build",
+  "coverage",
+  "ruff",
+  "furo",
+  "invoke",
+  "mypy",
+  "pytest",
+  "pytest-mypy-testing",
+  "pytest-cov",
+  "sphinx",
+  "tox",
+  "twine",
+  "wheel",
+  "sphinx-autodoc-typehints",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "pydash.__version__" }
+
+[tool.distutils.bdist_wheel]
+python-tag = "py3"
+
+[tool.ruff]
+src = ["src"]
+extend-exclude = [".cache", "tests/pytest_mypy_testing"]
+extend-include = ["*.pyi"]
 line-length = 100
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.git
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | \.cache
-  | _build
-  | build
-  | dist
-)/
-'''
+# target the lowest supported version to avoid introducing unsupported syntax
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+  # flake8
+  "F",
+  "E",
+  "W",
+  # flake8-bugbear
+  "B",
+  # pylint
+  "PL",
+]
+# F811 - redefinition of unused `name` from line `N`
+# E203 - whitespace before ':'
+# E701 - multiple statements on one line (colon)
+# PLR2004 - Magic value used in comparison, consider replacing `...` with a constant variable
+# PLW2901 - `...` loop variable `...` overwritten by assignment target
+# PLR0913 - Too many arguments in function definition
+ignore = ["F811", "E203", "E701", "PLR2004", "PLW2901", "PLR0913"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+# Exceptions for the type stub
+# F403 - `from module import *` used; unable to detect undefined names
+# F405 - name may be undefined, or defined from star imports
+# E501 - line too long
+"*.pyi" = ["F403", "F405", "E501"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+combine-as-imports = true
+force-sort-within-sections = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.mypy]
+mypy_path = ["src"]
+python_version = "3.8"
+exclude = [
+    "tests/pytest_mypy_testing",
+]
+show_column_numbers = true
+show_error_context = false
+ignore_missing_imports = true
+warn_return_any = false
+strict_optional = true
+warn_no_return = true
+warn_redundant_casts = false
+warn_unused_ignores = false
+
+[tool.pytest.ini_options]
+addopts = [
+    "--verbose",
+    "--doctest-modules",
+    "--no-cov-on-fail",
+    "--cov-fail-under=100",
+    "--cov-report=term-missing",
+    "--cov-report=xml:build/coverage/coverage.xml",
+    "--cov-report=html:build/coverage",
+    "--junitxml=build/testresults/junit.xml",
+]
+
+[tool.coverage.run]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/_compat.py",
+    "*/types.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "@t.overload"
+]
