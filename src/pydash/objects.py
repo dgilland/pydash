@@ -2114,12 +2114,12 @@ def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
 
 
 @t.overload
-def to_pairs(obj: t.Mapping[T, T2]) -> t.List[t.List[t.Union[T, T2]]]:
+def to_pairs(obj: t.Mapping[T, T2]) -> t.List[t.Tuple[T, T2]]:
     ...
 
 
 @t.overload
-def to_pairs(obj: t.Iterable[T]) -> t.List[t.List[t.Union[int, T]]]:
+def to_pairs(obj: t.Iterable[T]) -> t.List[t.Tuple[int, T]]:
     ...
 
 
@@ -2130,28 +2130,31 @@ def to_pairs(obj: t.Any) -> t.List:
 
 def to_pairs(obj):
     """
-    Creates a two-dimensional list of an object's key-value pairs, i.e., ``[[key1, value1], [key2,
-    value2]]``.
+    Creates a list of tuples of an object's key-value pairs, i.e.,
+    ``[(key1, value1), (key2, value2)]``.
 
     Args:
         obj: Object to process.
 
     Returns:
-        Two dimensional list of object's key-value pairs.
+        List of tuples of the object's key-value pairs.
 
     Example:
 
         >>> to_pairs([1, 2, 3, 4])
-        [[0, 1], [1, 2], [2, 3], [3, 4]]
+        [(0, 1), (1, 2), (2, 3), (3, 4)]
         >>> to_pairs({"a": 1})
-        [['a', 1]]
+        [('a', 1)]
 
     .. versionadded:: 1.0.0
 
     .. versionchanged:: 4.0.0
         Renamed from ``pairs`` to ``to_pairs``.
+
+    .. versionchanged:: 8.0.0
+        Returning list of tuples instead of list of lists.
     """
-    return [[key, value] for key, value in iterator(obj)]
+    return [(key, value) for key, value in iterator(obj)]
 
 
 def to_string(obj: t.Any) -> str:

@@ -298,8 +298,8 @@ def test_mypy_to_number() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_to_pairs() -> None:
-    reveal_type(_.to_pairs([1, 2, 3, 4]))  # R: builtins.list[builtins.list[builtins.int]]
-    reveal_type(_.to_pairs({'a': 1}))  # R: builtins.list[builtins.list[Union[builtins.str, builtins.int]]]
+    reveal_type(_.to_pairs([1, 2, 3, 4]))  # R: builtins.list[Tuple[builtins.int, builtins.int]]
+    reveal_type(_.to_pairs({'a': 1}))  # R: builtins.list[Tuple[builtins.str, builtins.int]]
     reveal_type(_.to_pairs(MyClass()))  # R: builtins.list[Any]
 
 

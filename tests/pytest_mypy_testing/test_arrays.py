@@ -408,8 +408,7 @@ def test_mypy_unshift() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_unzip() -> None:
-    reveal_type(_.unzip([[1, 4, 7], [2, 5, 8], [3, 6, 9]]))  # R: builtins.list[builtins.list[builtins.int]]
-    reveal_type(_.unzip([(1, 4, 7), (2, 5, 8), (3, 6, 9)]))  # R: builtins.list[builtins.list[builtins.int]]
+    reveal_type(_.unzip([(1, 4, 7), (2, 5, 8), (3, 6, 9)]))  # R: builtins.list[Tuple[builtins.int, builtins.int, builtins.int]]
 
 
 @pytest.mark.mypy_testing
@@ -447,7 +446,8 @@ def test_mypy_xor_with() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_zip_() -> None:
-    reveal_type(_.zip_([1, 2, 3], [4, 5, 6], [7, 8, 9]))  # R: builtins.list[builtins.list[builtins.int]]
+    reveal_type(_.zip_([1, 2, 3], [4, 5, 6], [7, 8, 9]))  # R: builtins.list[Tuple[builtins.int, builtins.int, builtins.int]]
+    reveal_type(_.zip_([1, 2, 3], ["one", "two", "three"]))  # R: builtins.list[Tuple[builtins.int, builtins.str]]
 
 
 @pytest.mark.mypy_testing
@@ -469,5 +469,10 @@ def test_mypy_zip_with() -> None:
     def add(x: int, y: int) -> int:
         return x + y
 
-    reveal_type(_.zip_with([1, 2], [10, 20], [100, 200], add))  # R: builtins.list[Union[builtins.list[builtins.int], builtins.int]]
+    reveal_type(_.zip_with([1, 2], [10, 20], add))  # R: builtins.list[builtins.int]
     reveal_type(_.zip_with([1, 2], [10, 20], [100, 200], iteratee=add))  # R: builtins.list[builtins.int]
+
+    def more_hello(s: str, n: int) -> str:
+        return s * n
+
+    reveal_type(_.zip_with(["hello", "hello", "hello"], [1, 2, 3], iteratee=more_hello))  # R: builtins.list[builtins.str]

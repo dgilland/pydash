@@ -562,23 +562,49 @@ class AllFuncs:
     def unshift(self: "Chain[t.List[T]]", *items: T2) -> "Chain[t.List[t.Union[T, T2]]]":
         return self._wrap(pyd.unshift)(*items)
 
-    def unzip(self: "Chain[t.Iterable[t.Iterable[T]]]") -> "Chain[t.List[t.List[T]]]":
+    @t.overload
+    def unzip(self: "Chain[t.Iterable[t.Tuple[T, T2]]]") -> "Chain[t.List[t.Tuple[T, T2]]]": ...
+    @t.overload
+    def unzip(
+        self: "Chain[t.Iterable[t.Tuple[T, T2, T3]]]",
+    ) -> "Chain[t.List[t.Tuple[T, T2, T3]]]": ...
+    @t.overload
+    def unzip(
+        self: "Chain[t.Iterable[t.Tuple[T, T2, T3, T4]]]",
+    ) -> "Chain[t.List[t.Tuple[T, T2, T3, T4]]]": ...
+    @t.overload
+    def unzip(
+        self: "Chain[t.Iterable[t.Tuple[T, T2, T3, T4, T5]]]",
+    ) -> "Chain[t.List[t.Tuple[T, T2, T3, T4, T5]]]": ...
+    @t.overload
+    def unzip(
+        self: "Chain[t.Iterable[t.Iterable[t.Any]]]",
+    ) -> "Chain[t.List[t.Tuple[t.Any, ...]]]": ...
+    def unzip(self):
         return self._wrap(pyd.unzip)()
 
     @t.overload
     def unzip_with(
-        self: "Chain[t.Iterable[t.Iterable[T]]]",
+        self: "Chain[t.Iterable[t.Tuple[T, T2]]]",
         iteratee: t.Union[
-            t.Callable[[T, T, int, t.List[T]], T2],
-            t.Callable[[T, T, int], T2],
-            t.Callable[[T, T], T2],
-            t.Callable[[T], T2],
+            t.Callable[[t.Union[T, T2, T3], t.Union[T, T2], int], T3],
+            t.Callable[[t.Union[T, T2, T3], t.Union[T, T2]], T3],
+            t.Callable[[t.Union[T, T2, T3]], T3],
         ],
-    ) -> "Chain[t.List[T2]]": ...
+    ) -> "Chain[t.List[T3]]": ...
+    @t.overload
+    def unzip_with(
+        self: "Chain[t.Iterable[t.Iterable[t.Any]]]",
+        iteratee: t.Union[
+            t.Callable[[t.Any, t.Any, int], T3],
+            t.Callable[[t.Any, t.Any], T3],
+            t.Callable[[t.Any], T3],
+        ],
+    ) -> "Chain[t.List[T3]]": ...
     @t.overload
     def unzip_with(
         self: "Chain[t.Iterable[t.Iterable[T]]]", iteratee: None = None
-    ) -> "Chain[t.List[t.List[T]]]": ...
+    ) -> "Chain[t.List[t.Tuple[T]]]": ...
     def unzip_with(self, iteratee=None):
         return self._wrap(pyd.unzip_with)(iteratee)
 
@@ -612,7 +638,11 @@ class AllFuncs:
     def xor_with(self, *lists, **kwargs):
         return self._wrap(pyd.xor_with)(*lists, **kwargs)
 
-    def zip_(self: "Chain[t.Iterable[T]]", *arrays: t.Iterable[T]) -> "Chain[t.List[t.List[T]]]":
+    @t.overload
+    def zip_(
+        self: "Chain[t.Iterable[t.Any]]", *arrays: t.Iterable[t.Any]
+    ) -> "Chain[t.List[t.Tuple[t.Any, ...]]]": ...
+    def zip_(self, *arrays):
         return self._wrap(pyd.zip_)(*arrays)
 
     zip = zip_
@@ -638,29 +668,32 @@ class AllFuncs:
     @t.overload
     def zip_with(
         self: "Chain[t.Iterable[T]]",
-        *arrays: t.Iterable[T],
+        array2: t.Iterable[T2],
+        *,
         iteratee: t.Union[
-            t.Callable[[T, T, int, t.List[T]], T2],
-            t.Callable[[T, T, int], T2],
-            t.Callable[[T, T], T2],
-            t.Callable[[T], T2],
+            t.Callable[[T, T2, int], T3], t.Callable[[T, T2], T3], t.Callable[[T], T3]
+        ],
+    ) -> "Chain[t.List[T3]]": ...
+    @t.overload
+    def zip_with(
+        self: "Chain[t.Iterable[t.Any]]",
+        *arrays: t.Iterable[t.Any],
+        iteratee: t.Union[
+            t.Callable[[t.Any, t.Any, int], T2],
+            t.Callable[[t.Any, t.Any], T2],
+            t.Callable[[t.Any], T2],
         ],
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def zip_with(
-        self: "Chain[t.Iterable[T]]", *arrays: t.Iterable[T]
-    ) -> "Chain[t.List[t.List[T]]]": ...
-    @t.overload
-    def zip_with(
-        self: "Chain[t.Union[t.Iterable[T], t.Callable[[T, T, int, t.List[T]], T2], t.Callable[[T, T, int], T2], t.Callable[[T, T], T2], t.Callable[[T], T2]]]",
+        self: "Chain[t.Union[t.Iterable[t.Any], t.Callable[[t.Any, t.Any, int], T2], t.Callable[[t.Any, t.Any], T2], t.Callable[[t.Any], T2]]]",
         *arrays: t.Union[
-            t.Iterable[T],
-            t.Callable[[T, T, int, t.List[T]], T2],
-            t.Callable[[T, T, int], T2],
-            t.Callable[[T, T], T2],
-            t.Callable[[T], T2],
+            t.Iterable[t.Any],
+            t.Callable[[t.Any, t.Any, int], T2],
+            t.Callable[[t.Any, t.Any], T2],
+            t.Callable[[t.Any], T2],
         ],
-    ) -> "Chain[t.List[t.Union[t.List[T], T2]]]": ...
+    ) -> "Chain[t.List[T2]]": ...
     def zip_with(self, *arrays, **kwargs):
         return self._wrap(pyd.zip_with)(*arrays, **kwargs)
 
@@ -2689,9 +2722,9 @@ class AllFuncs:
         return self._wrap(pyd.to_number)(precision)
 
     @t.overload
-    def to_pairs(self: "Chain[t.Mapping[T, T2]]") -> "Chain[t.List[t.List[t.Union[T, T2]]]]": ...
+    def to_pairs(self: "Chain[t.Mapping[T, T2]]") -> "Chain[t.List[t.Tuple[T, T2]]]": ...
     @t.overload
-    def to_pairs(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[t.List[t.Union[int, T]]]]": ...
+    def to_pairs(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[t.Tuple[int, T]]]": ...
     @t.overload
     def to_pairs(self: "Chain[t.Any]") -> "Chain[t.List]": ...
     def to_pairs(self):
