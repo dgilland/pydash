@@ -79,7 +79,7 @@ from .arrays import (
     zip_object_deep,
     zip_with,
 )
-from .chaining import _Dash, chain, tap, thru
+from .chaining import _Dash, chain, tap
 from .collections import (
     at,
     count_by,
@@ -168,6 +168,10 @@ from .numerical import (
     zscore,
 )
 from .objects import (
+    apply,
+    apply_if,
+    apply_if_not_none,
+    apply_ignore_excs,
     assign,
     assign_with,
     callables,
@@ -190,7 +194,6 @@ from .objects import (
     map_keys,
     map_values,
     map_values_deep,
-    maybe_apply,
     merge,
     merge_with,
     omit,
@@ -463,7 +466,6 @@ __all__ = (
     "_Dash",
     "chain",
     "tap",
-    "thru",
     "at",
     "count_by",
     "every",
@@ -545,6 +547,10 @@ __all__ = (
     "transpose",
     "variance",
     "zscore",
+    "apply",
+    "apply_if",
+    "apply_if_not_none",
+    "apply_ignore_excs",
     "assign",
     "assign_with",
     "callables",
@@ -567,7 +573,6 @@ __all__ = (
     "map_keys",
     "map_values",
     "map_values_deep",
-    "maybe_apply",
     "merge",
     "merge_with",
     "omit",

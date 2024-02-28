@@ -16,7 +16,6 @@ from .all_funcs import AllFuncs
 __all__ = (
     "chain",
     "tap",
-    "thru",
 )
 
 ValueT_co = t.TypeVar("ValueT_co", covariant=True)
@@ -263,25 +262,3 @@ def tap(value: T, interceptor: t.Callable[[T], t.Any]) -> T:
     """
     interceptor(value)
     return value
-
-
-def thru(value: T, interceptor: t.Callable[[T], T2]) -> T2:
-    """
-    Returns the result of calling `interceptor` on `value`. The purpose of this method is to pass
-    `value` through a function during a method chain.
-
-    Args:
-        value: Current value of chain operation.
-        interceptor: Function called with `value`.
-
-    Returns:
-        Results of ``interceptor(value)``.
-
-    Example:
-
-        >>> chain([1, 2, 3, 4]).thru(lambda x: x * 2).value()
-        [1, 2, 3, 4, 1, 2, 3, 4]
-
-    .. versionadded:: 2.0.0
-    """
-    return interceptor(value)

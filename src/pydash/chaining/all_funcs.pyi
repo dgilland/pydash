@@ -700,9 +700,6 @@ class AllFuncs:
     def tap(self: "Chain[T]", interceptor: t.Callable[[T], t.Any]) -> "Chain[T]":
         return self._wrap(pyd.tap)(interceptor)
 
-    def thru(self: "Chain[T]", interceptor: t.Callable[[T], T2]) -> "Chain[T2]":
-        return self._wrap(pyd.thru)(interceptor)
-
     @t.overload
     def at(self: "Chain[t.Mapping[T, T2]]", *paths: T) -> "Chain[t.List[t.Union[T2, None]]]": ...
     @t.overload
@@ -2578,10 +2575,35 @@ class AllFuncs:
     ) -> "Chain[t.Any]":
         return self._wrap(pyd.map_values_deep)(iteratee, property_path)
 
-    def maybe_apply(
+    def apply(self: "Chain[T]", func: t.Callable[[T], T2]) -> "Chain[T2]":
+        return self._wrap(pyd.apply)(func)
+
+    def apply_if(
+        self: "Chain[T]", func: t.Callable[[T], T2], predicate: t.Callable[[T], bool]
+    ) -> "Chain[t.Union[T, T2]]":
+        return self._wrap(pyd.apply_if)(func, predicate)
+
+    def apply_if_not_none(
         self: "Chain[t.Optional[T]]", func: t.Callable[[T], T2]
     ) -> "Chain[t.Optional[T2]]":
-        return self._wrap(pyd.maybe_apply)(func)
+        return self._wrap(pyd.apply_if_not_none)(func)
+
+    @t.overload
+    def apply_ignore_excs(
+        self: "Chain[T]",
+        func: t.Callable[[T], T2],
+        excs: t.Iterable[t.Type[Exception]],
+        fallback: T3,
+    ) -> "Chain[t.Union[T2, T3]]": ...
+    @t.overload
+    def apply_ignore_excs(
+        self: "Chain[T]",
+        func: t.Callable[[T], T2],
+        excs: t.Iterable[t.Type[Exception]],
+        fallback: None = None,
+    ) -> "Chain[t.Union[T2, None]]": ...
+    def apply_ignore_excs(self, func, excs, fallback=None):
+        return self._wrap(pyd.apply_ignore_excs)(func, excs, fallback)
 
     @t.overload
     def merge(

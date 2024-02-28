@@ -21,6 +21,10 @@ if t.TYPE_CHECKING:
     from _typeshed import SupportsRichComparisonT  # pragma: no cover
 
 __all__ = (
+    "apply",
+    "apply_if",
+    "apply_if_not_none",
+    "apply_ignore_excs",
     "assign",
     "assign_with",
     "callables",
@@ -43,7 +47,6 @@ __all__ = (
     "map_keys",
     "map_values",
     "map_values_deep",
-    "maybe_apply",
     "merge",
     "merge_with",
     "omit",
@@ -1252,7 +1255,53 @@ def map_values_deep(
         return callit(iteratee, obj, properties)
 
 
-def maybe_apply(obj: t.Optional[T], func: t.Callable[[T], T2]) -> t.Optional[T2]:
+def apply(obj: T, func: t.Callable[[T], T2]) -> T2:
+    """
+    Returns the result of calling `func` on `obj`. Particularly useful to pass
+    `obj` through a function during a method chain.
+
+    Args:
+        obj: Object to apply function to
+        func: Function called with `obj`.
+
+    Returns:
+        Results of ``func(value)``.
+
+    Example:
+
+        >>> apply(5, lambda x: x * 2)
+        10
+
+    .. versionadded:: 8.0.0
+    """
+    return func(obj)
+
+
+def apply_if(obj: T, func: t.Callable[[T], T2], predicate: t.Callable[[T], bool]) -> t.Union[T, T2]:
+    """
+    Apply `func` to `obj` if `predicate` returns `True`.
+
+    Args:
+        obj: Object to apply `func` to.
+        func: Function to apply to `obj`.
+        predicate: Predicate applied to `obj`.
+
+    Returns:
+        Result of applying `func` to `obj` or `obj`.
+
+    Example:
+
+        >>> apply_if(2, lambda x: x * 2, lambda x: x > 1)
+        4
+        >>> apply_if(2, lambda x: x * 2, lambda x: x < 1)
+        2
+
+    .. versionadded:: 8.0.0
+    """
+    return func(obj) if predicate(obj) else obj
+
+
+def apply_if_not_none(obj: t.Optional[T], func: t.Callable[[T], T2]) -> t.Optional[T2]:
     """
     Apply `func` to `obj` if `obj` is not ``None``.
 
@@ -1265,14 +1314,58 @@ def maybe_apply(obj: t.Optional[T], func: t.Callable[[T], T2]) -> t.Optional[T2]
 
     Example:
 
-        >>> maybe_apply(2, lambda x: x * 2)
+        >>> apply_if_not_none(2, lambda x: x * 2)
         4
-        >>> maybe_apply(None, lambda x: x * 2) is None
+        >>> apply_if_not_none(None, lambda x: x * 2) is None
         True
 
     .. versionadded:: 8.0.0
     """
-    return func(obj) if obj is not None else None
+    return apply_if(obj, func, lambda x: x is not None)  # type: ignore
+
+
+@t.overload
+def apply_ignore_excs(
+    obj: T, func: t.Callable[[T], T2], excs: t.Iterable[t.Type[Exception]], fallback: T3
+) -> t.Union[T2, T3]:
+    ...
+
+
+@t.overload
+def apply_ignore_excs(
+    obj: T, func: t.Callable[[T], T2], excs: t.Iterable[t.Type[Exception]], fallback: None = None
+) -> t.Union[T2, None]:
+    ...
+
+
+def apply_ignore_excs(obj, func, excs, fallback=None):
+    """
+    Tries to apply `func` to `obj` if any of the exceptions in `excs` are raised, return `fallback`.
+
+    Args:
+        obj: Object to apply `func` to.
+        func: Function to apply to `obj`.
+        excs: Exceptions to catch.
+        fallback: Value to return if exception is raised.
+
+    Returns:
+        Result of applying `func` to `obj` or ``None``.
+
+    Example:
+
+        >>> apply_ignore_excs(2, lambda x: x * 2, [ValueError])
+        4
+        >>> apply_ignore_excs(2, lambda x: x / 0, [ZeroDivisionError], "error")
+        'error'
+        >>> apply_ignore_excs(2, lambda x: x / 0, [ZeroDivisionError]) is None
+        True
+
+    .. versionadded:: 8.0.0
+    """
+    try:
+        return func(obj)
+    except tuple(excs):
+        return fallback
 
 
 @t.overload
