@@ -35,8 +35,3 @@ def test_mypy_tap() -> None:
         data.append(value)
 
     reveal_type(_.chain([1, 2, 3, 4]).map(lambda x: x * 2).tap(log).value())  # R: builtins.list[builtins.int]
-
-
-@pytest.mark.mypy_testing
-def test_mypy_thru() -> None:
-    reveal_type(_.chain([1, 2, 3, 4]).thru(lambda x: x * 2).value())  # R: builtins.list[builtins.int]

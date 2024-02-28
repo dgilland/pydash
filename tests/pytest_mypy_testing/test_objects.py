@@ -348,7 +348,25 @@ def test_mypy_values() -> None:
 
 
 @pytest.mark.mypy_testing
-def test_mypy_maybe_apply() -> None:
-    reveal_type(_.maybe_apply(1, lambda x: x + 1))  # R: Union[builtins.int, None]
-    reveal_type(_.maybe_apply(None, lambda x: x + 1))  # R: Union[builtins.int, None]
-    reveal_type(_.maybe_apply("hello", lambda x: x.upper()))  # R: Union[builtins.str, None]
+def test_mypy_apply() -> None:
+    reveal_type(_.apply("1", lambda x: int(x)))  # R: builtins.int
+    reveal_type(_.apply(1, lambda x: x + 1))  # R: builtins.int
+    reveal_type(_.apply("hello", lambda x: x.upper()))  # R: builtins.str
+
+
+@pytest.mark.mypy_testing
+def test_mypy_apply_if() -> None:
+    reveal_type(_.apply_if("5", lambda x: int(x), lambda x: x.isdecimal()))  # R: Union[builtins.str, builtins.int]
+
+
+@pytest.mark.mypy_testing
+def test_mypy_apply_if_not_none() -> None:
+    reveal_type(_.apply_if_not_none(1, lambda x: x + 1))  # R: Union[builtins.int, None]
+    reveal_type(_.apply_if_not_none(None, lambda x: x + 1))  # R: Union[builtins.int, None]
+    reveal_type(_.apply_if_not_none("hello", lambda x: x.upper()))  # R: Union[builtins.str, None]
+
+
+@pytest.mark.mypy_testing
+def test_mypy_apply_ignore_excs() -> None:
+    reveal_type(_.apply_ignore_excs(5, lambda x: x / 0, [ZeroDivisionError]))  # R: Union[builtins.float, None]
+    reveal_type(_.apply_ignore_excs(5, lambda x: x / 0, [ZeroDivisionError], "error"))  # R: Union[builtins.float, builtins.str]
