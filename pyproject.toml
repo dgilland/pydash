@@ -70,14 +70,16 @@ target-version = "py38"
 
 [tool.ruff.lint]
 select = [
-  # flake8
-  "F",
-  "E",
-  "W",
-  # flake8-bugbear
-  "B",
-  # pylint
-  "PL",
+    # flake8
+    "F",
+    "E",
+    "W",
+    # flake8-bugbear
+    "B",
+    # pylint
+    "PL",
+    # isort
+    "I",
 ]
 # F811 - redefinition of unused `name` from line `N`
 # E203 - whitespace before ':'

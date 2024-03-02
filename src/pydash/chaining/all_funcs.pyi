@@ -3,26 +3,35 @@
 
 import re
 import typing as t
+
+from _typeshed import (
+    SupportsAdd,
+    SupportsDunderGE,
+    SupportsDunderGT,
+    SupportsDunderLE,
+    SupportsDunderLT,
+    SupportsRichComparison,
+    SupportsRichComparisonT,
+    SupportsSub,
+)
 from typing_extensions import Concatenate, Literal, ParamSpec, Type
 
 import pydash as pyd
 from pydash.chaining.chaining import Chain
-from pydash.types import *
-from pydash.helpers import Unset, UNSET
 from pydash.functions import (
     After,
     Ary,
     Before,
-    CurryOne,
-    CurryTwo,
-    CurryThree,
-    CurryFour,
     CurryFive,
-    CurryRightOne,
-    CurryRightTwo,
-    CurryRightThree,
-    CurryRightFour,
+    CurryFour,
+    CurryOne,
     CurryRightFive,
+    CurryRightFour,
+    CurryRightOne,
+    CurryRightThree,
+    CurryRightTwo,
+    CurryThree,
+    CurryTwo,
     Debounce,
     Disjoin,
     Flow,
@@ -35,18 +44,9 @@ from pydash.functions import (
     Spread,
     Throttle,
 )
+from pydash.helpers import UNSET, Unset
+from pydash.types import *
 from pydash.utilities import MemoizedFunc
-
-from _typeshed import (
-    SupportsDunderGE,
-    SupportsDunderGT,
-    SupportsDunderLE,
-    SupportsDunderLT,
-    SupportsRichComparison,
-    SupportsAdd,
-    SupportsRichComparisonT,
-    SupportsSub,
-)
 
 ValueT_co = t.TypeVar("ValueT_co", covariant=True)
 T = t.TypeVar("T")

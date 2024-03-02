@@ -16,6 +16,7 @@
 
 import importlib.metadata
 
+
 pkg_info = importlib.metadata.metadata("pydash")
 
 project = pkg_info["Name"]

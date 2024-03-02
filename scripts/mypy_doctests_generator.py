@@ -1,7 +1,7 @@
+from pathlib import Path
 import re
 import sys
 import typing as t
-from pathlib import Path
 
 
 class DocString(t.NamedTuple):

@@ -1,8 +1,8 @@
-import ast
 import argparse
-import typing as t
-from pathlib import Path
+import ast
 from collections import defaultdict, deque
+from pathlib import Path
+import typing as t
 
 
 WRAPPER_KW = "RES"
