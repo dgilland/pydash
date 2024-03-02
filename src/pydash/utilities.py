@@ -112,15 +112,13 @@ def attempt(func: t.Callable[P, T], *args: "P.args", **kwargs: "P.kwargs") -> t.
 def cond(
     pairs: t.List[t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]]],
     *extra_pairs: t.Tuple[t.Callable[P, t.Any], t.Callable[P, T]],
-) -> t.Callable[P, T]:
-    ...
+) -> t.Callable[P, T]: ...
 
 
 @t.overload
 def cond(
     pairs: t.List[t.List[t.Callable[P, t.Any]]], *extra_pairs: t.List[t.Callable[P, t.Any]]
-) -> t.Callable[P, t.Any]:
-    ...
+) -> t.Callable[P, t.Any]: ...
 
 
 def cond(pairs, *extra_pairs):
@@ -179,13 +177,11 @@ def cond(pairs, *extra_pairs):
 
 
 @t.overload
-def conforms(source: t.Dict[T, t.Callable[[T2], t.Any]]) -> t.Callable[[t.Dict[T, T2]], bool]:
-    ...
+def conforms(source: t.Dict[T, t.Callable[[T2], t.Any]]) -> t.Callable[[t.Dict[T, T2]], bool]: ...
 
 
 @t.overload
-def conforms(source: t.List[t.Callable[[T], t.Any]]) -> t.Callable[[t.List[T]], bool]:
-    ...
+def conforms(source: t.List[t.Callable[[T], t.Any]]) -> t.Callable[[t.List[T]], bool]: ...
 
 
 def conforms(source: t.Union[t.List, t.Dict]) -> t.Callable:
@@ -226,13 +222,11 @@ def conforms(source: t.Union[t.List, t.Dict]) -> t.Callable:
 
 
 @t.overload
-def conforms_to(obj: t.Dict[T, T2], source: t.Dict[T, t.Callable[[T2], t.Any]]) -> bool:
-    ...
+def conforms_to(obj: t.Dict[T, T2], source: t.Dict[T, t.Callable[[T2], t.Any]]) -> bool: ...
 
 
 @t.overload
-def conforms_to(obj: t.List[T], source: t.List[t.Callable[[T], t.Any]]) -> bool:
-    ...
+def conforms_to(obj: t.List[T], source: t.List[t.Callable[[T], t.Any]]) -> bool: ...
 
 
 def conforms_to(obj, source):
@@ -308,8 +302,7 @@ def default_to(value: t.Union[T, None], default_value: T2) -> t.Union[T, T2]:
 
 
 @t.overload
-def default_to_any(value: None, *default_values: None) -> None:
-    ...
+def default_to_any(value: None, *default_values: None) -> None: ...
 
 
 @t.overload
@@ -317,8 +310,7 @@ def default_to_any(
     value: t.Union[T, None],
     default_value1: None,
     default_value2: T2,
-) -> t.Union[T, T2]:
-    ...
+) -> t.Union[T, T2]: ...
 
 
 @t.overload
@@ -327,8 +319,7 @@ def default_to_any(
     default_value1: None,
     default_value2: None,
     default_value3: T2,
-) -> t.Union[T, T2]:
-    ...
+) -> t.Union[T, T2]: ...
 
 
 @t.overload
@@ -338,8 +329,7 @@ def default_to_any(
     default_value2: None,
     default_value3: None,
     default_value4: T2,
-) -> t.Union[T, T2]:
-    ...
+) -> t.Union[T, T2]: ...
 
 
 @t.overload
@@ -350,13 +340,11 @@ def default_to_any(
     default_value3: None,
     default_value4: None,
     default_value5: T2,
-) -> t.Union[T, T2]:
-    ...
+) -> t.Union[T, T2]: ...
 
 
 @t.overload
-def default_to_any(value: t.Union[T, None], *default_values: T2) -> t.Union[T, T2]:
-    ...
+def default_to_any(value: t.Union[T, None], *default_values: T2) -> t.Union[T, T2]: ...
 
 
 def default_to_any(value, *default_values):
@@ -391,13 +379,11 @@ def default_to_any(value, *default_values):
 
 
 @t.overload
-def identity(arg: T, *args: t.Any) -> T:
-    ...
+def identity(arg: T, *args: t.Any) -> T: ...
 
 
 @t.overload
-def identity(arg: None = None, *args: t.Any) -> None:
-    ...
+def identity(arg: None = None, *args: t.Any) -> None: ...
 
 
 def identity(arg=None, *args):
@@ -425,13 +411,11 @@ def identity(arg=None, *args):
 
 
 @t.overload
-def iteratee(func: t.Callable[P, T]) -> t.Callable[P, T]:
-    ...
+def iteratee(func: t.Callable[P, T]) -> t.Callable[P, T]: ...
 
 
 @t.overload
-def iteratee(func: t.Any) -> t.Callable:
-    ...
+def iteratee(func: t.Any) -> t.Callable: ...
 
 
 def iteratee(func):
@@ -577,20 +561,17 @@ def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:
 class MemoizedFunc(Protocol[P, T, T2]):
     cache: t.Dict[T2, T]
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
-        ...  # pragma: no cover
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T: ...  # pragma: no cover
 
 
 @t.overload
-def memoize(func: t.Callable[P, T], resolver: None = None) -> MemoizedFunc[P, T, str]:
-    ...
+def memoize(func: t.Callable[P, T], resolver: None = None) -> MemoizedFunc[P, T, str]: ...
 
 
 @t.overload
 def memoize(
     func: t.Callable[P, T], resolver: t.Union[t.Callable[P, T2], None] = None
-) -> MemoizedFunc[P, T, T2]:
-    ...
+) -> MemoizedFunc[P, T, T2]: ...
 
 
 def memoize(func, resolver=None):
@@ -921,30 +902,25 @@ def property_of(obj: t.Any) -> t.Callable[[PathT], t.Any]:
 
 
 @t.overload
-def random(start: int = 0, stop: int = 1, *, floating: Literal[False] = False) -> int:
-    ...
+def random(start: int = 0, stop: int = 1, *, floating: Literal[False] = False) -> int: ...
 
 
 @t.overload
-def random(start: float, stop: int = 1, floating: bool = False) -> float:
-    ...
+def random(start: float, stop: int = 1, floating: bool = False) -> float: ...
 
 
 @t.overload
-def random(start: int = 0, *, stop: float, floating: bool = False) -> float:
-    ...
+def random(start: int = 0, *, stop: float, floating: bool = False) -> float: ...
 
 
 @t.overload
-def random(start: float, stop: float, floating: bool = False) -> float:
-    ...
+def random(start: float, stop: float, floating: bool = False) -> float: ...
 
 
 @t.overload
 def random(
     start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, *, floating: Literal[True]
-) -> float:
-    ...
+) -> float: ...
 
 
 def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floating: bool = False):
@@ -988,13 +964,11 @@ def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floati
 
 
 @t.overload
-def range_(stop: int) -> t.Generator[int, None, None]:
-    ...
+def range_(stop: int) -> t.Generator[int, None, None]: ...
 
 
 @t.overload
-def range_(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]:
-    ...
+def range_(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]: ...
 
 
 def range_(*args):
@@ -1037,13 +1011,11 @@ def range_(*args):
 
 
 @t.overload
-def range_right(stop: int) -> t.Generator[int, None, None]:
-    ...
+def range_right(stop: int) -> t.Generator[int, None, None]: ...
 
 
 @t.overload
-def range_right(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]:
-    ...
+def range_right(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]: ...
 
 
 def range_right(*args):
@@ -1075,18 +1047,15 @@ def range_right(*args):
 
 # TODO
 @t.overload
-def result(obj: None, key: t.Any, default: None = None) -> None:
-    ...
+def result(obj: None, key: t.Any, default: None = None) -> None: ...
 
 
 @t.overload
-def result(obj: None, key: t.Any, default: T) -> T:
-    ...
+def result(obj: None, key: t.Any, default: T) -> T: ...
 
 
 @t.overload
-def result(obj: t.Any, key: t.Any, default: t.Any = None) -> t.Any:
-    ...
+def result(obj: t.Any, key: t.Any, default: t.Any = None) -> t.Any: ...
 
 
 def result(obj, key, default=None):
@@ -1344,13 +1313,11 @@ def stub_true() -> Literal[True]:
 
 
 @t.overload
-def times(n: int, iteratee: t.Callable[..., T]) -> t.List[T]:
-    ...
+def times(n: int, iteratee: t.Callable[..., T]) -> t.List[T]: ...
 
 
 @t.overload
-def times(n: int, iteratee: None = None) -> t.List[int]:
-    ...
+def times(n: int, iteratee: None = None) -> t.List[int]: ...
 
 
 def times(n: int, iteratee=None):

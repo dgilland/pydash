@@ -13,8 +13,7 @@ import pydash as pyd
 
 #: Singleton object that differentiates between an explicit ``None`` value and an unset value.
 #: As a class so it has its own type
-class Unset:
-    ...
+class Unset: ...
 
 
 UNSET = Unset()

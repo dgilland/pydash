@@ -702,18 +702,15 @@ def is_equal_cmp(other: T) -> t.Callable[[T], bool]:
 
 
 @t.overload
-def is_equal_with(value: T, other: T2, customizer: t.Callable[[T, T2], T3]) -> T3:
-    ...
+def is_equal_with(value: T, other: T2, customizer: t.Callable[[T, T2], T3]) -> T3: ...
 
 
 @t.overload
-def is_equal_with(value: t.Any, other: t.Any, customizer: t.Callable) -> bool:
-    ...
+def is_equal_with(value: t.Any, other: t.Any, customizer: t.Callable) -> bool: ...
 
 
 @t.overload
-def is_equal_with(value: t.Any, other: t.Any, customizer: None) -> bool:
-    ...
+def is_equal_with(value: t.Any, other: t.Any, customizer: None) -> bool: ...
 
 
 def is_equal_with(value, other, customizer):
