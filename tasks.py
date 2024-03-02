@@ -13,7 +13,6 @@ import os
 from pathlib import Path
 import sys
 import tempfile
-import typing as t
 
 from invoke import Context, Exit, UnexpectedExit, run as _run, task
 
@@ -31,33 +30,39 @@ run = partial(_run, pty=True)
 
 
 @task()
-def ruff_format(ctx: Context, target: str, quiet: bool = False) -> None:
+def fmt(ctx: Context, target: str = "", quiet: bool = False) -> None:
+    """Autoformat code and docstrings."""
+    if not quiet:
+        print("Running ruff format")
+    ruff_format(ctx, target, quiet=quiet)
+
+    if not quiet:
+        print("Running ruff lint fixes")
+    ruff_fix(ctx, target, quiet=quiet)
+
+
+@task()
+def ruff_format(ctx: Context, target: str = "", quiet: bool = False) -> None:
     """Autoformat code and docstrings using ruff."""
     run(f"ruff format {target}", hide=quiet)
 
 
 @task()
-def ruff_fix(ctx: Context, target: str, quiet: bool = False) -> None:
+def ruff_fix(ctx: Context, target: str = "", quiet: bool = False) -> None:
     """Autofix fixable lint issues using ruff."""
     run(f"ruff check {target} --fix", hide=quiet)
 
 
 @task()
-def fmt(ctx: Context, target: t.Optional[str] = None, quiet: bool = False) -> None:
-    """Autoformat code and docstrings."""
-    if not quiet:
-        print("Running ruff format")
-    ruff_format(ctx, target or ".", quiet=quiet)
-
-    if not quiet:
-        print("Running ruff lint fixes")
-    ruff_fix(ctx, target or ".", quiet=quiet)
+def ruff_format_check(ctx: Context) -> None:
+    """Check code for static errors using pylint."""
+    run("ruff format --check")
 
 
 @task()
-def ruff_lint(ctx: Context) -> None:
+def ruff_check(ctx: Context) -> None:
     """Check code for static errors using pylint."""
-    run("ruff check .")
+    run("ruff check")
 
 
 @task()
@@ -70,13 +75,15 @@ def mypy(ctx: Context) -> None:
 def lint(ctx: Context) -> None:
     """Run linters."""
     linters = {
-        "ruff-lint": ruff_lint,
+        "ruff-format-check": ruff_format_check,
+        "ruff-check": ruff_check,
         "mypy": mypy,
     }
+
     # in python 3.8 and before the ast module doesn't have the `unparse` function
     # which is needed for the generation
     if sys.version_info >= (3, 9):
-        linters["chaining_types_update_required"] = chaining_types_update_required
+        linters["chaining-types-update-required"] = chaining_types_update_required
 
     failures = []
 
