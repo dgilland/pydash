@@ -367,6 +367,6 @@ def test_mypy_apply_if_not_none() -> None:
 
 
 @pytest.mark.mypy_testing
-def test_mypy_apply_ignore_excs() -> None:
-    reveal_type(_.apply_ignore_excs(5, lambda x: x / 0, [ZeroDivisionError]))  # R: Union[builtins.int, builtins.float]
-    reveal_type(_.apply_ignore_excs(5, lambda x: x / 0, [ZeroDivisionError], "error"))  # R: Union[builtins.float, builtins.str]
+def test_mypy_apply_catch() -> None:
+    reveal_type(_.apply_catch(5, lambda x: x / 0, [ZeroDivisionError]))  # R: Union[builtins.int, builtins.float]
+    reveal_type(_.apply_catch(5, lambda x: x / 0, [ZeroDivisionError], "error"))  # R: Union[builtins.float, builtins.str]

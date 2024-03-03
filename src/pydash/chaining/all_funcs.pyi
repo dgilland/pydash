@@ -2589,21 +2589,21 @@ class AllFuncs:
         return self._wrap(pyd.apply_if_not_none)(func)
 
     @t.overload
-    def apply_ignore_excs(
+    def apply_catch(
         self: "Chain[T]",
         func: t.Callable[[T], T2],
         exceptions: t.Iterable[t.Type[Exception]],
-        fallback: T3,
+        default: T3,
     ) -> "Chain[t.Union[T2, T3]]": ...
     @t.overload
-    def apply_ignore_excs(
+    def apply_catch(
         self: "Chain[T]",
         func: t.Callable[[T], T2],
         exceptions: t.Iterable[t.Type[Exception]],
-        fallback: Unset = UNSET,
+        default: Unset = UNSET,
     ) -> "Chain[t.Union[T, T2]]": ...
-    def apply_ignore_excs(self, func, exceptions, fallback=UNSET):
-        return self._wrap(pyd.apply_ignore_excs)(func, exceptions, fallback)
+    def apply_catch(self, func, exceptions, default=UNSET):
+        return self._wrap(pyd.apply_catch)(func, exceptions, default)
 
     @t.overload
     def merge(

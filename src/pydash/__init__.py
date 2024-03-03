@@ -169,9 +169,9 @@ from .numerical import (
 )
 from .objects import (
     apply,
+    apply_catch,
     apply_if,
     apply_if_not_none,
-    apply_ignore_excs,
     assign,
     assign_with,
     callables,
@@ -548,9 +548,9 @@ __all__ = (
     "variance",
     "zscore",
     "apply",
+    "apply_catch",
     "apply_if",
     "apply_if_not_none",
-    "apply_ignore_excs",
     "assign",
     "assign_with",
     "callables",

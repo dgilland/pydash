@@ -22,9 +22,9 @@ if t.TYPE_CHECKING:
 
 __all__ = (
     "apply",
+    "apply_catch",
     "apply_if",
     "apply_if_not_none",
-    "apply_ignore_excs",
     "assign",
     "assign_with",
     "callables",
@@ -1325,23 +1325,21 @@ def apply_if_not_none(obj: t.Optional[T], func: t.Callable[[T], T2]) -> t.Option
 
 
 @t.overload
-def apply_ignore_excs(
+def apply_catch(
     obj: T, func: t.Callable[[T], T2], exceptions: t.Iterable[t.Type[Exception]], default: T3
-) -> t.Union[T2, T3]:
-    ...
+) -> t.Union[T2, T3]: ...
 
 
 @t.overload
-def apply_ignore_excs(
+def apply_catch(
     obj: T,
     func: t.Callable[[T], T2],
     exceptions: t.Iterable[t.Type[Exception]],
     default: Unset = UNSET,
-) -> t.Union[T, T2]:
-    ...
+) -> t.Union[T, T2]: ...
 
 
-def apply_ignore_excs(obj, func, exceptions, default=UNSET):
+def apply_catch(obj, func, exceptions, default=UNSET):
     """
     Tries to apply `func` to `obj` if any of the exceptions in `excs` are raised, return `default`
     or `obj` if not set.
