@@ -1355,11 +1355,11 @@ def apply_catch(obj, func, exceptions, default=UNSET):
 
     Example:
 
-        >>> apply_ignore_excs(2, lambda x: x * 2, [ValueError])
+        >>> apply_catch(2, lambda x: x * 2, [ValueError])
         4
-        >>> apply_ignore_excs(2, lambda x: x / 0, [ZeroDivisionError], "error")
+        >>> apply_catch(2, lambda x: x / 0, [ZeroDivisionError], "error")
         'error'
-        >>> apply_ignore_excs(2, lambda x: x / 0, [ZeroDivisionError])
+        >>> apply_catch(2, lambda x: x / 0, [ZeroDivisionError])
         2
 
     .. versionadded:: 8.0.0
