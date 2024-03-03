@@ -1326,19 +1326,22 @@ def apply_if_not_none(obj: t.Optional[T], func: t.Callable[[T], T2]) -> t.Option
 
 @t.overload
 def apply_ignore_excs(
-    obj: T, func: t.Callable[[T], T2], excs: t.Iterable[t.Type[Exception]], fallback: T3
+    obj: T, func: t.Callable[[T], T2], exceptions: t.Iterable[t.Type[Exception]], fallback: T3
 ) -> t.Union[T2, T3]:
     ...
 
 
 @t.overload
 def apply_ignore_excs(
-    obj: T, func: t.Callable[[T], T2], excs: t.Iterable[t.Type[Exception]], fallback: None = None
+    obj: T,
+    func: t.Callable[[T], T2],
+    exceptions: t.Iterable[t.Type[Exception]],
+    fallback: None = None,
 ) -> t.Union[T2, None]:
     ...
 
 
-def apply_ignore_excs(obj, func, excs, fallback=None):
+def apply_ignore_excs(obj, func, exceptions, fallback=None):
     """
     Tries to apply `func` to `obj` if any of the exceptions in `excs` are raised, return `fallback`.
 
@@ -1364,7 +1367,7 @@ def apply_ignore_excs(obj, func, excs, fallback=None):
     """
     try:
         return func(obj)
-    except tuple(excs):
+    except tuple(exceptions):
         return fallback
 
 
