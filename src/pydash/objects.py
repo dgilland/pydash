@@ -12,7 +12,7 @@ import typing as t
 
 import pydash as pyd
 
-from .helpers import UNSET, base_get, base_set, callit, getargcount, iterator, iteriteratee
+from .helpers import UNSET, Unset, base_get, base_set, callit, getargcount, iterator, iteriteratee
 from .types import IterateeObjT, PathT
 from .utilities import PathToken, to_path, to_path_tokens
 
@@ -1336,14 +1336,15 @@ def apply_ignore_excs(
     obj: T,
     func: t.Callable[[T], T2],
     exceptions: t.Iterable[t.Type[Exception]],
-    fallback: None = None,
-) -> t.Union[T2, None]:
+    fallback: Unset = UNSET,
+) -> t.Union[T, T2]:
     ...
 
 
-def apply_ignore_excs(obj, func, exceptions, fallback=None):
+def apply_ignore_excs(obj, func, exceptions, fallback=UNSET):
     """
-    Tries to apply `func` to `obj` if any of the exceptions in `excs` are raised, return `fallback`.
+    Tries to apply `func` to `obj` if any of the exceptions in `excs` are raised, return `fallback`
+    or `obj` if not set.
 
     Args:
         obj: Object to apply `func` to.
@@ -1352,7 +1353,7 @@ def apply_ignore_excs(obj, func, exceptions, fallback=None):
         fallback: Value to return if exception is raised.
 
     Returns:
-        Result of applying `func` to `obj` or ``None``.
+        Result of applying `func` to `obj` or ``fallback``.
 
     Example:
 
@@ -1360,15 +1361,15 @@ def apply_ignore_excs(obj, func, exceptions, fallback=None):
         4
         >>> apply_ignore_excs(2, lambda x: x / 0, [ZeroDivisionError], "error")
         'error'
-        >>> apply_ignore_excs(2, lambda x: x / 0, [ZeroDivisionError]) is None
-        True
+        >>> apply_ignore_excs(2, lambda x: x / 0, [ZeroDivisionError])
+        2
 
     .. versionadded:: 8.0.0
     """
     try:
         return func(obj)
     except tuple(exceptions):
-        return fallback
+        return obj if fallback is UNSET else fallback
 
 
 @t.overload

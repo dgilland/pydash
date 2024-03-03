@@ -966,7 +966,7 @@ def test_apply_if_not_none(case, expected):
 
 @parametrize(
     "case,expected",
-    [((5, lambda x: x * 2, [ValueError]), 10), ((5, lambda x: x / 0, [ZeroDivisionError]), None)],
+    [((5, lambda x: x * 2, [ValueError]), 10), ((5, lambda x: x / 0, [ZeroDivisionError]), 5)],
 )
 def test_apply_ignore_excs(case, expected):
     assert _.apply_ignore_excs(*case) == expected
