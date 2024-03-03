@@ -1326,7 +1326,7 @@ def apply_if_not_none(obj: t.Optional[T], func: t.Callable[[T], T2]) -> t.Option
 
 @t.overload
 def apply_ignore_excs(
-    obj: T, func: t.Callable[[T], T2], exceptions: t.Iterable[t.Type[Exception]], fallback: T3
+    obj: T, func: t.Callable[[T], T2], exceptions: t.Iterable[t.Type[Exception]], default: T3
 ) -> t.Union[T2, T3]:
     ...
 
@@ -1336,24 +1336,24 @@ def apply_ignore_excs(
     obj: T,
     func: t.Callable[[T], T2],
     exceptions: t.Iterable[t.Type[Exception]],
-    fallback: Unset = UNSET,
+    default: Unset = UNSET,
 ) -> t.Union[T, T2]:
     ...
 
 
-def apply_ignore_excs(obj, func, exceptions, fallback=UNSET):
+def apply_ignore_excs(obj, func, exceptions, default=UNSET):
     """
-    Tries to apply `func` to `obj` if any of the exceptions in `excs` are raised, return `fallback`
+    Tries to apply `func` to `obj` if any of the exceptions in `excs` are raised, return `default`
     or `obj` if not set.
 
     Args:
         obj: Object to apply `func` to.
         func: Function to apply to `obj`.
         excs: Exceptions to catch.
-        fallback: Value to return if exception is raised.
+        default: Value to return if exception is raised.
 
     Returns:
-        Result of applying `func` to `obj` or ``fallback``.
+        Result of applying `func` to `obj` or ``default``.
 
     Example:
 
@@ -1369,7 +1369,7 @@ def apply_ignore_excs(obj, func, exceptions, fallback=UNSET):
     try:
         return func(obj)
     except tuple(exceptions):
-        return obj if fallback is UNSET else fallback
+        return obj if default is UNSET else default
 
 
 @t.overload
