@@ -12,7 +12,7 @@ import typing as t
 
 import pydash as pyd
 
-from .helpers import UNSET, base_get, base_set, callit, getargcount, iterator, iteriteratee
+from .helpers import UNSET, Unset, base_get, base_set, callit, getargcount, iterator, iteriteratee
 from .types import IterateeObjT, PathT
 from .utilities import PathToken, to_path, to_path_tokens
 
@@ -21,6 +21,10 @@ if t.TYPE_CHECKING:
     from _typeshed import SupportsRichComparisonT  # pragma: no cover
 
 __all__ = (
+    "apply",
+    "apply_catch",
+    "apply_if",
+    "apply_if_not_none",
     "assign",
     "assign_with",
     "callables",
@@ -1249,6 +1253,121 @@ def map_values_deep(
         return assign(obj, map_values(obj, deep_iteratee))  # type: ignore
     else:
         return callit(iteratee, obj, properties)
+
+
+def apply(obj: T, func: t.Callable[[T], T2]) -> T2:
+    """
+    Returns the result of calling `func` on `obj`. Particularly useful to pass
+    `obj` through a function during a method chain.
+
+    Args:
+        obj: Object to apply function to
+        func: Function called with `obj`.
+
+    Returns:
+        Results of ``func(value)``.
+
+    Example:
+
+        >>> apply(5, lambda x: x * 2)
+        10
+
+    .. versionadded:: 8.0.0
+    """
+    return func(obj)
+
+
+def apply_if(obj: T, func: t.Callable[[T], T2], predicate: t.Callable[[T], bool]) -> t.Union[T, T2]:
+    """
+    Apply `func` to `obj` if `predicate` returns `True`.
+
+    Args:
+        obj: Object to apply `func` to.
+        func: Function to apply to `obj`.
+        predicate: Predicate applied to `obj`.
+
+    Returns:
+        Result of applying `func` to `obj` or `obj`.
+
+    Example:
+
+        >>> apply_if(2, lambda x: x * 2, lambda x: x > 1)
+        4
+        >>> apply_if(2, lambda x: x * 2, lambda x: x < 1)
+        2
+
+    .. versionadded:: 8.0.0
+    """
+    return func(obj) if predicate(obj) else obj
+
+
+def apply_if_not_none(obj: t.Optional[T], func: t.Callable[[T], T2]) -> t.Optional[T2]:
+    """
+    Apply `func` to `obj` if `obj` is not ``None``.
+
+    Args:
+        obj: Object to apply `func` to.
+        func: Function to apply to `obj`.
+
+    Returns:
+        Result of applying `func` to `obj` or ``None``.
+
+    Example:
+
+        >>> apply_if_not_none(2, lambda x: x * 2)
+        4
+        >>> apply_if_not_none(None, lambda x: x * 2) is None
+        True
+
+    .. versionadded:: 8.0.0
+    """
+    return apply_if(obj, func, lambda x: x is not None)  # type: ignore
+
+
+@t.overload
+def apply_catch(
+    obj: T, func: t.Callable[[T], T2], exceptions: t.Iterable[t.Type[Exception]], default: T3
+) -> t.Union[T2, T3]: ...
+
+
+@t.overload
+def apply_catch(
+    obj: T,
+    func: t.Callable[[T], T2],
+    exceptions: t.Iterable[t.Type[Exception]],
+    default: Unset = UNSET,
+) -> t.Union[T, T2]: ...
+
+
+def apply_catch(obj, func, exceptions, default=UNSET):
+    """
+    Tries to apply `func` to `obj` if any of the exceptions in `excs` are raised, return `default`
+    or `obj` if not set.
+
+    Args:
+        obj: Object to apply `func` to.
+        func: Function to apply to `obj`.
+        excs: Exceptions to catch.
+        default: Value to return if exception is raised.
+
+    Returns:
+        Result of applying `func` to `obj` or ``default``.
+
+    Example:
+
+        >>> apply_catch(2, lambda x: x * 2, [ValueError])
+        4
+        >>> apply_catch(2, lambda x: x / 0, [ZeroDivisionError], "error")
+        'error'
+        >>> apply_catch(2, lambda x: x / 0, [ZeroDivisionError])
+        2
+
+    .. versionadded:: 8.0.0
+    """
+    try:
+        return func(obj)
+    except tuple(exceptions):
+        return obj if default is UNSET else default
 
 
 @t.overload

@@ -79,7 +79,7 @@ from .arrays import (
     zip_object_deep,
     zip_with,
 )
-from .chaining import _Dash, chain, tap, thru
+from .chaining import _Dash, chain, tap
 from .collections import (
     at,
     count_by,
@@ -168,6 +168,10 @@ from .numerical import (
     zscore,
 )
 from .objects import (
+    apply,
+    apply_catch,
+    apply_if,
+    apply_if_not_none,
     assign,
     assign_with,
     callables,
@@ -462,7 +466,6 @@ __all__ = (
     "_Dash",
     "chain",
     "tap",
-    "thru",
     "at",
     "count_by",
     "every",
@@ -544,6 +547,10 @@ __all__ = (
     "transpose",
     "variance",
     "zscore",
+    "apply",
+    "apply_catch",
+    "apply_if",
+    "apply_if_not_none",
     "assign",
     "assign_with",
     "callables",

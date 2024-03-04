@@ -944,3 +944,29 @@ def test_unset(obj, path, expected, new_obj):
 @parametrize("case,expected", [({"a": 1, "b": 2, "c": 3}, [1, 2, 3]), ([1, 2, 3], [1, 2, 3])])
 def test_values(case, expected):
     assert set(_.values(case)) == set(expected)
+
+
+@parametrize("case,expected", [((5, lambda x: x * 2), 10)])
+def test_apply(case, expected):
+    assert _.apply(*case) == expected
+
+
+@parametrize(
+    "case,expected",
+    [((5, lambda x: x * 2, lambda x: x == 5), 10), ((5, lambda x: x * 2, lambda x: x == 10), 5)],
+)
+def test_apply_if(case, expected):
+    assert _.apply_if(*case) == expected
+
+
+@parametrize("case,expected", [((5, lambda x: x * 2), 10), ((None, lambda x: x * 2), None)])
+def test_apply_if_not_none(case, expected):
+    assert _.apply_if_not_none(*case) == expected
+
+
+@parametrize(
+    "case,expected",
+    [((5, lambda x: x * 2, [ValueError]), 10), ((5, lambda x: x / 0, [ZeroDivisionError]), 5)],
+)
+def test_apply_catch(case, expected):
+    assert _.apply_catch(*case) == expected

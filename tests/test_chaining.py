@@ -165,8 +165,3 @@ def test_chaining_value_to_string(case, expected):
 def test_tap(value, interceptor, expected):
     actual = _.chain(value).initial().tap(interceptor).last().value()
     assert actual == expected
-
-
-@parametrize("value,func,expected", [([1, 2, 3, 4, 5], lambda value: [sum(value)], 10)])
-def test_thru(value, func, expected):
-    assert _.chain(value).initial().thru(func).last().value()

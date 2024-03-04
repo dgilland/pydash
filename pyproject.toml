@@ -44,7 +44,8 @@ dev = [
   "furo",
   "invoke",
   "mypy",
-  "pytest",
+  # pytest 8+ is not supported by pytest-mypy-testing
+  "pytest <8",
   "pytest-mypy-testing",
   "pytest-cov",
   "sphinx",

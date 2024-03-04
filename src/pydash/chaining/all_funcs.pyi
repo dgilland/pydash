@@ -700,9 +700,6 @@ class AllFuncs:
     def tap(self: "Chain[T]", interceptor: t.Callable[[T], t.Any]) -> "Chain[T]":
         return self._wrap(pyd.tap)(interceptor)
 
-    def thru(self: "Chain[T]", interceptor: t.Callable[[T], T2]) -> "Chain[T2]":
-        return self._wrap(pyd.thru)(interceptor)
-
     @t.overload
     def at(self: "Chain[t.Mapping[T, T2]]", *paths: T) -> "Chain[t.List[t.Union[T2, None]]]": ...
     @t.overload
@@ -2577,6 +2574,36 @@ class AllFuncs:
         property_path: t.Any = UNSET,
     ) -> "Chain[t.Any]":
         return self._wrap(pyd.map_values_deep)(iteratee, property_path)
+
+    def apply(self: "Chain[T]", func: t.Callable[[T], T2]) -> "Chain[T2]":
+        return self._wrap(pyd.apply)(func)
+
+    def apply_if(
+        self: "Chain[T]", func: t.Callable[[T], T2], predicate: t.Callable[[T], bool]
+    ) -> "Chain[t.Union[T, T2]]":
+        return self._wrap(pyd.apply_if)(func, predicate)
+
+    def apply_if_not_none(
+        self: "Chain[t.Optional[T]]", func: t.Callable[[T], T2]
+    ) -> "Chain[t.Optional[T2]]":
+        return self._wrap(pyd.apply_if_not_none)(func)
+
+    @t.overload
+    def apply_catch(
+        self: "Chain[T]",
+        func: t.Callable[[T], T2],
+        exceptions: t.Iterable[t.Type[Exception]],
+        default: T3,
+    ) -> "Chain[t.Union[T2, T3]]": ...
+    @t.overload
+    def apply_catch(
+        self: "Chain[T]",
+        func: t.Callable[[T], T2],
+        exceptions: t.Iterable[t.Type[Exception]],
+        default: Unset = UNSET,
+    ) -> "Chain[t.Union[T, T2]]": ...
+    def apply_catch(self, func, exceptions, default=UNSET):
+        return self._wrap(pyd.apply_catch)(func, exceptions, default)
 
     @t.overload
     def merge(
