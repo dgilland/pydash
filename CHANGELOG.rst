@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v8.0.0 (2024-03-26)
+-------------------
+
 - Add functions (Thanks DeviousStoat_!):
 
   - ``apply`` (previously named ``thru``)
