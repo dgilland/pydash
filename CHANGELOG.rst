@@ -3,6 +3,30 @@
 Changelog
 =========
 
+- Add functions (Thanks DeviousStoat_!):
+
+  - ``apply`` (previously named ``thru``)
+  - ``apply_catch``
+  - ``apply_if``
+  - ``apply_if_not_none``
+  - ``eq_cmp``
+  - ``gt_cmp``
+  - ``gte_cmp``
+  - ``in_range_cmp``
+  - ``is_equal_cmp``
+  - ``is_equal_with_cmp``
+  - ``is_instance_of_cmp``
+  - ``is_match_cmp``
+  - ``is_match_with_cmp``
+  - ``is_monotone_cmp``
+  - ``lt_cmp``
+  - ``lte_cmp``
+
+- Rename function ``thru`` to ``apply``. Thanks DeviousStoat_! (**breaking change**)
+- Changed ``zip_``, ``unzip``, ``zip_with``, ``unzip_with`` and ``to_pairs`` to accept iterables of tuples instead of lists and return lists of tuples instead of lists of lists. Thanks DeviousStoat_! (**breaking change**)
+- Fixed bug in ``divide``, ``multiply``, and ``subtract`` that returned the wrong result when ``0`` was used as one of the operation values. Thanks DeviousStoat_!
+
+
 v7.0.7 (2024-01-27)
 -------------------
 
