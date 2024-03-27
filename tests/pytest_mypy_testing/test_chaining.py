@@ -34,4 +34,6 @@ def test_mypy_tap() -> None:
     def log(value):
         data.append(value)
 
-    reveal_type(_.chain([1, 2, 3, 4]).map(lambda x: x * 2).tap(log).value())  # R: builtins.list[builtins.int]
+    reveal_type(
+        _.chain([1, 2, 3, 4]).map(lambda x: x * 2).tap(log).value()
+    )  # R: builtins.list[builtins.int]
