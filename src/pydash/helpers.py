@@ -5,7 +5,7 @@ from collections.abc import Hashable, Iterable, Mapping, Sequence
 from decimal import Decimal
 from functools import wraps
 import inspect
-from inspect import getfullargspec
+import operator
 import warnings
 
 import pydash as pyd
@@ -72,19 +72,25 @@ def _getargcount(iteratee, maxargs):
         # getting the iteratee argcount since it takes into account the "self" argument in callable
         # classes.
         sig = inspect.signature(iteratee)
-    except (TypeError, ValueError, AttributeError):
+    except (TypeError, ValueError, AttributeError):  # pragma: no cover
         pass
-    else:  # pragma: no cover
+    else:
         if not any(
             param.kind == inspect.Parameter.VAR_POSITIONAL for param in sig.parameters.values()
         ):
             argcount = len(sig.parameters)
 
     if argcount is None:
-        argspec = getfullargspec(iteratee)
-        if argspec and not argspec.varargs:  # pragma: no cover
-            # Use inspected arg count.
-            argcount = len(argspec.args)
+        # Signatures were added these operator methods in Python 3.12.3 and 3.11.9 but their
+        # instance objects are incorrectly reported as accepting varargs when they only accept a
+        # single argument.
+        if isinstance(iteratee, (operator.itemgetter, operator.attrgetter, operator.methodcaller)):
+            argcount = 1
+        else:
+            argspec = inspect.getfullargspec(iteratee)
+            if argspec and not argspec.varargs:  # pragma: no cover
+                # Use inspected arg count.
+                argcount = len(argspec.args)
 
     if argcount is None:
         # Assume all args are handleable.

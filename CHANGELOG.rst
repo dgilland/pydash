@@ -3,6 +3,9 @@
 Changelog
 =========
 
+- Fix issue where too many arguments were passed to stdlib's ``operator.attrgetter``, ``operator.itemgetter``, and ``operator.methodcaller`` when instances of those classes were used as callbacks to functions like ``map_``, ``filter_``, etc. due to a bug introduced in Python 3.12.3 and 3.11.9 that reported an incorrect signature for those ``operator`` class instances.
+
+
 v8.0.0 (2024-03-26)
 -------------------
 

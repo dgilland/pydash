@@ -1,6 +1,6 @@
 from collections import namedtuple
 import math
-from operator import itemgetter
+from operator import attrgetter, itemgetter, methodcaller
 
 import pytest
 
@@ -321,6 +321,22 @@ def test_key_by(case, expected):
                 itemgetter("a", "b"),
             ),
             [(1, 2), (3, 4), (5, 6)],
+            False,
+        ),
+        (
+            (
+                [helpers.Object(a=1, b=2, c=-1), helpers.Object(a=3, b=4, c=-1)],
+                attrgetter("a", "b"),
+            ),
+            [(1, 2), (3, 4)],
+            False,
+        ),
+        (
+            (
+                [{"a": 1, "b": 2, "c": -1}, {"a": 3, "b": 4}, {"a": 5}],
+                methodcaller("__len__"),
+            ),
+            [3, 2, 1],
             False,
         ),
     ],
