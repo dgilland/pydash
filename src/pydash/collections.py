@@ -989,7 +989,9 @@ def map_(
 
 
 @t.overload
-def map_(collection: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.List: ...
+def map_(
+    collection: t.Iterable[t.Any], iteratee: t.Union[IterateeObjT, None] = None
+) -> t.List[t.Any]: ...
 
 
 def map_(collection, iteratee=None):
