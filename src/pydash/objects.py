@@ -4,6 +4,8 @@ Functions that operate on lists, dicts, and other objects.
 .. versionadded:: 1.0.0
 """
 
+from __future__ import annotations
+
 import copy
 from functools import partial
 import math
@@ -925,10 +927,10 @@ def invert(obj: t.Mapping[T, T2]) -> t.Dict[T2, T]: ...
 
 
 @t.overload
-def invert(obj: t.Iterable[T]) -> t.Dict[T, int]: ...
+def invert(obj: t.Union[t.Iterator[T], t.Sequence[T]]) -> t.Dict[T, int]: ...
 
 
-def invert(obj) -> t.Dict:
+def invert(obj):
     """
     Creates an object composed of the inverted keys and values of the given object.
 
@@ -967,11 +969,15 @@ def invert_by(obj: t.Mapping[T, T2], iteratee: None = None) -> t.Dict[T2, t.List
 
 
 @t.overload
-def invert_by(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, t.List[int]]: ...
+def invert_by(
+    obj: t.Union[t.Iterator[T], t.Sequence[T]], iteratee: t.Callable[[T], T2]
+) -> t.Dict[T2, t.List[int]]: ...
 
 
 @t.overload
-def invert_by(obj: t.Iterable[T], iteratee: None = None) -> t.Dict[T, t.List[int]]: ...
+def invert_by(
+    obj: t.Union[t.Iterator[T], t.Sequence[T]], iteratee: None = None
+) -> t.Dict[T, t.List[int]]: ...
 
 
 def invert_by(obj, iteratee=None):
@@ -1510,7 +1516,7 @@ def omit(obj: t.Mapping[T, T2], *properties: PathT) -> t.Dict[T, T2]: ...
 
 
 @t.overload
-def omit(obj: t.Iterable[T], *properties: PathT) -> t.Dict[int, T]: ...
+def omit(obj: t.Union[t.Iterator[T], t.Sequence[T]], *properties: PathT) -> t.Dict[int, T]: ...
 
 
 @t.overload
@@ -1564,11 +1570,15 @@ def omit_by(obj: t.Dict[T, T2], iteratee: None = None) -> t.Dict[T, T2]: ...
 
 
 @t.overload
-def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T, int], t.Any]) -> t.Dict[int, T]: ...
+def omit_by(
+    obj: t.Union[t.Iterator[T], t.Sequence[T]], iteratee: t.Callable[[T, int], t.Any]
+) -> t.Dict[int, T]: ...
 
 
 @t.overload
-def omit_by(obj: t.Iterable[T], iteratee: t.Callable[[T], t.Any]) -> t.Dict[int, T]: ...
+def omit_by(
+    obj: t.Union[t.Iterator[T], t.Sequence[T]], iteratee: t.Callable[[T], t.Any]
+) -> t.Dict[int, T]: ...
 
 
 @t.overload
@@ -1949,7 +1959,7 @@ def to_dict(obj: t.Mapping[T, T2]) -> t.Dict[T, T2]: ...
 
 
 @t.overload
-def to_dict(obj: t.Iterable[T]) -> t.Dict[int, T]: ...
+def to_dict(obj: t.Union[t.Iterator[T], t.Sequence[T]]) -> t.Dict[int, T]: ...
 
 
 @t.overload
@@ -2140,7 +2150,7 @@ def to_pairs(obj: t.Mapping[T, T2]) -> t.List[t.Tuple[T, T2]]: ...
 
 
 @t.overload
-def to_pairs(obj: t.Iterable[T]) -> t.List[t.Tuple[int, T]]: ...
+def to_pairs(obj: t.Union[t.Iterator[T], t.Sequence[T]]) -> t.List[t.Tuple[int, T]]: ...
 
 
 @t.overload

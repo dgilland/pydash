@@ -4,6 +4,8 @@ Numerical/mathematical related functions.
 .. versionadded:: 2.1.0
 """
 
+from __future__ import annotations
+
 import math
 import operator
 import typing as t
