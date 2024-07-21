@@ -3,6 +3,9 @@
 Changelog
 =========
 
+- Fix typing issue in ``map_`` for compatability with ``chain``. Thanks DeviousStoat_!
+
+
 v8.0.1 (2024-04-26)
 -------------------
 
