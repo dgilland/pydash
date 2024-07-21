@@ -17,9 +17,7 @@ class MyClass:
 @pytest.mark.mypy_testing
 def test_mypy_assign() -> None:
     obj = {b"d": 5.5}
-    reveal_type(
-        _.assign(obj, {"a": 1}, {"b": 2}, {"c": 3})
-    )  # R: builtins.dict[Union[builtins.bytes, builtins.str], Union[builtins.float, builtins.int]]
+    reveal_type(_.assign(obj, {"a": 1}, {"b": 2}, {"c": 3}))  # R: builtins.dict[Union[builtins.bytes, builtins.str], Union[builtins.float, builtins.int]]
 
 
 @pytest.mark.mypy_testing
@@ -27,16 +25,12 @@ def test_mypy_assign_with() -> None:
     def customizer(x: t.Union[int, None], y: int) -> float:
         return float(y) if x is None else float(x + y)
 
-    reveal_type(
-        _.assign_with({"a": 1}, {"b": 2}, {"a": 3}, customizer=customizer)
-    )  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.float]]
+    reveal_type(_.assign_with({"a": 1}, {"b": 2}, {"a": 3}, customizer=customizer))  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.float]]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_callables() -> None:
-    reveal_type(
-        _.callables({"a": 1, "b": lambda: 2, "c": lambda: 3})
-    )  # R: builtins.list[builtins.str]
+    reveal_type(_.callables({"a": 1, "b": lambda: 2, "c": lambda: 3}))  # R: builtins.list[builtins.str]
 
 
 @pytest.mark.mypy_testing
@@ -51,17 +45,13 @@ def test_mypy_clone_with() -> None:
     def cbk(v: t.Union[int, t.Dict[str, int]], k: t.Union[str, None]) -> t.Union[int, None]:
         return v + 2 if isinstance(v, int) and k else None
 
-    reveal_type(
-        _.clone_with(x, cbk)
-    )  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.dict[builtins.str, builtins.int], None]]
+    reveal_type(_.clone_with(x, cbk))  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.dict[builtins.str, builtins.int], None]]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_clone_deep() -> None:
     x: t.Dict[str, t.Union[int, t.Dict[str, int]]] = {"a": 1, "b": 2, "c": {"d": 3}}
-    reveal_type(
-        _.clone_deep(x)
-    )  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.dict[builtins.str, builtins.int]]]
+    reveal_type(_.clone_deep(x))  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.dict[builtins.str, builtins.int]]]
 
 
 @pytest.mark.mypy_testing
@@ -71,25 +61,19 @@ def test_mypy_clone_deep_with() -> None:
     def cbk(v: t.Union[int, t.Dict[str, int]], k: t.Union[str, None]) -> t.Union[int, None]:
         return v + 2 if isinstance(v, int) and k else None
 
-    reveal_type(
-        _.clone_deep_with(x, cbk)
-    )  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.dict[builtins.str, builtins.int], None]]
+    reveal_type(_.clone_deep_with(x, cbk))  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.dict[builtins.str, builtins.int], None]]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_defaults() -> None:
     obj = {"a": 1}
-    reveal_type(
-        _.defaults(obj, {"b": 2}, {"c": 3}, {"a": 4})
-    )  # R: builtins.dict[builtins.str, builtins.int]
+    reveal_type(_.defaults(obj, {"b": 2}, {"c": 3}, {"a": 4}))  # R: builtins.dict[builtins.str, builtins.int]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_defaults_deep() -> None:
     obj = {"a": {"b": 1}}
-    reveal_type(
-        _.defaults_deep(obj, {"a": {"b": 2, "c": 3}})
-    )  # R: builtins.dict[builtins.str, builtins.dict[builtins.str, builtins.int]]
+    reveal_type(_.defaults_deep(obj, {"a": {"b": 2, "c": 3}}))  # R: builtins.dict[builtins.str, builtins.dict[builtins.str, builtins.int]]
 
 
 @pytest.mark.mypy_testing
@@ -115,9 +99,7 @@ def test_mypy_for_in() -> None:
     def cb(v: int, k: str) -> None:
         return None
 
-    reveal_type(
-        _.for_in({"a": 1, "b": 2, "c": 3}, cb)
-    )  # R: builtins.dict[builtins.str, builtins.int]
+    reveal_type(_.for_in({"a": 1, "b": 2, "c": 3}, cb))  # R: builtins.dict[builtins.str, builtins.int]
 
 
 @pytest.mark.mypy_testing
@@ -158,9 +140,7 @@ def test_mypy_invert_by() -> None:
     def group_prefix(x: int) -> str:
         return "group" + str(x)
 
-    reveal_type(
-        _.invert_by(obj, group_prefix)
-    )  # R: builtins.dict[builtins.str, builtins.list[builtins.str]]
+    reveal_type(_.invert_by(obj, group_prefix))  # R: builtins.dict[builtins.str, builtins.list[builtins.str]]
 
 
 @pytest.mark.mypy_testing
@@ -182,9 +162,7 @@ def test_mypy_map_keys() -> None:
     def callback(value: int, key: str) -> str:
         return key * 2
 
-    reveal_type(
-        _.map_keys({"a": 1, "b": 2, "c": 3}, callback)
-    )  # R: builtins.dict[builtins.str, builtins.int]
+    reveal_type(_.map_keys({"a": 1, "b": 2, "c": 3}, callback))  # R: builtins.dict[builtins.str, builtins.int]
 
 
 @pytest.mark.mypy_testing
@@ -192,12 +170,8 @@ def test_mypy_map_values() -> None:
     def times_two(x: int) -> str:
         return str(x * 2)
 
-    reveal_type(
-        _.map_values({"a": 1, "b": 2, "c": 3}, times_two)
-    )  # R: builtins.dict[builtins.str, builtins.str]
-    reveal_type(
-        _.map_values({"a": 1, "b": {"d": 4}, "c": 3}, {"d": 4})
-    )  # R: builtins.dict[Any, Any]
+    reveal_type(_.map_values({"a": 1, "b": 2, "c": 3}, times_two))  # R: builtins.dict[builtins.str, builtins.str]
+    reveal_type(_.map_values({"a": 1, "b": {"d": 4}, "c": 3}, {"d": 4}))  # R: builtins.dict[Any, Any]
 
 
 @pytest.mark.mypy_testing
@@ -213,9 +187,7 @@ def test_mypy_map_values_deep() -> None:
 @pytest.mark.mypy_testing
 def test_mypy_merge() -> None:
     obj = {"a": 2}
-    reveal_type(
-        _.merge(obj, {"a": 1}, {"b": 2, "c": 3}, {"d": 4})
-    )  # R: builtins.dict[builtins.str, builtins.int]
+    reveal_type(_.merge(obj, {"a": 1}, {"b": 2, "c": 3}, {"d": 4}))  # R: builtins.dict[builtins.str, builtins.int]
 
 
 @pytest.mark.mypy_testing
@@ -228,16 +200,10 @@ def test_mypy_merge_with() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_omit() -> None:
-    reveal_type(
-        _.omit({"a": 1, "b": 2, "c": 3}, "b", "c")
-    )  # R: builtins.dict[builtins.str, builtins.int]
-    reveal_type(
-        _.omit({"a": 1, "b": 2, "c": 3}, ["a", "c"])
-    )  # R: builtins.dict[builtins.str, builtins.int]
+    reveal_type(_.omit({"a": 1, "b": 2, "c": 3}, "b", "c"))  # R: builtins.dict[builtins.str, builtins.int]
+    reveal_type(_.omit({"a": 1, "b": 2, "c": 3}, ["a", "c"]))  # R: builtins.dict[builtins.str, builtins.int]
     reveal_type(_.omit([1, 2, 3, 4], 0, 3))  # R: builtins.dict[builtins.int, builtins.int]
-    reveal_type(
-        _.omit({"a": {"b": {"c": "d"}}}, "a.b.c")
-    )  # R: builtins.dict[builtins.str, builtins.dict[builtins.str, builtins.dict[builtins.str, builtins.str]]]
+    reveal_type(_.omit({"a": {"b": {"c": "d"}}}, "a.b.c"))  # R: builtins.dict[builtins.str, builtins.dict[builtins.str, builtins.dict[builtins.str, builtins.str]]]
     reveal_type(_.omit(MyClass(), "x"))  # R: builtins.dict[Any, Any]
 
 
@@ -247,9 +213,7 @@ def test_mypy_omit_by() -> None:
         return isinstance(v, int)
 
     obj: t.Dict[str, t.Union[str, int]] = {"a": 1, "b": "2", "c": 3}
-    reveal_type(
-        _.omit_by(obj, is_int)
-    )  # R: builtins.dict[builtins.str, Union[builtins.str, builtins.int]]
+    reveal_type(_.omit_by(obj, is_int))  # R: builtins.dict[builtins.str, Union[builtins.str, builtins.int]]
     reveal_type(_.omit_by([1, 2, 3, 4], is_int))  # R: builtins.dict[builtins.int, builtins.int]
     reveal_type(_.omit_by(MyClass(), is_int))  # R: builtins.dict[Any, Any]
 
@@ -262,9 +226,7 @@ def test_mypy_parse_int() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_pick() -> None:
-    reveal_type(
-        _.pick({"a": 1, "b": 2, "c": 3}, "a", "b")
-    )  # R: builtins.dict[builtins.str, builtins.int]
+    reveal_type(_.pick({"a": 1, "b": 2, "c": 3}, "a", "b"))  # R: builtins.dict[builtins.str, builtins.int]
     reveal_type(_.pick(MyClass(), "x"))  # R: builtins.dict[Any, Any]
 
 
@@ -275,17 +237,13 @@ def test_mypy_pick_by() -> None:
 
     obj: t.Dict[str, t.Union[int, str]] = {"a": 1, "b": "2", "c": 3}
 
-    reveal_type(
-        _.pick_by(obj, is_int)
-    )  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.str]]
+    reveal_type(_.pick_by(obj, is_int))  # R: builtins.dict[builtins.str, Union[builtins.int, builtins.str]]
     reveal_type(_.pick(MyClass(), lambda v: isinstance(v, int)))  # R: builtins.dict[Any, Any]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_rename_keys() -> None:
-    reveal_type(
-        _.rename_keys({"a": 1, "b": 2, "c": 3}, {"a": "A", "b": "B"})
-    )  # R: builtins.dict[builtins.str, builtins.int]
+    reveal_type(_.rename_keys({"a": 1, "b": 2, "c": 3}, {"a": "A", "b": "B"}))  # R: builtins.dict[builtins.str, builtins.int]
 
 
 @pytest.mark.mypy_testing
@@ -297,9 +255,7 @@ def test_mypy_set_() -> None:
 @pytest.mark.mypy_testing
 def test_mypy_set_with() -> None:
     reveal_type(_.set_with({}, "[0][1]", "a", lambda: {}))  # R: builtins.dict[Never, Never]
-    reveal_type(
-        _.set_with(MyClass(), "x", lambda: 10)
-    )  # R: tests.pytest_mypy_testing.test_objects.MyClass
+    reveal_type(_.set_with(MyClass(), "x", lambda: 10))  # R: tests.pytest_mypy_testing.test_objects.MyClass
 
 
 @pytest.mark.mypy_testing
@@ -313,9 +269,7 @@ def test_mypy_to_dict() -> None:
     reveal_type(_.to_dict(obj))  # R: builtins.dict[builtins.str, builtins.int]
     reveal_type(_.to_dict(MyClass()))  # R: builtins.dict[Any, Any]
     reveal_type(_.to_dict([1, 2, 3, 4]))  # R: builtins.dict[builtins.int, builtins.int]
-    reveal_type(
-        _.to_dict([(1, 2), (3, 4)])
-    )  # R: builtins.dict[builtins.int, Tuple[builtins.int, builtins.int]]
+    reveal_type(_.to_dict([(1, 2), (3, 4)]))  # R: builtins.dict[builtins.int, Tuple[builtins.int, builtins.int]]
 
 
 @pytest.mark.mypy_testing
@@ -364,29 +318,21 @@ def test_mypy_transform() -> None:
         return acc.append((k, v))
 
     base_list: t.List[t.Tuple[int, int]] = []
-    reveal_type(
-        _.transform([1, 2, 3, 4], build_list, base_list)
-    )  # R: builtins.list[Tuple[builtins.int, builtins.int]]
+    reveal_type(_.transform([1, 2, 3, 4], build_list, base_list))  # R: builtins.list[Tuple[builtins.int, builtins.int]]
 
 
 @pytest.mark.mypy_testing
 def test_mypy_update() -> None:
     reveal_type(_.update({}, ["a", "b"], lambda value: value))  # R: builtins.dict[Any, Any]
     reveal_type(_.update([], [0, 0], lambda value: 1))  # R: builtins.list[Any]
-    reveal_type(
-        _.update(MyClass(), "x", lambda value: 10)
-    )  # R: tests.pytest_mypy_testing.test_objects.MyClass
+    reveal_type(_.update(MyClass(), "x", lambda value: 10))  # R: tests.pytest_mypy_testing.test_objects.MyClass
 
 
 @pytest.mark.mypy_testing
 def test_mypy_update_with() -> None:
-    reveal_type(
-        _.update_with({}, "[0][1]", lambda x: "a", lambda x: {})
-    )  # R: builtins.dict[Any, Any]
+    reveal_type(_.update_with({}, "[0][1]", lambda x: "a", lambda x: {}))  # R: builtins.dict[Any, Any]
     reveal_type(_.update_with([], [0, 0], lambda x: 1, lambda x: []))  # R: builtins.list[Any]
-    reveal_type(
-        _.update_with(MyClass(), "lst.0", lambda value: 10, lambda x: [])
-    )  # R: tests.pytest_mypy_testing.test_objects.MyClass
+    reveal_type(_.update_with(MyClass(), "lst.0", lambda value: 10, lambda x: []))  # R: tests.pytest_mypy_testing.test_objects.MyClass
 
 
 @pytest.mark.mypy_testing
@@ -411,9 +357,7 @@ def test_mypy_apply() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_apply_if() -> None:
-    reveal_type(
-        _.apply_if("5", lambda x: int(x), lambda x: x.isdecimal())
-    )  # R: Union[builtins.str, builtins.int]
+    reveal_type(_.apply_if("5", lambda x: int(x), lambda x: x.isdecimal()))  # R: Union[builtins.str, builtins.int]
 
 
 @pytest.mark.mypy_testing
@@ -425,9 +369,5 @@ def test_mypy_apply_if_not_none() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_apply_catch() -> None:
-    reveal_type(
-        _.apply_catch(5, lambda x: x / 0, [ZeroDivisionError])
-    )  # R: Union[builtins.int, builtins.float]
-    reveal_type(
-        _.apply_catch(5, lambda x: x / 0, [ZeroDivisionError], "error")
-    )  # R: Union[builtins.float, builtins.str]
+    reveal_type(_.apply_catch(5, lambda x: x / 0, [ZeroDivisionError]))  # R: Union[builtins.int, builtins.float]
+    reveal_type(_.apply_catch(5, lambda x: x / 0, [ZeroDivisionError], "error"))  # R: Union[builtins.float, builtins.str]

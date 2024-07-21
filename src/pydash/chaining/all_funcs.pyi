@@ -1111,8 +1111,8 @@ class AllFuncs:
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def map_(
-        self: "Chain[t.Iterable]", iteratee: t.Union[IterateeObjT, None] = None
-    ) -> "Chain[t.List]": ...
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Union[IterateeObjT, None] = None
+    ) -> "Chain[t.List[t.Any]]": ...
     def map_(self, iteratee=None):
         return self._wrap(pyd.map_)(iteratee)
 

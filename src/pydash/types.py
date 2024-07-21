@@ -4,7 +4,7 @@ import typing as t
 from typing_extensions import Protocol
 
 
-IterateeObjT = t.Union[int, str, t.List, t.Tuple, t.Dict]
+IterateeObjT = t.Union[int, str, t.List[t.Any], t.Tuple[t.Any, ...], t.Dict[t.Any, t.Any]]
 NumberT = t.Union[float, int, Decimal]
 NumberNoDecimalT = t.Union[float, int]
 PathT = t.Union[t.Hashable, t.List[t.Hashable]]
