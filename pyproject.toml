@@ -11,20 +11,20 @@ readme = "README.rst"
 license = { file = "LICENSE.rst" }
 keywords = ["pydash", "utility", "functional", "lodash", "underscore"]
 classifiers = [
-  "Development Status :: 5 - Production/Stable",
-  "License :: OSI Approved :: MIT License",
-  "Intended Audience :: Developers",
-  "Operating System :: OS Independent",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Topic :: Software Development :: Libraries",
-  "Topic :: Software Development :: Libraries :: Python Modules",
-  "Topic :: Utilities",
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
 ]
 requires-python = ">=3.8"
 dependencies = ["typing-extensions>3.10,!=4.6.0"]
@@ -38,20 +38,20 @@ Changelog = "https://github.com/dgilland/pydash/blob/develop/CHANGELOG.rst"
 
 [project.optional-dependencies]
 dev = [
-  "build",
-  "coverage",
-  "ruff",
-  "furo",
-  "invoke",
-  "mypy",
-  "pytest",
-  "pytest-mypy-testing",
-  "pytest-cov",
-  "sphinx",
-  "tox",
-  "twine",
-  "wheel",
-  "sphinx-autodoc-typehints",
+    "build",
+    "coverage",
+    "ruff",
+    "furo",
+    "invoke",
+    "mypy",
+    "pytest",
+    "pytest-mypy-testing",
+    "pytest-cov",
+    "sphinx",
+    "tox",
+    "twine",
+    "wheel",
+    "sphinx-autodoc-typehints",
 ]
 
 [tool.setuptools.dynamic]
