@@ -4,6 +4,8 @@ Functions that wrap other functions.
 .. versionadded:: 1.0.0
 """
 
+from __future__ import annotations
+
 from functools import cached_property
 from inspect import getfullargspec
 import itertools

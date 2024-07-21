@@ -4,6 +4,9 @@ Exception classes.
 .. versionadded:: 1.0.0
 """
 
+from __future__ import annotations
+
+
 __all__ = ("InvalidMethod",)
 
 

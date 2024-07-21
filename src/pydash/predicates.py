@@ -4,6 +4,8 @@ Predicate functions that return boolean evaluations of objects.
 .. versionadded:: 2.0.0
 """
 
+from __future__ import annotations
+
 from collections.abc import Iterable, Mapping
 import datetime
 from itertools import islice

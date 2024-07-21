@@ -4,6 +4,8 @@ Utility functions.
 .. versionadded:: 1.0.0
 """
 
+from __future__ import annotations
+
 from collections import namedtuple
 from datetime import datetime, timezone
 from functools import partial, wraps

@@ -4,6 +4,8 @@ Functions that operate on lists and dicts.
 .. versionadded:: 1.0.0
 """
 
+from __future__ import annotations
+
 from functools import cmp_to_key
 import random
 import typing as t

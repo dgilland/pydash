@@ -4,6 +4,8 @@ String functions.
 .. versionadded:: 1.1.0
 """
 
+from __future__ import annotations
+
 import html
 import math
 import re

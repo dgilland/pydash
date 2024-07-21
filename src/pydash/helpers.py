@@ -1,5 +1,7 @@
 """Generic utility methods not part of main API."""
 
+from __future__ import annotations
+
 import builtins
 from collections.abc import Hashable, Iterable, Mapping, Sequence
 from decimal import Decimal

@@ -1,3 +1,11 @@
+"""
+Common types.
+
+.. versionadded:: 7.0.0
+"""
+
+from __future__ import annotations
+
 from decimal import Decimal
 import typing as t
 
