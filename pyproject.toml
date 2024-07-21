@@ -118,6 +118,7 @@ strict_optional = true
 warn_no_return = true
 warn_redundant_casts = false
 warn_unused_ignores = false
+disallow_any_generics = true
 
 [tool.pytest.ini_options]
 addopts = [

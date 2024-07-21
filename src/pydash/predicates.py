@@ -708,7 +708,7 @@ def is_equal_with(value: T, other: T2, customizer: t.Callable[[T, T2], T3]) -> T
 
 
 @t.overload
-def is_equal_with(value: t.Any, other: t.Any, customizer: t.Callable) -> bool: ...
+def is_equal_with(value: t.Any, other: t.Any, customizer: t.Callable[..., t.Any]) -> bool: ...
 
 
 @t.overload
@@ -1501,7 +1501,7 @@ def is_positive(value: t.Any) -> bool:
     return is_number(value) and value > 0
 
 
-def is_reg_exp(value: t.Any) -> TypeGuard[re.Pattern]:
+def is_reg_exp(value: t.Any) -> TypeGuard[re.Pattern[t.Any]]:
     """
     Checks if `value` is a ``RegExp`` object.
 

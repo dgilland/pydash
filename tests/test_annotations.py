@@ -1,7 +1,9 @@
+import typing as t
+
 import pydash as _
 
 
-def typed_function(row: int, index: int, col: list):
+def typed_function(row: int, index: int, col: t.List[t.Any]):
     return row + 1
 
 

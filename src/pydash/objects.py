@@ -92,7 +92,7 @@ def assign(
 ) -> t.List[t.Union[T, T2]]: ...
 
 
-def assign(obj, *sources) -> t.Union[t.List, t.Dict]:
+def assign(obj, *sources) -> t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]]:
     """
     Assigns properties of source object(s) to the destination object.
 
@@ -243,7 +243,7 @@ def callables(
 def callables(obj: t.Iterable[T]) -> t.List[T]: ...
 
 
-def callables(obj) -> t.List:
+def callables(obj):
     """
     Creates a sorted list of keys of an object that are callable.
 
@@ -337,7 +337,7 @@ def clone_with(value: T, customizer: None = None) -> T: ...
 
 
 @t.overload
-def clone_with(value: t.Any, customizer: t.Callable) -> t.Any: ...
+def clone_with(value: t.Any, customizer: t.Callable[..., t.Any]) -> t.Any: ...
 
 
 def clone_with(value, customizer=None):
@@ -435,7 +435,7 @@ def clone_deep_with(value: T, customizer: None = None) -> T: ...
 
 
 @t.overload
-def clone_deep_with(value: t.Any, customizer: t.Callable) -> t.Any: ...
+def clone_deep_with(value: t.Any, customizer: t.Callable[..., t.Any]) -> t.Any: ...
 
 
 def clone_deep_with(value, customizer=None):
@@ -1065,7 +1065,7 @@ def keys(obj: t.Iterable[T]) -> t.List[T]: ...
 
 
 @t.overload
-def keys(obj: t.Any) -> t.List: ...
+def keys(obj: t.Any) -> t.List[t.Any]: ...
 
 
 def keys(obj):
@@ -1125,7 +1125,9 @@ def map_keys(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, T]
 
 
 @t.overload
-def map_keys(obj: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict: ...
+def map_keys(
+    obj: t.Iterable[t.Any], iteratee: t.Union[IterateeObjT, None] = None
+) -> t.Dict[t.Any, t.Any]: ...
 
 
 def map_keys(obj, iteratee=None):
@@ -1182,7 +1184,9 @@ def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T, T
 
 
 @t.overload
-def map_values(obj: t.Iterable, iteratee: t.Union[IterateeObjT, None] = None) -> t.Dict: ...
+def map_values(
+    obj: t.Iterable[t.Any], iteratee: t.Union[IterateeObjT, None] = None
+) -> t.Dict[t.Any, t.Any]: ...
 
 
 def map_values(obj, iteratee=None):
@@ -1213,7 +1217,9 @@ def map_values(obj, iteratee=None):
 
 
 def map_values_deep(
-    obj: t.Iterable, iteratee: t.Union[t.Callable, None] = None, property_path: t.Any = UNSET
+    obj: t.Iterable[t.Any],
+    iteratee: t.Union[t.Callable[..., t.Any], None] = None,
+    property_path: t.Any = UNSET,
 ) -> t.Any:
     """
     Map all non-object values in `obj` with return values from `iteratee`. The iteratee is invoked
@@ -1520,7 +1526,7 @@ def omit(obj: t.Union[t.Iterator[T], t.Sequence[T]], *properties: PathT) -> t.Di
 
 
 @t.overload
-def omit(obj: t.Any, *properties: PathT) -> t.Dict: ...
+def omit(obj: t.Any, *properties: PathT) -> t.Dict[t.Any, t.Any]: ...
 
 
 def omit(obj, *properties):
@@ -1586,7 +1592,9 @@ def omit_by(obj: t.List[T], iteratee: None = None) -> t.Dict[int, T]: ...
 
 
 @t.overload
-def omit_by(obj: t.Any, iteratee: t.Union[t.Callable, None] = None) -> t.Dict: ...
+def omit_by(
+    obj: t.Any, iteratee: t.Union[t.Callable[..., t.Any], None] = None
+) -> t.Dict[t.Any, t.Any]: ...
 
 
 def omit_by(obj, iteratee=None):
@@ -1693,7 +1701,7 @@ def pick(obj: t.Union[t.Tuple[T, ...], t.List[T]], *properties: PathT) -> t.Dict
 
 
 @t.overload
-def pick(obj: t.Any, *properties: PathT) -> t.Dict: ...
+def pick(obj: t.Any, *properties: PathT) -> t.Dict[t.Any, t.Any]: ...
 
 
 def pick(obj, *properties):
@@ -1749,7 +1757,9 @@ def pick_by(obj: t.Union[t.Tuple[T, ...], t.List[T]], iteratee: None = None) -> 
 
 
 @t.overload
-def pick_by(obj: t.Any, iteratee: t.Union[t.Callable, None] = None) -> t.Dict: ...
+def pick_by(
+    obj: t.Any, iteratee: t.Union[t.Callable[..., t.Any], None] = None
+) -> t.Dict[t.Any, t.Any]: ...
 
 
 def pick_by(obj, iteratee=None):
@@ -1865,7 +1875,9 @@ def set_(obj: T, path: PathT, value: t.Any) -> T:
     return set_with(obj, path, value)
 
 
-def set_with(obj: T, path: PathT, value: t.Any, customizer: t.Union[t.Callable, None] = None) -> T:
+def set_with(
+    obj: T, path: PathT, value: t.Any, customizer: t.Union[t.Callable[..., t.Any], None] = None
+) -> T:
     """
     This method is like :func:`set_` except that it accepts customizer which is invoked to produce
     the objects of path. If customizer returns undefined path creation is handled by the method
@@ -1963,7 +1975,7 @@ def to_dict(obj: t.Union[t.Iterator[T], t.Sequence[T]]) -> t.Dict[int, T]: ...
 
 
 @t.overload
-def to_dict(obj: t.Any) -> t.Dict: ...
+def to_dict(obj: t.Any) -> t.Dict[t.Any, t.Any]: ...
 
 
 def to_dict(obj):
@@ -2134,7 +2146,7 @@ def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
         if precision < 0:
             # Round down since negative `precision` means we are going to the nearest positive
             # integer place.
-            rounder: t.Callable = math.floor
+            rounder: t.Callable[..., t.Any] = math.floor
         else:
             rounder = round
 
@@ -2154,7 +2166,7 @@ def to_pairs(obj: t.Union[t.Iterator[T], t.Sequence[T]]) -> t.List[t.Tuple[int, 
 
 
 @t.overload
-def to_pairs(obj: t.Any) -> t.List: ...
+def to_pairs(obj: t.Any) -> t.List[t.Any]: ...
 
 
 def to_pairs(obj):
@@ -2316,7 +2328,7 @@ def update(
     obj: t.Dict[t.Any, T2],
     path: PathT,
     updater: t.Callable[[T2], t.Any],
-) -> t.Dict: ...
+) -> t.Dict[t.Any, t.Any]: ...
 
 
 @t.overload
@@ -2324,14 +2336,14 @@ def update(
     obj: t.List[T],
     path: PathT,
     updater: t.Callable[[T], t.Any],
-) -> t.List: ...
+) -> t.List[t.Any]: ...
 
 
 @t.overload
 def update(
     obj: T,
     path: PathT,
-    updater: t.Callable,
+    updater: t.Callable[..., t.Any],
 ) -> T: ...
 
 
@@ -2369,8 +2381,8 @@ def update_with(
     obj: t.Dict[t.Any, T2],
     path: PathT,
     updater: t.Callable[[T2], t.Any],
-    customizer: t.Union[t.Callable, None],
-) -> t.Dict: ...
+    customizer: t.Union[t.Callable[..., t.Any], None],
+) -> t.Dict[t.Any, t.Any]: ...
 
 
 @t.overload
@@ -2378,16 +2390,16 @@ def update_with(
     obj: t.List[T],
     path: PathT,
     updater: t.Callable[[T], t.Any],
-    customizer: t.Union[t.Callable, None] = None,
-) -> t.List: ...
+    customizer: t.Union[t.Callable[..., t.Any], None] = None,
+) -> t.List[t.Any]: ...
 
 
 @t.overload
 def update_with(
     obj: T,
     path: PathT,
-    updater: t.Callable,
-    customizer: t.Union[t.Callable, None] = None,
+    updater: t.Callable[..., t.Any],
+    customizer: t.Union[t.Callable[..., t.Any], None] = None,
 ) -> T: ...
 
 
@@ -2469,7 +2481,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
     return obj
 
 
-def unset(obj: t.Union[t.List, t.Dict], path: PathT) -> bool:  # noqa: C901
+def unset(obj: t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]], path: PathT) -> bool:  # noqa: C901
     """
     Removes the property at `path` of `obj`.
 
@@ -2547,7 +2559,7 @@ def values(obj: t.Iterable[T]) -> t.List[T]: ...
 
 
 @t.overload
-def values(obj: t.Any) -> t.List: ...
+def values(obj: t.Any) -> t.List[t.Any]: ...
 
 
 def values(obj):

@@ -64,7 +64,7 @@ __all__ = (
 
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
-CallableT = t.TypeVar("CallableT", bound=t.Callable)
+CallableT = t.TypeVar("CallableT", bound=t.Callable[..., t.Any])
 P = ParamSpec("P")
 
 # These regexes are used in to_path() to parse deep path strings.
@@ -186,7 +186,7 @@ def conforms(source: t.Dict[T, t.Callable[[T2], t.Any]]) -> t.Callable[[t.Dict[T
 def conforms(source: t.List[t.Callable[[T], t.Any]]) -> t.Callable[[t.List[T]], bool]: ...
 
 
-def conforms(source: t.Union[t.List, t.Dict]) -> t.Callable:
+def conforms(source: t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]]) -> t.Callable[..., t.Any]:
     """
     Creates a function that invokes the predicate properties of `source` with the corresponding
     property values of a given object, returning ``True`` if all predicates return truthy, else
@@ -417,7 +417,7 @@ def iteratee(func: t.Callable[P, T]) -> t.Callable[P, T]: ...
 
 
 @t.overload
-def iteratee(func: t.Any) -> t.Callable: ...
+def iteratee(func: t.Any) -> t.Callable[..., t.Any]: ...
 
 
 def iteratee(func):
@@ -1229,7 +1229,7 @@ def retry(
     return decorator
 
 
-def stub_list() -> t.List:
+def stub_list() -> t.List[t.Any]:
     """
     Returns empty "list".
 
@@ -1246,7 +1246,7 @@ def stub_list() -> t.List:
     return []
 
 
-def stub_dict() -> t.Dict:
+def stub_dict() -> t.Dict[t.Any, t.Any]:
     """
     Returns empty "dict".
 
