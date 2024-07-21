@@ -4,6 +4,8 @@ Functions that operate on lists.
 .. versionadded:: 1.0.0
 """
 
+from __future__ import annotations
+
 from bisect import bisect_left, bisect_right
 from functools import cmp_to_key
 from math import ceil

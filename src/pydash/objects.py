@@ -4,6 +4,8 @@ Functions that operate on lists, dicts, and other objects.
 .. versionadded:: 1.0.0
 """
 
+from __future__ import annotations
+
 import copy
 from functools import partial
 import math
