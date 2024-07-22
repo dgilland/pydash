@@ -103,8 +103,8 @@ T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
 T4 = t.TypeVar("T4")
 T5 = t.TypeVar("T5")
-SequenceT = t.TypeVar("SequenceT", bound=t.Sequence)
-MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence)
+SequenceT = t.TypeVar("SequenceT", bound=t.Sequence[t.Any])
+MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence[t.Any])
 
 
 def chunk(array: t.Sequence[T], size: int = 1) -> t.List[t.Sequence[T]]:
@@ -664,7 +664,7 @@ def flatten(array):
     return flatten_depth(array, depth=1)
 
 
-def flatten_deep(array: t.Iterable) -> t.List:
+def flatten_deep(array: t.Iterable[t.Any]) -> t.List[t.Any]:
     """
     Flattens an array recursively.
 
@@ -684,7 +684,7 @@ def flatten_deep(array: t.Iterable) -> t.List:
     return flatten_depth(array, depth=-1)
 
 
-def flatten_depth(array: t.Iterable, depth: int = 1) -> t.List:
+def flatten_depth(array: t.Iterable[t.Any], depth: int = 1) -> t.List[t.Any]:
     """
     Recursively flatten `array` up to `depth` times.
 
@@ -2701,7 +2701,9 @@ def zip_object(keys, values=None):
     return dict(zip(keys, values))
 
 
-def zip_object_deep(keys: t.Iterable[t.Any], values: t.Union[t.List[t.Any], None] = None) -> t.Dict:
+def zip_object_deep(
+    keys: t.Iterable[t.Any], values: t.Union[t.List[t.Any], None] = None
+) -> t.Dict[t.Any, t.Any]:
     """
     This method is like :func:`zip_object` except that it supports property paths.
 
@@ -2723,7 +2725,7 @@ def zip_object_deep(keys: t.Iterable[t.Any], values: t.Union[t.List[t.Any], None
     if values is None:  # pragma: no cover
         keys, values = unzip(keys)
 
-    obj: t.Dict = {}
+    obj: t.Dict[t.Any, t.Any] = {}
     for idx, key in enumerate(keys):
         obj = pyd.set_(obj, key, pyd.get(values, idx))
 

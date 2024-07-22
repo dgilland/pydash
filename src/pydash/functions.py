@@ -55,7 +55,7 @@ P = ParamSpec("P")
 
 
 class _WithArgCount(Protocol):
-    func: t.Callable
+    func: t.Callable[..., t.Any]
 
     @cached_property
     def _argcount(self) -> t.Optional[int]:
@@ -110,7 +110,7 @@ class Ary(_WithArgCount, t.Generic[T]):
         return self.func(*cut_args, **kwargs)  # type: ignore
 
 
-class Before(After, t.Generic[P, T]):
+class Before(After[P, T], t.Generic[P, T]):
     """Wrap a function in a before context."""
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> t.Union[T, None]:
@@ -447,7 +447,7 @@ class Disjoin(t.Generic[T]):
 class Flip(_WithArgCount):
     """Wrap a function in a flip context."""
 
-    def __init__(self, func: t.Callable) -> None:
+    def __init__(self, func: t.Callable[..., t.Any]) -> None:
         self.func = func
 
     def __call__(self, *args, **kwargs):
@@ -495,7 +495,7 @@ class Juxtapose(t.Generic[P, T]):
 class OverArgs(_WithArgCount):
     """Wrap a function in an over_args context."""
 
-    def __init__(self, func: t.Callable, *transforms: t.Callable) -> None:
+    def __init__(self, func: t.Callable[..., t.Any], *transforms: t.Callable[..., t.Any]) -> None:
         self.func = func
         self.transforms = pyd.flatten(transforms)
 
@@ -608,7 +608,7 @@ class Spread(t.Generic[T]):
     def __init__(self, func: t.Callable[..., T]) -> None:
         self.func = func
 
-    def __call__(self, args: t.Iterable) -> T:
+    def __call__(self, args: t.Iterable[t.Any]) -> T:
         """Return results from :attr:`func` using array of `args` provided."""
         return self.func(*args)
 
@@ -962,7 +962,7 @@ def flip(func: t.Callable[[T1, T2], T]) -> t.Callable[[T2, T1], T]: ...
 def flip(func: t.Callable[[T1], T]) -> t.Callable[[T1], T]: ...
 
 
-def flip(func: t.Callable) -> t.Callable:
+def flip(func: t.Callable[..., t.Any]) -> t.Callable[..., t.Any]:
     """
     Creates a function that invokes the method with arguments reversed.
 
@@ -1267,7 +1267,7 @@ def over_args(
 ) -> t.Callable[[T1], T]: ...
 
 
-def over_args(func: t.Callable, *transforms: t.Callable) -> t.Callable:  # type: ignore
+def over_args(func, *transforms):
     """
     Creates a function that runs each argument through a corresponding transform function.
 

@@ -121,7 +121,7 @@ class JSRegExp:
                 results = []
         return results
 
-    def replace(self, text: str, repl: t.Union[str, t.Callable[[re.Match], str]]) -> str:
+    def replace(self, text: str, repl: t.Union[str, t.Callable[[re.Match[str]], str]]) -> str:
         """Replace parts of text that match the regular expression."""
         count = 0 if self._global else 1
         return self.pattern.sub(repl, text, count=count)
@@ -1187,7 +1187,7 @@ def reg_exp_js_match(text: t.Any, reg_exp: str) -> t.List[str]:
 
 
 def reg_exp_js_replace(
-    text: t.Any, reg_exp: str, repl: t.Union[str, t.Callable[[re.Match], str]]
+    text: t.Any, reg_exp: str, repl: t.Union[str, t.Callable[[re.Match[str]], str]]
 ) -> str:
     """
     Replace `text` with `repl` using Javascript style regular expression to find matches.
@@ -1228,7 +1228,7 @@ def reg_exp_js_replace(
 def reg_exp_replace(
     text: t.Any,
     pattern: t.Any,
-    repl: t.Union[str, t.Callable[[re.Match], str]],
+    repl: t.Union[str, t.Callable[[re.Match[str]], str]],
     ignore_case: bool = False,
     count: int = 0,
 ) -> str:
@@ -1293,7 +1293,7 @@ def repeat(text: t.Any, n: t.SupportsInt = 0) -> str:
 def replace(
     text: t.Any,
     pattern: t.Any,
-    repl: t.Union[str, t.Callable[[re.Match], str]],
+    repl: t.Union[str, t.Callable[[re.Match[str]], str]],
     ignore_case: bool = False,
     count: int = 0,
     escape: bool = True,
@@ -1373,7 +1373,7 @@ def replace(
 def replace_end(
     text: t.Any,
     pattern: t.Any,
-    repl: t.Union[str, t.Callable[[re.Match], str]],
+    repl: t.Union[str, t.Callable[[re.Match[str]], str]],
     ignore_case: bool = False,
     escape: bool = True,
 ) -> str:
@@ -1408,7 +1408,7 @@ def replace_end(
 def replace_start(
     text: t.Any,
     pattern: t.Any,
-    repl: t.Union[str, t.Callable[[re.Match], str]],
+    repl: t.Union[str, t.Callable[[re.Match[str]], str]],
     ignore_case: bool = False,
     escape: bool = True,
 ) -> str:
@@ -2021,7 +2021,7 @@ def truncate(
     text: t.Any,
     length: int = 30,
     omission: str = "...",
-    separator: t.Union[str, re.Pattern, None] = None,
+    separator: t.Union[str, re.Pattern[str], None] = None,
 ) -> str:
     """
     Truncates `text` if it is longer than the given maximum string length. The last characters of
@@ -2353,7 +2353,7 @@ def flatten_url_params(
     if isinstance(params, dict):
         params = list(params.items())
 
-    flattened: t.List = []
+    flattened: t.List[t.Any] = []
     for param, value in params:
         if isinstance(value, (list, tuple)):
             flattened += zip([param] * len(value), value)

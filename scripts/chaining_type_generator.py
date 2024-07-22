@@ -68,9 +68,9 @@ T5 = t.TypeVar("T5")
 NumT = t.TypeVar("NumT", int, float, "Decimal")
 NumT2 = t.TypeVar("NumT2", int, float, "Decimal")
 NumT3 = t.TypeVar("NumT3", int, float, "Decimal")
-CallableT = t.TypeVar("CallableT", bound=t.Callable)
-SequenceT = t.TypeVar("SequenceT", bound=t.Sequence)
-MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence)
+CallableT = t.TypeVar("CallableT", bound=t.Callable[..., t.Any])
+SequenceT = t.TypeVar("SequenceT", bound=t.Sequence[t.Any])
+MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence[t.Any])
 P = ParamSpec("P")
 
 

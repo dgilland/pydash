@@ -58,9 +58,9 @@ T5 = t.TypeVar("T5")
 NumT = t.TypeVar("NumT", int, float, "Decimal")
 NumT2 = t.TypeVar("NumT2", int, float, "Decimal")
 NumT3 = t.TypeVar("NumT3", int, float, "Decimal")
-CallableT = t.TypeVar("CallableT", bound=t.Callable)
-SequenceT = t.TypeVar("SequenceT", bound=t.Sequence)
-MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence)
+CallableT = t.TypeVar("CallableT", bound=t.Callable[..., t.Any])
+SequenceT = t.TypeVar("SequenceT", bound=t.Sequence[t.Any])
+MutableSequenceT = t.TypeVar("MutableSequenceT", bound=t.MutableSequence[t.Any])
 P = ParamSpec("P")
 
 class AllFuncs:
@@ -205,10 +205,10 @@ class AllFuncs:
     def flatten(self):
         return self._wrap(pyd.flatten)()
 
-    def flatten_deep(self: "Chain[t.Iterable]") -> "Chain[t.List]":
+    def flatten_deep(self: "Chain[t.Iterable[t.Any]]") -> "Chain[t.List[t.Any]]":
         return self._wrap(pyd.flatten_deep)()
 
-    def flatten_depth(self: "Chain[t.Iterable]", depth: int = 1) -> "Chain[t.List]":
+    def flatten_depth(self: "Chain[t.Iterable[t.Any]]", depth: int = 1) -> "Chain[t.List[t.Any]]":
         return self._wrap(pyd.flatten_depth)(depth)
 
     @t.overload
@@ -662,7 +662,7 @@ class AllFuncs:
 
     def zip_object_deep(
         self: "Chain[t.Iterable[t.Any]]", values: t.Union[t.List[t.Any], None] = None
-    ) -> "Chain[t.Dict]":
+    ) -> "Chain[t.Dict[t.Any, t.Any]]":
         return self._wrap(pyd.zip_object_deep)(values)
 
     @t.overload
@@ -927,29 +927,29 @@ class AllFuncs:
     def flat_map_deep(
         self: "Chain[t.Mapping[T, T2]]",
         iteratee: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], None] = None,
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_deep(
         self: "Chain[t.Mapping[T, T2]]", iteratee: t.Union[t.Callable[[T2, T], t.Any], None] = None
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_deep(
         self: "Chain[t.Mapping[t.Any, T2]]", iteratee: t.Union[t.Callable[[T2], t.Any], None] = None
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_deep(
         self: "Chain[t.Iterable[T]]",
         iteratee: t.Union[t.Callable[[T, int, t.List[T]], t.Any], None] = None,
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_deep(
         self: "Chain[t.Iterable[T]]", iteratee: t.Union[t.Callable[[T, int], t.Any], None] = None
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_deep(
         self: "Chain[t.Iterable[T]]", iteratee: t.Union[t.Callable[[T], t.Any], None] = None
-    ) -> "Chain[t.List]": ...
-    def flat_map_deep(self: "Chain[t.Iterable]", iteratee=None):
+    ) -> "Chain[t.List[t.Any]]": ...
+    def flat_map_deep(self, iteratee=None):
         return self._wrap(pyd.flat_map_deep)(iteratee)
 
     @t.overload
@@ -957,37 +957,37 @@ class AllFuncs:
         self: "Chain[t.Mapping[T, T2]]",
         iteratee: t.Union[t.Callable[[T2, T, t.Dict[T, T2]], t.Any], None] = None,
         depth: int = 1,
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_depth(
         self: "Chain[t.Mapping[T, T2]]",
         iteratee: t.Union[t.Callable[[T2, T], t.Any], None] = None,
         depth: int = 1,
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_depth(
         self: "Chain[t.Mapping[t.Any, T2]]",
         iteratee: t.Union[t.Callable[[T2], t.Any], None] = None,
         depth: int = 1,
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_depth(
         self: "Chain[t.Iterable[T]]",
         iteratee: t.Union[t.Callable[[T, int, t.List[T]], t.Any], None] = None,
         depth: int = 1,
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_depth(
         self: "Chain[t.Iterable[T]]",
         iteratee: t.Union[t.Callable[[T, int], t.Any], None] = None,
         depth: int = 1,
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def flat_map_depth(
         self: "Chain[t.Iterable[T]]",
         iteratee: t.Union[t.Callable[[T], t.Any], None] = None,
         depth: int = 1,
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     def flat_map_depth(self, iteratee=None, depth=1):
         return self._wrap(pyd.flat_map_depth)(iteratee, depth)
 
@@ -1065,12 +1065,14 @@ class AllFuncs:
         return self._wrap(pyd.group_by)(iteratee)
 
     def includes(
-        self: "Chain[t.Union[t.Sequence, t.Dict]]", target: t.Any, from_index: int = 0
+        self: "Chain[t.Union[t.Sequence[t.Any], t.Dict[t.Any, t.Any]]]",
+        target: t.Any,
+        from_index: int = 0,
     ) -> "Chain[bool]":
         return self._wrap(pyd.includes)(target, from_index)
 
     def invoke_map(
-        self: "Chain[t.Iterable]", path: PathT, *args: t.Any, **kwargs: t.Any
+        self: "Chain[t.Iterable[t.Any]]", path: PathT, *args: t.Any, **kwargs: t.Any
     ) -> "Chain[t.List[t.Any]]":
         return self._wrap(pyd.invoke_map)(path, *args, **kwargs)
 
@@ -1080,8 +1082,8 @@ class AllFuncs:
     ) -> "Chain[t.Dict[T2, T]]": ...
     @t.overload
     def key_by(
-        self: "Chain[t.Iterable]", iteratee: t.Union[IterateeObjT, None] = None
-    ) -> "Chain[t.Dict]": ...
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Union[IterateeObjT, None] = None
+    ) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     def key_by(self, iteratee=None):
         return self._wrap(pyd.key_by)(iteratee)
 
@@ -1118,7 +1120,7 @@ class AllFuncs:
 
     map = map_
 
-    def nest(self: "Chain[t.Iterable]", *properties: t.Any) -> "Chain[t.Any]":
+    def nest(self: "Chain[t.Iterable[t.Any]]", *properties: t.Any) -> "Chain[t.Any]":
         return self._wrap(pyd.nest)(*properties)
 
     @t.overload
@@ -1187,7 +1189,7 @@ class AllFuncs:
     def partition(self, predicate=None):
         return self._wrap(pyd.partition)(predicate)
 
-    def pluck(self: "Chain[t.Iterable]", path: PathT) -> "Chain[t.List]":
+    def pluck(self: "Chain[t.Iterable[t.Any]]", path: PathT) -> "Chain[t.List[t.Any]]":
         return self._wrap(pyd.pluck)(path)
 
     @t.overload
@@ -1200,7 +1202,7 @@ class AllFuncs:
     ) -> "Chain[T3]": ...
     @t.overload
     def reduce_(
-        self: "Chain[t.Mapping]", iteratee: t.Callable[[T3], T3], accumulator: T3
+        self: "Chain[t.Mapping[t.Any, t.Any]]", iteratee: t.Callable[[T3], T3], accumulator: T3
     ) -> "Chain[T3]": ...
     @t.overload
     def reduce_(
@@ -1216,7 +1218,9 @@ class AllFuncs:
     ) -> "Chain[T2]": ...
     @t.overload
     def reduce_(
-        self: "Chain[t.Mapping]", iteratee: t.Callable[[T], T], accumulator: None = None
+        self: "Chain[t.Mapping[t.Any, t.Any]]",
+        iteratee: t.Callable[[T], T],
+        accumulator: None = None,
     ) -> "Chain[T]": ...
     @t.overload
     def reduce_(
@@ -1228,7 +1232,7 @@ class AllFuncs:
     ) -> "Chain[T2]": ...
     @t.overload
     def reduce_(
-        self: "Chain[t.Iterable]", iteratee: t.Callable[[T2], T2], accumulator: T2
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Callable[[T2], T2], accumulator: T2
     ) -> "Chain[T2]": ...
     @t.overload
     def reduce_(
@@ -1240,7 +1244,7 @@ class AllFuncs:
     ) -> "Chain[T]": ...
     @t.overload
     def reduce_(
-        self: "Chain[t.Iterable]", iteratee: t.Callable[[T], T], accumulator: None = None
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Callable[[T], T], accumulator: None = None
     ) -> "Chain[T]": ...
     @t.overload
     def reduce_(
@@ -1261,7 +1265,7 @@ class AllFuncs:
     ) -> "Chain[T3]": ...
     @t.overload
     def reduce_right(
-        self: "Chain[t.Mapping]", iteratee: t.Callable[[T3], T3], accumulator: T3
+        self: "Chain[t.Mapping[t.Any, t.Any]]", iteratee: t.Callable[[T3], T3], accumulator: T3
     ) -> "Chain[T3]": ...
     @t.overload
     def reduce_right(
@@ -1277,7 +1281,9 @@ class AllFuncs:
     ) -> "Chain[T2]": ...
     @t.overload
     def reduce_right(
-        self: "Chain[t.Mapping]", iteratee: t.Callable[[T], T], accumulator: None = None
+        self: "Chain[t.Mapping[t.Any, t.Any]]",
+        iteratee: t.Callable[[T], T],
+        accumulator: None = None,
     ) -> "Chain[T]": ...
     @t.overload
     def reduce_right(
@@ -1289,7 +1295,7 @@ class AllFuncs:
     ) -> "Chain[T2]": ...
     @t.overload
     def reduce_right(
-        self: "Chain[t.Iterable]", iteratee: t.Callable[[T2], T2], accumulator: T2
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Callable[[T2], T2], accumulator: T2
     ) -> "Chain[T2]": ...
     @t.overload
     def reduce_right(
@@ -1301,7 +1307,7 @@ class AllFuncs:
     ) -> "Chain[T]": ...
     @t.overload
     def reduce_right(
-        self: "Chain[t.Iterable]", iteratee: t.Callable[[T], T], accumulator: None = None
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Callable[[T], T], accumulator: None = None
     ) -> "Chain[T]": ...
     @t.overload
     def reduce_right(
@@ -1326,7 +1332,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T3]]": ...
     @t.overload
     def reductions(
-        self: "Chain[t.Mapping]",
+        self: "Chain[t.Mapping[t.Any, t.Any]]",
         iteratee: t.Callable[[T3], T3],
         accumulator: T3,
         from_right: bool = False,
@@ -1347,7 +1353,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def reductions(
-        self: "Chain[t.Mapping]",
+        self: "Chain[t.Mapping[t.Any, t.Any]]",
         iteratee: t.Callable[[T], T],
         accumulator: None = None,
         from_right: bool = False,
@@ -1368,7 +1374,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def reductions(
-        self: "Chain[t.Iterable]",
+        self: "Chain[t.Iterable[t.Any]]",
         iteratee: t.Callable[[T2], T2],
         accumulator: T2,
         from_right: bool = False,
@@ -1389,7 +1395,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def reductions(
-        self: "Chain[t.Iterable]",
+        self: "Chain[t.Iterable[t.Any]]",
         iteratee: t.Callable[[T], T],
         accumulator: None = None,
         from_right: bool = False,
@@ -1414,7 +1420,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T3]]": ...
     @t.overload
     def reductions_right(
-        self: "Chain[t.Mapping]", iteratee: t.Callable[[T3], T3], accumulator: T3
+        self: "Chain[t.Mapping[t.Any, t.Any]]", iteratee: t.Callable[[T3], T3], accumulator: T3
     ) -> "Chain[t.List[T3]]": ...
     @t.overload
     def reductions_right(
@@ -1430,7 +1436,9 @@ class AllFuncs:
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def reductions_right(
-        self: "Chain[t.Mapping]", iteratee: t.Callable[[T], T], accumulator: None = None
+        self: "Chain[t.Mapping[t.Any, t.Any]]",
+        iteratee: t.Callable[[T], T],
+        accumulator: None = None,
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def reductions_right(
@@ -1442,7 +1450,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def reductions_right(
-        self: "Chain[t.Iterable]", iteratee: t.Callable[[T2], T2], accumulator: T2
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Callable[[T2], T2], accumulator: T2
     ) -> "Chain[t.List[T2]]": ...
     @t.overload
     def reductions_right(
@@ -1454,7 +1462,7 @@ class AllFuncs:
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def reductions_right(
-        self: "Chain[t.Iterable]", iteratee: t.Callable[[T], T], accumulator: None = None
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Callable[[T], T], accumulator: None = None
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def reductions_right(
@@ -1625,7 +1633,7 @@ class AllFuncs:
     def flip(self: "Chain[t.Callable[[T1, T2], T]]") -> "Chain[t.Callable[[T2, T1], T]]": ...
     @t.overload
     def flip(self: "Chain[t.Callable[[T1], T]]") -> "Chain[t.Callable[[T1], T]]": ...
-    def flip(self: "Chain[t.Callable]") -> "Chain[t.Callable]":
+    def flip(self: "Chain[t.Callable[..., t.Any]]") -> "Chain[t.Callable[..., t.Any]]":
         return self._wrap(pyd.flip)()
 
     @t.overload
@@ -1732,7 +1740,7 @@ class AllFuncs:
     def over_args(
         self: "Chain[t.Callable[[T1], T]]", transform_one: t.Callable[[T1], T1]
     ) -> "Chain[t.Callable[[T1], T]]": ...
-    def over_args(self: "Chain[t.Callable]", *transforms: t.Callable) -> "Chain[t.Callable]":
+    def over_args(self, *transforms):
         return self._wrap(pyd.over_args)(*transforms)
 
     def partial(
@@ -2193,7 +2201,7 @@ class AllFuncs:
     def assign(
         self: "Chain[t.Union[t.Tuple[T, ...], t.List[T]]]", *sources: t.Mapping[int, T2]
     ) -> "Chain[t.List[t.Union[T, T2]]]": ...
-    def assign(self, *sources) -> "Chain[t.Union[t.List, t.Dict]]":
+    def assign(self, *sources) -> "Chain[t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]]]":
         return self._wrap(pyd.assign)(*sources)
 
     @t.overload
@@ -2239,7 +2247,7 @@ class AllFuncs:
     ) -> "Chain[t.List['SupportsRichComparisonT']]": ...
     @t.overload
     def callables(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[T]]": ...
-    def callables(self) -> "Chain[t.List]":
+    def callables(self):
         return self._wrap(pyd.callables)()
 
     def clone(self: "Chain[T]") -> "Chain[T]":
@@ -2272,7 +2280,7 @@ class AllFuncs:
     @t.overload
     def clone_with(self: "Chain[T]", customizer: None = None) -> "Chain[T]": ...
     @t.overload
-    def clone_with(self: "Chain[t.Any]", customizer: t.Callable) -> "Chain[t.Any]": ...
+    def clone_with(self: "Chain[t.Any]", customizer: t.Callable[..., t.Any]) -> "Chain[t.Any]": ...
     def clone_with(self, customizer=None):
         return self._wrap(pyd.clone_with)(customizer)
 
@@ -2306,7 +2314,9 @@ class AllFuncs:
     @t.overload
     def clone_deep_with(self: "Chain[T]", customizer: None = None) -> "Chain[T]": ...
     @t.overload
-    def clone_deep_with(self: "Chain[t.Any]", customizer: t.Callable) -> "Chain[t.Any]": ...
+    def clone_deep_with(
+        self: "Chain[t.Any]", customizer: t.Callable[..., t.Any]
+    ) -> "Chain[t.Any]": ...
     def clone_deep_with(self, customizer=None):
         return self._wrap(pyd.clone_deep_with)(customizer)
 
@@ -2502,7 +2512,7 @@ class AllFuncs:
     @t.overload
     def keys(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[T]]": ...
     @t.overload
-    def keys(self: "Chain[t.Any]") -> "Chain[t.List]": ...
+    def keys(self: "Chain[t.Any]") -> "Chain[t.List[t.Any]]": ...
     def keys(self):
         return self._wrap(pyd.keys)()
 
@@ -2532,8 +2542,8 @@ class AllFuncs:
     ) -> "Chain[t.Dict[T2, T]]": ...
     @t.overload
     def map_keys(
-        self: "Chain[t.Iterable]", iteratee: t.Union[IterateeObjT, None] = None
-    ) -> "Chain[t.Dict]": ...
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Union[IterateeObjT, None] = None
+    ) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     def map_keys(self, iteratee=None):
         return self._wrap(pyd.map_keys)(iteratee)
 
@@ -2563,14 +2573,14 @@ class AllFuncs:
     ) -> "Chain[t.Dict[T, T2]]": ...
     @t.overload
     def map_values(
-        self: "Chain[t.Iterable]", iteratee: t.Union[IterateeObjT, None] = None
-    ) -> "Chain[t.Dict]": ...
+        self: "Chain[t.Iterable[t.Any]]", iteratee: t.Union[IterateeObjT, None] = None
+    ) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     def map_values(self, iteratee=None):
         return self._wrap(pyd.map_values)(iteratee)
 
     def map_values_deep(
-        self: "Chain[t.Iterable]",
-        iteratee: t.Union[t.Callable, None] = None,
+        self: "Chain[t.Iterable[t.Any]]",
+        iteratee: t.Union[t.Callable[..., t.Any], None] = None,
         property_path: t.Any = UNSET,
     ) -> "Chain[t.Any]":
         return self._wrap(pyd.map_values_deep)(iteratee, property_path)
@@ -2626,7 +2636,7 @@ class AllFuncs:
         self: "Chain[t.Union[t.Iterator[T], t.Sequence[T]]]", *properties: PathT
     ) -> "Chain[t.Dict[int, T]]": ...
     @t.overload
-    def omit(self: "Chain[t.Any]", *properties: PathT) -> "Chain[t.Dict]": ...
+    def omit(self: "Chain[t.Any]", *properties: PathT) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     def omit(self, *properties):
         return self._wrap(pyd.omit)(*properties)
 
@@ -2652,8 +2662,8 @@ class AllFuncs:
     def omit_by(self: "Chain[t.List[T]]", iteratee: None = None) -> "Chain[t.Dict[int, T]]": ...
     @t.overload
     def omit_by(
-        self: "Chain[t.Any]", iteratee: t.Union[t.Callable, None] = None
-    ) -> "Chain[t.Dict]": ...
+        self: "Chain[t.Any]", iteratee: t.Union[t.Callable[..., t.Any], None] = None
+    ) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     def omit_by(self, iteratee=None):
         return self._wrap(pyd.omit_by)(iteratee)
 
@@ -2669,7 +2679,7 @@ class AllFuncs:
         self: "Chain[t.Union[t.Tuple[T, ...], t.List[T]]]", *properties: PathT
     ) -> "Chain[t.Dict[int, T]]": ...
     @t.overload
-    def pick(self: "Chain[t.Any]", *properties: PathT) -> "Chain[t.Dict]": ...
+    def pick(self: "Chain[t.Any]", *properties: PathT) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     def pick(self, *properties):
         return self._wrap(pyd.pick)(*properties)
 
@@ -2697,8 +2707,8 @@ class AllFuncs:
     ) -> "Chain[t.Dict[int, T]]": ...
     @t.overload
     def pick_by(
-        self: "Chain[t.Any]", iteratee: t.Union[t.Callable, None] = None
-    ) -> "Chain[t.Dict]": ...
+        self: "Chain[t.Any]", iteratee: t.Union[t.Callable[..., t.Any], None] = None
+    ) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     def pick_by(self, iteratee=None):
         return self._wrap(pyd.pick_by)(iteratee)
 
@@ -2713,7 +2723,10 @@ class AllFuncs:
     set = set_
 
     def set_with(
-        self: "Chain[T]", path: PathT, value: t.Any, customizer: t.Union[t.Callable, None] = None
+        self: "Chain[T]",
+        path: PathT,
+        value: t.Any,
+        customizer: t.Union[t.Callable[..., t.Any], None] = None,
     ) -> "Chain[T]":
         return self._wrap(pyd.set_with)(path, value, customizer)
 
@@ -2731,7 +2744,7 @@ class AllFuncs:
         self: "Chain[t.Union[t.Iterator[T], t.Sequence[T]]]",
     ) -> "Chain[t.Dict[int, T]]": ...
     @t.overload
-    def to_dict(self: "Chain[t.Any]") -> "Chain[t.Dict]": ...
+    def to_dict(self: "Chain[t.Any]") -> "Chain[t.Dict[t.Any, t.Any]]": ...
     def to_dict(self):
         return self._wrap(pyd.to_dict)()
 
@@ -2759,7 +2772,7 @@ class AllFuncs:
         self: "Chain[t.Union[t.Iterator[T], t.Sequence[T]]]",
     ) -> "Chain[t.List[t.Tuple[int, T]]]": ...
     @t.overload
-    def to_pairs(self: "Chain[t.Any]") -> "Chain[t.List]": ...
+    def to_pairs(self: "Chain[t.Any]") -> "Chain[t.List[t.Any]]": ...
     def to_pairs(self):
         return self._wrap(pyd.to_pairs)()
 
@@ -2809,13 +2822,13 @@ class AllFuncs:
     @t.overload
     def update(
         self: "Chain[t.Dict[t.Any, T2]]", path: PathT, updater: t.Callable[[T2], t.Any]
-    ) -> "Chain[t.Dict]": ...
+    ) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     @t.overload
     def update(
         self: "Chain[t.List[T]]", path: PathT, updater: t.Callable[[T], t.Any]
-    ) -> "Chain[t.List]": ...
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
-    def update(self: "Chain[T]", path: PathT, updater: t.Callable) -> "Chain[T]": ...
+    def update(self: "Chain[T]", path: PathT, updater: t.Callable[..., t.Any]) -> "Chain[T]": ...
     def update(self, path, updater):
         return self._wrap(pyd.update)(path, updater)
 
@@ -2824,26 +2837,28 @@ class AllFuncs:
         self: "Chain[t.Dict[t.Any, T2]]",
         path: PathT,
         updater: t.Callable[[T2], t.Any],
-        customizer: t.Union[t.Callable, None],
-    ) -> "Chain[t.Dict]": ...
+        customizer: t.Union[t.Callable[..., t.Any], None],
+    ) -> "Chain[t.Dict[t.Any, t.Any]]": ...
     @t.overload
     def update_with(
         self: "Chain[t.List[T]]",
         path: PathT,
         updater: t.Callable[[T], t.Any],
-        customizer: t.Union[t.Callable, None] = None,
-    ) -> "Chain[t.List]": ...
+        customizer: t.Union[t.Callable[..., t.Any], None] = None,
+    ) -> "Chain[t.List[t.Any]]": ...
     @t.overload
     def update_with(
         self: "Chain[T]",
         path: PathT,
-        updater: t.Callable,
-        customizer: t.Union[t.Callable, None] = None,
+        updater: t.Callable[..., t.Any],
+        customizer: t.Union[t.Callable[..., t.Any], None] = None,
     ) -> "Chain[T]": ...
     def update_with(self, path, updater, customizer=None):
         return self._wrap(pyd.update_with)(path, updater, customizer)
 
-    def unset(self: "Chain[t.Union[t.List, t.Dict]]", path: PathT) -> "Chain[bool]":
+    def unset(
+        self: "Chain[t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]]]", path: PathT
+    ) -> "Chain[bool]":
         return self._wrap(pyd.unset)(path)
 
     @t.overload
@@ -2851,7 +2866,7 @@ class AllFuncs:
     @t.overload
     def values(self: "Chain[t.Iterable[T]]") -> "Chain[t.List[T]]": ...
     @t.overload
-    def values(self: "Chain[t.Any]") -> "Chain[t.List]": ...
+    def values(self: "Chain[t.Any]") -> "Chain[t.List[t.Any]]": ...
     def values(self):
         return self._wrap(pyd.values)()
 
@@ -2929,7 +2944,7 @@ class AllFuncs:
     ) -> "Chain[T3]": ...
     @t.overload
     def is_equal_with(
-        self: "Chain[t.Any]", other: t.Any, customizer: t.Callable
+        self: "Chain[t.Any]", other: t.Any, customizer: t.Callable[..., t.Any]
     ) -> "Chain[bool]": ...
     @t.overload
     def is_equal_with(self: "Chain[t.Any]", other: t.Any, customizer: None) -> "Chain[bool]": ...
@@ -3161,14 +3176,14 @@ class AllFuncs:
         return self._wrap(pyd.reg_exp_js_match)(reg_exp)
 
     def reg_exp_js_replace(
-        self: "Chain[t.Any]", reg_exp: str, repl: t.Union[str, t.Callable[[re.Match], str]]
+        self: "Chain[t.Any]", reg_exp: str, repl: t.Union[str, t.Callable[[re.Match[str]], str]]
     ) -> "Chain[str]":
         return self._wrap(pyd.reg_exp_js_replace)(reg_exp, repl)
 
     def reg_exp_replace(
         self: "Chain[t.Any]",
         pattern: t.Any,
-        repl: t.Union[str, t.Callable[[re.Match], str]],
+        repl: t.Union[str, t.Callable[[re.Match[str]], str]],
         ignore_case: bool = False,
         count: int = 0,
     ) -> "Chain[str]":
@@ -3180,7 +3195,7 @@ class AllFuncs:
     def replace(
         self: "Chain[t.Any]",
         pattern: t.Any,
-        repl: t.Union[str, t.Callable[[re.Match], str]],
+        repl: t.Union[str, t.Callable[[re.Match[str]], str]],
         ignore_case: bool = False,
         count: int = 0,
         escape: bool = True,
@@ -3194,7 +3209,7 @@ class AllFuncs:
     def replace_end(
         self: "Chain[t.Any]",
         pattern: t.Any,
-        repl: t.Union[str, t.Callable[[re.Match], str]],
+        repl: t.Union[str, t.Callable[[re.Match[str]], str]],
         ignore_case: bool = False,
         escape: bool = True,
     ) -> "Chain[str]":
@@ -3203,7 +3218,7 @@ class AllFuncs:
     def replace_start(
         self: "Chain[t.Any]",
         pattern: t.Any,
-        repl: t.Union[str, t.Callable[[re.Match], str]],
+        repl: t.Union[str, t.Callable[[re.Match[str]], str]],
         ignore_case: bool = False,
         escape: bool = True,
     ) -> "Chain[str]":
@@ -3288,7 +3303,7 @@ class AllFuncs:
         self: "Chain[t.Any]",
         length: int = 30,
         omission: str = "...",
-        separator: t.Union[str, re.Pattern, None] = None,
+        separator: t.Union[str, re.Pattern[str], None] = None,
     ) -> "Chain[str]":
         return self._wrap(pyd.truncate)(length, omission, separator)
 
@@ -3336,7 +3351,9 @@ class AllFuncs:
     def conforms(
         self: "Chain[t.List[t.Callable[[T], t.Any]]]",
     ) -> "Chain[t.Callable[[t.List[T]], bool]]": ...
-    def conforms(self: "Chain[t.Union[t.List, t.Dict]]") -> "Chain[t.Callable]":
+    def conforms(
+        self: "Chain[t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]]]",
+    ) -> "Chain[t.Callable[..., t.Any]]":
         return self._wrap(pyd.conforms)()
 
     @t.overload
@@ -3398,7 +3415,7 @@ class AllFuncs:
     @t.overload
     def iteratee(self: "Chain[t.Callable[P, T]]") -> "Chain[t.Callable[P, T]]": ...
     @t.overload
-    def iteratee(self: "Chain[t.Any]") -> "Chain[t.Callable]": ...
+    def iteratee(self: "Chain[t.Any]") -> "Chain[t.Callable[..., t.Any]]": ...
     def iteratee(self):
         return self._wrap(pyd.iteratee)()
 

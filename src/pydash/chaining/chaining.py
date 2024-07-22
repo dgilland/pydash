@@ -33,7 +33,7 @@ class Chain(AllFuncs, t.Generic[ValueT_co]):
     def __init__(self, value: t.Union[ValueT_co, Unset] = UNSET) -> None:
         self._value = value
 
-    def _wrap(self, func) -> "ChainWrapper":
+    def _wrap(self, func) -> "ChainWrapper[t.Union[ValueT_co, Unset]]":
         """Implement `AllFuncs` interface."""
         return ChainWrapper(self._value, func)
 
@@ -116,7 +116,7 @@ class ChainWrapper(t.Generic[ValueT_co]):
         self._value = value
         self.method = method
         self.args = ()
-        self.kwargs: t.Dict = {}
+        self.kwargs: t.Dict[t.Any, t.Any] = {}
 
     def _generate(self):
         """Generate a copy of this instance."""
