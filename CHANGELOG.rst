@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v8.0.3 (2024-07-22)
+-------------------
+
 - Specify explicit type parameters for all type annotations. Thanks DeviousStoat_!
 
 
