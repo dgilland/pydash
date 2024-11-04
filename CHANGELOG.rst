@@ -3,6 +3,9 @@
 Changelog
 =========
 
+- Fix bug in ``zip_object`` and ``zip_object_deep`` where an empty list for keys/values would cause an exception instead of returning an empty dict.
+
+
 v8.0.3 (2024-07-22)
 -------------------
 
