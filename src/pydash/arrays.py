@@ -2694,9 +2694,12 @@ def zip_object(keys, values=None):
     .. versionchanged:: 4.0.0
         Removed alias ``object_``.
     """
-
     if values is None:
-        keys, values = unzip(keys)
+        keys_values = unzip(keys)
+        if len(keys_values) == 0:
+            keys, values = [], []
+        else:
+            keys, values = keys_values
 
     return dict(zip(keys, values))
 
@@ -2722,8 +2725,12 @@ def zip_object_deep(
 
     .. versionadded:: 4.0.0
     """
-    if values is None:  # pragma: no cover
-        keys, values = unzip(keys)
+    if values is None:
+        keys_values = unzip(keys)
+        if len(keys_values) == 0:
+            keys, values = [], []
+        else:
+            keys, values = keys_values
 
     obj: t.Dict[t.Any, t.Any] = {}
     for idx, key in enumerate(keys):

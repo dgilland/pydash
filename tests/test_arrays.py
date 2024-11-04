@@ -915,6 +915,8 @@ def test_zip_(case, expected):
     [
         ((["moe", "larry"], [30, 40]), {"moe": 30, "larry": 40}),
         (([["moe", 30], ["larry", 40]],), {"moe": 30, "larry": 40}),
+        (([],), {}),
+        (([], []), {}),
     ],
 )
 def test_zip_object(case, expected):
@@ -925,7 +927,10 @@ def test_zip_object(case, expected):
     "case,expected",
     [
         ((["a.b.c", "a.b.d"], [1, 2]), {"a": {"b": {"c": 1, "d": 2}}}),
+        (([["a.b.c", 1], ["a.b.d", 2]],), {"a": {"b": {"c": 1, "d": 2}}}),
         ((["a.b[0].c", "a.b[1].d"], [1, 2]), {"a": {"b": [{"c": 1}, {"d": 2}]}}),
+        (([],), {}),
+        (([], []), {}),
     ],
 )
 def test_zip_object_deep(case, expected):
