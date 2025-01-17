@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v8.0.5 (2025-01-17)
+-------------------
+
 - Fix bug that could result in passing too many arguments to callback functions when the callback contained a var-keyword or keyword-only arguments.
 
 
