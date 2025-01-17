@@ -254,9 +254,9 @@ def main() -> int:
     wrapper = ast.parse(wrapper).body[0]
     assert isinstance(wrapper, ast.Expr), "`wrapper` value should contain one expression"
     wrapper = wrapper.value
-    assert isinstance(
-        wrapper, ast.Subscript
-    ), "`wrapper` value should contain one with one subscript"
+    assert isinstance(wrapper, ast.Subscript), (
+        "`wrapper` value should contain one with one subscript"
+    )
 
     to_file = open(args.output, "w")
     to_file.write(build_header(args.class_name))

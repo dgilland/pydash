@@ -163,7 +163,7 @@ def cond(pairs, *extra_pairs):
             pass
 
         if not is_valid:
-            raise ValueError("Each predicate-function pair should contain " "exactly two elements")
+            raise ValueError("Each predicate-function pair should contain exactly two elements")
 
         if not all(map(callable, pair)):
             raise TypeError("Both predicate-function pair should be callable")
@@ -1179,7 +1179,7 @@ def retry(
             and (len(jitter) != 2 or not all(isinstance(jit, NUMBER_TYPES) for jit in jitter))
         )
     ):
-        raise ValueError("jitter must be a number greater than 0 or a 2-item tuple of " "numbers")
+        raise ValueError("jitter must be a number greater than 0 or a 2-item tuple of numbers")
 
     if not isinstance(exceptions, tuple) or not all(
         issubclass(exc, Exception) for exc in exceptions
