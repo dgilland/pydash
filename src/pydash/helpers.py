@@ -29,6 +29,13 @@ BUILTINS = {value: key for key, value in builtins.__dict__.items() if isinstance
 #: Object keys that are restricted from access via path access.
 RESTRICTED_KEYS = ("__globals__", "__builtins__")
 
+#: Inspect signature parameter kinds that correspond to positional arguments.
+POSITIONAL_PARAMETERS = (
+    inspect.Parameter.VAR_POSITIONAL,
+    inspect.Parameter.POSITIONAL_ONLY,
+    inspect.Parameter.POSITIONAL_OR_KEYWORD,
+)
+
 
 def callit(iteratee, *args, **kwargs):
     """Inspect argspec of `iteratee` function and only pass the supported arguments when calling
@@ -77,10 +84,12 @@ def _getargcount(iteratee, maxargs):
     except (TypeError, ValueError, AttributeError):  # pragma: no cover
         pass
     else:
-        if not any(
-            param.kind == inspect.Parameter.VAR_POSITIONAL for param in sig.parameters.values()
-        ):
-            argcount = len(sig.parameters)
+        # VAR_POSITIONAL corresponds to *args so we only want to count parameters if there isn't a
+        # catch-all for positional args.
+        params = list(sig.parameters.values())
+        if not any(param.kind == inspect.Parameter.VAR_POSITIONAL for param in params):
+            positional_params = [p for p in params if p.kind in POSITIONAL_PARAMETERS]
+            argcount = len(positional_params)
 
     if argcount is None:
         # Signatures were added these operator methods in Python 3.12.3 and 3.11.9 but their

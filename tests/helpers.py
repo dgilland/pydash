@@ -1,10 +1,10 @@
-class Object(object):
+class Object:
     def __init__(self, **attrs):
         for key, value in attrs.items():
             setattr(self, key, value)
 
 
-class ItemsObject(object):
+class ItemsObject:
     def __init__(self, items):
         self._items = items
 
@@ -15,7 +15,7 @@ class ItemsObject(object):
             return enumerate(self._items)
 
 
-class IteritemsObject(object):
+class IteritemsObject:
     def __init__(self, items):
         self._items = items
 
@@ -28,7 +28,7 @@ class IteritemsObject(object):
                 yield i, item
 
 
-class Filter(object):
+class Filter:
     def __init__(self, predicate):
         self.predicate = predicate
 

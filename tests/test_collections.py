@@ -350,6 +350,17 @@ def test_map_(case, expected, sort_results):
     assert actual == expected
 
 
+def test_map_using_class_instance_method_with_kwargs():
+    class Thing:
+        def double(self, value, **kwargs):
+            return value * 2
+
+    values = [1, 2, 3]
+    thing = Thing()
+    result = _.map_(values, thing.double)
+    assert result == [2, 4, 6]
+
+
 @parametrize(
     "case,expected",
     [
