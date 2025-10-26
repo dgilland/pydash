@@ -133,7 +133,7 @@ def iterator(obj):
     if isinstance(obj, Mapping):
         return obj.items()
     elif hasattr(obj, "iteritems"):
-        return obj.iteritems()  # noqa: B301
+        return obj.iteritems()
     elif hasattr(obj, "items"):
         return iter(obj.items())
     elif isinstance(obj, Iterable):

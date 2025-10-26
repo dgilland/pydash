@@ -173,7 +173,7 @@ def gt(value: "SupportsDunderGT[T]", other: T) -> bool:
 
     .. versionadded:: 3.3.0
     """
-    return value > other
+    return bool(value > other)
 
 
 def gt_cmp(other: T) -> t.Callable[["SupportsDunderGT[T]"], bool]:
@@ -222,7 +222,7 @@ def gte(value: "SupportsDunderGE[T]", other: T) -> bool:
 
     .. versionadded:: 3.3.0
     """
-    return value >= other
+    return bool(value >= other)
 
 
 def gte_cmp(other: T) -> t.Callable[["SupportsDunderGE[T]"], bool]:
@@ -271,7 +271,7 @@ def lt(value: "SupportsDunderLT[T]", other: T) -> bool:
 
     .. versionadded:: 3.3.0
     """
-    return value < other
+    return bool(value < other)
 
 
 def lt_cmp(other: T) -> t.Callable[["SupportsDunderLT[T]"], bool]:
@@ -320,7 +320,7 @@ def lte(value: "SupportsDunderLE[T]", other: T) -> bool:
 
     .. versionadded:: 3.3.0
     """
-    return value <= other
+    return bool(value <= other)
 
 
 def lte_cmp(other: T) -> t.Callable[["SupportsDunderLE[T]"], bool]:
