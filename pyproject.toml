@@ -8,25 +8,25 @@ dynamic = ["version"]
 authors = [{ name = "Derrick Gilland", email = "dgilland@gmail.com" }]
 description = 'The kitchen sink of Python utility libraries for doing "stuff" in a functional way. Based on the Lo-Dash Javascript library.'
 readme = "README.rst"
-license = { file = "LICENSE.rst" }
+license = "MIT"
 keywords = ["pydash", "utility", "functional", "lodash", "underscore"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
-    "License :: OSI Approved :: MIT License",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = ["typing-extensions>3.10,!=4.6.0"]
 
 [project.urls]
@@ -66,7 +66,7 @@ extend-exclude = [".cache", "tests/pytest_mypy_testing"]
 extend-include = ["*.pyi"]
 line-length = 100
 # target the lowest supported version to avoid introducing unsupported syntax
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
 select = [
@@ -106,7 +106,7 @@ docstring-code-format = true
 
 [tool.mypy]
 mypy_path = ["src"]
-python_version = "3.8"
+python_version = "3.9"
 exclude = [
     "tests/pytest_mypy_testing",
 ]

@@ -96,7 +96,7 @@ def _getargcount(iteratee, maxargs):
         # instance objects are incorrectly reported as accepting varargs when they only accept a
         # single argument.
         if isinstance(iteratee, (operator.itemgetter, operator.attrgetter, operator.methodcaller)):
-            argcount = 1
+            argcount = 1  # pragma: no cover
         else:
             argspec = inspect.getfullargspec(iteratee)
             if argspec and not argspec.varargs:  # pragma: no cover
