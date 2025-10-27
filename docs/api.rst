@@ -30,14 +30,14 @@ This is the recommended way to use pydash.
 
     # OK (importing main module)
     import pydash
-    pydash.where({})
+    pydash.filter_({})
 
     # OK (import from main module)
-    from pydash import where
-    where({})
+    from pydash import filter_
+    filter_({})
 
     # NOT RECOMMENDED (importing from submodule)
-    from pydash.collections import where
+    from pydash.collections import filter_
 
 
 Only the main pydash module API is guaranteed to adhere to semver. It's possible that backwards incompatibility outside the main module API could be broken between minor releases.
@@ -70,7 +70,6 @@ The ``py_`` instance is basically a combination of using ``pydash.<function>`` a
 
 A full listing of aliased ``py_`` methods:
 
-- ``_.object`` is :func:`pydash.arrays.object_`
 - ``_.slice`` is :func:`pydash.arrays.slice_`
 - ``_.zip`` is :func:`pydash.arrays.zip_`
 - ``_.all`` is :func:`pydash.collections.all_`
