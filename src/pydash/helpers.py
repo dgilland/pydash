@@ -215,10 +215,11 @@ def _base_get_object(obj, key, default=UNSET):
     return value
 
 
-def _raise_if_restricted_key(key):
+def _raise_if_restricted_key(*keys):
     # Prevent access to restricted keys for security reasons.
-    if key in RESTRICTED_KEYS:
-        raise KeyError(f"access to restricted key {key!r} is not allowed")
+    for key in keys:
+        if key in RESTRICTED_KEYS:
+            raise KeyError(f"access to restricted key {key!r} is not allowed")
 
 
 def base_set(obj, key, value, allow_override=True):

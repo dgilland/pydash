@@ -219,6 +219,24 @@ def test_invoke(case, expected):
 
 
 @parametrize(
+    "case",
+    [
+        ({}, "__globals__"),
+        ({}, "__builtins__"),
+        ({}, "a.__globals__.b"),
+        ({}, "a.__builtins__.b"),
+        ([], "__globals__"),
+        ([], "__builtins__"),
+        ([], "a.__globals__.b"),
+        ([], "a.__builtins__.b"),
+    ],
+)
+def test_invoke__raises_for_objects_when_path_restricted(case):
+    with pytest.raises(KeyError, match="access to restricted key"):
+        _.invoke(*case)
+
+
+@parametrize(
     "case,expected",
     [
         # NOTE: The expected is a list of values but find_key returns only a single

@@ -14,7 +14,17 @@ import typing as t
 
 import pydash as pyd
 
-from .helpers import UNSET, Unset, base_get, base_set, callit, getargcount, iterator, iteriteratee
+from .helpers import (
+    UNSET,
+    Unset,
+    _raise_if_restricted_key,
+    base_get,
+    base_set,
+    callit,
+    getargcount,
+    iterator,
+    iteriteratee,
+)
 from .types import IterateeObjT, PathT
 from .utilities import PathToken, to_path, to_path_tokens
 
@@ -1046,6 +1056,8 @@ def invoke(obj: t.Any, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
     .. versionadded:: 1.0.0
     """
     paths = to_path(path)
+    _raise_if_restricted_key(*paths)
+
     target_path = pyd.initial(paths)
     method_name = pyd.last(paths)
 
