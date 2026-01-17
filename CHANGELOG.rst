@@ -3,6 +3,9 @@
 Changelog
 =========
 
+v8.0.6 (2026-01-17)
+-------------------
+
 - Prevent access to object paths containing ``__globals__`` or ``__builtins__`` in ``invoke(). Attempting to access these keys will raise a ``KeyError``.
 
 
