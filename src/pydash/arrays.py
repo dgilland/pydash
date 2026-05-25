@@ -449,14 +449,15 @@ def drop_while(array, predicate=None):
 
     .. versionadded:: 1.1.0
     """
+    arr = list(array)
     n = 0
-    for is_true, _, _, _ in iteriteratee(array, predicate):
+    for is_true, _, _, _ in iteriteratee(arr, predicate):
         if is_true:
             n += 1
         else:
             break
 
-    return array[n:]
+    return arr[n:]
 
 
 def duplicates(
@@ -2093,14 +2094,15 @@ def take_while(array, predicate=None):
 
     .. versionadded:: 1.1.0
     """
+    arr = list(array)
     n = 0
-    for is_true, _, _, _ in iteriteratee(array, predicate):
+    for is_true, _, _, _ in iteriteratee(arr, predicate):
         if is_true:
             n += 1
         else:
             break
 
-    return array[:n]
+    return arr[:n]
 
 
 @t.overload
