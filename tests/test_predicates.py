@@ -94,6 +94,12 @@ def test_lte(case, expected):
         (("", 5), False),
         ((2, ""), False),
         ((-1, -2, ""), True),
+        # Reversed ranges (start > end) are supported by swapping the bounds,
+        # matching lodash's documented ``_.inRange(-3, -2, -6) // => true``.
+        ((-3, -2, -6), True),
+        ((-2, -2, -6), False),  # exclusive upper bound after swap
+        ((-6, -2, -6), True),  # inclusive lower bound after swap
+        ((1, 5, 0), True),
     ],
 )
 def test_in_range(case, expected):
