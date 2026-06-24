@@ -390,6 +390,7 @@ def test_for_in_right(case, expected):
         (({object: 1}, object), 1),
         (({object: {object: 1}}, [object, object]), 1),
         (({1: {"name": "John Doe"}}, "1.name"), "John Doe"),
+        (({"a": {"": {"b": 1}}}, "a..b"), 1),
         ((helpers.Object(), "[0].field"), None),
     ],
 )
@@ -770,6 +771,7 @@ def test_rename_keys(case, expected):
         (([1, 2, [3, 4, [5, 6]]], "[2].[2].[2]", 7), [1, 2, [3, 4, [5, 6, 7]]]),
         (({}, "a.b[0].c", 1), {"a": {"b": [{"c": 1}]}}),
         (({}, "a.b[0][0].c", 1), {"a": {"b": [[{"c": 1}]]}}),
+        (({}, "a..b", 1), {"a": {"": {"b": 1}}}),
         (({}, "a", tuple), {"a": tuple}),
         (({}, r"a.b\.c.d", 1), {"a": {"b.c": {"d": 1}}}),
     ],
