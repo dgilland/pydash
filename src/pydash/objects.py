@@ -2115,7 +2115,7 @@ def to_list(obj, split_strings=True):
     if isinstance(obj, list):
         return obj[:]
     elif isinstance(obj, dict):
-        return obj.values()
+        return list(obj.values())
     elif not split_strings and isinstance(obj, (str, bytes)):
         return [obj]
     elif split_strings and isinstance(obj, bytes):
