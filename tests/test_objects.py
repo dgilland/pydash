@@ -181,6 +181,21 @@ def test_to_dict(case, expected):
 @parametrize(
     "case,expected",
     [
+        ({"a": 1, "b": 2, "c": 3}, [1, 2, 3]),
+        ([1, 2, 3], [1, 2, 3]),
+        ((1, 2), [1, 2]),
+        (1, [1]),
+    ],
+)
+def test_to_list(case, expected):
+    result = _.to_list(case)
+    assert result == expected
+    assert isinstance(result, list)
+
+
+@parametrize(
+    "case,expected",
+    [
         ({"a": 1, "b": 2, "c": 3}, {1: "a", 2: "b", 3: "c"}),
         ([1, 2, 3], {1: 0, 2: 1, 3: 2}),
     ],
