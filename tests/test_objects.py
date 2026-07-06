@@ -541,7 +541,7 @@ def test_map_values(case, expected):
         (
             (
                 [["value 1", [["value 2", ["value 3"]]]]],
-                lambda value, property_path: (_.join(property_path, ".") + "==" + value),
+                lambda value, property_path: _.join(property_path, ".") + "==" + value,
             ),
             [["0.0==value 1", [["0.1.0.0==value 2", ["0.1.0.1.0==value 3"]]]]],
         ),
@@ -809,9 +809,9 @@ def test_set_on_class_works_the_same_with_string_and_list():
     [
         (({}, "[0][1]", "a", lambda: {}), {0: {1: "a"}}),
         (({}, "[0][1]", dict, lambda: {}), {0: {1: dict}}),
-        ((Namespace(), "a.b", 5, lambda: Namespace()), Namespace(a=Namespace(b=5))),
+        ((Namespace(), "a.b", 5, lambda: Namespace()), Namespace(a=Namespace(b=5))),  # noqa: PLW0108
         (
-            (Namespace(a=Namespace(b=5)), "a.c.d", 55, lambda: Namespace()),
+            (Namespace(a=Namespace(b=5)), "a.c.d", 55, lambda: Namespace()),  # noqa: PLW0108
             Namespace(a=Namespace(b=5, c=Namespace(d=55))),
         ),
     ],
