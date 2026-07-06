@@ -3,6 +3,12 @@
 Changelog
 =========
 
+v8.0.7 (unreleased)
+-------------------
+
+- Fix ``in_range`` to support reversed ranges where ``start`` is greater than ``end`` by swapping the bounds, matching lodash's documented ``_.inRange`` behavior (e.g. ``in_range(-3, -2, -6)`` now returns ``True``).
+
+
 v8.0.6 (2026-01-17)
 -------------------
 
