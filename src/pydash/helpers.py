@@ -26,8 +26,8 @@ NUMBER_TYPES = (int, float, Decimal)
 #: Dictionary of builtins with keys as the builtin function and values as the string name.
 BUILTINS = {value: key for key, value in builtins.__dict__.items() if isinstance(value, Hashable)}
 
-#: Object keys that are restricted from access via path access.
-RESTRICTED_KEYS = ("__globals__", "__builtins__")
+#: Object key marker that is restricted from access via path access.
+RESTRICTED_KEY_MARKER = "__"
 
 #: Inspect signature parameter kinds that correspond to positional arguments.
 POSITIONAL_PARAMETERS = (
@@ -218,7 +218,11 @@ def _base_get_object(obj, key, default=UNSET):
 def _raise_if_restricted_key(*keys):
     # Prevent access to restricted keys for security reasons.
     for key in keys:
-        if key in RESTRICTED_KEYS:
+        if (
+            isinstance(key, str)
+            and key.startswith(RESTRICTED_KEY_MARKER)
+            and key.endswith(RESTRICTED_KEY_MARKER)
+        ):
             raise KeyError(f"access to restricted key {key!r} is not allowed")
 
 

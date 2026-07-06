@@ -223,12 +223,16 @@ def test_invoke(case, expected):
     [
         ({}, "__globals__"),
         ({}, "__builtins__"),
+        ({}, "__class__"),
         ({}, "a.__globals__.b"),
         ({}, "a.__builtins__.b"),
+        ({}, "a.__class__.b"),
         ([], "__globals__"),
         ([], "__builtins__"),
+        ([], "__class__"),
         ([], "a.__globals__.b"),
         ([], "a.__builtins__.b"),
+        ([], "a.__class__.b"),
     ],
 )
 def test_invoke__raises_for_objects_when_path_restricted(case):
@@ -410,6 +414,10 @@ def test_get__should_not_populate_defaultdict():
         (SomeNamedTuple(1, 2), "__globals__"),
         (helpers.Object(subobj=helpers.Object()), "subobj.__builtins__"),
         (helpers.Object(subobj=helpers.Object()), "__builtins__"),
+        (helpers.Object(), "__class__"),
+        (helpers.Object(), "__name__"),
+        (helpers.Object(subobj=helpers.Object()), "subobj.__dict__"),
+        (helpers.Object(), "__len__"),
     ],
 )
 def test_get__raises_for_objects_when_path_restricted(obj, path):
@@ -422,8 +430,10 @@ def test_get__raises_for_objects_when_path_restricted(obj, path):
     [
         ({}, "__globals__"),
         ({}, "__builtins__"),
+        ({}, "__class__"),
         ([], "__globals__"),
         ([], "__builtins__"),
+        ([], "__class__"),
     ],
 )
 def test_get__does_not_raise_for_dict_or_list_when_path_restricted(obj, path):
@@ -433,9 +443,9 @@ def test_get__does_not_raise_for_dict_or_list_when_path_restricted(obj, path):
 @parametrize(
     "obj,path",
     [
-        (helpers.Object(), "__name__"),
-        (helpers.Object(), "foo.__dict__"),
-        (helpers.Object(), "__len__"),
+        (helpers.Object(), "_name"),
+        (helpers.Object(), "foo._dict"),
+        (helpers.Object(), "_len"),
     ],
 )
 def test_get__does_not_raise_for_objects_when_path_is_unrestricted(obj, path):
@@ -787,6 +797,19 @@ def test_set_on_class_works_the_same_with_string_and_list():
     a2 = A()
 
     assert _.set_(a1, "x.a.b", 1).x == _.set_(a2, ["x", "a", "b"], 1).x
+
+
+def test_set__raises_for_objects_when_path_restricted():
+    class User:
+        is_admin = False
+
+    user = User()
+
+    with pytest.raises(KeyError, match="access to restricted key"):
+        _.set_(user, "__class__.is_admin", True)
+
+    assert User.is_admin is False
+    assert User().is_admin is False
 
 
 @parametrize(
