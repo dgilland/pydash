@@ -991,7 +991,7 @@ def test_some(case, expected):
 @parametrize(
     "case,expected",
     [
-        (([1, 2, 3], lambda x: math.sin(x)), [3, 1, 2]),
+        (([1, 2, 3], math.sin), [3, 1, 2]),
         (
             (
                 [
@@ -1009,8 +1009,8 @@ def test_some(case, expected):
                 {"name": "fred", "age": 40},
             ],
         ),
-        (({"a": 1, "b": 2, "c": 3}, lambda x: math.sin(x)), [3, 1, 2]),
-        (([1, 2, 3], lambda x: math.sin(x), True), [2, 1, 3]),
+        (({"a": 1, "b": 2, "c": 3}, math.sin), [3, 1, 2]),
+        (([1, 2, 3], math.sin, True), [2, 1, 3]),
         (
             (
                 [
@@ -1029,7 +1029,7 @@ def test_some(case, expected):
                 {"name": "barney", "age": 26},
             ],
         ),
-        (({"a": 1, "b": 2, "c": 3}, lambda x: math.sin(x), True), [2, 1, 3]),
+        (({"a": 1, "b": 2, "c": 3}, math.sin, True), [2, 1, 3]),
     ],
 )
 def test_sort_by(case, expected):

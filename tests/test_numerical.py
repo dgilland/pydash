@@ -81,7 +81,7 @@ def test_max_(case, expected):
     [
         (([1, 2, 3],), 3),
         (({"a": 3, "b": 2, "c": 1},), 3),
-        ((["anaconda", "bison", "camel"], lambda x: len(x)), "anaconda"),
+        ((["anaconda", "bison", "camel"], len), "anaconda"),
         (
             (
                 [{"name": "barney", "age": 36}, {"name": "fred", "age": 40}],
@@ -160,7 +160,7 @@ def test_min_(case, expected):
     [
         (([1, 2, 3],), 1),
         (({"a": 3, "b": 2, "c": 1},), 1),
-        ((["anaconda", "bison", "cat"], lambda x: len(x)), "cat"),
+        ((["anaconda", "bison", "cat"], len), "cat"),
         (
             (
                 [{"name": "barney", "age": 36}, {"name": "fred", "age": 40}],
