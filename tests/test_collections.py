@@ -31,6 +31,11 @@ def test_at(case, expected):
         (([{"one": 1}, {"one": 1}, {"two": 2}, {"one": 1}], {"one": 1}), {True: 3, False: 1}),
         (([{"one": 1}, {"one": 1}, {"two": 2}, {"one": 1}], "one"), {1: 3, None: 1}),
         (({1: 0, 2: 0, 4: 3},), {0: 2, 3: 1}),
+        # pydash.floor/ceil/round_ have an optional `precision` arg; when used as
+        # an iteratee the collection index must not be passed as precision.
+        (([6.1, 4.2, 6.3], _.floor), {6.0: 2, 4.0: 1}),
+        (([6.1, 4.2, 6.3], _.ceil), {7.0: 2, 5.0: 1}),
+        (([1.1, 1.9, 2.1], _.round_), {1.0: 1, 2.0: 2}),
     ],
 )
 def test_count_by(case, expected):
@@ -991,7 +996,7 @@ def test_some(case, expected):
 @parametrize(
     "case,expected",
     [
-        (([1, 2, 3], lambda x: math.sin(x)), [3, 1, 2]),
+        (([1, 2, 3], math.sin), [3, 1, 2]),
         (
             (
                 [
@@ -1009,8 +1014,8 @@ def test_some(case, expected):
                 {"name": "fred", "age": 40},
             ],
         ),
-        (({"a": 1, "b": 2, "c": 3}, lambda x: math.sin(x)), [3, 1, 2]),
-        (([1, 2, 3], lambda x: math.sin(x), True), [2, 1, 3]),
+        (({"a": 1, "b": 2, "c": 3}, math.sin), [3, 1, 2]),
+        (([1, 2, 3], math.sin, True), [2, 1, 3]),
         (
             (
                 [
@@ -1029,7 +1034,7 @@ def test_some(case, expected):
                 {"name": "barney", "age": 26},
             ],
         ),
-        (({"a": 1, "b": 2, "c": 3}, lambda x: math.sin(x), True), [2, 1, 3]),
+        (({"a": 1, "b": 2, "c": 3}, math.sin, True), [2, 1, 3]),
     ],
 )
 def test_sort_by(case, expected):

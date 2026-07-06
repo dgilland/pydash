@@ -872,7 +872,7 @@ def get(obj: t.Any, path: PathT, default: t.Any = None) -> t.Any:
         # When a returnable default is given, use a sentinel value to detect when base_get() returns
         # a default value for a missing path, so we can exit early from the loop and not mistakenly
         # iterate over the default.
-        sentinel = object()
+        sentinel = object()  # type: ignore
 
     for key in to_path(path):
         obj = base_get(obj, key, default=sentinel)
@@ -2115,7 +2115,7 @@ def to_list(obj, split_strings=True):
     if isinstance(obj, list):
         return obj[:]
     elif isinstance(obj, dict):
-        return obj.values()
+        return list(obj.values())
     elif not split_strings and isinstance(obj, (str, bytes)):
         return [obj]
     elif split_strings and isinstance(obj, bytes):

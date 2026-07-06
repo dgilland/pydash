@@ -7,6 +7,7 @@ Functions that operate on lists.
 from __future__ import annotations
 
 from bisect import bisect_left, bisect_right
+from collections.abc import Iterable, Mapping
 from functools import cmp_to_key
 from math import ceil
 import typing as t
@@ -936,7 +937,7 @@ def intersection_by(array, *others, **kwargs):
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     # Sort by smallest list length to make intersection faster.
-    others = sorted(others, key=lambda other: len(other))
+    others = sorted(others, key=len)
 
     for other in others:
         array = list(iterintersection(array, other, iteratee=iteratee))
@@ -993,7 +994,7 @@ def intersection_with(array, *others, **kwargs):
     comparator, others = parse_iteratee("comparator", *others, **kwargs)
 
     # Sort by smallest list length to reduce to intersection faster.
-    others = sorted(others, key=lambda other: len(other))
+    others = sorted(others, key=len)
 
     for other in others:
         array = list(iterintersection(array, other, comparator=comparator))
@@ -2818,11 +2819,15 @@ def zip_with(*arrays, **kwargs):
 def iterflatten(array, depth=-1):
     """Iteratively flatten a list shallowly or deeply."""
     for item in array:
-        if isinstance(item, (list, tuple)) and depth != 0:
+        if is_flattenable(item) and depth != 0:
             for subitem in iterflatten(item, depth - 1):
                 yield subitem
         else:
             yield item
+
+
+def is_flattenable(value):
+    return isinstance(value, Iterable) and not isinstance(value, (str, bytes, bytearray, Mapping))
 
 
 def iterinterleave(*arrays):
@@ -2844,7 +2849,11 @@ def iterinterleave(*arrays):
 def iterintersperse(iterable, separator):
     """Iteratively intersperse iterable."""
     iterable = iter(iterable)
-    yield next(iterable)
+    try:
+        item = next(iterable)
+    except StopIteration:
+        return
+    yield item
     for item in iterable:
         yield separator
         yield item
