@@ -356,6 +356,7 @@ def test_intersection_with(case, expected):
 @parametrize(
     "case,expected",
     [
+        (([], "x"), []),
         (([1, 2, 3, 4], 10), [1, 10, 2, 10, 3, 10, 4]),
         (([1, 2, 3, 4], [0, 0, 0]), [1, [0, 0, 0], 2, [0, 0, 0], 3, [0, 0, 0], 4]),
         (

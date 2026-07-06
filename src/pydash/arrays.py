@@ -2849,7 +2849,11 @@ def iterinterleave(*arrays):
 def iterintersperse(iterable, separator):
     """Iteratively intersperse iterable."""
     iterable = iter(iterable)
-    yield next(iterable)
+    try:
+        item = next(iterable)
+    except StopIteration:
+        return
+    yield item
     for item in iterable:
         yield separator
         yield item
