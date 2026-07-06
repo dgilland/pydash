@@ -936,7 +936,7 @@ def intersection_by(array, *others, **kwargs):
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     # Sort by smallest list length to make intersection faster.
-    others = sorted(others, key=lambda other: len(other))
+    others = sorted(others, key=len)
 
     for other in others:
         array = list(iterintersection(array, other, iteratee=iteratee))
@@ -993,7 +993,7 @@ def intersection_with(array, *others, **kwargs):
     comparator, others = parse_iteratee("comparator", *others, **kwargs)
 
     # Sort by smallest list length to reduce to intersection faster.
-    others = sorted(others, key=lambda other: len(other))
+    others = sorted(others, key=len)
 
     for other in others:
         array = list(iterintersection(array, other, comparator=comparator))
