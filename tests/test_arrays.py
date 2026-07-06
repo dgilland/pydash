@@ -656,7 +656,7 @@ def test_sorted_uniq(case, expected):
 @parametrize(
     "case,iteratee,expected",
     [
-        ([2.5, 3, 1, 2, 1.5], lambda num: math.floor(num), [1, 2.5, 3]),
+        ([2.5, 3, 1, 2, 1.5], math.floor, [1, 2.5, 3]),
         (["A", "b", "C", "a", "B", "c"], lambda letter: letter.lower(), ["A", "C", "b"]),
     ],
 )
@@ -769,7 +769,7 @@ def test_uniq(case, expected):
 @parametrize(
     "case,iteratee,expected",
     [
-        ([1, 2, 1.5, 3, 2.5], lambda num: math.floor(num), [1, 2, 3]),
+        ([1, 2, 1.5, 3, 2.5], math.floor, [1, 2, 3]),
         (
             [
                 {"name": "banana", "type": "fruit"},
