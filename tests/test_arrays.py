@@ -104,6 +104,7 @@ def test_drop(case, expected):
     "case,expected",
     [
         (([1, 2, 3, 4, 5], lambda item: item < 3), [3, 4, 5]),
+        ((iter([1, 2, 3, 4, 5]), lambda item: item < 3), [3, 4, 5]),
     ],
 )
 def test_drop_while(case, expected):
@@ -730,6 +731,7 @@ def test_take(case, expected):
     "case,expected",
     [
         (([1, 2, 3, 4, 5], lambda item: item < 3), [1, 2]),
+        ((iter([1, 2, 3, 4, 5]), lambda item: item < 3), [1, 2]),
     ],
 )
 def test_take_while(case, expected):
