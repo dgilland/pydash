@@ -31,6 +31,11 @@ def test_at(case, expected):
         (([{"one": 1}, {"one": 1}, {"two": 2}, {"one": 1}], {"one": 1}), {True: 3, False: 1}),
         (([{"one": 1}, {"one": 1}, {"two": 2}, {"one": 1}], "one"), {1: 3, None: 1}),
         (({1: 0, 2: 0, 4: 3},), {0: 2, 3: 1}),
+        # pydash.floor/ceil/round_ have an optional `precision` arg; when used as
+        # an iteratee the collection index must not be passed as precision.
+        (([6.1, 4.2, 6.3], _.floor), {6.0: 2, 4.0: 1}),
+        (([6.1, 4.2, 6.3], _.ceil), {7.0: 2, 5.0: 1}),
+        (([1.1, 1.9, 2.1], _.round_), {1.0: 1, 2.0: 2}),
     ],
 )
 def test_count_by(case, expected):

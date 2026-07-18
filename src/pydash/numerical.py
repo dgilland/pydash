@@ -320,6 +320,11 @@ def ceil(x: NumberT, precision: int = 0) -> float:
     return rounder(math.ceil, x, precision)
 
 
+# When used as an iteratee (e.g. count_by, group_by), only the element value
+# should be passed; the optional `precision` parameter must not receive the
+# collection index.  Marking _argcount=1 tells callit() to pass a single arg.
+ceil._argcount = 1  # type: ignore[attr-defined]
+
 NumT = t.TypeVar("NumT", int, float, "Decimal")
 NumT2 = t.TypeVar("NumT2", int, float, "Decimal")
 NumT3 = t.TypeVar("NumT3", int, float, "Decimal")
@@ -412,6 +417,12 @@ def floor(x: NumberT, precision: int = 0) -> float:
     .. versionadded:: 3.3.0
     """
     return rounder(math.floor, x, precision)
+
+
+# When used as an iteratee (e.g. count_by, group_by), only the element value
+# should be passed; the optional `precision` parameter must not receive the
+# collection index.  Marking _argcount=1 tells callit() to pass a single arg.
+floor._argcount = 1  # type: ignore[attr-defined]
 
 
 @t.overload
@@ -941,6 +952,12 @@ def round_(x, precision=0):
         Remove alias ``curve``.
     """
     return rounder(round, x, precision)
+
+
+# When used as an iteratee (e.g. count_by, group_by), only the element value
+# should be passed; the optional `precision` parameter must not receive the
+# collection index.  Marking _argcount=1 tells callit() to pass a single arg.
+round_._argcount = 1  # type: ignore[attr-defined]
 
 
 @t.overload

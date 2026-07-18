@@ -207,6 +207,8 @@ def test_find_last_index(case, filter_by, expected):
     "case,expected",
     [
         ([1, ["2222"], [3, [[4]]]], [1, "2222", 3, [[4]]]),
+        ([iter([1, 2]), iter([3, [[4]]])], [1, 2, 3, [[4]]]),
+        ([{"a": 1}, [2]], [{"a": 1}, 2]),
     ],
 )
 def test_flatten(case, expected):
@@ -217,6 +219,8 @@ def test_flatten(case, expected):
     "case,expected",
     [
         ([1, ["2222"], [3, [[4]]]], [1, "2222", 3, 4]),
+        ([iter([1, [2]]), iter([[3, [4]]])], [1, 2, 3, 4]),
+        ([{"a": 1}, [2]], [{"a": 1}, 2]),
     ],
 )
 def test_flatten_deep(case, expected):
@@ -230,6 +234,8 @@ def test_flatten_deep(case, expected):
         (([1, ["2222"], [3, [[4]]]], 1), [1, "2222", 3, [[4]]]),
         (([1, ["2222"], [3, [[4]]]], 2), [1, "2222", 3, [4]]),
         (([1, ["2222"], [3, [[4]]]], 3), [1, "2222", 3, 4]),
+        (([iter([1, [2]])], 1), [1, [2]]),
+        (([iter([1, [2]])], 2), [1, 2]),
     ],
 )
 def test_flatten_depth(case, expected):
@@ -351,6 +357,7 @@ def test_intersection_with(case, expected):
 @parametrize(
     "case,expected",
     [
+        (([], "x"), []),
         (([1, 2, 3, 4], 10), [1, 10, 2, 10, 3, 10, 4]),
         (([1, 2, 3, 4], [0, 0, 0]), [1, [0, 0, 0], 2, [0, 0, 0], 3, [0, 0, 0], 4]),
         (

@@ -350,7 +350,8 @@ def lte_cmp(other: T) -> t.Callable[["SupportsDunderLE[T]"], bool]:
 def in_range(value: t.Any, start: t.Any = 0, end: t.Any = None) -> bool:
     """
     Checks if `value` is between `start` and up to but not including `end`. If `end` is not
-    specified it defaults to `start` with `start` becoming ``0``.
+    specified it defaults to `start` with `start` becoming ``0``. If `start` is greater than `end`
+    the bounds are swapped, so a reversed range is supported.
 
     Args:
 
@@ -375,8 +376,13 @@ def in_range(value: t.Any, start: t.Any = 0, end: t.Any = None) -> bool:
         True
         >>> in_range(3.5, 2.5)
         False
+        >>> in_range(-3, -2, -6)
+        True
 
     .. versionadded:: 3.1.0
+
+    .. versionchanged:: 8.0.7
+        Support reversed ranges where `start` is greater than `end`.
     """
     if not is_number(value):
         return False
@@ -389,6 +395,9 @@ def in_range(value: t.Any, start: t.Any = 0, end: t.Any = None) -> bool:
         start = 0
     elif not is_number(end):
         end = 0
+
+    if start > end:
+        start, end = end, start
 
     return start <= value < end
 
