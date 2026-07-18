@@ -1347,6 +1347,11 @@ def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
     """
     flat_indexes = flatten(indexes)
     for index in sorted(flat_indexes, reverse=True):
+        # Skip out-of-range indexes (lodash leaves them as holes / no-ops).
+        if not isinstance(index, int):
+            continue
+        if index < -len(array) or index >= len(array):
+            continue
         del array[index]
 
     return array
