@@ -127,6 +127,9 @@ def chunk(array: t.Sequence[T], size: int = 1) -> t.List[t.Sequence[T]]:
 
     .. versionadded:: 1.1.0
     """
+    # Lodash returns [] when size < 1; avoid ZeroDivisionError on size=0.
+    if size < 1:
+        return []
     chunks = int(ceil(len(array) / float(size)))
     return [array[i * size : (i + 1) * size] for i in range(chunks)]
 
