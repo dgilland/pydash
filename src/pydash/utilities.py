@@ -1101,7 +1101,7 @@ def result(obj, key, default=None):
     return ret
 
 
-def retry(
+def retry(  # noqa: PLR0917
     attempts: int = 3,
     delay: t.Union[int, float] = 0.5,
     max_delay: t.Union[int, float] = 150.0,
