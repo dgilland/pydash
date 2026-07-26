@@ -120,6 +120,11 @@ def test_mean(case, expected):
     assert _.mean(case) == expected
 
 
+def test_mean_empty():
+    assert math.isnan(_.mean([]))
+    assert math.isnan(_.mean({}))
+
+
 @parametrize(
     "case,expected",
     [
@@ -131,6 +136,11 @@ def test_mean(case, expected):
 )
 def test_mean_by(case, expected):
     assert _.mean_by(*case) == expected
+
+
+def test_mean_by_empty():
+    assert math.isnan(_.mean_by([]))
+    assert math.isnan(_.mean_by([], lambda x: x * 2))
 
 
 @parametrize(

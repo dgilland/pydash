@@ -289,10 +289,15 @@ def mean_by(collection, iteratee=None):
 
         >>> mean_by([1, 2, 3, 4], lambda x: x**2)
         7.5
+        >>> math.isnan(mean_by([]))
+        True
 
     .. versionadded:: 4.0.0
     """
-    return sum_by(collection, iteratee) / len(collection)
+    length = len(collection)
+    if not length:
+        return float("nan")
+    return sum_by(collection, iteratee) / length
 
 
 def ceil(x: NumberT, precision: int = 0) -> float:
