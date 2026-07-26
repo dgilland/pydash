@@ -1,3 +1,5 @@
+import math
+
 import pytest
 
 import pydash as _
@@ -142,6 +144,11 @@ def test_mean_by(case, expected):
 )
 def test_median(case, expected):
     assert _.median(*case) == expected
+
+
+def test_median_empty():
+    assert math.isnan(_.median([]))
+    assert math.isnan(_.median({}))
 
 
 @parametrize(
