@@ -398,6 +398,9 @@ def test_last(case, expected):
         ([0, 1, 2, 3, 4, 5], 3, -5, -1),
         ([0, 1, 2, 3, 4, 5], 3, -6, -1),
         ([0, 1, 2, 3, 4, 5], 3, None, 3),
+        ([1, 2, 3], 1, None, 0),
+        ([1, 2, 3], 1, 0, 0),
+        ([5, 2, 3], 5, None, 0),
     ],
 )
 def test_last_index_of(case, value, from_index, expected):

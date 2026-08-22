@@ -1083,7 +1083,7 @@ def last_index_of(
         # Set starting index base on from_index offset.
         index = max(0, index + from_index) if from_index < 0 else min(from_index, index - 1)
 
-    while index:
+    while index >= 0:
         if index < array_len and array[index] == value:
             return index
         index -= 1
