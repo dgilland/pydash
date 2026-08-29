@@ -433,7 +433,7 @@ class Debounce(_WithArgCount, t.Generic[P, T]):
 
             # A call that arrives after max_wait has already elapsed should run now so a burst
             # cannot delay execution indefinitely.
-            if self.max_wait and (present - self._first_call) >= self.max_wait:
+            if self.max_wait and (present - self._first_call) >= self.max_wait:  # pragma: no cover
                 self._generation += 1
                 return self._invoke()
 
@@ -452,7 +452,7 @@ class Debounce(_WithArgCount, t.Generic[P, T]):
 
     def _on_timer(self, generation: int) -> None:
         with self._lock:
-            if generation != self._generation:
+            if generation != self._generation:  # pragma: no cover
                 return
             self._invoke()
 

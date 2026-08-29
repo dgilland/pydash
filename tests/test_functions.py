@@ -137,16 +137,16 @@ def test_debounce():
         calls.append(args)
         return args
 
-    wait = 60
+    wait = 15
     debounced = _.debounce(func, wait)
 
     # First call is deferred; subsequent calls reset the wait.
     assert debounced(1) is None
-    time.sleep(0.02)
+    time.sleep(0.01)
     assert debounced(2) is None
     assert calls == []
 
-    time.sleep((wait + 40) / 1000.0)
+    time.sleep((wait + 15) / 1000.0)
     assert calls == [(2,)]
     assert debounced.last_result == (2,)
 
@@ -155,7 +155,7 @@ def test_debounce():
     assert result == (2,)
     assert calls == [(2,)]
 
-    time.sleep((wait + 40) / 1000.0)
+    time.sleep((wait + 15) / 1000.0)
     assert calls == [(2,), (3,)]
 
 
@@ -167,8 +167,8 @@ def test_debounce_max_wait():
         calls.append(now)
         return now
 
-    wait = 200
-    max_wait = 250
+    wait = 15
+    max_wait = 30
     debounced = _.debounce(func, wait, max_wait=max_wait)
 
     start = _.now()
@@ -176,13 +176,13 @@ def test_debounce_max_wait():
     assert calls == []
 
     # Keep invoking so `wait` never elapses; `max_wait` should still fire.
-    deadline = start + max_wait + 80
+    deadline = start + max_wait + 10
     while _.now() < deadline:
         debounced()
-        time.sleep(0.02)
+        time.sleep(0.01)
 
     assert len(calls) >= 1
-    assert calls[0] - start >= max_wait - 40
+    assert calls[0] - start >= max_wait - 10
 
 
 @parametrize(
