@@ -1441,13 +1441,38 @@ def _to_path_token(key) -> PathToken:
     )
 
 
+def _to_path_keys(value):
+    keys = []
+    parts = RE_PATH_KEY_DELIM.split(value)
+
+    for idx, key in enumerate(parts):
+        if key is None:
+            continue
+
+        if key == "":
+            prev_part = pyd.get(parts, idx - 1) if idx else None
+            next_part = pyd.get(parts, idx + 1)
+            prev_is_list_index = _maybe_list_index(prev_part) is not None
+            next_is_list_index = _maybe_list_index(next_part) is not None
+
+            if prev_is_list_index or next_is_list_index:
+                continue
+
+            if prev_part is not None and next_part is not None:
+                continue
+
+        keys.append(key)
+
+    return keys
+
+
 def to_path_tokens(value) -> t.List[PathToken]:
     """Parse `value` into :class:`PathToken` objects."""
     if pyd.is_string(value) and ("." in value or "[" in value):
         # Since we can't tell whether a bare number is supposed to be dict key or a list index, we
         # support a special syntax where any string-integer surrounded by brackets is treated as a
         # list index and converted to an integer.
-        keys = [_to_path_token(key) for key in filter(None, RE_PATH_KEY_DELIM.split(value))]
+        keys = [_to_path_token(key) for key in _to_path_keys(value)]
     elif pyd.is_string(value) or pyd.is_number(value):
         keys = [PathToken(value, default_factory=dict)]
     elif value is UNSET:

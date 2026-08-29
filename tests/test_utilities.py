@@ -623,6 +623,7 @@ def test_times(case, expected):
         ("a[0][1][2].b.c", ["a", 0, 1, 2, "b", "c"]),
         ("a[0][1][2].b.c", ["a", 0, 1, 2, "b", "c"]),
         ("a[0][-1][-2].b.c", ["a", 0, -1, -2, "b", "c"]),
+        ("a..b", ["a", "", "b"]),
     ],
 )
 def test_to_path(case, expected):
