@@ -6,8 +6,19 @@ Changelog
 v8.0.7 (unreleased)
 -------------------
 
-- Fix ``in_range`` to support reversed ranges where ``start`` is greater than ``end`` by swapping the bounds, matching lodash's documented ``_.inRange`` behavior (e.g. ``in_range(-3, -2, -6)`` now returns ``True``).
-- Fix ``debounce`` to delay execution until after ``wait`` milliseconds of quiet instead of invoking immediately on the first call.
+- Support iterables in ``take_while`` and ``drop_while``. Thanks ``Sai Asish Y``!
+- Guard all dunder-path access on objects. Thanks gaoflow_!
+- Fix flattening nested iterables. Thanks gaoflow_!
+- Fix ``StopIteration`` leak in ``iterintersperse`` on empty iterable. Thanks gaoflow_!
+- Fix ``in_range`` to support reversed ranges where ``start`` is greater than ``end`` by swapping the bounds, matching lodash's documented ``_.inRange`` behavior (e.g. ``in_range(-3, -2, -6)`` now returns ``True``). Thanks gaoflow_!
+- Fix ``floor``, ``ceil``, and ``round_`` passing index as precision when used as iteratees. Thanks gaoflow_!
+- Fix ``debounce`` to delay execution until after ``wait`` milliseconds of quiet instead of invoking immediately on the first call. Thanks SeaStarDeng_!
+- Fix ``to_list`` returning a ``dict_values`` view instead of a list for dicts. Thanks HarperZ9_!
+- Fix ``chunk`` to return empty list when size is less than 1. Thanks santhreal_!
+- Fix mishandling of out-of-range indexes in ``pull_at``. Thanks santhreal_!
+- Fix ``mean``, ``mean_by``, and ``median`` to return ``NaN`` on empty collections. Thanks santhreal_!
+- Fix ``last_index_of`` missing a match at index 0. Thanks uttam12331_!
+- Fix empty key handling in deep paths. Thanks CodingFeng101_!
 
 
 v8.0.6 (2026-01-17)
@@ -1341,3 +1352,9 @@ v0.0.0 (2014-07-22)
 .. _weineel: https://github.com/weineel
 .. _bl4ckst0ne: https://github.com/bl4ckst0ne
 .. _DeviousStoat: https://github.com/DeviousStoat
+.. _SeaStarDeng: https://github.com/DSeaStar
+.. _CodingFeng101: https://github.com/CodingFeng101
+.. _uttam12331: https://github.com/uttam12331
+.. _santhreal: https://github.com/santhreal
+.. _gaoflow: https://github.com/gaoflow
+.. _HarperZ9: https://github.com/HarperZ9
