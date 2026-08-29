@@ -3,7 +3,7 @@
 Changelog
 =========
 
-v8.0.7 (unreleased)
+v8.1.0 (2026-08-29)
 -------------------
 
 - Support iterables in ``take_while`` and ``drop_while``. Thanks ``Sai Asish Y``!
