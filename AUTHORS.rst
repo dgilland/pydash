@@ -27,3 +27,4 @@ Contributors
 - Weineel Lee, `weineel@github <https://github.com/weineel>`_
 - bl4ckst0ne@github `bl4ckst0ne@github <https://github.com/bl4ckst0ne>`_
 - Thomas `DeviousStoat@github <https://github.com/DeviousStoat>`_
+- SeaStar Deng, `DSeaStar@github <https://github.com/DSeaStar>`_

@@ -9,6 +9,7 @@ from __future__ import annotations
 from functools import cached_property
 from inspect import getfullargspec
 import itertools
+import threading
 import time
 import typing as t
 
@@ -403,30 +404,64 @@ class Debounce(_WithArgCount, t.Generic[P, T]):
 
         self.last_result: t.Union[T, None] = None
 
-        # Initialize last_* times to be prior to the wait periods so that func
-        # is primed to be executed on first call.
-        self.last_call = pyd.now() - self.wait
-        self.last_execution = pyd.now() - max_wait if pyd.is_number(max_wait) else None
+        self._lock = threading.Lock()
+        self._timer: t.Optional[threading.Timer] = None
+        self._args: t.Tuple[t.Any, ...] = ()
+        self._kwargs: t.Dict[str, t.Any] = {}
+        self._first_call: t.Optional[int] = None
+        self._generation = 0
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """
-        Execute :attr:`func` if function hasn't been called within last :attr:`wait` milliseconds or
-        in last :attr:`max_wait` milliseconds.
+        Schedule :attr:`func` to run after :attr:`wait` milliseconds have elapsed since the last
+        call. If :attr:`max_wait` is set, execute once that many milliseconds have elapsed since the
+        first call in the current burst.
 
         Return results of last successful call.
         """
-        present = pyd.now()
+        with self._lock:
+            self._args = args
+            self._kwargs = kwargs
+            present = pyd.now()
 
-        if (present - self.last_call) >= self.wait or (
-            self.max_wait and (present - self.last_execution) >= self.max_wait  # type: ignore
-        ):
-            self.last_result = self.func(*args, **kwargs)
-            self.last_execution = present
+            if self._first_call is None:
+                self._first_call = present
 
-        self.last_call = present
+            if self._timer is not None:
+                self._timer.cancel()
+                self._timer = None
 
-        # It will be set after first call, cannot be `None` anymore
-        return self.last_result  # type: ignore
+            # A call that arrives after max_wait has already elapsed should run now so a burst
+            # cannot delay execution indefinitely.
+            if self.max_wait and (present - self._first_call) >= self.max_wait:
+                self._generation += 1
+                return self._invoke()
+
+            delay_ms = self.wait
+            if self.max_wait:
+                remaining_max = self.max_wait - (present - self._first_call)
+                delay_ms = min(delay_ms, remaining_max)
+
+            self._generation += 1
+            generation = self._generation
+            self._timer = threading.Timer(max(delay_ms, 0) / 1000.0, self._on_timer, (generation,))
+            self._timer.daemon = True
+            self._timer.start()
+
+            return self.last_result  # type: ignore
+
+    def _on_timer(self, generation: int) -> None:
+        with self._lock:
+            if generation != self._generation:
+                return
+            self._invoke()
+
+    def _invoke(self) -> T:
+        """Execute ``func`` with the latest arguments. Caller must hold ``_lock``."""
+        self.last_result = self.func(*self._args, **self._kwargs)
+        self._first_call = None
+        self._timer = None
+        return self.last_result
 
 
 class Disjoin(t.Generic[T]):
@@ -891,6 +926,9 @@ def debounce(
         Function wrapped in a :class:`Debounce` context.
 
     .. versionadded:: 1.0.0
+
+    .. versionchanged:: 8.0.7
+        Execute ``func`` after ``wait`` milliseconds of quiet instead of on the leading edge.
     """
     return Debounce(func, wait, max_wait=max_wait)
 
