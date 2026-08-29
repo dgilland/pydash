@@ -1452,13 +1452,12 @@ def _to_path_keys(value):
         if key == "":
             prev_part = pyd.get(parts, idx - 1) if idx else None
             next_part = pyd.get(parts, idx + 1)
-            prev_is_list_index = _maybe_list_index(prev_part) is not None
-            next_is_list_index = _maybe_list_index(next_part) is not None
-
-            if prev_is_list_index or next_is_list_index:
+            if prev_part is not None and next_part is not None:
                 continue
 
-            if prev_part is not None and next_part is not None:
+            prev_is_list_index = _maybe_list_index(prev_part) is not None
+            next_is_list_index = _maybe_list_index(next_part) is not None
+            if prev_is_list_index or next_is_list_index:
                 continue
 
         keys.append(key)
