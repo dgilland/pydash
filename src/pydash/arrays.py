@@ -531,13 +531,18 @@ def fill(
 
     .. versionadded:: 3.1.0
     """
-    if end is None:
-        end = len(array)
-    else:
-        end = min(end, len(array))
+    length = len(array)
 
-    # Use this style of assignment so that `array` is mutated.
-    array[:] = array[:start] + [value] * len(array[start:end]) + array[end:]  # type: ignore
+    if end is None:
+        end = length
+
+    # Normalize to ``[0, length]``, negatives as slicing does, and fill in
+    # place so the length stays fixed.
+    start = max(length + start, 0) if start < 0 else min(start, length)
+    end = max(length + end, 0) if end < 0 else min(end, length)
+
+    for index in range(start, end):
+        array[index] = value  # type: ignore
     return array  # type: ignore
 
 
