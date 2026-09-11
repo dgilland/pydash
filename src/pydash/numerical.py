@@ -1162,6 +1162,8 @@ def variance(array):
 
     .. versionadded:: 2.1.0
     """
+    if not isinstance(array, Sized):
+        array = list(array)
     avg = mean(array)
 
     def var(x):

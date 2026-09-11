@@ -296,6 +296,7 @@ def test_slope(case, expected):
     "case,expected",
     [
         ([1, 2, 3], (2.0 / 3.0) ** 0.5),
+        ((value for value in [1, 2, 3]), (2.0 / 3.0) ** 0.5),
     ],
 )
 def test_std_deviation(case, expected):
@@ -369,10 +370,17 @@ def test_transpose(case, expected):
     "case,expected",
     [
         ([1, 2, 3], 2.0 / 3.0),
+        (iter([1, 2, 3]), 2.0 / 3.0),
+        ((value for value in [1, 2, 3]), 2.0 / 3.0),
     ],
 )
 def test_variance(case, expected):
     assert _.variance(case) == expected
+
+
+def test_variance_empty_iterators():
+    assert math.isnan(_.variance(iter([])))
+    assert math.isnan(_.variance(value for value in []))
 
 
 @parametrize(
