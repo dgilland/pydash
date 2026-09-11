@@ -33,3 +33,4 @@ Contributors
 - santhreal, `santhreal@github <https://github.com/santhreal>`_
 - gaoflow, `gaoflow@github <https://github.com/gaoflow>`_
 - HarperZ9, `HarperZ9@github <https://github.com/HarperZ9>`_
+- Sun Haoyuan, `Shy7777@github <https://github.com/Shy7777>`_

@@ -6,6 +6,7 @@ Numerical/mathematical related functions.
 
 from __future__ import annotations
 
+from collections.abc import Sized
 import math
 import operator
 import typing as t
@@ -294,6 +295,8 @@ def mean_by(collection, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
+    if not isinstance(collection, Sized):
+        collection = list(collection)
     length = len(collection)
     if not length:
         return float("nan")
@@ -1159,6 +1162,8 @@ def variance(array):
 
     .. versionadded:: 2.1.0
     """
+    if not isinstance(array, Sized):
+        array = list(array)
     avg = mean(array)
 
     def var(x):

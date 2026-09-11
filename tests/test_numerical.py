@@ -114,6 +114,8 @@ def test_max_default(collection, default, expected):
     [
         ([1, 2, 3, 4, 5], 3),
         ([0, 0.5, 1], 0.5),
+        (iter([1, 2, 3, 4, 5]), 3),
+        ((value for value in [0, 0.5, 1]), 0.5),
     ],
 )
 def test_mean(case, expected):
@@ -130,6 +132,7 @@ def test_mean_empty():
     [
         (([1, 2, 3, 4, 5],), 3),
         (([{"b": 4}, {"b": 5}, {"b": 6}], "b"), 5),
+        ((({"b": value} for value in [4, 5, 6]), "b"), 5),
         (([0, 0.5, 1],), 0.5),
         (({"one": {"a": 1}, "two": {"a": 2}, "three": {"a": 3}}, "a"), 2),
     ],
@@ -141,6 +144,11 @@ def test_mean_by(case, expected):
 def test_mean_by_empty():
     assert math.isnan(_.mean_by([]))
     assert math.isnan(_.mean_by([], lambda x: x * 2))
+
+
+def test_mean_empty_iterators():
+    assert math.isnan(_.mean(iter([])))
+    assert math.isnan(_.mean_by((value for value in []), "b"))
 
 
 @parametrize(
@@ -288,6 +296,7 @@ def test_slope(case, expected):
     "case,expected",
     [
         ([1, 2, 3], (2.0 / 3.0) ** 0.5),
+        ((value for value in [1, 2, 3]), (2.0 / 3.0) ** 0.5),
     ],
 )
 def test_std_deviation(case, expected):
@@ -361,10 +370,17 @@ def test_transpose(case, expected):
     "case,expected",
     [
         ([1, 2, 3], 2.0 / 3.0),
+        (iter([1, 2, 3]), 2.0 / 3.0),
+        ((value for value in [1, 2, 3]), 2.0 / 3.0),
     ],
 )
 def test_variance(case, expected):
     assert _.variance(case) == expected
+
+
+def test_variance_empty_iterators():
+    assert math.isnan(_.variance(iter([])))
+    assert math.isnan(_.variance(value for value in []))
 
 
 @parametrize(
