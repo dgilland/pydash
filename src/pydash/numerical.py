@@ -1004,6 +1004,7 @@ def scale(array, maximum: NumberT = 1):
 
     .. versionadded:: 2.1.0
     """
+    array = list(array)
     array_max = max(array)
     factor = maximum / array_max
     return [item * factor for item in array]

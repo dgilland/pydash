@@ -1,3 +1,4 @@
+from decimal import Decimal
 import math
 
 import pytest
@@ -269,6 +270,27 @@ def test_round_(case, expected):
 )
 def test_scale(case, expected):
     assert _.scale(*case) == expected
+
+
+@parametrize("iterable", [iter, lambda values: (value for value in values)])
+@parametrize(
+    "values,maximum,expected",
+    [
+        ([2, 5, 10], 1, [0.2, 0.5, 1]),
+        ([2, 5, 10], 10, [2, 5, 10]),
+        ([-2, 0, 4], 2, [-1, 0, 2]),
+        ([5], 1, [1]),
+        ([Decimal("1"), Decimal("2")], Decimal("1"), [Decimal("0.5"), Decimal("1")]),
+    ],
+)
+def test_scale_iterable(iterable, values, maximum, expected):
+    assert _.scale(iterable(values), maximum) == expected
+
+
+@parametrize("values,error", [([], ValueError), ([0, 0], ZeroDivisionError)])
+def test_scale_iterable_errors(values, error):
+    with pytest.raises(error):
+        _.scale(iter(values))
 
 
 @parametrize(
