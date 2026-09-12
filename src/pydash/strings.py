@@ -2046,6 +2046,8 @@ def truncate(
         'hello w...'
         >>> truncate("hello world", 10, separator=" ")
         'hello...'
+        >>> truncate("hello world", 2)
+        '...'
 
     .. versionadded:: 1.1.0
 
@@ -2058,7 +2060,7 @@ def truncate(
         return text
 
     omission_len = len(omission)
-    text_len = length - omission_len
+    text_len = max(0, length - omission_len)
     text = text[:text_len]
 
     trunc_len = len(text)

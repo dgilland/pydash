@@ -1092,6 +1092,12 @@ def test_truncate(case, expected):
     assert _.truncate(*case) == expected
 
 
+@parametrize("length", [-1, 0, 1, 2, 3])
+@parametrize("separator", [None, " ", re.compile(" ")])
+def test_truncate_limit_no_longer_than_omission(length, separator):
+    assert _.truncate("abcdefgh", length, separator=separator) == "..."
+
+
 @parametrize(
     "case,expected",
     [
