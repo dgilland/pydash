@@ -33,3 +33,4 @@ Contributors
 - santhreal, `santhreal@github <https://github.com/santhreal>`_
 - gaoflow, `gaoflow@github <https://github.com/gaoflow>`_
 - HarperZ9, `HarperZ9@github <https://github.com/HarperZ9>`_
+- emme1t, `emme1t@github <https://github.com/emme1t>`_
