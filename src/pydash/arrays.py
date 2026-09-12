@@ -1789,12 +1789,14 @@ def sorted_last_index_of(
         3
         >>> sorted_last_index_of([6, 5, 5, 5, 4], 6)
         -1
+        >>> sorted_last_index_of([], 5)
+        -1
 
     .. versionadded:: 4.0.0
     """
     index = sorted_last_index(array, value) - 1
 
-    if index < len(array) and array[index] == value:
+    if 0 <= index < len(array) and array[index] == value:
         return index
     else:
         return -1
