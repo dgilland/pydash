@@ -2541,7 +2541,7 @@ def xor_by(array, *lists, **kwargs):
 
     iteratee, lists = parse_iteratee("iteratee", *lists, **kwargs)
 
-    return xor(
+    return xor_by(
         uniq(
             difference_by(
                 array + lists[0],
@@ -2550,6 +2550,7 @@ def xor_by(array, *lists, **kwargs):
             )
         ),
         *lists[1:],
+        iteratee=iteratee,
     )
 
 
@@ -2606,6 +2607,7 @@ def xor_with(array, *lists, **kwargs):
             )
         ),
         *lists[1:],
+        comparator=comp,
     )
 
 

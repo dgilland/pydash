@@ -916,6 +916,39 @@ def test_xor_with(case, expected):
 
 
 @parametrize(
+    "arrays,expected",
+    [
+        (([{"id": 1}], [{"id": 2}], [{"id": 1, "name": "updated"}]), [{"id": 2}]),
+        (
+            ([{"id": 1}], [{"id": 2}], [{"id": 1, "name": "updated"}], [{"id": 2}]),
+            [],
+        ),
+    ],
+)
+def test_xor_by_multiple_arrays(arrays, expected):
+    assert _.xor_by(*arrays, "id") == expected
+    assert _.xor_by(*arrays, iteratee="id") == expected
+
+
+@parametrize(
+    "arrays,expected",
+    [
+        (([{"id": 1}], [{"id": 2}], [{"id": 1, "name": "updated"}]), [{"id": 2}]),
+        (
+            ([{"id": 1}], [{"id": 2}], [{"id": 1, "name": "updated"}], [{"id": 2}]),
+            [],
+        ),
+    ],
+)
+def test_xor_with_multiple_arrays(arrays, expected):
+    def comparator(left, right):
+        return left["id"] == right["id"]
+
+    assert _.xor_with(*arrays, comparator) == expected
+    assert _.xor_with(*arrays, comparator=comparator) == expected
+
+
+@parametrize(
     "case,expected",
     [
         (
