@@ -331,6 +331,26 @@ def test_intersection(case, expected):
     assert _.intersection(*case) == expected
 
 
+@parametrize("factory", [iter, lambda values: (value for value in values)])
+def test_intersection_iterators(factory):
+    assert _.intersection([3, 1, 2, 3], factory([1, 2, 3]), factory([2, 3])) == [3, 2]
+    assert _.intersection([1, 2], factory([])) == []
+
+
+@parametrize("factory", [iter, lambda values: (value for value in values)])
+def test_intersection_by_iterators(factory):
+    assert _.intersection_by([3.1, 1.1, 2.1], factory([1.2, 2.2, 3.2]), int) == [3.1, 1.1, 2.1]
+
+
+@parametrize("factory", [iter, lambda values: (value for value in values)])
+def test_intersection_with_iterators(factory):
+    assert _.intersection_with([3, 1, 2], factory([1, 2, 3]), comparator=lambda a, b: a == b) == [
+        3,
+        1,
+        2,
+    ]
+
+
 @parametrize(
     "case,expected",
     [

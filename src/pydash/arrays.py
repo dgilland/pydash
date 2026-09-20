@@ -7,7 +7,7 @@ Functions that operate on lists.
 from __future__ import annotations
 
 from bisect import bisect_left, bisect_right
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Iterator, Mapping
 from functools import cmp_to_key
 from math import ceil
 import typing as t
@@ -946,7 +946,9 @@ def intersection_by(array, *others, **kwargs):
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     # Sort by smallest list length to make intersection faster.
-    others = sorted(others, key=len)
+    others = sorted(
+        (list(other) if isinstance(other, Iterator) else other for other in others), key=len
+    )
 
     for other in others:
         array = list(iterintersection(array, other, iteratee=iteratee))
@@ -1003,7 +1005,9 @@ def intersection_with(array, *others, **kwargs):
     comparator, others = parse_iteratee("comparator", *others, **kwargs)
 
     # Sort by smallest list length to reduce to intersection faster.
-    others = sorted(others, key=len)
+    others = sorted(
+        (list(other) if isinstance(other, Iterator) else other for other in others), key=len
+    )
 
     for other in others:
         array = list(iterintersection(array, other, comparator=comparator))
