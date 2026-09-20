@@ -35,3 +35,4 @@ Contributors
 - HarperZ9, `HarperZ9@github <https://github.com/HarperZ9>`_
 - oyeong011
 - jackwalkerlabs, `jackwalkerlabs@github <https://github.com/jackwalkerlabs>`_
+- Sun Haoyuan, `Shy7777@github <https://github.com/Shy7777>`_
