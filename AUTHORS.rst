@@ -36,3 +36,4 @@ Contributors
 - oyeong011
 - jackwalkerlabs, `jackwalkerlabs@github <https://github.com/jackwalkerlabs>`_
 - Sun Haoyuan, `Shy7777@github <https://github.com/Shy7777>`_
+- emme1t, `emme1t@github <https://github.com/emme1t>`_
