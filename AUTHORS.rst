@@ -40,3 +40,4 @@ Contributors
 - Vitaliy, `vitalivo@github <https://github.com/vitalivo>`_
 - MarkXian, `xianjianlf2@github <https://github.com/xianjianlf2>`_
 - Jake Wang, `jakezwang@github <https://github.com/jakezwang>`_
+- Gonghan-Princess, `Gonghan-Princess@github <https://github.com/Gonghan-Princess>`_
