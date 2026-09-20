@@ -531,13 +531,18 @@ def fill(
 
     .. versionadded:: 3.1.0
     """
-    if end is None:
-        end = len(array)
-    else:
-        end = min(end, len(array))
+    length = len(array)
 
-    # Use this style of assignment so that `array` is mutated.
-    array[:] = array[:start] + [value] * len(array[start:end]) + array[end:]  # type: ignore
+    if end is None:
+        end = length
+
+    # Normalize to ``[0, length]``, negatives as slicing does, and fill in
+    # place so the length stays fixed.
+    start = max(length + start, 0) if start < 0 else min(start, length)
+    end = max(length + end, 0) if end < 0 else min(end, length)
+
+    for index in range(start, end):
+        array[index] = value  # type: ignore
     return array  # type: ignore
 
 
@@ -1789,12 +1794,14 @@ def sorted_last_index_of(
         3
         >>> sorted_last_index_of([6, 5, 5, 5, 4], 6)
         -1
+        >>> sorted_last_index_of([], 5)
+        -1
 
     .. versionadded:: 4.0.0
     """
     index = sorted_last_index(array, value) - 1
 
-    if index < len(array) and array[index] == value:
+    if 0 <= index < len(array) and array[index] == value:
         return index
     else:
         return -1
