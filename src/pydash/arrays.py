@@ -7,7 +7,7 @@ Functions that operate on lists.
 from __future__ import annotations
 
 from bisect import bisect_left, bisect_right
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Iterator, Mapping
 from functools import cmp_to_key
 from math import ceil
 import typing as t
@@ -531,13 +531,18 @@ def fill(
 
     .. versionadded:: 3.1.0
     """
-    if end is None:
-        end = len(array)
-    else:
-        end = min(end, len(array))
+    length = len(array)
 
-    # Use this style of assignment so that `array` is mutated.
-    array[:] = array[:start] + [value] * len(array[start:end]) + array[end:]  # type: ignore
+    if end is None:
+        end = length
+
+    # Normalize to ``[0, length]``, negatives as slicing does, and fill in
+    # place so the length stays fixed.
+    start = max(length + start, 0) if start < 0 else min(start, length)
+    end = max(length + end, 0) if end < 0 else min(end, length)
+
+    for index in range(start, end):
+        array[index] = value  # type: ignore
     return array  # type: ignore
 
 
@@ -941,7 +946,9 @@ def intersection_by(array, *others, **kwargs):
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     # Sort by smallest list length to make intersection faster.
-    others = sorted(others, key=len)
+    others = sorted(
+        (list(other) if isinstance(other, Iterator) else other for other in others), key=len
+    )
 
     for other in others:
         array = list(iterintersection(array, other, iteratee=iteratee))
@@ -998,7 +1005,9 @@ def intersection_with(array, *others, **kwargs):
     comparator, others = parse_iteratee("comparator", *others, **kwargs)
 
     # Sort by smallest list length to reduce to intersection faster.
-    others = sorted(others, key=len)
+    others = sorted(
+        (list(other) if isinstance(other, Iterator) else other for other in others), key=len
+    )
 
     for other in others:
         array = list(iterintersection(array, other, comparator=comparator))
@@ -1789,12 +1798,14 @@ def sorted_last_index_of(
         3
         >>> sorted_last_index_of([6, 5, 5, 5, 4], 6)
         -1
+        >>> sorted_last_index_of([], 5)
+        -1
 
     .. versionadded:: 4.0.0
     """
     index = sorted_last_index(array, value) - 1
 
-    if index < len(array) and array[index] == value:
+    if 0 <= index < len(array) and array[index] == value:
         return index
     else:
         return -1

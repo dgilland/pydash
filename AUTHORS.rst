@@ -33,4 +33,10 @@ Contributors
 - santhreal, `santhreal@github <https://github.com/santhreal>`_
 - gaoflow, `gaoflow@github <https://github.com/gaoflow>`_
 - HarperZ9, `HarperZ9@github <https://github.com/HarperZ9>`_
+- oyeong011, `oyeong011@github <https://github.com/oyeong011>`_
+- jackwalkerlabs, `jackwalkerlabs@github <https://github.com/jackwalkerlabs>`_
+- Sun Haoyuan, `Shy7777@github <https://github.com/Shy7777>`_
+- emme1t, `emme1t@github <https://github.com/emme1t>`_
+- Vitaliy, `vitalivo@github <https://github.com/vitalivo>`_
+- MarkXian, `xianjianlf2@github <https://github.com/xianjianlf2>`_
 - Jake Wang, `jakezwang@github <https://github.com/jakezwang>`_
