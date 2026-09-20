@@ -3,6 +3,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
+  the latest arguments. Trailing invocations run in a daemon timer thread.
+
 v8.1.0 (2026-08-29)
 -------------------
 

@@ -658,20 +658,56 @@ class Throttle(_WithArgCount, t.Generic[P, T]):
         self.last_result: t.Union[T, None] = None
         self.last_execution = pyd.now() - self.wait
 
+        self._lock = threading.RLock()
+        self._timer: t.Optional[threading.Timer] = None
+        self._args: t.Tuple[t.Any, ...] = ()
+        self._kwargs: t.Dict[str, t.Any] = {}
+        self._generation = 0
+
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """
-        Execute :attr:`func` if function hasn't been called within last :attr:`wait` milliseconds.
+        Execute immediately if the wait has elapsed, otherwise schedule the latest call for the
+        end of the current wait period.
 
         Return results of last successful call.
         """
-        present = pyd.now()
+        with self._lock:
+            self._args = args
+            self._kwargs = kwargs
+            present = pyd.now()
+            remaining = self.wait - (present - self.last_execution)
 
-        if (present - self.last_execution) >= self.wait:
-            self.last_result = self.func(*args, **kwargs)
-            self.last_execution = present
+            if remaining <= 0:
+                if self._timer is not None:
+                    self._timer.cancel()
+                self._generation += 1
+                return self._invoke(present)
 
-        # The last result will be filled on first execution, so it is always `T`
-        return self.last_result  # type: ignore
+            if self._timer is None:
+                self._generation += 1
+                self._timer = threading.Timer(
+                    remaining / 1000.0, self._on_timer, (self._generation,)
+                )
+                self._timer.daemon = True
+                self._timer.start()
+
+            # The first call executes immediately and fills last_result.
+            return self.last_result  # type: ignore
+
+    def _on_timer(self, generation: int) -> None:
+        with self._lock:
+            if generation != self._generation:
+                return
+            self._invoke(pyd.now())
+
+    def _invoke(self, present: int) -> T:
+        """Execute the latest call. Caller must hold ``_lock``."""
+        args, kwargs = self._args, self._kwargs
+        self._args, self._kwargs = (), {}
+        self._timer = None
+        self.last_execution = present
+        self.last_result = self.func(*args, **kwargs)
+        return self.last_result
 
 
 def after(func: t.Callable[P, T], n: t.SupportsInt) -> After[P, T]:
@@ -1439,6 +1475,10 @@ def throttle(func: t.Callable[P, T], wait: int) -> Throttle[P, T]:
     Creates a function that, when executed, will only call the `func` function at most once per
     every `wait` milliseconds. Subsequent calls to the throttled function will return the result of
     the last `func` call.
+
+    The first call executes immediately. If called again during the wait period, `func` also runs
+    once at the end of that period with the latest arguments. This trailing call runs in a daemon
+    timer thread. A single call does not schedule a second invocation.
 
     Args:
         func: Function to throttle.
