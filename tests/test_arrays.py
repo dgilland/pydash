@@ -158,6 +158,14 @@ def test_duplicates(case, expected):
         (([1, 2, 3, 4, 5], 0, 0, 5), [0, 0, 0, 0, 0]),
         (([1, 2, 3, 4, 5], 0, 0, 8), [0, 0, 0, 0, 0]),
         (([1, 2, 3, 4, 5], 0, 0, -1), [0, 0, 0, 0, 5]),
+        # start after end must be a no-op and must not grow the array.
+        (([1, 2, 3, 4], "x", 4, 1), [1, 2, 3, 4]),
+        (([1, 2, 3, 4, 5], 0, 3, 2), [1, 2, 3, 4, 5]),
+        # negative start supported the same way slicing does.
+        (([1, 2, 3, 4, 5], 0, -2), [1, 2, 3, 0, 0]),
+        (([1, 2, 3, 4, 5], 0, -2, -1), [1, 2, 3, 0, 5]),
+        # reversed negative span is a no-op, not an array-growing overlap.
+        (([1, 2, 3], "x", -1, -2), [1, 2, 3]),
     ],
 )
 def test_fill(case, expected):
@@ -674,6 +682,13 @@ def test_sorted_last_index_by(case, expected):
 @parametrize(
     "array,value,expected",
     [
+        ([], 1, -1),
+        ((), 1, -1),
+        (range(0), 1, -1),
+        ([2, 3, 3, 4], 1, -1),
+        ([2, 3, 3, 4], 2, 0),
+        ([2, 3, 3, 4], 3, 2),
+        ([2, 3, 3, 4], 5, -1),
         ([2, 3, 4, 10, 10], 10, 4),
         ([10, 10, 4, 2, 3], 11, -1),
     ],

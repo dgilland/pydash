@@ -1,3 +1,5 @@
+import heapq
+import threading
 import time
 from unittest import mock
 
@@ -374,6 +376,129 @@ def test_throttle():
 
     time.sleep(100 / 1000.0)
     assert throttled() > expected
+
+
+def test_throttle_trailing_call():
+    calls = []
+    finished = threading.Event()
+
+    def func(value, *, suffix):
+        calls.append((value, suffix))
+        if value == "last":
+            finished.set()
+        return value
+
+    throttled = _.throttle(func, 100)
+    assert throttled("first", suffix="a") == "first"
+    assert throttled("middle", suffix="b") == "first"
+    assert throttled("last", suffix="c") == "first"
+    assert finished.wait(1), "the last call in the burst was dropped"
+    assert calls == [("first", "a"), ("last", "c")]
+
+
+@pytest.fixture
+def throttle_clock(monkeypatch):
+    now = [1000]
+    queue = []
+    timers = []
+
+    class Timer:
+        def __init__(self, interval, function, args):
+            self.when = now[0] + interval * 1000
+            self.function = function
+            self.args = args
+            self.cancelled = False
+            timers.append(self)
+
+        def start(self):
+            heapq.heappush(queue, (self.when, len(timers), self))
+
+        def cancel(self):
+            self.cancelled = True
+
+    def advance(milliseconds, run_timers=True):
+        target = now[0] + milliseconds
+        while run_timers and queue and queue[0][0] <= target:
+            when, _, timer = heapq.heappop(queue)
+            now[0] = max(now[0], when)
+            if not timer.cancelled:
+                timer.function(*timer.args)
+        now[0] = target
+
+    monkeypatch.setattr(_, "now", lambda: now[0])
+    monkeypatch.setattr(threading, "Timer", Timer)
+    return advance, timers
+
+
+def test_throttle_single_call_does_not_repeat(throttle_clock):
+    advance, timers = throttle_clock
+    func = mock.Mock(return_value="result")
+    throttled = _.throttle(func, 100)
+    assert throttled("first") == "result"
+    advance(200)
+    func.assert_called_once_with("first")
+    assert timers == []
+
+
+def test_throttle_keeps_fixed_trailing_deadline(throttle_clock):
+    advance, _timers = throttle_clock
+    calls = []
+
+    def func(value):
+        calls.append((_.now(), value))
+        return value
+
+    throttled = _.throttle(func, 100)
+    assert throttled(1) == 1
+    advance(20)
+    assert throttled(2) == 1
+    advance(40)
+    assert throttled(3) == 1
+    advance(40)
+    assert calls == [(1000, 1), (1100, 3)]
+    assert throttled.last_result == 3
+    advance(50)
+    assert throttled(4) == 3
+    advance(50)
+    assert calls == [(1000, 1), (1100, 3), (1200, 4)]
+    advance(200)
+    assert throttled(5) == 5
+
+
+def test_throttle_late_timer_does_not_duplicate_new_call(throttle_clock):
+    advance, timers = throttle_clock
+    func = mock.Mock(side_effect=lambda value: value)
+    throttled = _.throttle(func, 100)
+    assert throttled("first") == "first"
+    advance(20)
+    throttled("old")
+    old_timer = timers[0]
+
+    # Simulate a busy timer thread: a new call arrives after the deadline first.
+    advance(100, run_timers=False)
+    assert throttled("new") == "new"
+    assert old_timer.cancelled
+    throttled("pending")
+    # Timer.cancel cannot stop a callback that has already started.
+    old_timer.function(*old_timer.args)
+    advance(100)
+    assert func.call_args_list == [mock.call("first"), mock.call("new"), mock.call("pending")]
+
+
+def test_throttle_reentrant_call_is_deferred(throttle_clock):
+    advance, _timers = throttle_clock
+    calls = []
+
+    def func(value):
+        calls.append(value)
+        if value == "first":
+            throttled("nested")
+        return value
+
+    throttled = _.throttle(func, 100)
+    assert throttled("first") == "first"
+    advance(100)
+    assert calls == ["first", "nested"]
 
 
 @parametrize(
