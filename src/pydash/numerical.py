@@ -635,12 +635,12 @@ def median(collection, iteratee=None):
 
     .. versionadded:: 2.1.0
     """
+    collection = sorted(ret[0] for ret in iteriteratee(collection, iteratee))
     length = len(collection)
     if not length:
         # Match mean_by: empty collection has no median.
         return float("nan")
     middle = (length + 1) / 2
-    collection = sorted(ret[0] for ret in iteriteratee(collection, iteratee))
 
     if pyd.is_odd(length):
         result = collection[int(middle - 1)]

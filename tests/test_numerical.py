@@ -156,6 +156,20 @@ def test_median(case, expected):
     assert _.median(*case) == expected
 
 
+@parametrize("values,expected", [([3, 1, 2], 2), ([4, 1, 3, 2], 2.5)])
+def test_median_iterator(values, expected):
+    assert _.median(iter(values)) == expected
+
+
+def test_median_iterator_with_iteratee():
+    values = ({"value": value} for value in [3, 1, 2])
+    assert _.median(values, "value") == 2
+
+
+def test_median_empty_iterator():
+    assert math.isnan(_.median(iter([])))
+
+
 def test_median_empty():
     assert math.isnan(_.median([]))
     assert math.isnan(_.median({}))
