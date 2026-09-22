@@ -41,3 +41,4 @@ Contributors
 - MarkXian, `xianjianlf2@github <https://github.com/xianjianlf2>`_
 - Jake Wang, `jakezwang@github <https://github.com/jakezwang>`_
 - Gonghan-Princess, `Gonghan-Princess@github <https://github.com/Gonghan-Princess>`_
+- Eric3-jp, `Eric3-jp@github <https://github.com/Eric3-jp>`_

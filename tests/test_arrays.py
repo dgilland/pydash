@@ -638,6 +638,18 @@ def test_sorted_index_by(case, expected):
     assert _.sorted_index_by(*case) == expected
 
 
+@parametrize("key", [0, ""])
+@parametrize("method,expected", [(_.sorted_index_by, 1), (_.sorted_last_index_by, 3)])
+def test_sorted_index_by_falsey_property(method, key, expected):
+    array = [{key: rank} for rank in [1, 2, 2, 3]]
+    assert method(array, {key: 2}, key) == expected
+
+
+@parametrize("method,expected", [(_.sorted_index_by, 0), (_.sorted_last_index_by, 2)])
+def test_sorted_index_by_empty_matcher(method, expected):
+    assert method([{"x": 1}, {"x": 2}], {"x": 3}, {}) == expected
+
+
 @parametrize(
     "array,value,expected",
     [
