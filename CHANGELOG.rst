@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Honor falsey iteratees, including ``0`` and empty-string property names, in
+  ``sorted_index_by`` and ``sorted_last_index_by``.
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.
 
