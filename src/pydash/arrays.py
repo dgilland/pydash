@@ -2900,12 +2900,15 @@ def iterunique(array, comparator=None, iteratee=None):  # noqa: PLR0912
         if comparator is None:
             try:
                 if cmp_item not in seen_hashable:
-                    yield item
                     seen_hashable.add(cmp_item)
+                    if cmp_item not in seen_unhashable:
+                        yield item
             except TypeError:
-                if cmp_item not in seen_unhashable:
-                    yield item
+                if cmp_item not in seen_unhashable and not any(
+                    cmp_item == seen_item for seen_item in seen_hashable
+                ):
                     seen_unhashable.append(cmp_item)
+                    yield item
         else:
             unseen = True
             for seen_item in seen_unhashable:
