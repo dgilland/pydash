@@ -351,6 +351,25 @@ def test_intersection_with_iterators(factory):
     ]
 
 
+def test_intersection_with_non_sized_iterables():
+    class NonSizedIterable:
+        def __init__(self, values):
+            self.values = values
+
+        def __iter__(self):
+            return iter(self.values)
+
+    assert _.intersection([3, 1, 2, 3], NonSizedIterable([1, 2, 3])) == [3, 1, 2]
+    assert _.intersection_by([3.1, 1.1, 2.1], NonSizedIterable([1.2, 2.2, 3.2]), int) == [
+        3.1,
+        1.1,
+        2.1,
+    ]
+    assert _.intersection_with(
+        [3, 1, 2], NonSizedIterable([1, 2, 3]), comparator=lambda a, b: a == b
+    ) == [3, 1, 2]
+
+
 @parametrize(
     "case,expected",
     [
