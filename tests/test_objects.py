@@ -868,6 +868,15 @@ def test_set_with(case, expected):
         (("ofobar", ["^[f]"]), None),
         (("foobar", [], [".+[r]$"]), False),
         (("foobra", [], [".+[r]$"]), None),
+        (("YES", ["^yes$"]), True),
+        (("yes", ["^YES$"]), True),
+        (("No", [], ["^no$"]), False),
+        (("no", [], ["^NO$"]), False),
+        (("YeS", ["^y[a-z]s$"]), True),
+        (("YES!", ["^yes$"]), None),
+        (("X", [r"^\S$"]), True),
+        ((" ", [r"^\S$"]), None),
+        (("YES", [r"(?-i:^yes$)"]), None),
     ],
 )
 def test_to_boolean(case, expected):
