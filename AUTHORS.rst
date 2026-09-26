@@ -42,3 +42,4 @@ Contributors
 - Jake Wang, `jakezwang@github <https://github.com/jakezwang>`_
 - Gonghan-Princess, `Gonghan-Princess@github <https://github.com/Gonghan-Princess>`_
 - agammann, `agammann@github <https://github.com/agammann>`_
+- Rupayon, `rupayon123@github <https://github.com/rupayon123>`_

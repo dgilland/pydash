@@ -237,7 +237,7 @@ def difference_by(array, *others, **kwargs):
 
     .. versionadded:: 4.0.0
     """
-    array = array[:]
+    array = list(array)
 
     if not others:
         return array
@@ -246,6 +246,7 @@ def difference_by(array, *others, **kwargs):
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     for other in others:
+        other = list(other) if other else []
         if not other:
             continue
         array = list(iterdifference(array, other, iteratee=iteratee))
@@ -294,7 +295,7 @@ def difference_with(array, *others, **kwargs):
 
     .. versionadded:: 4.0.0
     """
-    array = array[:]
+    array = list(array)
 
     if not others:
         return array
@@ -308,6 +309,7 @@ def difference_with(array, *others, **kwargs):
         others = others[:-1]
 
     for other in others:
+        other = list(other) if other else []
         if not other:
             continue
         array = list(iterdifference(array, other, comparator=comparator))
