@@ -817,6 +817,18 @@ def test_uniq(case, expected):
     assert _.uniq(case) == expected
 
 
+@parametrize("first,second", [(set, frozenset), (frozenset, set)])
+def test_uniq_equal_values_with_different_hashability(first, second):
+    original = first({1})
+    values = [original, second({1}), first({2}), second({2})]
+    result = _.uniq(values)
+    assert result == [original, first({2})]
+    assert result[0] is original
+
+    records = [{"value": value} for value in values]
+    assert _.uniq_by(records, "value") == [records[0], records[2]]
+
+
 @parametrize(
     "case,iteratee,expected",
     [
