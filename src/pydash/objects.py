@@ -1964,7 +1964,7 @@ def to_boolean(
             if text.lower() in [val.lower() for val in vals]:
                 return True
             else:
-                return re.match("|".join(vals), text)
+                return re.match("|".join(vals), text, re.IGNORECASE)
 
         if true_values and boolean_match(obj, true_values):
             value = True
