@@ -1369,7 +1369,7 @@ def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
     .. versionadded:: 1.1.0
     """
     flat_indexes = flatten(indexes)
-    for index in sorted(flat_indexes, reverse=True):
+    for index in sorted(set(flat_indexes), reverse=True):
         try:
             del array[index]
         except IndexError:
