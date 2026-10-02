@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``splice`` deletion and insertion positions for negative and out-of-range start indexes.
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.
 
