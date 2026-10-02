@@ -7,7 +7,7 @@ Functions that operate on lists.
 from __future__ import annotations
 
 from bisect import bisect_left, bisect_right
-from collections.abc import Iterable, Iterator, Mapping, Sized
+from collections.abc import Iterable, Iterator, Mapping, Sequence, Sized
 from functools import cmp_to_key
 from math import ceil
 import typing as t
@@ -1189,9 +1189,20 @@ def nth(array: t.Iterable[T], pos: int = 0) -> t.Union[T, None]:
         33
         >>> nth([11, 22, 33])
         11
+        >>> nth(iter([11, 22, 33]), 1)
+        22
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: VERSION
+        Support iterables that are not sequences, such as generators and sets.
+        They previously returned ``None``.
     """
+    # pyd.get indexes by position, which needs a sequence. A mapping is left
+    # alone because it is indexed by key rather than position, and realizing
+    # one would look up its keys instead.
+    if not isinstance(array, (Sequence, Mapping)):
+        array = list(array)
     return pyd.get(array, pos)
 
 
