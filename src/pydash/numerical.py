@@ -13,7 +13,7 @@ import typing as t
 
 import pydash as pyd
 
-from .helpers import UNSET, Unset, iterator, iterator_with_default, iteriteratee
+from .helpers import UNSET, Unset, iterator, iteriteratee
 from .types import IterateeObjT, NumberNoDecimalT, NumberT, SupportsMul, SupportsRound
 
 
@@ -574,7 +574,9 @@ def max_by(collection, iteratee=None, default=UNSET):
     if isinstance(collection, dict):
         collection = collection.values()
 
-    return max(iterator_with_default(collection, default), key=pyd.iteratee(iteratee))
+    if default is UNSET:
+        return max(collection, key=pyd.iteratee(iteratee))
+    return max(collection, key=pyd.iteratee(iteratee), default=default)
 
 
 @t.overload
@@ -795,7 +797,9 @@ def min_by(collection, iteratee=None, default=UNSET):
     """
     if isinstance(collection, dict):
         collection = collection.values()
-    return min(iterator_with_default(collection, default), key=pyd.iteratee(iteratee))
+    if default is UNSET:
+        return min(collection, key=pyd.iteratee(iteratee))
+    return min(collection, key=pyd.iteratee(iteratee), default=default)
 
 
 def moving_mean(array: t.Sequence["SupportsAdd[int, t.Any]"], size: t.SupportsInt) -> t.List[float]:

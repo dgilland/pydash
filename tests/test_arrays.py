@@ -471,6 +471,35 @@ def test_nth(case, pos, expected):
 
 
 @parametrize(
+    "factory,pos,expected",
+    [
+        (lambda: iter([11, 22, 33]), 0, 11),
+        (lambda: iter([11, 22, 33]), 2, 33),
+        (lambda: iter([11, 22, 33]), -1, 33),
+        (lambda: iter([11, 22, 33]), 4, None),
+        (lambda: (x for x in [11, 22, 33]), 1, 22),
+        (lambda: zip([11, 22], "ab"), 1, (22, "b")),
+        ({11: "a", 22: "b"}.keys, 1, 22),
+        (lambda: iter([]), 0, None),
+    ],
+)
+def test_nth_with_non_sequence_iterables(factory, pos, expected):
+    # nth is annotated Iterable, but indexed by position, which needs a
+    # sequence. These used to return None.
+    assert _.nth(factory(), pos) == expected
+
+
+@parametrize(
+    "case,pos,expected",
+    [({0: "x", 1: "y"}, 0, "x"), ({0: "x", 1: "y"}, 1, "y"), ({"a": 1}, 0, None)],
+)
+def test_nth_indexes_a_mapping_by_key(case, pos, expected):
+    # A mapping is looked up by key rather than by position, so it must not be
+    # realized into a list of its keys.
+    assert _.nth(case, pos) == expected
+
+
+@parametrize(
     "case,expected,after",
     [
         (([1, 2, 3],), 3, [1, 2]),
@@ -537,6 +566,27 @@ def test_pull_all_with(case, values, iteratee, expected):
 )
 def test_pull_at(case, expected):
     assert _.pull_at(*case) == expected
+
+
+@parametrize(
+    "indexes,expected",
+    [
+        ((0, 0), [2, 3, 4]),
+        ((1, 1), [1, 3, 4]),
+        ((3, 3), [1, 2, 3]),
+        ((-1, -1), [1, 2, 3]),
+        (([0, 0, 2, 2],), [2, 4]),
+        (([0, 2], 0, 2), [2, 4]),
+        ((0, 0, 10, 10), [2, 3, 4]),
+    ],
+)
+def test_pull_at_duplicate_indexes(indexes, expected):
+    array = [1, 2, 3, 4]
+
+    result = _.pull_at(array, *indexes)
+
+    assert result is array
+    assert array == expected
 
 
 @parametrize(
