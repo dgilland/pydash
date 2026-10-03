@@ -1041,14 +1041,47 @@ def test_xor(case, expected):
     assert _.xor(*case) == expected
 
 
+def test_xor_accepts_iterable_inputs_without_mutating_lists():
+    array = [1, 2, 3]
+    other = [2, 4]
+
+    assert _.xor(iter(array), (value for value in other)) == [1, 3, 4]
+    assert array == [1, 2, 3]
+    assert other == [2, 4]
+
+
 @parametrize("case,expected", [(([1, 2, 3], [5, 4], lambda val: val % 3), [3])])
 def test_xor_by(case, expected):
     assert _.xor_by(*case) == expected
 
 
+def test_xor_by_with_only_iteratee():
+    assert _.xor_by([1, 2], lambda value: value) == [1, 2]
+
+
+def test_xor_by_consumes_each_iterable_once():
+    assert _.xor_by((value for value in [1, 2, 3]), iter([2, 4]), iteratee=lambda value: value) == [
+        1,
+        3,
+        4,
+    ]
+
+
 @parametrize("case,expected", [(([1, 2, 3], [5, 4], lambda a, b: a <= b), [5, 4])])
 def test_xor_with(case, expected):
     assert _.xor_with(*case) == expected
+
+
+def test_xor_with_with_only_comparator():
+    assert _.xor_with((1, 2), lambda left, right: left == right) == [1, 2]
+
+
+def test_xor_with_accepts_tuple_and_secondary_iterator():
+    assert _.xor_with((1, 2, 3), iter([2, 4]), comparator=lambda left, right: left == right) == [
+        1,
+        3,
+        4,
+    ]
 
 
 @parametrize(
