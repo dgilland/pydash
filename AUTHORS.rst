@@ -45,4 +45,6 @@ Contributors
 - rupayon123, `rupayon123@github <https://github.com/rupayon123>`_
 - Likio3000, `Likio3000@github <https://github.com/Likio3000>`_
 - x0Lazarus, `x0Lazarus@github <https://github.com/x0Lazarus>`_
+- shkyyy18, `shkyyy18@github <https://github.com/shkyyy18>`_
+- fhgffy, `fhgffy@github <https://github.com/fhgffy>`_
 - Pralav Singh, `pralav-25@github <https://github.com/pralav-25>`_

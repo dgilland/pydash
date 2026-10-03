@@ -540,6 +540,27 @@ def test_pull_at(case, expected):
 
 
 @parametrize(
+    "indexes,expected",
+    [
+        ((0, 0), [2, 3, 4]),
+        ((1, 1), [1, 3, 4]),
+        ((3, 3), [1, 2, 3]),
+        ((-1, -1), [1, 2, 3]),
+        (([0, 0, 2, 2],), [2, 4]),
+        (([0, 2], 0, 2), [2, 4]),
+        ((0, 0, 10, 10), [2, 3, 4]),
+    ],
+)
+def test_pull_at_duplicate_indexes(indexes, expected):
+    array = [1, 2, 3, 4]
+
+    result = _.pull_at(array, *indexes)
+
+    assert result is array
+    assert array == expected
+
+
+@parametrize(
     "case,expected",
     [
         (([1, 2, 3], 4), [1, 2, 3, 4]),
