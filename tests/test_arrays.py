@@ -479,7 +479,7 @@ def test_nth(case, pos, expected):
         (lambda: iter([11, 22, 33]), 4, None),
         (lambda: (x for x in [11, 22, 33]), 1, 22),
         (lambda: zip([11, 22], "ab"), 1, (22, "b")),
-        (lambda: {11: "a", 22: "b"}.keys(), 1, 22),
+        ({11: "a", 22: "b"}.keys, 1, 22),
         (lambda: iter([]), 0, None),
     ],
 )
