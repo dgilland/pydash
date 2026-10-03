@@ -289,30 +289,6 @@ def parse_iteratee(iteratee_keyword, *args, **kwargs):
     return iteratee, args
 
 
-class iterator_with_default(object):
-    """A wrapper around an iterator object that provides a default."""
-
-    def __init__(self, collection, default):
-        self.iter = iter(collection)
-        self.default = default
-
-    def __iter__(self):
-        return self
-
-    def next_default(self):
-        ret = self.default
-        self.default = UNSET
-        return ret
-
-    def __next__(self):
-        ret = next(self.iter, self.next_default())
-        if ret is UNSET:
-            raise StopIteration
-        return ret
-
-    next = __next__
-
-
 def deprecated(func):  # pragma: no cover
     """
     This is a decorator which can be used to mark functions as deprecated.

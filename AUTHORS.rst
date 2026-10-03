@@ -47,3 +47,4 @@ Contributors
 - x0Lazarus, `x0Lazarus@github <https://github.com/x0Lazarus>`_
 - shkyyy18, `shkyyy18@github <https://github.com/shkyyy18>`_
 - fhgffy, `fhgffy@github <https://github.com/fhgffy>`_
+- Pralav Singh, `pralav-25@github <https://github.com/pralav-25>`_
