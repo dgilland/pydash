@@ -2557,16 +2557,25 @@ def xor_by(array, *lists, **kwargs):
 
     .. versionadded:: 4.0.0
     """
+    # Materialize the first array once so all declared Iterable inputs (including
+    # generators and iterators) can participate in the list operations below.
+    array = list(array)
+
     if not lists:
-        return array[:]
+        return array
 
     iteratee, lists = parse_iteratee("iteratee", *lists, **kwargs)
+
+    if not lists:
+        return array
+
+    first = list(lists[0])
 
     return xor_by(
         uniq(
             difference_by(
-                array + lists[0],
-                intersection_by(array, lists[0], iteratee=iteratee),
+                array + first,
+                intersection_by(array, first, iteratee=iteratee),
                 iteratee=iteratee,
             )
         ),
@@ -2614,16 +2623,25 @@ def xor_with(array, *lists, **kwargs):
 
     .. versionadded:: 4.0.0
     """
+    # ``array`` is declared as a Sequence, so tuples are valid inputs. Convert
+    # it once because the implementation combines arrays with ``+`` below.
+    array = list(array)
+
     if not lists:
-        return array[:]
+        return array
 
     comp, lists = parse_iteratee("comparator", *lists, **kwargs)
+
+    if not lists:
+        return array
+
+    first = list(lists[0])
 
     return xor_with(
         uniq(
             difference_with(
-                array + lists[0],
-                intersection_with(array, lists[0], comparator=comp),
+                array + first,
+                intersection_with(array, first, comparator=comp),
                 comparator=comp,
             )
         ),

@@ -8,6 +8,8 @@ Unreleased
 
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.
+- Fix ``xor``, ``xor_by``, and ``xor_with`` rejecting declared iterable inputs such as generators
+  and tuples. Thanks WU Leizhi!
 
 v8.1.0 (2026-08-29)
 -------------------
