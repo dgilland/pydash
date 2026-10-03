@@ -9,6 +9,8 @@ Unreleased
 - Fix ``truncate`` dropping an extra character when the string separator is not found.
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.
+- Fix ``nth`` returning ``None`` for iterables that are not sequences, such as generators, sets
+  and ``zip`` objects, despite being annotated to accept any iterable.
 
 v8.1.0 (2026-08-29)
 -------------------
