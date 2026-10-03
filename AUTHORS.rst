@@ -48,3 +48,4 @@ Contributors
 - shkyyy18, `shkyyy18@github <https://github.com/shkyyy18>`_
 - fhgffy, `fhgffy@github <https://github.com/fhgffy>`_
 - Pralav Singh, `pralav-25@github <https://github.com/pralav-25>`_
+- Basil Chen, `rastagan-git@github <https://github.com/rastagan-git>`_

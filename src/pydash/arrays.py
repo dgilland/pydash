@@ -1893,7 +1893,8 @@ def splice(
 
     Args:
         array: List to splice.
-        start: Start to splice at.
+        start: Start to splice at. Negative indexes count from the end of the original
+            array. Out-of-range indexes are clamped to the start or end of the array.
         count: Number of items to remove starting at `start`. If ``None`` then all
             items after `start` are removed. Defaults to ``None``.
         items: Elements to insert starting at `start`. Each item is inserted in the order
@@ -1922,12 +1923,19 @@ def splice(
         [2, 3]
         >>> array
         [1, 0, 0, 4]
+        >>> array = [1, 2, 3, 4]
+        >>> splice(array, -1, 1, 9)
+        [4]
+        >>> array
+        [1, 2, 3, 9]
 
     .. versionadded:: 2.2.0
 
     .. versionchanged:: 3.0.0
         Support string splicing.
     """
+    start = max(0, len(array) + start) if start < 0 else min(start, len(array))
+
     if count is None:
         count = len(array) - start
 
