@@ -471,6 +471,35 @@ def test_nth(case, pos, expected):
 
 
 @parametrize(
+    "factory,pos,expected",
+    [
+        (lambda: iter([11, 22, 33]), 0, 11),
+        (lambda: iter([11, 22, 33]), 2, 33),
+        (lambda: iter([11, 22, 33]), -1, 33),
+        (lambda: iter([11, 22, 33]), 4, None),
+        (lambda: (x for x in [11, 22, 33]), 1, 22),
+        (lambda: zip([11, 22], "ab"), 1, (22, "b")),
+        ({11: "a", 22: "b"}.keys, 1, 22),
+        (lambda: iter([]), 0, None),
+    ],
+)
+def test_nth_with_non_sequence_iterables(factory, pos, expected):
+    # nth is annotated Iterable, but indexed by position, which needs a
+    # sequence. These used to return None.
+    assert _.nth(factory(), pos) == expected
+
+
+@parametrize(
+    "case,pos,expected",
+    [({0: "x", 1: "y"}, 0, "x"), ({0: "x", 1: "y"}, 1, "y"), ({"a": 1}, 0, None)],
+)
+def test_nth_indexes_a_mapping_by_key(case, pos, expected):
+    # A mapping is looked up by key rather than by position, so it must not be
+    # realized into a list of its keys.
+    assert _.nth(case, pos) == expected
+
+
+@parametrize(
     "case,expected,after",
     [
         (([1, 2, 3],), 3, [1, 2]),
@@ -537,6 +566,27 @@ def test_pull_all_with(case, values, iteratee, expected):
 )
 def test_pull_at(case, expected):
     assert _.pull_at(*case) == expected
+
+
+@parametrize(
+    "indexes,expected",
+    [
+        ((0, 0), [2, 3, 4]),
+        ((1, 1), [1, 3, 4]),
+        ((3, 3), [1, 2, 3]),
+        ((-1, -1), [1, 2, 3]),
+        (([0, 0, 2, 2],), [2, 4]),
+        (([0, 2], 0, 2), [2, 4]),
+        ((0, 0, 10, 10), [2, 3, 4]),
+    ],
+)
+def test_pull_at_duplicate_indexes(indexes, expected):
+    array = [1, 2, 3, 4]
+
+    result = _.pull_at(array, *indexes)
+
+    assert result is array
+    assert array == expected
 
 
 @parametrize(
@@ -742,6 +792,18 @@ def test_sorted_uniq_by(case, iteratee, expected):
         (([1, 2, 3], 0, 2, "splice", "slice", "dice"), [1, 2], ["splice", "slice", "dice", 3]),
         (([1, 2, 3], 0), [1, 2, 3], []),
         (([1, 2, 3], 1), [2, 3], [1]),
+        (([1, 2, 3, 4], -1, 1), [4], [1, 2, 3]),
+        (([1, 2, 3, 4], -2, 1, 9), [3], [1, 2, 9, 4]),
+        (([1, 2, 3, 4], -2, None, 9, 8), [3, 4], [1, 2, 9, 8]),
+        (([1, 2, 3, 4], -1, 0, 9, 8), [], [1, 2, 3, 9, 8, 4]),
+        (([1, 2, 3, 4], -4, 2, 9, 8), [1, 2], [9, 8, 3, 4]),
+        (([1, 2, 3, 4], -5, 1, 9), [1], [9, 2, 3, 4]),
+        (([1, 2, 3, 4], -100, None, 9, 8), [1, 2, 3, 4], [9, 8]),
+        (([1, 2, 3, 4], -2, 10, 9), [3, 4], [1, 2, 9]),
+        (([1, 2, 3, 4], 99, 0, 9, 8), [], [1, 2, 3, 4, 9, 8]),
+        (([1, 2, 3, 4], 99, None, 9, 8), [], [1, 2, 3, 4, 9, 8]),
+        (([], -1, None, 9, 8), [], [9, 8]),
+        (([], 99, 0, 9, 8), [], [9, 8]),
     ],
 )
 def test_splice(case, expected, after):
@@ -754,6 +816,14 @@ def test_splice(case, expected, after):
     "case,expected",
     [
         (("123", 1, 0, "splice"), "1splice23"),
+        (("1234", -1, 1, "a"), "123a"),
+        (("1234", -2, 1, "a"), "12a4"),
+        (("1234", -2, None, "a", "b"), "12ab"),
+        (("1234", -1, 0, "a", "b"), "123ab4"),
+        (("1234", -5, 1, "a"), "a234"),
+        (("1234", 99, 0, "a", "b"), "1234ab"),
+        (("", -1, None, "a", "b"), "ab"),
+        (("", 99, 0, "a", "b"), "ab"),
     ],
 )
 def test_splice_string(case, expected):

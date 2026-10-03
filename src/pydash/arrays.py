@@ -7,7 +7,7 @@ Functions that operate on lists.
 from __future__ import annotations
 
 from bisect import bisect_left, bisect_right
-from collections.abc import Iterable, Iterator, Mapping, Sized
+from collections.abc import Iterable, Iterator, Mapping, Sequence, Sized
 from functools import cmp_to_key
 from math import ceil
 import typing as t
@@ -1189,9 +1189,20 @@ def nth(array: t.Iterable[T], pos: int = 0) -> t.Union[T, None]:
         33
         >>> nth([11, 22, 33])
         11
+        >>> nth(iter([11, 22, 33]), 1)
+        22
 
     .. versionadded:: 4.0.0
+
+    .. versionchanged:: VERSION
+        Support iterables that are not sequences, such as generators and sets.
+        They previously returned ``None``.
     """
+    # pyd.get indexes by position, which needs a sequence. A mapping is left
+    # alone because it is indexed by key rather than position, and realizing
+    # one would look up its keys instead.
+    if not isinstance(array, (Sequence, Mapping)):
+        array = list(array)
     return pyd.get(array, pos)
 
 
@@ -1369,7 +1380,7 @@ def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
     .. versionadded:: 1.1.0
     """
     flat_indexes = flatten(indexes)
-    for index in sorted(flat_indexes, reverse=True):
+    for index in sorted(set(flat_indexes), reverse=True):
         try:
             del array[index]
         except IndexError:
@@ -1882,7 +1893,8 @@ def splice(
 
     Args:
         array: List to splice.
-        start: Start to splice at.
+        start: Start to splice at. Negative indexes count from the end of the original
+            array. Out-of-range indexes are clamped to the start or end of the array.
         count: Number of items to remove starting at `start`. If ``None`` then all
             items after `start` are removed. Defaults to ``None``.
         items: Elements to insert starting at `start`. Each item is inserted in the order
@@ -1911,12 +1923,19 @@ def splice(
         [2, 3]
         >>> array
         [1, 0, 0, 4]
+        >>> array = [1, 2, 3, 4]
+        >>> splice(array, -1, 1, 9)
+        [4]
+        >>> array
+        [1, 2, 3, 9]
 
     .. versionadded:: 2.2.0
 
     .. versionchanged:: 3.0.0
         Support string splicing.
     """
+    start = max(0, len(array) + start) if start < 0 else min(start, len(array))
+
     if count is None:
         count = len(array) - start
 

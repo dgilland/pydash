@@ -102,6 +102,31 @@ def test_max_by(case, expected):
     assert _.max_by(*case) == expected
 
 
+@parametrize("function", [_.max_by, _.min_by])
+@parametrize("collection_factory", [list, dict, lambda: iter(())])
+@parametrize("default", [None, object()])
+def test_extrema_by_empty_default_skips_iteratee(function, collection_factory, default):
+    def iteratee(value):
+        pytest.fail("The iteratee should not be called for an empty collection")
+
+    assert function(collection_factory(), iteratee, default=default) is default
+
+
+@parametrize("function", [_.max_by, _.min_by])
+@parametrize("collection_factory", [list, dict, lambda: iter(())])
+def test_extrema_by_empty_without_default(function, collection_factory):
+    with pytest.raises(ValueError):
+        function(collection_factory(), lambda value: value["score"])
+
+
+@parametrize("function,expected", [(_.max_by, 2), (_.min_by, 1)])
+@parametrize("as_mapping", [False, True])
+def test_extrema_by_nonempty_with_default(function, expected, as_mapping):
+    values = [{"score": 1}, {"score": 2}]
+    collection = dict(enumerate(values)) if as_mapping else iter(values)
+    assert function(collection, lambda value: value["score"], default=None) == {"score": expected}
+
+
 @parametrize(
     "collection,default,expected",
     [([], -1, -1), ([1, 2, 3], -1, 3), ({}, -1, -1), ([], None, None), ({}, None, None)],

@@ -6,10 +6,15 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``truncate`` dropping an extra character when the string separator is not found.
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.
+- Fix ``nth`` returning ``None`` for iterables that are not sequences, such as generators, sets
+  and ``zip`` objects, despite being annotated to accept any iterable.
+- Fix ``splice`` deletion and insertion positions for negative and out-of-range start indexes.
 - Fix ``xor``, ``xor_by``, and ``xor_with`` rejecting declared iterable inputs such as generators
-  and tuples. Thanks WU Leizhi!
+  and tuples. Thanks MbappeWU_!
+
 
 v8.1.0 (2026-08-29)
 -------------------
@@ -1366,3 +1371,4 @@ v0.0.0 (2014-07-22)
 .. _santhreal: https://github.com/santhreal
 .. _gaoflow: https://github.com/gaoflow
 .. _HarperZ9: https://github.com/HarperZ9
+.. _MbappeWU: https://github.com/MbappeWU

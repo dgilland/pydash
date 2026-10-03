@@ -1092,6 +1092,23 @@ def test_truncate(case, expected):
     assert _.truncate(*case) == expected
 
 
+@parametrize(
+    "text,length,omission,separator,expected",
+    [
+        ("helloworld", 8, "...", " ", "hello..."),
+        ("hello world", 8, "...", " ", "hello..."),
+        ("hello--world", 8, "...", "--", "hello..."),
+        ("abcdefgh", 4, "...", " ", "a..."),
+        ("abcdefgh", 5, "", " ", "abcde"),
+        ("abcdefgh", 6, "~", "::", "abcde~"),
+        ("\u4f60\u597d\u4e16\u754c\u6b22\u8fce", 5, "...", " ", "\u4f60\u597d..."),
+    ],
+)
+def test_truncate_missing_string_separator(text, length, omission, separator, expected):
+    assert _.truncate(text, length, omission, separator) == expected
+    assert _.truncate(text, length, omission, re.compile(re.escape(separator))) == expected
+
+
 @parametrize("length", [-1, 0, 1, 2, 3])
 @parametrize("separator", [None, " ", re.compile(" ")])
 def test_truncate_limit_no_longer_than_omission(length, separator):
