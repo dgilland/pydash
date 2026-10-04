@@ -2017,7 +2017,7 @@ def sample_size(collection: t.Sequence[T], n: t.Union[int, None] = None) -> t.Li
 
     .. versionadded:: 4.0.0
     """
-    num = min(n or 1, len(collection))
+    num = min(1 if n is None else n, len(collection))
     return random.sample(collection, num)
 
 

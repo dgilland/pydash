@@ -50,3 +50,4 @@ Contributors
 - fhgffy, `fhgffy@github <https://github.com/fhgffy>`_
 - Pralav Singh, `pralav-25@github <https://github.com/pralav-25>`_
 - Basil Chen, `rastagan-git@github <https://github.com/rastagan-git>`_
+- Kudala Bharani Kumar Reddy, `kudala-bharani@github <https://github.com/kudala-bharani>`_
