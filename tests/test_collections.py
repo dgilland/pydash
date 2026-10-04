@@ -929,19 +929,27 @@ def test_sample(case):
 
 
 @parametrize(
-    "case",
+    "case,expected_size",
     [
-        ([1, 2, 3, 4, 5, 6], 2),
-        ([1, 2, 3, 4, 5, 6], 3),
-        ([1, 2, 3, 4, 5, 6], 4),
+        (([1, 2, 3, 4, 5, 6], 2), 2),
+        (([1, 2, 3, 4, 5, 6], 3), 3),
+        (([1, 2, 3, 4, 5, 6], 4), 4),
+        (([1, 2, 3], 0), 0),
+        (((1, 2, 3), 0), 0),
+        (([], 0), 0),
+        (([1, 2, 3],), 1),
+        (([1, 2, 3], None), 1),
+        (([],), 0),
+        (([], None), 0),
+        (([1, 2, 3], 5), 3),
     ],
 )
-def test_sample_size(case):
-    collection, n = case
+def test_sample_size(case, expected_size):
+    collection = case[0]
     sample_n = _.sample_size(*case)
 
     assert isinstance(sample_n, list)
-    assert len(sample_n) == min(n, len(collection))
+    assert len(sample_n) == expected_size
     assert set(sample_n).issubset(collection)
 
 
