@@ -149,6 +149,80 @@ def test_duplicates(case, expected):
     assert _.duplicates(*case) == expected
 
 
+def test_duplicates_applies_falsey_iteratee_shorthands():
+    records = [{"": "same", "id": "first"}, {"": "same", "id": "second"}]
+    original = [record.copy() for record in records]
+
+    result = _.duplicates(records, "")
+
+    assert result == [records[1]]
+    assert result[0] is records[1]
+    assert records == original
+
+
+def test_duplicates_applies_numeric_zero_iteratee_as_property_path():
+    records = [{"0": "same", "id": "first"}, {"0": "same", "id": "second"}]
+
+    result = _.duplicates(records, 0)
+
+    assert result == [records[1]]
+    assert result[0] is records[1]
+
+
+def test_duplicates_applies_falsey_callable_iteratee():
+    class FalseyIteratee:
+        def __bool__(self):
+            raise AssertionError("duplicates must not evaluate callable truthiness")
+
+        def __call__(self, record):
+            return record["group"]
+
+    records = [
+        {"group": "same", "id": "first"},
+        {"group": "same", "id": "second"},
+        {"group": "other", "id": "third"},
+    ]
+
+    result = _.duplicates(records, FalseyIteratee())
+
+    assert result == [records[1]]
+    assert result[0] is records[1]
+
+
+def test_duplicates_applies_empty_matcher_iteratee():
+    records = [{"id": "first"}, {"id": "second"}]
+
+    result = _.duplicates(records, {})
+
+    assert result == [records[1]]
+    assert result[0] is records[1]
+
+
+def test_duplicates_preserves_duplicate_order_and_identity():
+    records = [
+        {"group": "a", "id": "first-a"},
+        {"group": "b", "id": "first-b"},
+        {"group": "a", "id": "second-a"},
+        {"group": "b", "id": "second-b"},
+    ]
+
+    result = _.duplicates(records, "group")
+
+    assert result == [records[2], records[3]]
+    assert result[0] is records[2]
+    assert result[1] is records[3]
+
+
+def test_duplicates_falsey_iteratee_controls_and_empty_input():
+    records = [1, 2, 3, 4, 5]
+
+    assert _.duplicates([]) == []
+    assert _.duplicates([], "") == []
+    assert _.duplicates(records) == []
+    assert _.duplicates(records, None) == []
+    assert _.duplicates(records, lambda value: value % 2) == [3, 4, 5]
+
+
 @parametrize(
     "case,expected",
     [
