@@ -590,6 +590,27 @@ def test_pull_at_duplicate_indexes(indexes, expected):
 
 
 @parametrize(
+    "indexes,expected",
+    [
+        ((-1, -2), [1, 2]),
+        ((-2, -1), [1, 2]),
+        ((1, -3), [1, 3, 4]),
+        ((3, -1), [1, 2, 3]),
+        ((0, -1), [2, 3]),
+        (([0, -4, -1], 3), [2, 3]),
+        ((-5, 4, -1), [1, 2, 3]),
+    ],
+)
+def test_pull_at_normalizes_original_indexes(indexes, expected):
+    array = [1, 2, 3, 4]
+
+    result = _.pull_at(array, *indexes)
+
+    assert result is array
+    assert array == expected
+
+
+@parametrize(
     "case,expected",
     [
         (([1, 2, 3], 4), [1, 2, 3, 4]),
