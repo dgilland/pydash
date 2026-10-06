@@ -1364,7 +1364,7 @@ def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
 
     Args:
         array: List to pull from.
-        indexes: Indexes to pull.
+        indexes: Indexes in the original array to pull. Negative indexes count from the end.
 
     Returns:
         Modified `array`.
@@ -1379,12 +1379,11 @@ def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
 
     .. versionadded:: 1.1.0
     """
-    flat_indexes = flatten(indexes)
-    for index in sorted(set(flat_indexes), reverse=True):
-        try:
+    array_len = len(array)
+    flat_indexes = {index if index >= 0 else array_len + index for index in flatten(indexes)}
+    for index in sorted(flat_indexes, reverse=True):
+        if 0 <= index < array_len:
             del array[index]
-        except IndexError:
-            pass
 
     return array
 
