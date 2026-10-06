@@ -2046,6 +2046,8 @@ def truncate(
         'hello w...'
         >>> truncate("hello world", 10, separator=" ")
         'hello...'
+        >>> truncate("hello world again", 14, separator=" ")
+        'hello world...'
         >>> truncate("hello world", 2)
         '...'
 
@@ -2061,21 +2063,21 @@ def truncate(
 
     omission_len = len(omission)
     text_len = max(0, length - omission_len)
-    text = text[:text_len]
-
-    trunc_len = len(text)
+    trunc_len = text_len
 
     if pyd.is_string(separator):
-        separator_index = text.rfind(separator)
-        if separator_index != -1:
-            trunc_len = separator_index
+        if not text.startswith(separator, text_len):
+            separator_index = text[:text_len].rfind(separator)
+            if separator_index != -1:
+                trunc_len = separator_index
     elif pyd.is_reg_exp(separator):
-        last = None
-        for match in separator.finditer(text):
-            last = match
+        if separator.match(text, text_len) is None:
+            last = None
+            for match in separator.finditer(text[:text_len]):
+                last = match
 
-        if last is not None:
-            trunc_len = last.start()
+            if last is not None:
+                trunc_len = last.start()
 
     return text[:trunc_len] + omission
 
