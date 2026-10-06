@@ -491,7 +491,7 @@ def duplicates(
 
     .. versionadded:: 3.0.0
     """
-    if iteratee:
+    if iteratee is not None:
         cbk = pyd.iteratee(iteratee)
         computed = [cbk(item) for item in array]
     else:
