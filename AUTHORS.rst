@@ -52,3 +52,4 @@ Contributors
 - Basil Chen, `rastagan-git@github <https://github.com/rastagan-git>`_
 - Kudala Bharani Kumar Reddy, `kudala-bharani@github <https://github.com/kudala-bharani>`_
 - Fan Wu, `FanWu-ai@github <https://github.com/FanWu-ai>`_
+- yuefdev, `yuefdev@github <https://github.com/yuefdev>`_

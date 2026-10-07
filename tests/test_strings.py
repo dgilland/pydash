@@ -1109,6 +1109,25 @@ def test_truncate_missing_string_separator(text, length, omission, separator, ex
     assert _.truncate(text, length, omission, re.compile(re.escape(separator))) == expected
 
 
+@parametrize(
+    "text,length,omission,separator,expected",
+    [
+        ("hello world again", 14, "...", " ", "hello world..."),
+        ("one--two--three", 11, "...", "--", "one--two..."),
+        ("one--two--three", 9, "~", "--", "one--two~"),
+        ("hello world again", 11, "", " ", "hello world"),
+        ("hello world again", 13, "...", " ", "hello..."),
+    ],
+)
+def test_truncate_at_separator_boundary(text, length, omission, separator, expected):
+    assert _.truncate(text, length, omission, separator) == expected
+    assert _.truncate(text, length, omission, re.compile(re.escape(separator))) == expected
+
+
+def test_truncate_regex_boundary_preserves_lookbehind_context():
+    assert _.truncate("one two three", 10, separator=re.compile(r"(?<=\w)\s+")) == "one two..."
+
+
 @parametrize("length", [-1, 0, 1, 2, 3])
 @parametrize("separator", [None, " ", re.compile(" ")])
 def test_truncate_limit_no_longer_than_omission(length, separator):
