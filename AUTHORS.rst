@@ -53,3 +53,4 @@ Contributors
 - Kudala Bharani Kumar Reddy, `kudala-bharani@github <https://github.com/kudala-bharani>`_
 - Fan Wu, `FanWu-ai@github <https://github.com/FanWu-ai>`_
 - yuefdev, `yuefdev@github <https://github.com/yuefdev>`_
+- Huanyi Xie, `xiehuanyi@github <https://github.com/xiehuanyi>`_
