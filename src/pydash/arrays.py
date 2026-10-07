@@ -1894,8 +1894,9 @@ def splice(
         array: List to splice.
         start: Start to splice at. Negative indexes count from the end of the original
             array. Out-of-range indexes are clamped to the start or end of the array.
-        count: Number of items to remove starting at `start`. If ``None`` then all
-            items after `start` are removed. Defaults to ``None``.
+        count: Number of items to remove starting at `start`. Negative counts remove
+            no items. If ``None`` then all items after `start` are removed. Defaults
+            to ``None``.
         items: Elements to insert starting at `start`. Each item is inserted in the order
             given.
 
@@ -1937,6 +1938,7 @@ def splice(
 
     if count is None:
         count = len(array) - start
+    count = max(count, 0)
 
     is_string = pyd.is_string(array)
 
