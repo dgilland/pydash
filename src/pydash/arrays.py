@@ -2178,7 +2178,7 @@ def union(array, *others):
     .. versionadded:: 1.0.0
     """
     if not others:
-        return array[:]
+        return uniq(array)
 
     return uniq(flatten([array] + list(others)))
 
@@ -2220,7 +2220,7 @@ def union_by(array, *others, **kwargs):
     .. versionadded:: 4.0.0
     """
     if not others:
-        return array[:]
+        return uniq_by(array, iteratee=kwargs.get("iteratee"))
 
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
@@ -2266,7 +2266,7 @@ def union_with(array, *others, **kwargs):
     .. versionadded:: 4.0.0
     """
     if not others:
-        return array[:]
+        return uniq_with(array, comparator=kwargs.get("comparator"))
 
     comparator, others = parse_iteratee("comparator", *others, **kwargs)
 

@@ -1269,3 +1269,24 @@ def test_zip_object_deep(case, expected):
 )
 def test_zip_with(case, expected):
     assert _.zip_with(*case) == expected
+
+
+@parametrize("values", [[1, 1, 2], (1, 1, 2)])
+def test_union_deduplicates_a_single_array(values):
+    assert _.union(values) == [1, 2]
+
+
+def test_union_by_honors_an_iteratee_with_a_single_array():
+    values = [{"id": 1}, {"id": 1, "extra": True}, {"id": 2}]
+    assert _.union_by(values, iteratee="id") == [values[0], values[2]]
+    assert _.union_by(values, "id") == [values[0], values[2]]
+
+
+def test_union_with_honors_a_comparator_with_a_single_array():
+    values = [1, 3, 2, 4]
+
+    def comparator(left, right):
+        return left % 2 == right % 2
+
+    assert _.union_with(values, comparator=comparator) == [1, 2]
+    assert _.union_with(values, comparator) == [1, 2]
