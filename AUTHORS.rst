@@ -11,6 +11,7 @@ Lead
 Contributors
 ------------
 
+- harbinresearcher, `harbinresearcher@github <https://github.com/harbinresearcher>`_
 - WU Leizhi, `MbappeWU@github <https://github.com/MbappeWU>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
