@@ -1024,7 +1024,7 @@ def intersection_with(array, *others, **kwargs):
         if not array:
             break
 
-    return array
+    return uniq_with(array, comparator) if comparator is not None else array
 
 
 def intersperse(array: t.Iterable[T], separator: T2) -> t.List[t.Union[T, T2]]:

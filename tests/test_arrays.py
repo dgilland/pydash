@@ -1290,3 +1290,54 @@ def test_union_with_honors_a_comparator_with_a_single_array():
 
     assert _.union_with(values, comparator=comparator) == [1, 2]
     assert _.union_with(values, comparator) == [1, 2]
+
+
+@parametrize("keyword", [False, True])
+def test_intersection_with_deduplicates_using_comparator(keyword):
+    array = ["A", "a", "B", "b", "C"]
+    other = ["a", "b"]
+
+    def comparator(left, right):
+        return left.lower() == right.lower()
+
+    if keyword:
+        result = _.intersection_with(array, other, comparator=comparator)
+    else:
+        result = _.intersection_with(array, other, comparator)
+
+    assert result == ["A", "B"]
+    assert array == ["A", "a", "B", "b", "C"]
+    assert other == ["a", "b"]
+
+
+def test_intersection_with_deduplication_preserves_first_references():
+    first = {"id": 1, "name": "first"}
+    duplicate = {"id": 1, "name": "duplicate"}
+    second = {"id": 2, "name": "second"}
+    result = _.intersection_with(
+        [first, duplicate, second],
+        [{"id": 1}, {"id": 2}],
+        [{"id": 2}, {"id": 1}],
+        comparator=lambda left, right: left["id"] == right["id"],
+    )
+
+    assert len(result) == 2
+    assert result[0] is first
+    assert result[1] is second
+
+
+def test_intersection_with_unmatched_value_does_not_suppress_match():
+    assert _.intersection_with(
+        [1, 2], [3], comparator=lambda left, right: abs(left - right) <= 1
+    ) == [2]
+
+
+def test_intersection_with_deduplicates_after_matching_all_arrays():
+    assert _.intersection_with(
+        [1, 2], [2], [3], comparator=lambda left, right: abs(left - right) <= 1
+    ) == [2]
+
+
+@parametrize("array,expected", [([1, 2], [1]), ([2, 1], [2, 1])])
+def test_intersection_with_deduplication_comparator_argument_order(array, expected):
+    assert _.intersection_with(array, [0], comparator=lambda left, right: left > right) == expected
