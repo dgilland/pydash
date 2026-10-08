@@ -606,7 +606,7 @@ def memoize(func, resolver=None):
     """
 
     def memoized(*args: P.args, **kwargs: P.kwargs):
-        if resolver:
+        if resolver is not None:
             key = resolver(*args, **kwargs)
         else:
             key = f"{args}{kwargs}"

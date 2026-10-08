@@ -225,6 +225,40 @@ def test_memoize(case, args, kwargs, key):
     assert memoized.cache[key] == expected
 
 
+class FalseyResolver:
+    def __bool__(self):
+        return False
+
+    def __call__(self, value):
+        return value["key"]
+
+
+class EmptyResolver(dict[str, object]):
+    def __call__(self, value):
+        return value["key"]
+
+
+@parametrize("resolver_type", [FalseyResolver, EmptyResolver])
+def test_memoize_falsey_resolver(resolver_type):
+    resolver = resolver_type()
+    assert callable(resolver) and not resolver
+    calls = []
+
+    def compute(value):
+        calls.append(value)
+        return value["key"]
+
+    memoized = _.memoize(compute, resolver=resolver)
+    assert memoized({"key": "shared", "ignored": 1}) == "shared"
+    assert memoized(value={"key": "shared", "ignored": 2}) == "shared"
+    assert len(calls) == 1
+    assert memoized.cache == {"shared": "shared"}
+
+    memoized.cache["shared"] = "prefilled"
+    assert memoized({"key": "shared", "ignored": 3}) == "prefilled"
+    assert len(calls) == 1
+
+
 @parametrize(
     "case,args,kwargs,expected",
     [
