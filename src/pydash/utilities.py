@@ -1520,7 +1520,7 @@ def base_range(*args, **kwargs):
         if step is None:
             step = 1 if start < stop else -1
 
-        length = int(max([math.ceil((stop - start) / (step or 1)), 0]))
+        length = max(-((start - stop) // (step or 1)), 0)
 
         if from_right:
             start += (step * length) - step

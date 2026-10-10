@@ -1,3 +1,4 @@
+from itertools import islice
 import time
 from unittest import mock
 
@@ -440,6 +441,30 @@ def test_range_(case, expected):
 )
 def test_range_right(case, expected):
     assert list(_.range_right(*case)) == expected
+
+
+@parametrize("func", [_.range_, _.range_right])
+@parametrize("case", [(0, 2**53 + 1, 2**53), (0, -(2**53) - 1, -(2**53))])
+def test_range_large_integer_step(func, case):
+    expected = list(range(*case))
+    if func is _.range_right:
+        expected.reverse()
+
+    assert list(func(*case)) == expected
+
+
+@parametrize("func", [_.range_, _.range_right])
+@parametrize(
+    "stop",
+    [2**53 + 1, 2**53 + 3, 10**400, -(2**53) - 1, -(10**400)],
+    ids=["rounded-down", "rounded-up", "overflow", "negative-rounded", "negative-overflow"],
+)
+def test_range_large_integer_stop_is_lazy(func, stop):
+    expected = range(0, stop, 1 if stop > 0 else -1)
+    if func is _.range_right:
+        expected = reversed(expected)
+
+    assert list(islice(func(stop), 3)) == list(islice(expected, 3))
 
 
 @parametrize(
