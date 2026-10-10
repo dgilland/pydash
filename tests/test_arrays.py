@@ -1290,3 +1290,23 @@ def test_union_with_honors_a_comparator_with_a_single_array():
 
     assert _.union_with(values, comparator=comparator) == [1, 2]
     assert _.union_with(values, comparator) == [1, 2]
+
+
+@pytest.mark.parametrize("key", [0, ""])
+@pytest.mark.parametrize("function,expected", [(_.sorted_index_by, 1), (_.sorted_last_index_by, 3)])
+def test_sorted_index_by_falsey_property(function, expected, key):
+    values = [{key: 1}, {key: 2}, {key: 2}, {key: 4}]
+    assert function(values, {key: 2}, key) == expected
+
+
+@pytest.mark.parametrize("function,expected", [(_.sorted_index_by, 1), (_.sorted_last_index_by, 3)])
+def test_sorted_index_by_falsey_callable(function, expected):
+    class Key:
+        def __bool__(self):
+            return False
+
+        def __call__(self, value):
+            return value["rank"]
+
+    values = [{"rank": 1}, {"rank": 2}, {"rank": 2}, {"rank": 4}]
+    assert function(values, {"rank": 2}, Key()) == expected
