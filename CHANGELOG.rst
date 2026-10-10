@@ -14,6 +14,9 @@ Unreleased
 - Fix ``splice`` deletion and insertion positions for negative and out-of-range start indexes.
 - Fix ``xor``, ``xor_by``, and ``xor_with`` rejecting declared iterable inputs such as generators
   and tuples. Thanks MbappeWU_!
+- Fix ``retry`` accumulating ``jitter`` into the base delay so that it compounded and was scaled on
+  later attempts. Jitter is now applied only to each individual sleep.
+- Fix ``retry`` raising a ``scale`` error message for an invalid ``max_delay``.
 
 
 v8.1.0 (2026-08-29)
