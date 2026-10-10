@@ -14,6 +14,9 @@ Unreleased
 - Fix ``splice`` deletion and insertion positions for negative and out-of-range start indexes.
 - Fix ``xor``, ``xor_by``, and ``xor_with`` rejecting declared iterable inputs such as generators
   and tuples. Thanks MbappeWU_!
+- Fix ``floor`` and ``ceil`` returning off-by-one-unit results for float inputs when ``precision`` is
+  given, due to float error when scaling by a power of 10 (e.g. ``floor(0.29, 2)`` returned
+  ``0.28`` and ``ceil(1.1, 2)`` returned ``1.11``).
 
 
 v8.1.0 (2026-08-29)
