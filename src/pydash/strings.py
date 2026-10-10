@@ -896,9 +896,15 @@ def number_format(
         int_part = num_parts[0]
         dec_part = (num_parts + [""])[1]
 
+        # Strip the sign so it isn't counted as a digit when grouping.
+        sign = ""
+        if int_part.startswith("-"):
+            sign = "-"
+            int_part = int_part[1:]
+
         # Reverse the integer part, chop it into groups of 3, join on `order_separator`, and then
         # un-reverse the string.
-        int_part = order_separator.join(chop(int_part[::-1], 3))[::-1]
+        int_part = sign + order_separator.join(chop(int_part[::-1], 3))[::-1]
 
         text = decimal_separator.join(pyd.compact([int_part, dec_part]))
 

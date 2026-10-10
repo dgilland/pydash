@@ -54,3 +54,4 @@ Contributors
 - Fan Wu, `FanWu-ai@github <https://github.com/FanWu-ai>`_
 - yuefdev, `yuefdev@github <https://github.com/yuefdev>`_
 - Huanyi Xie, `xiehuanyi@github <https://github.com/xiehuanyi>`_
+- Bharat Kaurav, `TheNetherWatcher@github <https://github.com/TheNetherWatcher>`_

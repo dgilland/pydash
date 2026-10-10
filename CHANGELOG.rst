@@ -14,6 +14,8 @@ Unreleased
 - Fix ``splice`` deletion and insertion positions for negative and out-of-range start indexes.
 - Fix ``xor``, ``xor_by``, and ``xor_with`` rejecting declared iterable inputs such as generators
   and tuples. Thanks MbappeWU_!
+- Fix ``number_format`` inserting an order separator after the minus sign for negative numbers
+  whose integer digit count is a multiple of 3 (e.g. ``-999`` became ``-,999``).
 
 
 v8.1.0 (2026-08-29)
