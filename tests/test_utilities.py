@@ -560,6 +560,29 @@ def test_retry_on_exception(mock_sleep):
 
 
 @parametrize(
+    "case,delay_times",
+    [
+        ({"jitter": (1, 1), "delay": 2, "scale": 1, "attempts": 5}, [3, 3, 3, 3]),
+        ({"jitter": (1, 1), "delay": 2, "scale": 2, "attempts": 5}, [3, 5, 9, 17]),
+        ({"jitter": (1, 1), "delay": 0, "scale": 2, "attempts": 4}, [1, 1, 1]),
+        (
+            {"jitter": (1, 1), "delay": 2, "scale": 2, "max_delay": 6, "attempts": 5},
+            [3, 5, 6, 6],
+        ),
+    ],
+)
+def test_retry_jitter_does_not_accumulate(mock_sleep, case, delay_times):
+    @_.retry(**case)
+    def func():
+        raise ValueError()
+
+    with pytest.raises(ValueError):
+        func()
+
+    assert [mock.call(time) for time in delay_times] == mock_sleep.call_args_list
+
+
+@parametrize(
     "case,exception",
     [
         ({"attempts": 0}, ValueError),
@@ -583,6 +606,12 @@ def test_retry_on_exception(mock_sleep):
 def test_retry_invalid_args(case, exception):
     with pytest.raises(exception):
         _.retry(**case)
+
+
+@parametrize("arg", ["attempts", "delay", "max_delay", "scale", "jitter"])
+def test_retry_invalid_args_message(arg):
+    with pytest.raises(ValueError, match=f"^{arg} must be"):
+        _.retry(**{arg: -1})
 
 
 @parametrize("case,expected", [(_.times(2, _.stub_list), [[], []]), (_.stub_list(), [])])
