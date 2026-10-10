@@ -1685,7 +1685,7 @@ def sorted_index_by(array, value, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    if iteratee:
+    if iteratee is not None:
         # Generate array of sorted keys computed using iteratee.
         iteratee = pyd.iteratee(iteratee)
         array = sorted(iteratee(item) for item in array)
@@ -1789,7 +1789,7 @@ def sorted_last_index_by(array, value, iteratee=None):
         >>> sorted_last_index_by(array, {"x": 4}, "x")
         1
     """
-    if iteratee:
+    if iteratee is not None:
         # Generate array of sorted keys computed using iteratee.
         iteratee = pyd.iteratee(iteratee)
         array = sorted(iteratee(item) for item in array)
