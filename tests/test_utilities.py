@@ -327,6 +327,68 @@ def test_over_some(funcs, data, expected):
     assert _.over_some(funcs)(*data) == expected
 
 
+@parametrize("make_funcs", [iter, lambda funcs: (func for func in funcs)])
+def test_over_reuses_iterator_functions(make_funcs):
+    func = _.over(make_funcs([max, min]))
+    assert func(1, 2, 3) == [3, 1]
+    assert func(4, 5) == [5, 4]
+
+
+@parametrize("make_funcs", [iter, lambda funcs: (func for func in funcs)])
+def test_over_every_reuses_iterator_functions(make_funcs):
+    func = _.over_every(make_funcs([lambda x: x > 0, lambda x: x < 10]))
+    for value, expected in [(-1, False), (5, True), (20, False)] * 2:
+        assert func(value) is expected
+
+
+@parametrize("make_funcs", [iter, lambda funcs: (func for func in funcs)])
+def test_over_some_reuses_iterator_functions(make_funcs):
+    func = _.over_some(make_funcs([lambda x: x < 0, lambda x: x > 10]))
+    for value, expected in [(-1, True), (5, False), (20, True)] * 2:
+        assert func(value) is expected
+
+
+@parametrize("factory", [_.over, _.over_every, _.over_some])
+def test_over_combinators_leave_iterators_lazy_at_construction(factory):
+    produced = []
+
+    def functions():
+        produced.append(bool)
+        yield bool
+
+    factory(functions())
+    assert produced == []
+
+
+@parametrize("factory,value,expected", [(_.over_every, 0, False), (_.over_some, 1, True)])
+def test_over_predicates_reuse_iterators_without_consuming_short_circuited_tail(
+    factory, value, expected
+):
+    def functions():
+        yield bool
+        raise AssertionError("The next function should not be consumed")
+
+    func = factory(functions())
+    assert func(value) is expected
+    assert func(value) is expected
+
+
+def test_over_consumes_functions_once_on_first_call():
+    produced = []
+
+    def functions():
+        for function in [max, min]:
+            produced.append(function)
+            yield function
+
+    func = _.over(functions())
+    assert produced == []
+    assert func(1, 2, 3) == [3, 1]
+    assert produced == [max, min]
+    assert func(4, 5) == [5, 4]
+    assert produced == [max, min]
+
+
 @parametrize(
     "case,arg,expected",
     [
