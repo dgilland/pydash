@@ -2582,22 +2582,23 @@ def xor_by(array, *lists, **kwargs):
     array = list(array)
 
     if not lists:
-        return array
+        return uniq_by(array, iteratee=kwargs.get("iteratee"))
 
     iteratee, lists = parse_iteratee("iteratee", *lists, **kwargs)
 
     if not lists:
-        return array
+        return uniq_by(array, iteratee=iteratee)
 
     first = list(lists[0])
 
     return xor_by(
-        uniq(
+        uniq_by(
             difference_by(
                 array + first,
                 intersection_by(array, first, iteratee=iteratee),
                 iteratee=iteratee,
-            )
+            ),
+            iteratee=iteratee,
         ),
         *lists[1:],
         iteratee=iteratee,

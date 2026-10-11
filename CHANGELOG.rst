@@ -6,6 +6,9 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``xor`` returning duplicate values for one array and ``xor_by`` deduplicating without
+  its iteratee.
+
 - Fix ``truncate`` dropping an extra character when the string separator is not found.
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.
