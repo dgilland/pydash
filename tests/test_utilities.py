@@ -637,3 +637,37 @@ def test_unique_id_setup():
 @parametrize("case,expected", [((), "1"), (("foo",), "foo2")])
 def test_unique_id(case, expected):
     assert _.unique_id(*case) == expected
+
+
+def test_cond_keyword_only_arguments():
+    def matches(*, value):
+        return value > 0
+
+    def selected(*, value):
+        return value * 2
+
+    conditional = _.cond([(matches, selected)])
+    assert conditional(value=3) == 6
+    assert conditional(value=-1) is None
+
+
+def test_cond_mixed_arguments():
+    def matches(value, *, limit):
+        return value > limit
+
+    def selected(value, *, limit):
+        return value - limit
+
+    conditional = _.cond((matches, selected), (lambda *args, **kwargs: True, selected))
+    assert conditional(3, limit=2) == 1
+    assert conditional(1, limit=2) == -1
+
+
+def test_cond_argument_named_argcount():
+    def matches(*, argcount):
+        return argcount > 0
+
+    def selected(*, argcount):
+        return argcount
+
+    assert _.cond([(matches, selected)])(argcount=2) == 2
