@@ -3017,6 +3017,8 @@ def iterdifference(array, other, comparator=None, iteratee=None):
     if not array or not other:  # pragma: no cover
         return
 
+    use_cache = comparator is None and iteratee is None
+
     if comparator is None:
         comparator = pyd.is_equal
 
@@ -3025,13 +3027,13 @@ def iterdifference(array, other, comparator=None, iteratee=None):
     def is_different(item, seen):
         is_diff = True
 
-        if item not in seen:
+        if not use_cache or item not in seen:
             for value in other:
                 if comparator(iteratee(item), iteratee(value)):
                     is_diff = False
                     break
 
-            if is_diff:
+            if is_diff and use_cache:
                 seen.append(item)
         return is_diff
 
