@@ -1037,3 +1037,29 @@ def test_apply_if_not_none(case, expected):
 )
 def test_apply_catch(case, expected):
     assert _.apply_catch(*case) == expected
+
+
+def test_invoke_dictionary_callables():
+    def add(value, *, increment=1):
+        return value + increment
+
+    obj = {"nested": {"add": add}}
+    assert _.invoke(obj, "nested.add", 3, increment=2) == 5
+    assert _.invoke(obj, ["nested", "add"], 4) == 5
+    assert _.method("nested.add", 3, increment=2)(obj) == 5
+    assert _.method_of(obj, 4)("nested.add") == 5
+
+
+def test_invoke_indexed_callables():
+    functions = [lambda value: value * 2]
+    assert _.invoke(functions, [0], 3) == 6
+    assert _.invoke({0: functions[0]}, [0], 4) == 8
+    assert _.invoke(functions, [1], 3) is None
+
+
+def test_invoke_noncallable_attribute():
+    class Container:
+        value = None
+
+    with pytest.raises(TypeError):
+        _.invoke(Container(), "value")
