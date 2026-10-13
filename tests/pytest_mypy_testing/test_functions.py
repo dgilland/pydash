@@ -1,6 +1,7 @@
 import typing as t
 
 import pytest
+from typing_extensions import assert_type
 
 import pydash as _
 
@@ -284,3 +285,43 @@ def test_mypy_wrap() -> None:
     wrapper = _.wrap('hello', as_tuple)
     reveal_type(wrapper)  # R: pydash.functions.Partial[Tuple[builtins.str, builtins.int]]
     reveal_type(wrapper(1))  # R: Tuple[builtins.str, builtins.int]
+
+
+@pytest.mark.mypy_testing
+def test_mypy_over_args_changes_argument_types() -> None:
+    def increment(value: int) -> int:
+        return value + 1
+
+    def parse(value: str) -> int:
+        return int(value)
+
+    increment_text = _.over_args(increment, parse)
+    assert_type(increment_text("12"), int)
+    assert increment_text("12") == 13
+
+    def join_values(first: int, second: int) -> str:
+        return str(first + second)
+
+    joined_text = _.over_args(join_values, parse, parse)
+    assert_type(joined_text("12", "4"), str)
+    assert joined_text("12", "4") == "16"
+
+
+@pytest.mark.mypy_testing
+def test_mypy_over_args_all_transform_arities() -> None:
+    def parse(value: str) -> int:
+        return int(value)
+
+    def add_three(a: int, b: int, c: int) -> int:
+        return a + b + c
+
+    def add_four(a: int, b: int, c: int, d: int) -> int:
+        return a + b + c + d
+
+    def add_five(a: int, b: int, c: int, d: int, e: int) -> int:
+        return a + b + c + d + e
+
+    assert_type(_.over_args(add_three, parse, parse, parse)("1", "2", "3"), int)
+    assert_type(_.over_args(add_four, parse, parse, parse, parse)("1", "2", "3", "4"), int)
+    assert_type(_.over_args(add_five, parse, parse, parse, parse, parse)("1", "2", "3", "4", "5"), int)
+    assert_type(_.chain(add_three).over_args(parse, parse, parse).value()("1", "2", "3"), int)
