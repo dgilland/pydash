@@ -202,10 +202,25 @@ def test_matches(case, arg, expected):
         (("a", 2), {"a": 1, "b": 2}, False),
         ((1, 2), [1, 2, 3], True),
         ((1, 3), [1, 2, 3], False),
+        (("missing", None), {}, False),
+        (("missing", {}), {}, False),
+        (("missing", []), {}, False),
+        (("a", None), {"a": None}, True),
+        (("a.b", None), {"a": {}}, False),
+        (("a.b", None), {"a": {"b": None}}, True),
+        ((["a", 0, "b"], None), {"a": [{}]}, False),
+        ((["a", 0, "b"], None), {"a": [{"b": None}]}, True),
+        ((2, None), [1, 2], False),
+        ((1, None), [1, None], True),
     ],
 )
 def test_matches_property(case, arg, expected):
     assert _.matches_property(*case)(arg) is expected
+
+
+def test_matches_property_iteratee_does_not_match_absent_paths():
+    records = [{}, {"a": {}}, {"a": {"b": None}}, {"a": {"b": 1}}]
+    assert _.filter_(records, ["a.b", None]) == [{"a": {"b": None}}]
 
 
 @parametrize(

@@ -556,8 +556,14 @@ def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:
 
     .. versionadded:: 3.1.0
     """
-    prop_accessor = property_(key)
-    return lambda obj: matches(value)(prop_accessor(obj))
+    marker = object()
+    predicate = matches(value)
+
+    def _matches_property(obj: t.Any) -> bool:
+        actual = pyd.get(obj, key, marker)
+        return actual is not marker and predicate(actual)
+
+    return _matches_property
 
 
 class MemoizedFunc(Protocol[P, T, T2]):
