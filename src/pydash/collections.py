@@ -2048,7 +2048,7 @@ def shuffle(collection):
 
     .. versionadded:: 1.0.0
     """
-    if isinstance(collection, dict):
+    if isinstance(collection, t.Mapping):
         collection = collection.values()
 
     # Make copy of collection since random.shuffle works on list in-place.

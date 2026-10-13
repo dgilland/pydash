@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``shuffle`` returning keys instead of values for generic mappings.
+
 - Fix ``truncate`` dropping an extra character when the string separator is not found.
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.

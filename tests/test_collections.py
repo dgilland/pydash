@@ -1,6 +1,7 @@
-from collections import namedtuple
+from collections import UserDict, namedtuple
 import math
 from operator import attrgetter, itemgetter, methodcaller
+from types import MappingProxyType
 
 import pytest
 
@@ -1063,3 +1064,11 @@ def test_sort_by(case, expected):
 )
 def test_to_list(case, expected):
     assert set(_.to_list(*case)) == set(expected)
+
+
+@parametrize("mapping_type", [dict, UserDict, MappingProxyType])
+def test_shuffle_returns_mapping_values(mapping_type):
+    original = {"a": 1, "b": 1, "c": 2}
+    mapping = mapping_type(original)
+    assert sorted(_.shuffle(mapping)) == [1, 1, 2]
+    assert dict(mapping) == original
