@@ -1,6 +1,7 @@
 from collections import namedtuple
 import math
 from operator import attrgetter, itemgetter, methodcaller
+from types import MappingProxyType
 
 import pytest
 
@@ -10,6 +11,22 @@ from . import helpers
 
 
 parametrize = pytest.mark.parametrize
+
+
+@parametrize("factory", [dict, MappingProxyType])
+def test_reduce_right_mapping_order(factory):
+    collection = factory({"a": "A", "b": "B", "c": "C"})
+    keys = []
+
+    def join(acc, value, key):
+        keys.append(key)
+        return acc + value
+
+    assert _.reduce_right(collection, join, "") == "CBA"
+    assert keys == ["c", "b", "a"]
+    assert list(collection.items()) == [("a", "A"), ("b", "B"), ("c", "C")]
+    assert _.reductions_right(collection, lambda acc, value: acc + value, "") == ["C", "CB", "CBA"]
+    assert _.reduce_right(factory({}), join, "") == ""
 
 
 @parametrize(
