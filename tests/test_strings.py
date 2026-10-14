@@ -692,6 +692,41 @@ def test_replace_start(case, expected):
 
 
 @parametrize(
+    "text,expected",
+    [("xbar", "xbar"), ("bar foo", "X foo")],
+)
+def test_replace_start_alternatives(text, expected):
+    assert _.replace_start(text, "foo|bar", "X", escape=False) == expected
+
+
+@parametrize(
+    "text,expected",
+    [("foox", "foox"), ("bar foo", "bar X")],
+)
+def test_replace_end_alternatives(text, expected):
+    assert _.replace_end(text, "foo|bar", "X", escape=False) == expected
+
+
+def test_replace_both_ends_alternatives():
+    assert _.replace("foox", "foo|bar", "X", escape=False, from_start=True, from_end=True) == "foox"
+    assert _.replace_start("bar", "(foo)|(bar)", r"\2!", escape=False) == "bar!"
+
+
+@parametrize("compile_pattern", [str, re.compile])
+def test_replace_anchored_inline_flags(compile_pattern):
+    pattern = compile_pattern("(?x) # flags\n (?i) foo|bar # end")
+    assert _.replace_start("BAR foo", pattern, "X", escape=False) == "X foo"
+    assert _.replace_end("bar FOO", pattern, "X", escape=False) == "bar X"
+    assert _.replace_start("xBAR", pattern, "X", escape=False) == "xBAR"
+    assert _.replace_end("FOOx", pattern, "X", escape=False) == "FOOx"
+
+
+def test_replace_anchored_inline_comments():
+    pattern = r"(?#before)(?i)(?#escaped\)comment)foo|bar"
+    assert _.replace_end("bar FOO", pattern, "X", escape=False) == "bar X"
+
+
+@parametrize(
     "case,expected",
     [
         (("foo  bar baz", "-"), "foo-bar-baz"),
