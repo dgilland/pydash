@@ -1796,7 +1796,8 @@ def pick_by(obj, iteratee=None):
     """
     obj = to_dict(obj)
 
-    if iteratee is None or callable(iteratee):
+    literal_keys = iteratee is None or callable(iteratee)
+    if literal_keys:
         paths = keys(obj)
         if iteratee is None:
             iteratee = pyd.identity
@@ -1814,10 +1815,13 @@ def pick_by(obj, iteratee=None):
     result = {}
 
     for path in paths:
-        value = get(obj, path)
+        value = obj[path] if literal_keys else get(obj, path)
 
         if callit(iteratee, value, path, argcount=argcount):
-            set_(result, path, value)
+            if literal_keys:
+                result[path] = value
+            else:
+                set_(result, path, value)
 
     return result
 

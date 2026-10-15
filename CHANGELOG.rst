@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve literal property keys in ``pick_by`` when using a callable or the default predicate.
+
 - Fix ``truncate`` dropping an extra character when the string separator is not found.
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.
