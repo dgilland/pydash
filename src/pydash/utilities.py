@@ -216,7 +216,13 @@ def conforms(source: t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]]) -> t.Callable
 
     def _conforms(obj):
         for key, predicate in iterator(source):
-            if not pyd.has(obj, key) or not predicate(obj[key]):
+            if isinstance(obj, dict) and key not in obj:
+                return False
+            try:
+                value = obj[key]
+            except (KeyError, IndexError, TypeError):
+                return False
+            if not predicate(value):
                 return False
         return True
 
