@@ -54,3 +54,4 @@ Contributors
 - Fan Wu, `FanWu-ai@github <https://github.com/FanWu-ai>`_
 - yuefdev, `yuefdev@github <https://github.com/yuefdev>`_
 - Huanyi Xie, `xiehuanyi@github <https://github.com/xiehuanyi>`_
+- jaredrainsha, `jaredrainsha@github <https://github.com/jaredrainsha>`_

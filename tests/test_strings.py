@@ -1236,6 +1236,30 @@ def test_url(case, expected):
 
 @parametrize(
     "case,expected",
+    [
+        (
+            {"args": ["https://example.com/path?a=&b=1"], "kwargs": {}},
+            "https://example.com/path?a=&b=1",
+        ),
+        ({"args": ["/foo?flag"], "kwargs": {}}, "/foo?flag="),
+        (
+            {"args": ["/foo?tag=first&tag=&tag=last"], "kwargs": {}},
+            "/foo?tag=first&tag=&tag=last",
+        ),
+        ({"args": ["/foo?=value&empty="], "kwargs": {}}, "/foo?=value&empty="),
+        (
+            {"args": ["/foo?x=", "bar?y="], "kwargs": {"z": ""}},
+            "/foo/bar?z=&x=&y=",
+        ),
+        ({"args": ["/foo"], "kwargs": {"a": ""}}, "/foo?a="),
+    ],
+)
+def test_url_blank_query_values(case, expected):
+    assert _.url(*case["args"], **case["kwargs"]) == expected
+
+
+@parametrize(
+    "case,expected",
     [  # noqa
         ("hello world!", ["hello", "world"]),  # noqa
         ("hello_world", ["hello", "world"]),
