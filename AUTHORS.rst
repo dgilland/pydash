@@ -57,3 +57,4 @@ Contributors
 - Huanyi Xie, `xiehuanyi@github <https://github.com/xiehuanyi>`_
 - Ryan Duguid, `ryanduguid@github <https://github.com/ryanduguid>`_
 - himanshu748, `himanshu748@github <https://github.com/himanshu748>`_
+- Bharat Kaurav, `TheNetherWatcher@github <https://github.com/TheNetherWatcher>`_
