@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Honor custom comparisons and iteratees in difference helpers when input values compare equal.
 - Fix ``xor`` returning duplicate values for one array and ``xor_by`` deduplicating without
   its iteratee.
 - Preserve large integer values in ``to_integer`` and return ``0`` for infinite inputs.

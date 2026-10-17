@@ -1324,6 +1324,44 @@ def test_union_with_honors_a_comparator_with_a_single_array():
     assert _.union_with(values, comparator) == [1, 2]
 
 
+@parametrize(
+    "array,other,expected",
+    [
+        ([1, True], [True], [1]),
+        ([True, 1], [1], [True]),
+        ([1.0, 1], [1], [1.0]),
+        ([1, True, 1], [True], [1, 1]),
+    ],
+)
+def test_difference_with_respects_custom_comparison_for_equal_values(array, other, expected):
+    def comparator(left, right):
+        return type(left) is type(right) and left == right
+
+    result = _.difference_with(array, other, comparator=comparator)
+    assert result == expected
+    assert result[0] is array[0]
+
+
+@parametrize(
+    "array,other,expected",
+    [
+        ([1, True], [True], [1]),
+        ([True, 1], [1], [True]),
+        ([1.0, 1], [1], [1.0]),
+        ([1, True, 1], [True], [1, 1]),
+    ],
+)
+def test_difference_by_respects_transformed_values_when_inputs_compare_equal(
+    array, other, expected
+):
+    def iteratee(value):
+        return type(value).__name__, value
+
+    result = _.difference_by(array, other, iteratee=iteratee)
+    assert result == expected
+    assert result[0] is array[0]
+
+
 @pytest.mark.parametrize("key", [0, ""])
 @pytest.mark.parametrize("function,expected", [(_.sorted_index_by, 1), (_.sorted_last_index_by, 3)])
 def test_sorted_index_by_falsey_property(function, expected, key):
