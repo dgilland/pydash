@@ -890,6 +890,17 @@ def test_to_boolean(case, expected):
         (1.9, 1),
         ("1.4", 1),
         ("1.9", 1),
+        (2**53 + 1, 2**53 + 1),
+        (-(2**53 + 1), -(2**53 + 1)),
+        (str(2**53 + 1), 2**53 + 1),
+        (str(-(2**53 + 1)), -(2**53 + 1)),
+        (10**400, 10**400),
+        (str(10**400), 10**400),
+        (float("inf"), 0),
+        (float("-inf"), 0),
+        ("inf", 0),
+        ("-inf", 0),
+        (float("nan"), 0),
         ("foo", 0),
         (None, 0),
         (True, 1),
@@ -901,6 +912,27 @@ def test_to_boolean(case, expected):
 )
 def test_to_integer(case, expected):
     assert _.to_integer(case) == expected
+
+
+def test_to_integer_preserves_float_conversion_protocol():
+    class FloatConvertible:
+        def __int__(self):
+            return 99
+
+        def __float__(self):
+            return 1.9
+
+    class IntegerSubclass(int):
+        def __float__(self):
+            return 2.9
+
+    class StringSubclass(str):
+        def __float__(self):
+            return 3.9
+
+    assert _.to_integer(FloatConvertible()) == 1
+    assert _.to_integer(IntegerSubclass(99)) == 2
+    assert _.to_integer(StringSubclass("99")) == 3
 
 
 @parametrize(
