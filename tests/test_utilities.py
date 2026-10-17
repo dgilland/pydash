@@ -1,3 +1,4 @@
+from collections import defaultdict
 from itertools import islice
 import time
 from unittest import mock
@@ -8,6 +9,33 @@ import pydash as _
 
 
 parametrize = pytest.mark.parametrize
+
+
+@parametrize("key", ["a.b", "a[0]", "[0]", ("a", "b")])
+def test_conforms_literal_keys(key):
+    source = {key: lambda value: value == 1}
+    assert _.conforms(source)({key: 1}) is True
+    assert _.conforms_to({key: 2}, source) is False
+
+
+def test_conforms_missing_literal_key():
+    assert _.conforms({"a.b": lambda value: True})({"a": {"b": 1}}) is False
+    obj = defaultdict(lambda: 1)
+    assert _.conforms_to(obj, {"missing": lambda value: True}) is False
+    assert obj == {}
+
+
+def test_conforms_predicate_error_propagates():
+    def predicate(value):
+        raise KeyError("predicate failure")
+
+    with pytest.raises(KeyError, match="predicate failure"):
+        _.conforms_to({"a": 1}, {"a": predicate})
+
+
+@parametrize("obj", [[], None])
+def test_conforms_missing_index(obj):
+    assert _.conforms([lambda value: True])(obj) is False
 
 
 @parametrize("case,expected", [((lambda a, b: a / b, 4, 2), 2)])

@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Check literal property keys in ``conforms`` and ``conforms_to`` without interpreting them as paths.
 - Preserve literal property keys in ``pick_by`` when using a callable or the default predicate.
 - Fix ``reduce_right`` and ``reductions_right`` traversing mappings in the wrong order or reducing keys.
 - Fix anchored string replacements applying anchors to only one regular-expression alternative.
