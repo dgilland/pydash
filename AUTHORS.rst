@@ -61,3 +61,4 @@ Contributors
 - Muneeb Sheikh, `muneikh@github <https://github.com/muneikh>`_
 - Himanshu Kumar, `himanshu748@github <https://github.com/himanshu748>`_
 - Gambit-Checkmate, `Gambit-Checkmate@github <https://github.com/Gambit-Checkmate>`_
+- jaredrainsha, `jaredrainsha@github <https://github.com/jaredrainsha>`_

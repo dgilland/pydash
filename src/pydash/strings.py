@@ -2243,7 +2243,7 @@ def url(*paths: t.Any, **params: t.Any) -> str:
 
     for path in paths:
         scheme, netloc, path, query, fragment = urlsplit(path)
-        query = parse_qsl(query)
+        query = parse_qsl(query, keep_blank_values=True)
         params_list += query
         paths_list.append(urlunsplit((scheme, netloc, path, "", fragment)))
 
