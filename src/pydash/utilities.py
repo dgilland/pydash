@@ -1166,7 +1166,7 @@ def retry(  # noqa: PLR0917
         raise ValueError("delay must be a number greater than or equal to 0")
 
     if not isinstance(max_delay, NUMBER_TYPES) or max_delay < 0:
-        raise ValueError("scale must be a number greater than or equal to 0")
+        raise ValueError("max_delay must be a number greater than or equal to 0")
 
     if not isinstance(scale, NUMBER_TYPES) or scale <= 0:
         raise ValueError("scale must be a number greater than 0")
@@ -1210,16 +1210,18 @@ def retry(  # noqa: PLR0917
                     if attempt == attempts:
                         raise
 
-                    if jitter:
-                        delay_time += max(0, random(*jitter))
+                    # Jitter only applies to the current sleep so that it doesn't accumulate into
+                    # (and get scaled along with) the base delay of later attempts.
+                    sleep_time = delay_time
 
-                    if delay_time < 0:  # pragma: no cover
-                        continue
+                    if jitter:
+                        sleep_time += max(0, random(*jitter))
 
                     if max_delay:
                         delay_time = min(delay_time, max_delay)
+                        sleep_time = min(sleep_time, max_delay)
 
-                    time.sleep(delay_time)
+                    time.sleep(sleep_time)
 
                     # Scale after first iteration.
                     delay_time *= scale
