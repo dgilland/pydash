@@ -56,3 +56,4 @@ Contributors
 - yuefdev, `yuefdev@github <https://github.com/yuefdev>`_
 - Huanyi Xie, `xiehuanyi@github <https://github.com/xiehuanyi>`_
 - Ryan Duguid, `ryanduguid@github <https://github.com/ryanduguid>`_
+- himanshu748, `himanshu748@github <https://github.com/himanshu748>`_
