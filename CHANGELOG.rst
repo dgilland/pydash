@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``xor`` returning duplicate values for one array and ``xor_by`` deduplicating without
+  its iteratee.
 - Preserve large integer values in ``to_integer`` and return ``0`` for infinite inputs.
 - Fix ``range_`` and ``range_right`` losing precision or overflowing for large integer bounds.
 - Honor false-valued iteratees in ``sorted_index_by`` and ``sorted_last_index_by``.

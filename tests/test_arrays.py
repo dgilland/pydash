@@ -1144,6 +1144,38 @@ def test_xor(case, expected):
     assert _.xor(*case) == expected
 
 
+@parametrize("array", [[1, 1, 2], [1, 2, 1], [1, 2, 2]])
+def test_xor_single_array_is_unique(array):
+    assert _.xor(array) == [1, 2]
+
+
+@parametrize(
+    "arrays,expected",
+    [
+        ((), [2.1, 1.1]),
+        (([],), [2.1, 1.1]),
+        (([3.1, 3.2],), [2.1, 1.1, 3.1]),
+        (([3.1, 3.2], [3.3]), [2.1, 1.1]),
+    ],
+)
+@parametrize("positional", [False, True])
+def test_xor_by_deduplicates_using_iteratee(arrays, expected, positional):
+    array = [2.1, 2.2, 1.1]
+
+    if positional:
+        result = _.xor_by(array, *arrays, int)
+    else:
+        result = _.xor_by(array, *arrays, iteratee=int)
+
+    assert result == expected
+    assert array == [2.1, 2.2, 1.1]
+
+
+def test_xor_by_deduplicates_unhashable_criteria():
+    array = [{"id": [1], "name": "first"}, {"id": [1], "name": "second"}]
+    assert _.xor_by(iter(array), [], "id") == [array[0]]
+
+
 def test_xor_accepts_iterable_inputs_without_mutating_lists():
     array = [1, 2, 3]
     other = [2, 4]

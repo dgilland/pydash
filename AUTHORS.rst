@@ -59,3 +59,4 @@ Contributors
 - himanshu748, `himanshu748@github <https://github.com/himanshu748>`_
 - Bharat Kaurav, `TheNetherWatcher@github <https://github.com/TheNetherWatcher>`_
 - Muneeb Sheikh, `muneikh@github <https://github.com/muneikh>`_
+- Himanshu Kumar, `himanshu748@github <https://github.com/himanshu748>`_
