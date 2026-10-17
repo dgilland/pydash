@@ -7,6 +7,10 @@ Unreleased
 ----------
 
 - Preserve large integer values in ``to_integer`` and return ``0`` for infinite inputs.
+- Fix ``range_`` and ``range_right`` losing precision or overflowing for large integer bounds.
+- Honor false-valued iteratees in ``sorted_index_by`` and ``sorted_last_index_by``.
+- Fix ``reduce_`` rejecting mappings when no initial accumulator is provided.
+- Fix ``intersection_with`` returning duplicates when distinct values match under its comparator.
 - Fix ``truncate`` dropping an extra character when the string separator is not found.
 - Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
   the latest arguments. Trailing invocations run in a daemon timer thread.
@@ -15,6 +19,14 @@ Unreleased
 - Fix ``splice`` deletion and insertion positions for negative and out-of-range start indexes.
 - Fix ``xor``, ``xor_by``, and ``xor_with`` rejecting declared iterable inputs such as generators
   and tuples. Thanks MbappeWU_!
+- Fix ``number_format`` inserting an order separator after the minus sign for negative numbers
+  whose integer digit count is a multiple of 3 (e.g. ``-999`` became ``-,999``).
+- Fix ``retry`` accumulating ``jitter`` into the base delay so that it compounded and was scaled on
+  later attempts. Jitter is now applied only to each individual sleep.
+- Fix ``retry`` raising a ``scale`` error message for an invalid ``max_delay``.
+- Fix ``floor`` and ``ceil`` returning off-by-one-unit results for float inputs when ``precision`` is
+  given, due to float error when scaling by a power of 10 (e.g. ``floor(0.29, 2)`` returned
+  ``0.28`` and ``ceil(1.1, 2)`` returned ``1.11``).
 
 
 v8.1.0 (2026-08-29)
