@@ -11,6 +11,7 @@ Lead
 Contributors
 ------------
 
+- harbinresearcher, `harbinresearcher@github <https://github.com/harbinresearcher>`_
 - WU Leizhi, `MbappeWU@github <https://github.com/MbappeWU>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
@@ -54,3 +55,6 @@ Contributors
 - Fan Wu, `FanWu-ai@github <https://github.com/FanWu-ai>`_
 - yuefdev, `yuefdev@github <https://github.com/yuefdev>`_
 - Huanyi Xie, `xiehuanyi@github <https://github.com/xiehuanyi>`_
+- Ryan Duguid, `ryanduguid@github <https://github.com/ryanduguid>`_
+- himanshu748, `himanshu748@github <https://github.com/himanshu748>`_
+- Bharat Kaurav, `TheNetherWatcher@github <https://github.com/TheNetherWatcher>`_
