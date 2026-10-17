@@ -1180,26 +1180,31 @@ def map_values(
 ) -> t.Dict[T, T3]: ...
 
 
+# Mappings are also iterables, but preserve their keys instead of enumerating.
 @t.overload
-def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T, T3]: ...
+def map_values(  # type: ignore[overload-overlap]
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]
+) -> t.Dict[T, T3]: ...
 
 
 @t.overload
-def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T, T3]: ...
+def map_values(  # type: ignore[overload-overlap]
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]
+) -> t.Dict[T, T3]: ...
 
 
 @t.overload
 def map_values(
     obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]
-) -> t.Dict[T, T2]: ...
+) -> t.Dict[int, T2]: ...
 
 
 @t.overload
-def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T, T2]: ...
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[int, T2]: ...
 
 
 @t.overload
-def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T, T2]: ...
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[int, T2]: ...
 
 
 @t.overload
