@@ -11,7 +11,6 @@ Lead
 Contributors
 ------------
 
-- WU Leizhi, `MbappeWU@github <https://github.com/MbappeWU>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
 - Bharadwaj Yarlagadda, `bharadwajyarlagadda@github <https://github.com/bharadwajyarlagadda>`_
@@ -51,7 +50,15 @@ Contributors
 - Pralav Singh, `pralav-25@github <https://github.com/pralav-25>`_
 - Basil Chen, `rastagan-git@github <https://github.com/rastagan-git>`_
 - Kudala Bharani Kumar Reddy, `kudala-bharani@github <https://github.com/kudala-bharani>`_
+- WU Leizhi, `MbappeWU@github <https://github.com/MbappeWU>`_
 - Fan Wu, `FanWu-ai@github <https://github.com/FanWu-ai>`_
 - yuefdev, `yuefdev@github <https://github.com/yuefdev>`_
 - Huanyi Xie, `xiehuanyi@github <https://github.com/xiehuanyi>`_
+- Ryan Duguid, `ryanduguid@github <https://github.com/ryanduguid>`_
+- harbinresearcher, `harbinresearcher@github <https://github.com/harbinresearcher>`_
+- himanshu748, `himanshu748@github <https://github.com/himanshu748>`_
+- Bharat Kaurav, `TheNetherWatcher@github <https://github.com/TheNetherWatcher>`_
+- Muneeb Sheikh, `muneikh@github <https://github.com/muneikh>`_
+- Himanshu Kumar, `himanshu748@github <https://github.com/himanshu748>`_
+- Gambit-Checkmate, `Gambit-Checkmate@github <https://github.com/Gambit-Checkmate>`_
 - jaredrainsha, `jaredrainsha@github <https://github.com/jaredrainsha>`_

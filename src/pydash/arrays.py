@@ -1024,7 +1024,7 @@ def intersection_with(array, *others, **kwargs):
         if not array:
             break
 
-    return array
+    return uniq_with(array, comparator) if comparator is not None else array
 
 
 def intersperse(array: t.Iterable[T], separator: T2) -> t.List[t.Union[T, T2]]:
@@ -1608,10 +1608,10 @@ def sort(array, comparator=None, key=None, reverse=False):
 
     .. versionadded:: 2.2.0
     """
-    if comparator and key:
+    if comparator is not None and key is not None:
         raise ValueError('The "comparator" and "key" arguments are mutually exclusive')
 
-    if comparator:
+    if comparator is not None:
         key = cmp_to_key(comparator)
 
     array.sort(key=key, reverse=reverse)
@@ -1685,7 +1685,7 @@ def sorted_index_by(array, value, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    if iteratee:
+    if iteratee is not None:
         # Generate array of sorted keys computed using iteratee.
         iteratee = pyd.iteratee(iteratee)
         array = sorted(iteratee(item) for item in array)
@@ -1789,7 +1789,7 @@ def sorted_last_index_by(array, value, iteratee=None):
         >>> sorted_last_index_by(array, {"x": 4}, "x")
         1
     """
-    if iteratee:
+    if iteratee is not None:
         # Generate array of sorted keys computed using iteratee.
         iteratee = pyd.iteratee(iteratee)
         array = sorted(iteratee(item) for item in array)
@@ -1861,9 +1861,9 @@ def sorted_uniq_by(
 ) -> t.List["SupportsRichComparisonT"]:
     """
     This method is like :func:`sorted_uniq` except that it accepts iteratee which is invoked for
-    each element in array to generate the criterion by which uniqueness is computed. The order of
-    result values is determined by the order they occur in the array. The iteratee is invoked with
-    one argument: ``(value)``.
+    each element in array to generate the criterion by which uniqueness is computed. The first
+    value for each criterion is retained, then the retained values are sorted in ascending order.
+    The iteratee is invoked with one argument: ``(value)``.
 
     Args:
         array: List of values to be sorted.
@@ -1871,7 +1871,7 @@ def sorted_uniq_by(
             :func:`.identity`.
 
     Returns:
-        Unique list.
+        Sorted list of unique values.
 
     Example:
 
@@ -2582,22 +2582,23 @@ def xor_by(array, *lists, **kwargs):
     array = list(array)
 
     if not lists:
-        return array
+        return uniq_by(array, iteratee=kwargs.get("iteratee"))
 
     iteratee, lists = parse_iteratee("iteratee", *lists, **kwargs)
 
     if not lists:
-        return array
+        return uniq_by(array, iteratee=iteratee)
 
     first = list(lists[0])
 
     return xor_by(
-        uniq(
+        uniq_by(
             difference_by(
                 array + first,
                 intersection_by(array, first, iteratee=iteratee),
                 iteratee=iteratee,
-            )
+            ),
+            iteratee=iteratee,
         ),
         *lists[1:],
         iteratee=iteratee,
@@ -3017,6 +3018,8 @@ def iterdifference(array, other, comparator=None, iteratee=None):
     if not array or not other:  # pragma: no cover
         return
 
+    use_cache = comparator is None and iteratee is None
+
     if comparator is None:
         comparator = pyd.is_equal
 
@@ -3025,13 +3028,13 @@ def iterdifference(array, other, comparator=None, iteratee=None):
     def is_different(item, seen):
         is_diff = True
 
-        if item not in seen:
+        if not use_cache or item not in seen:
             for value in other:
                 if comparator(iteratee(item), iteratee(value)):
                     is_diff = False
                     break
 
-            if is_diff:
+            if is_diff and use_cache:
                 seen.append(item)
         return is_diff
 

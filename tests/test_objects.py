@@ -762,6 +762,26 @@ def test_pick_by(case, expected):
     assert _.pick_by(*case) == expected
 
 
+@parametrize("key", ["a.b", "a[0]", "[0]", ("a", "b")])
+def test_pick_by_literal_keys(key):
+    obj = {key: 1, "other": 0}
+    calls = []
+
+    def predicate(value, name):
+        calls.append((value, name))
+        return value == 1
+
+    assert _.pick_by(obj, predicate) == {key: 1}
+    assert calls == [(1, key), (0, "other")]
+    assert _.pick_by(obj) == {key: 1}
+
+
+def test_pick_by_literal_key_does_not_read_nested_value():
+    obj = {"a.b": 1, "a": {"b": 2}}
+    assert _.pick_by(obj, lambda value, key: key == "a.b") == {"a.b": 1}
+    assert _.pick_by(obj, ["a.b"]) == {"a": {"b": 2}}
+
+
 @parametrize(
     "case,expected",
     [
@@ -890,6 +910,17 @@ def test_to_boolean(case, expected):
         (1.9, 1),
         ("1.4", 1),
         ("1.9", 1),
+        (2**53 + 1, 2**53 + 1),
+        (-(2**53 + 1), -(2**53 + 1)),
+        (str(2**53 + 1), 2**53 + 1),
+        (str(-(2**53 + 1)), -(2**53 + 1)),
+        (10**400, 10**400),
+        (str(10**400), 10**400),
+        (float("inf"), 0),
+        (float("-inf"), 0),
+        ("inf", 0),
+        ("-inf", 0),
+        (float("nan"), 0),
         ("foo", 0),
         (None, 0),
         (True, 1),
@@ -901,6 +932,27 @@ def test_to_boolean(case, expected):
 )
 def test_to_integer(case, expected):
     assert _.to_integer(case) == expected
+
+
+def test_to_integer_preserves_float_conversion_protocol():
+    class FloatConvertible:
+        def __int__(self):
+            return 99
+
+        def __float__(self):
+            return 1.9
+
+    class IntegerSubclass(int):
+        def __float__(self):
+            return 2.9
+
+    class StringSubclass(str):
+        def __float__(self):
+            return 3.9
+
+    assert _.to_integer(FloatConvertible()) == 1
+    assert _.to_integer(IntegerSubclass(99)) == 2
+    assert _.to_integer(StringSubclass("99")) == 3
 
 
 @parametrize(
@@ -1037,3 +1089,29 @@ def test_apply_if_not_none(case, expected):
 )
 def test_apply_catch(case, expected):
     assert _.apply_catch(*case) == expected
+
+
+def test_invoke_dictionary_callables():
+    def add(value, *, increment=1):
+        return value + increment
+
+    obj = {"nested": {"add": add}}
+    assert _.invoke(obj, "nested.add", 3, increment=2) == 5
+    assert _.invoke(obj, ["nested", "add"], 4) == 5
+    assert _.method("nested.add", 3, increment=2)(obj) == 5
+    assert _.method_of(obj, 4)("nested.add") == 5
+
+
+def test_invoke_indexed_callables():
+    functions = [lambda value: value * 2]
+    assert _.invoke(functions, [0], 3) == 6
+    assert _.invoke({0: functions[0]}, [0], 4) == 8
+    assert _.invoke(functions, [1], 3) is None
+
+
+def test_invoke_noncallable_attribute():
+    class Container:
+        value = None
+
+    with pytest.raises(TypeError):
+        _.invoke(Container(), "value")

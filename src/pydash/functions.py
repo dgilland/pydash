@@ -52,6 +52,11 @@ T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
 T4 = t.TypeVar("T4")
 T5 = t.TypeVar("T5")
+A1 = t.TypeVar("A1")
+A2 = t.TypeVar("A2")
+A3 = t.TypeVar("A3")
+A4 = t.TypeVar("A4")
+A5 = t.TypeVar("A5")
 P = ParamSpec("P")
 
 
@@ -1299,46 +1304,46 @@ def once(func: t.Callable[P, T]) -> Once[P, T]:
 @t.overload
 def over_args(
     func: t.Callable[[T1, T2, T3, T4, T5], T],
-    transform_one: t.Callable[[T1], T1],
-    transform_two: t.Callable[[T2], T2],
-    transform_three: t.Callable[[T3], T3],
-    transform_four: t.Callable[[T4], T4],
-    transform_five: t.Callable[[T5], T5],
-) -> t.Callable[[T1, T2, T3, T4, T5], T]: ...
+    transform_one: t.Callable[[A1], T1],
+    transform_two: t.Callable[[A2], T2],
+    transform_three: t.Callable[[A3], T3],
+    transform_four: t.Callable[[A4], T4],
+    transform_five: t.Callable[[A5], T5],
+) -> t.Callable[[A1, A2, A3, A4, A5], T]: ...
 
 
 @t.overload
 def over_args(
     func: t.Callable[[T1, T2, T3, T4], T],
-    transform_one: t.Callable[[T1], T1],
-    transform_two: t.Callable[[T2], T2],
-    transform_three: t.Callable[[T3], T3],
-    transform_four: t.Callable[[T4], T4],
-) -> t.Callable[[T1, T2, T3, T4], T]: ...
+    transform_one: t.Callable[[A1], T1],
+    transform_two: t.Callable[[A2], T2],
+    transform_three: t.Callable[[A3], T3],
+    transform_four: t.Callable[[A4], T4],
+) -> t.Callable[[A1, A2, A3, A4], T]: ...
 
 
 @t.overload
 def over_args(
     func: t.Callable[[T1, T2, T3], T],
-    transform_one: t.Callable[[T1], T1],
-    transform_two: t.Callable[[T2], T2],
-    transform_three: t.Callable[[T3], T3],
-) -> t.Callable[[T1, T2, T3], T]: ...
+    transform_one: t.Callable[[A1], T1],
+    transform_two: t.Callable[[A2], T2],
+    transform_three: t.Callable[[A3], T3],
+) -> t.Callable[[A1, A2, A3], T]: ...
 
 
 @t.overload
 def over_args(
     func: t.Callable[[T1, T2], T],
-    transform_one: t.Callable[[T1], T1],
-    transform_two: t.Callable[[T2], T2],
-) -> t.Callable[[T1, T2], T]: ...
+    transform_one: t.Callable[[A1], T1],
+    transform_two: t.Callable[[A2], T2],
+) -> t.Callable[[A1, A2], T]: ...
 
 
 @t.overload
 def over_args(
     func: t.Callable[[T1], T],
-    transform_one: t.Callable[[T1], T1],
-) -> t.Callable[[T1], T]: ...
+    transform_one: t.Callable[[A1], T1],
+) -> t.Callable[[A1], T]: ...
 
 
 def over_args(func, *transforms):
