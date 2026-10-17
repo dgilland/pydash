@@ -1,6 +1,7 @@
 import typing as t
 
 import pytest
+from typing_extensions import assert_type
 
 import pydash as _
 
@@ -173,6 +174,24 @@ def test_mypy_map_values() -> None:
     reveal_type(_.map_values({"a": 1, "b": 2, "c": 3}, times_two))  # R: builtins.dict[builtins.str, builtins.str]
     reveal_type(_.map_values({"a": 1, "b": {"d": 4}, "c": 3}, {"d": 4}))  # R: builtins.dict[Any, Any]
 
+
+@pytest.mark.mypy_testing
+def test_mypy_map_values_iterable_keys() -> None:
+    def value_only(value: str) -> bool:
+        return bool(value)
+
+    def with_index(value: str, index: int) -> bool:
+        return bool(value) and index == 0
+
+    def with_collection(value: str, index: int, collection: list[str]) -> bool:
+        return value == collection[index]
+
+    assert_type(_.map_values(["a", ""], value_only), dict[int, bool])
+    assert_type(_.map_values(("a", ""), with_index), dict[int, bool])
+    assert_type(_.map_values(["a", ""], with_collection), dict[int, bool])
+    assert_type(_.chain(["a", ""]).map_values(value_only).value(), dict[int, bool])
+
+    assert_type(_.map_values(iter(["a", ""]), value_only), dict[int, bool])
 
 @pytest.mark.mypy_testing
 def test_mypy_map_values_deep() -> None:

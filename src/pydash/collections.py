@@ -1457,7 +1457,7 @@ def reduce_(collection, iteratee=None, accumulator=None):
     .. versionchanged:: 4.0.0
         Removed aliases ``foldl`` and ``inject``.
     """
-    iterable = iterator(collection)
+    iterable = iter(iterator(collection))
 
     if accumulator is None:
         try:
@@ -2051,7 +2051,7 @@ def shuffle(collection):
 
     .. versionadded:: 1.0.0
     """
-    if isinstance(collection, dict):
+    if isinstance(collection, t.Mapping):
         collection = collection.values()
 
     # Make copy of collection since random.shuffle works on list in-place.

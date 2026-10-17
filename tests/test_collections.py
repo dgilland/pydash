@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import UserDict, namedtuple
 import math
 from operator import attrgetter, itemgetter, methodcaller
 from types import MappingProxyType
@@ -840,6 +840,27 @@ def test_reduce_(case, expected):
     assert _.reduce_(*case) == expected
 
 
+@parametrize("mapping_type", [dict, MappingProxyType])
+@parametrize("values,expected", [({"first": 1}, 1), ({"first": 1, "second": 2, "third": 3}, 6)])
+def test_reduce_mapping_without_accumulator(mapping_type, values, expected):
+    collection = mapping_type(values)
+    visited = []
+
+    def accumulate(total, value, key):
+        visited.append(key)
+        return total + value
+
+    assert _.reduce_(collection, accumulate) == expected
+    assert visited == list(values)[1:]
+    assert dict(collection) == values
+
+
+@parametrize("mapping_type", [dict, MappingProxyType])
+def test_reduce_empty_mapping_without_accumulator(mapping_type):
+    with pytest.raises(TypeError, match=r"reduce_\(\) of empty sequence with no initial value"):
+        _.reduce_(mapping_type({}), lambda total, value: total + value)
+
+
 @parametrize("case,exception", [(([],), TypeError)])
 def test_reduce_raise(case, exception):
     raised = False
@@ -1080,3 +1101,11 @@ def test_sort_by(case, expected):
 )
 def test_to_list(case, expected):
     assert set(_.to_list(*case)) == set(expected)
+
+
+@parametrize("mapping_type", [dict, UserDict, MappingProxyType])
+def test_shuffle_returns_mapping_values(mapping_type):
+    original = {"a": 1, "b": 1, "c": 2}
+    mapping = mapping_type(original)
+    assert sorted(_.shuffle(mapping)) == [1, 1, 2]
+    assert dict(mapping) == original
