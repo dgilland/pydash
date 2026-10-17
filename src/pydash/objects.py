@@ -1061,15 +1061,22 @@ def invoke(obj: t.Any, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
     target_path = pyd.initial(paths)
     method_name = pyd.last(paths)
 
-    try:
-        # potential error is caught
-        method = getattr(get(obj, target_path), method_name)  # type: ignore
-    except AttributeError:
-        ret = None
-    else:
-        ret = method(*args, **kwargs)
+    target = get(obj, target_path)
+    missing = object()
+    method: t.Any = (
+        base_get(target, method_name, default=missing)
+        if isinstance(target, (t.Mapping, t.Sequence))
+        else missing
+    )
+    if method is missing:
+        if not isinstance(method_name, str):
+            return None
+        try:
+            method = getattr(target, method_name)
+        except AttributeError:
+            return None
 
-    return ret
+    return method(*args, **kwargs)
 
 
 @t.overload
@@ -1173,26 +1180,31 @@ def map_values(
 ) -> t.Dict[T, T3]: ...
 
 
+# Mappings are also iterables, but preserve their keys instead of enumerating.
 @t.overload
-def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]) -> t.Dict[T, T3]: ...
+def map_values(  # type: ignore[overload-overlap]
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], T3]
+) -> t.Dict[T, T3]: ...
 
 
 @t.overload
-def map_values(obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]) -> t.Dict[T, T3]: ...
+def map_values(  # type: ignore[overload-overlap]
+    obj: t.Mapping[T, T2], iteratee: t.Callable[[T2], T3]
+) -> t.Dict[T, T3]: ...
 
 
 @t.overload
 def map_values(
     obj: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], T2]
-) -> t.Dict[T, T2]: ...
+) -> t.Dict[int, T2]: ...
 
 
 @t.overload
-def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[T, T2]: ...
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T, int], T2]) -> t.Dict[int, T2]: ...
 
 
 @t.overload
-def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T, T2]: ...
+def map_values(obj: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[int, T2]: ...
 
 
 @t.overload
@@ -2047,11 +2059,20 @@ def to_integer(obj: t.Any) -> int:
 
     .. versionadded:: 4.0.0
     """
+    if type(obj) is int:
+        return obj
+
+    if type(obj) is str:
+        try:
+            return int(obj)
+        except ValueError:
+            pass
+
     try:
         # Convert to float first to handle converting floats as string since int('1.1') would fail
         # but this won't.
         num = int(float(obj))
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, OverflowError):
         num = 0
 
     return num
