@@ -2047,11 +2047,20 @@ def to_integer(obj: t.Any) -> int:
 
     .. versionadded:: 4.0.0
     """
+    if type(obj) is int:
+        return obj
+
+    if type(obj) is str:
+        try:
+            return int(obj)
+        except ValueError:
+            pass
+
     try:
         # Convert to float first to handle converting floats as string since int('1.1') would fail
         # but this won't.
         num = int(float(obj))
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, OverflowError):
         num = 0
 
     return num
