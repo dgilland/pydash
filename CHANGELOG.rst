@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``range_`` and ``range_right`` losing precision or overflowing for large integer bounds.
 - Honor false-valued iteratees in ``sorted_index_by`` and ``sorted_last_index_by``.
 - Fix ``reduce_`` rejecting mappings when no initial accumulator is provided.
 - Fix ``intersection_with`` returning duplicates when distinct values match under its comparator.
