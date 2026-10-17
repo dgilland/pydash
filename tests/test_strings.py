@@ -441,6 +441,12 @@ def test_lower_first(case, expected):
         ((1234, 1), "1,234.0"),
         ((1234, 2, ",", "."), "1.234,00"),
         (("1234",), ""),
+        ((-1,), "-1"),
+        ((-999,), "-999"),
+        ((-1234,), "-1,234"),
+        ((-123456,), "-123,456"),
+        ((-123456789.12, 2), "-123,456,789.12"),
+        ((-999.5, 2, ",", "."), "-999,50"),
     ],
 )
 def test_number_format(case, expected):
@@ -689,6 +695,41 @@ def test_replace_end(case, expected):
 )
 def test_replace_start(case, expected):
     assert _.replace_start(*case) == expected
+
+
+@parametrize(
+    "text,expected",
+    [("xbar", "xbar"), ("bar foo", "X foo")],
+)
+def test_replace_start_alternatives(text, expected):
+    assert _.replace_start(text, "foo|bar", "X", escape=False) == expected
+
+
+@parametrize(
+    "text,expected",
+    [("foox", "foox"), ("bar foo", "bar X")],
+)
+def test_replace_end_alternatives(text, expected):
+    assert _.replace_end(text, "foo|bar", "X", escape=False) == expected
+
+
+def test_replace_both_ends_alternatives():
+    assert _.replace("foox", "foo|bar", "X", escape=False, from_start=True, from_end=True) == "foox"
+    assert _.replace_start("bar", "(foo)|(bar)", r"\2!", escape=False) == "bar!"
+
+
+@parametrize("compile_pattern", [str, re.compile])
+def test_replace_anchored_inline_flags(compile_pattern):
+    pattern = compile_pattern("(?x) # flags\n (?i) foo|bar # end")
+    assert _.replace_start("BAR foo", pattern, "X", escape=False) == "X foo"
+    assert _.replace_end("bar FOO", pattern, "X", escape=False) == "bar X"
+    assert _.replace_start("xBAR", pattern, "X", escape=False) == "xBAR"
+    assert _.replace_end("FOOx", pattern, "X", escape=False) == "FOOx"
+
+
+def test_replace_anchored_inline_comments():
+    pattern = r"(?#before)(?i)(?#escaped\)comment)foo|bar"
+    assert _.replace_end("bar FOO", pattern, "X", escape=False) == "bar X"
 
 
 @parametrize(

@@ -26,6 +26,11 @@ def test_add(case, expected):
         ((6.004, 2), 6.01),
         ((6040, -2), 6100),
         (([4.006, 6.004], 2), [4.01, 6.01]),
+        ((1.1, 2), 1.1),
+        ((0.07, 2), 0.07),
+        ((0.55, 2), 0.55),
+        ((-0.29, 2), -0.29),
+        ((1234.5678, -2), 1300),
     ],
 )
 def test_ceil(case, expected):
@@ -62,10 +67,23 @@ def test_divide(dividend, divisor, expected):
         ((0.046, 2), 0.04),
         ((4060, -2), 4000),
         (([4.006, 0.046], 2), [4.0, 0.04]),
+        ((0.29, 2), 0.29),
+        ((0.57, 2), 0.57),
+        ((1.13, 2), 1.13),
+        ((-1.1, 2), -1.1),
+        (([0.29, 0.58], 2), [0.29, 0.58]),
+        ((1234.5678, -2), 1200),
     ],
 )
 def test_floor(case, expected):
     assert _.floor(*case) == expected
+
+
+@parametrize("func", [_.ceil, _.floor])
+@parametrize("value,exception", [(float("inf"), OverflowError), (float("nan"), ValueError)])
+def test_ceil_floor_non_finite(func, value, exception):
+    with pytest.raises(exception):
+        func(value, 2)
 
 
 @parametrize(

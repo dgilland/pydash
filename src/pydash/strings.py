@@ -896,9 +896,15 @@ def number_format(
         int_part = num_parts[0]
         dec_part = (num_parts + [""])[1]
 
+        # Strip the sign so it isn't counted as a digit when grouping.
+        sign = ""
+        if int_part.startswith("-"):
+            sign = "-"
+            int_part = int_part[1:]
+
         # Reverse the integer part, chop it into groups of 3, join on `order_separator`, and then
         # un-reverse the string.
-        int_part = order_separator.join(chop(int_part[::-1], 3))[::-1]
+        int_part = sign + order_separator.join(chop(int_part[::-1], 3))[::-1]
 
         text = decimal_separator.join(pyd.compact([int_part, dec_part]))
 
@@ -1359,13 +1365,24 @@ def replace(  # noqa: PLR0917
         if escape:
             pattern = re.escape(pattern)
 
-        if from_start and not pattern.startswith("^"):
-            pattern = "^" + pattern
-
-        if from_end and not pattern.endswith("$"):
-            pattern += "$"
-
         pat = re.compile(pattern, flags=flags)
+
+    if from_start or from_end:
+        pattern = pat.pattern
+        # The compiled flags retain leading global flag groups. Remove those
+        # groups before embedding the expression, including verbose trivia.
+        prefix = r"\(\?[aiLmsux]+\)|\(\?#(?:\\.|[^\\)])*\)"
+        if pat.flags & re.VERBOSE:
+            prefix += r"|[ \t\n\r\f\v]+|#[^\n]*(?:\n|$)"
+        pattern = re.sub(f"^(?:{prefix})+", "", pattern)
+        if pat.flags & re.VERBOSE:
+            pattern += "\n"
+        pattern = f"(?:{pattern})"
+        if from_start:
+            pattern = "^" + pattern
+        if from_end:
+            pattern += "$"
+        pat = re.compile(pattern, flags=pat.flags)
 
     return pat.sub(repl, text, count=count)
 

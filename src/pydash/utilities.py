@@ -7,8 +7,10 @@ Utility functions.
 from __future__ import annotations
 
 from collections import namedtuple
+from collections.abc import Iterator
 from datetime import datetime, timezone
 from functools import partial, wraps
+from itertools import tee
 import math
 from random import randint, uniform
 import re
@@ -168,12 +170,12 @@ def cond(pairs, *extra_pairs):
         if not all(map(callable, pair)):
             raise TypeError("Both predicate-function pair should be callable")
 
-    def _cond(*args):
+    def _cond(*args, **kwargs):
         for pair in pairs:
             predicate, iteratee = pair
 
-            if callit(predicate, *args):
-                return iteratee(*args)
+            if callit(partial(predicate, **kwargs) if kwargs else predicate, *args):
+                return iteratee(*args, **kwargs)
 
     return _cond
 
@@ -562,8 +564,14 @@ def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:
 
     .. versionadded:: 3.1.0
     """
-    prop_accessor = property_(key)
-    return lambda obj: matches(value)(prop_accessor(obj))
+    marker = object()
+    predicate = matches(value)
+
+    def _matches_property(obj: t.Any) -> bool:
+        actual = pyd.get(obj, key, marker)
+        return actual is not marker and predicate(actual)
+
+    return _matches_property
 
 
 class MemoizedFunc(Protocol[P, T, T2]):
@@ -612,7 +620,7 @@ def memoize(func, resolver=None):
     """
 
     def memoized(*args: P.args, **kwargs: P.kwargs):
-        if resolver:
+        if resolver is not None:
             key = resolver(*args, **kwargs)
         else:
             key = f"{args}{kwargs}"
@@ -773,7 +781,13 @@ def over(funcs: t.Iterable[t.Callable[P, T]]) -> t.Callable[P, t.List[T]]:
     """
 
     def _over(*args: P.args, **kwargs: P.kwargs) -> t.List[T]:
-        return [func(*args, **kwargs) for func in funcs]
+        nonlocal funcs
+        current: t.Iterable[t.Callable[P, T]]
+        if isinstance(funcs, Iterator):
+            funcs, current = tee(funcs)
+        else:
+            current = funcs
+        return [func(*args, **kwargs) for func in current]
 
     return _over
 
@@ -799,7 +813,13 @@ def over_every(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     """
 
     def _over_every(*args: P.args, **kwargs: P.kwargs) -> bool:
-        return all(func(*args, **kwargs) for func in funcs)
+        nonlocal funcs
+        current: t.Iterable[t.Callable[P, t.Any]]
+        if isinstance(funcs, Iterator):
+            funcs, current = tee(funcs)
+        else:
+            current = funcs
+        return all(func(*args, **kwargs) for func in current)
 
     return _over_every
 
@@ -825,7 +845,13 @@ def over_some(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     """
 
     def _over_some(*args: P.args, **kwargs: P.kwargs) -> bool:
-        return any(func(*args, **kwargs) for func in funcs)
+        nonlocal funcs
+        current: t.Iterable[t.Callable[P, t.Any]]
+        if isinstance(funcs, Iterator):
+            funcs, current = tee(funcs)
+        else:
+            current = funcs
+        return any(func(*args, **kwargs) for func in current)
 
     return _over_some
 
@@ -1172,7 +1198,7 @@ def retry(  # noqa: PLR0917
         raise ValueError("delay must be a number greater than or equal to 0")
 
     if not isinstance(max_delay, NUMBER_TYPES) or max_delay < 0:
-        raise ValueError("scale must be a number greater than or equal to 0")
+        raise ValueError("max_delay must be a number greater than or equal to 0")
 
     if not isinstance(scale, NUMBER_TYPES) or scale <= 0:
         raise ValueError("scale must be a number greater than 0")
@@ -1216,16 +1242,18 @@ def retry(  # noqa: PLR0917
                     if attempt == attempts:
                         raise
 
-                    if jitter:
-                        delay_time += max(0, random(*jitter))
+                    # Jitter only applies to the current sleep so that it doesn't accumulate into
+                    # (and get scaled along with) the base delay of later attempts.
+                    sleep_time = delay_time
 
-                    if delay_time < 0:  # pragma: no cover
-                        continue
+                    if jitter:
+                        sleep_time += max(0, random(*jitter))
 
                     if max_delay:
                         delay_time = min(delay_time, max_delay)
+                        sleep_time = min(sleep_time, max_delay)
 
-                    time.sleep(delay_time)
+                    time.sleep(sleep_time)
 
                     # Scale after first iteration.
                     delay_time *= scale
@@ -1526,7 +1554,7 @@ def base_range(*args, **kwargs):
         if step is None:
             step = 1 if start < stop else -1
 
-        length = int(max([math.ceil((stop - start) / (step or 1)), 0]))
+        length = max(-((start - stop) // (step or 1)), 0)
 
         if from_right:
             start += (step * length) - step
