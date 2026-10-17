@@ -7,6 +7,7 @@ Numerical/mathematical related functions.
 from __future__ import annotations
 
 from collections.abc import Sized
+import decimal
 import math
 import operator
 import typing as t
@@ -325,7 +326,7 @@ def ceil(x: NumberT, precision: int = 0) -> float:
 
     .. versionadded:: 3.3.0
     """
-    return rounder(math.ceil, x, precision)
+    return rounder(math.ceil, x, precision, shift_exactly=True)
 
 
 # When used as an iteratee (e.g. count_by, group_by), only the element value
@@ -424,7 +425,7 @@ def floor(x: NumberT, precision: int = 0) -> float:
 
     .. versionadded:: 3.3.0
     """
-    return rounder(math.floor, x, precision)
+    return rounder(math.floor, x, precision, shift_exactly=True)
 
 
 # When used as an iteratee (e.g. count_by, group_by), only the element value
@@ -1268,11 +1269,23 @@ def call_math_operator(value1, value2, op, default):
     return op(value1, value2)
 
 
-def rounder(func, x, precision):
-    precision = pow(10, precision)
+def rounder(func, x, precision, shift_exactly=False):
+    factor = pow(10, precision)
 
     def rounder_func(item):
-        return func(item * precision) / precision
+        if (
+            shift_exactly
+            and isinstance(item, float)
+            and isinstance(precision, int)
+            and math.isfinite(item)
+        ):
+            # Shift the decimal point on the number's shortest decimal representation instead of
+            # multiplying by a power of 10. Otherwise float representation error gets floored or
+            # ceiled into the result (e.g. 0.29 * 100 == 28.999999999999996 so floor(0.29, 2)
+            # would be 0.28).
+            shifted = decimal.Decimal(repr(float(item))).scaleb(precision)
+            return float(decimal.Decimal(func(shifted)).scaleb(-precision))
+        return func(item * factor) / factor
 
     result = None
 

@@ -55,6 +55,11 @@ T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
 T4 = t.TypeVar("T4")
 T5 = t.TypeVar("T5")
+A1 = t.TypeVar("A1")
+A2 = t.TypeVar("A2")
+A3 = t.TypeVar("A3")
+A4 = t.TypeVar("A4")
+A5 = t.TypeVar("A5")
 NumT = t.TypeVar("NumT", int, float, "Decimal")
 NumT2 = t.TypeVar("NumT2", int, float, "Decimal")
 NumT3 = t.TypeVar("NumT3", int, float, "Decimal")
@@ -1709,37 +1714,37 @@ class AllFuncs:
     @t.overload
     def over_args(
         self: "Chain[t.Callable[[T1, T2, T3, T4, T5], T]]",
-        transform_one: t.Callable[[T1], T1],
-        transform_two: t.Callable[[T2], T2],
-        transform_three: t.Callable[[T3], T3],
-        transform_four: t.Callable[[T4], T4],
-        transform_five: t.Callable[[T5], T5],
-    ) -> "Chain[t.Callable[[T1, T2, T3, T4, T5], T]]": ...
+        transform_one: t.Callable[[A1], T1],
+        transform_two: t.Callable[[A2], T2],
+        transform_three: t.Callable[[A3], T3],
+        transform_four: t.Callable[[A4], T4],
+        transform_five: t.Callable[[A5], T5],
+    ) -> "Chain[t.Callable[[A1, A2, A3, A4, A5], T]]": ...
     @t.overload
     def over_args(
         self: "Chain[t.Callable[[T1, T2, T3, T4], T]]",
-        transform_one: t.Callable[[T1], T1],
-        transform_two: t.Callable[[T2], T2],
-        transform_three: t.Callable[[T3], T3],
-        transform_four: t.Callable[[T4], T4],
-    ) -> "Chain[t.Callable[[T1, T2, T3, T4], T]]": ...
+        transform_one: t.Callable[[A1], T1],
+        transform_two: t.Callable[[A2], T2],
+        transform_three: t.Callable[[A3], T3],
+        transform_four: t.Callable[[A4], T4],
+    ) -> "Chain[t.Callable[[A1, A2, A3, A4], T]]": ...
     @t.overload
     def over_args(
         self: "Chain[t.Callable[[T1, T2, T3], T]]",
-        transform_one: t.Callable[[T1], T1],
-        transform_two: t.Callable[[T2], T2],
-        transform_three: t.Callable[[T3], T3],
-    ) -> "Chain[t.Callable[[T1, T2, T3], T]]": ...
+        transform_one: t.Callable[[A1], T1],
+        transform_two: t.Callable[[A2], T2],
+        transform_three: t.Callable[[A3], T3],
+    ) -> "Chain[t.Callable[[A1, A2, A3], T]]": ...
     @t.overload
     def over_args(
         self: "Chain[t.Callable[[T1, T2], T]]",
-        transform_one: t.Callable[[T1], T1],
-        transform_two: t.Callable[[T2], T2],
-    ) -> "Chain[t.Callable[[T1, T2], T]]": ...
+        transform_one: t.Callable[[A1], T1],
+        transform_two: t.Callable[[A2], T2],
+    ) -> "Chain[t.Callable[[A1, A2], T]]": ...
     @t.overload
     def over_args(
-        self: "Chain[t.Callable[[T1], T]]", transform_one: t.Callable[[T1], T1]
-    ) -> "Chain[t.Callable[[T1], T]]": ...
+        self: "Chain[t.Callable[[T1], T]]", transform_one: t.Callable[[A1], T1]
+    ) -> "Chain[t.Callable[[A1], T]]": ...
     def over_args(self, *transforms):
         return self._wrap(pyd.over_args)(*transforms)
 
@@ -2562,15 +2567,15 @@ class AllFuncs:
     @t.overload
     def map_values(
         self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int, t.List[T]], T2]
-    ) -> "Chain[t.Dict[T, T2]]": ...
+    ) -> "Chain[t.Dict[int, T2]]": ...
     @t.overload
     def map_values(
         self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int], T2]
-    ) -> "Chain[t.Dict[T, T2]]": ...
+    ) -> "Chain[t.Dict[int, T2]]": ...
     @t.overload
     def map_values(
         self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T], T2]
-    ) -> "Chain[t.Dict[T, T2]]": ...
+    ) -> "Chain[t.Dict[int, T2]]": ...
     @t.overload
     def map_values(
         self: "Chain[t.Iterable[t.Any]]", iteratee: t.Union[IterateeObjT, None] = None
