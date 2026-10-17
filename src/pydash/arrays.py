@@ -1861,9 +1861,9 @@ def sorted_uniq_by(
 ) -> t.List["SupportsRichComparisonT"]:
     """
     This method is like :func:`sorted_uniq` except that it accepts iteratee which is invoked for
-    each element in array to generate the criterion by which uniqueness is computed. The order of
-    result values is determined by the order they occur in the array. The iteratee is invoked with
-    one argument: ``(value)``.
+    each element in array to generate the criterion by which uniqueness is computed. The first
+    value for each criterion is retained, then the retained values are sorted in ascending order.
+    The iteratee is invoked with one argument: ``(value)``.
 
     Args:
         array: List of values to be sorted.
@@ -1871,7 +1871,7 @@ def sorted_uniq_by(
             :func:`.identity`.
 
     Returns:
-        Unique list.
+        Sorted list of unique values.
 
     Example:
 
