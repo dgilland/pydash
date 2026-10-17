@@ -175,9 +175,38 @@ def count_by(collection, iteratee=None):
     return ret
 
 
+@t.overload
+def every(
+    collection: t.Mapping[T, T2],
+    predicate: t.Callable[[T2, T, t.Mapping[T, T2]], t.Any],
+) -> bool: ...
+
+
+@t.overload
+def every(collection: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]) -> bool: ...
+
+
+@t.overload
+def every(collection: t.Mapping[t.Any, T2], predicate: t.Callable[[T2], t.Any]) -> bool: ...
+
+
+@t.overload
+def every(
+    collection: t.Iterable[T], predicate: t.Callable[[T, int, t.Iterable[T]], t.Any]
+) -> bool: ...
+
+
+@t.overload
+def every(collection: t.Iterable[T], predicate: t.Callable[[T, int], t.Any]) -> bool: ...
+
+
+@t.overload
 def every(
     collection: t.Iterable[T], predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None
-) -> bool:
+) -> bool: ...
+
+
+def every(collection, predicate=None):
     """
     Checks if the predicate returns a truthy value for all elements of a collection. The predicate
     is invoked with three arguments: ``(value, index|key, collection)``. If a property name is
@@ -213,11 +242,7 @@ def every(
     .. versionchanged: 4.0.0
         Removed alias ``all_``.
     """
-    if predicate:
-        cbk = pyd.iteratee(predicate)
-        collection = (cbk(item) for item in collection)
-
-    return all(collection)
+    return all(result for result, _, _, _ in iteriteratee(collection, predicate))
 
 
 @t.overload
@@ -2083,9 +2108,38 @@ def size(collection: t.Sized) -> int:
     return len(collection)
 
 
+@t.overload
 def some(
-    collection: t.Iterable[T], predicate: t.Union[t.Callable[[T], t.Any], None] = None
-) -> bool:
+    collection: t.Mapping[T, T2],
+    predicate: t.Callable[[T2, T, t.Mapping[T, T2]], t.Any],
+) -> bool: ...
+
+
+@t.overload
+def some(collection: t.Mapping[T, T2], predicate: t.Callable[[T2, T], t.Any]) -> bool: ...
+
+
+@t.overload
+def some(collection: t.Mapping[t.Any, T2], predicate: t.Callable[[T2], t.Any]) -> bool: ...
+
+
+@t.overload
+def some(
+    collection: t.Iterable[T], predicate: t.Callable[[T, int, t.Iterable[T]], t.Any]
+) -> bool: ...
+
+
+@t.overload
+def some(collection: t.Iterable[T], predicate: t.Callable[[T, int], t.Any]) -> bool: ...
+
+
+@t.overload
+def some(
+    collection: t.Iterable[T], predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None
+) -> bool: ...
+
+
+def some(collection, predicate=None):
     """
     Checks if the predicate returns a truthy value for any element of a collection. The predicate is
     invoked with three arguments: ``(value, index|key, collection)``. If a property name is passed
@@ -2117,11 +2171,7 @@ def some(
     .. versionchanged:: 4.0.0
         Removed alias ``any_``.
     """
-    if predicate:
-        cbk = pyd.iteratee(predicate)
-        collection = (cbk(item) for item in collection)
-
-    return any(collection)
+    return any(result for result, _, _, _ in iteriteratee(collection, predicate))
 
 
 @t.overload

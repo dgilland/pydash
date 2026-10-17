@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``every`` and ``some`` ignoring predicate index/key and collection arguments,
+  iterating over mapping keys instead of values, and ignoring false-valued predicates.
 - Fix ``sort`` ignoring false-valued comparators and accepting both a comparator and a key
   when either callable is false-valued.
 - Check literal property keys in ``conforms`` and ``conforms_to`` without interpreting them as paths.

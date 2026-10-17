@@ -755,10 +755,32 @@ class AllFuncs:
     def count_by(self, iteratee=None):
         return self._wrap(pyd.count_by)(iteratee)
 
+    @t.overload
+    def every(
+        self: "Chain[t.Mapping[T, T2]]", predicate: t.Callable[[T2, T, t.Mapping[T, T2]], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def every(
+        self: "Chain[t.Mapping[T, T2]]", predicate: t.Callable[[T2, T], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def every(
+        self: "Chain[t.Mapping[t.Any, T2]]", predicate: t.Callable[[T2], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def every(
+        self: "Chain[t.Iterable[T]]", predicate: t.Callable[[T, int, t.Iterable[T]], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def every(
+        self: "Chain[t.Iterable[T]]", predicate: t.Callable[[T, int], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
     def every(
         self: "Chain[t.Iterable[T]]",
         predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
-    ) -> "Chain[bool]":
+    ) -> "Chain[bool]": ...
+    def every(self, predicate=None):
         return self._wrap(pyd.every)(predicate)
 
     @t.overload
@@ -1527,9 +1549,32 @@ class AllFuncs:
     def size(self: "Chain[t.Sized]") -> "Chain[int]":
         return self._wrap(pyd.size)()
 
+    @t.overload
     def some(
-        self: "Chain[t.Iterable[T]]", predicate: t.Union[t.Callable[[T], t.Any], None] = None
-    ) -> "Chain[bool]":
+        self: "Chain[t.Mapping[T, T2]]", predicate: t.Callable[[T2, T, t.Mapping[T, T2]], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def some(
+        self: "Chain[t.Mapping[T, T2]]", predicate: t.Callable[[T2, T], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def some(
+        self: "Chain[t.Mapping[t.Any, T2]]", predicate: t.Callable[[T2], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def some(
+        self: "Chain[t.Iterable[T]]", predicate: t.Callable[[T, int, t.Iterable[T]], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def some(
+        self: "Chain[t.Iterable[T]]", predicate: t.Callable[[T, int], t.Any]
+    ) -> "Chain[bool]": ...
+    @t.overload
+    def some(
+        self: "Chain[t.Iterable[T]]",
+        predicate: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
+    ) -> "Chain[bool]": ...
+    def some(self, predicate=None):
         return self._wrap(pyd.some)(predicate)
 
     @t.overload
