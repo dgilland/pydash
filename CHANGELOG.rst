@@ -20,6 +20,9 @@ Unreleased
 - Fix ``retry`` accumulating ``jitter`` into the base delay so that it compounded and was scaled on
   later attempts. Jitter is now applied only to each individual sleep.
 - Fix ``retry`` raising a ``scale`` error message for an invalid ``max_delay``.
+- Fix ``floor`` and ``ceil`` returning off-by-one-unit results for float inputs when ``precision`` is
+  given, due to float error when scaling by a power of 10 (e.g. ``floor(0.29, 2)`` returned
+  ``0.28`` and ``ceil(1.1, 2)`` returned ``1.11``).
 
 
 v8.1.0 (2026-08-29)
