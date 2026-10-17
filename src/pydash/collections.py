@@ -1456,7 +1456,7 @@ def reduce_(collection, iteratee=None, accumulator=None):
     .. versionchanged:: 4.0.0
         Removed aliases ``foldl`` and ``inject``.
     """
-    iterable = iterator(collection)
+    iterable = iter(iterator(collection))
 
     if accumulator is None:
         try:

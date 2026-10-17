@@ -1,3 +1,4 @@
+from itertools import islice
 import time
 from unittest import mock
 
@@ -223,6 +224,40 @@ def test_memoize(case, args, kwargs, key):
     assert memoized(*args, **kwargs) == expected
     assert memoized.cache
     assert memoized.cache[key] == expected
+
+
+class FalseyResolver:
+    def __bool__(self):
+        return False
+
+    def __call__(self, value):
+        return value["key"]
+
+
+class EmptyResolver(dict[str, object]):
+    def __call__(self, value):
+        return value["key"]
+
+
+@parametrize("resolver_type", [FalseyResolver, EmptyResolver])
+def test_memoize_falsey_resolver(resolver_type):
+    resolver = resolver_type()
+    assert callable(resolver) and not resolver
+    calls = []
+
+    def compute(value):
+        calls.append(value)
+        return value["key"]
+
+    memoized = _.memoize(compute, resolver=resolver)
+    assert memoized({"key": "shared", "ignored": 1}) == "shared"
+    assert memoized(value={"key": "shared", "ignored": 2}) == "shared"
+    assert len(calls) == 1
+    assert memoized.cache == {"shared": "shared"}
+
+    memoized.cache["shared"] = "prefilled"
+    assert memoized({"key": "shared", "ignored": 3}) == "prefilled"
+    assert len(calls) == 1
 
 
 @parametrize(
@@ -504,6 +539,30 @@ def test_range_right(case, expected):
     assert list(_.range_right(*case)) == expected
 
 
+@parametrize("func", [_.range_, _.range_right])
+@parametrize("case", [(0, 2**53 + 1, 2**53), (0, -(2**53) - 1, -(2**53))])
+def test_range_large_integer_step(func, case):
+    expected = list(range(*case))
+    if func is _.range_right:
+        expected.reverse()
+
+    assert list(func(*case)) == expected
+
+
+@parametrize("func", [_.range_, _.range_right])
+@parametrize(
+    "stop",
+    [2**53 + 1, 2**53 + 3, 10**400, -(2**53) - 1, -(10**400)],
+    ids=["rounded-down", "rounded-up", "overflow", "negative-rounded", "negative-overflow"],
+)
+def test_range_large_integer_stop_is_lazy(func, stop):
+    expected = range(0, stop, 1 if stop > 0 else -1)
+    if func is _.range_right:
+        expected = reversed(expected)
+
+    assert list(islice(func(stop), 3)) == list(islice(expected, 3))
+
+
 @parametrize(
     "case,expected",
     [
@@ -622,6 +681,29 @@ def test_retry_on_exception(mock_sleep):
 
 
 @parametrize(
+    "case,delay_times",
+    [
+        ({"jitter": (1, 1), "delay": 2, "scale": 1, "attempts": 5}, [3, 3, 3, 3]),
+        ({"jitter": (1, 1), "delay": 2, "scale": 2, "attempts": 5}, [3, 5, 9, 17]),
+        ({"jitter": (1, 1), "delay": 0, "scale": 2, "attempts": 4}, [1, 1, 1]),
+        (
+            {"jitter": (1, 1), "delay": 2, "scale": 2, "max_delay": 6, "attempts": 5},
+            [3, 5, 6, 6],
+        ),
+    ],
+)
+def test_retry_jitter_does_not_accumulate(mock_sleep, case, delay_times):
+    @_.retry(**case)
+    def func():
+        raise ValueError()
+
+    with pytest.raises(ValueError):
+        func()
+
+    assert [mock.call(time) for time in delay_times] == mock_sleep.call_args_list
+
+
+@parametrize(
     "case,exception",
     [
         ({"attempts": 0}, ValueError),
@@ -645,6 +727,12 @@ def test_retry_on_exception(mock_sleep):
 def test_retry_invalid_args(case, exception):
     with pytest.raises(exception):
         _.retry(**case)
+
+
+@parametrize("arg", ["attempts", "delay", "max_delay", "scale", "jitter"])
+def test_retry_invalid_args_message(arg):
+    with pytest.raises(ValueError, match=f"^{arg} must be"):
+        _.retry(**{arg: -1})
 
 
 @parametrize("case,expected", [(_.times(2, _.stub_list), [[], []]), (_.stub_list(), [])])
