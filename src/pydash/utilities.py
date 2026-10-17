@@ -7,8 +7,10 @@ Utility functions.
 from __future__ import annotations
 
 from collections import namedtuple
+from collections.abc import Iterator
 from datetime import datetime, timezone
 from functools import partial, wraps
+from itertools import tee
 import math
 from random import randint, uniform
 import re
@@ -767,7 +769,13 @@ def over(funcs: t.Iterable[t.Callable[P, T]]) -> t.Callable[P, t.List[T]]:
     """
 
     def _over(*args: P.args, **kwargs: P.kwargs) -> t.List[T]:
-        return [func(*args, **kwargs) for func in funcs]
+        nonlocal funcs
+        current: t.Iterable[t.Callable[P, T]]
+        if isinstance(funcs, Iterator):
+            funcs, current = tee(funcs)
+        else:
+            current = funcs
+        return [func(*args, **kwargs) for func in current]
 
     return _over
 
@@ -793,7 +801,13 @@ def over_every(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     """
 
     def _over_every(*args: P.args, **kwargs: P.kwargs) -> bool:
-        return all(func(*args, **kwargs) for func in funcs)
+        nonlocal funcs
+        current: t.Iterable[t.Callable[P, t.Any]]
+        if isinstance(funcs, Iterator):
+            funcs, current = tee(funcs)
+        else:
+            current = funcs
+        return all(func(*args, **kwargs) for func in current)
 
     return _over_every
 
@@ -819,7 +833,13 @@ def over_some(funcs: t.Iterable[t.Callable[P, t.Any]]) -> t.Callable[P, bool]:
     """
 
     def _over_some(*args: P.args, **kwargs: P.kwargs) -> bool:
-        return any(func(*args, **kwargs) for func in funcs)
+        nonlocal funcs
+        current: t.Iterable[t.Callable[P, t.Any]]
+        if isinstance(funcs, Iterator):
+            funcs, current = tee(funcs)
+        else:
+            current = funcs
+        return any(func(*args, **kwargs) for func in current)
 
     return _over_some
 

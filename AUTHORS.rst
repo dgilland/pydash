@@ -58,3 +58,4 @@ Contributors
 - Ryan Duguid, `ryanduguid@github <https://github.com/ryanduguid>`_
 - himanshu748, `himanshu748@github <https://github.com/himanshu748>`_
 - Bharat Kaurav, `TheNetherWatcher@github <https://github.com/TheNetherWatcher>`_
+- Muneeb Sheikh, `muneikh@github <https://github.com/muneikh>`_
