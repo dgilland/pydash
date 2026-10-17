@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Fix anchored string replacements applying anchors to only one regular-expression alternative.
 - Fix ``shuffle`` returning keys instead of values for generic mappings.
 - Fix ``matches_property`` matching absent paths against ``None`` or empty patterns.
 - Honor custom comparisons and iteratees in difference helpers when input values compare equal.

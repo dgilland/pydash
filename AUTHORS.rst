@@ -60,3 +60,4 @@ Contributors
 - Bharat Kaurav, `TheNetherWatcher@github <https://github.com/TheNetherWatcher>`_
 - Muneeb Sheikh, `muneikh@github <https://github.com/muneikh>`_
 - Himanshu Kumar, `himanshu748@github <https://github.com/himanshu748>`_
+- Gambit-Checkmate, `Gambit-Checkmate@github <https://github.com/Gambit-Checkmate>`_
