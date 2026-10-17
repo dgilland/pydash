@@ -1061,15 +1061,22 @@ def invoke(obj: t.Any, path: PathT, *args: t.Any, **kwargs: t.Any) -> t.Any:
     target_path = pyd.initial(paths)
     method_name = pyd.last(paths)
 
-    try:
-        # potential error is caught
-        method = getattr(get(obj, target_path), method_name)  # type: ignore
-    except AttributeError:
-        ret = None
-    else:
-        ret = method(*args, **kwargs)
+    target = get(obj, target_path)
+    missing = object()
+    method: t.Any = (
+        base_get(target, method_name, default=missing)
+        if isinstance(target, (t.Mapping, t.Sequence))
+        else missing
+    )
+    if method is missing:
+        if not isinstance(method_name, str):
+            return None
+        try:
+            method = getattr(target, method_name)
+        except AttributeError:
+            return None
 
-    return ret
+    return method(*args, **kwargs)
 
 
 @t.overload
