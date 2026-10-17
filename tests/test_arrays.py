@@ -1144,6 +1144,38 @@ def test_xor(case, expected):
     assert _.xor(*case) == expected
 
 
+@parametrize("array", [[1, 1, 2], [1, 2, 1], [1, 2, 2]])
+def test_xor_single_array_is_unique(array):
+    assert _.xor(array) == [1, 2]
+
+
+@parametrize(
+    "arrays,expected",
+    [
+        ((), [2.1, 1.1]),
+        (([],), [2.1, 1.1]),
+        (([3.1, 3.2],), [2.1, 1.1, 3.1]),
+        (([3.1, 3.2], [3.3]), [2.1, 1.1]),
+    ],
+)
+@parametrize("positional", [False, True])
+def test_xor_by_deduplicates_using_iteratee(arrays, expected, positional):
+    array = [2.1, 2.2, 1.1]
+
+    if positional:
+        result = _.xor_by(array, *arrays, int)
+    else:
+        result = _.xor_by(array, *arrays, iteratee=int)
+
+    assert result == expected
+    assert array == [2.1, 2.2, 1.1]
+
+
+def test_xor_by_deduplicates_unhashable_criteria():
+    array = [{"id": [1], "name": "first"}, {"id": [1], "name": "second"}]
+    assert _.xor_by(iter(array), [], "id") == [array[0]]
+
+
 def test_xor_accepts_iterable_inputs_without_mutating_lists():
     array = [1, 2, 3]
     other = [2, 4]
@@ -1290,3 +1322,112 @@ def test_union_with_honors_a_comparator_with_a_single_array():
 
     assert _.union_with(values, comparator=comparator) == [1, 2]
     assert _.union_with(values, comparator) == [1, 2]
+
+
+@parametrize(
+    "array,other,expected",
+    [
+        ([1, True], [True], [1]),
+        ([True, 1], [1], [True]),
+        ([1.0, 1], [1], [1.0]),
+        ([1, True, 1], [True], [1, 1]),
+    ],
+)
+def test_difference_with_respects_custom_comparison_for_equal_values(array, other, expected):
+    def comparator(left, right):
+        return type(left) is type(right) and left == right
+
+    result = _.difference_with(array, other, comparator=comparator)
+    assert result == expected
+    assert result[0] is array[0]
+
+
+@parametrize(
+    "array,other,expected",
+    [
+        ([1, True], [True], [1]),
+        ([True, 1], [1], [True]),
+        ([1.0, 1], [1], [1.0]),
+        ([1, True, 1], [True], [1, 1]),
+    ],
+)
+def test_difference_by_respects_transformed_values_when_inputs_compare_equal(
+    array, other, expected
+):
+    def iteratee(value):
+        return type(value).__name__, value
+
+    result = _.difference_by(array, other, iteratee=iteratee)
+    assert result == expected
+    assert result[0] is array[0]
+
+
+@pytest.mark.parametrize("key", [0, ""])
+@pytest.mark.parametrize("function,expected", [(_.sorted_index_by, 1), (_.sorted_last_index_by, 3)])
+def test_sorted_index_by_falsey_property(function, expected, key):
+    values = [{key: 1}, {key: 2}, {key: 2}, {key: 4}]
+    assert function(values, {key: 2}, key) == expected
+
+
+@pytest.mark.parametrize("function,expected", [(_.sorted_index_by, 1), (_.sorted_last_index_by, 3)])
+def test_sorted_index_by_falsey_callable(function, expected):
+    class Key:
+        def __bool__(self):
+            return False
+
+        def __call__(self, value):
+            return value["rank"]
+
+    values = [{"rank": 1}, {"rank": 2}, {"rank": 2}, {"rank": 4}]
+    assert function(values, {"rank": 2}, Key()) == expected
+
+
+@parametrize("keyword", [False, True])
+def test_intersection_with_deduplicates_using_comparator(keyword):
+    array = ["A", "a", "B", "b", "C"]
+    other = ["a", "b"]
+
+    def comparator(left, right):
+        return left.lower() == right.lower()
+
+    if keyword:
+        result = _.intersection_with(array, other, comparator=comparator)
+    else:
+        result = _.intersection_with(array, other, comparator)
+
+    assert result == ["A", "B"]
+    assert array == ["A", "a", "B", "b", "C"]
+    assert other == ["a", "b"]
+
+
+def test_intersection_with_deduplication_preserves_first_references():
+    first = {"id": 1, "name": "first"}
+    duplicate = {"id": 1, "name": "duplicate"}
+    second = {"id": 2, "name": "second"}
+    result = _.intersection_with(
+        [first, duplicate, second],
+        [{"id": 1}, {"id": 2}],
+        [{"id": 2}, {"id": 1}],
+        comparator=lambda left, right: left["id"] == right["id"],
+    )
+
+    assert len(result) == 2
+    assert result[0] is first
+    assert result[1] is second
+
+
+def test_intersection_with_unmatched_value_does_not_suppress_match():
+    assert _.intersection_with(
+        [1, 2], [3], comparator=lambda left, right: abs(left - right) <= 1
+    ) == [2]
+
+
+def test_intersection_with_deduplicates_after_matching_all_arrays():
+    assert _.intersection_with(
+        [1, 2], [2], [3], comparator=lambda left, right: abs(left - right) <= 1
+    ) == [2]
+
+
+@parametrize("array,expected", [([1, 2], [1]), ([2, 1], [2, 1])])
+def test_intersection_with_deduplication_comparator_argument_order(array, expected):
+    assert _.intersection_with(array, [0], comparator=lambda left, right: left > right) == expected
