@@ -170,12 +170,12 @@ def cond(pairs, *extra_pairs):
         if not all(map(callable, pair)):
             raise TypeError("Both predicate-function pair should be callable")
 
-    def _cond(*args):
+    def _cond(*args, **kwargs):
         for pair in pairs:
             predicate, iteratee = pair
 
-            if callit(predicate, *args):
-                return iteratee(*args)
+            if callit(partial(predicate, **kwargs) if kwargs else predicate, *args):
+                return iteratee(*args, **kwargs)
 
     return _cond
 
