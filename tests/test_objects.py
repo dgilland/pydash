@@ -762,6 +762,26 @@ def test_pick_by(case, expected):
     assert _.pick_by(*case) == expected
 
 
+@parametrize("key", ["a.b", "a[0]", "[0]", ("a", "b")])
+def test_pick_by_literal_keys(key):
+    obj = {key: 1, "other": 0}
+    calls = []
+
+    def predicate(value, name):
+        calls.append((value, name))
+        return value == 1
+
+    assert _.pick_by(obj, predicate) == {key: 1}
+    assert calls == [(1, key), (0, "other")]
+    assert _.pick_by(obj) == {key: 1}
+
+
+def test_pick_by_literal_key_does_not_read_nested_value():
+    obj = {"a.b": 1, "a": {"b": 2}}
+    assert _.pick_by(obj, lambda value, key: key == "a.b") == {"a.b": 1}
+    assert _.pick_by(obj, ["a.b"]) == {"a": {"b": 2}}
+
+
 @parametrize(
     "case,expected",
     [
