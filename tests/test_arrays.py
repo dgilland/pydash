@@ -771,6 +771,55 @@ def test_sort_comparator_key_exception():
         _.sort([], comparator=lambda: None, key=lambda: None)
 
 
+class FalseySortCallable:
+    def __init__(self, callback):
+        self.callback = callback
+
+    def __bool__(self):
+        return False
+
+    def __call__(self, *args):
+        return self.callback(*args)
+
+
+@parametrize("reverse,expected", [(False, [3, 2, 1]), (True, [1, 2, 3])])
+def test_sort_falsey_comparator(reverse, expected):
+    comparator = FalseySortCallable(lambda left, right: right - left)
+    assert not comparator
+    array = [1, 3, 2]
+
+    result = _.sort(array, comparator=comparator, reverse=reverse)
+
+    assert result is array
+    assert array == expected
+
+
+@parametrize("falsey_comparator,falsey_key", [(True, False), (False, True), (True, True)])
+def test_sort_falsey_comparator_key_exception(falsey_comparator, falsey_key):
+    def comparator(left, right):
+        return left - right
+
+    def key(value):
+        return value
+
+    comparator_arg = FalseySortCallable(comparator) if falsey_comparator else comparator
+    key_arg = FalseySortCallable(key) if falsey_key else key
+    assert bool(comparator_arg) is not falsey_comparator
+    assert bool(key_arg) is not falsey_key
+
+    with pytest.raises(ValueError, match="mutually exclusive"):
+        _.sort([], comparator=comparator_arg, key=key_arg)
+
+
+def test_sort_falsey_key_without_comparator():
+    key = FalseySortCallable(lambda value: -value)
+    assert not key
+    array = [1, 3, 2]
+
+    assert _.sort(array, key=key) is array
+    assert array == [3, 2, 1]
+
+
 @parametrize(
     "case,expected",
     [

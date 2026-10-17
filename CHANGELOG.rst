@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``sort`` ignoring false-valued comparators and accepting both a comparator and a key
+  when either callable is false-valued.
 - Check literal property keys in ``conforms`` and ``conforms_to`` without interpreting them as paths.
 - Preserve literal property keys in ``pick_by`` when using a callable or the default predicate.
 - Fix ``reduce_right`` and ``reductions_right`` traversing mappings in the wrong order or reducing keys.

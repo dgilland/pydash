@@ -1608,10 +1608,10 @@ def sort(array, comparator=None, key=None, reverse=False):
 
     .. versionadded:: 2.2.0
     """
-    if comparator and key:
+    if comparator is not None and key is not None:
         raise ValueError('The "comparator" and "key" arguments are mutually exclusive')
 
-    if comparator:
+    if comparator is not None:
         key = cmp_to_key(comparator)
 
     array.sort(key=key, reverse=reverse)
