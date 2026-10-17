@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``reduce_right`` and ``reductions_right`` traversing mappings in the wrong order or reducing keys.
 - Fix anchored string replacements applying anchors to only one regular-expression alternative.
 - Fix ``shuffle`` returning keys instead of values for generic mappings.
 - Fix ``matches_property`` matching absent paths against ``None`` or empty patterns.

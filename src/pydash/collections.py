@@ -6,6 +6,7 @@ Functions that operate on lists and dicts.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from functools import cmp_to_key
 import random
 import typing as t
@@ -1607,7 +1608,9 @@ def reduce_right(collection, iteratee=None, accumulator=None):
     .. versionchanged:: 4.0.0
         Removed alias ``foldr``.
     """
-    if not isinstance(collection, dict):
+    if isinstance(collection, Mapping):
+        collection = dict(reversed(list(collection.items())))
+    else:
         collection = list(collection)[::-1]
 
     return reduce_(collection, iteratee, accumulator)
