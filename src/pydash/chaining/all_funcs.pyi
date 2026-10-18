@@ -152,7 +152,13 @@ class AllFuncs:
 
     def duplicates(
         self: "Chain[t.Sequence[T]]",
-        iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None,
+        iteratee: t.Union[
+            t.Callable[[T, int, t.Sequence[T]], t.Any],
+            t.Callable[[T, int], t.Any],
+            t.Callable[[T], t.Any],
+            IterateeObjT,
+            None,
+        ] = None,
     ) -> "Chain[t.List[T]]":
         return self._wrap(pyd.duplicates)(iteratee)
 

@@ -1245,6 +1245,8 @@ def is_match_with(
                 break
     else:
         equal = callit(cbk, obj, source, _key, _obj, _source)
+        if equal is None:
+            equal = obj == source
 
     return equal
 
