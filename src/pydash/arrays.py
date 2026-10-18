@@ -467,7 +467,14 @@ def drop_while(array, predicate=None):
 
 
 def duplicates(
-    array: t.Sequence[T], iteratee: t.Union[t.Callable[[T], t.Any], IterateeObjT, None] = None
+    array: t.Sequence[T],
+    iteratee: t.Union[
+        t.Callable[[T, int, t.Sequence[T]], t.Any],
+        t.Callable[[T, int], t.Any],
+        t.Callable[[T], t.Any],
+        IterateeObjT,
+        None,
+    ] = None,
 ) -> t.List[T]:
     """
     Creates a unique list of duplicate values from `array`. If iteratee is passed, each element of
@@ -492,8 +499,7 @@ def duplicates(
     .. versionadded:: 3.0.0
     """
     if iteratee is not None:
-        cbk = pyd.iteratee(iteratee)
-        computed = [cbk(item) for item in array]
+        computed = [result for result, _, _, _ in iteriteratee(array, iteratee)]
     else:
         computed = array  # type: ignore
 

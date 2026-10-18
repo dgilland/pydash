@@ -9,6 +9,9 @@ Unreleased
 - Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
   shared mutable children, cycles, and deep-copied mapping keys.
 
+- Preserve arguments without a corresponding transform in ``over_args`` instead of raising
+  ``IndexError``.
+
 - Fix ``every`` and ``some`` ignoring predicate index/key and collection arguments,
   iterating over mapping keys instead of values, and ignoring false-valued predicates.
 - Sort values rather than keys in ``order_by`` for generic mappings.
