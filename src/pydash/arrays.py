@@ -1359,8 +1359,8 @@ def pull_all_with(
 
 def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
     """
-    Removes elements from `array` corresponding to the specified indexes and returns a list of the
-    removed elements. Indexes may be specified as a list of indexes or as individual arguments.
+    Removes elements from `array` corresponding to the specified indexes and returns the modified
+    array. Indexes may be specified as a list of indexes or as individual arguments.
 
     Args:
         array: List to pull from.

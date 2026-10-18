@@ -1189,3 +1189,15 @@ def test_quantifier_empty_collection(function, expected):
         pytest.fail("Empty collections must not invoke the predicate")
 
     assert function(iter(()), predicate) is expected
+
+
+@parametrize("mapping_type", [dict, UserDict, MappingProxyType])
+@parametrize("orders", [None, [False]])
+def test_order_by_mapping_values(mapping_type, orders):
+    source = {"first": {"score": 3}, "second": {"score": 1}, "third": {"score": 2}}
+    collection = mapping_type(source)
+    expected = [{"score": 1}, {"score": 2}, {"score": 3}]
+    if orders:
+        expected.reverse()
+    assert _.order_by(collection, ["score"], orders) == expected
+    assert dict(collection) == source
