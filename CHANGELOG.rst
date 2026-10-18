@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Treat empty source sequences as no-ops in ``assign`` and ``assign_with`` instead of
+  raising ``IndexError``.
 - Remove the complete delimiter in ``unquote`` so it round-trips multi-character and
   string-coercible delimiters accepted by ``quote``.
 - Allow debounced callbacks to start another burst without deadlocking or resetting that
