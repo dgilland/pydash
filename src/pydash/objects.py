@@ -233,7 +233,7 @@ def assign_with(obj, *sources, customizer=None):
         source = source.copy()
 
         for key, value in source.items():
-            if customizer:
+            if customizer is not None:
                 val = callit(customizer, obj.get(key), value, key, obj, source, argcount=argcount)
                 if val is not None:
                     value = val
@@ -2470,7 +2470,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
 
     if customizer is not None and not callable(customizer):
         call_customizer = partial(callit, clone, customizer, argcount=1)
-    elif customizer:
+    elif customizer is not None:
         call_customizer = partial(callit, customizer, argcount=getargcount(customizer, maxargs=3))
     else:
         call_customizer = None
