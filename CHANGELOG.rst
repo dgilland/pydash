@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Sort values rather than keys in ``order_by`` for generic mappings.
+
 - Fix ``sort`` ignoring false-valued comparators and accepting both a comparator and a key
   when either callable is false-valued.
 - Check literal property keys in ``conforms`` and ``conforms_to`` without interpreting them as paths.
