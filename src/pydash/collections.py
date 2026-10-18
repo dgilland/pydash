@@ -1169,7 +1169,7 @@ def order_by(collection, keys, orders=None, reverse=False):
         Renamed from ``order_by`` to ``order_by`` and removed alias
         ``sort_by_order``.
     """
-    if isinstance(collection, dict):
+    if isinstance(collection, Mapping):
         collection = collection.values()
 
     # Maintain backwards compatibility.
