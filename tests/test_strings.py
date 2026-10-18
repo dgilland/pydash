@@ -1328,3 +1328,20 @@ def test_word_cycle(case, expected):
     actual = _.chain(case).camel_case().kebab_case().snake_case().start_case().camel_case().value()
 
     assert actual == expected
+
+
+@parametrize(
+    "function,text,delimiter,expected",
+    [
+        (_.substr_left_end, "prefix", "pre", ""),
+        (_.substr_left_end, "same", "same", ""),
+        (_.substr_right, "suffix", "fix", ""),
+        (_.substr_right, "same", "same", ""),
+        (_.substr_left_end, "pre-middle-pre", "pre", "pre-middle-"),
+        (_.substr_right, "fix-middle-fix", "fix", "-middle-fix"),
+        (_.substr_left_end, "text", "missing", "text"),
+        (_.substr_right, "text", "missing", "text"),
+    ],
+)
+def test_substr_preserves_empty_matches(function, text, delimiter, expected):
+    assert function(text, delimiter) == expected

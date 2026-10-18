@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve empty matched results in ``substr_left_end`` and ``substr_right``.
+
 - Fix ``sort`` ignoring false-valued comparators and accepting both a comparator and a key
   when either callable is false-valued.
 - Check literal property keys in ``conforms`` and ``conforms_to`` without interpreting them as paths.
