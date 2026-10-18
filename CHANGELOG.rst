@@ -8,10 +8,18 @@ Unreleased
 
 - Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
   shared mutable children, cycles, and deep-copied mapping keys.
-
+- Honor false-valued callable customizers in ``assign_with``, ``set_with``, and
+  ``update_with`` instead of testing their truth value.
+- Treat empty source sequences as no-ops in ``assign`` and ``assign_with`` instead of
+  raising ``IndexError``.
+- Remove the complete delimiter in ``unquote`` so it round-trips multi-character and
+  string-coercible delimiters accepted by ``quote``.
+- Allow debounced callbacks to start another burst without deadlocking or resetting that
+  burst's timer and maximum-wait deadline.
+- Return ``None`` for infinite numeric inputs to ``parse_int`` instead of leaking
+  ``OverflowError``.
 - Preserve arguments without a corresponding transform in ``over_args`` instead of raising
   ``IndexError``.
-
 - Fix ``every`` and ``some`` ignoring predicate index/key and collection arguments,
   iterating over mapping keys instead of values, and ignoring false-valued predicates.
 - Sort values rather than keys in ``order_by`` for generic mappings.

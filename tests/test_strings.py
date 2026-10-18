@@ -1219,6 +1219,32 @@ def test_unquote(case, expected):
     assert _.unquote(*case) == expected
 
 
+@parametrize("delimiter", ["**", "<<<", "🙂🙂", -8])
+@parametrize("text", ["hello", "", "**nested**"])
+def test_unquote_round_trips_quote_with_complete_delimiter(text, delimiter):
+    assert _.unquote(_.quote(text, delimiter), delimiter) == text
+
+
+@parametrize(
+    "text, delimiter",
+    [
+        ("**hello", "**"),
+        ("hello**", "**"),
+        ("*hello*", "**"),
+        ("aaa", "aa"),
+        ("*", "**"),
+        ("hello", ""),
+        ("hello", None),
+    ],
+)
+def test_unquote_does_not_remove_incomplete_or_empty_delimiters(text, delimiter):
+    assert _.unquote(text, delimiter) == text
+
+
+def test_unquote_removes_one_delimiter_pair():
+    assert _.unquote("****hello****", "**") == "**hello**"
+
+
 @parametrize(
     "case,expected",
     [  # noqa

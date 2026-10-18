@@ -2,6 +2,7 @@ from argparse import Namespace
 from collections import defaultdict, namedtuple
 from copy import deepcopy
 import datetime as dt
+from decimal import Decimal
 
 import pytest
 
@@ -39,6 +40,105 @@ def test_assign(case, expected):
 )
 def test_assign_with(case, expected):
     assert _.assign_with(*case) == expected
+
+
+class Customizer:
+    def __init__(self, callback):
+        self.callback = callback
+        self.calls = []
+
+    def __call__(self, *args):
+        self.calls.append(args)
+        return self.callback(*args)
+
+
+class FalseBoolCustomizer(Customizer):
+    def __bool__(self):
+        return False
+
+
+class EmptyCustomizer(Customizer):
+    def __len__(self):
+        return 0
+
+
+class NoTruthCustomizer(Customizer):
+    def __bool__(self):
+        raise AssertionError("customizer truth value must not be inspected")
+
+
+CUSTOMIZERS = [FalseBoolCustomizer, EmptyCustomizer, NoTruthCustomizer]
+
+
+@parametrize("factory", CUSTOMIZERS)
+@parametrize("positional", [False, True])
+@parametrize("use_default", [False, True])
+def test_assign_with_calls_supplied_customizer(factory, positional, use_default):
+    customizer = factory(lambda old, new, *_: None if use_default else old + new)
+    target = {"a": 5}
+    source = {"a": 10}
+    if positional:
+        result = _.assign_with(target, source, customizer)
+    else:
+        result = _.assign_with(target, source, customizer=customizer)
+    assert result is target
+    assert result == {"a": 10 if use_default else 15}
+    assert len(customizer.calls) == 1
+    old, new, key, obj, src = customizer.calls[0]
+    assert (old, new, key) == (5, 10, "a")
+    assert obj is target
+    assert src == source
+
+
+@parametrize("factory", CUSTOMIZERS)
+@parametrize("helper", [_.set_with, _.update_with])
+def test_path_helpers_call_supplied_customizer(factory, helper):
+    customizer = factory(lambda *_: {})
+    target = {}
+    value = 7 if helper is _.set_with else lambda old: (old or 0) + 7
+    result = helper(target, "[0][1][2]", value, customizer=customizer)
+    assert result is target
+    assert result == {0: {1: {2: 7}}}
+    assert len(customizer.calls) == 2
+    assert customizer.calls[0] == (None, 0, target)
+    assert customizer.calls[1] == (None, 1, target[0])
+
+
+@parametrize("name", ["assign", "assign_with"])
+@parametrize("chained", [False, True])
+@parametrize("populated", [False, True])
+def test_assignment_accepts_no_sources(name, chained, populated):
+    nested = {"keep": [1, 2]}
+    target = {"nested": nested} if populated else {}
+    if chained:
+        result = getattr(_.chain(target), name)().value()
+    else:
+        result = getattr(_, name)(target)
+    assert result is target
+    assert target == ({"nested": {"keep": [1, 2]}} if populated else {})
+    if populated:
+        assert target["nested"] is nested
+
+
+def test_explicit_none_customizer_accepts_no_sources():
+    target = {"a": 1}
+    assert _.assign_with(target, customizer=None) is target
+
+
+@parametrize("positional", [False, True])
+def test_no_source_does_not_call_customizer(positional):
+    calls = []
+
+    def customizer(value):
+        calls.append(value)
+
+    target = {"a": 1}
+    if positional:
+        result = _.assign_with(target, customizer)
+    else:
+        result = _.assign_with(target, customizer=customizer)
+    assert result is target
+    assert calls == []
 
 
 @parametrize(
@@ -844,6 +944,22 @@ def test_omit_by(case, expected):
 )
 def test_parse_int(case, expected):
     assert _.parse_int(*case) == expected
+
+
+@parametrize("value", [float("inf"), float("-inf"), Decimal("Infinity"), Decimal("-Infinity")])
+@parametrize("radix", [None, 0, 10])
+def test_parse_int_returns_none_for_infinite_numbers(value, radix):
+    assert _.parse_int(value, radix) is None
+
+
+@parametrize("value", [float("nan"), Decimal("NaN"), "inf", "-inf", "not a number", None])
+def test_parse_int_other_unparseable_values_are_unchanged(value):
+    assert _.parse_int(value) is None
+
+
+@parametrize("value", [10**400, -(10**400)])
+def test_parse_int_preserves_finite_large_integers(value):
+    assert _.parse_int(value) == value
 
 
 @parametrize(
