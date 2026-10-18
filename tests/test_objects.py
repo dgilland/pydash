@@ -1,6 +1,7 @@
 from argparse import Namespace
 from collections import defaultdict, namedtuple
 import datetime as dt
+from decimal import Decimal
 
 import pytest
 
@@ -758,6 +759,22 @@ def test_omit_by(case, expected):
 )
 def test_parse_int(case, expected):
     assert _.parse_int(*case) == expected
+
+
+@parametrize("value", [float("inf"), float("-inf"), Decimal("Infinity"), Decimal("-Infinity")])
+@parametrize("radix", [None, 0, 10])
+def test_parse_int_returns_none_for_infinite_numbers(value, radix):
+    assert _.parse_int(value, radix) is None
+
+
+@parametrize("value", [float("nan"), Decimal("NaN"), "inf", "-inf", "not a number", None])
+def test_parse_int_other_unparseable_values_are_unchanged(value):
+    assert _.parse_int(value) is None
+
+
+@parametrize("value", [10**400, -(10**400)])
+def test_parse_int_preserves_finite_large_integers(value):
+    assert _.parse_int(value) == value
 
 
 @parametrize(

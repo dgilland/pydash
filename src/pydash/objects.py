@@ -1710,7 +1710,7 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
         # 10 is needed to allow floats to parse correctly.
         args = (value,) if radix == 10 else (to_string(value), radix)
         parsed = int(*args)
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, OverflowError):
         parsed = None
 
     return parsed
