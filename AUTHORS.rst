@@ -63,3 +63,4 @@ Contributors
 - Gambit-Checkmate, `Gambit-Checkmate@github <https://github.com/Gambit-Checkmate>`_
 - jaredrainsha, `jaredrainsha@github <https://github.com/jaredrainsha>`_
 - Terminal Chai, `terminalchai@github <https://github.com/terminalchai>`_
+- Jaden Fix, `jadenfix@github <https://github.com/jadenfix>`_
