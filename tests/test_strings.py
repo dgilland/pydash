@@ -732,6 +732,21 @@ def test_replace_anchored_inline_comments():
     assert _.replace_end("bar FOO", pattern, "X", escape=False) == "bar X"
 
 
+def test_replace_end_before_final_newline():
+    assert _.replace_end("foo\n", "foo", "X") == "foo\n"
+    assert _.replace_end("foo\n", "\n", "X") == "fooX"
+
+
+@parametrize("compile_pattern", [str, re.compile])
+def test_replace_multiline_string_boundaries(compile_pattern):
+    pattern = compile_pattern("(?m)foo")
+    assert _.replace_start("bar\nfoo", pattern, "X", escape=False) == "bar\nfoo"
+    assert _.replace_end("foo\nbar", pattern, "X", escape=False) == "foo\nbar"
+    assert _.replace_start("foo\nfoo", pattern, "X", escape=False) == "X\nfoo"
+    assert _.replace_end("foo\nfoo", pattern, "X", escape=False) == "foo\nX"
+    assert _.replace("foo\n", pattern, "X", escape=False, from_start=True, from_end=True) == "foo\n"
+
+
 @parametrize(
     "case,expected",
     [
@@ -1328,3 +1343,20 @@ def test_word_cycle(case, expected):
     actual = _.chain(case).camel_case().kebab_case().snake_case().start_case().camel_case().value()
 
     assert actual == expected
+
+
+@parametrize(
+    "function,text,delimiter,expected",
+    [
+        (_.substr_left_end, "prefix", "pre", ""),
+        (_.substr_left_end, "same", "same", ""),
+        (_.substr_right, "suffix", "fix", ""),
+        (_.substr_right, "same", "same", ""),
+        (_.substr_left_end, "pre-middle-pre", "pre", "pre-middle-"),
+        (_.substr_right, "fix-middle-fix", "fix", "-middle-fix"),
+        (_.substr_left_end, "text", "missing", "text"),
+        (_.substr_right, "text", "missing", "text"),
+    ],
+)
+def test_substr_preserves_empty_matches(function, text, delimiter, expected):
+    assert function(text, delimiter) == expected
