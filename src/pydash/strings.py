@@ -1771,7 +1771,10 @@ def substr_left_end(text: t.Any, subtext: str) -> str:
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
-    return text.rpartition(subtext)[0] or text if subtext else text
+    if not subtext:
+        return text
+    left, separator, _ = text.rpartition(subtext)
+    return left if separator else text
 
 
 def substr_right(text: t.Any, subtext: str) -> str:
@@ -1794,7 +1797,10 @@ def substr_right(text: t.Any, subtext: str) -> str:
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
-    return text.partition(subtext)[2] or text if subtext else text
+    if not subtext:
+        return text
+    _, separator, right = text.partition(subtext)
+    return right if separator else text
 
 
 def substr_right_end(text: t.Any, subtext: str) -> str:
