@@ -149,6 +149,27 @@ def test_duplicates(case, expected):
     assert _.duplicates(*case) == expected
 
 
+@parametrize("arity", [2, 3])
+def test_duplicates_passes_index_and_collection_to_iteratee(arity):
+    records = [{"value": 10}, {"value": 20}, {"value": 30}, {"value": 40}]
+    calls = []
+
+    def two_args(value, index):
+        calls.append((value, index))
+        return index % 2
+
+    def three_args(value, index, collection):
+        assert collection is records
+        return two_args(value, index)
+
+    result = _.duplicates(records, two_args if arity == 2 else three_args)
+
+    assert result == [records[2], records[3]]
+    assert result[0] is records[2]
+    assert result[1] is records[3]
+    assert calls == list(zip(records, range(len(records))))
+
+
 def test_duplicates_applies_falsey_iteratee_shorthands():
     records = [{"": "same", "id": "first"}, {"": "same", "id": "second"}]
     original = [record.copy() for record in records]
