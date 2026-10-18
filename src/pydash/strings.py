@@ -1379,9 +1379,9 @@ def replace(  # noqa: PLR0917
             pattern += "\n"
         pattern = f"(?:{pattern})"
         if from_start:
-            pattern = "^" + pattern
+            pattern = r"\A" + pattern
         if from_end:
-            pattern += "$"
+            pattern += r"\Z"
         pat = re.compile(pattern, flags=pat.flags)
 
     return pat.sub(repl, text, count=count)

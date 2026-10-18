@@ -732,6 +732,21 @@ def test_replace_anchored_inline_comments():
     assert _.replace_end("bar FOO", pattern, "X", escape=False) == "bar X"
 
 
+def test_replace_end_before_final_newline():
+    assert _.replace_end("foo\n", "foo", "X") == "foo\n"
+    assert _.replace_end("foo\n", "\n", "X") == "fooX"
+
+
+@parametrize("compile_pattern", [str, re.compile])
+def test_replace_multiline_string_boundaries(compile_pattern):
+    pattern = compile_pattern("(?m)foo")
+    assert _.replace_start("bar\nfoo", pattern, "X", escape=False) == "bar\nfoo"
+    assert _.replace_end("foo\nbar", pattern, "X", escape=False) == "foo\nbar"
+    assert _.replace_start("foo\nfoo", pattern, "X", escape=False) == "X\nfoo"
+    assert _.replace_end("foo\nfoo", pattern, "X", escape=False) == "foo\nX"
+    assert _.replace("foo\n", pattern, "X", escape=False, from_start=True, from_end=True) == "foo\n"
+
+
 @parametrize(
     "case,expected",
     [
