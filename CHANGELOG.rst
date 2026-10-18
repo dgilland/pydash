@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
+  shared mutable children, cycles, and deep-copied mapping keys.
 - Honor false-valued callable customizers in ``assign_with``, ``set_with``, and
   ``update_with`` instead of testing their truth value.
 - Treat empty source sequences as no-ops in ``assign`` and ``assign_with`` instead of
