@@ -1,6 +1,7 @@
 import typing as t
 
 import pytest
+from typing_extensions import assert_type
 
 import pydash as _
 
@@ -206,3 +207,26 @@ def test_mypy_sort_by() -> None:
     reveal_type(_.sort_by({"a": 2, "b": 3, "c": 1}))  # R: builtins.list[builtins.int]
     reveal_type(_.sort_by({"a": 2, "b": 3, "c": 1}, reverse=True))  # R: builtins.list[builtins.int]
     reveal_type(_.sort_by([{"a": 2}, {"a": 3}, {"a": 1}], "a"))  # R: builtins.list[builtins.dict[builtins.str, builtins.int]]
+
+
+@pytest.mark.mypy_testing
+def test_mypy_quantifier_callback_arguments() -> None:
+    def by_index(value: int, index: int) -> bool:
+        return value > index
+
+    def by_collection(value: int, index: int, collection: t.Iterable[int]) -> bool:
+        return value in collection
+
+    def by_mapping(value: int, key: str, collection: t.Mapping[str, int]) -> bool:
+        return collection[key] == value
+
+    assert_type(_.every([1, 2], by_index), bool)
+    assert_type(_.some([1, 2], by_index), bool)
+    assert_type(_.every([1, 2], by_collection), bool)
+    assert_type(_.some([1, 2], by_collection), bool)
+    assert_type(_.every({"a": 1}, by_mapping), bool)
+    assert_type(_.some({"a": 1}, by_mapping), bool)
+    assert_type(_.every([{0: True}], 0), bool)
+    assert_type(_.some([{0: True}], 0), bool)
+    assert_type(_.chain([1, 2]).every(by_index).value(), bool)
+    assert_type(_.chain([1, 2]).some(by_index).value(), bool)

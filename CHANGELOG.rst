@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``every`` and ``some`` ignoring predicate index/key and collection arguments,
+  iterating over mapping keys instead of values, and ignoring false-valued predicates.
 - Sort values rather than keys in ``order_by`` for generic mappings.
 - Preserve empty matched results in ``substr_left_end`` and ``substr_right``.
 - Fix ``sort`` ignoring false-valued comparators and accepting both a comparator and a key

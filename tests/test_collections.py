@@ -1111,6 +1111,86 @@ def test_shuffle_returns_mapping_values(mapping_type):
     assert dict(mapping) == original
 
 
+@parametrize("function,expected", [(_.every, False), (_.some, True)])
+@parametrize(
+    "predicate",
+    [
+        lambda value, index: value == 20 and index == 1,
+        lambda value, index, collection: collection[index] == value and index == 1,
+    ],
+)
+def test_quantifier_predicate_arguments(function, expected, predicate):
+    assert function([10, 20], predicate) is expected
+
+
+@parametrize("function,result", [(_.every, True), (_.some, False)])
+@parametrize("factory", [dict, UserDict, MappingProxyType])
+def test_quantifier_mapping_callback(function, result, factory):
+    collection = factory({"first": 10, "second": 20})
+    calls = []
+
+    def predicate(value, key, original):
+        assert original is collection
+        calls.append((value, key))
+        return result
+
+    assert function(collection, predicate) is result
+    assert calls == [(10, "first"), (20, "second")]
+
+
+@parametrize("function", [_.every, _.some])
+@parametrize("factory", [dict, UserDict, MappingProxyType])
+@parametrize("collection,expected", [({"key": False}, False), ({0: True}, True)])
+def test_quantifier_mapping_values(function, factory, collection, expected):
+    assert function(factory(collection)) is expected
+
+
+@parametrize("function", [_.every, _.some])
+@parametrize("key", [0, ""])
+def test_quantifier_falsey_property(function, key):
+    assert function([{key: False}], key) is False
+
+
+@parametrize("function", [_.every, _.some])
+def test_quantifier_empty_matching_predicate(function):
+    assert function([0], {}) is True
+
+
+@parametrize("function", [_.every, _.some])
+def test_quantifier_falsey_callable(function):
+    class FalseyPredicate:
+        def __bool__(self):
+            return False
+
+        def __call__(self, value):
+            return not value
+
+    assert function([True], FalseyPredicate()) is False
+
+
+@parametrize("function,first", [(_.every, False), (_.some, True)])
+def test_quantifier_short_circuits_generator(function, first):
+    collection = iter([first, "not visited"])
+    calls = []
+
+    def predicate(value, index, original):
+        assert original is collection
+        calls.append((value, index))
+        return value
+
+    assert function(collection, predicate) is first
+    assert calls == [(first, 0)]
+    assert next(collection) == "not visited"
+
+
+@parametrize("function,expected", [(_.every, True), (_.some, False)])
+def test_quantifier_empty_collection(function, expected):
+    def predicate(value):
+        pytest.fail("Empty collections must not invoke the predicate")
+
+    assert function(iter(()), predicate) is expected
+
+
 @parametrize("mapping_type", [dict, UserDict, MappingProxyType])
 @parametrize("orders", [None, [False]])
 def test_order_by_mapping_values(mapping_type, orders):
