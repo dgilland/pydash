@@ -63,3 +63,4 @@ Contributors
 - Gambit-Checkmate, `Gambit-Checkmate@github <https://github.com/Gambit-Checkmate>`_
 - jaredrainsha, `jaredrainsha@github <https://github.com/jaredrainsha>`_
 - Terminal Chai, `terminalchai@github <https://github.com/terminalchai>`_
+- Rowan Vale, `theman6660@github <https://github.com/theman6660>`_
