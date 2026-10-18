@@ -9,6 +9,9 @@ Unreleased
 - Treat empty source sequences as no-ops in ``assign`` and ``assign_with`` instead of
   raising ``IndexError``.
 
+- Preserve arguments without a corresponding transform in ``over_args`` instead of raising
+  ``IndexError``.
+
 - Fix ``every`` and ``some`` ignoring predicate index/key and collection arguments,
   iterating over mapping keys instead of values, and ignoring false-valued predicates.
 - Sort values rather than keys in ``order_by`` for generic mappings.

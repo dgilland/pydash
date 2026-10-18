@@ -540,8 +540,10 @@ class OverArgs(_WithArgCount):
         self.transforms = pyd.flatten(transforms)
 
     def __call__(self, *args):
-        args = (self.transforms[idx](args) for idx, args in enumerate(args))
-        return self.func(*args)
+        transformed_args = list(args)
+        for index, transform in enumerate(self.transforms[: len(args)]):
+            transformed_args[index] = transform(args[index])
+        return self.func(*transformed_args)
 
 
 class Negate(_WithArgCount, t.Generic[P]):
@@ -1349,6 +1351,7 @@ def over_args(
 def over_args(func, *transforms):
     """
     Creates a function that runs each argument through a corresponding transform function.
+    Arguments without a corresponding transform are passed through unchanged.
 
     Args:
         func: Function to wrap.

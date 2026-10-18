@@ -439,6 +439,9 @@ def test_is_match(case, expected):
         (([1, 2], [2, 4], lambda a, b: None if isinstance(a, list) else b == a + a), True),
         (([1, 2], [2, 4], lambda a, b, key: a == b == key), False),
         (([0, 1], [0, 1], lambda a, b, key: a == b == key), True),
+        (({"a": 1}, {"a": 1}, lambda a, b: None), True),
+        (({"a": 1}, {"a": 2}, lambda a, b: None), False),
+        (({"a": 1}, {"a": 1}, lambda a, b: False), False),
     ],
 )
 def test_is_match_with(case, expected):
