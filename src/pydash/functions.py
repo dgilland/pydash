@@ -409,7 +409,7 @@ class Debounce(_WithArgCount, t.Generic[P, T]):
 
         self.last_result: t.Union[T, None] = None
 
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
         self._timer: t.Optional[threading.Timer] = None
         self._args: t.Tuple[t.Any, ...] = ()
         self._kwargs: t.Dict[str, t.Any] = {}
@@ -463,9 +463,11 @@ class Debounce(_WithArgCount, t.Generic[P, T]):
 
     def _invoke(self) -> T:
         """Execute ``func`` with the latest arguments. Caller must hold ``_lock``."""
-        self.last_result = self.func(*self._args, **self._kwargs)
+        args, kwargs = self._args, self._kwargs
+        self._args, self._kwargs = (), {}
         self._first_call = None
         self._timer = None
+        self.last_result = self.func(*args, **kwargs)
         return self.last_result
 
 
