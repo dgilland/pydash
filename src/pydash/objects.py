@@ -221,7 +221,7 @@ def assign_with(obj, *sources, customizer=None):
     """
     sources = list(sources)
 
-    if customizer is None and callable(sources[-1]):
+    if customizer is None and sources and callable(sources[-1]):
         customizer = sources.pop()
 
     if customizer is not None:
