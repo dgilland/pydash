@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Remove the complete delimiter in ``unquote`` so it round-trips multi-character and
+  string-coercible delimiters accepted by ``quote``.
 - Allow debounced callbacks to start another burst without deadlocking or resetting that
   burst's timer and maximum-wait deadline.
 - Return ``None`` for infinite numeric inputs to ``parse_int`` instead of leaking
