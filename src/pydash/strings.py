@@ -2209,7 +2209,11 @@ def unquote(text: t.Any, quote_char: t.Any = '"') -> str:
     .. versionadded:: 3.0.0
     """
     text = pyd.to_string(text)
-    inner = text[1:-1]
+    quote_char = pyd.to_string(quote_char)
+    if not quote_char:
+        return text
+    quote_length = len(quote_char)
+    inner = text[quote_length:-quote_length]
 
     if text == f"{quote_char}{inner}{quote_char}":
         text = inner
