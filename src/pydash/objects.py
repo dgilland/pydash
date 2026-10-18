@@ -2633,38 +2633,35 @@ def values(obj):
 #
 
 
-def base_clone(value, is_deep=False, customizer=None, key=None, _cloned=False):
+def base_clone(value, is_deep=False, customizer=None, key=None):
     """Base clone function that supports deep clone and customizer callback."""
-    clone_by = copy.deepcopy if is_deep else copy.copy
-    result = None
-
-    if callable(customizer) and not _cloned:
+    if callable(customizer):
         argcount = getargcount(customizer, maxargs=4)
         cbk = partial(callit, customizer, argcount=argcount)
-    elif _cloned:
-        cbk = customizer
     else:
         cbk = None
 
-    if cbk:
-        result = cbk(value, key, value)
-
+    result = cbk(value, key, value) if cbk else None
     if result is not None:
         return result
 
-    if not _cloned:
-        result = clone_by(value)
-    else:
-        result = value
-
-    if cbk and not pyd.is_string(value) and not isinstance(value, bytes):
-        for key, subvalue in iterator(value):  # noqa: PLR1704
-            if is_deep:
-                val = base_clone(subvalue, is_deep, cbk, key, _cloned=True)
-            else:
-                val = cbk(subvalue, key, value)
-
-            if val is not None:
-                result[key] = val
-
+    memo = {} if is_deep else None
+    result = copy.deepcopy(value, memo) if is_deep else copy.copy(value)
+    if cbk:
+        _customize_clone(value, result, cbk, is_deep=is_deep, memo=memo, seen=set())
     return result
+
+
+def _customize_clone(value, result, customizer, *, is_deep, memo, seen):
+    """Read callback inputs from the original graph and write to its clone."""
+    if pyd.is_string(value) or isinstance(value, bytes) or id(value) in seen:
+        return
+    seen.add(id(value))
+
+    for key, subvalue in iterator(value):
+        val = customizer(subvalue, key, subvalue if is_deep else value)
+        if is_deep and val is None:
+            val = memo.get(id(subvalue), subvalue)
+            _customize_clone(subvalue, val, customizer, is_deep=is_deep, memo=memo, seen=seen)
+        if val is not None:
+            result[memo.get(id(key), key) if is_deep else key] = val
