@@ -6,6 +6,9 @@ Changelog
 Unreleased
 ----------
 
+- Return ``None`` for infinite numeric inputs to ``parse_int`` instead of leaking
+  ``OverflowError``.
+
 - Preserve arguments without a corresponding transform in ``over_args`` instead of raising
   ``IndexError``.
 
