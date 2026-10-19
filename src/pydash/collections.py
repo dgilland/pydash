@@ -2214,7 +2214,7 @@ def sort_by(collection, iteratee=None, reverse=False):
 
     .. versionadded:: 1.0.0
     """
-    if isinstance(collection, dict):
+    if isinstance(collection, Mapping):
         collection = collection.values()
 
     return sorted(collection, key=pyd.iteratee(iteratee), reverse=reverse)

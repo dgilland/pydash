@@ -1201,3 +1201,15 @@ def test_order_by_mapping_values(mapping_type, orders):
         expected.reverse()
     assert _.order_by(collection, ["score"], orders) == expected
     assert dict(collection) == source
+
+
+@parametrize("factory", [dict, UserDict, MappingProxyType])
+@parametrize("reverse", [False, True])
+def test_sort_by_generic_mapping_values(factory, reverse):
+    source = {"a": {"score": 3}, "b": {"score": 1}, "c": {"score": 2}}
+    collection = factory(source)
+    expected = [{"score": 1}, {"score": 2}, {"score": 3}]
+    if reverse:
+        expected.reverse()
+    assert _.sort_by(collection, "score", reverse=reverse) == expected
+    assert dict(collection) == source
