@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Propagate customizer exceptions from nested ``is_match_with`` comparisons instead
+  of silently reporting a nonmatch.
 - Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
   shared mutable children, cycles, and deep-copied mapping keys.
 - Honor false-valued callable customizers in ``assign_with``, ``set_with``, and
