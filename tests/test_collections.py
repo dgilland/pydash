@@ -1201,3 +1201,21 @@ def test_order_by_mapping_values(mapping_type, orders):
         expected.reverse()
     assert _.order_by(collection, ["score"], orders) == expected
     assert dict(collection) == source
+
+
+@parametrize(
+    "target,offset,expected",
+    [
+        (1, 1, False),
+        (2, 1, True),
+        (3, 3, False),
+        (1, -1, False),
+        (3, -1, True),
+        (1, -10, True),
+        (1, 10, False),
+    ],
+)
+def test_includes_dictionary_offset(target, offset, expected):
+    source = {"a": 1, "b": 2, "c": 3}
+    assert _.includes(source, target, from_index=offset) is expected
+    assert source == {"a": 1, "b": 2, "c": 3}
