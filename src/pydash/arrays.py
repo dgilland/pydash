@@ -2665,12 +2665,13 @@ def xor_with(array, *lists, **kwargs):
     first = list(lists[0])
 
     return xor_with(
-        uniq(
+        uniq_with(
             difference_with(
                 array + first,
                 intersection_with(array, first, comparator=comp),
                 comparator=comp,
-            )
+            ),
+            comparator=comp,
         ),
         *lists[1:],
         comparator=comp,
