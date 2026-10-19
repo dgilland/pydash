@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Return ``True`` when ``is_equal_with`` falls back to comparing equal empty containers,
+  including empty containers nested in other values.
 - Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
   shared mutable children, cycles, and deep-copied mapping keys.
 - Honor false-valued callable customizers in ``assign_with``, ``set_with``, and

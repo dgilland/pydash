@@ -65,3 +65,4 @@ Contributors
 - Terminal Chai, `terminalchai@github <https://github.com/terminalchai>`_
 - Rowan Vale, `theman6660@github <https://github.com/theman6660>`_
 - Jaden Fix, `jadenfix@github <https://github.com/jadenfix>`_
+- Apeksha Pandey, `Apeksha9389@github <https://github.com/Apeksha9389>`_

@@ -763,6 +763,7 @@ def is_equal_with(value, other, customizer):
         and isinstance(other, (list, dict))
         and len(value) == len(other)
     ):
+        equal = True
         # Walk a/b to determine equality using customizer.
         for key, val in iterator(value):
             if pyd.has(other, key):
