@@ -291,6 +291,20 @@ def test_is_equal_with(case, expected):
     assert _.is_equal_with_cmp(*case[1:])(case[0]) == expected
 
 
+@parametrize("value", [[], {}, [[]], {"items": {}}, {"items": []}, [{"items": {}}]])
+def test_is_equal_with_empty_containers(value):
+    def customizer(_value, _other):
+        return None
+
+    assert _.is_equal_with(value, value, customizer) is True
+    assert _.is_equal_with_cmp(value, customizer)(value) is True
+
+
+@parametrize("value", [[], {}])
+def test_is_equal_with_empty_containers_honors_customizer(value):
+    assert _.is_equal_with(value, value, lambda _value, _other: False) is False
+
+
 @parametrize("case,expected", [(Exception(), True), ({}, False), ([], False)])
 def test_is_error(case, expected):
     assert _.is_error(case) == expected
