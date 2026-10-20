@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Keep all arrays in ``zip_with`` when no optional iteratee is supplied.
 - Compute ``chunk`` counts with exact integer arithmetic for large sizes and sequences.
 - Propagate customizer exceptions from nested ``is_match_with`` comparisons instead
   of silently reporting a nonmatch.

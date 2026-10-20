@@ -1519,6 +1519,18 @@ def test_intersection_with_deduplication_comparator_argument_order(array, expect
     assert _.intersection_with(array, [0], comparator=lambda left, right: left > right) == expected
 
 
+@parametrize("factory", [list, tuple, iter])
+def test_zip_with_without_iteratee_keeps_all_arrays(factory):
+    assert _.zip_with(factory([1, 2]), factory([3, 4])) == [(1, 3), (2, 4)]
+    assert _.zip_with(factory([1, 2]), factory([3, 4]), factory([5, 6])) == [(1, 3, 5), (2, 4, 6)]
+
+
+def test_zip_with_explicit_optional_iteratee():
+    assert _.zip_with([1, 2], [3, 4], None) == [(1, 3), (2, 4)]
+    assert _.zip_with([1, 2], [3, 4], iteratee=None) == [(1, 3), (2, 4)]
+    assert _.zip_with([1, 2], [3, 4], _.add) == [4, 6]
+
+
 @parametrize("size", [10**400, 2**53 + 1])
 def test_chunk_large_integer_size(size):
     assert _.chunk([1, 2, 3], size) == [[1, 2, 3]]
