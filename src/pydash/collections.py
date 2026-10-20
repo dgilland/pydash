@@ -914,9 +914,8 @@ def includes(
     """
     collection_values: t.Container[t.Any]
     if isinstance(collection, dict):
-        collection_values = collection.values()
+        collection_values = list(collection.values())[from_index:]
     else:
-        # only makes sense to do this if `collection` is not a dict
         collection_values = collection[from_index:]
 
     return target in collection_values
@@ -949,6 +948,9 @@ def invoke_map(
 
     .. versionadded:: 4.0.0
     """
+    if callable(path):
+        return map_(collection, lambda item: path(item, *args, **kwargs))
+
     return map_(collection, lambda item: pyd.invoke(item, path, *args, **kwargs))
 
 
@@ -2214,7 +2216,7 @@ def sort_by(collection, iteratee=None, reverse=False):
 
     .. versionadded:: 1.0.0
     """
-    if isinstance(collection, dict):
+    if isinstance(collection, Mapping):
         collection = collection.values()
 
     return sorted(collection, key=pyd.iteratee(iteratee), reverse=reverse)

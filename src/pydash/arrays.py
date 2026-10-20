@@ -9,7 +9,6 @@ from __future__ import annotations
 from bisect import bisect_left, bisect_right
 from collections.abc import Iterable, Iterator, Mapping, Sequence, Sized
 from functools import cmp_to_key
-from math import ceil
 import typing as t
 
 import pydash as pyd
@@ -130,7 +129,7 @@ def chunk(array: t.Sequence[T], size: int = 1) -> t.List[t.Sequence[T]]:
     # Lodash returns [] when size < 1; avoid ZeroDivisionError on size=0.
     if size < 1:
         return []
-    chunks = int(ceil(len(array) / float(size)))
+    chunks = (len(array) + size - 1) // size
     return [array[i * size : (i + 1) * size] for i in range(chunks)]
 
 
@@ -2671,12 +2670,13 @@ def xor_with(array, *lists, **kwargs):
     first = list(lists[0])
 
     return xor_with(
-        uniq(
+        uniq_with(
             difference_with(
                 array + first,
                 intersection_with(array, first, comparator=comp),
                 comparator=comp,
-            )
+            ),
+            comparator=comp,
         ),
         *lists[1:],
         comparator=comp,
@@ -2882,7 +2882,7 @@ def zip_with(*arrays, **kwargs):
     """
     if "iteratee" in kwargs:
         iteratee = kwargs["iteratee"]
-    elif len(arrays) > 1:
+    elif len(arrays) > 1 and (callable(arrays[-1]) or arrays[-1] is None):
         iteratee = arrays[-1]
         arrays = arrays[:-1]
     else:

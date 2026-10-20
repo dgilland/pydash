@@ -1112,7 +1112,7 @@ def prune(text: t.Any, length: int = 0, omission: str = "...") -> str:
     # Replace non-alphanumeric chars with whitespace.
     def repl(match):
         char = match.group(0)
-        return " " if char.upper() == char.lower() else char
+        return char if char.isalnum() else " "
 
     subtext = reg_exp_replace(text[: length + 1], r".(?=\W*\w*$)", repl)
 

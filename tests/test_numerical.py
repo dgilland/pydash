@@ -1,5 +1,7 @@
+from collections import UserDict
 from decimal import Decimal
 import math
+from types import MappingProxyType
 
 import pytest
 
@@ -471,3 +473,13 @@ def test_variance_empty_iterators():
 )
 def test_zscore(case, expected):
     assert _.map_(_.zscore(*case), lambda v: round(v, 3)) == expected
+
+
+@parametrize("factory", [dict, UserDict, MappingProxyType])
+@parametrize("function,expected", [(_.max_by, {"score": 3}), (_.min_by, {"score": 1})])
+def test_extrema_by_generic_mapping_values(factory, function, expected):
+    source = {"a": {"score": 3}, "b": {"score": 1}, "c": {"score": 2}}
+    collection = factory(source)
+    assert function(collection, "score") == expected
+    assert dict(collection) == source
+    assert function(factory({}), "score", default="empty") == "empty"
