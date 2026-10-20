@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Deduplicate single-array results in ``intersection``, ``intersection_by``, and
+  ``intersection_with``, honoring positional and keyword comparison rules.
 - Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
   shared mutable children, cycles, and deep-copied mapping keys.
 - Honor false-valued callable customizers in ``assign_with``, ``set_with``, and

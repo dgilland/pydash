@@ -896,7 +896,7 @@ def intersection(array: t.Sequence[T], *others: t.Iterable[t.Any]) -> t.List[T]:
         >>> intersection([1, 2, 3], [1, 2, 3, 4, 5], [2, 3])
         [2, 3]
 
-        >>> intersection([1, 2, 3])
+        >>> intersection([1, 2, 2, 3])
         [1, 2, 3]
 
     .. versionadded:: 1.0.0
@@ -948,10 +948,13 @@ def intersection_by(array, *others, **kwargs):
     """
     array = array[:]
 
-    if not others:
-        return array
+    if others:
+        iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
+    else:
+        iteratee = kwargs.get("iteratee")
 
-    iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
+    if not others:
+        return uniq_by(array, iteratee)
 
     # Sort by smallest list length to make intersection faster.
     others = sorted(
@@ -1011,10 +1014,13 @@ def intersection_with(array, *others, **kwargs):
     """
     array = array[:]
 
-    if not others:
-        return array
+    if others:
+        comparator, others = parse_iteratee("comparator", *others, **kwargs)
+    else:
+        comparator = kwargs.get("comparator")
 
-    comparator, others = parse_iteratee("comparator", *others, **kwargs)
+    if not others:
+        return uniq_with(array, comparator)
 
     # Sort by smallest list length to reduce to intersection faster.
     others = sorted(
