@@ -763,6 +763,7 @@ def is_equal_with(value, other, customizer):
         and isinstance(other, (list, dict))
         and len(value) == len(other)
     ):
+        equal = True
         # Walk a/b to determine equality using customizer.
         for key, val in iterator(value):
             if pyd.has(other, key):
@@ -1237,9 +1238,10 @@ def is_match_with(
         for key, value in iterator(source):
             try:
                 obj_value = base_get(obj, key)
-                equal = is_match_with(obj_value, value, cbk, _key=key, _obj=_obj, _source=_source)
             except Exception:
                 equal = False
+            else:
+                equal = is_match_with(obj_value, value, cbk, _key=key, _obj=_obj, _source=_source)
 
             if not equal:
                 break

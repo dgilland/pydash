@@ -1272,13 +1272,29 @@ def test_xor_by_consumes_each_iterable_once():
     ]
 
 
-@parametrize("case,expected", [(([1, 2, 3], [5, 4], lambda a, b: a <= b), [5, 4])])
+@parametrize("case,expected", [(([1, 2, 3], [5, 4], lambda a, b: a <= b), [5])])
 def test_xor_with(case, expected):
     assert _.xor_with(*case) == expected
 
 
 def test_xor_with_with_only_comparator():
     assert _.xor_with((1, 2), lambda left, right: left == right) == [1, 2]
+
+
+@parametrize("extra_arrays", [([],), ([{"id": 3}],), ([{"id": 3}], [{"id": 4}])])
+@parametrize("as_tuple", [False, True])
+def test_xor_with_deduplicates_using_comparator(extra_arrays, as_tuple):
+    values = [{"id": 1, "name": "first"}, {"id": 1, "name": "duplicate"}, {"id": 2}]
+    original = values[:]
+    array = tuple(values) if as_tuple else values
+    expected = [values[0], values[2]] + [value for other in extra_arrays for value in other]
+
+    def comparator(left, right):
+        return left["id"] == right["id"]
+
+    assert _.xor_with(array, *extra_arrays, comparator) == expected
+    assert _.xor_with(array, *extra_arrays, comparator=comparator) == expected
+    assert values == original
 
 
 def test_xor_with_accepts_tuple_and_secondary_iterator():
@@ -1501,3 +1517,25 @@ def test_intersection_with_deduplicates_after_matching_all_arrays():
 @parametrize("array,expected", [([1, 2], [1]), ([2, 1], [2, 1])])
 def test_intersection_with_deduplication_comparator_argument_order(array, expected):
     assert _.intersection_with(array, [0], comparator=lambda left, right: left > right) == expected
+
+
+@parametrize("factory", [list, tuple, iter])
+def test_zip_with_without_iteratee_keeps_all_arrays(factory):
+    assert _.zip_with(factory([1, 2]), factory([3, 4])) == [(1, 3), (2, 4)]
+    assert _.zip_with(factory([1, 2]), factory([3, 4]), factory([5, 6])) == [(1, 3, 5), (2, 4, 6)]
+
+
+def test_zip_with_explicit_optional_iteratee():
+    assert _.zip_with([1, 2], [3, 4], None) == [(1, 3), (2, 4)]
+    assert _.zip_with([1, 2], [3, 4], iteratee=None) == [(1, 3), (2, 4)]
+    assert _.zip_with([1, 2], [3, 4], _.add) == [4, 6]
+
+
+@parametrize("size", [10**400, 2**53 + 1])
+def test_chunk_large_integer_size(size):
+    assert _.chunk([1, 2, 3], size) == [[1, 2, 3]]
+
+
+def test_chunk_does_not_round_large_sequence_length():
+    result = _.chunk(range(2**53 + 1), 2**53)
+    assert result == [range(2**53), range(2**53, 2**53 + 1)]

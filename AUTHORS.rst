@@ -11,6 +11,7 @@ Lead
 Contributors
 ------------
 
+- Rexyysilent, `Rexyysilent@github <https://github.com/Rexyysilent>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
 - Bharadwaj Yarlagadda, `bharadwajyarlagadda@github <https://github.com/bharadwajyarlagadda>`_
@@ -65,4 +66,5 @@ Contributors
 - Terminal Chai, `terminalchai@github <https://github.com/terminalchai>`_
 - Rowan Vale, `theman6660@github <https://github.com/theman6660>`_
 - Jaden Fix, `jadenfix@github <https://github.com/jadenfix>`_
+- Apeksha Pandey, `Apeksha9389@github <https://github.com/Apeksha9389>`_
 - nk-batman21, `nk-batman21@github <https://github.com/nk-batman21>`_
