@@ -1219,3 +1219,15 @@ def test_includes_dictionary_offset(target, offset, expected):
     source = {"a": 1, "b": 2, "c": 3}
     assert _.includes(source, target, from_index=offset) is expected
     assert source == {"a": 1, "b": 2, "c": 3}
+
+
+@parametrize("factory", [dict, UserDict, MappingProxyType])
+@parametrize("reverse", [False, True])
+def test_sort_by_generic_mapping_values(factory, reverse):
+    source = {"a": {"score": 3}, "b": {"score": 1}, "c": {"score": 2}}
+    collection = factory(source)
+    expected = [{"score": 1}, {"score": 2}, {"score": 3}]
+    if reverse:
+        expected.reverse()
+    assert _.sort_by(collection, "score", reverse=reverse) == expected
+    assert dict(collection) == source
