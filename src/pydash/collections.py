@@ -949,6 +949,9 @@ def invoke_map(
 
     .. versionadded:: 4.0.0
     """
+    if callable(path):
+        return map_(collection, lambda item: path(item, *args, **kwargs))
+
     return map_(collection, lambda item: pyd.invoke(item, path, *args, **kwargs))
 
 
