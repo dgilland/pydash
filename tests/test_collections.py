@@ -289,6 +289,9 @@ def test_includes(case, expected):
             ([{"a": {"b": {"c": 2}}}, {"a": {"b": {"c": 3}}}], "a.b.items"),
             [{"c": 2}.items(), {"c": 3}.items()],
         ),
+        (([[1, 2], [3, 4]], sum), [3, 7]),
+        ((["ab", "cd"], str.upper), ["AB", "CD"]),
+        ((["a-b", "c-d"], str.split, "-"), [["a", "b"], ["c", "d"]]),
     ],
 )
 def test_invoke_map(case, expected):
