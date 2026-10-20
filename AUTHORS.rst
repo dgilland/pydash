@@ -65,3 +65,4 @@ Contributors
 - Terminal Chai, `terminalchai@github <https://github.com/terminalchai>`_
 - Rowan Vale, `theman6660@github <https://github.com/theman6660>`_
 - Jaden Fix, `jadenfix@github <https://github.com/jadenfix>`_
+- nk-batman21, `nk-batman21@github <https://github.com/nk-batman21>`_
