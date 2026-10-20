@@ -1519,6 +1519,92 @@ def test_intersection_with_deduplication_comparator_argument_order(array, expect
     assert _.intersection_with(array, [0], comparator=lambda left, right: left > right) == expected
 
 
+@parametrize("function", [_.intersection, _.intersection_by, _.intersection_with])
+@parametrize("factory", [list, tuple])
+@parametrize("values,expected", [([3, 1, 3, 2, 1], [3, 1, 2]), ([], []), ([3, 1, 2], [3, 1, 2])])
+def test_intersection_single_array_is_unique(function, factory, values, expected):
+    array = factory(values)
+
+    result = function(array)
+
+    assert isinstance(result, list)
+    assert result == expected
+    assert result is not array
+    assert array == factory(values)
+
+
+@parametrize("keyword", [False, True])
+def test_intersection_by_single_array_uses_iteratee(keyword):
+    first = {"id": [1], "name": "first"}
+    duplicate = {"id": [1], "name": "duplicate"}
+    second = {"id": [2], "name": "second"}
+    array = [first, duplicate, second]
+
+    if keyword:
+        result = _.intersection_by(array, iteratee="id")
+    else:
+        result = _.intersection_by(array, "id")
+
+    assert result == [first, second]
+    assert result[0] is first
+    assert result[1] is second
+    assert array == [first, duplicate, second]
+
+
+@parametrize("keyword", [False, True])
+def test_intersection_with_single_array_uses_comparator(keyword):
+    first = {"id": 1, "name": "first"}
+    duplicate = {"id": 1, "name": "duplicate"}
+    second = {"id": 2, "name": "second"}
+    array = [first, duplicate, second]
+
+    def comparator(left, right):
+        return left["id"] == right["id"]
+
+    if keyword:
+        result = _.intersection_with(array, comparator=comparator)
+    else:
+        result = _.intersection_with(array, comparator)
+
+    assert result == [first, second]
+    assert result[0] is first
+    assert result[1] is second
+    assert array == [first, duplicate, second]
+
+
+@parametrize("function", [_.intersection_by, _.intersection_with])
+def test_intersection_single_array_with_explicit_none(function):
+    assert function([3, 1, 3, 2, 1], None) == [3, 1, 2]
+
+
+@parametrize("array,expected", [([1, 2], [1]), ([2, 1], [2, 1])])
+@parametrize("keyword", [False, True])
+def test_intersection_with_single_array_comparator_argument_order(array, expected, keyword):
+    def comparator(left, right):
+        return left > right
+
+    if keyword:
+        result = _.intersection_with(array, comparator=comparator)
+    else:
+        result = _.intersection_with(array, comparator)
+
+    assert result == expected
+
+
+def test_intersection_single_array_preserves_first_unhashable_values():
+    first = {"id": 1}
+    duplicate = {"id": 1}
+    second = {"id": 2}
+    array = [first, duplicate, second]
+
+    result = _.intersection(array)
+
+    assert result == [first, second]
+    assert result[0] is first
+    assert result[1] is second
+    assert array == [first, duplicate, second]
+
+
 @parametrize("factory", [list, tuple, iter])
 def test_zip_with_without_iteratee_keeps_all_arrays(factory):
     assert _.zip_with(factory([1, 2]), factory([3, 4])) == [(1, 3), (2, 4)]

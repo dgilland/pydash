@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Deduplicate single-array results in ``intersection``, ``intersection_by``, and
+  ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
 - Keep all arrays in ``zip_with`` when no optional iteratee is supplied.
 - Compute ``chunk`` counts with exact integer arithmetic for large sizes and sequences.
