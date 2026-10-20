@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Deduplicate ``xor_with`` results with the supplied comparator.
 - Honor positive and negative ``from_index`` offsets in ``includes`` for dictionaries.
 - Use generic mapping values in ``sort_by``, ``max_by``, and ``min_by``.
 - Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
