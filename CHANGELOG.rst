@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Compute ``chunk`` counts with exact integer arithmetic for large sizes and sequences.
+
 - Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
   shared mutable children, cycles, and deep-copied mapping keys.
 - Honor false-valued callable customizers in ``assign_with``, ``set_with``, and

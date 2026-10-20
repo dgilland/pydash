@@ -1501,3 +1501,13 @@ def test_intersection_with_deduplicates_after_matching_all_arrays():
 @parametrize("array,expected", [([1, 2], [1]), ([2, 1], [2, 1])])
 def test_intersection_with_deduplication_comparator_argument_order(array, expected):
     assert _.intersection_with(array, [0], comparator=lambda left, right: left > right) == expected
+
+
+@parametrize("size", [10**400, 2**53 + 1])
+def test_chunk_large_integer_size(size):
+    assert _.chunk([1, 2, 3], size) == [[1, 2, 3]]
+
+
+def test_chunk_does_not_round_large_sequence_length():
+    result = _.chunk(range(2**53 + 1), 2**53)
+    assert result == [range(2**53), range(2**53, 2**53 + 1)]
