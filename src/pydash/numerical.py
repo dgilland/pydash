@@ -6,7 +6,7 @@ Numerical/mathematical related functions.
 
 from __future__ import annotations
 
-from collections.abc import Sized
+from collections.abc import Mapping, Sized
 import decimal
 import math
 import operator
@@ -572,7 +572,7 @@ def max_by(collection, iteratee=None, default=UNSET):
 
     .. versionadded:: 4.0.0
     """
-    if isinstance(collection, dict):
+    if isinstance(collection, Mapping):
         collection = collection.values()
 
     if default is UNSET:
@@ -796,7 +796,7 @@ def min_by(collection, iteratee=None, default=UNSET):
 
     .. versionadded:: 4.0.0
     """
-    if isinstance(collection, dict):
+    if isinstance(collection, Mapping):
         collection = collection.values()
     if default is UNSET:
         return min(collection, key=pyd.iteratee(iteratee))
