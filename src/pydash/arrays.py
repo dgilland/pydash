@@ -2876,7 +2876,7 @@ def zip_with(*arrays, **kwargs):
     """
     if "iteratee" in kwargs:
         iteratee = kwargs["iteratee"]
-    elif len(arrays) > 1:
+    elif len(arrays) > 1 and (callable(arrays[-1]) or arrays[-1] is None):
         iteratee = arrays[-1]
         arrays = arrays[:-1]
     else:
