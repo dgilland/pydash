@@ -1272,13 +1272,29 @@ def test_xor_by_consumes_each_iterable_once():
     ]
 
 
-@parametrize("case,expected", [(([1, 2, 3], [5, 4], lambda a, b: a <= b), [5, 4])])
+@parametrize("case,expected", [(([1, 2, 3], [5, 4], lambda a, b: a <= b), [5])])
 def test_xor_with(case, expected):
     assert _.xor_with(*case) == expected
 
 
 def test_xor_with_with_only_comparator():
     assert _.xor_with((1, 2), lambda left, right: left == right) == [1, 2]
+
+
+@parametrize("extra_arrays", [([],), ([{"id": 3}],), ([{"id": 3}], [{"id": 4}])])
+@parametrize("as_tuple", [False, True])
+def test_xor_with_deduplicates_using_comparator(extra_arrays, as_tuple):
+    values = [{"id": 1, "name": "first"}, {"id": 1, "name": "duplicate"}, {"id": 2}]
+    original = values[:]
+    array = tuple(values) if as_tuple else values
+    expected = [values[0], values[2]] + [value for other in extra_arrays for value in other]
+
+    def comparator(left, right):
+        return left["id"] == right["id"]
+
+    assert _.xor_with(array, *extra_arrays, comparator) == expected
+    assert _.xor_with(array, *extra_arrays, comparator=comparator) == expected
+    assert values == original
 
 
 def test_xor_with_accepts_tuple_and_secondary_iterator():

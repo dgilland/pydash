@@ -13,6 +13,26 @@ from . import helpers
 parametrize = pytest.mark.parametrize
 
 
+@parametrize("error", [RuntimeError, ValueError, KeyError])
+@parametrize("value", [{"item": 1}, [1], {"items": [1]}])
+def test_is_match_with_propagates_customizer_errors(value, error):
+    def customizer(_value, _other):
+        raise error("comparison failed")
+
+    with pytest.raises(error, match="comparison failed"):
+        _.is_match_with(value, value, customizer)
+    with pytest.raises(error, match="comparison failed"):
+        _.is_match_with_cmp(value, customizer)(value)
+
+
+@parametrize("value,source", [({}, {"missing": 1}), ([], [1])])
+def test_is_match_with_missing_values_remain_nonmatches(value, source):
+    def customizer(_value, _other):
+        pytest.fail("missing values should not reach the customizer")
+
+    assert _.is_match_with(value, source, customizer) is False
+
+
 @parametrize(
     "value,other,expected",
     [("a", "a", True), (None, None, True), (None, "", False), (1, str(1), False)],
@@ -269,6 +289,20 @@ def test_is_equal(case, expected):
 def test_is_equal_with(case, expected):
     assert _.is_equal_with(*case) == expected
     assert _.is_equal_with_cmp(*case[1:])(case[0]) == expected
+
+
+@parametrize("value", [[], {}, [[]], {"items": {}}, {"items": []}, [{"items": {}}]])
+def test_is_equal_with_empty_containers(value):
+    def customizer(_value, _other):
+        return None
+
+    assert _.is_equal_with(value, value, customizer) is True
+    assert _.is_equal_with_cmp(value, customizer)(value) is True
+
+
+@parametrize("value", [[], {}])
+def test_is_equal_with_empty_containers_honors_customizer(value):
+    assert _.is_equal_with(value, value, lambda _value, _other: False) is False
 
 
 @parametrize("case,expected", [(Exception(), True), ({}, False), ([], False)])
