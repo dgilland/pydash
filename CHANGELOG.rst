@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Compute ``chunk`` counts with exact integer arithmetic for large sizes and sequences.
 - Propagate customizer exceptions from nested ``is_match_with`` comparisons instead
   of silently reporting a nonmatch.
 - Return ``True`` when ``is_equal_with`` falls back to comparing equal empty containers,
