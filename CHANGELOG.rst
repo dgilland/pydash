@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Propagate customizer exceptions from nested ``is_match_with`` comparisons instead
+  of silently reporting a nonmatch.
 - Return ``True`` when ``is_equal_with`` falls back to comparing equal empty containers,
   including empty containers nested in other values.
 - Deduplicate ``xor_with`` results with the supplied comparator.

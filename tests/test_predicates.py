@@ -13,6 +13,26 @@ from . import helpers
 parametrize = pytest.mark.parametrize
 
 
+@parametrize("error", [RuntimeError, ValueError, KeyError])
+@parametrize("value", [{"item": 1}, [1], {"items": [1]}])
+def test_is_match_with_propagates_customizer_errors(value, error):
+    def customizer(_value, _other):
+        raise error("comparison failed")
+
+    with pytest.raises(error, match="comparison failed"):
+        _.is_match_with(value, value, customizer)
+    with pytest.raises(error, match="comparison failed"):
+        _.is_match_with_cmp(value, customizer)(value)
+
+
+@parametrize("value,source", [({}, {"missing": 1}), ([], [1])])
+def test_is_match_with_missing_values_remain_nonmatches(value, source):
+    def customizer(_value, _other):
+        pytest.fail("missing values should not reach the customizer")
+
+    assert _.is_match_with(value, source, customizer) is False
+
+
 @parametrize(
     "value,other,expected",
     [("a", "a", True), (None, None, True), (None, "", False), (1, str(1), False)],
