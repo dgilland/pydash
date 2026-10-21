@@ -864,3 +864,30 @@ def test_cond_argument_named_argcount():
         return argcount
 
     assert _.cond([(matches, selected)])(argcount=2) == 2
+
+
+@parametrize("bound,expected", [(5, (0, 5)), (-5, (-5, 0)), (0, (0, 0))])
+def test_random_single_integer_bound(bound, expected):
+    with mock.patch("pydash.utilities.randint", return_value=0) as draw:
+        assert _.random(bound) == 0
+        draw.assert_called_once_with(*expected)
+
+
+def test_random_single_float_bound():
+    with mock.patch("pydash.utilities.uniform", return_value=0.5) as draw:
+        assert _.random(2.5) == 0.5
+        draw.assert_called_once_with(0, 2.5)
+
+
+def test_random_preserves_explicit_bounds_and_defaults():
+    with mock.patch("pydash.utilities.randint", return_value=0) as draw:
+        _.random()
+        draw.assert_called_with(0, 1)
+        _.random(5, 1)
+        draw.assert_called_with(1, 5)
+        _.random(stop=5)
+        draw.assert_called_with(0, 5)
+        _.random(start=0, stop=0)
+        draw.assert_called_with(0, 0)
+        assert _.chain(5).random().value() == 0
+        draw.assert_called_with(0, 5)
