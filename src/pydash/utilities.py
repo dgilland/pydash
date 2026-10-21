@@ -21,7 +21,7 @@ from typing_extensions import Literal, ParamSpec, Protocol, Type
 
 import pydash as pyd
 
-from .helpers import NUMBER_TYPES, UNSET, base_get, callit, getargcount, iterator
+from .helpers import NUMBER_TYPES, UNSET, Unset, base_get, callit, getargcount, iterator
 from .types import PathT
 
 
@@ -957,7 +957,11 @@ def random(
 ) -> float: ...
 
 
-def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floating: bool = False):
+def random(
+    start: t.Union[float, int, Unset] = UNSET,
+    stop: t.Union[float, int, Unset] = UNSET,
+    floating: bool = False,
+):
     """
     Produces a random number between `start` and `stop` (inclusive). If only one argument is
     provided a number between 0 and the given number will be returned. If floating is truthy or
@@ -984,6 +988,13 @@ def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floati
 
     .. versionadded:: 1.0.0
     """
+    if isinstance(start, Unset):
+        start = 0
+        if isinstance(stop, Unset):
+            stop = 1
+    elif isinstance(stop, Unset):
+        start, stop = 0, start
+
     floating = isinstance(start, float) or isinstance(stop, float) or floating is True
 
     if stop < start:
