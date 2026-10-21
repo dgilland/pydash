@@ -2995,6 +2995,8 @@ def iterintersection(array, other, comparator=None, iteratee=None):
     if not array or not other:  # pragma: no cover
         return
 
+    use_cache = comparator is None
+
     if comparator is None:
         comparator = pyd.is_equal
 
@@ -3005,19 +3007,19 @@ def iterintersection(array, other, comparator=None, iteratee=None):
     for item in array:
         cmp_item = iteratee(item)
 
-        if cmp_item in seen:
-            continue
-
-        seen.append(cmp_item)
+        if use_cache:
+            if cmp_item in seen:
+                continue
+            seen.append(cmp_item)
         seen_others = []
 
         for value in other:
             cmp_value = iteratee(value)
 
-            if cmp_value in seen_others:
-                continue
-
-            seen_others.append(cmp_value)
+            if use_cache:
+                if cmp_value in seen_others:
+                    continue
+                seen_others.append(cmp_value)
 
             if comparator(cmp_item, cmp_value):
                 yield item
