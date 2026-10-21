@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under
+  ordinary equality.
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
