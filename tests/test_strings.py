@@ -1391,3 +1391,18 @@ def test_word_cycle(case, expected):
 )
 def test_substr_preserves_empty_matches(function, text, delimiter, expected):
     assert function(text, delimiter) == expected
+
+
+@parametrize(
+    "text,pattern,expected",
+    [
+        ("ab ab", "/(a)b/g", ["ab", "ab"]),
+        ("ab ab", "/(a)(b)/g", ["ab", "ab"]),
+        ("ab b", "/(a)?b/g", ["ab", "b"]),
+        ("ab ab", "/(?:a)b/g", ["ab", "ab"]),
+        ("ab", "/(z)/g", []),
+    ],
+)
+def test_global_js_regex_returns_complete_matches(text, pattern, expected):
+    assert _.reg_exp_js_match(text, pattern) == expected
+    assert _.words(text, pattern) == expected
