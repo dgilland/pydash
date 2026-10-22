@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Pass each element to ``partial`` and ``partial_right`` wrappers of ``round_``, ``floor``,
+  and ``ceil`` when they are used as iteratees.
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
