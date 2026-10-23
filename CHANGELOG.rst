@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Honor multiline and dot-all flags in JavaScript-style regex matching and replacement.
+
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
