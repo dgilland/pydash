@@ -7,7 +7,7 @@ Functions that wrap other functions.
 from __future__ import annotations
 
 from functools import cached_property
-from inspect import getfullargspec
+from inspect import getfullargspec, ismethod
 import itertools
 import threading
 import time
@@ -217,7 +217,18 @@ class Curry(t.Generic[T1, T]):
 
     def __init__(self, func, arity, args=None, kwargs=None) -> None:
         self.func = func
-        self.arity = len(getfullargspec(func).args) if arity is None else arity
+        if arity is None:
+            argspec = getfullargspec(func)
+            arity = len(argspec.args)
+            # A fixed positional bound method already has its receiver supplied.
+            # Retain the existing argument-count model for other signatures.
+            if (
+                ismethod(func)
+                and arity
+                and not (argspec.varargs or argspec.varkw or argspec.kwonlyargs)
+            ):
+                arity -= 1
+        self.arity = arity
         self.args = () if args is None else args
         self.kwargs = {} if kwargs is None else kwargs
 
