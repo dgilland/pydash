@@ -1281,6 +1281,25 @@ def test_xor_with_with_only_comparator():
     assert _.xor_with((1, 2), lambda left, right: left == right) == [1, 2]
 
 
+@parametrize("as_tuple", [False, True])
+@parametrize("keyword", [False, True])
+def test_xor_with_single_array_deduplicates_using_comparator(as_tuple, keyword):
+    values = [{"id": 1, "name": "first"}, {"id": 1, "name": "second"}, {"id": 2}]
+    array = tuple(values) if as_tuple else values
+
+    def comparator(left, right):
+        return left["id"] == right["id"]
+
+    result = _.xor_with(array, comparator=comparator) if keyword else _.xor_with(array, comparator)
+
+    assert result == [values[0], values[2]]
+    assert len(array) == 3
+
+
+def test_xor_with_single_array_deduplicates_by_equality():
+    assert _.xor_with([1, 1, 2]) == [1, 2]
+
+
 @parametrize("extra_arrays", [([],), ([{"id": 3}],), ([{"id": 3}], [{"id": 4}])])
 @parametrize("as_tuple", [False, True])
 def test_xor_with_deduplicates_using_comparator(extra_arrays, as_tuple):
