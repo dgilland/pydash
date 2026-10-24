@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Compare literal dictionary keys in ``is_equal_with`` instead of interpreting them as paths.
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
