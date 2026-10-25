@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve numeric return types, including Decimal, in median and its chain wrapper.
+
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).

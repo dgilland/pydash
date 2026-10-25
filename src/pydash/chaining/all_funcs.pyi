@@ -60,6 +60,7 @@ A2 = t.TypeVar("A2")
 A3 = t.TypeVar("A3")
 A4 = t.TypeVar("A4")
 A5 = t.TypeVar("A5")
+MedianT = t.TypeVar("MedianT", bound=NumberT)
 NumT = t.TypeVar("NumT", int, float, "Decimal")
 NumT2 = t.TypeVar("NumT2", int, float, "Decimal")
 NumT3 = t.TypeVar("NumT3", int, float, "Decimal")
@@ -2020,32 +2021,36 @@ class AllFuncs:
 
     @t.overload
     def median(
-        self: "Chain[t.Mapping[T, T2]]", iteratee: t.Callable[[T2, T, t.Dict[T, T2]], NumberT]
-    ) -> "Chain[t.Union[float, int]]": ...
+        self: "Chain[t.Mapping[T, T2]]", iteratee: t.Callable[[T2, T, t.Dict[T, T2]], MedianT]
+    ) -> "Chain[t.Union[float, MedianT]]": ...
     @t.overload
     def median(
-        self: "Chain[t.Mapping[T, T2]]", iteratee: t.Callable[[T2, T], NumberT]
-    ) -> "Chain[t.Union[float, int]]": ...
+        self: "Chain[t.Mapping[T, T2]]", iteratee: t.Callable[[T2, T], MedianT]
+    ) -> "Chain[t.Union[float, MedianT]]": ...
     @t.overload
     def median(
-        self: "Chain[t.Mapping[t.Any, T2]]", iteratee: t.Callable[[T2], NumberT]
-    ) -> "Chain[t.Union[float, int]]": ...
+        self: "Chain[t.Mapping[t.Any, T2]]", iteratee: t.Callable[[T2], MedianT]
+    ) -> "Chain[t.Union[float, MedianT]]": ...
     @t.overload
     def median(
-        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int, t.List[T]], NumberT]
-    ) -> "Chain[t.Union[float, int]]": ...
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int, t.List[T]], MedianT]
+    ) -> "Chain[t.Union[float, MedianT]]": ...
     @t.overload
     def median(
-        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int], NumberT]
-    ) -> "Chain[t.Union[float, int]]": ...
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int], MedianT]
+    ) -> "Chain[t.Union[float, MedianT]]": ...
     @t.overload
     def median(
-        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T], NumberT]
-    ) -> "Chain[t.Union[float, int]]": ...
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T], MedianT]
+    ) -> "Chain[t.Union[float, MedianT]]": ...
     @t.overload
     def median(
-        self: "Chain[t.Iterable[NumberT]]", iteratee: None = None
-    ) -> "Chain[t.Union[float, int]]": ...
+        self: "Chain[t.Mapping[t.Any, MedianT]]", iteratee: None = None
+    ) -> "Chain[t.Union[float, MedianT]]": ...
+    @t.overload
+    def median(
+        self: "Chain[t.Iterable[MedianT]]", iteratee: None = None
+    ) -> "Chain[t.Union[float, MedianT]]": ...
     def median(self, iteratee=None):
         return self._wrap(pyd.median)(iteratee)
 

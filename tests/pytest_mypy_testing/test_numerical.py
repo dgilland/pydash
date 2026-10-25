@@ -2,6 +2,7 @@ import math
 import typing as t
 
 import pytest
+from typing_extensions import assert_type
 
 import pydash as _
 
@@ -87,8 +88,8 @@ def test_mypy_max_by() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_median() -> None:
-    reveal_type(_.median([1, 2, 3, 4, 5]))  # R: Union[builtins.float, builtins.int]
-    reveal_type(_.median([1, 2, 3, 4]))  # R: Union[builtins.float, builtins.int]
+    assert_type(_.median([1, 2, 3, 4, 5]), t.Union[float, int])
+    assert_type(_.median([1, 2, 3, 4]), t.Union[float, int])
 
 
 @pytest.mark.mypy_testing
