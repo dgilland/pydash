@@ -1204,6 +1204,9 @@ def order_by(collection, keys, orders=None, reverse=False):
         reverse = orders
         orders = None
 
+    if orders:
+        orders = list(orders)
+
     comparers = []
 
     if orders:
