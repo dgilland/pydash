@@ -1064,6 +1064,68 @@ def test_set_(case, expected):
     assert _.set_(*case) == expected
 
 
+@parametrize("helper", [_.set_, _.update])
+@parametrize("parent", [None, 1])
+def test_set_helpers_replace_primitive_path_intermediates(helper, parent):
+    target = {"a": parent}
+    value = "value" if helper is _.set_ else lambda old: "value"
+
+    assert helper(target, "a.b", value) is target
+    assert target == {"a": {"b": "value"}}
+
+
+@parametrize("helper", [_.set_, _.update])
+@parametrize(
+    "target,path,expected",
+    [
+        ({"a": {"keep": 1}}, "a.b", {"a": {"keep": 1, "b": "value"}}),
+        ({"a": [{}]}, "a[0].b", {"a": [{"b": "value"}]}),
+    ],
+)
+def test_set_helpers_preserve_existing_path_containers(helper, target, path, expected):
+    nested = target["a"]
+    value = "value" if helper is _.set_ else lambda old: "value"
+
+    assert helper(target, path, value) is target
+    assert target == expected
+    assert target["a"] is nested
+
+
+@parametrize("helper", [_.set_, _.update])
+def test_set_helpers_preserve_mutable_attribute_intermediates(helper):
+    parent = Namespace()
+    target = {"a": parent}
+    value = "value" if helper is _.set_ else lambda old: "value"
+
+    assert helper(target, "a.b", value) is target
+    assert target["a"] is parent
+    assert parent.b == "value"
+
+
+def test_set_preserves_tuple_path_intermediate_with_mutable_child():
+    child = {"keep": 1}
+    parent = (child,)
+    target = {"a": parent}
+
+    assert _.set_(target, "a[0].b", 2) is target
+    assert target["a"] is parent
+    assert child == {"keep": 1, "b": 2}
+
+
+@parametrize("helper", [_.set_with, _.update_with])
+def test_update_with_customizer_replaces_primitive_intermediate(helper):
+    target = {"a": 1}
+
+    def customizer(*_):
+        return Namespace()
+
+    value = "value" if helper is _.set_with else lambda old: "value"
+
+    assert helper(target, "a.b", value, customizer) is target
+    assert isinstance(target["a"], Namespace)
+    assert target["a"].b == "value"
+
+
 def test_set_on_class_works_the_same_with_string_and_list():
     class A:
         def __init__(self):
