@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
+  callbacks instead of numbering the reversed values again.
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
