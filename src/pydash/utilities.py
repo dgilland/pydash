@@ -1007,14 +1007,15 @@ def range_(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]
 
 def range_(*args):
     """
-    Creates a list of numbers (positive and/or negative) progressing from start up to but not
-    including end. If `start` is less than `stop`, a zero-length range is created unless a negative
-    `step` is specified.
+    Yields numbers from `start` up to, but not including, `stop`. If `step` is omitted,
+    it defaults to ``1`` when `start` < `stop`, otherwise ``-1``. An explicit nonzero
+    `step` that moves away from `stop` produces an empty range.
 
     Args:
         start: Integer to start with. Defaults to ``0``.
         stop: Integer to stop at.
-        step: The value to increment or decrement by. Defaults to ``1``.
+        step: The value to increment or decrement by. Defaults to ``1`` if `start`
+            < `stop` else ``-1``.
 
     Yields:
         Next integer in range.
@@ -1029,6 +1030,10 @@ def range_(*args):
         [0, 2, 4]
         >>> list(range_(4, 1))
         [4, 3, 2]
+        >>> list(range_(4, 1, 1))
+        []
+        >>> list(range_(-3))
+        [0, -1, -2]
 
     .. versionadded:: 1.0.0
 
@@ -1054,7 +1059,8 @@ def range_right(start: int, stop: int, step: int = 1) -> t.Generator[int, None, 
 
 def range_right(*args):
     """
-    Similar to :func:`range_`, except that it populates the values in descending order.
+    Yields the values of :func:`range_` in reverse order. Reversing a descending range
+    produces values in ascending order.
 
     Args:
         start: Integer to start with. Defaults to ``0``.
@@ -1073,6 +1079,10 @@ def range_right(*args):
         [3, 2, 1]
         >>> list(range_right(0, 6, 2))
         [4, 2, 0]
+        >>> list(range_right(4, 1))
+        [2, 3, 4]
+        >>> list(range_right(-3))
+        [-2, -1, 0]
 
     .. versionadded:: 4.0.0
     """
