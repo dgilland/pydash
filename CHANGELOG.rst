@@ -6,6 +6,9 @@ Changelog
 Unreleased
 ----------
 
+- Process many arrays in ``xor``, ``xor_by``, and ``xor_with`` without exceeding the
+  Python recursion limit.
+
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).

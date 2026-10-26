@@ -1625,3 +1625,40 @@ def test_chunk_large_integer_size(size):
 def test_chunk_does_not_round_large_sequence_length():
     result = _.chunk(range(2**53 + 1), 2**53)
     assert result == [range(2**53), range(2**53, 2**53 + 1)]
+
+
+@parametrize("function", [_.xor, _.xor_by, _.xor_with])
+def test_xor_many_arrays(function):
+    values = [1, 2, 2]
+    others = [[], [2, 3]] * 600
+    assert function(values, *others) == [1, 2]
+    assert values == [1, 2, 2]
+    assert others == [[], [2, 3]] * 600
+
+
+@parametrize("positional", [False, True])
+def test_xor_by_many_iterators(positional):
+    anchor = {"id": -1}
+    others = [iter([{"id": index % 3}]) for index in range(1200)]
+    if positional:
+        result = _.xor_by(iter([anchor]), *others, "id")
+    else:
+        result = _.xor_by(iter([anchor]), *others, iteratee="id")
+    assert result == [anchor]
+    assert all(list(other) == [] for other in others)
+
+
+@parametrize("positional", [False, True])
+def test_xor_with_many_iterators(positional):
+    anchor = {"id": -1}
+    others = [iter([{"id": index % 3}]) for index in range(1200)]
+
+    def comparator(left, right):
+        return left["id"] == right["id"]
+
+    if positional:
+        result = _.xor_with((anchor,), *others, comparator)
+    else:
+        result = _.xor_with((anchor,), *others, comparator=comparator)
+    assert result == [anchor]
+    assert all(list(other) == [] for other in others)
