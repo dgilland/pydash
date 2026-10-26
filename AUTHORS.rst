@@ -11,6 +11,7 @@ Lead
 Contributors
 ------------
 
+- Shaowei Chen, `123qeew@github <https://github.com/123qeew>`_
 - Rexyysilent, `Rexyysilent@github <https://github.com/Rexyysilent>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
