@@ -69,3 +69,4 @@ Contributors
 - Apeksha Pandey, `Apeksha9389@github <https://github.com/Apeksha9389>`_
 - nk-batman21, `nk-batman21@github <https://github.com/nk-batman21>`_
 - hansu650, `hansu650@github <https://github.com/hansu650>`_
+- Luxe7, `Luxe7@github <https://github.com/Luxe7>`_
