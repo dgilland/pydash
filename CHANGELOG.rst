@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Apply clone customizations to object attributes without requiring item assignment.
 - Preserve leaf values in ``map_values_deep`` when its optional iteratee is omitted or ``None``.
 - Keep positional iteratee arguments when partials bind keyword-only or variable keyword arguments.
 - Infer callable return types in ``invoke_map`` and its chain wrapper.
