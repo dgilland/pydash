@@ -1218,13 +1218,13 @@ def retry(  # noqa: PLR0917
     ):
         raise TypeError("exceptions must be a tuple of Exception types")
 
-    if on_exception and not callable(on_exception):
+    if on_exception is not None and not callable(on_exception):
         raise TypeError("on_exception must be a callable")
 
     if jitter and not isinstance(jitter, tuple):
         jitter = (0, jitter)
 
-    on_exc_argcount = getargcount(on_exception, maxargs=2) if on_exception else None
+    on_exc_argcount = getargcount(on_exception, maxargs=2) if on_exception is not None else None
 
     def decorator(func):
         @wraps(func)
@@ -1236,7 +1236,7 @@ def retry(  # noqa: PLR0917
                 try:
                     return func(*args, **kwargs)
                 except exceptions as exc:
-                    if on_exception:
+                    if on_exception is not None:
                         callit(on_exception, exc, attempt, argcount=on_exc_argcount)
 
                     if attempt == attempts:
