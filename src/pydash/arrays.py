@@ -1328,8 +1328,8 @@ def pull_all_by(
 
     .. versionadded:: 4.0.0
     """
-    values = difference(array, difference_by(array, values, iteratee=iteratee))
-    return pull_all(array, values)
+    array[:] = difference_by(array, values, iteratee=iteratee)
+    return array
 
 
 def pull_all_with(
@@ -1364,8 +1364,8 @@ def pull_all_with(
 
     .. versionadded:: 4.0.0
     """
-    values = difference(array, difference_with(array, values, comparator=comparator))
-    return pull_all(array, values)
+    array[:] = difference_with(array, values, comparator=comparator)
+    return array
 
 
 def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
