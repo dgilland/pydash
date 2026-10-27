@@ -397,6 +397,19 @@ def test_partial_as_iteratee():
 
 
 @parametrize(
+    "func,expected",
+    [
+        (_.partial_right(_.round_, 2), [1.23, 2.35]),
+        (_.partial(_.round_, precision=2), [1.23, 2.35]),
+        (_.partial_right(_.floor, 1), [1.2, 2.3]),
+        (_.partial_right(_.ceil, 1), [1.3, 2.4]),
+    ],
+)
+def test_partial_of_rounding_function_as_iteratee(func, expected):
+    assert _.map_([1.234, 2.345], func) == expected
+
+
+@parametrize(
     "case,case_args,case_kwargs,args,expected",
     [
         (lambda a, b, c: a + b + c, ("a", "b"), {}, ("c",), "cab"),
