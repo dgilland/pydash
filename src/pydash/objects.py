@@ -2491,14 +2491,18 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
 
         obj_val = base_get(target, key, default=None)
         path_obj = None
+        incompatible = obj_val is None or isinstance(
+            obj_val, (bool, int, float, complex, str, bytes)
+        )
 
         if call_customizer:
             path_obj = call_customizer(obj_val, key, target)
 
         if path_obj is None:
-            path_obj = default_factory()
+            path_obj = default_factory() if incompatible else obj_val
 
-        base_set(target, key, path_obj, allow_override=False)
+        if not (isinstance(target, tuple) and path_obj is obj_val):
+            base_set(target, key, path_obj, allow_override=incompatible)
 
         try:
             target = base_get(target, key, default=None)
