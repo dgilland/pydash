@@ -1104,8 +1104,19 @@ class AllFuncs:
     ) -> "Chain[bool]":
         return self._wrap(pyd.includes)(target, from_index)
 
+    @t.overload
+    def invoke_map(
+        self: "Chain[t.Iterable[t.Any]]", path: t.Callable[..., T], *args: t.Any, **kwargs: t.Any
+    ) -> "Chain[t.List[T]]": ...
+    @t.overload
     def invoke_map(
         self: "Chain[t.Iterable[t.Any]]", path: PathT, *args: t.Any, **kwargs: t.Any
+    ) -> "Chain[t.List[t.Any]]": ...
+    def invoke_map(
+        self: "Chain[t.Iterable[t.Any]]",
+        path: t.Union[PathT, t.Callable[..., t.Any]],
+        *args: t.Any,
+        **kwargs: t.Any,
     ) -> "Chain[t.List[t.Any]]":
         return self._wrap(pyd.invoke_map)(path, *args, **kwargs)
 
@@ -3541,7 +3552,9 @@ class AllFuncs:
         floating: Literal[True],
     ) -> "Chain[float]": ...
     def random(
-        self: "Chain[t.Union[float, int]]", stop: t.Union[float, int] = 1, floating: bool = False
+        self: "Chain[t.Union[float, int, Unset]]",
+        stop: t.Union[float, int, Unset] = UNSET,
+        floating: bool = False,
     ):
         return self._wrap(pyd.random)(stop, floating)
 
