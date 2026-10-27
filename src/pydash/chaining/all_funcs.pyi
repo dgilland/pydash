@@ -3541,7 +3541,9 @@ class AllFuncs:
         floating: Literal[True],
     ) -> "Chain[float]": ...
     def random(
-        self: "Chain[t.Union[float, int]]", stop: t.Union[float, int] = 1, floating: bool = False
+        self: "Chain[t.Union[float, int, Unset]]",
+        stop: t.Union[float, int, Unset] = UNSET,
+        floating: bool = False,
     ):
         return self._wrap(pyd.random)(stop, floating)
 
