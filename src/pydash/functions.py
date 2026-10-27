@@ -7,7 +7,7 @@ Functions that wrap other functions.
 from __future__ import annotations
 
 from functools import cached_property
-from inspect import getfullargspec
+from inspect import getfullargspec, isfunction
 import itertools
 import threading
 import time
@@ -16,7 +16,7 @@ import typing as t
 from typing_extensions import Concatenate, Literal, ParamSpec, Protocol
 
 import pydash as pyd
-from pydash.helpers import getargcount
+from pydash.helpers import _getargcount, getargcount
 
 
 __all__ = (
@@ -605,10 +605,24 @@ class Partial(_WithArgCount, t.Generic[T]):
 
     @cached_property
     def _argcount(self) -> t.Optional[int]:
-        func_argcount = getargcount(self.func, None)
+        # A plain function's `_argcount` can be an iteratee hint, so count its real parameters.
+        func_argcount = (
+            _getargcount(self.func, None) if isfunction(self.func) else getargcount(self.func, None)
+        )
         if func_argcount is None:
             return None
-        argcount = func_argcount - len(self.args) - len(self.kwargs)
+        try:
+            argspec = getfullargspec(self.func)
+        except TypeError:
+            bound_keywords = len(self.kwargs)
+        else:
+            # Keyword-only parameters and **kwargs do not consume positional slots.
+            bound_keywords = (
+                len(self.kwargs)
+                if argspec.varargs
+                else sum(key in argspec.args for key in self.kwargs)
+            )
+        argcount = func_argcount - len(self.args) - bound_keywords
         return argcount if argcount >= 0 else None
 
 

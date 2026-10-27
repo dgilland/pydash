@@ -1391,3 +1391,40 @@ def test_word_cycle(case, expected):
 )
 def test_substr_preserves_empty_matches(function, text, delimiter, expected):
     assert function(text, delimiter) == expected
+
+
+@parametrize(
+    "text,pattern,expected",
+    [
+        ("one\ntwo", "/^two/m", ["two"]),
+        ("one\ntwo", r"/^\w+/gm", ["one", "two"]),
+        ("one\nTWO", "/^two/im", ["TWO"]),
+        ("a\nb", "/a.b/s", ["a\nb"]),
+        ("a\nb a\nb", "/a.b/gs", ["a\nb", "a\nb"]),
+        ("one\ntwo", "/^two/", []),
+        ("a\nb", "/a.b/", []),
+    ],
+)
+def test_js_regex_line_flags(text, pattern, expected):
+    assert _.reg_exp_js_match(text, pattern) == expected
+    assert _.words(text, pattern) == expected
+
+
+def test_js_regex_line_flags_in_replacement():
+    assert _.reg_exp_js_replace("one\ntwo", "/^two/m", "X") == "one\nX"
+    assert _.reg_exp_js_replace("a\nb", "/a.b/s", "X") == "X"
+
+
+@parametrize(
+    "text,pattern,expected",
+    [
+        ("ab ab", "/(a)b/g", ["ab", "ab"]),
+        ("ab ab", "/(a)(b)/g", ["ab", "ab"]),
+        ("ab b", "/(a)?b/g", ["ab", "b"]),
+        ("ab ab", "/(?:a)b/g", ["ab", "ab"]),
+        ("ab", "/(z)/g", []),
+    ],
+)
+def test_global_js_regex_returns_complete_matches(text, pattern, expected):
+    assert _.reg_exp_js_match(text, pattern) == expected
+    assert _.words(text, pattern) == expected
