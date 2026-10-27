@@ -1,3 +1,4 @@
+from functools import partial
 import heapq
 import json
 import os
@@ -15,6 +16,46 @@ import pydash as _
 
 
 parametrize = pytest.mark.parametrize
+
+
+class Methods:
+    label = "base"
+
+    def instance(receiver, left, right):
+        return receiver.label, left, right
+
+    def positional_only(receiver, left, right, /):
+        return receiver.label, left, right
+
+    @classmethod
+    def class_method(receiver, left, right):
+        return receiver.label, left, right
+
+    @staticmethod
+    def static(left, right):
+        return left, right
+
+    def zero(receiver):
+        return receiver.label
+
+    def defaults(receiver, left=10, right=20):
+        return receiver.label, left, right
+
+    def mixed(receiver, left, *, right):
+        return receiver.label, left, right
+
+    def extras(receiver, left, **kwargs):
+        return receiver.label, left, kwargs
+
+    def variadic(*args):
+        return args
+
+    def named_variadic(receiver, *args):
+        return receiver.label, args
+
+
+class Derived(Methods):
+    label = "derived"
 
 
 @parametrize(
@@ -114,6 +155,85 @@ def test_curry_arity_max_from_func():
     result = _.reduce_(ids, curried_func_with_data, {})
 
     assert result == {1: 3}
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+@pytest.mark.parametrize(
+    "method,label",
+    [
+        (Methods().instance, "base"),
+        (Derived().instance, "derived"),
+        (Methods.class_method, "base"),
+        (Methods().class_method, "base"),
+        (Derived.class_method, "derived"),
+    ],
+)
+def test_curry_bound_method(curry, method, label):
+    curried = curry(method)
+    assert curried.arity == 2
+    assert curried._argcount == 2
+    for _attempt in range(2):
+        assert curried(1, 2) == (label, 1, 2)
+        first, second = (2, 1) if curry is _.curry_right else (1, 2)
+        remaining = curried(first)
+        assert remaining._argcount == 1
+        assert remaining(second) == (label, 1, 2)
+        assert curried(right=2)(left=1) == (label, 1, 2)
+        assert curried(left=1)(right=2) == (label, 1, 2)
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+@pytest.mark.parametrize("chained", [False, True])
+def test_curry_bound_method_as_iteratee(curry, chained):
+    curried = curry(Methods().instance)("fixed")
+    if chained:
+        actual = _.chain([1, 2]).map_(curried).value()
+    else:
+        actual = _.map_([1, 2], curried)
+    expected = (
+        [("base", 1, "fixed"), ("base", 2, "fixed")]
+        if curry is _.curry_right
+        else [("base", "fixed", 1), ("base", "fixed", 2)]
+    )
+    assert actual == expected
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_bound_method_zero_and_defaults(curry):
+    assert curry(Methods().zero)() == "base"
+    curried = curry(Methods().defaults)
+    assert curried.arity == 2
+    assert curried(1, 2) == ("base", 1, 2)
+    assert curry(Methods().defaults, arity=0)() == ("base", 10, 20)
+    assert curry(Methods().defaults, arity=1)(1, 2) == ("base", 1, 20)
+    first, second = (2, 1) if curry is _.curry_right else (1, 2)
+    assert curry(Methods().positional_only)(first)(second) == ("base", 1, 2)
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_other_callable_controls(curry):
+    receiver = Methods()
+    assert curry(Methods.instance)(receiver, 1, 2) == ("base", 1, 2)
+    assert curry(Methods.static)(1, 2) == (1, 2)
+    assert curry(partial(Methods.static, 1))(2) == (1, 2)
+    assert curry(receiver.variadic).arity == 0
+    assert curry(receiver.variadic)() == (receiver,)
+    assert curry(receiver.named_variadic).arity == 1
+    assert curry(receiver.named_variadic)(1, 2) == ("base", (1,))
+
+    class Callable:
+        def __call__(self, left, right):
+            return left, right
+
+    assert curry(Callable()).arity == 3
+    assert curry(Callable(), arity=2)(1, 2) == (1, 2)
+    assert curry(receiver.instance, arity=2)(1, 2) == ("base", 1, 2)
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_bound_method_keyword_parameter_controls(curry):
+    assert curry(Methods().mixed)(1, right=2) == ("base", 1, 2)
+    assert curry(Methods().extras)(1, tag=2) == ("base", 1, {"tag": 2})
 
 
 @parametrize(
@@ -397,6 +517,19 @@ def test_partial_as_iteratee():
 
 
 @parametrize(
+    "func,expected",
+    [
+        (_.partial_right(_.round_, 2), [1.23, 2.35]),
+        (_.partial(_.round_, precision=2), [1.23, 2.35]),
+        (_.partial_right(_.floor, 1), [1.2, 2.3]),
+        (_.partial_right(_.ceil, 1), [1.3, 2.4]),
+    ],
+)
+def test_partial_of_rounding_function_as_iteratee(func, expected):
+    assert _.map_([1.234, 2.345], func) == expected
+
+
+@parametrize(
     "case,case_args,case_kwargs,args,expected",
     [
         (lambda a, b, c: a + b + c, ("a", "b"), {}, ("c",), "cab"),
@@ -419,6 +552,30 @@ def test_partial_right(case, case_args, case_kwargs, args, expected):
 )
 def test_rearg(case, args, kwargs, expected):
     assert _.rearg(*case)(*args, **kwargs) == expected
+
+
+@parametrize("indexes", [(1, 1, 0), ([1, 1, 0],)])
+def test_rearg_repeated_indexes(indexes):
+    def collect(*args, suffix):
+        return args, suffix
+
+    rearranged = _.rearg(collect, *indexes)
+    assert rearranged("a", "b", "c", suffix="end") == (("b", "b", "a", "c"), "end")
+    assert rearranged("x", "y", suffix="again") == (("y", "y", "x"), "again")
+
+
+def test_rearg_repeated_indexes_preserve_identity():
+    value = []
+    rearranged = _.rearg(lambda *args: args, 0, 0)
+    first, second = rearranged(value)
+    assert first is value
+    assert second is value
+
+
+def test_rearg_repeated_indexes_skip_missing_arguments():
+    rearranged = _.rearg(lambda *args: args, 3, 1, 1, -1)
+    assert rearranged("a", "b", "c") == ("b", "b", "a", "c")
+    assert rearranged() == ()
 
 
 @parametrize(
@@ -636,3 +793,31 @@ def test_can_be_used_as_predicate_argcount_is_known():
         return x > 0
 
     assert _.filter_([-1, 0, 1], _.negate(is_positive)) == [-1, 0]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_keyword_only_arguments_as_iteratee(factory):
+    def transform(value, *, increment):
+        return value + increment
+
+    wrapped = factory(transform, increment=2)
+    assert wrapped(1) == 3
+    assert _.map_([1, 2], wrapped) == [3, 4]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_variable_keyword_arguments_as_iteratee(factory):
+    def transform(value, **options):
+        return value + options["increment"]
+
+    assert _.map_([1, 2], factory(transform, increment=2)) == [3, 4]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_nested_and_builtin_iteratees(factory):
+    def transform(value, increment=0):
+        return value + increment
+
+    assert _.map_([1, 2], factory(transform, increment=2)) == [3, 4]
+    assert _.map_([1, 2], factory(factory(transform), increment=2)) == [3, 4]
+    assert _.map_([1, 2], factory(str)) == ["1", "2"]

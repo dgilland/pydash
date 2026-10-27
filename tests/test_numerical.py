@@ -483,3 +483,11 @@ def test_extrema_by_generic_mapping_values(factory, function, expected):
     assert function(collection, "score") == expected
     assert dict(collection) == source
     assert function(factory({}), "score", default="empty") == "empty"
+
+
+def test_median_preserves_decimal_values_and_empty_fallback():
+    result = _.median([Decimal("1"), Decimal("2")])
+    assert isinstance(result, Decimal)
+    assert result == Decimal("1.5")
+    assert _.median({1: Decimal("1"), 2: Decimal("2")}) == Decimal("1.5")
+    assert math.isnan(_.median([]))

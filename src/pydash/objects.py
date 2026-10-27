@@ -1252,7 +1252,7 @@ def map_values_deep(
 
     Args:
         obj: Object to map.
-        iteratee: Iteratee applied to each value.
+        iteratee: Iteratee applied to each value. Defaults to :func:`.identity`.
         property_path: Path key(s) to access.
 
     Returns:
@@ -1288,7 +1288,7 @@ def map_values_deep(
 
         return assign(obj, map_values(obj, deep_iteratee))  # type: ignore
     else:
-        return callit(iteratee, obj, properties)
+        return obj if iteratee is None else callit(iteratee, obj, properties)
 
 
 def apply(obj: T, func: t.Callable[[T], T2]) -> T2:
@@ -2491,14 +2491,18 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
 
         obj_val = base_get(target, key, default=None)
         path_obj = None
+        incompatible = obj_val is None or isinstance(
+            obj_val, (bool, int, float, complex, str, bytes)
+        )
 
         if call_customizer:
             path_obj = call_customizer(obj_val, key, target)
 
         if path_obj is None:
-            path_obj = default_factory()
+            path_obj = default_factory() if incompatible else obj_val
 
-        base_set(target, key, path_obj, allow_override=False)
+        if not (isinstance(target, tuple) and path_obj is obj_val):
+            base_set(target, key, path_obj, allow_override=incompatible)
 
         try:
             target = base_get(target, key, default=None)
@@ -2664,4 +2668,8 @@ def _customize_clone(value, result, customizer, *, is_deep, memo, seen):
             val = memo.get(id(subvalue), subvalue)
             _customize_clone(subvalue, val, customizer, is_deep=is_deep, memo=memo, seen=seen)
         if val is not None:
-            result[memo.get(id(key), key) if is_deep else key] = val
+            target_key = memo.get(id(key), key) if is_deep else key
+            if hasattr(type(result), "__setitem__"):
+                result[target_key] = val
+            else:
+                setattr(result, target_key, val)
