@@ -107,12 +107,16 @@ class JSRegExp:
         self._ignore_case = "i" in options
 
         flags = re.I if self._ignore_case else 0
+        if "m" in options:
+            flags |= re.M
+        if "s" in options:
+            flags |= re.S
         self.pattern = re.compile(pattern, flags=flags)
 
     def find(self, text: str) -> t.List[str]:
         """Return list of regular expression matches."""
         if self._global:
-            results = self.pattern.findall(text)
+            results = [match.group(0) for match in self.pattern.finditer(text)]
         else:
             res = self.pattern.search(text)
             if res:

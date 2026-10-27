@@ -1644,3 +1644,20 @@ def test_chunk_large_integer_size(size):
 def test_chunk_does_not_round_large_sequence_length():
     result = _.chunk(range(2**53 + 1), 2**53)
     assert result == [range(2**53), range(2**53, 2**53 + 1)]
+
+
+@parametrize("function", [_.pull_all_by, _.pull_all_with])
+@parametrize("values_factory", [list, iter])
+def test_pull_custom_criteria_preserve_equal_distinct_values(function, values_factory):
+    array = [1, True, "keep"]
+    values = values_factory([1])
+    if function is _.pull_all_by:
+        result = function(array, values, type)
+    else:
+        result = function(
+            array, values, lambda left, right: type(left) is type(right) and left == right
+        )
+    assert result is array
+    assert len(array) == 2
+    assert array[0] is True
+    assert array[1] == "keep"
