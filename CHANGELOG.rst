@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Preserve numeric return types, including Decimal, in median and its chain wrapper.
 - Apply clone customizations to object attributes without requiring item assignment.
 - Preserve leaf values in ``map_values_deep`` when its optional iteratee is omitted or ``None``.
 - Keep positional iteratee arguments when partials bind keyword-only or variable keyword arguments.
