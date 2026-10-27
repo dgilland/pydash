@@ -75,3 +75,4 @@ Contributors
 - jipeng6036-del, `jipeng6036-del@github <https://github.com/jipeng6036-del>`_
 - Edson Henrique, `edsonsims@github <https://github.com/edsonsims>`_
 - Mayank Dhingra, `mayankdhingra02@github <https://github.com/mayankdhingra02>`_
+- KennyMcSimpson, `KennyMcSimpson@github <https://github.com/KennyMcSimpson>`_
