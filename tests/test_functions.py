@@ -434,6 +434,30 @@ def test_rearg(case, args, kwargs, expected):
     assert _.rearg(*case)(*args, **kwargs) == expected
 
 
+@parametrize("indexes", [(1, 1, 0), ([1, 1, 0],)])
+def test_rearg_repeated_indexes(indexes):
+    def collect(*args, suffix):
+        return args, suffix
+
+    rearranged = _.rearg(collect, *indexes)
+    assert rearranged("a", "b", "c", suffix="end") == (("b", "b", "a", "c"), "end")
+    assert rearranged("x", "y", suffix="again") == (("y", "y", "x"), "again")
+
+
+def test_rearg_repeated_indexes_preserve_identity():
+    value = []
+    rearranged = _.rearg(lambda *args: args, 0, 0)
+    first, second = rearranged(value)
+    assert first is value
+    assert second is value
+
+
+def test_rearg_repeated_indexes_skip_missing_arguments():
+    rearranged = _.rearg(lambda *args: args, 3, 1, 1, -1)
+    assert rearranged("a", "b", "c") == ("b", "b", "a", "c")
+    assert rearranged() == ()
+
+
 @parametrize(
     "case,args,expected",
     [

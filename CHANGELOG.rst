@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Preserve repeated argument indexes in ``rearg`` instead of silently dropping duplicates.
 - Preserve numeric return types, including Decimal, in median and its chain wrapper.
 - Apply clone customizations to object attributes without requiring item assignment.
 - Preserve leaf values in ``map_values_deep`` when its optional iteratee is omitted or ``None``.
