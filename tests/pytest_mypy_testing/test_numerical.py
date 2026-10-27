@@ -1,3 +1,4 @@
+from decimal import Decimal
 import math
 import typing as t
 
@@ -90,6 +91,22 @@ def test_mypy_max_by() -> None:
 def test_mypy_median() -> None:
     assert_type(_.median([1, 2, 3, 4, 5]), t.Union[float, int])
     assert_type(_.median([1, 2, 3, 4]), t.Union[float, int])
+
+
+@pytest.mark.mypy_testing
+def test_mypy_median_decimal_types() -> None:
+    decimals = [Decimal("1"), Decimal("2")]
+    assert_type(_.median(decimals), t.Union[float, Decimal])
+    assert_type(_.median({"a": Decimal("1")}), t.Union[float, Decimal])
+    assert_type(_.median(["1", "2"], Decimal), t.Union[float, Decimal])
+    assert_type(_.chain(decimals).median().value(), t.Union[float, Decimal])
+    assert_type(_.median([1, 2]), t.Union[float, int])
+    assert_type(_.median([1.0, 2.0]), float)
+    assert_type(_.median({1: Decimal("1")}), t.Union[float, Decimal])
+    empty: list[Decimal] = []
+    assert_type(_.median(empty), t.Union[float, Decimal])
+    mixed: list[t.Union[int, Decimal]] = [1, Decimal("2")]
+    assert_type(_.median(mixed), t.Union[float, int, Decimal])
 
 
 @pytest.mark.mypy_testing
