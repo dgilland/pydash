@@ -2660,12 +2660,12 @@ def xor_with(array, *lists, **kwargs):
     array = list(array)
 
     if not lists:
-        return array
+        return uniq_with(array, comparator=kwargs.get("comparator"))
 
     comp, lists = parse_iteratee("comparator", *lists, **kwargs)
 
     if not lists:
-        return array
+        return uniq_with(array, comparator=comp)
 
     first = list(lists[0])
 
