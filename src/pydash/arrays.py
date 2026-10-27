@@ -2588,32 +2588,31 @@ def xor_by(array, *lists, **kwargs):
 
     .. versionadded:: 4.0.0
     """
-    # Materialize the first array once so all declared Iterable inputs (including
-    # generators and iterators) can participate in the list operations below.
-    array = list(array)
+    while True:
+        # Materialize the first array once so all declared Iterable inputs (including
+        # generators and iterators) can participate in the list operations below.
+        array = list(array)
 
-    if not lists:
-        return uniq_by(array, iteratee=kwargs.get("iteratee"))
+        if not lists:
+            return uniq_by(array, iteratee=kwargs.get("iteratee"))
 
-    iteratee, lists = parse_iteratee("iteratee", *lists, **kwargs)
+        iteratee, lists = parse_iteratee("iteratee", *lists, **kwargs)
 
-    if not lists:
-        return uniq_by(array, iteratee=iteratee)
+        if not lists:
+            return uniq_by(array, iteratee=iteratee)
 
-    first = list(lists[0])
+        first = list(lists[0])
 
-    return xor_by(
-        uniq_by(
+        array = uniq_by(
             difference_by(
                 array + first,
                 intersection_by(array, first, iteratee=iteratee),
                 iteratee=iteratee,
             ),
             iteratee=iteratee,
-        ),
-        *lists[1:],
-        iteratee=iteratee,
-    )
+        )
+        lists = lists[1:]
+        kwargs = {"iteratee": iteratee}
 
 
 @t.overload
@@ -2655,32 +2654,31 @@ def xor_with(array, *lists, **kwargs):
 
     .. versionadded:: 4.0.0
     """
-    # ``array`` is declared as a Sequence, so tuples are valid inputs. Convert
-    # it once because the implementation combines arrays with ``+`` below.
-    array = list(array)
+    while True:
+        # ``array`` is declared as a Sequence, so tuples are valid inputs. Convert
+        # it once because the implementation combines arrays with ``+`` below.
+        array = list(array)
 
-    if not lists:
-        return uniq_with(array, comparator=kwargs.get("comparator"))
+        if not lists:
+            return uniq_with(array, comparator=kwargs.get("comparator"))
 
-    comp, lists = parse_iteratee("comparator", *lists, **kwargs)
+        comp, lists = parse_iteratee("comparator", *lists, **kwargs)
 
-    if not lists:
-        return uniq_with(array, comparator=comp)
+        if not lists:
+            return uniq_with(array, comparator=comp)
 
-    first = list(lists[0])
+        first = list(lists[0])
 
-    return xor_with(
-        uniq_with(
+        array = uniq_with(
             difference_with(
                 array + first,
                 intersection_with(array, first, comparator=comp),
                 comparator=comp,
             ),
             comparator=comp,
-        ),
-        *lists[1:],
-        comparator=comp,
-    )
+        )
+        lists = lists[1:]
+        kwargs = {"comparator": comp}
 
 
 @t.overload

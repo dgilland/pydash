@@ -73,3 +73,4 @@ Contributors
 - Luxe7, `Luxe7@github <https://github.com/Luxe7>`_
 - Shaowei Chen, `123qeew@github <https://github.com/123qeew>`_
 - jipeng6036-del, `jipeng6036-del@github <https://github.com/jipeng6036-del>`_
+- Edson Henrique, `edsonsims@github <https://github.com/edsonsims>`_

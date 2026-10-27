@@ -22,6 +22,8 @@ Unreleased
 - Return complete global JavaScript-style regex matches when capture groups are present.
 - Use zero as the other bound when ``random`` receives a single bound, as documented.
 - Invoke false-valued ``retry`` exception callbacks instead of silently skipping them.
+- Process many arrays in ``xor``, ``xor_by``, and ``xor_with`` without exceeding the
+  Python recursion limit.
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
