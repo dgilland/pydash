@@ -107,6 +107,10 @@ class JSRegExp:
         self._ignore_case = "i" in options
 
         flags = re.I if self._ignore_case else 0
+        if "m" in options:
+            flags |= re.M
+        if "s" in options:
+            flags |= re.S
         self.pattern = re.compile(pattern, flags=flags)
 
     def find(self, text: str) -> t.List[str]:

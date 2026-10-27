@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Honor multiline and dot-all flags in JavaScript-style regex matching and replacement.
 - Pass each element to ``partial`` and ``partial_right`` wrappers of ``round_``, ``floor``,
   and ``ceil`` when they are used as iteratees.
 - Preserve custom removal criteria throughout ``pull_all_by`` and ``pull_all_with``.
