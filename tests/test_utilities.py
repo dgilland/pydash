@@ -891,3 +891,23 @@ def test_random_preserves_explicit_bounds_and_defaults():
         draw.assert_called_with(0, 0)
         assert _.chain(5).random().value() == 0
         draw.assert_called_with(0, 5)
+
+
+def test_retry_falsey_on_exception(mock_sleep):
+    calls = []
+
+    class Callback:
+        def __bool__(self):
+            return False
+
+        def __call__(self, error, attempt):
+            calls.append((str(error), attempt))
+
+    @_.retry(attempts=3, delay=0, on_exception=Callback())
+    def fail():
+        raise ValueError("failure")
+
+    with pytest.raises(ValueError, match="failure"):
+        fail()
+    assert calls == [("failure", 1), ("failure", 2), ("failure", 3)]
+    assert mock_sleep.call_count == 2
