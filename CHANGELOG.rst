@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Infer callable return types in ``invoke_map`` and its chain wrapper.
 - Deduplicate single-array ``xor_with`` results using positional or keyword comparators.
 - Honor multiline and dot-all flags in JavaScript-style regex matching and replacement.
 - Pass each element to ``partial`` and ``partial_right`` wrappers of ``round_``, ``floor``,

@@ -1104,8 +1104,19 @@ class AllFuncs:
     ) -> "Chain[bool]":
         return self._wrap(pyd.includes)(target, from_index)
 
+    @t.overload
+    def invoke_map(
+        self: "Chain[t.Iterable[t.Any]]", path: t.Callable[..., T], *args: t.Any, **kwargs: t.Any
+    ) -> "Chain[t.List[T]]": ...
+    @t.overload
     def invoke_map(
         self: "Chain[t.Iterable[t.Any]]", path: PathT, *args: t.Any, **kwargs: t.Any
+    ) -> "Chain[t.List[t.Any]]": ...
+    def invoke_map(
+        self: "Chain[t.Iterable[t.Any]]",
+        path: t.Union[PathT, t.Callable[..., t.Any]],
+        *args: t.Any,
+        **kwargs: t.Any,
     ) -> "Chain[t.List[t.Any]]":
         return self._wrap(pyd.invoke_map)(path, *args, **kwargs)
 
