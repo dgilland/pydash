@@ -6,8 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Use zero as the other bound when ``random`` receives a single bound, as documented.
 - Invoke false-valued ``retry`` exception callbacks instead of silently skipping them.
-
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
