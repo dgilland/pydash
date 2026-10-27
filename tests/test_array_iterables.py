@@ -42,3 +42,12 @@ def test_empty_arrays_without_truth_values(container):
 
 def test_none_unzip_input():
     assert _.unzip_with(None) == []
+
+
+@pytest.mark.parametrize("container", [NoTruthList, FalseList])
+def test_empty_intersection_does_not_evaluate_iteratee(container):
+    def unexpected_iteratee(value):
+        pytest.fail("An empty intersection should not evaluate the iteratee")
+
+    assert _.intersection_by(container([0]), container(), iteratee=unexpected_iteratee) == []
+    assert _.intersection_by(container(), container([0]), iteratee=unexpected_iteratee) == []

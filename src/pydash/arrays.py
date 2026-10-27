@@ -2992,6 +2992,8 @@ def iterintersection(array, other, comparator=None, iteratee=None):
     intersect."""
     if array is None or other is None:  # pragma: no cover
         return
+    if isinstance(other, Sized) and len(other) == 0:
+        return
 
     if comparator is None:
         comparator = pyd.is_equal
