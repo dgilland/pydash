@@ -1252,7 +1252,7 @@ def map_values_deep(
 
     Args:
         obj: Object to map.
-        iteratee: Iteratee applied to each value.
+        iteratee: Iteratee applied to each value. Defaults to :func:`.identity`.
         property_path: Path key(s) to access.
 
     Returns:
@@ -1288,7 +1288,7 @@ def map_values_deep(
 
         return assign(obj, map_values(obj, deep_iteratee))  # type: ignore
     else:
-        return callit(iteratee, obj, properties)
+        return obj if iteratee is None else callit(iteratee, obj, properties)
 
 
 def apply(obj: T, func: t.Callable[[T], T2]) -> T2:
@@ -2664,4 +2664,8 @@ def _customize_clone(value, result, customizer, *, is_deep, memo, seen):
             val = memo.get(id(subvalue), subvalue)
             _customize_clone(subvalue, val, customizer, is_deep=is_deep, memo=memo, seen=seen)
         if val is not None:
-            result[memo.get(id(key), key) if is_deep else key] = val
+            target_key = memo.get(id(key), key) if is_deep else key
+            if hasattr(type(result), "__setitem__"):
+                result[target_key] = val
+            else:
+                setattr(result, target_key, val)

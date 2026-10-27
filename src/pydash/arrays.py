@@ -1328,8 +1328,8 @@ def pull_all_by(
 
     .. versionadded:: 4.0.0
     """
-    values = difference(array, difference_by(array, values, iteratee=iteratee))
-    return pull_all(array, values)
+    array[:] = difference_by(array, values, iteratee=iteratee)
+    return array
 
 
 def pull_all_with(
@@ -1364,8 +1364,8 @@ def pull_all_with(
 
     .. versionadded:: 4.0.0
     """
-    values = difference(array, difference_with(array, values, comparator=comparator))
-    return pull_all(array, values)
+    array[:] = difference_with(array, values, comparator=comparator)
+    return array
 
 
 def pull_at(array: t.List[T], *indexes: int) -> t.List[T]:
@@ -2660,12 +2660,12 @@ def xor_with(array, *lists, **kwargs):
     array = list(array)
 
     if not lists:
-        return array
+        return uniq_with(array, comparator=kwargs.get("comparator"))
 
     comp, lists = parse_iteratee("comparator", *lists, **kwargs)
 
     if not lists:
-        return array
+        return uniq_with(array, comparator=comp)
 
     first = list(lists[0])
 
