@@ -11,7 +11,6 @@ Lead
 Contributors
 ------------
 
-- Rexyysilent, `Rexyysilent@github <https://github.com/Rexyysilent>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
 - Bharadwaj Yarlagadda, `bharadwajyarlagadda@github <https://github.com/bharadwajyarlagadda>`_
@@ -69,4 +68,10 @@ Contributors
 - Apeksha Pandey, `Apeksha9389@github <https://github.com/Apeksha9389>`_
 - nk-batman21, `nk-batman21@github <https://github.com/nk-batman21>`_
 - hansu650, `hansu650@github <https://github.com/hansu650>`_
+- Rexyysilent, `Rexyysilent@github <https://github.com/Rexyysilent>`_
+- Gabrieljr42, `Gabrieljr42@github <https://github.com/Gabrieljr42>`_
+- Luxe7, `Luxe7@github <https://github.com/Luxe7>`_
+- Shaowei Chen, `123qeew@github <https://github.com/123qeew>`_
+- jipeng6036-del, `jipeng6036-del@github <https://github.com/jipeng6036-del>`_
+- Edson Henrique, `edsonsims@github <https://github.com/edsonsims>`_
 - Mayank Dhingra, `mayankdhingra02@github <https://github.com/mayankdhingra02>`_

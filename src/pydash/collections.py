@@ -921,8 +921,23 @@ def includes(
     return target in collection_values
 
 
+@t.overload
+def invoke_map(
+    collection: t.Iterable[t.Any], path: t.Callable[..., T], *args: t.Any, **kwargs: t.Any
+) -> t.List[T]: ...
+
+
+@t.overload
 def invoke_map(
     collection: t.Iterable[t.Any], path: PathT, *args: t.Any, **kwargs: t.Any
+) -> t.List[t.Any]: ...
+
+
+def invoke_map(
+    collection: t.Iterable[t.Any],
+    path: t.Union[PathT, t.Callable[..., t.Any]],
+    *args: t.Any,
+    **kwargs: t.Any,
 ) -> t.List[t.Any]:
     """
     Invokes the method at `path` of each element in `collection`, returning a list of the results of
@@ -1203,6 +1218,9 @@ def order_by(collection, keys, orders=None, reverse=False):
     if pyd.is_boolean(orders):
         reverse = orders
         orders = None
+
+    if orders:
+        orders = list(orders)
 
     comparers = []
 
@@ -1626,6 +1644,8 @@ def reduce_right(collection, iteratee=None, accumulator=None):
 
         >>> reduce_right([1, 2, 3, 4], lambda total, x: total**x)
         4096
+        >>> reduce_right([10, 20, 30], lambda total, x, index: total + x * (index + 1), 0)
+        140
 
     .. versionadded:: 1.0.0
 
@@ -1635,11 +1655,7 @@ def reduce_right(collection, iteratee=None, accumulator=None):
     .. versionchanged:: 4.0.0
         Removed alias ``foldr``.
     """
-    if isinstance(collection, Mapping):
-        collection = dict(reversed(list(collection.items())))
-    else:
-        collection = list(collection)[::-1]
-
+    collection = dict(reversed(list(iterator(collection))))
     return reduce_(collection, iteratee, accumulator)
 
 
