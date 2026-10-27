@@ -1413,3 +1413,18 @@ def test_js_regex_line_flags(text, pattern, expected):
 def test_js_regex_line_flags_in_replacement():
     assert _.reg_exp_js_replace("one\ntwo", "/^two/m", "X") == "one\nX"
     assert _.reg_exp_js_replace("a\nb", "/a.b/s", "X") == "X"
+
+    
+@parametrize(
+    "text,pattern,expected",
+    [
+        ("ab ab", "/(a)b/g", ["ab", "ab"]),
+        ("ab ab", "/(a)(b)/g", ["ab", "ab"]),
+        ("ab b", "/(a)?b/g", ["ab", "b"]),
+        ("ab ab", "/(?:a)b/g", ["ab", "ab"]),
+        ("ab", "/(z)/g", []),
+    ],
+)
+def test_global_js_regex_returns_complete_matches(text, pattern, expected):
+    assert _.reg_exp_js_match(text, pattern) == expected
+    assert _.words(text, pattern) == expected
