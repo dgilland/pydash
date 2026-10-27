@@ -1252,7 +1252,7 @@ def map_values_deep(
 
     Args:
         obj: Object to map.
-        iteratee: Iteratee applied to each value.
+        iteratee: Iteratee applied to each value. Defaults to :func:`.identity`.
         property_path: Path key(s) to access.
 
     Returns:
@@ -1288,7 +1288,7 @@ def map_values_deep(
 
         return assign(obj, map_values(obj, deep_iteratee))  # type: ignore
     else:
-        return callit(iteratee, obj, properties)
+        return obj if iteratee is None else callit(iteratee, obj, properties)
 
 
 def apply(obj: T, func: t.Callable[[T], T2]) -> T2:

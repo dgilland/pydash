@@ -1281,6 +1281,25 @@ def test_xor_with_with_only_comparator():
     assert _.xor_with((1, 2), lambda left, right: left == right) == [1, 2]
 
 
+@parametrize("as_tuple", [False, True])
+@parametrize("keyword", [False, True])
+def test_xor_with_single_array_deduplicates_using_comparator(as_tuple, keyword):
+    values = [{"id": 1, "name": "first"}, {"id": 1, "name": "second"}, {"id": 2}]
+    array = tuple(values) if as_tuple else values
+
+    def comparator(left, right):
+        return left["id"] == right["id"]
+
+    result = _.xor_with(array, comparator=comparator) if keyword else _.xor_with(array, comparator)
+
+    assert result == [values[0], values[2]]
+    assert len(array) == 3
+
+
+def test_xor_with_single_array_deduplicates_by_equality():
+    assert _.xor_with([1, 1, 2]) == [1, 2]
+
+
 @parametrize("extra_arrays", [([],), ([{"id": 3}],), ([{"id": 3}], [{"id": 4}])])
 @parametrize("as_tuple", [False, True])
 def test_xor_with_deduplicates_using_comparator(extra_arrays, as_tuple):
@@ -1625,3 +1644,20 @@ def test_chunk_large_integer_size(size):
 def test_chunk_does_not_round_large_sequence_length():
     result = _.chunk(range(2**53 + 1), 2**53)
     assert result == [range(2**53), range(2**53, 2**53 + 1)]
+
+
+@parametrize("function", [_.pull_all_by, _.pull_all_with])
+@parametrize("values_factory", [list, iter])
+def test_pull_custom_criteria_preserve_equal_distinct_values(function, values_factory):
+    array = [1, True, "keep"]
+    values = values_factory([1])
+    if function is _.pull_all_by:
+        result = function(array, values, type)
+    else:
+        result = function(
+            array, values, lambda left, right: type(left) is type(right) and left == right
+        )
+    assert result is array
+    assert len(array) == 2
+    assert array[0] is True
+    assert array[1] == "keep"

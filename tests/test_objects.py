@@ -786,6 +786,25 @@ def test_map_values_deep(case, expected):
     assert _.map_values_deep(*case) == expected
 
 
+@parametrize("explicit_none", [False, True])
+@parametrize("obj", [{"a": [1, {"b": None, "c": False}], "d": ""}, [1, {"a": [2]}], {}, []])
+def test_map_values_deep_default_iteratee(obj, explicit_none):
+    expected = deepcopy(obj)
+    args = (None,) if explicit_none else ()
+
+    assert _.map_values_deep(obj, *args) is obj
+    assert obj == expected
+
+
+def test_map_values_deep_default_iteratee_chained():
+    child = {"value": 2}
+    obj = {"items": [1, child]}
+
+    assert _.chain(obj).map_values_deep().value() is obj
+    assert obj == {"items": [1, {"value": 2}]}
+    assert obj["items"][1] is child
+
+
 @parametrize(
     "case,expected",
     [
