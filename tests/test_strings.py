@@ -1414,7 +1414,7 @@ def test_js_regex_line_flags_in_replacement():
     assert _.reg_exp_js_replace("one\ntwo", "/^two/m", "X") == "one\nX"
     assert _.reg_exp_js_replace("a\nb", "/a.b/s", "X") == "X"
 
-    
+
 @parametrize(
     "text,pattern,expected",
     [
