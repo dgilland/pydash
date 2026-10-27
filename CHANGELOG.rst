@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Pass each element to ``partial`` and ``partial_right`` wrappers of ``round_``, ``floor``,
+  and ``ceil`` when they are used as iteratees.
 - Preserve custom removal criteria throughout ``pull_all_by`` and ``pull_all_with``.
 - Return complete global JavaScript-style regex matches when capture groups are present.
 - Use zero as the other bound when ``random`` receives a single bound, as documented.
