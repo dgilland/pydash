@@ -795,6 +795,25 @@ def test_order_by(case, expected):
     assert _.order_by(*case) == expected
 
 
+def test_order_by_accepts_iterable_orders():
+    items = [
+        {"a": 1, "b": 1, "id": "first"},
+        {"a": 2, "b": 2, "id": "second"},
+        {"a": 2, "b": 1, "id": "third"},
+        {"a": 2, "b": 1, "id": "fourth"},
+    ]
+
+    expected = _.order_by(items, ["a", "b"], [False, True])
+    assert _.order_by(items, ["a", "b"], (order for order in [False, True])) == expected
+    assert [item["id"] for item in expected] == ["third", "fourth", "second", "first"]
+
+    # An empty iterable should behave like an empty list, including key-prefix directions.
+    assert _.order_by(items, ["-a"], iter([])) == _.order_by(items, ["-a"], [])
+
+    # Unspecified per-key directions still default to ascending.
+    assert _.order_by(items, ["a", "b"], iter([False])) == _.order_by(items, ["a", "b"], [False])
+
+
 @parametrize(
     "case,expected",
     [

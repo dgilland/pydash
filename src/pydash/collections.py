@@ -921,8 +921,23 @@ def includes(
     return target in collection_values
 
 
+@t.overload
+def invoke_map(
+    collection: t.Iterable[t.Any], path: t.Callable[..., T], *args: t.Any, **kwargs: t.Any
+) -> t.List[T]: ...
+
+
+@t.overload
 def invoke_map(
     collection: t.Iterable[t.Any], path: PathT, *args: t.Any, **kwargs: t.Any
+) -> t.List[t.Any]: ...
+
+
+def invoke_map(
+    collection: t.Iterable[t.Any],
+    path: t.Union[PathT, t.Callable[..., t.Any]],
+    *args: t.Any,
+    **kwargs: t.Any,
 ) -> t.List[t.Any]:
     """
     Invokes the method at `path` of each element in `collection`, returning a list of the results of
@@ -1203,6 +1218,9 @@ def order_by(collection, keys, orders=None, reverse=False):
     if pyd.is_boolean(orders):
         reverse = orders
         orders = None
+
+    if orders:
+        orders = list(orders)
 
     comparers = []
 

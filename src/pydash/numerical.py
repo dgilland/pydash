@@ -55,6 +55,7 @@ __all__ = (
 T = t.TypeVar("T")
 T2 = t.TypeVar("T2")
 T3 = t.TypeVar("T3")
+MedianT = t.TypeVar("MedianT", bound=NumberT)
 
 
 INFINITY = float("inf")
@@ -582,42 +583,48 @@ def max_by(collection, iteratee=None, default=UNSET):
 
 @t.overload
 def median(
-    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], NumberT]
-) -> t.Union[float, int]: ...
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T, t.Dict[T, T2]], MedianT]
+) -> t.Union[float, MedianT]: ...
 
 
 @t.overload
 def median(
-    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], NumberT]
-) -> t.Union[float, int]: ...
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], MedianT]
+) -> t.Union[float, MedianT]: ...
 
 
 @t.overload
 def median(
-    collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], NumberT]
-) -> t.Union[float, int]: ...
+    collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], MedianT]
+) -> t.Union[float, MedianT]: ...
 
 
 @t.overload
 def median(
-    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], NumberT]
-) -> t.Union[float, int]: ...
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], MedianT]
+) -> t.Union[float, MedianT]: ...
 
 
 @t.overload
 def median(
-    collection: t.Iterable[T], iteratee: t.Callable[[T, int], NumberT]
-) -> t.Union[float, int]: ...
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int], MedianT]
+) -> t.Union[float, MedianT]: ...
 
 
 @t.overload
 def median(
-    collection: t.Iterable[T], iteratee: t.Callable[[T], NumberT]
-) -> t.Union[float, int]: ...
+    collection: t.Iterable[T], iteratee: t.Callable[[T], MedianT]
+) -> t.Union[float, MedianT]: ...
 
 
 @t.overload
-def median(collection: t.Iterable[NumberT], iteratee: None = None) -> t.Union[float, int]: ...
+def median(
+    collection: t.Mapping[t.Any, MedianT], iteratee: None = None
+) -> t.Union[float, MedianT]: ...
+
+
+@t.overload
+def median(collection: t.Iterable[MedianT], iteratee: None = None) -> t.Union[float, MedianT]: ...
 
 
 def median(collection, iteratee=None):
