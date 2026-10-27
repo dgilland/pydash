@@ -1644,6 +1644,8 @@ def reduce_right(collection, iteratee=None, accumulator=None):
 
         >>> reduce_right([1, 2, 3, 4], lambda total, x: total**x)
         4096
+        >>> reduce_right([10, 20, 30], lambda total, x, index: total + x * (index + 1), 0)
+        140
 
     .. versionadded:: 1.0.0
 
@@ -1653,11 +1655,7 @@ def reduce_right(collection, iteratee=None, accumulator=None):
     .. versionchanged:: 4.0.0
         Removed alias ``foldr``.
     """
-    if isinstance(collection, Mapping):
-        collection = dict(reversed(list(collection.items())))
-    else:
-        collection = list(collection)[::-1]
-
+    collection = dict(reversed(list(iterator(collection))))
     return reduce_(collection, iteratee, accumulator)
 
 

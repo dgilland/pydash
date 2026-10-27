@@ -72,3 +72,4 @@ Contributors
 - Gabrieljr42, `Gabrieljr42@github <https://github.com/Gabrieljr42>`_
 - Luxe7, `Luxe7@github <https://github.com/Luxe7>`_
 - Shaowei Chen, `123qeew@github <https://github.com/123qeew>`_
+- jipeng6036-del, `jipeng6036-del@github <https://github.com/jipeng6036-del>`_

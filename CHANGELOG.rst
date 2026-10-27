@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
+  callbacks instead of numbering the reversed values again.
 - Preserve repeated argument indexes in ``rearg`` instead of silently dropping duplicates.
 - Preserve numeric return types, including Decimal, in median and its chain wrapper.
 - Apply clone customizations to object attributes without requiring item assignment.
