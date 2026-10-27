@@ -7,6 +7,19 @@ Unreleased
 ----------
 
 - Preserve repeated argument indexes in ``rearg`` instead of silently dropping duplicates.
+- Preserve numeric return types, including Decimal, in median and its chain wrapper.
+- Apply clone customizations to object attributes without requiring item assignment.
+- Preserve leaf values in ``map_values_deep`` when its optional iteratee is omitted or ``None``.
+- Keep positional iteratee arguments when partials bind keyword-only or variable keyword arguments.
+- Infer callable return types in ``invoke_map`` and its chain wrapper.
+- Deduplicate single-array ``xor_with`` results using positional or keyword comparators.
+- Honor multiline and dot-all flags in JavaScript-style regex matching and replacement.
+- Pass each element to ``partial`` and ``partial_right`` wrappers of ``round_``, ``floor``,
+  and ``ceil`` when they are used as iteratees.
+- Preserve custom removal criteria throughout ``pull_all_by`` and ``pull_all_with``.
+- Return complete global JavaScript-style regex matches when capture groups are present.
+- Use zero as the other bound when ``random`` receives a single bound, as documented.
+- Invoke false-valued ``retry`` exception callbacks instead of silently skipping them.
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).

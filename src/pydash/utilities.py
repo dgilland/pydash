@@ -21,7 +21,7 @@ from typing_extensions import Literal, ParamSpec, Protocol, Type
 
 import pydash as pyd
 
-from .helpers import NUMBER_TYPES, UNSET, base_get, callit, getargcount, iterator
+from .helpers import NUMBER_TYPES, UNSET, Unset, base_get, callit, getargcount, iterator
 from .types import PathT
 
 
@@ -957,7 +957,11 @@ def random(
 ) -> float: ...
 
 
-def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floating: bool = False):
+def random(
+    start: t.Union[float, int, Unset] = UNSET,
+    stop: t.Union[float, int, Unset] = UNSET,
+    floating: bool = False,
+):
     """
     Produces a random number between `start` and `stop` (inclusive). If only one argument is
     provided a number between 0 and the given number will be returned. If floating is truthy or
@@ -984,6 +988,13 @@ def random(start: t.Union[float, int] = 0, stop: t.Union[float, int] = 1, floati
 
     .. versionadded:: 1.0.0
     """
+    if isinstance(start, Unset):
+        start = 0
+        if isinstance(stop, Unset):
+            stop = 1
+    elif isinstance(stop, Unset):
+        start, stop = 0, start
+
     floating = isinstance(start, float) or isinstance(stop, float) or floating is True
 
     if stop < start:
@@ -1007,14 +1018,15 @@ def range_(start: int, stop: int, step: int = 1) -> t.Generator[int, None, None]
 
 def range_(*args):
     """
-    Creates a list of numbers (positive and/or negative) progressing from start up to but not
-    including end. If `start` is less than `stop`, a zero-length range is created unless a negative
-    `step` is specified.
+    Yields numbers from `start` up to, but not including, `stop`. If `step` is omitted,
+    it defaults to ``1`` when `start` < `stop`, otherwise ``-1``. An explicit nonzero
+    `step` that moves away from `stop` produces an empty range.
 
     Args:
         start: Integer to start with. Defaults to ``0``.
         stop: Integer to stop at.
-        step: The value to increment or decrement by. Defaults to ``1``.
+        step: The value to increment or decrement by. Defaults to ``1`` if `start`
+            < `stop` else ``-1``.
 
     Yields:
         Next integer in range.
@@ -1029,6 +1041,10 @@ def range_(*args):
         [0, 2, 4]
         >>> list(range_(4, 1))
         [4, 3, 2]
+        >>> list(range_(4, 1, 1))
+        []
+        >>> list(range_(-3))
+        [0, -1, -2]
 
     .. versionadded:: 1.0.0
 
@@ -1054,7 +1070,8 @@ def range_right(start: int, stop: int, step: int = 1) -> t.Generator[int, None, 
 
 def range_right(*args):
     """
-    Similar to :func:`range_`, except that it populates the values in descending order.
+    Yields the values of :func:`range_` in reverse order. Reversing a descending range
+    produces values in ascending order.
 
     Args:
         start: Integer to start with. Defaults to ``0``.
@@ -1073,6 +1090,10 @@ def range_right(*args):
         [3, 2, 1]
         >>> list(range_right(0, 6, 2))
         [4, 2, 0]
+        >>> list(range_right(4, 1))
+        [2, 3, 4]
+        >>> list(range_right(-3))
+        [-2, -1, 0]
 
     .. versionadded:: 4.0.0
     """
@@ -1218,13 +1239,13 @@ def retry(  # noqa: PLR0917
     ):
         raise TypeError("exceptions must be a tuple of Exception types")
 
-    if on_exception and not callable(on_exception):
+    if on_exception is not None and not callable(on_exception):
         raise TypeError("on_exception must be a callable")
 
     if jitter and not isinstance(jitter, tuple):
         jitter = (0, jitter)
 
-    on_exc_argcount = getargcount(on_exception, maxargs=2) if on_exception else None
+    on_exc_argcount = getargcount(on_exception, maxargs=2) if on_exception is not None else None
 
     def decorator(func):
         @wraps(func)
@@ -1236,7 +1257,7 @@ def retry(  # noqa: PLR0917
                 try:
                     return func(*args, **kwargs)
                 except exceptions as exc:
-                    if on_exception:
+                    if on_exception is not None:
                         callit(on_exception, exc, attempt, argcount=on_exc_argcount)
 
                     if attempt == attempts:

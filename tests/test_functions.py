@@ -397,6 +397,19 @@ def test_partial_as_iteratee():
 
 
 @parametrize(
+    "func,expected",
+    [
+        (_.partial_right(_.round_, 2), [1.23, 2.35]),
+        (_.partial(_.round_, precision=2), [1.23, 2.35]),
+        (_.partial_right(_.floor, 1), [1.2, 2.3]),
+        (_.partial_right(_.ceil, 1), [1.3, 2.4]),
+    ],
+)
+def test_partial_of_rounding_function_as_iteratee(func, expected):
+    assert _.map_([1.234, 2.345], func) == expected
+
+
+@parametrize(
     "case,case_args,case_kwargs,args,expected",
     [
         (lambda a, b, c: a + b + c, ("a", "b"), {}, ("c",), "cab"),
@@ -660,3 +673,31 @@ def test_can_be_used_as_predicate_argcount_is_known():
         return x > 0
 
     assert _.filter_([-1, 0, 1], _.negate(is_positive)) == [-1, 0]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_keyword_only_arguments_as_iteratee(factory):
+    def transform(value, *, increment):
+        return value + increment
+
+    wrapped = factory(transform, increment=2)
+    assert wrapped(1) == 3
+    assert _.map_([1, 2], wrapped) == [3, 4]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_variable_keyword_arguments_as_iteratee(factory):
+    def transform(value, **options):
+        return value + options["increment"]
+
+    assert _.map_([1, 2], factory(transform, increment=2)) == [3, 4]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_nested_and_builtin_iteratees(factory):
+    def transform(value, increment=0):
+        return value + increment
+
+    assert _.map_([1, 2], factory(transform, increment=2)) == [3, 4]
+    assert _.map_([1, 2], factory(factory(transform), increment=2)) == [3, 4]
+    assert _.map_([1, 2], factory(str)) == ["1", "2"]
