@@ -6,6 +6,12 @@ Changelog
 Unreleased
 ----------
 
+- Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
+  callbacks instead of numbering the reversed values again.
+- Preserve repeated argument indexes in ``rearg`` instead of silently dropping duplicates.
+- Preserve numeric return types, including Decimal, in median and its chain wrapper.
+- Apply clone customizations to object attributes without requiring item assignment.
+- Preserve leaf values in ``map_values_deep`` when its optional iteratee is omitted or ``None``.
 - Keep positional iteratee arguments when partials bind keyword-only or variable keyword arguments.
 - Infer callable return types in ``invoke_map`` and its chain wrapper.
 - Deduplicate single-array ``xor_with`` results using positional or keyword comparators.

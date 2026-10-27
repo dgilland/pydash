@@ -634,9 +634,9 @@ class Rearg(_WithArgCount, t.Generic[P, T]):
 
         # Index `indexes` by the index value, so we can do a lookup mapping by walking the function
         # arguments.
-        self.indexes = {
-            src_index: dest_index for dest_index, src_index in enumerate(pyd.flatten(indexes))
-        }
+        self.indexes: t.Dict[int, t.List[int]] = {}
+        for dest_index, src_index in enumerate(pyd.flatten(indexes)):
+            self.indexes.setdefault(src_index, []).append(dest_index)
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results from :attr:`func` using rearranged arguments."""
@@ -646,11 +646,12 @@ class Rearg(_WithArgCount, t.Generic[P, T]):
         # Walk arguments to ensure each one is added to the final argument list.
         for src_index, arg in enumerate(args):
             # NOTE: dest_index will range from 0 to len(indexes).
-            dest_index = self.indexes.get(src_index)
+            dest_indexes = self.indexes.get(src_index)
 
-            if dest_index is not None:
-                # Remap argument index.
-                reargs[dest_index] = arg
+            if dest_indexes is not None:
+                # An argument can be requested at more than one destination.
+                for dest_index in dest_indexes:
+                    reargs[dest_index] = arg
             else:
                 # Argumnet index is not contained in `indexes` so stick in the back.
                 rest.append(arg)
@@ -1466,6 +1467,8 @@ def rearg(func: t.Callable[P, T], *indexes: int) -> Rearg[P, T]:
         (2, 3, 1)
         >>> jumble("a", "b", "c", "d", "e")
         ('b', 'c', 'd', 'a', 'e')
+        >>> rearg(lambda *args: args, 1, 1, 0)("a", "b")
+        ('b', 'b', 'a')
 
     .. versionadded:: 3.0.0
     """

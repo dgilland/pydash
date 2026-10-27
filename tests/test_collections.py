@@ -13,6 +13,33 @@ from . import helpers
 parametrize = pytest.mark.parametrize
 
 
+@parametrize("factory", [list, tuple, iter])
+def test_right_reductions_keep_original_sequence_indexes(factory):
+    values = [10, 20, 30]
+
+    def collect(accumulator, value, index):
+        return accumulator + [(index, value)]
+
+    expected = [(2, 30), (1, 20), (0, 10)]
+    assert _.reduce_right(factory(values), collect, []) == expected
+    assert _.reductions_right(factory(values), collect, []) == [
+        expected[:1],
+        expected[:2],
+        expected,
+    ]
+    assert _.reductions(factory(values), collect, [], from_right=True)[-1] == expected
+    assert values == [10, 20, 30]
+
+
+@parametrize("factory", [list, tuple, iter])
+def test_right_reductions_keep_indexes_without_an_initial_accumulator(factory):
+    def weighted_total(accumulator, value, index):
+        return accumulator + value * (index + 1)
+
+    assert _.reduce_right(factory([10, 20, 30]), weighted_total) == 80
+    assert _.reductions_right(factory([10, 20, 30]), weighted_total) == [70, 80]
+
+
 @parametrize("factory", [dict, MappingProxyType])
 def test_reduce_right_mapping_order(factory):
     collection = factory({"a": "A", "b": "B", "c": "C"})
@@ -766,6 +793,25 @@ def test_nest(case, expected):
 )
 def test_order_by(case, expected):
     assert _.order_by(*case) == expected
+
+
+def test_order_by_accepts_iterable_orders():
+    items = [
+        {"a": 1, "b": 1, "id": "first"},
+        {"a": 2, "b": 2, "id": "second"},
+        {"a": 2, "b": 1, "id": "third"},
+        {"a": 2, "b": 1, "id": "fourth"},
+    ]
+
+    expected = _.order_by(items, ["a", "b"], [False, True])
+    assert _.order_by(items, ["a", "b"], (order for order in [False, True])) == expected
+    assert [item["id"] for item in expected] == ["third", "fourth", "second", "first"]
+
+    # An empty iterable should behave like an empty list, including key-prefix directions.
+    assert _.order_by(items, ["-a"], iter([])) == _.order_by(items, ["-a"], [])
+
+    # Unspecified per-key directions still default to ascending.
+    assert _.order_by(items, ["a", "b"], iter([False])) == _.order_by(items, ["a", "b"], [False])
 
 
 @parametrize(
