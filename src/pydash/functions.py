@@ -611,7 +611,18 @@ class Partial(_WithArgCount, t.Generic[T]):
         )
         if func_argcount is None:
             return None
-        argcount = func_argcount - len(self.args) - len(self.kwargs)
+        try:
+            argspec = getfullargspec(self.func)
+        except TypeError:
+            bound_keywords = len(self.kwargs)
+        else:
+            # Keyword-only parameters and **kwargs do not consume positional slots.
+            bound_keywords = (
+                len(self.kwargs)
+                if argspec.varargs
+                else sum(key in argspec.args for key in self.kwargs)
+            )
+        argcount = func_argcount - len(self.args) - bound_keywords
         return argcount if argcount >= 0 else None
 
 
