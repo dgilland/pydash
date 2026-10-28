@@ -1,6 +1,6 @@
 from collections import UserDict, namedtuple
 import math
-from operator import attrgetter, itemgetter, methodcaller
+from operator import add, attrgetter, itemgetter, methodcaller, mul
 from types import MappingProxyType
 
 import pytest
@@ -883,6 +883,11 @@ def test_pluck(case, expected):
         (([1, 2, 3], None), 1),
         (([1, 2, 3], helpers.reduce_iteratee0), 6),
         (({"a": 1, "b": 2, "c": 3}, helpers.reduce_iteratee1, {}), {"a": 3, "b": 6, "c": 9}),
+        (([1, 2, 3, 4], mul), 24),
+        (([1, 2, 3], add, 10), 16),
+        (([3, 9, 2], max), 9),
+        (([12, 18], math.gcd), 6),
+        (([-3, -2], abs), 3),
     ],
 )
 def test_reduce_(case, expected):
@@ -929,6 +934,8 @@ def test_reduce_raise(case, exception):
         (([1, 2, 3], helpers.reduce_iteratee0), 6),
         (([[0, 1], [2, 3], [4, 5]], helpers.reduce_right_iteratee0), [4, 5, 2, 3, 0, 1]),
         (({"a": 1, "b": 2, "c": 3}, helpers.reduce_iteratee1, {}), {"a": 3, "b": 6, "c": 9}),
+        ((["a", "b", "c"], add), "cba"),
+        (([-3, -2], abs), 2),
     ],
 )
 def test_reduce_right(case, expected):
@@ -953,6 +960,8 @@ def test_reduce_right_exception(case, exception):
         (([1, 2, 3], None), [1, 1]),
         (([1, 2, 3], helpers.reduce_iteratee0), [3, 6]),
         (([1, 2, 3, 4, 5], helpers.reduce_iteratee0, 0), [1, 3, 6, 10, 15]),
+        (([1, 2, 3], add), [3, 6]),
+        (([-3, -2], abs), [3]),
     ],
 )
 def test_reductions(case, expected):
@@ -968,6 +977,8 @@ def test_reductions(case, expected):
             ([[0, 1], [2, 3], [4, 5]], helpers.reduce_right_iteratee0),
             [[4, 5, 2, 3], [4, 5, 2, 3, 0, 1]],
         ),
+        (([1, 2, 3], add), [5, 6]),
+        (([-3, -2], abs), [2]),
     ],
 )
 def test_reductions_right(case, expected):

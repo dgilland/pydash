@@ -10,6 +10,9 @@ Unreleased
 - Accept distinct uniqueness criterion types in ``sorted_uniq_by`` and its chain wrapper.
 - Return an empty single-item ``slice_`` for negative indexes before the start of a sequence.
 - Fixed float-list ``power`` exponent types for direct and chained calls.
+- Pass both the accumulator and the value to builtin reducers such as ``operator.add``, ``max``,
+  and ``math.gcd`` in ``reduce_``, ``reduce_right``, ``reductions``, ``reductions_right``,
+  ``zip_with``, and ``unzip_with``.
 - Compare literal dictionary keys in ``is_equal_with`` instead of interpreting them as paths.
 - Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
   callbacks instead of numbering the reversed values again.
