@@ -772,6 +772,17 @@ def test_slice_(case, expected):
     assert _.slice_(*case) == expected
 
 
+@parametrize("array", [[1, 2, 3], (1, 2, 3), "abc"])
+@parametrize("start", [-5, -6, -(10**100)])
+def test_slice_single_item_before_start(array, start):
+    assert _.slice_(array, start) == array[:0]
+
+
+@parametrize("array", [[1, 2, 3], (1, 2, 3), "abc"])
+def test_slice_explicit_negative_end(array):
+    assert _.slice_(array, -5, -1) == array[:-1]
+
+
 @parametrize(
     "case,expected",
     [
