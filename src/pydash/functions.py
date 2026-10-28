@@ -7,7 +7,7 @@ Functions that wrap other functions.
 from __future__ import annotations
 
 from functools import cached_property
-from inspect import getfullargspec
+from inspect import getfullargspec, isfunction, ismethod
 import itertools
 import threading
 import time
@@ -16,7 +16,7 @@ import typing as t
 from typing_extensions import Concatenate, Literal, ParamSpec, Protocol
 
 import pydash as pyd
-from pydash.helpers import getargcount
+from pydash.helpers import _getargcount, getargcount
 
 
 __all__ = (
@@ -217,7 +217,18 @@ class Curry(t.Generic[T1, T]):
 
     def __init__(self, func, arity, args=None, kwargs=None) -> None:
         self.func = func
-        self.arity = len(getfullargspec(func).args) if arity is None else arity
+        if arity is None:
+            argspec = getfullargspec(func)
+            arity = len(argspec.args)
+            # A fixed positional bound method already has its receiver supplied.
+            # Retain the existing argument-count model for other signatures.
+            if (
+                ismethod(func)
+                and arity
+                and not (argspec.varargs or argspec.varkw or argspec.kwonlyargs)
+            ):
+                arity -= 1
+        self.arity = arity
         self.args = () if args is None else args
         self.kwargs = {} if kwargs is None else kwargs
 
@@ -605,10 +616,24 @@ class Partial(_WithArgCount, t.Generic[T]):
 
     @cached_property
     def _argcount(self) -> t.Optional[int]:
-        func_argcount = getargcount(self.func, None)
+        # A plain function's `_argcount` can be an iteratee hint, so count its real parameters.
+        func_argcount = (
+            _getargcount(self.func, None) if isfunction(self.func) else getargcount(self.func, None)
+        )
         if func_argcount is None:
             return None
-        argcount = func_argcount - len(self.args) - len(self.kwargs)
+        try:
+            argspec = getfullargspec(self.func)
+        except TypeError:
+            bound_keywords = len(self.kwargs)
+        else:
+            # Keyword-only parameters and **kwargs do not consume positional slots.
+            bound_keywords = (
+                len(self.kwargs)
+                if argspec.varargs
+                else sum(key in argspec.args for key in self.kwargs)
+            )
+        argcount = func_argcount - len(self.args) - bound_keywords
         return argcount if argcount >= 0 else None
 
 
@@ -620,9 +645,9 @@ class Rearg(_WithArgCount, t.Generic[P, T]):
 
         # Index `indexes` by the index value, so we can do a lookup mapping by walking the function
         # arguments.
-        self.indexes = {
-            src_index: dest_index for dest_index, src_index in enumerate(pyd.flatten(indexes))
-        }
+        self.indexes: t.Dict[int, t.List[int]] = {}
+        for dest_index, src_index in enumerate(pyd.flatten(indexes)):
+            self.indexes.setdefault(src_index, []).append(dest_index)
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results from :attr:`func` using rearranged arguments."""
@@ -632,11 +657,12 @@ class Rearg(_WithArgCount, t.Generic[P, T]):
         # Walk arguments to ensure each one is added to the final argument list.
         for src_index, arg in enumerate(args):
             # NOTE: dest_index will range from 0 to len(indexes).
-            dest_index = self.indexes.get(src_index)
+            dest_indexes = self.indexes.get(src_index)
 
-            if dest_index is not None:
-                # Remap argument index.
-                reargs[dest_index] = arg
+            if dest_indexes is not None:
+                # An argument can be requested at more than one destination.
+                for dest_index in dest_indexes:
+                    reargs[dest_index] = arg
             else:
                 # Argumnet index is not contained in `indexes` so stick in the back.
                 rest.append(arg)
@@ -1452,6 +1478,8 @@ def rearg(func: t.Callable[P, T], *indexes: int) -> Rearg[P, T]:
         (2, 3, 1)
         >>> jumble("a", "b", "c", "d", "e")
         ('b', 'c', 'd', 'a', 'e')
+        >>> rearg(lambda *args: args, 1, 1, 0)("a", "b")
+        ('b', 'b', 'a')
 
     .. versionadded:: 3.0.0
     """
