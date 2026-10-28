@@ -950,6 +950,17 @@ def test_sorted_uniq_by(case, iteratee, expected):
 
 
 @parametrize(
+    "iteratee,expected",
+    [(len, ["a", "bb"]), (lambda word: [len(word)], ["a", "bb"]), (lambda word: None, ["bb"])],
+)
+def test_sorted_uniq_by_distinct_criterion_types(iteratee, expected):
+    words = ["bb", "a", "c", "dd"]
+    assert _.sorted_uniq_by(words, iteratee) == expected
+    assert _.chain(words).sorted_uniq_by(iteratee).value() == expected
+    assert words == ["bb", "a", "c", "dd"]
+
+
+@parametrize(
     "case,expected,after",
     [
         (([1, 2, 3], 1, 0, "splice"), [], [1, "splice", 2, 3]),

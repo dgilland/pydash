@@ -76,3 +76,5 @@ Contributors
 - Edson Henrique, `edsonsims@github <https://github.com/edsonsims>`_
 - Mayank Dhingra, `mayankdhingra02@github <https://github.com/mayankdhingra02>`_
 - KennyMcSimpson, `KennyMcSimpson@github <https://github.com/KennyMcSimpson>`_
+
+- jihtsan, `jihtsan@github <https://github.com/jihtsan>`_
