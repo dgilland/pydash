@@ -466,9 +466,7 @@ class AllFuncs:
 
     def sorted_uniq_by(
         self: "Chain[t.Iterable['SupportsRichComparisonT']]",
-        iteratee: t.Union[
-            t.Callable[["SupportsRichComparisonT"], "SupportsRichComparisonT"], None
-        ] = None,
+        iteratee: t.Union[t.Callable[["SupportsRichComparisonT"], t.Any], None] = None,
     ) -> "Chain[t.List['SupportsRichComparisonT']]":
         return self._wrap(pyd.sorted_uniq_by)(iteratee)
 

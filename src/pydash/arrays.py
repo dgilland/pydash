@@ -1867,9 +1867,7 @@ def sorted_uniq(array: t.Iterable["SupportsRichComparisonT"]) -> t.List["Support
 
 def sorted_uniq_by(
     array: t.Iterable["SupportsRichComparisonT"],
-    iteratee: t.Union[
-        t.Callable[["SupportsRichComparisonT"], "SupportsRichComparisonT"], None
-    ] = None,
+    iteratee: t.Union[t.Callable[["SupportsRichComparisonT"], t.Any], None] = None,
 ) -> t.List["SupportsRichComparisonT"]:
     """
     This method is like :func:`sorted_uniq` except that it accepts iteratee which is invoked for
