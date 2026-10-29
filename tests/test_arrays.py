@@ -1,4 +1,5 @@
 import math
+import typing as t
 
 import pytest
 
@@ -6,6 +7,16 @@ import pydash as _
 
 
 parametrize = pytest.mark.parametrize
+
+
+class NoTruthList(list[t.Any]):
+    def __bool__(self):
+        raise ValueError("The truth value of an array is ambiguous")
+
+
+class FalseList(list[t.Any]):
+    def __bool__(self):
+        return False
 
 
 @parametrize(
@@ -1206,6 +1217,7 @@ def test_unzip(case, expected):
         (([],), []),
         (([[1, 10, 100], [2, 20, 200]],), [(1, 2), (10, 20), (100, 200)]),
         (([[2, 4, 6], [2, 2, 2]], _.power), [4, 16, 36]),
+        ((None,), []),
     ],
 )
 def test_unzip_with(case, expected):
@@ -1581,6 +1593,15 @@ def test_intersection_by_single_array_uses_iteratee(keyword):
     assert array == [first, duplicate, second]
 
 
+@pytest.mark.parametrize("container", [NoTruthList, FalseList])
+def test_intersection_by_empty_does_not_evaluate_iteratee(container):
+    def unexpected_iteratee(value):
+        pytest.fail("An empty intersection should not evaluate the iteratee")
+
+    assert _.intersection_by(container([0]), container(), iteratee=unexpected_iteratee) == []
+    assert _.intersection_by(container(), container([0]), iteratee=unexpected_iteratee) == []
+
+
 @parametrize("keyword", [False, True])
 def test_intersection_with_single_array_uses_comparator(keyword):
     first = {"id": 1, "name": "first"}
@@ -1709,3 +1730,28 @@ def test_xor_with_many_iterators(positional):
         result = _.xor_with((anchor,), *others, comparator=comparator)
     assert result == [anchor]
     assert all(list(other) == [] for other in others)
+
+
+@pytest.mark.parametrize("container", [NoTruthList, FalseList])
+@pytest.mark.parametrize(
+    "operation,expected",
+    [
+        (lambda c: _.uniq_by(c([2, 1, 2])), [2, 1]),
+        (lambda c: _.uniq_with(c([2, 1, 2])), [2, 1]),
+        (lambda c: _.difference_by([1, 2, 3], c([2])), [1, 3]),
+        (lambda c: _.difference_with([1, 2, 3], c([2])), [1, 3]),
+        (lambda c: _.intersection_by(c([1, 2, 3]), c([2])), [2]),
+        (lambda c: _.intersection_with(c([1, 2, 3]), c([2])), [2]),
+        (lambda c: _.unzip_with(c([(1, 2), (3, 4)]), _.add), [4, 6]),
+    ],
+)
+def test_array_operations_do_not_test_input_truth(container, operation, expected):
+    assert operation(container) == expected
+
+
+@pytest.mark.parametrize("container", [NoTruthList, FalseList])
+def test_empty_arrays_without_truth_values(container):
+    assert _.uniq_by(container()) == []
+    assert _.intersection_by([1], container()) == []
+    assert _.difference_with([1], container()) == [1]
+    assert _.unzip_with(container()) == []

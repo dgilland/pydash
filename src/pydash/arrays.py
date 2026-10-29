@@ -245,7 +245,7 @@ def difference_by(array, *others, **kwargs):
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     for other in others:
-        other = list(other) if other else []
+        other = list(other) if other is not None else []
         if not other:
             continue
         array = list(iterdifference(array, other, iteratee=iteratee))
@@ -308,7 +308,7 @@ def difference_with(array, *others, **kwargs):
         others = others[:-1]
 
     for other in others:
-        other = list(other) if other else []
+        other = list(other) if other is not None else []
         if not other:
             continue
         array = list(iterdifference(array, other, comparator=comparator))
@@ -2492,7 +2492,7 @@ def unzip_with(array, iteratee=None):
 
     .. versionadded:: 3.3.0
     """
-    if not array:
+    if array is None:
         return []
 
     result = unzip(array)
@@ -2940,7 +2940,7 @@ def iterintersperse(iterable, separator):
 
 def iterunique(array, comparator=None, iteratee=None):  # noqa: PLR0912
     """Yield each unique item in array."""
-    if not array:  # pragma: no cover
+    if array is None:  # pragma: no cover
         return
 
     if iteratee is not None:
@@ -2991,7 +2991,9 @@ def iterduplicates(array):
 def iterintersection(array, other, comparator=None, iteratee=None):
     """Yield intersecting values between `array` and `other` using `comparator` to determine if they
     intersect."""
-    if not array or not other:  # pragma: no cover
+    if array is None or other is None:  # pragma: no cover
+        return
+    if isinstance(other, Sized) and len(other) == 0:
         return
 
     if comparator is None:
