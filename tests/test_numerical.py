@@ -1,5 +1,5 @@
 from collections import UserDict
-from decimal import Decimal
+from decimal import Decimal, Inexact, localcontext
 import math
 from types import MappingProxyType
 
@@ -491,3 +491,24 @@ def test_median_preserves_decimal_values_and_empty_fallback():
     assert result == Decimal("1.5")
     assert _.median({1: Decimal("1"), 2: Decimal("2")}) == Decimal("1.5")
     assert math.isnan(_.median([]))
+
+
+@parametrize(
+    "function,value,expected",
+    [
+        (_.ceil, 1.2345, 1.24),
+        (_.floor, 1.2399, 1.23),
+        (_.ceil, -1.2399, -1.23),
+        (_.floor, -1.2345, -1.24),
+        (_.ceil, 1.2e30, 1.2e30),
+        (_.floor, -1.2e30, -1.2e30),
+    ],
+)
+def test_float_rounding_is_independent_of_decimal_context(function, value, expected):
+    with localcontext() as context:
+        context.prec = 3
+        context.Emax = 9
+        context.Emin = -9
+        context.traps[Inexact] = True
+        assert function(value, 2) == expected
+        assert function([value], 2) == [expected]

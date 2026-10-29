@@ -17,8 +17,6 @@ import typing as t
 
 from typing_extensions import TypeGuard
 
-import pydash as pyd
-
 from .helpers import BUILTINS, NUMBER_TYPES, UNSET, base_get, callit, iterator
 
 
@@ -766,7 +764,7 @@ def is_equal_with(value, other, customizer):
         equal = True
         # Walk a/b to determine equality using customizer.
         for key, val in iterator(value):
-            if pyd.has(other, key):
+            if isinstance(other, list) or key in other:
                 equal = is_equal_with(val, other[key], customizer)
             else:
                 equal = False
@@ -1230,9 +1228,8 @@ def is_match_with(
         cbk = customizer
 
     if isinstance(source, (Mapping, Iterable)) and not isinstance(source, str):
-        # Set equal to True if source is empty, otherwise, False and then allow deep comparison to
-        # determine equality.
-        equal = not source
+        # An empty source matches vacuously, including one-shot iterators.
+        equal = True
 
         # Walk a/b to determine equality.
         for key, value in iterator(source):
