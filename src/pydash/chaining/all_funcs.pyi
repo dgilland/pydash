@@ -2169,9 +2169,7 @@ class AllFuncs:
     @t.overload
     def power(self: "Chain[t.List[int]]", n: int) -> "Chain[t.List[t.Union[int, float]]]": ...
     @t.overload
-    def power(
-        self: "Chain[t.List[float]]", n: t.List[t.Union[int, float]]
-    ) -> "Chain[t.List[float]]": ...
+    def power(self: "Chain[t.List[float]]", n: t.Union[int, float]) -> "Chain[t.List[float]]": ...
     def power(self, n):
         return self._wrap(pyd.power)(n)
 

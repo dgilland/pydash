@@ -7,7 +7,8 @@ Unreleased
 ----------
 
 - Accept distinct uniqueness criterion types in ``sorted_uniq_by`` and its chain wrapper.
-
+- Return an empty single-item ``slice_`` for negative indexes before the start of a sequence.
+- Fixed float-list ``power`` exponent types for direct and chained calls.
 - Compare literal dictionary keys in ``is_equal_with`` instead of interpreting them as paths.
 - Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
   callbacks instead of numbering the reversed values again.
