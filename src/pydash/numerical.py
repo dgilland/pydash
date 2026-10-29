@@ -911,7 +911,7 @@ def power(x: t.List[int], n: int) -> t.List[t.Union[int, float]]: ...
 
 
 @t.overload
-def power(x: t.List[float], n: t.List[t.Union[int, float]]) -> t.List[float]: ...
+def power(x: t.List[float], n: t.Union[int, float]) -> t.List[float]: ...
 
 
 def power(x, n):
@@ -1294,8 +1294,14 @@ def rounder(func, x, precision, shift_exactly=False):
             # multiplying by a power of 10. Otherwise float representation error gets floored or
             # ceiled into the result (e.g. 0.29 * 100 == 28.999999999999996 so floor(0.29, 2)
             # would be 0.28).
-            shifted = decimal.Decimal(repr(float(item))).scaleb(precision)
-            return float(decimal.Decimal(func(shifted)).scaleb(-precision))
+            original = decimal.Decimal(repr(float(item))).as_tuple()
+            shifted = decimal.Decimal(
+                (original.sign, original.digits, int(original.exponent) + precision)
+            )
+            rounded = decimal.Decimal(func(shifted)).as_tuple()
+            return float(
+                decimal.Decimal((rounded.sign, rounded.digits, int(rounded.exponent) - precision))
+            )
         return func(item * factor) / factor
 
     result = None

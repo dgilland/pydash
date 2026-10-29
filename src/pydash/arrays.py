@@ -245,7 +245,7 @@ def difference_by(array, *others, **kwargs):
     iteratee, others = parse_iteratee("iteratee", *others, **kwargs)
 
     for other in others:
-        other = list(other) if other else []
+        other = list(other) if other is not None else []
         if not other:
             continue
         array = list(iterdifference(array, other, iteratee=iteratee))
@@ -308,7 +308,7 @@ def difference_with(array, *others, **kwargs):
         others = others[:-1]
 
     for other in others:
-        other = list(other) if other else []
+        other = list(other) if other is not None else []
         if not other:
             continue
         array = list(iterdifference(array, other, comparator=comparator))
@@ -1533,7 +1533,8 @@ def slice_(array: SequenceT, start: int = 0, end: t.Union[int, None] = None) -> 
     Args:
         array: Array to slice.
         start: Start index. Defaults to ``0``.
-        end: End index. Defaults to selecting the value at ``start`` index.
+        end: End index. Defaults to selecting the value at ``start`` index, or an empty
+            slice when ``start`` is out of range.
 
     Returns:
         Sliced list.
@@ -1550,7 +1551,7 @@ def slice_(array: SequenceT, start: int = 0, end: t.Union[int, None] = None) -> 
     .. versionadded:: 1.1.0
     """
     if end is None:
-        end = (start + 1) if start >= 0 else (len(array) + start + 1)
+        end = (start + 1) if start >= 0 else max(0, len(array) + start + 1)
 
     return array[start:end]  # type: ignore
 
@@ -1866,9 +1867,7 @@ def sorted_uniq(array: t.Iterable["SupportsRichComparisonT"]) -> t.List["Support
 
 def sorted_uniq_by(
     array: t.Iterable["SupportsRichComparisonT"],
-    iteratee: t.Union[
-        t.Callable[["SupportsRichComparisonT"], "SupportsRichComparisonT"], None
-    ] = None,
+    iteratee: t.Union[t.Callable[["SupportsRichComparisonT"], t.Any], None] = None,
 ) -> t.List["SupportsRichComparisonT"]:
     """
     This method is like :func:`sorted_uniq` except that it accepts iteratee which is invoked for
@@ -2491,7 +2490,7 @@ def unzip_with(array, iteratee=None):
 
     .. versionadded:: 3.3.0
     """
-    if not array:
+    if array is None:
         return []
 
     result = unzip(array)
@@ -2939,7 +2938,7 @@ def iterintersperse(iterable, separator):
 
 def iterunique(array, comparator=None, iteratee=None):  # noqa: PLR0912
     """Yield each unique item in array."""
-    if not array:  # pragma: no cover
+    if array is None:  # pragma: no cover
         return
 
     if iteratee is not None:
@@ -2990,7 +2989,9 @@ def iterduplicates(array):
 def iterintersection(array, other, comparator=None, iteratee=None):
     """Yield intersecting values between `array` and `other` using `comparator` to determine if they
     intersect."""
-    if not array or not other:  # pragma: no cover
+    if array is None or other is None:  # pragma: no cover
+        return
+    if isinstance(other, Sized) and len(other) == 0:
         return
 
     if comparator is None:

@@ -688,3 +688,18 @@ def test_is_tuple(case, expected):
 )
 def test_is_zero(case, expected):
     assert _.is_zero(case) == expected
+
+
+@parametrize("obj", [[], [1], {}, None])
+def test_is_match_empty_iterator_source(obj):
+    assert _.is_match(obj, iter([]))
+
+
+def test_is_match_does_not_truth_test_iterable_sources():
+    class Source(list):
+        def __bool__(self):
+            raise AssertionError("source truth value is not needed")
+
+    assert _.is_match([1, 2], Source([1]))
+    assert not _.is_match([2], Source([1]))
+    assert not _.is_match([], iter([1]))
