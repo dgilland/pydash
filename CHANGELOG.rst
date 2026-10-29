@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Preserve arithmetic result types in mean, mean_by, and moving_mean.
 - Accept distinct uniqueness criterion types in ``sorted_uniq_by`` and its chain wrapper.
 - Return an empty single-item ``slice_`` for negative indexes before the start of a sequence.
 - Fixed float-list ``power`` exponent types for direct and chained calls.

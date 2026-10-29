@@ -15,7 +15,7 @@ import typing as t
 import pydash as pyd
 
 from .helpers import UNSET, Unset, iterator, iteriteratee
-from .types import IterateeObjT, NumberNoDecimalT, NumberT, SupportsMul, SupportsRound
+from .types import IterateeObjT, NumberNoDecimalT, NumberT, SupportsMean, SupportsMul, SupportsRound
 
 
 if t.TYPE_CHECKING:
@@ -197,11 +197,11 @@ def sum_by(collection, iteratee=None):
 
 
 @t.overload
-def mean(collection: t.Mapping[t.Any, "SupportsAdd[int, t.Any]"]) -> float: ...
+def mean(collection: t.Mapping[t.Any, SupportsMean[T3]]) -> t.Union[T3, float]: ...
 
 
 @t.overload
-def mean(collection: t.Iterable["SupportsAdd[int, t.Any]"]) -> float: ...
+def mean(collection: t.Iterable[SupportsMean[T3]]) -> t.Union[T3, float]: ...
 
 
 def mean(collection):
@@ -232,48 +232,50 @@ def mean(collection):
 @t.overload
 def mean_by(
     collection: t.Mapping[T, T2],
-    iteratee: t.Callable[[T2, T, t.Dict[T, T2]], "SupportsAdd[int, t.Any]"],
-) -> float: ...
+    iteratee: t.Callable[[T2, T, t.Dict[T, T2]], SupportsMean[T3]],
+) -> t.Union[T3, float]: ...
 
 
 @t.overload
 def mean_by(
-    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], "SupportsAdd[int, t.Any]"]
-) -> float: ...
+    collection: t.Mapping[T, T2], iteratee: t.Callable[[T2, T], SupportsMean[T3]]
+) -> t.Union[T3, float]: ...
 
 
 @t.overload
 def mean_by(
-    collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], "SupportsAdd[int, t.Any]"]
-) -> float: ...
+    collection: t.Mapping[t.Any, T2], iteratee: t.Callable[[T2], SupportsMean[T3]]
+) -> t.Union[T3, float]: ...
 
 
 @t.overload
 def mean_by(
-    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], "SupportsAdd[int, t.Any]"]
-) -> float: ...
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int, t.List[T]], SupportsMean[T3]]
+) -> t.Union[T3, float]: ...
 
 
 @t.overload
 def mean_by(
-    collection: t.Iterable[T], iteratee: t.Callable[[T, int], "SupportsAdd[int, t.Any]"]
-) -> float: ...
+    collection: t.Iterable[T], iteratee: t.Callable[[T, int], SupportsMean[T3]]
+) -> t.Union[T3, float]: ...
 
 
 @t.overload
 def mean_by(
-    collection: t.Iterable[T], iteratee: t.Callable[[T], "SupportsAdd[int, t.Any]"]
-) -> float: ...
+    collection: t.Iterable[T], iteratee: t.Callable[[T], SupportsMean[T3]]
+) -> t.Union[T3, float]: ...
 
 
 @t.overload
 def mean_by(
-    collection: t.Mapping[t.Any, "SupportsAdd[int, t.Any]"], iteratee: None = None
-) -> float: ...
+    collection: t.Mapping[t.Any, SupportsMean[T3]], iteratee: None = None
+) -> t.Union[T3, float]: ...
 
 
 @t.overload
-def mean_by(collection: t.Iterable["SupportsAdd[int, t.Any]"], iteratee: None = None) -> float: ...
+def mean_by(
+    collection: t.Iterable[SupportsMean[T3]], iteratee: None = None
+) -> t.Union[T3, float]: ...
 
 
 def mean_by(collection, iteratee=None):
@@ -810,7 +812,9 @@ def min_by(collection, iteratee=None, default=UNSET):
     return min(collection, key=pyd.iteratee(iteratee), default=default)
 
 
-def moving_mean(array: t.Sequence["SupportsAdd[int, t.Any]"], size: t.SupportsInt) -> t.List[float]:
+def moving_mean(
+    array: t.Sequence[SupportsMean[T3]], size: t.SupportsInt
+) -> t.List[t.Union[T3, float]]:
     """
     Calculate moving mean of each element of `array`.
 
