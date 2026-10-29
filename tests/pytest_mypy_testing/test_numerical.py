@@ -29,12 +29,12 @@ def test_mypy_sum_by() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_mean() -> None:
-    reveal_type(_.mean([1, 2, 3, 4]))  # R: builtins.float
+    assert_type(_.mean([1, 2, 3, 4]), float)
 
 
 @pytest.mark.mypy_testing
 def test_mypy_mean_by() -> None:
-    reveal_type(_.mean_by([1, 2, 3, 4], lambda x: x ** 2))  # R: builtins.float
+    assert_type(_.mean_by([1, 2, 3, 4], lambda x: x ** 2), float)
 
 
 @pytest.mark.mypy_testing
@@ -131,7 +131,7 @@ def test_mypy_min_by() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_moving_mean() -> None:
-    reveal_type(_.moving_mean(range(10), 1))  # R: builtins.list[builtins.float]
+    assert_type(_.moving_mean(range(10), 1), t.List[float])
 
 
 @pytest.mark.mypy_testing

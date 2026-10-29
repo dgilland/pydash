@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve arithmetic result types in mean, mean_by, and moving_mean.
+
 - Compare literal dictionary keys in ``is_equal_with`` instead of interpreting them as paths.
 - Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
   callbacks instead of numbering the reversed values again.
