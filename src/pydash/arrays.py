@@ -1533,7 +1533,8 @@ def slice_(array: SequenceT, start: int = 0, end: t.Union[int, None] = None) -> 
     Args:
         array: Array to slice.
         start: Start index. Defaults to ``0``.
-        end: End index. Defaults to selecting the value at ``start`` index.
+        end: End index. Defaults to selecting the value at ``start`` index, or an empty
+            slice when ``start`` is out of range.
 
     Returns:
         Sliced list.
@@ -1550,7 +1551,7 @@ def slice_(array: SequenceT, start: int = 0, end: t.Union[int, None] = None) -> 
     .. versionadded:: 1.1.0
     """
     if end is None:
-        end = (start + 1) if start >= 0 else (len(array) + start + 1)
+        end = (start + 1) if start >= 0 else max(0, len(array) + start + 1)
 
     return array[start:end]  # type: ignore
 

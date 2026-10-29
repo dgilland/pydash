@@ -77,3 +77,4 @@ Contributors
 - Mayank Dhingra, `mayankdhingra02@github <https://github.com/mayankdhingra02>`_
 - KennyMcSimpson, `KennyMcSimpson@github <https://github.com/KennyMcSimpson>`_
 - ShahadatTest, `ShahadatTest@github <https://github.com/ShahadatTest>`_
+- jwalith4418-Mj, `jwalith4418-Mj@github <https://github.com/jwalith4418-Mj>`_
