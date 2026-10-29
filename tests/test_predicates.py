@@ -291,6 +291,30 @@ def test_is_equal_with(case, expected):
     assert _.is_equal_with_cmp(*case[1:])(case[0]) == expected
 
 
+@parametrize(
+    "value,other,expected",
+    [
+        ({"a.b": "hello"}, {"a.b": "HELLO"}, True),
+        ({"a[0]": "hello"}, {"a[0]": "HELLO"}, True),
+        ({("a", "b"): "hello"}, {("a", "b"): "HELLO"}, True),
+        ([{"a.b": "hello"}], [{"a.b": "HELLO"}], True),
+        ({"a.b": "hello"}, {"a": {"b": "HELLO"}}, False),
+        ({"a[0]": "hello"}, {"a": ["HELLO"]}, False),
+        ({"1": "hello"}, {1: "HELLO"}, False),
+        ({"plain": "hello"}, {"plain": "HELLO"}, True),
+    ],
+)
+def test_is_equal_with_literal_dictionary_keys(value, other, expected):
+    def customizer(left, right):
+        if isinstance(left, str) and isinstance(right, str):
+            return left.casefold() == right.casefold()
+        return None
+
+    assert _.is_equal_with(value, other, customizer) is expected
+    assert _.is_equal_with(other, value, customizer) is expected
+    assert _.is_equal_with_cmp(other, customizer)(value) is expected
+
+
 @parametrize("value", [[], {}, [[]], {"items": {}}, {"items": []}, [{"items": {}}]])
 def test_is_equal_with_empty_containers(value):
     def customizer(_value, _other):
