@@ -8,7 +8,9 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from functools import cmp_to_key
+import inspect
 import random
+from types import BuiltinFunctionType
 import typing as t
 
 import pydash as pyd
@@ -1516,7 +1518,7 @@ def reduce_(collection, iteratee=None, accumulator=None):
         iteratee = pyd.identity
         argcount = 1
     else:
-        argcount = getargcount(iteratee, maxargs=3)
+        argcount = _reducer_argcount(iteratee)
 
     for index, item in iterable:
         result = callit(iteratee, result, item, index, argcount=argcount)
@@ -1657,6 +1659,27 @@ def reduce_right(collection, iteratee=None, accumulator=None):
     """
     collection = dict(reversed(list(iterator(collection))))
     return reduce_(collection, iteratee, accumulator)
+
+
+def _reducer_argcount(iteratee: t.Callable[..., t.Any]) -> int:
+    """Return how many arguments a reduce iteratee is called with."""
+    if not isinstance(iteratee, BuiltinFunctionType):
+        return getargcount(iteratee, maxargs=3)
+    # Builtins like operator.add need the accumulator and the value, while unary ones like
+    # abs take only the accumulator. Those without a signature, like max, take both.
+    try:
+        params = inspect.signature(iteratee).parameters.values()
+    except (TypeError, ValueError):
+        return 2
+    if any(param.kind == param.VAR_POSITIONAL for param in params):
+        return 2
+    required = [
+        param
+        for param in params
+        if param.kind in (param.POSITIONAL_ONLY, param.POSITIONAL_OR_KEYWORD)
+        and param.default is param.empty
+    ]
+    return 2 if len(required) >= 2 else 1
 
 
 @t.overload
@@ -1805,7 +1828,7 @@ def reductions(collection, iteratee=None, accumulator=None, from_right=False):
         iteratee = pyd.identity
         argcount = 1
     else:
-        argcount = getargcount(iteratee, maxargs=3)
+        argcount = _reducer_argcount(iteratee)
 
     results = []
 
