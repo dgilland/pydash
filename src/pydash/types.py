@@ -28,3 +28,9 @@ class SupportsMul(Protocol[_T_contra, _T_co]):
 
 class SupportsRound(Protocol[_T_co]):
     def __round__(self) -> _T_co: ...
+
+
+class SupportsMean(Protocol[_T_co]):
+    def __radd__(self, other: int, /) -> t.Any: ...
+
+    def __truediv__(self, other: int, /) -> _T_co: ...

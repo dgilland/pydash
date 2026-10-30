@@ -476,3 +476,14 @@ def test_mypy_zip_with() -> None:
         return s * n
 
     reveal_type(_.zip_with(["hello", "hello", "hello"], [1, 2, 3], iteratee=more_hello))  # R: builtins.list[builtins.str]
+
+
+@pytest.mark.mypy_testing
+def test_mypy_sorted_uniq_criterion_types() -> None:
+    from typing_extensions import assert_type
+
+    words = ["a", "bb", "c"]
+    assert_type(_.sorted_uniq_by(words, len), list[str])
+    assert_type(_.chain(words).sorted_uniq_by(len).value(), list[str])
+    assert_type(_.sorted_uniq_by(words, lambda word: [len(word)]), list[str])
+    assert_type(_.sorted_uniq_by(words, lambda word: None), list[str])

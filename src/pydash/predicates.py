@@ -1228,9 +1228,8 @@ def is_match_with(
         cbk = customizer
 
     if isinstance(source, (Mapping, Iterable)) and not isinstance(source, str):
-        # Set equal to True if source is empty, otherwise, False and then allow deep comparison to
-        # determine equality.
-        equal = not source
+        # An empty source matches vacuously, including one-shot iterators.
+        equal = True
 
         # Walk a/b to determine equality.
         for key, value in iterator(source):

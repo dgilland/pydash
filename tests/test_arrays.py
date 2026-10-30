@@ -1,4 +1,6 @@
+from bisect import bisect_left, bisect_right
 import math
+import typing as t
 
 import pytest
 
@@ -6,6 +8,16 @@ import pydash as _
 
 
 parametrize = pytest.mark.parametrize
+
+
+class NoTruthList(list[t.Any]):
+    def __bool__(self):
+        raise ValueError("The truth value of an array is ambiguous")
+
+
+class FalseList(list[t.Any]):
+    def __bool__(self):
+        return False
 
 
 @parametrize(
@@ -772,6 +784,17 @@ def test_slice_(case, expected):
     assert _.slice_(*case) == expected
 
 
+@parametrize("array", [[1, 2, 3], (1, 2, 3), "abc"])
+@parametrize("start", [-5, -6, -(10**100)])
+def test_slice_single_item_before_start(array, start):
+    assert _.slice_(array, start) == array[:0]
+
+
+@parametrize("array", [[1, 2, 3], (1, 2, 3), "abc"])
+def test_slice_explicit_negative_end(array):
+    assert _.slice_(array, -5, -1) == array[:-1]
+
+
 @parametrize(
     "case,expected",
     [
@@ -913,6 +936,32 @@ def test_sorted_last_index_by(case, expected):
     assert _.sorted_last_index_by(*case) == expected
 
 
+@pytest.mark.parametrize(
+    "function,expected", [(_.sorted_index_by, 12345), (_.sorted_last_index_by, 12346)]
+)
+def test_sorted_index_by_large_sequence_search(function, expected):
+    calls = []
+
+    def rank(value):
+        calls.append(value)
+        return value["rank"]
+
+    values = [{"rank": index} for index in range(65536)]
+    assert function(values, {"rank": 12345}, rank) == expected
+    # Searching an already sorted sequence should need only logarithmic key work.
+    assert len(calls) <= len(values).bit_length() + 1
+
+
+@pytest.mark.parametrize("function", [_.sorted_index_by, _.sorted_last_index_by])
+@pytest.mark.parametrize("size", [0, 1, 2, 17])
+def test_sorted_index_by_matches_bisect(function, size):
+    keys = [index // 3 for index in range(size)]
+    values = [{"rank": key} for key in keys]
+    bisect = bisect_left if function is _.sorted_index_by else bisect_right
+    for target in range(-1, size + 1):
+        assert function(values, {"rank": target}, "rank") == bisect(keys, target)
+
+
 @parametrize(
     "array,value,expected",
     [
@@ -947,6 +996,17 @@ def test_sorted_uniq(case, expected):
 )
 def test_sorted_uniq_by(case, iteratee, expected):
     assert _.sorted_uniq_by(case, iteratee) == expected
+
+
+@parametrize(
+    "iteratee,expected",
+    [(len, ["a", "bb"]), (lambda word: [len(word)], ["a", "bb"]), (lambda word: None, ["bb"])],
+)
+def test_sorted_uniq_by_distinct_criterion_types(iteratee, expected):
+    words = ["bb", "a", "c", "dd"]
+    assert _.sorted_uniq_by(words, iteratee) == expected
+    assert _.chain(words).sorted_uniq_by(iteratee).value() == expected
+    assert words == ["bb", "a", "c", "dd"]
 
 
 @parametrize(
@@ -1195,6 +1255,9 @@ def test_unzip(case, expected):
         (([],), []),
         (([[1, 10, 100], [2, 20, 200]],), [(1, 2), (10, 20), (100, 200)]),
         (([[2, 4, 6], [2, 2, 2]], _.power), [4, 16, 36]),
+        ((None,), []),
+        (([[1, 10, 100], [2, 20, 200]], max), [2, 20, 200]),
+        (([[-1, 2], [3, 4]], abs), [1, 2]),
     ],
 )
 def test_unzip_with(case, expected):
@@ -1402,6 +1465,8 @@ def test_zip_object_deep(case, expected):
     [
         (([1, 2],), [(1,), (2,)]),
         (([1, 2], [3, 4], _.add), [4, 6]),
+        (([1, 5], [3, 4], max), [3, 5]),
+        (([-1, 2], [3, 4], abs), [1, 2]),
     ],
 )
 def test_zip_with(case, expected):
@@ -1568,6 +1633,15 @@ def test_intersection_by_single_array_uses_iteratee(keyword):
     assert result[0] is first
     assert result[1] is second
     assert array == [first, duplicate, second]
+
+
+@pytest.mark.parametrize("container", [NoTruthList, FalseList])
+def test_intersection_by_empty_does_not_evaluate_iteratee(container):
+    def unexpected_iteratee(value):
+        pytest.fail("An empty intersection should not evaluate the iteratee")
+
+    assert _.intersection_by(container([0]), container(), iteratee=unexpected_iteratee) == []
+    assert _.intersection_by(container(), container([0]), iteratee=unexpected_iteratee) == []
 
 
 @parametrize("keyword", [False, True])
@@ -1751,3 +1825,28 @@ def test_xor_with_many_iterators(positional):
         result = _.xor_with((anchor,), *others, comparator=comparator)
     assert result == [anchor]
     assert all(list(other) == [] for other in others)
+
+
+@pytest.mark.parametrize("container", [NoTruthList, FalseList])
+@pytest.mark.parametrize(
+    "operation,expected",
+    [
+        (lambda c: _.uniq_by(c([2, 1, 2])), [2, 1]),
+        (lambda c: _.uniq_with(c([2, 1, 2])), [2, 1]),
+        (lambda c: _.difference_by([1, 2, 3], c([2])), [1, 3]),
+        (lambda c: _.difference_with([1, 2, 3], c([2])), [1, 3]),
+        (lambda c: _.intersection_by(c([1, 2, 3]), c([2])), [2]),
+        (lambda c: _.intersection_with(c([1, 2, 3]), c([2])), [2]),
+        (lambda c: _.unzip_with(c([(1, 2), (3, 4)]), _.add), [4, 6]),
+    ],
+)
+def test_array_operations_do_not_test_input_truth(container, operation, expected):
+    assert operation(container) == expected
+
+
+@pytest.mark.parametrize("container", [NoTruthList, FalseList])
+def test_empty_arrays_without_truth_values(container):
+    assert _.uniq_by(container()) == []
+    assert _.intersection_by([1], container()) == []
+    assert _.difference_with([1], container()) == [1]
+    assert _.unzip_with(container()) == []

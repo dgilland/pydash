@@ -466,9 +466,7 @@ class AllFuncs:
 
     def sorted_uniq_by(
         self: "Chain[t.Iterable['SupportsRichComparisonT']]",
-        iteratee: t.Union[
-            t.Callable[["SupportsRichComparisonT"], "SupportsRichComparisonT"], None
-        ] = None,
+        iteratee: t.Union[t.Callable[["SupportsRichComparisonT"], t.Any], None] = None,
     ) -> "Chain[t.List['SupportsRichComparisonT']]":
         return self._wrap(pyd.sorted_uniq_by)(iteratee)
 
@@ -1890,46 +1888,45 @@ class AllFuncs:
         return self._wrap(pyd.sum_by)(iteratee)
 
     @t.overload
-    def mean(self: "Chain[t.Mapping[t.Any, 'SupportsAdd[int, t.Any]']]") -> "Chain[float]": ...
+    def mean(self: "Chain[t.Mapping[t.Any, SupportsMean[T3]]]") -> "Chain[t.Union[T3, float]]": ...
     @t.overload
-    def mean(self: "Chain[t.Iterable['SupportsAdd[int, t.Any]']]") -> "Chain[float]": ...
+    def mean(self: "Chain[t.Iterable[SupportsMean[T3]]]") -> "Chain[t.Union[T3, float]]": ...
     def mean(self):
         return self._wrap(pyd.mean)()
 
     @t.overload
     def mean_by(
         self: "Chain[t.Mapping[T, T2]]",
-        iteratee: t.Callable[[T2, T, t.Dict[T, T2]], "SupportsAdd[int, t.Any]"],
-    ) -> "Chain[float]": ...
+        iteratee: t.Callable[[T2, T, t.Dict[T, T2]], SupportsMean[T3]],
+    ) -> "Chain[t.Union[T3, float]]": ...
     @t.overload
     def mean_by(
-        self: "Chain[t.Mapping[T, T2]]", iteratee: t.Callable[[T2, T], "SupportsAdd[int, t.Any]"]
-    ) -> "Chain[float]": ...
+        self: "Chain[t.Mapping[T, T2]]", iteratee: t.Callable[[T2, T], SupportsMean[T3]]
+    ) -> "Chain[t.Union[T3, float]]": ...
     @t.overload
     def mean_by(
-        self: "Chain[t.Mapping[t.Any, T2]]", iteratee: t.Callable[[T2], "SupportsAdd[int, t.Any]"]
-    ) -> "Chain[float]": ...
+        self: "Chain[t.Mapping[t.Any, T2]]", iteratee: t.Callable[[T2], SupportsMean[T3]]
+    ) -> "Chain[t.Union[T3, float]]": ...
     @t.overload
     def mean_by(
-        self: "Chain[t.Iterable[T]]",
-        iteratee: t.Callable[[T, int, t.List[T]], "SupportsAdd[int, t.Any]"],
-    ) -> "Chain[float]": ...
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int, t.List[T]], SupportsMean[T3]]
+    ) -> "Chain[t.Union[T3, float]]": ...
     @t.overload
     def mean_by(
-        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int], "SupportsAdd[int, t.Any]"]
-    ) -> "Chain[float]": ...
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T, int], SupportsMean[T3]]
+    ) -> "Chain[t.Union[T3, float]]": ...
     @t.overload
     def mean_by(
-        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T], "SupportsAdd[int, t.Any]"]
-    ) -> "Chain[float]": ...
+        self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T], SupportsMean[T3]]
+    ) -> "Chain[t.Union[T3, float]]": ...
     @t.overload
     def mean_by(
-        self: "Chain[t.Mapping[t.Any, 'SupportsAdd[int, t.Any]']]", iteratee: None = None
-    ) -> "Chain[float]": ...
+        self: "Chain[t.Mapping[t.Any, SupportsMean[T3]]]", iteratee: None = None
+    ) -> "Chain[t.Union[T3, float]]": ...
     @t.overload
     def mean_by(
-        self: "Chain[t.Iterable['SupportsAdd[int, t.Any]']]", iteratee: None = None
-    ) -> "Chain[float]": ...
+        self: "Chain[t.Iterable[SupportsMean[T3]]]", iteratee: None = None
+    ) -> "Chain[t.Union[T3, float]]": ...
     def mean_by(self, iteratee=None):
         return self._wrap(pyd.mean_by)(iteratee)
 
@@ -2147,8 +2144,8 @@ class AllFuncs:
         return self._wrap(pyd.min_by)(iteratee, default)
 
     def moving_mean(
-        self: "Chain[t.Sequence['SupportsAdd[int, t.Any]']]", size: t.SupportsInt
-    ) -> "Chain[t.List[float]]":
+        self: "Chain[t.Sequence[SupportsMean[T3]]]", size: t.SupportsInt
+    ) -> "Chain[t.List[t.Union[T3, float]]]":
         return self._wrap(pyd.moving_mean)(size)
 
     @t.overload
@@ -2171,9 +2168,7 @@ class AllFuncs:
     @t.overload
     def power(self: "Chain[t.List[int]]", n: int) -> "Chain[t.List[t.Union[int, float]]]": ...
     @t.overload
-    def power(
-        self: "Chain[t.List[float]]", n: t.List[t.Union[int, float]]
-    ) -> "Chain[t.List[float]]": ...
+    def power(self: "Chain[t.List[float]]", n: t.Union[int, float]) -> "Chain[t.List[float]]": ...
     def power(self, n):
         return self._wrap(pyd.power)(n)
 

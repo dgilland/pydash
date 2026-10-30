@@ -8,6 +8,15 @@ Unreleased
 
 - Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under
   ordinary equality.
+- Use logarithmic key evaluation in ``sorted_index_by`` and ``sorted_last_index_by``
+  instead of copying and sorting all keys. Inputs must be sorted by the iteratee.
+- Preserve arithmetic result types in mean, mean_by, and moving_mean.
+- Accept distinct uniqueness criterion types in ``sorted_uniq_by`` and its chain wrapper.
+- Return an empty single-item ``slice_`` for negative indexes before the start of a sequence.
+- Fixed float-list ``power`` exponent types for direct and chained calls.
+- Pass both the accumulator and the value to builtin reducers such as ``operator.add``, ``max``,
+  and ``math.gcd`` in ``reduce_``, ``reduce_right``, ``reductions``, ``reductions_right``,
+  ``zip_with``, and ``unzip_with``.
 - Compare literal dictionary keys in ``is_equal_with`` instead of interpreting them as paths.
 - Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
   callbacks instead of numbering the reversed values again.
