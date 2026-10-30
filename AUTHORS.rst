@@ -79,3 +79,4 @@ Contributors
 - ShahadatTest, `ShahadatTest@github <https://github.com/ShahadatTest>`_
 - jwalith4418-Mj, `jwalith4418-Mj@github <https://github.com/jwalith4418-Mj>`_
 - jihtsan, `jihtsan@github <https://github.com/jihtsan>`_
+- Jillur Rahman, `developerjillur@github <https://github.com/developerjillur>`_

@@ -1720,6 +1720,59 @@ def test_chunk_does_not_round_large_sequence_length():
     assert result == [range(2**53), range(2**53, 2**53 + 1)]
 
 
+@parametrize("keyword", [False, True])
+@parametrize(
+    "array,other,expected",
+    [
+        ([1, True], [True], True),
+        ([True], [1, True], True),
+        ([1.0, 1], [1], 1),
+        ([1], [1.0, 1], 1),
+    ],
+)
+def test_intersection_with_distinguishes_equal_values(array, other, expected, keyword):
+    def comparator(left, right):
+        return type(left) is type(right) and left == right
+
+    original_array = array[:]
+    original_other = other[:]
+    if keyword:
+        result = _.intersection_with(array, other, comparator=comparator)
+    else:
+        result = _.intersection_with(array, other, comparator)
+
+    assert len(result) == 1
+    assert result[0] is expected
+    assert array == original_array
+    assert other == original_other
+
+
+@parametrize("primary_duplicates", [False, True])
+def test_intersection_with_distinguishes_equal_object_references(primary_duplicates):
+    first = {"id": 1}
+    second = {"id": 1}
+    array, other = (
+        ([first, second], [second]) if primary_duplicates else ([second], [first, second])
+    )
+
+    result = _.intersection_with(array, other, comparator=lambda left, right: left is right)
+
+    assert len(result) == 1
+    assert result[0] is second
+
+
+def test_intersection_with_distinguishes_equal_values_across_arrays():
+    result = _.intersection_with(
+        [1, True, 1.0],
+        [True, 1],
+        [True],
+        comparator=lambda left, right: type(left) is type(right) and left == right,
+    )
+
+    assert len(result) == 1
+    assert result[0] is True
+
+
 @parametrize("function", [_.pull_all_by, _.pull_all_with])
 @parametrize("values_factory", [list, iter])
 def test_pull_custom_criteria_preserve_equal_distinct_values(function, values_factory):

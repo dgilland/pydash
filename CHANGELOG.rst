@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under
+  ordinary equality.
 - Use logarithmic key evaluation in ``sorted_index_by`` and ``sorted_last_index_by``
   instead of copying and sorting all keys. Inputs must be sorted by the iteratee.
 - Preserve arithmetic result types in mean, mean_by, and moving_mean.
