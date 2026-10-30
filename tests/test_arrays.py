@@ -1,3 +1,4 @@
+from bisect import bisect_left, bisect_right
 import math
 import typing as t
 
@@ -933,6 +934,32 @@ def test_sorted_last_index(case, expected):
 )
 def test_sorted_last_index_by(case, expected):
     assert _.sorted_last_index_by(*case) == expected
+
+
+@pytest.mark.parametrize(
+    "function,expected", [(_.sorted_index_by, 12345), (_.sorted_last_index_by, 12346)]
+)
+def test_sorted_index_by_large_sequence_search(function, expected):
+    calls = []
+
+    def rank(value):
+        calls.append(value)
+        return value["rank"]
+
+    values = [{"rank": index} for index in range(65536)]
+    assert function(values, {"rank": 12345}, rank) == expected
+    # Searching an already sorted sequence should need only logarithmic key work.
+    assert len(calls) <= len(values).bit_length() + 1
+
+
+@pytest.mark.parametrize("function", [_.sorted_index_by, _.sorted_last_index_by])
+@pytest.mark.parametrize("size", [0, 1, 2, 17])
+def test_sorted_index_by_matches_bisect(function, size):
+    keys = [index // 3 for index in range(size)]
+    values = [{"rank": key} for key in keys]
+    bisect = bisect_left if function is _.sorted_index_by else bisect_right
+    for target in range(-1, size + 1):
+        assert function(values, {"rank": target}, "rank") == bisect(keys, target)
 
 
 @parametrize(

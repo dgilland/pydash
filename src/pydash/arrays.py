@@ -1676,8 +1676,8 @@ def sorted_index_by(
 def sorted_index_by(array, value, iteratee=None):
     """
     This method is like :func:`sorted_index` except that it accepts iteratee which is invoked for
-    `value` and each element of `array` to compute their sort ranking. The iteratee is invoked with
-    one argument: ``(value)``.
+    `value` and searched elements of `array` to compute their sort ranking. The iteratee receives
+    one argument: ``(value)``. The array must already be sorted by the iteratee's result.
 
     Args:
         array: List to inspect.
@@ -1698,10 +1698,8 @@ def sorted_index_by(array, value, iteratee=None):
     .. versionadded:: 4.0.0
     """
     if iteratee is not None:
-        # Generate array of sorted keys computed using iteratee.
         iteratee = pyd.iteratee(iteratee)
-        array = sorted(iteratee(item) for item in array)
-        value = iteratee(value)
+        return bisect_left(array, iteratee(value), key=iteratee)
 
     return bisect_left(array, value)
 
@@ -1782,8 +1780,8 @@ def sorted_last_index_by(
 def sorted_last_index_by(array, value, iteratee=None):
     """
     This method is like :func:`sorted_last_index` except that it accepts iteratee which is invoked
-    for `value` and each element of `array` to compute their sort ranking. The iteratee is invoked
-    with one argument: ``(value)``.
+    for `value` and searched elements of `array` to compute sort ranks. The iteratee receives
+    one argument: ``(value)``. The array must already be sorted by the iteratee's result.
 
     Args:
         array: List to inspect.
@@ -1802,10 +1800,8 @@ def sorted_last_index_by(array, value, iteratee=None):
         1
     """
     if iteratee is not None:
-        # Generate array of sorted keys computed using iteratee.
         iteratee = pyd.iteratee(iteratee)
-        array = sorted(iteratee(item) for item in array)
-        value = iteratee(value)
+        return bisect_right(array, iteratee(value), key=iteratee)
 
     return bisect_right(array, value)
 

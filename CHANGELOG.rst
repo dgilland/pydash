@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Use logarithmic key evaluation in ``sorted_index_by`` and ``sorted_last_index_by``
+  instead of copying and sorting all keys. Inputs must be sorted by the iteratee.
 - Preserve arithmetic result types in mean, mean_by, and moving_mean.
 - Accept distinct uniqueness criterion types in ``sorted_uniq_by`` and its chain wrapper.
 - Return an empty single-item ``slice_`` for negative indexes before the start of a sequence.
