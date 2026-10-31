@@ -1457,3 +1457,13 @@ def test_replace_compiled_pattern_ignore_case(replace_func):
     assert replace_func("A\nB", pattern, "matched", ignore_case=True) == "matched"
     assert replace_func("A\nB", pattern, "matched") == "A\nB"
     assert pattern.flags & re.IGNORECASE == 0
+
+
+@parametrize("ignore_case", [False, True])
+def test_replace_reuses_compiled_flags(ignore_case, capsys):
+    pattern = re.compile("a.b", re.DEBUG | re.IGNORECASE)
+    capsys.readouterr()
+    original_flags = pattern.flags
+    assert _.replace("A B", pattern, "matched", ignore_case=ignore_case) == "matched"
+    assert capsys.readouterr().out == ""
+    assert pattern.flags == original_flags
