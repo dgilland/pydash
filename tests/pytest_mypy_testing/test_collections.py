@@ -132,6 +132,16 @@ def test_mypy_order_by() -> None:
 
 
 @pytest.mark.mypy_testing
+def test_mypy_order_by_numeric_keys() -> None:
+    rows = [[2], [1]]
+    mapping = {"second": [2], "first": [1]}
+    assert_type(_.order_by(rows, [0]), t.List[t.List[int]])
+    assert_type(_.order_by(mapping, [0]), t.List[t.List[int]])
+    assert_type(_.chain(rows).order_by([0]).value(), t.List[t.List[int]])
+    assert_type(_.chain(mapping).order_by([0]).value(), t.List[t.List[int]])
+
+
+@pytest.mark.mypy_testing
 def test_mypy_partition() -> None:
     reveal_type(_.partition([1, 2, 3, 4], lambda x: x >= 3))  # R: builtins.list[builtins.list[builtins.int]]
 

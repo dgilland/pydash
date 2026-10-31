@@ -1176,7 +1176,7 @@ class AllFuncs:
     @t.overload
     def order_by(
         self: "Chain[t.Mapping[t.Any, T2]]",
-        keys: t.Iterable[str],
+        keys: t.Iterable[t.Union[str, int]],
         orders: None = None,
         reverse: bool = False,
     ) -> "Chain[t.List[T2]]": ...
@@ -1190,7 +1190,7 @@ class AllFuncs:
     @t.overload
     def order_by(
         self: "Chain[t.Iterable[T]]",
-        keys: t.Iterable[str],
+        keys: t.Iterable[t.Union[str, int]],
         orders: None = None,
         reverse: bool = False,
     ) -> "Chain[t.List[T]]": ...
