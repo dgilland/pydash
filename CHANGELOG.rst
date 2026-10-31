@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve character order in multi-character number_format grouping separators.
+
 - Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under
   ordinary equality.
 - Use logarithmic key evaluation in ``sorted_index_by`` and ``sorted_last_index_by``

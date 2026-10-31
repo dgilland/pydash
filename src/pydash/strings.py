@@ -906,9 +906,8 @@ def number_format(
             sign = "-"
             int_part = int_part[1:]
 
-        # Reverse the integer part, chop it into groups of 3, join on `order_separator`, and then
-        # un-reverse the string.
-        int_part = sign + order_separator.join(chop(int_part[::-1], 3))[::-1]
+        # Group from the right without reversing the separator text.
+        int_part = sign + order_separator.join(chop_right(int_part, 3))
 
         text = decimal_separator.join(pyd.compact([int_part, dec_part]))
 
