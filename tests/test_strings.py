@@ -1449,3 +1449,11 @@ def test_js_regex_line_flags_in_replacement():
 def test_global_js_regex_returns_complete_matches(text, pattern, expected):
     assert _.reg_exp_js_match(text, pattern) == expected
     assert _.words(text, pattern) == expected
+
+
+@parametrize("replace_func", [_.replace, _.replace_start, _.replace_end])
+def test_replace_compiled_pattern_ignore_case(replace_func):
+    pattern = re.compile("a.b", re.DOTALL)
+    assert replace_func("A\nB", pattern, "matched", ignore_case=True) == "matched"
+    assert replace_func("A\nB", pattern, "matched") == "A\nB"
+    assert pattern.flags & re.IGNORECASE == 0
