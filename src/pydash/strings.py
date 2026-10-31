@@ -1361,7 +1361,7 @@ def replace(  # noqa: PLR0917
     flags = re.IGNORECASE if ignore_case else 0
 
     if isinstance(pattern, typing.Pattern):
-        pat = pattern
+        pat = re.compile(pattern.pattern, flags=pattern.flags | flags)
     else:
         pattern = pyd.to_string(pattern)
 

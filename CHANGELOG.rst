@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Honor ``ignore_case=True`` for compiled patterns in ``replace``, ``replace_start``, and
+  ``replace_end`` while preserving the pattern's existing flags.
 - Preserve character order in multi-character number_format grouping separators.
 - Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under
   ordinary equality.

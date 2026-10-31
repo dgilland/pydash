@@ -702,6 +702,47 @@ def test_replace(case, expected):
 
 
 @parametrize(
+    "replace_func,expected",
+    [
+        (_.replace, "X X X"),
+        (_.replace_start, "X foo FOO"),
+        (_.replace_end, "FOO foo X"),
+    ],
+)
+def test_replace_compiled_ignore_case(replace_func, expected):
+    pattern = re.compile("foo")
+    assert replace_func("FOO foo FOO", pattern, "X", ignore_case=True) == expected
+    assert not pattern.flags & re.IGNORECASE
+
+
+@parametrize(
+    "pattern,text,expected",
+    [
+        (re.compile("^foo", re.MULTILINE), "bar\nFOO", "bar\nX"),
+        (re.compile("f.o", re.DOTALL), "F\nO", "X"),
+        (re.compile("f o o # comment", re.VERBOSE), "FOO", "X"),
+        (re.compile("k", re.ASCII), "K\u212a", "X\u212a"),
+    ],
+)
+def test_replace_compiled_ignore_case_preserves_flags(pattern, text, expected):
+    assert _.replace(text, pattern, "X", ignore_case=True) == expected
+
+
+def test_replace_compiled_case_sensitivity():
+    assert _.replace("FOO foo", re.compile("foo"), "X") == "FOO X"
+    assert _.replace("FOO foo", re.compile("foo", re.IGNORECASE), "X") == "X X"
+
+
+def test_replace_compiled_ignore_case_count_and_callable():
+    assert (
+        _.replace(
+            "FOO foo", re.compile("foo"), lambda match: match[0] + "!", ignore_case=True, count=1
+        )
+        == "FOO! foo"
+    )
+
+
+@parametrize(
     "case,expected",
     [
         (("foo", "o", "a"), "foa"),
