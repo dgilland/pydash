@@ -2063,12 +2063,13 @@ def to_integer(obj: t.Any) -> int:
 
     .. versionadded:: 4.0.0
     """
-    if type(obj) is int:
-        return obj
+    # Keep subclasses exact unless they customize the float conversion protocol.
+    if isinstance(obj, int) and type(obj).__float__ is int.__float__:
+        return int.__int__(obj)
 
-    if type(obj) is str:
+    if isinstance(obj, str) and not hasattr(type(obj), "__float__"):
         try:
-            return int(obj)
+            return int(str.__str__(obj))
         except ValueError:
             pass
 

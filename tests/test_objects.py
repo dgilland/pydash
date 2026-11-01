@@ -3,6 +3,7 @@ from collections import defaultdict, namedtuple
 from copy import deepcopy
 import datetime as dt
 from decimal import Decimal
+from enum import IntEnum
 from types import SimpleNamespace
 
 import pytest
@@ -1252,7 +1253,38 @@ def test_to_boolean(case, expected):
     ],
 )
 def test_to_integer(case, expected):
-    assert _.to_integer(case) == expected
+    result = _.to_integer(case)
+    assert result == expected
+    assert type(result) is int
+
+
+@parametrize("kind", ["int", "enum", "str"])
+@parametrize("expected", [0, 1, -1, 2**53 + 1, -(2**53 + 1), 10**400, -(10**400)])
+def test_to_integer_preserves_subclass_precision(kind, expected):
+    class IntegerSubclass(int):
+        pass
+
+    class StringSubclass(str):
+        pass
+
+    integer_enum = IntEnum("IntegerEnum", {"VALUE": expected})
+    case = {
+        "int": IntegerSubclass(expected),
+        "enum": integer_enum.VALUE,
+        "str": StringSubclass(str(expected)),
+    }[kind]
+
+    result = _.to_integer(case)
+    assert result == expected
+    assert type(result) is int
+
+
+@parametrize("case,expected", [("1.9", 1), ("1e3", 1000), ("foo", 0), ("inf", 0)])
+def test_to_integer_string_subclass_fallback(case, expected):
+    class StringSubclass(str):
+        pass
+
+    assert _.to_integer(StringSubclass(case)) == expected
 
 
 def test_to_integer_preserves_float_conversion_protocol():

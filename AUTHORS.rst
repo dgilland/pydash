@@ -80,3 +80,4 @@ Contributors
 - jwalith4418-Mj, `jwalith4418-Mj@github <https://github.com/jwalith4418-Mj>`_
 - jihtsan, `jihtsan@github <https://github.com/jihtsan>`_
 - Jillur Rahman, `developerjillur@github <https://github.com/developerjillur>`_
+- BooGu, `boogu2005@github <https://github.com/boogu2005>`_
