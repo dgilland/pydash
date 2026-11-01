@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Serialize overlapping ``once`` calls across threads while preserving exception retries.
 - Preserve character order in multi-character number_format grouping separators.
 - Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under
   ordinary equality.

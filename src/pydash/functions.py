@@ -577,15 +577,29 @@ class Once(_WithArgCount, t.Generic[P, T]):
         self.func = func
         self.result: t.Union[T, None] = None
         self.called = False
+        self._lock = threading.RLock()
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results from the first call of :attr:`func`."""
-        if not self.called:
-            self.result = self.func(*args, **kwargs)
-            self.called = True
+        with self._lock:
+            if not self.called:
+                self.result = self.func(*args, **kwargs)
+                self.called = True
 
-        # At this point the result will be set, cannot be `None` anymore
-        return self.result  # type: ignore
+            # At this point the result will be set, cannot be `None` anymore
+            return self.result  # type: ignore
+
+    def __getstate__(self) -> dict[str, t.Any]:
+        """Return cached state without the process-local lock."""
+        with self._lock:
+            state = self.__dict__.copy()
+            del state["_lock"]
+            return state
+
+    def __setstate__(self, state: dict[str, t.Any]) -> None:
+        """Restore cached state with a fresh lock."""
+        self.__dict__.update(state)
+        self._lock = threading.RLock()
 
 
 class Partial(_WithArgCount, t.Generic[T]):
@@ -1311,6 +1325,9 @@ def once(func: t.Callable[P, T]) -> Once[P, T]:
     """
     Creates a function that is restricted to execute `func` once. Repeat calls to the function will
     return the value of the first call.
+
+    Concurrent calls from different threads wait for the first successful result. If `func` raises,
+    a later call can retry.
 
     Args:
         func: Function to execute.
