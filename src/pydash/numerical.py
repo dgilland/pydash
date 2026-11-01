@@ -6,7 +6,7 @@ Numerical/mathematical related functions.
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sized
+from collections.abc import Iterator, Mapping, Sized
 import decimal
 import math
 import operator
@@ -1166,6 +1166,9 @@ def variance(array):
     """
     Calculate the variance of the elements in `array`.
 
+    Iterators are saved for the mean and squared-deviation passes, including iterators that
+    provide a length.
+
     Args:
         array: List to process.
 
@@ -1179,7 +1182,7 @@ def variance(array):
 
     .. versionadded:: 2.1.0
     """
-    if not isinstance(array, Sized):
+    if isinstance(array, Iterator) or not isinstance(array, Sized):
         array = list(array)
     avg = mean(array)
 

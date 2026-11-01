@@ -1,6 +1,7 @@
 import typing as t
 
 import pytest
+from typing_extensions import assert_type
 
 import pydash as _
 
@@ -408,7 +409,7 @@ def test_mypy_unshift() -> None:
 
 @pytest.mark.mypy_testing
 def test_mypy_unzip() -> None:
-    reveal_type(_.unzip([(1, 4, 7), (2, 5, 8), (3, 6, 9)]))  # R: builtins.list[Tuple[builtins.int, builtins.int, builtins.int]]
+    assert_type(_.unzip([(1, 4, 7), (2, 5, 8), (3, 6, 9)]), t.List[t.Tuple[int, ...]])
 
 
 @pytest.mark.mypy_testing

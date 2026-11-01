@@ -7,6 +7,8 @@ Unreleased
 ----------
 
 - Serialize overlapping ``once`` calls across threads while preserving exception retries.
+- Fix ``unzip`` tuple overloads and generated chain signatures to describe variable-length columns
+  rather than input row shapes.
 - Preserve character order in multi-character number_format grouping separators.
 - Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under
   ordinary equality.
