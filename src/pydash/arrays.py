@@ -2393,19 +2393,29 @@ def unshift(array: t.List[T], *items: T2) -> t.List[t.Union[T, T2]]:
 
 
 @t.overload
-def unzip(array: t.Iterable[t.Tuple[T, T2]]) -> t.List[t.Tuple[T, T2]]: ...
+def unzip(
+    array: t.Iterable[t.Tuple[T, T2]],
+) -> t.List[t.Union[t.Tuple[T, ...], t.Tuple[T2, ...]]]: ...
 
 
 @t.overload
-def unzip(array: t.Iterable[t.Tuple[T, T2, T3]]) -> t.List[t.Tuple[T, T2, T3]]: ...
+def unzip(
+    array: t.Iterable[t.Tuple[T, T2, T3]],
+) -> t.List[t.Union[t.Tuple[T, ...], t.Tuple[T2, ...], t.Tuple[T3, ...]]]: ...
 
 
 @t.overload
-def unzip(array: t.Iterable[t.Tuple[T, T2, T3, T4]]) -> t.List[t.Tuple[T, T2, T3, T4]]: ...
+def unzip(
+    array: t.Iterable[t.Tuple[T, T2, T3, T4]],
+) -> t.List[t.Union[t.Tuple[T, ...], t.Tuple[T2, ...], t.Tuple[T3, ...], t.Tuple[T4, ...]]]: ...
 
 
 @t.overload
-def unzip(array: t.Iterable[t.Tuple[T, T2, T3, T4, T5]]) -> t.List[t.Tuple[T, T2, T3, T4, T5]]: ...
+def unzip(
+    array: t.Iterable[t.Tuple[T, T2, T3, T4, T5]],
+) -> t.List[
+    t.Union[t.Tuple[T, ...], t.Tuple[T2, ...], t.Tuple[T3, ...], t.Tuple[T4, ...], t.Tuple[T5, ...]]
+]: ...
 
 
 @t.overload
@@ -2799,16 +2809,19 @@ def zip_object_deep(
 
     .. versionadded:: 4.0.0
     """
+    column_values: t.Sequence[t.Any]
     if values is None:
         keys_values = unzip(keys)
         if len(keys_values) == 0:
-            keys, values = [], []
+            keys, column_values = [], []
         else:
-            keys, values = keys_values
+            keys, column_values = keys_values
+    else:
+        column_values = values
 
     obj: t.Dict[t.Any, t.Any] = {}
     for idx, key in enumerate(keys):
-        obj = pyd.set_(obj, key, pyd.get(values, idx))
+        obj = pyd.set_(obj, key, pyd.get(column_values, idx))
 
     return obj
 
