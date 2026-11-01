@@ -1,8 +1,9 @@
 from argparse import Namespace
-from collections import defaultdict, namedtuple
+from collections import ChainMap, UserDict, defaultdict, namedtuple
 from copy import deepcopy
 import datetime as dt
 from decimal import Decimal
+from enum import IntEnum
 from types import SimpleNamespace
 
 import pytest
@@ -17,6 +18,31 @@ parametrize = pytest.mark.parametrize
 today = dt.date.today()
 
 SomeNamedTuple = namedtuple("SomeNamedTuple", ["a", "b"])
+
+
+@parametrize("factory", [UserDict, ChainMap])
+@parametrize("setter", [_.set_, _.set_with])
+def test_set_mutable_mapping_keys(factory, setter):
+    obj = factory({"keep": 1})
+    assert setter(obj, "nested.value", 2) is obj
+    assert dict(obj) == {"keep": 1, "nested": {"value": 2}}
+    assert not hasattr(obj, "nested")
+
+
+@parametrize("factory", [UserDict, ChainMap])
+@parametrize("updater", [_.update, _.update_with])
+def test_update_mutable_mapping_keys(factory, updater):
+    obj = factory({"value": 1})
+    assert updater(obj, "value", lambda value: value + 1) is obj
+    assert dict(obj) == {"value": 2}
+    assert not hasattr(obj, "value")
+
+
+@parametrize("factory", [UserDict, ChainMap])
+def test_set_mutable_mapping_integer_keys(factory):
+    obj = factory()
+    _.set_(obj, [0], "value")
+    assert dict(obj) == {0: "value"}
 
 
 @parametrize(
@@ -1252,7 +1278,38 @@ def test_to_boolean(case, expected):
     ],
 )
 def test_to_integer(case, expected):
-    assert _.to_integer(case) == expected
+    result = _.to_integer(case)
+    assert result == expected
+    assert type(result) is int
+
+
+@parametrize("kind", ["int", "enum", "str"])
+@parametrize("expected", [0, 1, -1, 2**53 + 1, -(2**53 + 1), 10**400, -(10**400)])
+def test_to_integer_preserves_subclass_precision(kind, expected):
+    class IntegerSubclass(int):
+        pass
+
+    class StringSubclass(str):
+        pass
+
+    integer_enum = IntEnum("IntegerEnum", {"VALUE": expected})
+    case = {
+        "int": IntegerSubclass(expected),
+        "enum": integer_enum.VALUE,
+        "str": StringSubclass(str(expected)),
+    }[kind]
+
+    result = _.to_integer(case)
+    assert result == expected
+    assert type(result) is int
+
+
+@parametrize("case,expected", [("1.9", 1), ("1e3", 1000), ("foo", 0), ("inf", 0)])
+def test_to_integer_string_subclass_fallback(case, expected):
+    class StringSubclass(str):
+        pass
+
+    assert _.to_integer(StringSubclass(case)) == expected
 
 
 def test_to_integer_preserves_float_conversion_protocol():

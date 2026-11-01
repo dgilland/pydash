@@ -573,19 +573,21 @@ class AllFuncs:
         return self._wrap(pyd.unshift)(*items)
 
     @t.overload
-    def unzip(self: "Chain[t.Iterable[t.Tuple[T, T2]]]") -> "Chain[t.List[t.Tuple[T, T2]]]": ...
+    def unzip(
+        self: "Chain[t.Iterable[t.Tuple[T, T2]]]",
+    ) -> "Chain[t.List[t.Union[t.Tuple[T, ...], t.Tuple[T2, ...]]]]": ...
     @t.overload
     def unzip(
         self: "Chain[t.Iterable[t.Tuple[T, T2, T3]]]",
-    ) -> "Chain[t.List[t.Tuple[T, T2, T3]]]": ...
+    ) -> "Chain[t.List[t.Union[t.Tuple[T, ...], t.Tuple[T2, ...], t.Tuple[T3, ...]]]]": ...
     @t.overload
     def unzip(
         self: "Chain[t.Iterable[t.Tuple[T, T2, T3, T4]]]",
-    ) -> "Chain[t.List[t.Tuple[T, T2, T3, T4]]]": ...
+    ) -> "Chain[t.List[t.Union[t.Tuple[T, ...], t.Tuple[T2, ...], t.Tuple[T3, ...], t.Tuple[T4, ...]]]]": ...
     @t.overload
     def unzip(
         self: "Chain[t.Iterable[t.Tuple[T, T2, T3, T4, T5]]]",
-    ) -> "Chain[t.List[t.Tuple[T, T2, T3, T4, T5]]]": ...
+    ) -> "Chain[t.List[t.Union[t.Tuple[T, ...], t.Tuple[T2, ...], t.Tuple[T3, ...], t.Tuple[T4, ...], t.Tuple[T5, ...]]]]": ...
     @t.overload
     def unzip(
         self: "Chain[t.Iterable[t.Iterable[t.Any]]]",
@@ -1176,7 +1178,7 @@ class AllFuncs:
     @t.overload
     def order_by(
         self: "Chain[t.Mapping[t.Any, T2]]",
-        keys: t.Iterable[str],
+        keys: t.Iterable[t.Union[str, int]],
         orders: None = None,
         reverse: bool = False,
     ) -> "Chain[t.List[T2]]": ...
@@ -1190,7 +1192,7 @@ class AllFuncs:
     @t.overload
     def order_by(
         self: "Chain[t.Iterable[T]]",
-        keys: t.Iterable[str],
+        keys: t.Iterable[t.Union[str, int]],
         orders: None = None,
         reverse: bool = False,
     ) -> "Chain[t.List[T]]": ...

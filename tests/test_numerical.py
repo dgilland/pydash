@@ -464,6 +464,39 @@ def test_variance_empty_iterators():
     assert math.isnan(_.variance(value for value in []))
 
 
+class SizedIterator:
+    def __init__(self, values):
+        self.values = list(values)
+        self.iterator = iter(self.values)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return next(self.iterator)
+
+    def __len__(self):
+        return len(self.values)
+
+
+@parametrize("function", [_.variance, _.std_deviation])
+@parametrize("values", [[1, 2, 3], [7], [-4, 2, 8, 10]])
+def test_variance_sized_iterators(function, values):
+    assert function(SizedIterator(values)) == function(values)
+
+
+@parametrize("function", [_.variance, _.std_deviation])
+def test_variance_empty_sized_iterators(function):
+    assert math.isnan(function(SizedIterator([])))
+
+
+@parametrize("function", [_.variance, _.std_deviation])
+@parametrize("mapping_type", [dict, UserDict, MappingProxyType])
+def test_variance_keeps_mapping_values(function, mapping_type):
+    values = {"a": 1, "b": 2, "c": 3}
+    assert function(mapping_type(values)) == function([1, 2, 3])
+
+
 @parametrize(
     "case,expected",
     [
