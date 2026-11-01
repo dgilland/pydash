@@ -81,3 +81,4 @@ Contributors
 - jihtsan, `jihtsan@github <https://github.com/jihtsan>`_
 - Jillur Rahman, `developerjillur@github <https://github.com/developerjillur>`_
 - BooGu, `boogu2005@github <https://github.com/boogu2005>`_
+- Awais Ur Rehman, `awais-ur-rehman@github <https://github.com/awais-ur-rehman>`_
