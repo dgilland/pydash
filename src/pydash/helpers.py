@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import builtins
-from collections.abc import Hashable, Iterable, Mapping, Sequence
+from collections.abc import Hashable, Iterable, Mapping, MutableMapping, Sequence
 from decimal import Decimal
 from functools import wraps
 import inspect
@@ -237,7 +237,7 @@ def base_set(obj, key, value, allow_override=True):
         value: Value to assign.
         allow_override: Whether to allow overriding a previously set key.
     """
-    if isinstance(obj, dict):
+    if isinstance(obj, MutableMapping):
         if allow_override or key not in obj:
             obj[key] = value
     elif isinstance(obj, list):

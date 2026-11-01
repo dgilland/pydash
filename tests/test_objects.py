@@ -1,5 +1,5 @@
 from argparse import Namespace
-from collections import defaultdict, namedtuple
+from collections import ChainMap, UserDict, defaultdict, namedtuple
 from copy import deepcopy
 import datetime as dt
 from decimal import Decimal
@@ -17,6 +17,31 @@ parametrize = pytest.mark.parametrize
 today = dt.date.today()
 
 SomeNamedTuple = namedtuple("SomeNamedTuple", ["a", "b"])
+
+
+@parametrize("factory", [UserDict, ChainMap])
+@parametrize("setter", [_.set_, _.set_with])
+def test_set_mutable_mapping_keys(factory, setter):
+    obj = factory({"keep": 1})
+    assert setter(obj, "nested.value", 2) is obj
+    assert dict(obj) == {"keep": 1, "nested": {"value": 2}}
+    assert not hasattr(obj, "nested")
+
+
+@parametrize("factory", [UserDict, ChainMap])
+@parametrize("updater", [_.update, _.update_with])
+def test_update_mutable_mapping_keys(factory, updater):
+    obj = factory({"value": 1})
+    assert updater(obj, "value", lambda value: value + 1) is obj
+    assert dict(obj) == {"value": 2}
+    assert not hasattr(obj, "value")
+
+
+@parametrize("factory", [UserDict, ChainMap])
+def test_set_mutable_mapping_integer_keys(factory):
+    obj = factory()
+    _.set_(obj, [0], "value")
+    assert dict(obj) == {0: "value"}
 
 
 @parametrize(

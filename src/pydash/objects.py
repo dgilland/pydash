@@ -6,6 +6,7 @@ Functions that operate on lists, dicts, and other objects.
 
 from __future__ import annotations
 
+from collections.abc import MutableMapping
 import copy
 from functools import partial
 import math
@@ -1866,6 +1867,8 @@ def set_(obj: T, path: PathT, value: t.Any) -> T:
     Sets the value of an object described by `path`. If any part of the object path doesn't exist,
     it will be created.
 
+    Mutable mappings are updated by key, including mappings that are not ``dict`` subclasses.
+
     Args:
         obj: Object to modify.
         path: Target path to set value to.
@@ -2475,7 +2478,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
     else:
         call_customizer = None
 
-    default_type = dict if isinstance(obj, dict) else list
+    default_type = dict if isinstance(obj, MutableMapping) else list
     tokens = to_path_tokens(path)
 
     last_key = pyd.last(tokens)
