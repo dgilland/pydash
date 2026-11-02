@@ -11,6 +11,7 @@ Lead
 Contributors
 ------------
 
+- Roland, `n0liu@github <https://github.com/n0liu>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
 - Bharadwaj Yarlagadda, `bharadwajyarlagadda@github <https://github.com/bharadwajyarlagadda>`_
