@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than
+  propagating the original failure.
 - Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and
   ``str.splitlines`` used as iteratees instead of filling their optional arguments with the
   index, key, or collection.
