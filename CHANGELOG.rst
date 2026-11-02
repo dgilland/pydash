@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than propagating the original failure.
+
 - Serialize overlapping ``once`` calls across threads while preserving exception retries.
 - Fix ``unzip`` tuple overloads and generated chain signatures to describe variable-length columns
   rather than input row shapes.

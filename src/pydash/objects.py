@@ -2102,6 +2102,8 @@ def to_list(obj, split_strings=True):
     """
     Converts an obj, an iterable or a single item to a list.
 
+    Exceptions raised while consuming an iterable are propagated.
+
     Args:
         obj: Object to convert item or wrap.
         split_strings: Whether to split strings into single chars. Defaults to
@@ -2152,9 +2154,10 @@ def to_list(obj, split_strings=True):
         return list(chr(c) if isinstance(c, int) else c for c in obj)
     else:
         try:
-            return list(obj)
+            iterator = iter(obj)
         except TypeError:
             return [obj]
+        return list(iterator)
 
 
 def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
