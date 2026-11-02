@@ -599,6 +599,11 @@ def test_partial_of_rounding_function_as_iteratee(func, expected):
     assert _.map_([1.234, 2.345], func) == expected
 
 
+def test_partial_of_builtin_method_as_iteratee():
+    assert _.map_(["-a-", "-b-"], _.partial_right(str.strip, "-")) == ["a", "b"]
+    assert _.times(2, _.partial(dict.copy, {"a": 1})) == [{"a": 1}, {"a": 1}]
+
+
 @parametrize(
     "case,case_args,case_kwargs,args,expected",
     [

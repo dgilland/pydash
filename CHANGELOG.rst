@@ -6,6 +6,9 @@ Changelog
 Unreleased
 ----------
 
+- Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and
+  ``str.splitlines`` used as iteratees instead of filling their optional arguments with the
+  index, key, or collection.
 - Serialize overlapping ``once`` calls across threads while preserving exception retries.
 - Fix ``unzip`` tuple overloads and generated chain signatures to describe variable-length columns
   rather than input row shapes.

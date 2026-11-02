@@ -770,6 +770,7 @@ def test_keys(case, expected):
             ),
             {"fred": 40, "pebbles": 1},
         ),
+        (({"name": " fred ", "a": "banana"}, str.strip), {"name": "fred", "a": "banana"}),
     ],
 )
 def test_map_values(case, expected):
