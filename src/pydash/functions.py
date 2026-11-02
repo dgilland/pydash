@@ -632,7 +632,9 @@ class Partial(_WithArgCount, t.Generic[T]):
     def _argcount(self) -> t.Optional[int]:
         # A plain function's `_argcount` can be an iteratee hint, so count its real parameters.
         func_argcount = (
-            _getargcount(self.func, None) if isfunction(self.func) else getargcount(self.func, None)
+            _getargcount(self.func, None)
+            if isfunction(self.func)
+            else getargcount(self.func, None, required_only=False)
         )
         if func_argcount is None:
             return None

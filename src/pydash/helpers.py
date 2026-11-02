@@ -8,6 +8,7 @@ from decimal import Decimal
 from functools import wraps
 import inspect
 import operator
+from types import MethodDescriptorType
 import warnings
 
 import pydash as pyd
@@ -47,7 +48,7 @@ def callit(iteratee, *args, **kwargs):
     return iteratee(*args[:argstop])
 
 
-def getargcount(iteratee, maxargs):
+def getargcount(iteratee, maxargs, required_only=True):
     """Return argument count of iteratee function."""
     if hasattr(iteratee, "_argcount"):
         # Optimization feature where argcount of iteratee is known and properly
@@ -65,14 +66,19 @@ def getargcount(iteratee, maxargs):
         argcount = 1
 
         try:
-            argcount = _getargcount(iteratee, maxargs)
+            # Don't fill optional arguments of methods like str.strip with the index or collection.
+            argcount = _getargcount(
+                iteratee,
+                maxargs,
+                required_only=required_only and isinstance(iteratee, MethodDescriptorType),
+            )
         except TypeError:  # pragma: no cover
             pass
 
     return argcount
 
 
-def _getargcount(iteratee, maxargs):
+def _getargcount(iteratee, maxargs, required_only=False):
     argcount = None
 
     try:
@@ -89,6 +95,8 @@ def _getargcount(iteratee, maxargs):
         params = list(sig.parameters.values())
         if not any(param.kind == inspect.Parameter.VAR_POSITIONAL for param in params):
             positional_params = [p for p in params if p.kind in POSITIONAL_PARAMETERS]
+            if required_only:
+                positional_params = [p for p in positional_params if p.default is p.empty]
             argcount = len(positional_params)
 
     if argcount is None:

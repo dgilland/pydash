@@ -104,6 +104,7 @@ def test_every(case, expected):
     [
         (([0, True, False, None, 1, 2, 3],), [True, 1, 2, 3]),
         (([1, 2, 3, 4, 5, 6], lambda num: num % 2 == 0), [2, 4, 6]),
+        ((["a", " ", "b"], str.strip), ["a", "b"]),
         (
             (
                 [
@@ -345,6 +346,9 @@ def test_key_by(case, expected):
         (([1.1, 2.1, 3.1], int), [1, 2, 3], False),
         (([1, 2, 3], lambda num: num * 3), [3, 6, 9], False),
         (([[1], [2, 3], [4, 5, 6]], len), [1, 2, 3], False),
+        (([" a ", "b "], str.strip), ["a", "b"], False),
+        ((["a b", "c d"], str.split), [["a", "b"], ["c", "d"]], False),
+        ((["a\nb", "c\nd"], str.splitlines), [["a", "b"], ["c", "d"]], False),
         (({"one": 1, "two": 2, "three": 3}, lambda num: num * 3), [3, 6, 9], True),
         (
             ([{"name": "moe", "age": 40}, {"name": "larry", "age": 50}], "name"),
