@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Allow empty ``flow`` and ``flow_right`` pipelines to be used as iteratees without raising
+  ``IndexError`` during argument inspection.
 - Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than
   propagating the original failure.
 - Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and
