@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Keep ``debounce`` maximum waits and ``throttle`` intervals stable across system clock changes.
 - Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than
   propagating the original failure.
 - Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and
