@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Keep top-level iterator criteria reusable in ``matches`` and ``matches_property`` predicates without consuming them eagerly.
+
 - Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than
   propagating the original failure.
 - Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and
