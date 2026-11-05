@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Preserve exact integer digits in ``number_format`` without conversion through floating point.
 - Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than
   propagating the original failure.
 - Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and

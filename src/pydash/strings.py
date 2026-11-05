@@ -6,6 +6,7 @@ String functions.
 
 from __future__ import annotations
 
+from decimal import Decimal
 import html
 import math
 import re
@@ -871,6 +872,8 @@ def number_format(
     """
     Format a number to scale with custom decimal and order separators.
 
+    Integer digits are preserved exactly, including values beyond the floating-point range.
+
     Args:
         number: Number to format.
         scale: Number of decimals to include. Defaults to ``0``.
@@ -891,6 +894,10 @@ def number_format(
     """
     # Create a string formatter which converts number to the appropriately scaled representation.
     fmt = f"{{0:.{scale:d}f}}"
+
+    if isinstance(number, int):
+        # Integer fixed-point formatting otherwise converts through float.
+        number = Decimal(number)
 
     try:
         num_parts = fmt.format(number).split(".")
