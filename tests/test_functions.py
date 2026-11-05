@@ -1,8 +1,10 @@
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 from functools import partial
 import heapq
 import json
 import os
 from pathlib import Path
+import pickle
 import subprocess
 import sys
 import textwrap
@@ -487,6 +489,74 @@ def test_once(case, arglist, expected):
         assert fn(*args) == expected
 
 
+def test_once_overlapping_threads():
+    first_started = threading.Event()
+    second_started = threading.Event()
+    release_first = threading.Event()
+    calls = []
+
+    def callback(value):
+        calls.append(value)
+        if value == 1:
+            first_started.set()
+            assert release_first.wait(timeout=5)
+        return value
+
+    wrapped = _.once(callback)
+
+    def second_call():
+        second_started.set()
+        return wrapped(2)
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        first = pool.submit(wrapped, 1)
+        try:
+            assert first_started.wait(timeout=5)
+            second = pool.submit(second_call)
+            assert second_started.wait(timeout=5)
+            with pytest.raises(TimeoutError):
+                second.result(timeout=0.1)
+        finally:
+            release_first.set()
+        assert first.result(timeout=5) == second.result(timeout=5) == 1
+    assert calls == [1]
+
+
+def test_once_retries_after_exception():
+    calls = []
+
+    def callback():
+        calls.append(None)
+        if len(calls) == 1:
+            raise ValueError("retry")
+
+    wrapped = _.once(callback)
+    with pytest.raises(ValueError, match="retry"):
+        wrapped()
+    assert wrapped() is None
+    assert wrapped() is None
+    assert len(calls) == 2
+
+
+def test_once_recursive_call():
+    def callback(value):
+        return wrapped(value - 1) + value if value else 0
+
+    wrapped = _.once(callback)
+    assert wrapped(3) == 6
+    assert wrapped(10) == 6
+
+
+@parametrize("called", [False, True])
+def test_once_pickle(called):
+    wrapped = _.once(int)
+    if called:
+        assert wrapped("7") == 7
+    restored = pickle.loads(pickle.dumps(wrapped))
+    assert restored("9") == (7 if called else 9)
+    assert restored("10") == (7 if called else 9)
+
+
 @parametrize(
     "func,transforms,args,expected",
     [
@@ -527,6 +597,11 @@ def test_partial_as_iteratee():
 )
 def test_partial_of_rounding_function_as_iteratee(func, expected):
     assert _.map_([1.234, 2.345], func) == expected
+
+
+def test_partial_of_builtin_method_as_iteratee():
+    assert _.map_(["-a-", "-b-"], _.partial_right(str.strip, "-")) == ["a", "b"]
+    assert _.times(2, _.partial(dict.copy, {"a": 1})) == [{"a": 1}, {"a": 1}]
 
 
 @parametrize(

@@ -6,6 +6,7 @@ Functions that operate on lists, dicts, and other objects.
 
 from __future__ import annotations
 
+from collections.abc import MutableMapping
 import copy
 from functools import partial
 import math
@@ -1866,6 +1867,8 @@ def set_(obj: T, path: PathT, value: t.Any) -> T:
     Sets the value of an object described by `path`. If any part of the object path doesn't exist,
     it will be created.
 
+    Mutable mappings are updated by key, including mappings that are not ``dict`` subclasses.
+
     Args:
         obj: Object to modify.
         path: Target path to set value to.
@@ -2063,12 +2066,13 @@ def to_integer(obj: t.Any) -> int:
 
     .. versionadded:: 4.0.0
     """
-    if type(obj) is int:
-        return obj
+    # Keep subclasses exact unless they customize the float conversion protocol.
+    if isinstance(obj, int) and type(obj).__float__ is int.__float__:
+        return int.__int__(obj)
 
-    if type(obj) is str:
+    if isinstance(obj, str) and not hasattr(type(obj), "__float__"):
         try:
-            return int(obj)
+            return int(str.__str__(obj))
         except ValueError:
             pass
 
@@ -2097,6 +2101,8 @@ def to_list(obj: T, split_strings: bool = True) -> t.List[T]: ...
 def to_list(obj, split_strings=True):
     """
     Converts an obj, an iterable or a single item to a list.
+
+    Exceptions raised while consuming an iterable are propagated.
 
     Args:
         obj: Object to convert item or wrap.
@@ -2148,9 +2154,10 @@ def to_list(obj, split_strings=True):
         return list(chr(c) if isinstance(c, int) else c for c in obj)
     else:
         try:
-            return list(obj)
+            iterator = iter(obj)
         except TypeError:
             return [obj]
+        return list(iterator)
 
 
 def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
@@ -2475,7 +2482,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
     else:
         call_customizer = None
 
-    default_type = dict if isinstance(obj, dict) else list
+    default_type = dict if isinstance(obj, MutableMapping) else list
     tokens = to_path_tokens(path)
 
     last_key = pyd.last(tokens)

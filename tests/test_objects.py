@@ -1,8 +1,9 @@
 from argparse import Namespace
-from collections import defaultdict, namedtuple
+from collections import ChainMap, UserDict, defaultdict, namedtuple
 from copy import deepcopy
 import datetime as dt
 from decimal import Decimal
+from enum import IntEnum
 from types import SimpleNamespace
 
 import pytest
@@ -17,6 +18,66 @@ parametrize = pytest.mark.parametrize
 today = dt.date.today()
 
 SomeNamedTuple = namedtuple("SomeNamedTuple", ["a", "b"])
+
+
+class BrokenSequence:
+    def __init__(self, error):
+        self.error = error
+
+    def __getitem__(self, index):
+        if index == 0:
+            return 1
+        raise self.error
+
+
+class BrokenLengthHint:
+    def __init__(self, error):
+        self.error = error
+        self.values = iter([1, 2])
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return next(self.values)
+
+    def __length_hint__(self):
+        raise self.error
+
+
+class NonIterable:
+    def __iter__(self):
+        raise TypeError("iteration is unavailable")
+
+
+def broken_generator(error):
+    yield 1
+    raise error
+
+
+@parametrize("factory", [UserDict, ChainMap])
+@parametrize("setter", [_.set_, _.set_with])
+def test_set_mutable_mapping_keys(factory, setter):
+    obj = factory({"keep": 1})
+    assert setter(obj, "nested.value", 2) is obj
+    assert dict(obj) == {"keep": 1, "nested": {"value": 2}}
+    assert not hasattr(obj, "nested")
+
+
+@parametrize("factory", [UserDict, ChainMap])
+@parametrize("updater", [_.update, _.update_with])
+def test_update_mutable_mapping_keys(factory, updater):
+    obj = factory({"value": 1})
+    assert updater(obj, "value", lambda value: value + 1) is obj
+    assert dict(obj) == {"value": 2}
+    assert not hasattr(obj, "value")
+
+
+@parametrize("factory", [UserDict, ChainMap])
+def test_set_mutable_mapping_integer_keys(factory):
+    obj = factory()
+    _.set_(obj, [0], "value")
+    assert dict(obj) == {0: "value"}
 
 
 @parametrize(
@@ -417,6 +478,39 @@ def test_to_list(case, expected):
     assert isinstance(result, list)
 
 
+@pytest.mark.parametrize("factory", [broken_generator, BrokenSequence])
+@pytest.mark.parametrize("chained", [False, True])
+def test_to_list_propagates_errors_after_obtaining_iterator(factory, chained):
+    error = TypeError("item computation failed")
+    source = factory(error)
+
+    with pytest.raises(TypeError) as caught:
+        if chained:
+            _.chain(source).to_list().value()
+        else:
+            _.to_list(source)
+
+    assert caught.value is error
+
+
+@pytest.mark.parametrize("chained", [False, True])
+def test_to_list_ignores_typeerror_in_optional_length_hint(chained):
+    error = TypeError("length hint is unavailable")
+    source = BrokenLengthHint(error)
+    result = _.chain(source).to_list().value() if chained else _.to_list(source)
+
+    assert result == list(BrokenLengthHint(error)) == [1, 2]
+
+
+@pytest.mark.parametrize("source", [None, 42, object(), NonIterable()])
+@pytest.mark.parametrize("chained", [False, True])
+def test_to_list_still_wraps_noniterable_values(source, chained):
+    result = _.chain(source).to_list().value() if chained else _.to_list(source)
+
+    assert len(result) == 1
+    assert result[0] is source
+
+
 @parametrize(
     "case,expected",
     [
@@ -744,6 +838,7 @@ def test_keys(case, expected):
             ),
             {"fred": 40, "pebbles": 1},
         ),
+        (({"name": " fred ", "a": "banana"}, str.strip), {"name": "fred", "a": "banana"}),
     ],
 )
 def test_map_values(case, expected):
@@ -1252,7 +1347,38 @@ def test_to_boolean(case, expected):
     ],
 )
 def test_to_integer(case, expected):
-    assert _.to_integer(case) == expected
+    result = _.to_integer(case)
+    assert result == expected
+    assert type(result) is int
+
+
+@parametrize("kind", ["int", "enum", "str"])
+@parametrize("expected", [0, 1, -1, 2**53 + 1, -(2**53 + 1), 10**400, -(10**400)])
+def test_to_integer_preserves_subclass_precision(kind, expected):
+    class IntegerSubclass(int):
+        pass
+
+    class StringSubclass(str):
+        pass
+
+    integer_enum = IntEnum("IntegerEnum", {"VALUE": expected})
+    case = {
+        "int": IntegerSubclass(expected),
+        "enum": integer_enum.VALUE,
+        "str": StringSubclass(str(expected)),
+    }[kind]
+
+    result = _.to_integer(case)
+    assert result == expected
+    assert type(result) is int
+
+
+@parametrize("case,expected", [("1.9", 1), ("1e3", 1000), ("foo", 0), ("inf", 0)])
+def test_to_integer_string_subclass_fallback(case, expected):
+    class StringSubclass(str):
+        pass
+
+    assert _.to_integer(StringSubclass(case)) == expected
 
 
 def test_to_integer_preserves_float_conversion_protocol():

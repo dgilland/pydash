@@ -1138,7 +1138,7 @@ def order_by(
 @t.overload
 def order_by(
     collection: t.Mapping[t.Any, T2],
-    keys: t.Iterable[str],
+    keys: t.Iterable[t.Union[str, int]],
     orders: None = None,
     reverse: bool = False,
 ) -> t.List[T2]: ...
@@ -1156,7 +1156,7 @@ def order_by(
 @t.overload
 def order_by(
     collection: t.Iterable[T],
-    keys: t.Iterable[str],
+    keys: t.Iterable[t.Union[str, int]],
     orders: None = None,
     reverse: bool = False,
 ) -> t.List[T]: ...
@@ -1171,8 +1171,9 @@ def order_by(collection, keys, orders=None, reverse=False):
 
     Args:
         collection: Collection to iterate over.
-        keys: List of keys to sort by. By default, keys will be sorted in ascending order. To
-            sort a key in descending order, prepend a ``"-"`` to the key name. For example, to sort
+        keys: List of string keys or integer keys/indexes to sort by. By default, keys will be
+            sorted in ascending order. To sort a string key in descending order, prepend a
+            ``"-"`` to the key name. For example, to sort
             the key value for ``"name"`` in descending order, use ``"-name"``.
         orders: List of boolean sort orders to apply for each key. ``True``
             corresponds to ascending order while ``False`` is descending. Defaults to ``None``.
@@ -1200,6 +1201,8 @@ def order_by(collection, keys, orders=None, reverse=False):
         >>> assert results == [{'a': 3, 'b': 2},\
                                {'a': 2, 'b': 1},\
                                {'a': 1, 'b': 3}]
+        >>> order_by([[3], [1], [2]], [0])
+        [[1], [2], [3]]
 
     .. versionadded:: 3.0.0
 
@@ -1236,7 +1239,7 @@ def order_by(collection, keys, orders=None, reverse=False):
             comparers.append((pyd.property_(key), order))
     else:
         for key in keys:
-            if key.startswith("-"):
+            if isinstance(key, str) and key.startswith("-"):
                 order = -1
                 key = key[1:]
             else:

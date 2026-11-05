@@ -104,6 +104,7 @@ def test_every(case, expected):
     [
         (([0, True, False, None, 1, 2, 3],), [True, 1, 2, 3]),
         (([1, 2, 3, 4, 5, 6], lambda num: num % 2 == 0), [2, 4, 6]),
+        ((["a", " ", "b"], str.strip), ["a", "b"]),
         (
             (
                 [
@@ -345,6 +346,9 @@ def test_key_by(case, expected):
         (([1.1, 2.1, 3.1], int), [1, 2, 3], False),
         (([1, 2, 3], lambda num: num * 3), [3, 6, 9], False),
         (([[1], [2, 3], [4, 5, 6]], len), [1, 2, 3], False),
+        (([" a ", "b "], str.strip), ["a", "b"], False),
+        ((["a b", "c d"], str.split), [["a", "b"], ["c", "d"]], False),
+        ((["a\nb", "c\nd"], str.splitlines), [["a", "b"], ["c", "d"]], False),
         (({"one": 1, "two": 2, "three": 3}, lambda num: num * 3), [3, 6, 9], True),
         (
             ([{"name": "moe", "age": 40}, {"name": "larry", "age": 50}], "name"),
@@ -812,6 +816,28 @@ def test_order_by_accepts_iterable_orders():
 
     # Unspecified per-key directions still default to ascending.
     assert _.order_by(items, ["a", "b"], iter([False])) == _.order_by(items, ["a", "b"], [False])
+
+
+@parametrize("orders", [None, [], iter([]), False, [True]])
+def test_order_by_numeric_keys_with_default_directions(orders):
+    rows = [[2, "second"], [1, "first"], [2, "third"]]
+    expected = [rows[1], rows[0], rows[2]]
+    assert _.order_by(rows, [0], orders) == expected
+    assert rows == [[2, "second"], [1, "first"], [2, "third"]]
+
+
+def test_order_by_numeric_keys_mapping_and_chain():
+    rows = [{0: 2, "name": "a"}, {0: 1, "name": "b"}, {0: 2, "name": "c"}]
+    expected = [rows[1], rows[2], rows[0]]
+    assert _.order_by(dict(enumerate(rows)), [0, "-name"]) == expected
+    assert _.chain(rows).order_by([0, "-name"]).value() == expected
+
+
+def test_order_by_numeric_keys_explicit_and_reverse_directions():
+    rows = [[2], [1], [3]]
+    assert _.order_by(rows, [0], [False]) == [[3], [2], [1]]
+    assert _.order_by(rows, [0], True) == [[3], [2], [1]]
+    assert _.order_by(rows, [0], reverse=True) == [[3], [2], [1]]
 
 
 @parametrize(
