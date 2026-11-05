@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Evaluate ``find_last_key`` predicates from right to left and stop at the first match.
 - Keep ``debounce`` maximum waits and ``throttle`` intervals stable across system clock changes.
 - Type ``unzip_with`` without an iteratee as returning variable-length column tuples.
 - Allow empty ``flow`` and ``flow_right`` pipelines to be used as iteratees without raising

@@ -664,8 +664,7 @@ def find_last_key(obj, predicate=None):
         Made into its own function (instead of an alias of ``find_key``) with
         proper reverse find implementation.
     """
-    reversed_obj = reversed(list(iteriteratee(obj, predicate)))
-    for result, _, key, _ in reversed_obj:
+    for result, _, key, _ in iteriteratee(obj, predicate, reverse=True):
         if result:
             return key
 
