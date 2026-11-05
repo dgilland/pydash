@@ -1,4 +1,5 @@
 from decimal import Decimal
+from fractions import Fraction
 import math
 import typing as t
 
@@ -35,6 +36,40 @@ def test_mypy_mean() -> None:
 @pytest.mark.mypy_testing
 def test_mypy_mean_by() -> None:
     assert_type(_.mean_by([1, 2, 3, 4], lambda x: x ** 2), float)
+
+
+@pytest.mark.mypy_testing
+def test_mypy_mean_numeric_results() -> None:
+    decimals = [Decimal("1"), Decimal("2")]
+    assert_type(_.mean(decimals), t.Union[Decimal, float])
+    assert_type(_.mean({"a": Decimal("1")}), t.Union[Decimal, float])
+    assert_type(_.mean([Fraction(1), Fraction(2)]), t.Union[Fraction, float])
+    assert_type(_.mean([1j, 2j]), t.Union[complex, float])
+    assert_type(_.mean([1, 2]), float)
+    assert_type(_.mean([1.0, 2.0]), float)
+    assert_type(_.chain(decimals).mean().value(), t.Union[Decimal, float])
+    empty: list[Decimal] = []
+    assert_type(_.mean(empty), t.Union[Decimal, float])
+    assert math.isnan(_.mean(empty))
+    assert _.mean(decimals) == Decimal("1.5")
+
+
+@pytest.mark.mypy_testing
+def test_mypy_mean_by_numeric_results() -> None:
+    assert_type(_.mean_by(["1", "2"], Decimal), t.Union[Decimal, float])
+    assert_type(_.mean_by({"a": "1"}, Decimal), t.Union[Decimal, float])
+    assert_type(_.mean_by([1, 2], lambda x: x * 2), float)
+    assert_type(_.chain(["1", "2"]).mean_by(Decimal).value(), t.Union[Decimal, float])
+    assert _.mean_by(["1", "2"], Decimal) == Decimal("1.5")
+
+
+@pytest.mark.mypy_testing
+def test_mypy_moving_mean_numeric_results() -> None:
+    decimals = [Decimal("1"), Decimal("2"), Decimal("3")]
+    assert_type(_.moving_mean(decimals, 2), list[t.Union[Decimal, float]])
+    assert_type(_.moving_mean([1, 2, 3], 2), list[float])
+    assert_type(_.chain(decimals).moving_mean(2).value(), list[t.Union[Decimal, float]])
+    assert _.moving_mean(decimals, 2) == [Decimal("1.5"), Decimal("2.5")]
 
 
 @pytest.mark.mypy_testing
@@ -150,6 +185,24 @@ def test_mypy_multiply() -> None:
 def test_mypy_power() -> None:
     reveal_type(_.power(5, 2))  # R: Union[builtins.int, builtins.float]
     reveal_type(_.power(12.5, 3))  # R: builtins.float
+
+
+@pytest.mark.mypy_testing
+def test_mypy_power_list_scalar_exponents() -> None:
+    floats = [1.5, 2.0]
+    assert_type(_.power(floats, 2), t.List[float])
+    assert_type(_.power(floats, 0.5), t.List[float])
+    assert_type(_.power(floats, -1), t.List[float])
+    assert_type(_.chain(floats).power(2).value(), t.List[float])
+    assert_type(_.power([1, 2], 2), t.List[t.Union[int, float]])
+    assert _.power(floats, 2) == [2.25, 4.0]
+
+
+@pytest.mark.mypy_testing
+def test_mypy_power_rejects_list_exponents() -> None:
+    if t.TYPE_CHECKING:
+        floats = [1.5, 2.0]
+        _.power(floats, [2])  # type: ignore[call-overload]
 
 
 @pytest.mark.mypy_testing

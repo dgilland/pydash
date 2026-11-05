@@ -107,6 +107,18 @@ def test_mypy_invoke_map() -> None:
 
 
 @pytest.mark.mypy_testing
+def test_mypy_invoke_map_callable_types() -> None:
+    def prefix(value: str, *, text: str) -> str:
+        return text + value
+
+    assert_type(_.invoke_map(["ab", "cd"], str.upper), list[str])
+    assert_type(_.invoke_map(["ab", "c"], len), list[int])
+    assert_type(_.invoke_map(["ab"], "upper"), list[t.Any])
+    assert_type(_.chain(["ab"]).invoke_map(str.upper).value(), list[str])
+    assert_type(_.invoke_map(["ab"], prefix, text="!"), list[str])
+
+
+@pytest.mark.mypy_testing
 def test_mypy_key_by() -> None:
     reveal_type(_.key_by([{"a": 1, "b": 2}, {"a": 3, "b": 4}], "a"))  # R: builtins.dict[Any, Any]
     reveal_type(_.key_by([{"a": 1, "b": 2}, {"a": 3, "b": 4}], lambda d: d["a"]))  # R: builtins.dict[builtins.int, builtins.dict[builtins.str, builtins.int]]

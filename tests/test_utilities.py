@@ -11,6 +11,10 @@ import pydash as _
 parametrize = pytest.mark.parametrize
 
 
+def generator_source(values):
+    yield from values
+
+
 @parametrize("key", ["a.b", "a[0]", "[0]", ("a", "b")])
 def test_conforms_literal_keys(key):
     source = {key: lambda value: value == 1}
@@ -222,6 +226,115 @@ def test_iteratee(case, arg, expected):
 )
 def test_matches(case, arg, expected):
     assert _.matches(case)(arg) is expected
+
+
+@pytest.mark.parametrize(
+    "make_predicate,make_candidate",
+    [
+        (_.matches, lambda values: values),
+        (
+            lambda source: _.matches_property("items", source),
+            lambda values: {"items": values},
+        ),
+    ],
+)
+@pytest.mark.parametrize("make_source", [iter, generator_source])
+def test_matches_iterator_criteria_are_reused_for_changing_candidates(
+    make_predicate, make_candidate, make_source
+):
+    predicate = make_predicate(make_source([1, 2]))
+
+    assert predicate(make_candidate([1, 2])) is True
+    assert predicate(make_candidate([9, 9])) is False
+    assert predicate(make_candidate([1])) is False
+    assert predicate(make_candidate([1, 2, 3])) is True
+    assert predicate(make_candidate([1, 9])) is False
+
+
+@pytest.mark.parametrize(
+    "make_predicate,make_candidate",
+    [
+        (_.matches, lambda values: values),
+        (
+            lambda source: _.matches_property("items", source),
+            lambda values: {"items": values},
+        ),
+    ],
+)
+def test_matches_iterator_criteria_remain_lazy_and_short_circuit(make_predicate, make_candidate):
+    consumed = []
+
+    def criteria():
+        consumed.append(1)
+        yield 1
+        raise AssertionError("the unmatched tail should not be read")
+
+    predicate = make_predicate(criteria())
+
+    assert consumed == []
+    assert predicate(make_candidate([9])) is False
+    assert predicate(make_candidate([9])) is False
+    assert consumed == [1]
+
+
+@pytest.mark.parametrize(
+    "make_predicate,make_candidate",
+    [
+        (_.matches, lambda values: values),
+        (
+            lambda source: _.matches_property("items", source),
+            lambda values: {"items": values},
+        ),
+    ],
+)
+def test_matches_filter_reuses_iterator_based_predicate(make_predicate, make_candidate):
+    first = make_candidate([1, 2])
+    second = make_candidate([9, 9])
+    third = make_candidate([1, 2, 3])
+    predicate = make_predicate(iter([1, 2]))
+
+    result = _.filter_([first, second, third], predicate)
+    assert result == [first, third]
+    assert result[0] is first
+    assert result[1] is third
+
+
+@pytest.mark.parametrize(
+    "make_predicate,make_candidate",
+    [
+        (_.matches, lambda values: values),
+        (
+            lambda source: _.matches_property("items", source),
+            lambda values: {"items": values},
+        ),
+    ],
+)
+def test_matches_empty_iterator_criteria_remain_vacuous(make_predicate, make_candidate):
+    predicate = make_predicate(iter([]))
+
+    assert predicate(make_candidate([])) is True
+    assert predicate(make_candidate([9])) is True
+
+
+@pytest.mark.parametrize(
+    "make_predicate,make_candidate",
+    [
+        (_.matches, lambda values: values),
+        (
+            lambda source: _.matches_property("items", source),
+            lambda values: {"items": values},
+        ),
+    ],
+)
+def test_matches_reiterable_criteria_still_reflect_mutation(make_predicate, make_candidate):
+    source = [1, 2]
+    predicate = make_predicate(source)
+
+    assert predicate(make_candidate([1, 2])) is True
+
+    source[0] = 9
+    assert predicate(make_candidate([9, 2])) is True
+    assert predicate(make_candidate([1, 2])) is False
 
 
 @parametrize(
