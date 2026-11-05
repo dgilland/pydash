@@ -1182,8 +1182,15 @@ def variance(array):
 
     .. versionadded:: 2.1.0
     """
-    if isinstance(array, Iterator) or not isinstance(array, Sized):
+    if isinstance(array, Mapping):
+        array = list(array.values())
+    elif isinstance(array, Iterator) or not isinstance(array, Sized):
         array = list(array)
+
+    if array and all(isinstance(value, int) for value in array):
+        offset = next(iter(array))
+        array = [value - offset for value in array]
+
     avg = mean(array)
 
     def var(x):
