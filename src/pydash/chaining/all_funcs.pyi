@@ -616,7 +616,7 @@ class AllFuncs:
     @t.overload
     def unzip_with(
         self: "Chain[t.Iterable[t.Iterable[T]]]", iteratee: None = None
-    ) -> "Chain[t.List[t.Tuple[T]]]": ...
+    ) -> "Chain[t.List[t.Tuple[T, ...]]]": ...
     def unzip_with(self, iteratee=None):
         return self._wrap(pyd.unzip_with)(iteratee)
 

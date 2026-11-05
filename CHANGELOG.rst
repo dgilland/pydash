@@ -7,6 +7,10 @@ Unreleased
 ----------
 
 - Keep ``debounce`` maximum waits and ``throttle`` intervals stable across system clock changes.
+- Type ``unzip_with`` without an iteratee as returning variable-length column tuples.
+- Allow empty ``flow`` and ``flow_right`` pipelines to be used as iteratees without raising
+  ``IndexError`` during argument inspection.
+- Keep top-level iterator criteria reusable in ``matches`` and ``matches_property`` predicates without consuming them eagerly.
 - Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than
   propagating the original failure.
 - Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and
