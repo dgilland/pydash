@@ -194,7 +194,7 @@ class Flow(t.Generic[P, T]):
 
     @cached_property
     def _argcount(self) -> t.Optional[int]:
-        return getargcount(self.funcs[self._from_index], None)
+        return getargcount(self.funcs[self._from_index], None) if self.funcs else 0
 
 
 class Conjoin(t.Generic[T]):
