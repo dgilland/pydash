@@ -11,6 +11,7 @@ Lead
 Contributors
 ------------
 
+- Tanveer Singh, `tanveerchana@github <https://github.com/tanveerchana>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
 - Bharadwaj Yarlagadda, `bharadwajyarlagadda@github <https://github.com/bharadwajyarlagadda>`_
@@ -82,3 +83,4 @@ Contributors
 - Jillur Rahman, `developerjillur@github <https://github.com/developerjillur>`_
 - BooGu, `boogu2005@github <https://github.com/boogu2005>`_
 - Awais Ur Rehman, `awais-ur-rehman@github <https://github.com/awais-ur-rehman>`_
+- Roland, `n0liu@github <https://github.com/n0liu>`_

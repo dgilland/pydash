@@ -2472,7 +2472,7 @@ def unzip_with(
 def unzip_with(
     array: t.Iterable[t.Iterable[T]],
     iteratee: None = None,
-) -> t.List[t.Tuple[T]]: ...
+) -> t.List[t.Tuple[T, ...]]: ...
 
 
 def unzip_with(array, iteratee=None):
