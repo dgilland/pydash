@@ -517,6 +517,8 @@ def matches(source: t.Any) -> t.Callable[[t.Any], bool]:
     object and the `source` object, returning ``True`` if the given object has equivalent property
     values, else ``False``.
 
+    Iterator sources remain reusable across repeated predicate calls.
+
     Args:
         source: Source object used for comparision.
 
@@ -538,7 +540,15 @@ def matches(source: t.Any) -> t.Callable[[t.Any], bool]:
     .. versionchanged:: 3.0.0
         Use :func:`pydash.predicates.is_match` as matching function.
     """
-    return lambda obj: pyd.is_match(obj, source)
+
+    def _matches(obj: t.Any) -> bool:
+        nonlocal source
+        current = source
+        if isinstance(source, Iterator):
+            source, current = tee(source)
+        return pyd.is_match(obj, current)
+
+    return _matches
 
 
 def matches_property(key: t.Any, value: t.Any) -> t.Callable[[t.Any], bool]:

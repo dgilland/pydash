@@ -194,7 +194,7 @@ class Flow(t.Generic[P, T]):
 
     @cached_property
     def _argcount(self) -> t.Optional[int]:
-        return getargcount(self.funcs[self._from_index], None)
+        return getargcount(self.funcs[self._from_index], None) if self.funcs else 0
 
 
 class Conjoin(t.Generic[T]):
@@ -438,7 +438,7 @@ class Debounce(_WithArgCount, t.Generic[P, T]):
         with self._lock:
             self._args = args
             self._kwargs = kwargs
-            present = pyd.now()
+            present = time.monotonic_ns() // 1_000_000
 
             if self._first_call is None:
                 self._first_call = present
@@ -707,7 +707,7 @@ class Throttle(_WithArgCount, t.Generic[P, T]):
         self.wait = wait
 
         self.last_result: t.Union[T, None] = None
-        self.last_execution = pyd.now() - self.wait
+        self.last_execution = time.monotonic_ns() // 1_000_000 - self.wait
 
         self._lock = threading.RLock()
         self._timer: t.Optional[threading.Timer] = None
@@ -725,7 +725,7 @@ class Throttle(_WithArgCount, t.Generic[P, T]):
         with self._lock:
             self._args = args
             self._kwargs = kwargs
-            present = pyd.now()
+            present = time.monotonic_ns() // 1_000_000
             remaining = self.wait - (present - self.last_execution)
 
             if remaining <= 0:
@@ -749,7 +749,7 @@ class Throttle(_WithArgCount, t.Generic[P, T]):
         with self._lock:
             if generation != self._generation:
                 return
-            self._invoke(pyd.now())
+            self._invoke(time.monotonic_ns() // 1_000_000)
 
     def _invoke(self, present: int) -> T:
         """Execute the latest call. Caller must hold ``_lock``."""
@@ -1003,6 +1003,8 @@ def debounce(
     Creates a function that will delay the execution of `func` until after `wait` milliseconds have
     elapsed since the last time it was invoked. Subsequent calls to the debounced function will
     return the result of the last `func` call.
+
+    Wait intervals use a monotonic clock and are unaffected by system clock adjustments.
 
     Args:
         func: Function to execute.
@@ -1536,6 +1538,8 @@ def throttle(func: t.Callable[P, T], wait: int) -> Throttle[P, T]:
     The first call executes immediately. If called again during the wait period, `func` also runs
     once at the end of that period with the latest arguments. This trailing call runs in a daemon
     timer thread. A single call does not schedule a second invocation.
+
+    Wait intervals use a monotonic clock and are unaffected by system clock adjustments.
 
     Args:
         func: Function to throttle.

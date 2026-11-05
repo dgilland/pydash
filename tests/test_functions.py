@@ -355,6 +355,7 @@ def test_callback_can_start_another_burst(first_path):
         with (
             patch('pydash.functions.threading.Timer', Timer),
             patch('pydash.now', lambda: clock[0]),
+            patch('pydash.functions.time.monotonic_ns', lambda: clock[0] * 1_000_000),
         ):
             debounced = pydash.debounce(callback, 10, max_wait=25)
             debounced('first')
@@ -735,8 +736,47 @@ def throttle_clock(monkeypatch):
         now[0] = target
 
     monkeypatch.setattr(_, "now", lambda: now[0])
+    monkeypatch.setattr(time, "monotonic_ns", lambda: now[0] * 1_000_000)
     monkeypatch.setattr(threading, "Timer", Timer)
     return advance, timers
+
+
+@parametrize("clock_jump", [-3_600_000, 3_600_000])
+def test_throttle_ignores_wall_clock_changes(throttle_clock, monkeypatch, clock_jump):
+    advance, _timers = throttle_clock
+    wall_clock = [1_000_000]
+    monkeypatch.setattr(_, "now", lambda: wall_clock[0])
+    func = mock.Mock(side_effect=lambda value: value)
+    throttled = _.throttle(func, 100)
+
+    assert throttled("first") == "first"
+    advance(40)
+    wall_clock[0] += clock_jump
+    assert throttled("latest") == "first"
+    func.assert_called_once_with("first")
+
+    advance(60)
+    assert func.call_args_list == [mock.call("first"), mock.call("latest")]
+
+
+@parametrize("clock_jump", [-3_600_000, 3_600_000])
+def test_debounce_max_wait_ignores_wall_clock_changes(throttle_clock, monkeypatch, clock_jump):
+    advance, _timers = throttle_clock
+    wall_clock = [1_000_000]
+    monkeypatch.setattr(_, "now", lambda: wall_clock[0])
+    func = mock.Mock(side_effect=lambda value: value)
+    debounced = _.debounce(func, 80, max_wait=100)
+
+    assert debounced("first") is None
+    advance(40)
+    wall_clock[0] += clock_jump
+    assert debounced("middle") is None
+    advance(40)
+    assert debounced("latest") is None
+    func.assert_not_called()
+
+    advance(20)
+    func.assert_called_once_with("latest")
 
 
 def test_throttle_single_call_does_not_repeat(throttle_clock):
@@ -841,6 +881,15 @@ def test_flow_argcount():
 
 def test_flow_right_argcount():
     assert _.flow_right(lambda x: x * 2, lambda x, y: x + y)._argcount == 2
+
+
+@parametrize("factory", [_.flow, _.flow_right])
+def test_empty_flow_as_iteratee(factory):
+    pipeline = factory()
+    assert pipeline("value") is None
+    assert _.map_([1, 2], pipeline) == [None, None]
+    assert _.filter_([1, 2], pipeline) == []
+    assert _.chain([1, 2]).map_(pipeline).value() == [None, None]
 
 
 def test_juxtapose_argcount():
