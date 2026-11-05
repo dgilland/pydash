@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import Decimal, localcontext
 import re
 from urllib.parse import parse_qsl, urlsplit
 
@@ -472,6 +472,28 @@ def test_number_format_decimal_and_chain_controls():
 def test_number_format_single_or_empty_separator_controls():
     assert _.number_format(-12345, 0, ".", ",") == "-12,345"
     assert _.number_format(12345, 0, ".", "") == "12345"
+
+
+@parametrize("number", [2**53 + 1, -(2**53 + 1), 1234567890123456789, 10**400, -(10**400)])
+@parametrize("scale", [0, 2])
+def test_number_format_preserves_integer_digits(number, scale):
+    expected = format(number, ",d") + (".00" if scale else "")
+    assert _.number_format(number, scale) == expected
+
+
+def test_number_format_exact_integer_separators_and_chain():
+    assert _.number_format(2**53 + 1, 2, ":", "ab") == "9ab007ab199ab254ab740ab993:00"
+    assert _.chain(-(2**53 + 1)).number_format(2, ",", " ").value() == "-9 007 199 254 740 993,00"
+
+
+def test_number_format_integer_ignores_decimal_context():
+    with localcontext() as context:
+        context.prec = 3
+        assert _.number_format(2**53 + 1, 2) == "9,007,199,254,740,993.00"
+
+
+def test_number_format_preserves_float_rounding():
+    assert _.number_format(2.675, 2) == "2.67"
 
 
 @parametrize(
