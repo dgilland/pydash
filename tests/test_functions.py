@@ -843,6 +843,15 @@ def test_flow_right_argcount():
     assert _.flow_right(lambda x: x * 2, lambda x, y: x + y)._argcount == 2
 
 
+@parametrize("factory", [_.flow, _.flow_right])
+def test_empty_flow_as_iteratee(factory):
+    pipeline = factory()
+    assert pipeline("value") is None
+    assert _.map_([1, 2], pipeline) == [None, None]
+    assert _.filter_([1, 2], pipeline) == []
+    assert _.chain([1, 2]).map_(pipeline).value() == [None, None]
+
+
 def test_juxtapose_argcount():
     assert _.juxtapose(lambda x, y, z: x + y + z, lambda x, y, z: x * y * z)._argcount == 3
 

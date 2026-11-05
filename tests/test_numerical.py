@@ -498,6 +498,18 @@ def test_variance_keeps_mapping_values(function, mapping_type):
 
 
 @parametrize(
+    "case",
+    [
+        [10**18, 10**18 + 1],
+        iter([10**18, 10**18 + 1]),
+        {"first": 10**18, "second": 10**18 + 1},
+    ],
+)
+def test_variance_preserves_precision_for_large_integer_values(case):
+    assert _.variance(case) == 0.25
+
+
+@parametrize(
     "case,expected",
     [
         (([1, 2, 3],), [-1.225, 0.0, 1.225]),
