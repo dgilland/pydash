@@ -642,6 +642,39 @@ def test_find_last_key(case, expected):
 
 
 @parametrize(
+    "make_collection, keys",
+    [
+        (list, [2, 1]),
+        (iter, [2, 1]),
+        (lambda values: dict(zip("abc", values)), ["c", "b"]),
+    ],
+)
+def test_find_last_key_calls_predicate_in_reverse_until_match(make_collection, keys):
+    collection = make_collection(["skip", "match", "try"])
+    seen = []
+
+    def predicate(value, key, original):
+        assert original is collection
+        assert value != "skip"
+        seen.append(key)
+        return value == "match"
+
+    assert _.find_last_key(collection, predicate) == keys[-1]
+    assert seen == keys
+
+
+def test_find_last_key_checks_all_items_in_reverse_when_no_match():
+    seen = []
+
+    def predicate(value):
+        seen.append(value)
+        return False
+
+    assert _.find_last_key([1, 2, 3], predicate) is None
+    assert seen == [3, 2, 1]
+
+
+@parametrize(
     "case,expected",
     [
         (

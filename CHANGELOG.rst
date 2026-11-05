@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Evaluate ``find_last_key`` predicates from right to left and stop at the first match.
 - Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than
   propagating the original failure.
 - Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and
