@@ -520,6 +520,20 @@ def test_zscore(case, expected):
     assert _.map_(_.zscore(*case), lambda v: round(v, 3)) == expected
 
 
+@parametrize("offset", [10**16, -(10**16), 10**400])
+@parametrize("factory", [list, tuple, iter])
+def test_zscore_preserves_integer_translation_invariance(offset, factory):
+    values = [0, 1, 2]
+    assert _.zscore(factory([offset + value for value in values])) == pytest.approx(
+        _.zscore(values)
+    )
+
+
+def test_zscore_centers_integer_iteratee_results():
+    values = {"a": {"value": 10**16}, "b": {"value": 10**16 + 1}, "c": {"value": 10**16 + 2}}
+    assert _.zscore(values, "value") == pytest.approx(_.zscore([0, 1, 2]))
+
+
 @parametrize("factory", [dict, UserDict, MappingProxyType])
 @parametrize("function,expected", [(_.max_by, {"score": 3}), (_.min_by, {"score": 1})])
 def test_extrema_by_generic_mapping_values(factory, function, expected):
