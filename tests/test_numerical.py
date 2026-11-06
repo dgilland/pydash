@@ -326,6 +326,16 @@ def test_round_(case, expected):
     assert _.round_(*case) == expected
 
 
+@parametrize("value", [1e308, -1e308, 1e200, -1e200])
+def test_round_large_finite_float_does_not_overflow(value):
+    assert _.round_(value, 200) == round(value, 200)
+
+
+def test_round_large_finite_floats_in_a_collection():
+    values = [1e308, 2.675, -1e308]
+    assert _.round_(values, 2) == [1e308, 2.68, -1e308]
+
+
 @parametrize(
     "case,expected",
     [
