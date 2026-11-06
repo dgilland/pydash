@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Leave the object unchanged when setting, updating, or unsetting an empty path.
 - Preserve exact integer digits in ``number_format`` without conversion through floating point.
 - Evaluate ``find_last_key`` predicates from right to left and stop at the first match.
 - Keep ``debounce`` maximum waits and ``throttle`` intervals stable across system clock changes.
