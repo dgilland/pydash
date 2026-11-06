@@ -1256,6 +1256,9 @@ def zscore(collection, iteratee=None):
     .. versionadded:: 2.1.0
     """
     array = pyd.map_(collection, iteratee)
+    if array and all(isinstance(item, int) for item in array):
+        offset = array[0]
+        array = [item - offset for item in array]
     avg = mean(array)
     sig = std_deviation(array)
 
