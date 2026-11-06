@@ -124,6 +124,7 @@ v8.1.0 (2026-08-29)
 - Fix flattening nested iterables. Thanks gaoflow_!
 - Fix ``StopIteration`` leak in ``iterintersperse`` on empty iterable. Thanks gaoflow_!
 - Fix ``in_range`` to support reversed ranges where ``start`` is greater than ``end`` by swapping the bounds, matching lodash's documented ``_.inRange`` behavior (e.g. ``in_range(-3, -2, -6)`` now returns ``True``). Thanks gaoflow_!
+- Round large finite floating-point values without overflowing during decimal scaling.
 - Fix ``floor``, ``ceil``, and ``round_`` passing index as precision when used as iteratees. Thanks gaoflow_!
 - Fix ``debounce`` to delay execution until after ``wait`` milliseconds of quiet instead of invoking immediately on the first call. Thanks SeaStarDeng_!
 - Fix ``to_list`` returning a ``dict_values`` view instead of a list for dicts. Thanks HarperZ9_!
