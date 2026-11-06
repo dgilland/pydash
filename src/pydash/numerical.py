@@ -662,7 +662,16 @@ def median(collection, iteratee=None):
     else:
         left = int(middle - 1.5)
         right = int(middle - 0.5)
-        result = (collection[left] + collection[right]) / 2
+        middle_sum = collection[left] + collection[right]
+        if (
+            isinstance(middle_sum, float)
+            and math.isinf(middle_sum)
+            and math.isfinite(collection[left])
+            and math.isfinite(collection[right])
+        ):
+            result = collection[left] / 2 + collection[right] / 2
+        else:
+            result = middle_sum / 2
 
     return result
 
