@@ -1521,7 +1521,10 @@ def _merge_with(obj, *sources, **kwargs):
 
     for source in sources:
         for key, src_value in iterator(source):
-            obj_value = base_get(obj, key, default=None)
+            if isinstance(obj, MutableMapping):
+                obj_value = obj.get(key)
+            else:
+                obj_value = base_get(obj, key, default=None)
             all_sequences = isinstance(src_value, list) and isinstance(obj_value, list)
             all_mappings = isinstance(src_value, dict) and isinstance(obj_value, dict)
 

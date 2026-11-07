@@ -1009,6 +1009,30 @@ def test_merge(case, expected):
     assert _.merge(*case) == expected
 
 
+@parametrize("combine", [_.merge, _.merge_with, _.defaults_deep])
+def test_merge_distinguishes_numeric_strings_from_integer_keys(combine):
+    int_value = {"left": 1}
+    obj = {"nested": {1: int_value}}
+    source = {"nested": {"1": {"right": 2}}}
+
+    assert combine(obj, source) is obj
+    assert obj == {"nested": {1: {"left": 1}, "1": {"right": 2}}}
+    assert obj["nested"][1] is int_value
+    assert obj["nested"]["1"] is not source["nested"]["1"]
+
+
+def test_merge_with_customizer_reads_literal_mapping_key():
+    obj = UserDict({1: {"left": 1}})
+    seen = []
+
+    def customizer(obj_value, src_value, key):
+        seen.append((key, obj_value))
+
+    assert _.merge_with(obj, {"1": {"right": 2}}, iteratee=customizer) is obj
+    assert seen == [("1", None)]
+    assert obj == {1: {"left": 1}, "1": {"right": 2}}
+
+
 def test_merge_no_link_dict():
     case1 = {"foo": {"bar": None}}
     case2 = {"foo": {"bar": False}}
