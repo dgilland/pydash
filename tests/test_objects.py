@@ -1,6 +1,7 @@
 from argparse import Namespace
 from collections import ChainMap, UserDict, defaultdict, namedtuple
 from copy import deepcopy
+from dataclasses import dataclass
 import datetime as dt
 from decimal import Decimal
 from enum import IntEnum
@@ -311,6 +312,58 @@ def test_default_customizer_preserves_isolation():
     result["outer"]["items"].append("new")
     assert source == {"outer": {"items": []}}
     assert result == {"outer": {"items": ["new"]}}
+
+
+@parametrize("source", [(1, 2), SomeNamedTuple(1, 2), {"items": (1, 2)}])
+def test_default_deep_customizer_accepts_immutable_sequences(source):
+    result = _.clone_deep_with(source, lambda *_: None)
+
+    assert result == source
+    assert type(result) is type(source)
+
+
+@parametrize("named", [False, True])
+def test_deep_customizer_updates_mutable_children_inside_tuples(named):
+    child = {"count": 1}
+    source = SomeNamedTuple(child, "tag") if named else (child, "tag")
+
+    result = _.clone_deep_with(source, multiply_numbers)
+
+    assert type(result) is type(source)
+    assert result == ({"count": 10}, "tag")
+    assert result[0] is not child
+    assert source == ({"count": 1}, "tag")
+
+
+@parametrize("customizer,expected", [(lambda *_: None, [1]), (multiply_numbers, [10])])
+def test_deep_customizer_preserves_frozen_parent_attributes(customizer, expected):
+    @dataclass(frozen=True)
+    class Config:
+        entries: list
+
+    source = Config([1])
+
+    result = _.clone_deep_with(source, customizer)
+
+    assert isinstance(result, Config)
+    assert result is not source
+    assert result.entries is not source.entries
+    assert result.entries == expected
+    assert source.entries == [1]
+
+
+def test_default_deep_customizer_preserves_tuple_list_cycles():
+    child = []
+    source = (child,)
+    child.append(source)
+
+    result = _.clone_deep_with(source, lambda *_: None)
+
+    assert isinstance(result, tuple)
+    assert result is not source
+    assert result[0] is not child
+    assert result[0][0] is result
+    assert child[0] is source
 
 
 def test_customizer_observes_original_values():

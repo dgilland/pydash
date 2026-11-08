@@ -2673,7 +2673,7 @@ def _customize_clone(value, result, customizer, *, is_deep, memo, seen):
         if is_deep and val is None:
             val = memo.get(id(subvalue), subvalue)
             _customize_clone(subvalue, val, customizer, is_deep=is_deep, memo=memo, seen=seen)
-        if val is not None:
+        elif val is not None:
             target_key = memo.get(id(key), key) if is_deep else key
             if hasattr(type(result), "__setitem__"):
                 result[target_key] = val

@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Avoid rewriting immutable parent entries in ``clone_deep_with`` when the customizer delegates
+  to default copying.
 - Preserve exact integer digits in ``number_format`` without conversion through floating point.
 - Evaluate ``find_last_key`` predicates from right to left and stop at the first match.
 - Keep ``debounce`` maximum waits and ``throttle`` intervals stable across system clock changes.
