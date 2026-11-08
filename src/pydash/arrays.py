@@ -2904,10 +2904,17 @@ def zip_with(*arrays, **kwargs):
 
 def iterflatten(array, depth=-1):
     """Iteratively flatten a list shallowly or deeply."""
-    for item in array:
-        if is_flattenable(item) and depth != 0:
-            for subitem in iterflatten(item, depth - 1):
-                yield subitem
+    stack = [(iter(array), depth)]
+    while stack:
+        iterator, current_depth = stack[-1]
+        try:
+            item = next(iterator)
+        except StopIteration:
+            stack.pop()
+            continue
+
+        if is_flattenable(item) and current_depth != 0:
+            stack.append((iter(item), current_depth - 1))
         else:
             yield item
 
