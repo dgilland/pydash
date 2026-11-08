@@ -154,6 +154,36 @@ def test_drop_while(case, expected):
     assert _.drop_while(*case) == expected
 
 
+@parametrize("make_array", [list, iter])
+def test_drop_while_stops_calling_predicate_at_first_false(make_array):
+    array = make_array([2, 0, None, 3])
+    seen = []
+
+    def predicate(value, index, original):
+        assert original is array
+        seen.append(index)
+        return value > 0
+
+    assert _.drop_while(array, predicate) == [0, None, 3]
+    assert seen == [0, 1]
+
+
+def test_drop_while_preserves_mapping_values_and_keys():
+    array = {"prefix": 2, "first": 0, "tail": None}
+    seen = []
+
+    def predicate(value, key):
+        seen.append(key)
+        return value > 0
+
+    assert _.drop_while(array, predicate) == [0, None]
+    assert seen == ["prefix", "first"]
+
+
+def test_drop_while_uses_identity_when_predicate_is_omitted():
+    assert _.drop_while([1, 0, 2]) == [0, 2]
+
+
 @parametrize(
     "case,expected",
     [
