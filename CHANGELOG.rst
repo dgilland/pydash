@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve literal mapping keys in ``map_values_deep`` callback paths and parse the optional
+  path prefix only once.
 - Preserve exact integer digits in ``number_format`` without conversion through floating point.
 - Evaluate ``find_last_key`` predicates from right to left and stop at the first match.
 - Keep ``debounce`` maximum waits and ``throttle`` intervals stable across system clock changes.

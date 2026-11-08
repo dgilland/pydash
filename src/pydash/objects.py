@@ -1279,16 +1279,18 @@ def map_values_deep(
     .. versionchanged:: 4.0.0
         Renamed from ``deep_map_values`` to ``map_values_deep``.
     """
-    properties = to_path(property_path)
 
-    if pyd.is_object(obj):
+    def map_values_with_path(obj, properties):
+        if pyd.is_object(obj):
 
-        def deep_iteratee(value, key):
-            return map_values_deep(value, iteratee, pyd.flatten([properties, key]))
+            def deep_iteratee(value, key):
+                return map_values_with_path(value, [*properties, key])
 
-        return assign(obj, map_values(obj, deep_iteratee))  # type: ignore
-    else:
-        return obj if iteratee is None else callit(iteratee, obj, properties)
+            return assign(obj, map_values(obj, deep_iteratee))
+        else:
+            return obj if iteratee is None else callit(iteratee, obj, properties)
+
+    return map_values_with_path(obj, to_path(property_path))
 
 
 def apply(obj: T, func: t.Callable[[T], T2]) -> T2:
