@@ -140,9 +140,9 @@ def iterator(obj):
     """Return iterative based on object type."""
     if isinstance(obj, Mapping):
         return obj.items()
-    elif hasattr(obj, "iteritems"):
+    elif callable(getattr(obj, "iteritems", None)):
         return obj.iteritems()
-    elif hasattr(obj, "items"):
+    elif callable(getattr(obj, "items", None)):
         return iter(obj.items())
     elif isinstance(obj, Iterable):
         return enumerate(obj)

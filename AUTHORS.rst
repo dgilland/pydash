@@ -84,3 +84,4 @@ Contributors
 - BooGu, `boogu2005@github <https://github.com/boogu2005>`_
 - Awais Ur Rehman, `awais-ur-rehman@github <https://github.com/awais-ur-rehman>`_
 - Roland, `n0liu@github <https://github.com/n0liu>`_
+- wynneyin, `wynneyin@github <https://github.com/wynneyin>`_
