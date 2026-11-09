@@ -175,6 +175,29 @@ def test_deburr(case, expected):
 @parametrize(
     "case,expected",
     [
+        # Latin Extended-A letters are deburred like lodash (issue #441).
+        ("\u0142\u00f3\u0142\u0107", "lolc"),  # łółć
+        ("\u011f\u00fc\u015f\u0131\u00f6\u00e7", "gusioc"),  # güşıöç
+        ("\u0141ukasz \u017b\u00f3\u0142\u0107", "Lukasz Zolc"),
+        ("s\u0153ur", "soeur"),
+        ("\u0152uvre", "Oeuvre"),
+        ("\u0130stanbul", "Istanbul"),
+        ("\u0132 \u0133 \u017f \u0149", "IJ ij s 'n"),
+        # Combining diacritical marks are removed like lodash.
+        ("e\u0301\u0302x", "ex"),
+        ("a\u0327", "a"),
+        ("abcABC", "abcABC"),
+        ("", ""),
+        (None, ""),
+    ],
+)
+def test_deburr_latin_extended_a(case, expected):
+    assert _.deburr(case) == expected
+
+
+@parametrize(
+    "case,expected",
+    [
         ("Foo", "foo"),
         ("Foo bar", "foo bar"),
         ("Foo Bar", "foo Bar"),
