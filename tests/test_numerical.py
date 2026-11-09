@@ -283,6 +283,20 @@ def test_moving_mean(case, expected):
     assert _.moving_mean(*case) == expected
 
 
+@parametrize("array", [[], [1, 2, 3]])
+@parametrize("size", [0, -1, "0"])
+def test_moving_mean_rejects_nonpositive_windows(array, size):
+    with pytest.raises(ValueError, match="size must be positive"):
+        _.moving_mean(array, size)
+
+
+def test_moving_mean_window_boundaries():
+    assert _.moving_mean([], 1) == []
+    assert _.moving_mean([1, 2, 3], 1) == [1, 2, 3]
+    assert _.moving_mean([1, 2, 3], 3) == [2]
+    assert _.moving_mean([1, 2, 3], 4) == []
+
+
 @parametrize(
     "multiplier,multiplicand,expected",
     [

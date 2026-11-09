@@ -820,10 +820,13 @@ def moving_mean(
 
     Args:
         array: List to process.
-        size: Window size.
+        size: Positive window size.
 
     Returns:
         Result of moving average.
+
+    Raises:
+        ValueError: If the window size is not positive.
 
     Example:
 
@@ -841,6 +844,8 @@ def moving_mean(
     """
     result = []
     size = int(size)
+    if size <= 0:
+        raise ValueError("size must be positive")
 
     for i in range(size - 1, len(array) + 1):
         window = array[i - size : i]
