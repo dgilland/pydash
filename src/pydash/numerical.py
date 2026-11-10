@@ -1025,8 +1025,7 @@ def scale(array, maximum: NumberT = 1):
     """
     array = list(array)
     array_max = max(array)
-    factor = maximum / array_max
-    return [item * factor for item in array]
+    return [(item / array_max) * maximum for item in array]
 
 
 @t.overload

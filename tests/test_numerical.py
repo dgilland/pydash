@@ -349,6 +349,19 @@ def test_scale(case, expected):
     assert _.scale(*case) == expected
 
 
+@parametrize(
+    "values,maximum,expected",
+    [
+        ([10**400, 2 * 10**400], 1, [0.5, 1.0]),
+        ([1e308, 5e307], 1e-308, [1e-308, 5e-309]),
+        ([1e-308, 5e-309], 1e308, [1e308, 5e307]),
+        ([5e-324, 5e-324], 1, [1.0, 1.0]),
+    ],
+)
+def test_scale_preserves_finite_results_for_extreme_values(values, maximum, expected):
+    assert _.scale(iter(values), maximum) == expected
+
+
 @parametrize("iterable", [iter, lambda values: (value for value in values)])
 @parametrize(
     "values,maximum,expected",
