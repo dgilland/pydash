@@ -228,6 +228,24 @@ def test_mypy_retry() -> None:
 
 
 @pytest.mark.mypy_testing
+def test_retry_exception_types() -> None:
+    _.retry(exceptions=())
+    _.retry(exceptions=(ValueError,))
+    _.retry(exceptions=(ValueError, RuntimeError))
+    if t.TYPE_CHECKING:
+        _.retry(exceptions=[ValueError])  # E: Argument "exceptions" to "retry" has incompatible type "list[type[ValueError]]"; expected "tuple[type[Exception], ...]"
+
+
+@pytest.mark.mypy_testing
+def test_chained_retry_exception_types() -> None:
+    _.chain(3).retry(exceptions=())
+    _.chain(3).retry(exceptions=(ValueError,))
+    _.chain(3).retry(exceptions=(ValueError, RuntimeError))
+    if t.TYPE_CHECKING:
+        _.chain(3).retry(exceptions=[ValueError])  # E: Argument "exceptions" to "retry" of "AllFuncs" has incompatible type "list[type[ValueError]]"; expected "tuple[type[Exception], ...]"
+
+
+@pytest.mark.mypy_testing
 def test_mypy_stub_list() -> None:
     reveal_type(_.stub_list())  # R: builtins.list[Any]
 
