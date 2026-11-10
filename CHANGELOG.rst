@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Stop evaluating the ``drop_while`` predicate after the first retained item.
 - Keep numeric strings and integer keys distinct when merging or assigning deep defaults.
 - Leave the object unchanged when setting, updating, or unsetting an empty path.
 - Preserve exact integer digits in ``number_format`` without conversion through floating point.
