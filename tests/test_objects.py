@@ -924,6 +924,65 @@ def test_map_values_deep_default_iteratee(obj, explicit_none):
     assert obj == expected
 
 
+@parametrize(
+    "obj,expected",
+    [
+        ({("region", "west"): 1}, {("region", "west"): [("region", "west")]}),
+        ({(): {"value": 1}}, {(): {"value": [(), "value"]}}),
+        (
+            {"items": [{("a", ("b", "c")): 1}]},
+            {"items": [{("a", ("b", "c")): ["items", 0, ("a", ("b", "c"))]}]},
+        ),
+        ({"[0]": {"value": 1}}, {"[0]": {"value": ["[0]", "value"]}}),
+        ({r"a\.b": {"value": 1}}, {r"a\.b": {"value": [r"a\.b", "value"]}}),
+        ({r"a\\b": {"value": 1}}, {r"a\\b": {"value": [r"a\\b", "value"]}}),
+        ({"a.b": [1]}, {"a.b": [["a.b", 0]]}),
+        ({0: {"value": 1}}, {0: {"value": [0, "value"]}}),
+    ],
+)
+def test_map_values_deep_preserves_literal_keys_in_callback_paths(obj, expected):
+    assert _.map_values_deep(obj, lambda value, path: path) is obj
+    assert obj == expected
+
+
+@parametrize(
+    "property_path,expected_path",
+    [
+        ("root[1]", ["root", 1, "value"]),
+        ([r"root\.name", "[2]"], ["root.name", 2, "value"]),
+        ([r"root\\\\name"], [r"root\\name", "value"]),
+        (("root", "group"), [("root", "group"), "value"]),
+    ],
+)
+def test_map_values_deep_parses_prefix_once(property_path, expected_path):
+    obj = {"value": 1}
+
+    assert _.map_values_deep(obj, lambda value, path: path, property_path) == {
+        "value": expected_path
+    }
+
+
+def test_map_values_deep_callback_paths_are_independent():
+    child = {"a": 1, "b": 2}
+    obj = {"items": [child, 3]}
+    seen = []
+
+    def iteratee(value, path):
+        seen.append((value, path.copy()))
+        path.append("visited")
+        return path
+
+    assert _.map_values_deep(obj, iteratee) is obj
+    assert obj["items"][0] is child
+    assert obj == {
+        "items": [
+            {"a": ["items", 0, "a", "visited"], "b": ["items", 0, "b", "visited"]},
+            ["items", 1, "visited"],
+        ]
+    }
+    assert seen == [(1, ["items", 0, "a"]), (2, ["items", 0, "b"]), (3, ["items", 1])]
+
+
 def test_map_values_deep_default_iteratee_chained():
     child = {"value": 2}
     obj = {"items": [1, child]}

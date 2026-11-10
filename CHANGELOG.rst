@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve literal mapping keys in ``map_values_deep`` callback paths and parse the optional
+  path prefix only once.
 - Return the original collection from ``nest`` when the grouping property list is empty.
 - Keep negative ``ary`` limits uncapped under Python optimization.
 - Stop evaluating the ``drop_while`` predicate after the first retained item.
