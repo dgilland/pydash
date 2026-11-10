@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Return the original collection from ``nest`` when the grouping property list is empty.
 - Keep negative ``ary`` limits uncapped under Python optimization.
 - Stop evaluating the ``drop_while`` predicate after the first retained item.
 - Keep numeric strings and integer keys distinct when merging or assigning deep defaults.
