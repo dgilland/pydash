@@ -1088,6 +1088,7 @@ def nest(collection: t.Iterable[t.Any], *properties: t.Any) -> t.Any:
     """
     This method is like :func:`group_by` except that it supports nested grouping by multiple string
     `properties`. If only a single key is given, it is like calling ``group_by(collection, prop)``.
+    With no grouping properties, the original collection is returned unchanged.
 
     Args:
         collection: Collection to iterate over.
@@ -1117,11 +1118,11 @@ def nest(collection: t.Iterable[t.Any], *properties: t.Any) -> t.Any:
 
     .. versionadded:: 4.3.0
     """
-    if not properties:
+    flat_properties = pyd.flatten(properties)
+    if not flat_properties:
         return collection
 
-    flat_properties = pyd.flatten(properties)
-    first, rest = flat_properties[0], flat_properties[1:]
+    first, *rest = flat_properties
 
     return pyd.map_values(group_by(collection, first), lambda value: nest(value, *rest))
 
