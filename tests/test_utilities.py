@@ -609,7 +609,14 @@ def test_property_of(case, arg, expected):
     assert _.map_(arg, _.property_of(case)) == expected
 
 
-@parametrize("case,minimum,maximum", [((), 0, 1), ((25,), 0, 25), ((5, 10), 5, 10)])
+@parametrize(
+    "case,minimum,maximum",
+    [
+        ((), 0, 1),
+        ((25,), 0, 25),
+        ((5, 10), 5, 10),
+    ],
+)
 def test_random(case, minimum, maximum):
     for _x in range(50):
         rnd = _.random(*case)
@@ -627,6 +634,7 @@ def test_random(case, minimum, maximum):
         ((5, 10.0), False, 5, 10),
         ((5.0, 10.0), False, 5, 10),
         ((5.0, 10.0), True, 5, 10),
+        ((-1e308, 1e308), True, -1e308, 1e308),
     ],
 )
 def test_random_float(case, floating, minimum, maximum):
@@ -981,19 +989,19 @@ def test_cond_argument_named_argcount():
 
 @parametrize("bound,expected", [(5, (0, 5)), (-5, (-5, 0)), (0, (0, 0))])
 def test_random_single_integer_bound(bound, expected):
-    with mock.patch("pydash.utilities.randint", return_value=0) as draw:
+    with mock.patch("pydash.utilities._random.randint", return_value=0) as draw:
         assert _.random(bound) == 0
         draw.assert_called_once_with(*expected)
 
 
 def test_random_single_float_bound():
-    with mock.patch("pydash.utilities.uniform", return_value=0.5) as draw:
+    with mock.patch("pydash.utilities._random.uniform", return_value=0.5) as draw:
         assert _.random(2.5) == 0.5
         draw.assert_called_once_with(0, 2.5)
 
 
 def test_random_preserves_explicit_bounds_and_defaults():
-    with mock.patch("pydash.utilities.randint", return_value=0) as draw:
+    with mock.patch("pydash.utilities._random.randint", return_value=0) as draw:
         _.random()
         draw.assert_called_with(0, 1)
         _.random(5, 1)

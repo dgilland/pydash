@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from functools import partial, wraps
 from itertools import tee
 import math
-from random import randint, uniform
+import random as _random
 import re
 import time
 import typing as t
@@ -1011,9 +1011,13 @@ def random(
         stop, start = start, stop
 
     if floating:
-        rnd = uniform(start, stop)
+        if math.isinf(stop - start):
+            r = _random.random()
+            rnd = start * (1 - r) + stop * r
+        else:
+            rnd = _random.uniform(start, stop)
     else:
-        rnd = randint(start, stop)  # type: ignore
+        rnd = _random.randint(start, stop)  # type: ignore
 
     return rnd
 
