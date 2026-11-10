@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Keep numeric strings and integer keys distinct when merging or assigning deep defaults.
 - Leave the object unchanged when setting, updating, or unsetting an empty path.
 - Preserve exact integer digits in ``number_format`` without conversion through floating point.
 - Evaluate ``find_last_key`` predicates from right to left and stop at the first match.
