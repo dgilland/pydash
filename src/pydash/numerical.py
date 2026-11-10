@@ -1315,7 +1315,15 @@ def rounder(func, x, precision, shift_exactly=False):
             return float(
                 decimal.Decimal((rounded.sign, rounded.digits, int(rounded.exponent) - precision))
             )
-        return func(item * factor) / factor
+        scaled = item * factor
+        if (
+            func is round
+            and isinstance(item, float)
+            and math.isfinite(item)
+            and not math.isfinite(scaled)
+        ):
+            return round(item, precision)
+        return func(scaled) / factor
 
     result = None
 
