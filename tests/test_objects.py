@@ -1,6 +1,7 @@
 from argparse import Namespace
 from collections import ChainMap, UserDict, defaultdict, namedtuple
 from copy import deepcopy
+from dataclasses import dataclass
 import datetime as dt
 from decimal import Decimal
 from enum import IntEnum
@@ -311,6 +312,58 @@ def test_default_customizer_preserves_isolation():
     result["outer"]["items"].append("new")
     assert source == {"outer": {"items": []}}
     assert result == {"outer": {"items": ["new"]}}
+
+
+@parametrize("source", [(1, 2), SomeNamedTuple(1, 2), {"items": (1, 2)}])
+def test_default_deep_customizer_accepts_immutable_sequences(source):
+    result = _.clone_deep_with(source, lambda *_: None)
+
+    assert result == source
+    assert type(result) is type(source)
+
+
+@parametrize("named", [False, True])
+def test_deep_customizer_updates_mutable_children_inside_tuples(named):
+    child = {"count": 1}
+    source = SomeNamedTuple(child, "tag") if named else (child, "tag")
+
+    result = _.clone_deep_with(source, multiply_numbers)
+
+    assert type(result) is type(source)
+    assert result == ({"count": 10}, "tag")
+    assert result[0] is not child
+    assert source == ({"count": 1}, "tag")
+
+
+@parametrize("customizer,expected", [(lambda *_: None, [1]), (multiply_numbers, [10])])
+def test_deep_customizer_preserves_frozen_parent_attributes(customizer, expected):
+    @dataclass(frozen=True)
+    class Config:
+        entries: list
+
+    source = Config([1])
+
+    result = _.clone_deep_with(source, customizer)
+
+    assert isinstance(result, Config)
+    assert result is not source
+    assert result.entries is not source.entries
+    assert result.entries == expected
+    assert source.entries == [1]
+
+
+def test_default_deep_customizer_preserves_tuple_list_cycles():
+    child = []
+    source = (child,)
+    child.append(source)
+
+    result = _.clone_deep_with(source, lambda *_: None)
+
+    assert isinstance(result, tuple)
+    assert result is not source
+    assert result[0] is not child
+    assert result[0][0] is result
+    assert child[0] is source
 
 
 def test_customizer_observes_original_values():
@@ -924,6 +977,65 @@ def test_map_values_deep_default_iteratee(obj, explicit_none):
     assert obj == expected
 
 
+@parametrize(
+    "obj,expected",
+    [
+        ({("region", "west"): 1}, {("region", "west"): [("region", "west")]}),
+        ({(): {"value": 1}}, {(): {"value": [(), "value"]}}),
+        (
+            {"items": [{("a", ("b", "c")): 1}]},
+            {"items": [{("a", ("b", "c")): ["items", 0, ("a", ("b", "c"))]}]},
+        ),
+        ({"[0]": {"value": 1}}, {"[0]": {"value": ["[0]", "value"]}}),
+        ({r"a\.b": {"value": 1}}, {r"a\.b": {"value": [r"a\.b", "value"]}}),
+        ({r"a\\b": {"value": 1}}, {r"a\\b": {"value": [r"a\\b", "value"]}}),
+        ({"a.b": [1]}, {"a.b": [["a.b", 0]]}),
+        ({0: {"value": 1}}, {0: {"value": [0, "value"]}}),
+    ],
+)
+def test_map_values_deep_preserves_literal_keys_in_callback_paths(obj, expected):
+    assert _.map_values_deep(obj, lambda value, path: path) is obj
+    assert obj == expected
+
+
+@parametrize(
+    "property_path,expected_path",
+    [
+        ("root[1]", ["root", 1, "value"]),
+        ([r"root\.name", "[2]"], ["root.name", 2, "value"]),
+        ([r"root\\\\name"], [r"root\\name", "value"]),
+        (("root", "group"), [("root", "group"), "value"]),
+    ],
+)
+def test_map_values_deep_parses_prefix_once(property_path, expected_path):
+    obj = {"value": 1}
+
+    assert _.map_values_deep(obj, lambda value, path: path, property_path) == {
+        "value": expected_path
+    }
+
+
+def test_map_values_deep_callback_paths_are_independent():
+    child = {"a": 1, "b": 2}
+    obj = {"items": [child, 3]}
+    seen = []
+
+    def iteratee(value, path):
+        seen.append((value, path.copy()))
+        path.append("visited")
+        return path
+
+    assert _.map_values_deep(obj, iteratee) is obj
+    assert obj["items"][0] is child
+    assert obj == {
+        "items": [
+            {"a": ["items", 0, "a", "visited"], "b": ["items", 0, "b", "visited"]},
+            ["items", 1, "visited"],
+        ]
+    }
+    assert seen == [(1, ["items", 0, "a"]), (2, ["items", 0, "b"]), (3, ["items", 1])]
+
+
 def test_map_values_deep_default_iteratee_chained():
     child = {"value": 2}
     obj = {"items": [1, child]}
@@ -1007,6 +1119,30 @@ def test_map_values_deep_default_iteratee_chained():
 )
 def test_merge(case, expected):
     assert _.merge(*case) == expected
+
+
+@parametrize("combine", [_.merge, _.merge_with, _.defaults_deep])
+def test_merge_distinguishes_numeric_strings_from_integer_keys(combine):
+    int_value = {"left": 1}
+    obj = {"nested": {1: int_value}}
+    source = {"nested": {"1": {"right": 2}}}
+
+    assert combine(obj, source) is obj
+    assert obj == {"nested": {1: {"left": 1}, "1": {"right": 2}}}
+    assert obj["nested"][1] is int_value
+    assert obj["nested"]["1"] is not source["nested"]["1"]
+
+
+def test_merge_with_customizer_reads_literal_mapping_key():
+    obj = UserDict({1: {"left": 1}})
+    seen = []
+
+    def customizer(obj_value, src_value, key):
+        seen.append((key, obj_value))
+
+    assert _.merge_with(obj, {"1": {"right": 2}}, iteratee=customizer) is obj
+    assert seen == [("1", None)]
+    assert obj == {1: {"left": 1}, "1": {"right": 2}}
 
 
 def test_merge_no_link_dict():
@@ -1454,6 +1590,79 @@ def test_to_pairs(case, expected):
     assert dict(_.to_pairs(case)) == dict(expected)
 
 
+@parametrize("attribute", ["items", "iteritems"])
+@parametrize("deep", [False, True])
+def test_clone_with_mapping_data_attributes(attribute, deep):
+    child = [1, {"count": 2}]
+    source = SimpleNamespace(**{attribute: child, "count": 2})
+    clone = _.clone_deep_with if deep else _.clone_with
+
+    result = clone(source, multiply_numbers)
+
+    assert isinstance(result, SimpleNamespace)
+    assert result is not source
+    assert result.count == 20
+    assert source.count == 2
+    assert getattr(source, attribute) is child
+    assert child == [1, {"count": 2}]
+    if deep:
+        assert getattr(result, attribute) is not child
+        assert getattr(result, attribute) == [10, {"count": 20}]
+    else:
+        assert getattr(result, attribute) is child
+
+
+@parametrize(
+    "transform,expected",
+    [
+        (_.to_pairs, [("items", [1]), ("iteritems", 0), ("count", 2)]),
+        (_.values, [[1], 0, 2]),
+        (_.map_values, {"items": [1], "iteritems": 0, "count": 2}),
+    ],
+)
+def test_object_transforms_with_mapping_data_attributes(transform, expected):
+    source = SimpleNamespace(items=[1], iteritems=0, count=2)
+
+    assert transform(source) == expected
+
+
+def test_iterable_with_noncallable_items():
+    class Values:
+        items = "metadata"
+
+        def __iter__(self):
+            return iter([1, 2])
+
+    assert _.to_pairs(Values()) == [(0, 1), (1, 2)]
+
+
+@parametrize("factory", [helpers.ItemsObject, helpers.IteritemsObject])
+def test_iterator_callable_mapping_methods(factory):
+    assert _.to_pairs(factory({"value": 3})) == [("value", 3)]
+
+
+@parametrize(
+    "factory,attribute",
+    [(helpers.ItemsObject, "iteritems"), (helpers.IteritemsObject, "items")],
+)
+def test_iterator_callable_mapping_methods_with_data_attributes(factory, attribute):
+    source = factory({"value": 3})
+    setattr(source, attribute, None)
+
+    assert _.to_pairs(source) == [("value", 3)]
+
+
+@parametrize("attribute", ["items", "iteritems"])
+def test_iterator_method_errors_propagate(attribute):
+    def broken_method():
+        raise TypeError("mapping iteration failed")
+
+    source = SimpleNamespace(**{attribute: broken_method})
+
+    with pytest.raises(TypeError, match="mapping iteration failed"):
+        _.to_pairs(source)
+
+
 @parametrize(
     "case,expected",
     [
@@ -1538,6 +1747,45 @@ def test_update_with(case, expected):
 def test_unset(obj, path, expected, new_obj):
     assert _.unset(obj, path) == expected
     assert obj == new_obj
+
+
+@parametrize("set_value", [_.set_, _.set_with])
+def test_set_empty_path_leaves_root_unchanged(set_value):
+    obj = {None: 7}
+
+    assert set_value(obj, [], 8) is obj
+    assert obj == {None: 7}
+
+    assert set_value(obj, [None], 8) is obj
+    assert obj == {None: 8}
+
+
+@parametrize("update_value", [_.update, _.update_with])
+def test_update_empty_path_leaves_root_unchanged(update_value):
+    obj = {None: 7}
+    seen = []
+
+    def updater(value):
+        seen.append(value)
+        return value + 1
+
+    assert update_value(obj, [], updater) is obj
+    assert obj == {None: 7}
+    assert seen == []
+
+    assert update_value(obj, [None], updater) is obj
+    assert obj == {None: 8}
+    assert seen == [7]
+
+
+def test_unset_empty_path_leaves_root_unchanged():
+    obj = {None: 7}
+
+    assert _.unset(obj, []) is False
+    assert obj == {None: 7}
+
+    assert _.unset(obj, [None]) is True
+    assert obj == {}
 
 
 @parametrize("case,expected", [({"a": 1, "b": 2, "c": 3}, [1, 2, 3]), ([1, 2, 3], [1, 2, 3])])
