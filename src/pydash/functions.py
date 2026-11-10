@@ -98,7 +98,8 @@ class Ary(_WithArgCount, t.Generic[T]):
         try:
             # Type error would be caught
             n = int(n)  # type: ignore
-            assert n >= 0
+            if n < 0:
+                n = None
         except (ValueError, TypeError, AssertionError):
             n = None
 
@@ -799,7 +800,7 @@ def ary(func: t.Callable[..., T], n: t.Union[t.SupportsInt, None]) -> Ary[T]:
 
     Args:
         func: Function to cap arguments for.
-        n: Number of arguments to accept.
+        n: Number of arguments to accept. A negative value or ``None`` leaves them uncapped.
 
     Returns:
         Function wrapped in an :class:`Ary` context.

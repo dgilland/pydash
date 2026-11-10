@@ -1068,6 +1068,30 @@ def test_merge(case, expected):
     assert _.merge(*case) == expected
 
 
+@parametrize("combine", [_.merge, _.merge_with, _.defaults_deep])
+def test_merge_distinguishes_numeric_strings_from_integer_keys(combine):
+    int_value = {"left": 1}
+    obj = {"nested": {1: int_value}}
+    source = {"nested": {"1": {"right": 2}}}
+
+    assert combine(obj, source) is obj
+    assert obj == {"nested": {1: {"left": 1}, "1": {"right": 2}}}
+    assert obj["nested"][1] is int_value
+    assert obj["nested"]["1"] is not source["nested"]["1"]
+
+
+def test_merge_with_customizer_reads_literal_mapping_key():
+    obj = UserDict({1: {"left": 1}})
+    seen = []
+
+    def customizer(obj_value, src_value, key):
+        seen.append((key, obj_value))
+
+    assert _.merge_with(obj, {"1": {"right": 2}}, iteratee=customizer) is obj
+    assert seen == [("1", None)]
+    assert obj == {1: {"left": 1}, "1": {"right": 2}}
+
+
 def test_merge_no_link_dict():
     case1 = {"foo": {"bar": None}}
     case2 = {"foo": {"bar": False}}
@@ -1597,6 +1621,45 @@ def test_update_with(case, expected):
 def test_unset(obj, path, expected, new_obj):
     assert _.unset(obj, path) == expected
     assert obj == new_obj
+
+
+@parametrize("set_value", [_.set_, _.set_with])
+def test_set_empty_path_leaves_root_unchanged(set_value):
+    obj = {None: 7}
+
+    assert set_value(obj, [], 8) is obj
+    assert obj == {None: 7}
+
+    assert set_value(obj, [None], 8) is obj
+    assert obj == {None: 8}
+
+
+@parametrize("update_value", [_.update, _.update_with])
+def test_update_empty_path_leaves_root_unchanged(update_value):
+    obj = {None: 7}
+    seen = []
+
+    def updater(value):
+        seen.append(value)
+        return value + 1
+
+    assert update_value(obj, [], updater) is obj
+    assert obj == {None: 7}
+    assert seen == []
+
+    assert update_value(obj, [None], updater) is obj
+    assert obj == {None: 8}
+    assert seen == [7]
+
+
+def test_unset_empty_path_leaves_root_unchanged():
+    obj = {None: 7}
+
+    assert _.unset(obj, []) is False
+    assert obj == {None: 7}
+
+    assert _.unset(obj, [None]) is True
+    assert obj == {}
 
 
 @parametrize("case,expected", [({"a": 1, "b": 2, "c": 3}, [1, 2, 3]), ([1, 2, 3], [1, 2, 3])])
