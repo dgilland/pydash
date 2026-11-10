@@ -1,5 +1,6 @@
 from bisect import bisect_left, bisect_right
 import math
+import sys
 import typing as t
 
 import pytest
@@ -152,6 +153,36 @@ def test_drop(case, expected):
 )
 def test_drop_while(case, expected):
     assert _.drop_while(*case) == expected
+
+
+@parametrize("make_array", [list, iter])
+def test_drop_while_stops_calling_predicate_at_first_false(make_array):
+    array = make_array([2, 0, None, 3])
+    seen = []
+
+    def predicate(value, index, original):
+        assert original is array
+        seen.append(index)
+        return value > 0
+
+    assert _.drop_while(array, predicate) == [0, None, 3]
+    assert seen == [0, 1]
+
+
+def test_drop_while_preserves_mapping_values_and_keys():
+    array = {"prefix": 2, "first": 0, "tail": None}
+    seen = []
+
+    def predicate(value, key):
+        seen.append(key)
+        return value > 0
+
+    assert _.drop_while(array, predicate) == [0, None]
+    assert seen == ["prefix", "first"]
+
+
+def test_drop_while_uses_identity_when_predicate_is_omitted():
+    assert _.drop_while([1, 0, 2]) == [0, 2]
 
 
 @parametrize(
@@ -382,10 +413,40 @@ def test_flatten_deep(case, expected):
         (([1, ["2222"], [3, [[4]]]], 3), [1, "2222", 3, 4]),
         (([iter([1, [2]])], 1), [1, [2]]),
         (([iter([1, [2]])], 2), [1, 2]),
+        (([1, [2, [3]], 4], 0), [1, [2, [3]], 4]),
+        (([1, [2, (), [3]], 4], -2), [1, 2, 3, 4]),
+        (
+            ([["text", b"bytes", bytearray(b"value"), {"a": 1}], [], [2]], -1),
+            ["text", b"bytes", bytearray(b"value"), {"a": 1}, 2],
+        ),
     ],
 )
 def test_flatten_depth(case, expected):
     assert _.flatten_depth(*case) == expected
+
+
+@parametrize("wrap", [list, tuple, iter])
+def test_flatten_deep_beyond_recursion_limit(wrap):
+    leaf = object()
+    nested = leaf
+    for _level in range(sys.getrecursionlimit() + 100):
+        nested = wrap([nested])
+
+    assert _.flatten_deep(nested) == [leaf]
+
+
+@parametrize("wrap", [list, tuple, iter])
+def test_flatten_depth_beyond_recursion_limit_preserves_boundary(wrap):
+    leaf = [object()]
+    nested = leaf
+    nesting_depth = sys.getrecursionlimit() + 100
+    for _level in range(nesting_depth):
+        nested = wrap([nested])
+
+    result = _.flatten_depth(nested, depth=nesting_depth - 1)
+
+    assert len(result) == 1
+    assert result[0] is leaf
 
 
 @parametrize(

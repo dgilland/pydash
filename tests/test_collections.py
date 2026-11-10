@@ -514,6 +514,16 @@ def test_nest(case, expected):
     assert _.nest(*case) == expected
 
 
+@parametrize("make_collection", [list, iter])
+@parametrize("properties", [(), ([],), ([], [])])
+def test_nest_with_no_grouping_properties_returns_original(make_collection, properties):
+    item = {"category": "a"}
+    collection = make_collection([item])
+
+    assert _.nest(collection, *properties) is collection
+    assert list(collection) == [item]
+
+
 @parametrize(
     "case,expected",
     [
