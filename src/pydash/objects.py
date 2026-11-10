@@ -27,7 +27,7 @@ from .helpers import (
     iteriteratee,
 )
 from .types import IterateeObjT, PathT
-from .utilities import PathToken, to_path, to_path_tokens
+from .utilities import to_path, to_path_tokens
 
 
 if t.TYPE_CHECKING:
@@ -1521,7 +1521,10 @@ def _merge_with(obj, *sources, **kwargs):
 
     for source in sources:
         for key, src_value in iterator(source):
-            obj_value = base_get(obj, key, default=None)
+            if isinstance(obj, MutableMapping):
+                obj_value = obj.get(key)
+            else:
+                obj_value = base_get(obj, key, default=None)
             all_sequences = isinstance(src_value, list) and isinstance(obj_value, list)
             all_mappings = isinstance(src_value, dict) and isinstance(obj_value, dict)
 
@@ -2451,6 +2454,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
     This method is like :func:`update` except that it accepts customizer which is invoked to produce
     the objects of path. If customizer returns ``None``, path creation is handled by the method
     instead. The customizer is invoked with three arguments: ``(nested_value, key, nested_object)``.
+    An empty path has no property to update and leaves the object unchanged.
 
     Args:
         obj: Object to modify.
@@ -2471,6 +2475,10 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
 
     .. versionadded:: 4.0.0
     """
+    tokens = to_path_tokens(path)
+    if not tokens:
+        return obj
+
     if not callable(updater):
         updater = pyd.constant(updater)
 
@@ -2482,12 +2490,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
         call_customizer = None
 
     default_type = dict if isinstance(obj, MutableMapping) else list
-    tokens = to_path_tokens(path)
-
-    last_key = pyd.last(tokens)
-
-    if isinstance(last_key, PathToken):
-        last_key = last_key.key
+    last_key = tokens[-1].key
 
     target = obj
 
@@ -2530,7 +2533,7 @@ def update_with(obj, path, updater, customizer=None):  # noqa: PLR0912
 
 def unset(obj: t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]], path: PathT) -> bool:  # noqa: C901
     """
-    Removes the property at `path` of `obj`.
+    Removes the property at `path` of `obj`. An empty path returns ``False``.
 
     Note:
         Only ``list``, ``dict``, or objects with a ``pop()`` method can be unset by this function.
@@ -2556,12 +2559,10 @@ def unset(obj: t.Union[t.List[t.Any], t.Dict[t.Any, t.Any]], path: PathT) -> boo
         False
     """
     tokens = to_path_tokens(path)
+    if not tokens:
+        return False
 
-    last_key = pyd.last(tokens)
-
-    if isinstance(last_key, PathToken):
-        last_key = last_key.key
-
+    last_key = tokens[-1].key
     target = obj
 
     for token in pyd.initial(tokens):

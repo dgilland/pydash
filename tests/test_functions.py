@@ -88,10 +88,23 @@ def test_after(case, expected):
         ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 2), (1, 2, 3, 4), {"d": 10}, 13),
         ((lambda a=0, b=0, c=0, d=0: a + b + c + d, 3), (1, 2, 3, 4), {"d": 10}, 16),
         ((lambda a=0, b=0, c=0, d=0: a + b + c + d, None), (1, 2, 3, 4), {}, 10),
+        ((lambda a=0, b=0, c=0, d=0: a + b + c + d, -1), (1, 2, 3, 4), {}, 10),
     ],
 )
 def test_ary(case, args, kwargs, expected):
     assert _.ary(*case)(*args, **kwargs) == expected
+
+
+def test_ary_negative_limit_under_optimization():
+    script = "from pydash import ary; print(ary(lambda *args: args, -1)(1, 2, 3))"
+    result = subprocess.run(
+        [sys.executable, "-O", "-c", script],
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=10,
+    )
+    assert result.stdout.strip() == "(1, 2, 3)"
 
 
 @parametrize(
