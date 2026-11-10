@@ -13,7 +13,7 @@ import typing as t
 
 import pydash as pyd
 
-from .helpers import base_get, iteriteratee, parse_iteratee
+from .helpers import base_get, iterator, iteriteratee, parse_iteratee
 from .types import IterateeObjT
 
 
@@ -454,15 +454,12 @@ def drop_while(array, predicate=None):
 
     .. versionadded:: 1.1.0
     """
-    result = []
-    dropping = True
-    for is_true, value, _, _ in iteriteratee(array, predicate):
-        if dropping and is_true:
-            continue
-        dropping = False
-        result.append(value)
+    items = iter(iterator(array))
+    for is_true, value, _, _ in iteriteratee(array, predicate, items=items):
+        if not is_true:
+            return [value, *(item for _, item in items)]
 
-    return result
+    return []
 
 
 def duplicates(
@@ -2904,10 +2901,17 @@ def zip_with(*arrays, **kwargs):
 
 def iterflatten(array, depth=-1):
     """Iteratively flatten a list shallowly or deeply."""
-    for item in array:
-        if is_flattenable(item) and depth != 0:
-            for subitem in iterflatten(item, depth - 1):
-                yield subitem
+    stack = [(iter(array), depth)]
+    while stack:
+        iterator, current_depth = stack[-1]
+        try:
+            item = next(iterator)
+        except StopIteration:
+            stack.pop()
+            continue
+
+        if is_flattenable(item) and current_depth != 0:
+            stack.append((iter(item), current_depth - 1))
         else:
             yield item
 

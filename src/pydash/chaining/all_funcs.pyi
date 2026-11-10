@@ -3595,7 +3595,7 @@ class AllFuncs:
         max_delay: t.Union[int, float] = 150.0,
         scale: t.Union[int, float] = 2.0,
         jitter: t.Union[int, float, t.Tuple[t.Union[int, float], t.Union[int, float]]] = 0,
-        exceptions: t.Iterable[Type[Exception]] = (Exception,),
+        exceptions: t.Tuple[Type[Exception], ...] = (Exception,),
         on_exception: t.Union[t.Callable[[Exception, int], t.Any], None] = None,
     ) -> "Chain[t.Callable[[CallableT], CallableT]]":
         return self._wrap(pyd.retry)(delay, max_delay, scale, jitter, exceptions, on_exception)

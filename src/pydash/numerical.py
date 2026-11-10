@@ -662,7 +662,16 @@ def median(collection, iteratee=None):
     else:
         left = int(middle - 1.5)
         right = int(middle - 0.5)
-        result = (collection[left] + collection[right]) / 2
+        middle_sum = collection[left] + collection[right]
+        if (
+            isinstance(middle_sum, float)
+            and math.isinf(middle_sum)
+            and math.isfinite(collection[left])
+            and math.isfinite(collection[right])
+        ):
+            result = collection[left] / 2 + collection[right] / 2
+        else:
+            result = middle_sum / 2
 
     return result
 
@@ -1030,8 +1039,7 @@ def scale(array, maximum: NumberT = 1):
     """
     array = list(array)
     array_max = max(array)
-    factor = maximum / array_max
-    return [item * factor for item in array]
+    return [(item / array_max) * maximum for item in array]
 
 
 @t.overload
@@ -1261,6 +1269,9 @@ def zscore(collection, iteratee=None):
     .. versionadded:: 2.1.0
     """
     array = pyd.map_(collection, iteratee)
+    if array and all(isinstance(item, int) for item in array):
+        offset = array[0]
+        array = [item - offset for item in array]
     avg = mean(array)
     sig = std_deviation(array)
 
@@ -1317,7 +1328,15 @@ def rounder(func, x, precision, shift_exactly=False):
             return float(
                 decimal.Decimal((rounded.sign, rounded.digits, int(rounded.exponent) - precision))
             )
-        return func(item * factor) / factor
+        scaled = item * factor
+        if (
+            func is round
+            and isinstance(item, float)
+            and math.isfinite(item)
+            and not math.isfinite(scaled)
+        ):
+            return round(item, precision)
+        return func(scaled) / factor
 
     result = None
 

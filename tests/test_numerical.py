@@ -1,5 +1,6 @@
 from collections import UserDict
 from decimal import Decimal, Inexact, localcontext
+from fractions import Fraction
 import math
 from types import MappingProxyType
 
@@ -210,6 +211,17 @@ def test_median(case, expected):
     assert _.median(*case) == expected
 
 
+@parametrize("values", [[1e308, 1e308], [-1e308, -1e308], [1e308, 1.6e308]])
+def test_median_does_not_overflow_finite_middle_values(values):
+    expected = float(sum(Fraction(value) for value in values) / 2)
+    assert _.median(iter(values)) == expected
+
+
+@parametrize("values", [[5e-324, 5e-324], [-1e308, 1e308]])
+def test_median_preserves_small_and_opposite_sign_values(values):
+    assert _.median(values) == (values[0] + values[1]) / 2
+
+
 @parametrize("values,expected", [([3, 1, 2], 2), ([4, 1, 3, 2], 2.5)])
 def test_median_iterator(values, expected):
     assert _.median(iter(values)) == expected
@@ -340,6 +352,16 @@ def test_round_(case, expected):
     assert _.round_(*case) == expected
 
 
+@parametrize("value", [1e308, -1e308, 1e200, -1e200])
+def test_round_large_finite_float_does_not_overflow(value):
+    assert _.round_(value, 200) == round(value, 200)
+
+
+def test_round_large_finite_floats_in_a_collection():
+    values = [1e308, 2.675, -1e308]
+    assert _.round_(values, 2) == [1e308, 2.68, -1e308]
+
+
 @parametrize(
     "case,expected",
     [
@@ -351,6 +373,19 @@ def test_round_(case, expected):
 )
 def test_scale(case, expected):
     assert _.scale(*case) == expected
+
+
+@parametrize(
+    "values,maximum,expected",
+    [
+        ([10**400, 2 * 10**400], 1, [0.5, 1.0]),
+        ([1e308, 5e307], 1e-308, [1e-308, 5e-309]),
+        ([1e-308, 5e-309], 1e308, [1e308, 5e307]),
+        ([5e-324, 5e-324], 1, [1.0, 1.0]),
+    ],
+)
+def test_scale_preserves_finite_results_for_extreme_values(values, maximum, expected):
+    assert _.scale(iter(values), maximum) == expected
 
 
 @parametrize("iterable", [iter, lambda values: (value for value in values)])
@@ -532,6 +567,20 @@ def test_variance_preserves_precision_for_large_integer_values(case):
 )
 def test_zscore(case, expected):
     assert _.map_(_.zscore(*case), lambda v: round(v, 3)) == expected
+
+
+@parametrize("offset", [10**16, -(10**16), 10**400])
+@parametrize("factory", [list, tuple, iter])
+def test_zscore_preserves_integer_translation_invariance(offset, factory):
+    values = [0, 1, 2]
+    assert _.zscore(factory([offset + value for value in values])) == pytest.approx(
+        _.zscore(values)
+    )
+
+
+def test_zscore_centers_integer_iteratee_results():
+    values = {"a": {"value": 10**16}, "b": {"value": 10**16 + 1}, "c": {"value": 10**16 + 2}}
+    assert _.zscore(values, "value") == pytest.approx(_.zscore([0, 1, 2]))
 
 
 @parametrize("factory", [dict, UserDict, MappingProxyType])
