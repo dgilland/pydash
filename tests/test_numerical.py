@@ -1,5 +1,6 @@
 from collections import UserDict
 from decimal import Decimal, Inexact, localcontext
+from fractions import Fraction
 import math
 from types import MappingProxyType
 
@@ -208,6 +209,17 @@ def test_mean_empty_iterators():
 )
 def test_median(case, expected):
     assert _.median(*case) == expected
+
+
+@parametrize("values", [[1e308, 1e308], [-1e308, -1e308], [1e308, 1.6e308]])
+def test_median_does_not_overflow_finite_middle_values(values):
+    expected = float(sum(Fraction(value) for value in values) / 2)
+    assert _.median(iter(values)) == expected
+
+
+@parametrize("values", [[5e-324, 5e-324], [-1e308, 1e308]])
+def test_median_preserves_small_and_opposite_sign_values(values):
+    assert _.median(values) == (values[0] + values[1]) / 2
 
 
 @parametrize("values,expected", [([3, 1, 2], 2), ([4, 1, 3, 2], 2.5)])

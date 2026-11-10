@@ -40,6 +40,7 @@ Unreleased
 - Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
   callbacks instead of numbering the reversed values again.
 - Preserve repeated argument indexes in ``rearg`` instead of silently dropping duplicates.
+- Avoid an infinite median when adding two finite floating-point middle values overflows.
 - Preserve numeric return types, including Decimal, in median and its chain wrapper.
 - Apply clone customizations to object attributes without requiring item assignment.
 - Preserve leaf values in ``map_values_deep`` when its optional iteratee is omitted or ``None``.
