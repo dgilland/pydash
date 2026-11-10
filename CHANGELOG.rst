@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Convert Latin Extended-A letters and remove combining diacritical marks in ``deburr``
+  to match lodash behavior.
 - Reject nonpositive window sizes in ``moving_mean`` with a ``ValueError``.
 - Treat non-callable ``items`` and ``iteritems`` attributes as data when iterating over objects.
 - Avoid rewriting immutable parent entries in ``clone_deep_with`` when the customizer delegates

@@ -199,6 +199,135 @@ DEBURRED_LETTERS = {
     "\xdf": "ss",
     "\xd7": " ",
     "\xf7": " ",
+    # Latin Extended-A block (lodash parity, see issue #441).
+    "\u0100": "A",
+    "\u0102": "A",
+    "\u0104": "A",
+    "\u0101": "a",
+    "\u0103": "a",
+    "\u0105": "a",
+    "\u0106": "C",
+    "\u0108": "C",
+    "\u010a": "C",
+    "\u010c": "C",
+    "\u0107": "c",
+    "\u0109": "c",
+    "\u010b": "c",
+    "\u010d": "c",
+    "\u010e": "D",
+    "\u0110": "D",
+    "\u010f": "d",
+    "\u0111": "d",
+    "\u0112": "E",
+    "\u0114": "E",
+    "\u0116": "E",
+    "\u0118": "E",
+    "\u011a": "E",
+    "\u0113": "e",
+    "\u0115": "e",
+    "\u0117": "e",
+    "\u0119": "e",
+    "\u011b": "e",
+    "\u011c": "G",
+    "\u011e": "G",
+    "\u0120": "G",
+    "\u0122": "G",
+    "\u011d": "g",
+    "\u011f": "g",
+    "\u0121": "g",
+    "\u0123": "g",
+    "\u0124": "H",
+    "\u0126": "H",
+    "\u0125": "h",
+    "\u0127": "h",
+    "\u0128": "I",
+    "\u012a": "I",
+    "\u012c": "I",
+    "\u012e": "I",
+    "\u0130": "I",
+    "\u0129": "i",
+    "\u012b": "i",
+    "\u012d": "i",
+    "\u012f": "i",
+    "\u0131": "i",
+    "\u0132": "IJ",
+    "\u0133": "ij",
+    "\u0134": "J",
+    "\u0135": "j",
+    "\u0136": "K",
+    "\u0137": "k",
+    "\u0138": "k",
+    "\u0139": "L",
+    "\u013b": "L",
+    "\u013d": "L",
+    "\u013f": "L",
+    "\u0141": "L",
+    "\u013a": "l",
+    "\u013c": "l",
+    "\u013e": "l",
+    "\u0140": "l",
+    "\u0142": "l",
+    "\u0143": "N",
+    "\u0145": "N",
+    "\u0147": "N",
+    "\u014a": "N",
+    "\u0144": "n",
+    "\u0146": "n",
+    "\u0148": "n",
+    "\u014b": "n",
+    "\u0149": "'n",
+    "\u014c": "O",
+    "\u014e": "O",
+    "\u0150": "O",
+    "\u014d": "o",
+    "\u014f": "o",
+    "\u0151": "o",
+    "\u0152": "Oe",
+    "\u0153": "oe",
+    "\u0154": "R",
+    "\u0156": "R",
+    "\u0158": "R",
+    "\u0155": "r",
+    "\u0157": "r",
+    "\u0159": "r",
+    "\u015a": "S",
+    "\u015c": "S",
+    "\u015e": "S",
+    "\u0160": "S",
+    "\u015b": "s",
+    "\u015d": "s",
+    "\u015f": "s",
+    "\u0161": "s",
+    "\u0162": "T",
+    "\u0164": "T",
+    "\u0166": "T",
+    "\u0163": "t",
+    "\u0165": "t",
+    "\u0167": "t",
+    "\u0168": "U",
+    "\u016a": "U",
+    "\u016c": "U",
+    "\u016e": "U",
+    "\u0170": "U",
+    "\u0172": "U",
+    "\u0169": "u",
+    "\u016b": "u",
+    "\u016d": "u",
+    "\u016f": "u",
+    "\u0171": "u",
+    "\u0173": "u",
+    "\u0174": "W",
+    "\u0175": "w",
+    "\u0176": "Y",
+    "\u0177": "y",
+    "\u0178": "Y",
+    "\u0179": "Z",
+    "\u017b": "Z",
+    "\u017d": "Z",
+    "\u017a": "z",
+    "\u017c": "z",
+    "\u017e": "z",
+    "\u017f": "s",
 }
 
 # Use Javascript style regex to make Lo-Dash compatibility easier.
@@ -206,7 +335,7 @@ DEBURRED_LETTERS = {
 
 # References: https://github.com/lodash/lodash/blob/master/words.js#L8
 RS_ASCII_WORDS = "/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g"
-RS_LATIN1 = "/[\xc0-\xff]/g"
+RS_LATIN1 = "/[\xc0-\xff\u0100-\u017f]/g"
 
 # Used to compose unicode character classes.
 RS_ASTRAL_RANGE = "\\ud800-\\udfff"
@@ -288,6 +417,7 @@ RS_UNICODE_WORDS = (
 JS_RE_ASCII_WORDS = JSRegExp(RS_ASCII_WORDS)
 JS_RE_UNICODE_WORDS = JSRegExp(RS_UNICODE_WORDS)
 JS_RE_LATIN1 = JSRegExp(RS_LATIN1)
+JS_RE_COMBO_MARKS = JSRegExp(f"/{RS_COMBO}/g")
 RE_HAS_UNICODE_WORD = re.compile(RS_HAS_UNICODE_WORD)
 RE_APOS = re.compile(RS_APOS)
 RE_HTML_TAGS = re.compile(r"<\/?[^>]+>")
@@ -477,7 +607,8 @@ def count_substr(text: t.Any, subtext: t.Any) -> int:
 
 def deburr(text: t.Any) -> str:
     """
-    Deburrs `text` by converting latin-1 supplementary letters to basic latin letters.
+    Deburrs `text` by converting Latin-1 Supplement and Latin Extended-A letters
+    to basic Latin letters and removing combining diacritical marks.
 
     Args:
         text: String to deburr.
@@ -495,9 +626,11 @@ def deburr(text: t.Any) -> str:
     .. versionadded:: 2.0.0
     """
     text = pyd.to_string(text)
-    return JS_RE_LATIN1.replace(
+    text = JS_RE_LATIN1.replace(
         text, lambda match: DEBURRED_LETTERS.get(match.group(), match.group())
     )
+    # Remove combining diacritical marks (lodash parity, see issue #441).
+    return JS_RE_COMBO_MARKS.replace(text, "")
 
 
 def decapitalize(text: t.Any) -> str:
