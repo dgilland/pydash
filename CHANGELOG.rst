@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Avoid rewriting immutable parent entries in ``clone_deep_with`` when the customizer delegates
+  to default copying.
 - Preserve literal mapping keys in ``map_values_deep`` callback paths and parse the optional
   path prefix only once.
 - Return the original collection from ``nest`` when the grouping property list is empty.
