@@ -1590,6 +1590,79 @@ def test_to_pairs(case, expected):
     assert dict(_.to_pairs(case)) == dict(expected)
 
 
+@parametrize("attribute", ["items", "iteritems"])
+@parametrize("deep", [False, True])
+def test_clone_with_mapping_data_attributes(attribute, deep):
+    child = [1, {"count": 2}]
+    source = SimpleNamespace(**{attribute: child, "count": 2})
+    clone = _.clone_deep_with if deep else _.clone_with
+
+    result = clone(source, multiply_numbers)
+
+    assert isinstance(result, SimpleNamespace)
+    assert result is not source
+    assert result.count == 20
+    assert source.count == 2
+    assert getattr(source, attribute) is child
+    assert child == [1, {"count": 2}]
+    if deep:
+        assert getattr(result, attribute) is not child
+        assert getattr(result, attribute) == [10, {"count": 20}]
+    else:
+        assert getattr(result, attribute) is child
+
+
+@parametrize(
+    "transform,expected",
+    [
+        (_.to_pairs, [("items", [1]), ("iteritems", 0), ("count", 2)]),
+        (_.values, [[1], 0, 2]),
+        (_.map_values, {"items": [1], "iteritems": 0, "count": 2}),
+    ],
+)
+def test_object_transforms_with_mapping_data_attributes(transform, expected):
+    source = SimpleNamespace(items=[1], iteritems=0, count=2)
+
+    assert transform(source) == expected
+
+
+def test_iterable_with_noncallable_items():
+    class Values:
+        items = "metadata"
+
+        def __iter__(self):
+            return iter([1, 2])
+
+    assert _.to_pairs(Values()) == [(0, 1), (1, 2)]
+
+
+@parametrize("factory", [helpers.ItemsObject, helpers.IteritemsObject])
+def test_iterator_callable_mapping_methods(factory):
+    assert _.to_pairs(factory({"value": 3})) == [("value", 3)]
+
+
+@parametrize(
+    "factory,attribute",
+    [(helpers.ItemsObject, "iteritems"), (helpers.IteritemsObject, "items")],
+)
+def test_iterator_callable_mapping_methods_with_data_attributes(factory, attribute):
+    source = factory({"value": 3})
+    setattr(source, attribute, None)
+
+    assert _.to_pairs(source) == [("value", 3)]
+
+
+@parametrize("attribute", ["items", "iteritems"])
+def test_iterator_method_errors_propagate(attribute):
+    def broken_method():
+        raise TypeError("mapping iteration failed")
+
+    source = SimpleNamespace(**{attribute: broken_method})
+
+    with pytest.raises(TypeError, match="mapping iteration failed"):
+        _.to_pairs(source)
+
+
 @parametrize(
     "case,expected",
     [

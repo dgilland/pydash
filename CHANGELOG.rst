@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Treat non-callable ``items`` and ``iteritems`` attributes as data when iterating over objects.
 - Avoid rewriting immutable parent entries in ``clone_deep_with`` when the customizer delegates
   to default copying.
 - Preserve literal mapping keys in ``map_values_deep`` callback paths and parse the optional
