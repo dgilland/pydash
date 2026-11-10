@@ -118,8 +118,8 @@ def _getargcount(iteratee, maxargs, required_only=False):
     return argcount
 
 
-def iteriteratee(obj, iteratee=None, reverse=False):
-    """Return iterative iteratee based on collection type."""
+def iteriteratee(obj, iteratee=None, reverse=False, *, items=None):
+    """Apply the iteratee to collection items or to a supplied key-value iterator."""
     if iteratee is None:
         cbk = pyd.identity
         argcount = 1
@@ -127,7 +127,8 @@ def iteriteratee(obj, iteratee=None, reverse=False):
         cbk = pyd.iteratee(iteratee)
         argcount = getargcount(cbk, maxargs=3)
 
-    items = iterator(obj)
+    if items is None:
+        items = iterator(obj)
 
     if reverse:
         items = reversed(tuple(items))

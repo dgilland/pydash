@@ -7,6 +7,9 @@ Unreleased
 ----------
 
 - Keep negative ``ary`` limits uncapped under Python optimization.
+- Stop evaluating the ``drop_while`` predicate after the first retained item.
+- Keep numeric strings and integer keys distinct when merging or assigning deep defaults.
+- Leave the object unchanged when setting, updating, or unsetting an empty path.
 - Preserve exact integer digits in ``number_format`` without conversion through floating point.
 - Evaluate ``find_last_key`` predicates from right to left and stop at the first match.
 - Keep ``debounce`` maximum waits and ``throttle`` intervals stable across system clock changes.
@@ -27,6 +30,7 @@ Unreleased
   ordinary equality.
 - Use logarithmic key evaluation in ``sorted_index_by`` and ``sorted_last_index_by``
   instead of copying and sorting all keys. Inputs must be sorted by the iteratee.
+- Preserve z-score translation invariance for large integer observations.
 - Preserve arithmetic result types in mean, mean_by, and moving_mean.
 - Accept distinct uniqueness criterion types in ``sorted_uniq_by`` and its chain wrapper.
 - Return an empty single-item ``slice_`` for negative indexes before the start of a sequence.
@@ -35,9 +39,11 @@ Unreleased
   and ``math.gcd`` in ``reduce_``, ``reduce_right``, ``reductions``, ``reductions_right``,
   ``zip_with``, and ``unzip_with``.
 - Compare literal dictionary keys in ``is_equal_with`` instead of interpreting them as paths.
+- Scale extreme finite values without overflowing or underflowing the scale factor.
 - Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
   callbacks instead of numbering the reversed values again.
 - Preserve repeated argument indexes in ``rearg`` instead of silently dropping duplicates.
+- Avoid an infinite median when adding two finite floating-point middle values overflows.
 - Preserve numeric return types, including Decimal, in median and its chain wrapper.
 - Apply clone customizations to object attributes without requiring item assignment.
 - Preserve leaf values in ``map_values_deep`` when its optional iteratee is omitted or ``None``.
@@ -125,6 +131,7 @@ v8.1.0 (2026-08-29)
 - Fix flattening nested iterables. Thanks gaoflow_!
 - Fix ``StopIteration`` leak in ``iterintersperse`` on empty iterable. Thanks gaoflow_!
 - Fix ``in_range`` to support reversed ranges where ``start`` is greater than ``end`` by swapping the bounds, matching lodash's documented ``_.inRange`` behavior (e.g. ``in_range(-3, -2, -6)`` now returns ``True``). Thanks gaoflow_!
+- Round large finite floating-point values without overflowing during decimal scaling.
 - Fix ``floor``, ``ceil``, and ``round_`` passing index as precision when used as iteratees. Thanks gaoflow_!
 - Fix ``debounce`` to delay execution until after ``wait`` milliseconds of quiet instead of invoking immediately on the first call. Thanks SeaStarDeng_!
 - Fix ``to_list`` returning a ``dict_values`` view instead of a list for dicts. Thanks HarperZ9_!
