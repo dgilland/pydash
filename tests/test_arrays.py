@@ -1,5 +1,6 @@
 from bisect import bisect_left, bisect_right
 import math
+import sys
 import typing as t
 
 import pytest
@@ -412,10 +413,40 @@ def test_flatten_deep(case, expected):
         (([1, ["2222"], [3, [[4]]]], 3), [1, "2222", 3, 4]),
         (([iter([1, [2]])], 1), [1, [2]]),
         (([iter([1, [2]])], 2), [1, 2]),
+        (([1, [2, [3]], 4], 0), [1, [2, [3]], 4]),
+        (([1, [2, (), [3]], 4], -2), [1, 2, 3, 4]),
+        (
+            ([["text", b"bytes", bytearray(b"value"), {"a": 1}], [], [2]], -1),
+            ["text", b"bytes", bytearray(b"value"), {"a": 1}, 2],
+        ),
     ],
 )
 def test_flatten_depth(case, expected):
     assert _.flatten_depth(*case) == expected
+
+
+@parametrize("wrap", [list, tuple, iter])
+def test_flatten_deep_beyond_recursion_limit(wrap):
+    leaf = object()
+    nested = leaf
+    for _level in range(sys.getrecursionlimit() + 100):
+        nested = wrap([nested])
+
+    assert _.flatten_deep(nested) == [leaf]
+
+
+@parametrize("wrap", [list, tuple, iter])
+def test_flatten_depth_beyond_recursion_limit_preserves_boundary(wrap):
+    leaf = [object()]
+    nested = leaf
+    nesting_depth = sys.getrecursionlimit() + 100
+    for _level in range(nesting_depth):
+        nested = wrap([nested])
+
+    result = _.flatten_depth(nested, depth=nesting_depth - 1)
+
+    assert len(result) == 1
+    assert result[0] is leaf
 
 
 @parametrize(
