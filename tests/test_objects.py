@@ -1540,6 +1540,45 @@ def test_unset(obj, path, expected, new_obj):
     assert obj == new_obj
 
 
+@parametrize("set_value", [_.set_, _.set_with])
+def test_set_empty_path_leaves_root_unchanged(set_value):
+    obj = {None: 7}
+
+    assert set_value(obj, [], 8) is obj
+    assert obj == {None: 7}
+
+    assert set_value(obj, [None], 8) is obj
+    assert obj == {None: 8}
+
+
+@parametrize("update_value", [_.update, _.update_with])
+def test_update_empty_path_leaves_root_unchanged(update_value):
+    obj = {None: 7}
+    seen = []
+
+    def updater(value):
+        seen.append(value)
+        return value + 1
+
+    assert update_value(obj, [], updater) is obj
+    assert obj == {None: 7}
+    assert seen == []
+
+    assert update_value(obj, [None], updater) is obj
+    assert obj == {None: 8}
+    assert seen == [7]
+
+
+def test_unset_empty_path_leaves_root_unchanged():
+    obj = {None: 7}
+
+    assert _.unset(obj, []) is False
+    assert obj == {None: 7}
+
+    assert _.unset(obj, [None]) is True
+    assert obj == {}
+
+
 @parametrize("case,expected", [({"a": 1, "b": 2, "c": 3}, [1, 2, 3]), ([1, 2, 3], [1, 2, 3])])
 def test_values(case, expected):
     assert set(_.values(case)) == set(expected)
