@@ -639,18 +639,31 @@ class Partial(_WithArgCount, t.Generic[T]):
         )
         if func_argcount is None:
             return None
+        argcount = func_argcount - len(self.args)
         try:
             argspec = getfullargspec(self.func)
         except TypeError:
-            bound_keywords = len(self.kwargs)
+            argcount -= len(self.kwargs)
         else:
-            # Keyword-only parameters and **kwargs do not consume positional slots.
-            bound_keywords = (
-                len(self.kwargs)
-                if argspec.varargs
-                else sum(key in argspec.args for key in self.kwargs)
-            )
-        argcount = func_argcount - len(self.args) - bound_keywords
+            if argspec.varargs:
+                argcount -= len(self.kwargs)
+            else:
+                # Keyword-only parameters and **kwargs do not consume positional slots.
+                # `argspec.args` may start with an implicit `self`/`cls` slot that
+                # `func_argcount` already excludes, so align both before indexing slots.
+                implicit_slots = len(argspec.args) - func_argcount
+                first_bound_slot = next(
+                    (
+                        index
+                        for index, name in enumerate(argspec.args[implicit_slots:])
+                        if name in self.kwargs
+                    ),
+                    None,
+                )
+                if first_bound_slot is not None:
+                    # A positional parameter bound by keyword can't also receive a caller
+                    # argument, so only the slots before it stay positionally reachable.
+                    argcount = min(argcount, first_bound_slot - len(self.args))
         return argcount if argcount >= 0 else None
 
 

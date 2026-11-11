@@ -87,3 +87,4 @@ Contributors
 - Jinyong Li, `Jinyong-Li@github <https://github.com/Jinyong-Li>`_
 - wynneyin, `wynneyin@github <https://github.com/wynneyin>`_
 - Arin Aeruva, `arin30@github <https://github.com/arin30>`_
+- Cyber Marty, `Cyber-Marty@github <https://github.com/Cyber-Marty>`_
