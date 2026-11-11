@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Forward keyword arguments unchanged through ``over_args``.
 - Fix bug in ``random`` where float bounds spanning more than the maximum finite float (e.g.
   ``random(-1e308, 1e308)``) could return ``inf`` or ``nan`` instead of a value within the bounds.
 - Convert Latin Extended-A letters and remove combining diacritical marks in ``deburr``
