@@ -9,6 +9,7 @@ Unreleased
 - Stop ``partial`` and ``partial_right`` wrappers from accepting a positional iteratee argument in
   a slot that a keyword argument already binds, so ``map_`` passes the element instead of an index
   into the bound parameter.
+- Forward keyword arguments unchanged through ``over_args``.
 - Fix bug in ``random`` where float bounds spanning more than the maximum finite float (e.g.
   ``random(-1e308, 1e308)``) could return ``inf`` or ``nan`` instead of a value within the bounds.
 - Convert Latin Extended-A letters and remove combining diacritical marks in ``deburr``

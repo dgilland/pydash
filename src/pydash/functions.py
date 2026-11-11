@@ -553,11 +553,11 @@ class OverArgs(_WithArgCount):
         self.func = func
         self.transforms = pyd.flatten(transforms)
 
-    def __call__(self, *args):
+    def __call__(self, /, *args, **kwargs):
         transformed_args = list(args)
         for index, transform in enumerate(self.transforms[: len(args)]):
             transformed_args[index] = transform(args[index])
-        return self.func(*transformed_args)
+        return self.func(*transformed_args, **kwargs)
 
 
 class Negate(_WithArgCount, t.Generic[P]):
@@ -1368,53 +1368,57 @@ def once(func: t.Callable[P, T]) -> Once[P, T]:
 
 @t.overload
 def over_args(
-    func: t.Callable[[T1, T2, T3, T4, T5], T],
+    func: t.Callable[Concatenate[T1, T2, T3, T4, T5, P], T],
     transform_one: t.Callable[[A1], T1],
     transform_two: t.Callable[[A2], T2],
     transform_three: t.Callable[[A3], T3],
     transform_four: t.Callable[[A4], T4],
     transform_five: t.Callable[[A5], T5],
-) -> t.Callable[[A1, A2, A3, A4, A5], T]: ...
+) -> t.Callable[Concatenate[A1, A2, A3, A4, A5, P], T]: ...
 
 
 @t.overload
 def over_args(
-    func: t.Callable[[T1, T2, T3, T4], T],
+    func: t.Callable[Concatenate[T1, T2, T3, T4, P], T],
     transform_one: t.Callable[[A1], T1],
     transform_two: t.Callable[[A2], T2],
     transform_three: t.Callable[[A3], T3],
     transform_four: t.Callable[[A4], T4],
-) -> t.Callable[[A1, A2, A3, A4], T]: ...
+) -> t.Callable[Concatenate[A1, A2, A3, A4, P], T]: ...
 
 
 @t.overload
 def over_args(
-    func: t.Callable[[T1, T2, T3], T],
+    func: t.Callable[Concatenate[T1, T2, T3, P], T],
     transform_one: t.Callable[[A1], T1],
     transform_two: t.Callable[[A2], T2],
     transform_three: t.Callable[[A3], T3],
-) -> t.Callable[[A1, A2, A3], T]: ...
+) -> t.Callable[Concatenate[A1, A2, A3, P], T]: ...
 
 
 @t.overload
 def over_args(
-    func: t.Callable[[T1, T2], T],
+    func: t.Callable[Concatenate[T1, T2, P], T],
     transform_one: t.Callable[[A1], T1],
     transform_two: t.Callable[[A2], T2],
-) -> t.Callable[[A1, A2], T]: ...
+) -> t.Callable[Concatenate[A1, A2, P], T]: ...
 
 
 @t.overload
 def over_args(
-    func: t.Callable[[T1], T],
+    func: t.Callable[Concatenate[T1, P], T],
     transform_one: t.Callable[[A1], T1],
-) -> t.Callable[[A1], T]: ...
+) -> t.Callable[Concatenate[A1, P], T]: ...
+
+
+@t.overload
+def over_args(func: t.Callable[P, T]) -> t.Callable[P, T]: ...
 
 
 def over_args(func, *transforms):
     """
-    Creates a function that runs each argument through a corresponding transform function.
-    Arguments without a corresponding transform are passed through unchanged.
+    Creates a function that runs positional arguments through corresponding transform functions.
+    Remaining positional arguments and all keyword arguments are passed through unchanged.
 
     Args:
         func: Function to wrap.
