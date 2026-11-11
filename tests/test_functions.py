@@ -979,6 +979,87 @@ def test_partial_keyword_only_arguments_as_iteratee(factory):
 
 
 @parametrize("factory", [_.partial, _.partial_right])
+def test_partial_keyword_bound_middle_argument_as_iteratee(factory):
+    def transform(value, increment=0, scale=1):
+        return (value + increment) * scale
+
+    wrapped = factory(transform, increment=2)
+
+    assert wrapped(1) == 3
+    assert wrapped._argcount == 1
+    assert _.map_([1, 2], wrapped) == [3, 4]
+    assert _.chain([1, 2]).map_(wrapped).value() == [3, 4]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_keyword_bound_argument_argcount(factory):
+    def transform(value, increment=0, scale=1):
+        return (value + increment) * scale
+
+    assert factory(transform, scale=2)._argcount == 2
+    assert factory(transform, increment=2)._argcount == 1
+    assert factory(transform, increment=2, scale=3)._argcount == 1
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_keyword_bound_argument_argcount_with_implicit_first_parameter(factory):
+    class Parser:
+        def parse(self, value, base=0, scale=1):
+            return (value + base) * scale
+
+        @classmethod
+        def parse_class(cls, value, base=0, scale=1):
+            return (value + base) * scale
+
+        def __call__(self, value, base=0, scale=1):
+            return (value + base) * scale
+
+    parser = Parser()
+
+    # The implicit `self`/`cls` that `getfullargspec` reports must not shift the bound slot.
+    assert factory(parser.parse, scale=2)._argcount == 2
+    assert factory(parser.parse, base=2)._argcount == 1
+    assert factory(parser, scale=2)._argcount == 2
+    assert factory(Parser.parse_class, scale=2)._argcount == 2
+
+
+def test_partial_keyword_bound_method_as_iteratee():
+    class Parser:
+        def parse(self, value, base=0, scale=1):
+            return (value + base) * scale
+
+    parser = Parser()
+
+    assert _.map_([1, 2], _.partial(parser.parse, scale=2)) == [2, 6]
+    assert _.map_([1, 2], _.partial(parser.parse, base=2)) == [3, 4]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_keyword_bound_argument_argcount_with_bound_positional(factory):
+    def transform(left, right, increment=0, scale=1):
+        return (left, right, increment, scale)
+
+    assert factory(transform, 10, increment=5)._argcount == 1
+    assert factory(transform, 10, 20, increment=5)._argcount == 0
+
+
+def test_partial_bound_positional_and_keyword_slot_as_iteratee():
+    def transform(left, right, increment=0, scale=1):
+        return (left, right, increment, scale)
+
+    # Slots before the keyword-bound parameter still receive the element.
+    assert _.map_([1, 2], _.partial(transform, 10, increment=5)) == [
+        (10, 1, 5, 1),
+        (10, 2, 5, 1),
+    ]
+    # A zero argument count calls the wrapper without the element or index.
+    assert _.map_([1, 2], _.partial(transform, 10, 20, increment=5)) == [
+        (10, 20, 5, 1),
+        (10, 20, 5, 1),
+    ]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
 def test_partial_variable_keyword_arguments_as_iteratee(factory):
     def transform(value, **options):
         return value + options["increment"]
