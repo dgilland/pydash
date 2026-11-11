@@ -325,3 +325,17 @@ def test_mypy_over_args_all_transform_arities() -> None:
     assert_type(_.over_args(add_four, parse, parse, parse, parse)("1", "2", "3", "4"), int)
     assert_type(_.over_args(add_five, parse, parse, parse, parse, parse)("1", "2", "3", "4", "5"), int)
     assert_type(_.chain(add_three).over_args(parse, parse, parse).value()("1", "2", "3"), int)
+
+
+@pytest.mark.mypy_testing
+def test_mypy_over_args_preserves_remaining_parameters() -> None:
+    def label(value: int, prefix: str, *, suffix: str) -> str:
+        return f"{prefix}{value}{suffix}"
+
+    def parse(value: str) -> int:
+        return int(value)
+
+    wrapped = _.over_args(label, parse)
+    assert_type(wrapped("4", "value=", suffix="!"), str)
+    assert_type(_.chain(label).over_args(parse).value()("4", "value=", suffix="!"), str)
+    assert_type(_.over_args(label)(4, prefix="value=", suffix="!"), str)

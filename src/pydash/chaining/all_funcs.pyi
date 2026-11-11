@@ -1776,38 +1776,40 @@ class AllFuncs:
 
     @t.overload
     def over_args(
-        self: "Chain[t.Callable[[T1, T2, T3, T4, T5], T]]",
+        self: "Chain[t.Callable[Concatenate[T1, T2, T3, T4, T5, P], T]]",
         transform_one: t.Callable[[A1], T1],
         transform_two: t.Callable[[A2], T2],
         transform_three: t.Callable[[A3], T3],
         transform_four: t.Callable[[A4], T4],
         transform_five: t.Callable[[A5], T5],
-    ) -> "Chain[t.Callable[[A1, A2, A3, A4, A5], T]]": ...
+    ) -> "Chain[t.Callable[Concatenate[A1, A2, A3, A4, A5, P], T]]": ...
     @t.overload
     def over_args(
-        self: "Chain[t.Callable[[T1, T2, T3, T4], T]]",
+        self: "Chain[t.Callable[Concatenate[T1, T2, T3, T4, P], T]]",
         transform_one: t.Callable[[A1], T1],
         transform_two: t.Callable[[A2], T2],
         transform_three: t.Callable[[A3], T3],
         transform_four: t.Callable[[A4], T4],
-    ) -> "Chain[t.Callable[[A1, A2, A3, A4], T]]": ...
+    ) -> "Chain[t.Callable[Concatenate[A1, A2, A3, A4, P], T]]": ...
     @t.overload
     def over_args(
-        self: "Chain[t.Callable[[T1, T2, T3], T]]",
+        self: "Chain[t.Callable[Concatenate[T1, T2, T3, P], T]]",
         transform_one: t.Callable[[A1], T1],
         transform_two: t.Callable[[A2], T2],
         transform_three: t.Callable[[A3], T3],
-    ) -> "Chain[t.Callable[[A1, A2, A3], T]]": ...
+    ) -> "Chain[t.Callable[Concatenate[A1, A2, A3, P], T]]": ...
     @t.overload
     def over_args(
-        self: "Chain[t.Callable[[T1, T2], T]]",
+        self: "Chain[t.Callable[Concatenate[T1, T2, P], T]]",
         transform_one: t.Callable[[A1], T1],
         transform_two: t.Callable[[A2], T2],
-    ) -> "Chain[t.Callable[[A1, A2], T]]": ...
+    ) -> "Chain[t.Callable[Concatenate[A1, A2, P], T]]": ...
     @t.overload
     def over_args(
-        self: "Chain[t.Callable[[T1], T]]", transform_one: t.Callable[[A1], T1]
-    ) -> "Chain[t.Callable[[A1], T]]": ...
+        self: "Chain[t.Callable[Concatenate[T1, P], T]]", transform_one: t.Callable[[A1], T1]
+    ) -> "Chain[t.Callable[Concatenate[A1, P], T]]": ...
+    @t.overload
+    def over_args(self: "Chain[t.Callable[P, T]]") -> "Chain[t.Callable[P, T]]": ...
     def over_args(self, *transforms):
         return self._wrap(pyd.over_args)(*transforms)
 

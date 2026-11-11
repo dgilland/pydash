@@ -598,6 +598,26 @@ def test_over_args_preserves_arguments_without_transforms(transforms, arguments,
     assert wrapped(*arguments) == expected
 
 
+def test_over_args_forwards_keyword_only_arguments():
+    marker = object()
+
+    def target(value, *, suffix):
+        return value, suffix
+
+    wrapped = _.over_args(target, str)
+    value, suffix = wrapped(3, suffix=marker)
+    assert value == "3"
+    assert suffix is marker
+
+
+def test_over_args_forwards_self_keyword_without_transforming_it():
+    def target(*, self):
+        return self
+
+    wrapped = _.over_args(target, str)
+    assert wrapped(self=3) == 3
+
+
 def test_over_args_keeps_tail_references():
     marker = object()
     wrapped = _.over_args(lambda first, second: (first, second), str)
