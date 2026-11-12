@@ -828,6 +828,26 @@ def test_order_by_accepts_iterable_orders():
     assert _.order_by(items, ["a", "b"], iter([False])) == _.order_by(items, ["a", "b"], [False])
 
 
+def test_order_by_does_not_truth_test_order_iterable():
+    class Directions:
+        def __init__(self, directions):
+            self.directions = directions
+
+        def __iter__(self):
+            return iter(self.directions)
+
+        def __bool__(self):
+            raise ValueError("sort directions have no truth value")
+
+    rows = [[2, 2], [1, 0], [2, 1]]
+    assert _.order_by(rows, [0, 1], Directions([False, True])) == [
+        rows[2],
+        rows[0],
+        rows[1],
+    ]
+    assert _.order_by(rows, [0], Directions([])) == [rows[1], rows[0], rows[2]]
+
+
 @parametrize("orders", [None, [], iter([]), False, [True]])
 def test_order_by_numeric_keys_with_default_directions(orders):
     rows = [[2, "second"], [1, "first"], [2, "third"]]
