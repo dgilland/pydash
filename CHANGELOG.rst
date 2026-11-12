@@ -6,6 +6,9 @@ Changelog
 Unreleased
 ----------
 
+- Keep an escaped backslash (``\\``) that comes right before a ``.`` path delimiter as part of
+  the key in ``to_path`` and deep path functions such as ``get`` and ``set_``, instead of
+  dropping it.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
