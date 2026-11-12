@@ -6,7 +6,7 @@ Functions that operate on lists, dicts, and other objects.
 
 from __future__ import annotations
 
-from collections.abc import MutableMapping
+from collections.abc import Mapping, MutableMapping
 import copy
 from functools import partial
 import math
@@ -1421,7 +1421,8 @@ def merge(obj: t.Sequence[T], *sources: t.Sequence[T2]) -> t.List[t.Union[T, T2]
 def merge(obj, *sources):
     """
     Recursively merges properties of the source object(s) into the destination object. Subsequent
-    sources will overwrite property assignments of previous sources.
+    sources will overwrite property assignments of previous sources. Nested mutable mappings
+    are merged in place, including mappings that are not ``dict`` subclasses.
 
     Args:
         obj: Destination object to merge source(s) into.
@@ -1528,7 +1529,7 @@ def _merge_with(obj, *sources, **kwargs):
             else:
                 obj_value = base_get(obj, key, default=None)
             all_sequences = isinstance(src_value, list) and isinstance(obj_value, list)
-            all_mappings = isinstance(src_value, dict) and isinstance(obj_value, dict)
+            all_mappings = isinstance(src_value, Mapping) and isinstance(obj_value, MutableMapping)
 
             _result = None
             if iteratee:
