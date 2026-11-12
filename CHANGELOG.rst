@@ -6,6 +6,9 @@ Changelog
 Unreleased
 ----------
 
+- Merge nested mutable mappings in place instead of replacing their existing contents, including
+  ``UserDict`` and ``ChainMap``, and apply deep defaults and customizers to their entries.
+
 - Stop ``partial`` and ``partial_right`` wrappers from accepting a positional iteratee argument in
   a slot that a keyword argument already binds, so ``map_`` passes the element instead of an index
   into the bound parameter.
