@@ -88,3 +88,4 @@ Contributors
 - wynneyin, `wynneyin@github <https://github.com/wynneyin>`_
 - Arin Aeruva, `arin30@github <https://github.com/arin30>`_
 - Cyber Marty, `Cyber-Marty@github <https://github.com/Cyber-Marty>`_
+- ainuo-AI, `ainuo-AI@github <https://github.com/ainuo-AI>`_

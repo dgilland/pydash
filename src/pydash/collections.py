@@ -842,6 +842,18 @@ def for_each_right(collection, iteratee):
 
 
 @t.overload
+def group_by(
+    collection: t.Mapping[t.Any, T], iteratee: t.Callable[[T], T2]
+) -> t.Dict[T2, t.List[T]]: ...
+
+
+@t.overload
+def group_by(
+    collection: t.Mapping[t.Any, T], iteratee: t.Union[IterateeObjT, None] = None
+) -> t.Dict[t.Any, t.List[T]]: ...
+
+
+@t.overload
 def group_by(collection: t.Iterable[T], iteratee: t.Callable[[T], T2]) -> t.Dict[T2, t.List[T]]: ...
 
 
@@ -870,11 +882,16 @@ def group_by(collection, iteratee=None):
         >>> results = group_by([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], {'a': 1})
         >>> assert results == {False: [{'a': 3, 'b': 4}],\
                                True: [{'a': 1, 'b': 2}]}
+        >>> group_by({'first': 1, 'second': 3}, lambda value: value % 2)
+        {1: [1, 3]}
 
     .. versionadded:: 1.0.0
     """
     ret = {}
     cbk = pyd.iteratee(iteratee)
+
+    if isinstance(collection, Mapping):
+        collection = collection.values()
 
     for value in collection:
         key = cbk(value)

@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Group mapping values rather than keys in ``group_by``, including when using
+  iteratee shorthands, and infer the grouped value types from the mapping.
 - Stop ``partial`` and ``partial_right`` wrappers from accepting a positional iteratee argument in
   a slot that a keyword argument already binds, so ``map_`` passes the element instead of an index
   into the bound parameter.
