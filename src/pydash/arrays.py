@@ -799,6 +799,18 @@ def index_of(array: t.Sequence[T], value: T, from_index: int = 0) -> int:
 
     .. versionadded:: 1.0.0
     """
+    if isinstance(array, range):
+        # range.index does not accept a starting index. Slicing preserves
+        # range's arithmetic search without materializing the sequence.
+        tail = array[from_index:]
+        # At runtime range.index also accepts objects that compare equal to an int.
+        searchable_tail: Sequence[object] = tail
+        try:
+            index = searchable_tail.index(value)
+        except ValueError:
+            return -1
+        return array.index(tail.start) + index
+
     try:
         return array.index(value, from_index)
     except ValueError:

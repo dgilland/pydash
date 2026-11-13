@@ -480,6 +480,26 @@ def test_index_of(case, value, from_index, expected):
     assert _.index_of(case, value, from_index) == expected
 
 
+@parametrize(
+    "sequence,value,start,expected",
+    [
+        (range(10, 20, 2), 14, 0, 2),
+        (range(10, 20, 2), 14, 3, -1),
+        (range(10, 20, 2), 14, -3, 2),
+        (range(10, 20, 2), 14, -2, -1),
+        (range(10, 20, 2), 14, -100, 2),
+        (range(20, 10, -2), 14, 2, 3),
+        (range(10, 20, 2), 14, 100, -1),
+        (range(10, 20, 2), 15, 0, -1),
+        (range(10, 20, 2), 14.0, 0, 2),
+        (range(0), 0, 0, -1),
+        (range(10**30), 10**30 - 1, -2, 10**30 - 1),
+    ],
+)
+def test_index_of_range(sequence, value, start, expected):
+    assert _.index_of(sequence, value, start) == expected
+
+
 @parametrize("case,expected", [([1, 2, 3], [1, 2]), ([1], [])])
 def test_initial(case, expected):
     assert _.initial(case) == expected
