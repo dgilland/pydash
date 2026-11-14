@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Search values in generic mappings with ``includes`` and respect the start offset.
 - Stop ``partial`` and ``partial_right`` wrappers from accepting a positional iteratee argument in
   a slot that a keyword argument already binds, so ``map_`` passes the element instead of an index
   into the bound parameter.
