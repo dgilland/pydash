@@ -8,6 +8,14 @@ Unreleased
 
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
+- Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
+- Transliterate letters like ``ß``, ``æ``, ``ø`` and ``Ł`` in ``slugify`` through ``deburr`` instead of
+  dropping them.
+- Search values in generic mappings with ``includes`` and respect the start offset.
+- Support ``range`` objects in ``index_of``, including when a start index is supplied.
+- Merge nested mutable mappings in place instead of replacing their existing contents, including
+  ``UserDict`` and ``ChainMap``, and apply deep defaults and customizers to their entries.
+- Allow sort directions in ``order_by`` to be iterables without a truth value.
 - Stop ``partial`` and ``partial_right`` wrappers from accepting a positional iteratee argument in
   a slot that a keyword argument already binds, so ``map_`` passes the element instead of an index
   into the bound parameter.
