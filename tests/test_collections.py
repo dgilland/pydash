@@ -828,6 +828,26 @@ def test_order_by_accepts_iterable_orders():
     assert _.order_by(items, ["a", "b"], iter([False])) == _.order_by(items, ["a", "b"], [False])
 
 
+def test_order_by_does_not_truth_test_order_iterable():
+    class Directions:
+        def __init__(self, directions):
+            self.directions = directions
+
+        def __iter__(self):
+            return iter(self.directions)
+
+        def __bool__(self):
+            raise ValueError("sort directions have no truth value")
+
+    rows = [[2, 2], [1, 0], [2, 1]]
+    assert _.order_by(rows, [0, 1], Directions([False, True])) == [
+        rows[2],
+        rows[0],
+        rows[1],
+    ]
+    assert _.order_by(rows, [0], Directions([])) == [rows[1], rows[0], rows[2]]
+
+
 @parametrize("orders", [None, [], iter([]), False, [True]])
 def test_order_by_numeric_keys_with_default_directions(orders):
     rows = [[2, "second"], [1, "first"], [2, "third"]]
@@ -1299,9 +1319,11 @@ def test_order_by_mapping_values(mapping_type, orders):
     assert dict(collection) == source
 
 
+@parametrize("factory", [dict, UserDict, MappingProxyType])
 @parametrize(
     "target,offset,expected",
     [
+        ("a", 0, False),
         (1, 1, False),
         (2, 1, True),
         (3, 3, False),
@@ -1311,10 +1333,11 @@ def test_order_by_mapping_values(mapping_type, orders):
         (1, 10, False),
     ],
 )
-def test_includes_dictionary_offset(target, offset, expected):
+def test_includes_mapping_offset(factory, target, offset, expected):
     source = {"a": 1, "b": 2, "c": 3}
-    assert _.includes(source, target, from_index=offset) is expected
-    assert source == {"a": 1, "b": 2, "c": 3}
+    mapping = factory(source)
+    assert _.includes(mapping, target, from_index=offset) is expected
+    assert dict(mapping) == {"a": 1, "b": 2, "c": 3}
 
 
 @parametrize("factory", [dict, UserDict, MappingProxyType])
