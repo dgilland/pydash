@@ -705,6 +705,21 @@ def test_nth_with_non_sequence_iterables(factory, pos, expected):
     assert _.nth(factory(), pos) == expected
 
 
+@parametrize("pos", [0, 2])
+def test_nth_only_consumes_through_the_requested_position(pos):
+    def values():
+        yield from range(pos + 1)
+        pytest.fail("nth consumed an item after the requested position")
+
+    assert _.nth(values(), pos) == pos
+
+
+def test_nth_leaves_remaining_items_in_the_iterator():
+    values = iter([11, 22, 33, 44])
+    assert _.nth(values, 1) == 22
+    assert list(values) == [33, 44]
+
+
 @parametrize(
     "case,pos,expected",
     [({0: "x", 1: "y"}, 0, "x"), ({0: "x", 1: "y"}, 1, "y"), ({"a": 1}, 0, None)],

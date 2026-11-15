@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
 - Transliterate letters like ``ß``, ``æ``, ``ø`` and ``Ł`` in ``slugify`` through ``deburr`` instead of
   dropping them.
 - Search values in generic mappings with ``includes`` and respect the start offset.
