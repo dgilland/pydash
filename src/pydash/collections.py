@@ -1176,7 +1176,7 @@ def order_by(collection, keys, orders=None, reverse=False):
             sorted in ascending order. To sort a string key in descending order, prepend a
             ``"-"`` to the key name. For example, to sort
             the key value for ``"name"`` in descending order, use ``"-name"``.
-        orders: List of boolean sort orders to apply for each key. ``True``
+        orders: Iterable of boolean sort orders to apply for each key. ``True``
             corresponds to ascending order while ``False`` is descending. Defaults to ``None``.
         reverse (bool, optional): Whether to reverse the sort. Defaults to ``False``.
 
@@ -1224,8 +1224,7 @@ def order_by(collection, keys, orders=None, reverse=False):
     if pyd.is_boolean(orders):
         reverse = orders
         orders = None
-
-    if orders:
+    elif orders is not None:
         orders = list(orders)
 
     comparers = []
