@@ -885,11 +885,14 @@ def group_by(collection, iteratee=None):
 
 
 def includes(
-    collection: t.Union[t.Sequence[t.Any], t.Dict[t.Any, t.Any]], target: t.Any, from_index: int = 0
+    collection: t.Union[t.Sequence[t.Any], t.Mapping[t.Any, t.Any]],
+    target: t.Any,
+    from_index: int = 0,
 ) -> bool:
     """
     Checks if a given value is present in a collection. If `from_index` is negative, it is used as
-    the offset from the end of the collection.
+    the offset from the end of the collection. For mappings, the search and offset apply to values
+    in iteration order.
 
     Args:
         collection: Collection to iterate over.
@@ -915,7 +918,7 @@ def includes(
         ``include``.
     """
     collection_values: t.Container[t.Any]
-    if isinstance(collection, dict):
+    if isinstance(collection, Mapping):
         collection_values = list(collection.values())[from_index:]
     else:
         collection_values = collection[from_index:]

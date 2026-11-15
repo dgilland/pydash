@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Search values in generic mappings with ``includes`` and respect the start offset.
 - Support ``range`` objects in ``index_of``, including when a start index is supplied.
 - Merge nested mutable mappings in place instead of replacing their existing contents, including
   ``UserDict`` and ``ChainMap``, and apply deep defaults and customizers to their entries.
