@@ -898,6 +898,7 @@ def test_series_phrase_serial(case, expected):
         (" foo bar ", "foo-bar"),
         ("Un éléphant à l'orée du bois", "un-elephant-a-loree-du-bois"),
         ("shouldn't couldn't wouldn't", "shouldnt-couldnt-wouldnt"),
+        ("Ærøskøbing Straße", "aeroskobing-strasse"),
         ("", ""),
         (5, "5"),
         (None, ""),

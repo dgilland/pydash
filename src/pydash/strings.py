@@ -1728,7 +1728,7 @@ def slugify(text: t.Any, separator: str = "-") -> str:
         Remove single quotes from output.
     """
     normalized = (
-        unicodedata.normalize("NFKD", pyd.to_string(text))
+        unicodedata.normalize("NFKD", deburr(pyd.to_string(text)))
         .encode("ascii", "ignore")
         .decode("utf8")
         .replace("'", "")

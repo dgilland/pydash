@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Transliterate letters like ``ß``, ``æ``, ``ø`` and ``Ł`` in ``slugify`` through ``deburr`` instead of
+  dropping them.
 - Search values in generic mappings with ``includes`` and respect the start offset.
 - Support ``range`` objects in ``index_of``, including when a start index is supplied.
 - Merge nested mutable mappings in place instead of replacing their existing contents, including
