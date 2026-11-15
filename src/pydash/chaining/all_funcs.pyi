@@ -1099,7 +1099,7 @@ class AllFuncs:
         return self._wrap(pyd.group_by)(iteratee)
 
     def includes(
-        self: "Chain[t.Union[t.Sequence[t.Any], t.Dict[t.Any, t.Any]]]",
+        self: "Chain[t.Union[t.Sequence[t.Any], t.Mapping[t.Any, t.Any]]]",
         target: t.Any,
         from_index: int = 0,
     ) -> "Chain[bool]":

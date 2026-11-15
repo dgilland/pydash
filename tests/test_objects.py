@@ -1145,6 +1145,78 @@ def test_merge_with_customizer_reads_literal_mapping_key():
     assert obj == {1: {"left": 1}, "1": {"right": 2}}
 
 
+@parametrize("combine", [_.merge, _.merge_with, _.defaults_deep])
+@parametrize("destination_type", [dict, UserDict, ChainMap])
+@parametrize("source_type", [dict, UserDict, ChainMap])
+def test_merge_nested_mapping_types(combine, destination_type, source_type):
+    nested = destination_type({"keep": 1, "shared": "destination"})
+    destination = {"settings": nested}
+    source = {"settings": source_type({"shared": "source", "new": [2]})}
+
+    assert combine(destination, source) is destination
+    expected_shared = "destination" if combine is _.defaults_deep else "source"
+    assert destination["settings"] == {"keep": 1, "shared": expected_shared, "new": [2]}
+    assert destination["settings"] is nested
+    destination["settings"]["new"].append(3)
+    assert source["settings"] == {"shared": "source", "new": [2]}
+
+
+@parametrize("mapping_type", [UserDict, ChainMap])
+def test_merge_with_customizes_nested_mapping_values(mapping_type):
+    nested = mapping_type({"numbers": [1]})
+    destination = {"settings": nested}
+    source = {"settings": mapping_type({"numbers": [2], "new": [3]})}
+    seen = []
+
+    def customizer(obj_value, src_value, key, obj, source_value):
+        seen.append(key)
+        if isinstance(obj_value, list) and isinstance(src_value, list):
+            return obj_value + src_value
+
+    assert _.merge_with(destination, source, iteratee=customizer) is destination
+    assert destination == {"settings": {"numbers": [1, 2], "new": [3]}}
+    assert destination["settings"] is nested
+    assert seen == ["settings", "numbers", "new"]
+    assert source["settings"] == {"numbers": [2], "new": [3]}
+
+
+def test_merge_nested_chainmap_retains_parent_layers():
+    parent = {"inherited": {"keep": 1}}
+    child = {"local": 2}
+    nested = ChainMap(child, parent)
+    destination = {"settings": nested}
+
+    assert _.merge(destination, {"settings": {"added": 3}}) is destination
+    assert destination["settings"] is nested
+    assert nested.maps[0] is child
+    assert nested.maps[1] is parent
+    assert child == {"local": 2, "added": 3}
+    assert parent == {"inherited": {"keep": 1}}
+
+
+@parametrize("mapping_type", [UserDict, ChainMap])
+def test_merge_nested_mappings_in_lists(mapping_type):
+    nested = mapping_type({"keep": 1})
+    destination = {"settings": [nested]}
+    source = {"settings": [mapping_type({"new": 2})]}
+
+    assert _.merge(destination, source) is destination
+    assert destination == {"settings": [{"keep": 1, "new": 2}]}
+    assert destination["settings"][0] is nested
+    assert source["settings"][0] == {"new": 2}
+
+
+@parametrize("mapping_type", [UserDict, ChainMap])
+def test_merge_mapping_scalar_replacements_remain_unchanged(mapping_type):
+    assert _.merge({"settings": mapping_type({"old": 1})}, {"settings": 2}) == {"settings": 2}
+    source = {"settings": mapping_type({"new": [3]})}
+    destination = {"settings": 2}
+    assert _.merge(destination, source) is destination
+    assert destination == source
+    assert destination["settings"] is not source["settings"]
+    assert destination["settings"]["new"] is not source["settings"]["new"]
+
+
 def test_merge_no_link_dict():
     case1 = {"foo": {"bar": None}}
     case2 = {"foo": {"bar": False}}
