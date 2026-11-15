@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
-from functools import partial
+from functools import partial, wraps
 import heapq
 import json
 import os
@@ -240,9 +240,69 @@ def test_curry_other_callable_controls(curry):
         def __call__(self, left, right):
             return left, right
 
-    assert curry(Callable()).arity == 3
+    assert curry(Callable()).arity == 2
     assert curry(Callable(), arity=2)(1, 2) == (1, 2)
     assert curry(receiver.instance, arity=2)(1, 2) == ("base", 1, 2)
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_callable_instance(curry):
+    class Pair:
+        def __call__(self, left, right, /):
+            return left, right
+
+    curried = curry(Pair())
+    expected = (2, 1) if curry is _.curry_right else (1, 2)
+
+    assert curried(1)(2) == expected
+    assert curried(1, 2) == (1, 2)
+    assert curried._argcount == 2
+    assert curried(1)._argcount == 1
+    assert _.map_([2], curried(1)) == [expected]
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_class_constructor(curry):
+    class Pair:
+        def __init__(self, left, right):
+            self.values = left, right
+
+    class InheritedPair(Pair):
+        pass
+
+    expected = (2, 1) if curry is _.curry_right else (1, 2)
+    for constructor in (Pair, InheritedPair):
+        curried = curry(constructor)
+        assert curried(1)(2).values == expected
+        assert curried(1, 2).values == (1, 2)
+        assert curried._argcount == 2
+        assert curried(1)._argcount == 1
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_callable_instance_zero_and_defaults(curry):
+    class Zero:
+        def __call__(self):
+            return 42
+
+    class Defaults:
+        def __call__(self, left=10, right=20):
+            return left, right
+
+    assert curry(Zero())() == 42
+    assert curry(Defaults())(1, 2) == (1, 2)
+    assert curry(Defaults(), arity=0)() == (10, 20)
+    assert curry(Defaults(), arity=1)(1) == (1, 20)
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_keeps_wrapper_signature(curry):
+    @wraps(lambda value: value)
+    def wrapper(left, right):
+        return left, right
+
+    expected = (2, 1) if curry is _.curry_right else (1, 2)
+    assert curry(wrapper)(1)(2) == expected
 
 
 @pytest.mark.parametrize("curry", [_.curry, _.curry_right])

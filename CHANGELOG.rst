@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Infer the positional arity of callable instances and class constructors correctly in
+  ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
 - Transliterate letters like ``ß``, ``æ``, ``ø`` and ``Ł`` in ``slugify`` through ``deburr`` instead of
   dropping them.
