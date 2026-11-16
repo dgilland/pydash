@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator, Mapping, Sized
 import decimal
+from fractions import Fraction
 import math
 import operator
 import typing as t
@@ -1080,7 +1081,19 @@ def slope(point1, point2):
     if x1 == x2:
         result = INFINITY
     else:
-        result = (y2 - y1) / (x2 - x1)
+        rise, run = y2 - y1, x2 - x1
+        if any(isinstance(delta, float) and math.isinf(delta) for delta in (rise, run)) and all(
+            isinstance(value, int) or (isinstance(value, float) and math.isfinite(value))
+            for value in (x1, y1, x2, y2)
+        ):
+            # Finite coordinates can overflow during subtraction before division.
+            exact = (Fraction(y2) - Fraction(y1)) / (Fraction(x2) - Fraction(x1))
+            try:
+                result = float(exact)
+            except OverflowError:
+                result = INFINITY if exact > 0 else -INFINITY
+        else:
+            result = rise / run
 
     return result
 

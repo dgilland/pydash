@@ -423,6 +423,66 @@ def test_slope(case, expected):
 
 
 @parametrize(
+    "point1,point2",
+    [
+        ((1e308, 1e308), (-1e308, -1e308)),
+        ((1e308, -1e308), (-1e308, 1e308)),
+        ((1e308, 1.0), (-1e308, -1.0)),
+        ((1.0, 1e308), (-1.0, -1e308)),
+        ((1e308, 5e-16), (-1e308, -5e-16)),
+        ((1e308, 1e308), (-1e308, 0)),
+    ],
+)
+def test_slope_avoids_intermediate_float_overflow(point1, point2):
+    expected = float(
+        (Fraction(point2[1]) - Fraction(point1[1])) / (Fraction(point2[0]) - Fraction(point1[0]))
+    )
+    assert _.slope(point1, point2) == expected
+    assert _.slope(point2, point1) == expected
+    assert _.chain(point1).slope(point2).value() == expected
+
+
+@parametrize("sign", [-1, 1])
+def test_slope_preserves_true_float_overflow(sign):
+    assert _.slope((0.0, -1e308), (sign * 1e-308, 1e308)) == sign * float("inf")
+
+
+def test_slope_preserves_decimal_arithmetic():
+    result = _.slope(
+        (Decimal("1e400"), Decimal("1e400")),
+        (Decimal("-1e400"), Decimal("-1e400")),
+    )
+    assert result == Decimal(1)
+    assert isinstance(result, Decimal)
+
+
+def test_slope_preserves_nonfinite_inputs():
+    assert _.slope((0.0, 0.0), (float("inf"), 1.0)) == 0.0
+    assert math.isnan(_.slope((0.0, 0.0), (float("inf"), float("inf"))))
+    assert math.isnan(_.slope((0.0, 0.0), (float("nan"), 1.0)))
+
+
+def test_slope_preserves_fraction_arithmetic():
+    result = _.slope((Fraction(1, 3), Fraction(1, 7)), (Fraction(2, 3), Fraction(2, 7)))
+    assert result == Fraction(3, 7)
+    assert isinstance(result, Fraction)
+
+
+def test_slope_preserves_large_integer_arithmetic():
+    assert _.slope((10**400, 10**400), (-(10**400), -(10**400))) == 1.0
+
+
+def test_slope_preserves_vertical_lines():
+    assert _.slope((1e308, -1e308), (1e308, 1e308)) == float("inf")
+
+
+@parametrize("point1,point2,error", [((1,), (2, 3), IndexError), (("x", 1), (2, 3), TypeError)])
+def test_slope_preserves_invalid_input_errors(point1, point2, error):
+    with pytest.raises(error):
+        _.slope(point1, point2)
+
+
+@parametrize(
     "case,expected",
     [
         ([1, 2, 3], (2.0 / 3.0) ** 0.5),
