@@ -799,6 +799,18 @@ def index_of(array: t.Sequence[T], value: T, from_index: int = 0) -> int:
 
     .. versionadded:: 1.0.0
     """
+    if isinstance(array, range):
+        # range.index does not accept a starting index. Slicing preserves
+        # range's arithmetic search without materializing the sequence.
+        tail = array[from_index:]
+        # At runtime range.index also accepts objects that compare equal to an int.
+        searchable_tail: Sequence[object] = tail
+        try:
+            index = searchable_tail.index(value)
+        except ValueError:
+            return -1
+        return array.index(tail.start) + index
+
     try:
         return array.index(value, from_index)
     except ValueError:
@@ -1204,12 +1216,14 @@ def nth(array: t.Iterable[T], pos: int = 0) -> t.Union[T, None]:
 
     .. versionchanged:: VERSION
         Support iterables that are not sequences, such as generators and sets.
-        They previously returned ``None``.
+        For a nonnegative index, iteration stops once the requested element is found.
     """
     # pyd.get indexes by position, which needs a sequence. A mapping is left
     # alone because it is indexed by key rather than position, and realizing
     # one would look up its keys instead.
     if not isinstance(array, (Sequence, Mapping)):
+        if isinstance(pos, int) and pos >= 0:
+            return next((value for index, value in enumerate(array) if index == pos), None)
         array = list(array)
     return pyd.get(array, pos)
 
