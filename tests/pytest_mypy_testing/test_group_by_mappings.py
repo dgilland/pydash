@@ -14,6 +14,9 @@ def test_mypy_group_by_mappings() -> None:
     values: t.Mapping[str, int] = {"first": 1, "second": 3}
     assert_type(_.group_by(values, parity), t.Dict[int, t.List[int]])
     assert_type(_.group_by(values), t.Dict[t.Any, t.List[int]])
+    assert_type(_.chain(values).group_by(parity).value(), t.Dict[int, t.List[int]])
+    assert_type(_.chain(values).group_by().value(), t.Dict[t.Any, t.List[int]])
 
     records: t.Mapping[str, t.Dict[str, int]] = {"first": {"kind": 1}}
     assert_type(_.group_by(records, "kind"), t.Dict[t.Any, t.List[t.Dict[str, int]]])
+    assert_type(_.chain(records).group_by("kind").value(), t.Dict[t.Any, t.List[t.Dict[str, int]]])

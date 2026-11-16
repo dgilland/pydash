@@ -1089,6 +1089,14 @@ class AllFuncs:
 
     @t.overload
     def group_by(
+        self: "Chain[t.Mapping[t.Any, T]]", iteratee: t.Callable[[T], T2]
+    ) -> "Chain[t.Dict[T2, t.List[T]]]": ...
+    @t.overload
+    def group_by(
+        self: "Chain[t.Mapping[t.Any, T]]", iteratee: t.Union[IterateeObjT, None] = None
+    ) -> "Chain[t.Dict[t.Any, t.List[T]]]": ...
+    @t.overload
+    def group_by(
         self: "Chain[t.Iterable[T]]", iteratee: t.Callable[[T], T2]
     ) -> "Chain[t.Dict[T2, t.List[T]]]": ...
     @t.overload
