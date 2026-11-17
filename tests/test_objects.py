@@ -1560,6 +1560,28 @@ def test_to_boolean(case, expected):
     assert _.to_boolean(*case) is expected
 
 
+@parametrize("truthy", [True, False])
+@parametrize(
+    "patterns,text,expected",
+    [
+        ((r"^other$", r"(?i)^yes$"), "YeS", True),
+        ((r"^other$", r"(?i)^yes$"), "never", None),
+        ((r"^(no)$", r"^(y)\1$"), "yy", True),
+        ((r"^(no)$", r"^(y)\1$"), "yno", None),
+        ((r"^(no)$", r"^(y)\1$"), "no", True),
+        ((r"^(?P<value>no)$", r"^(?P<value>yes)$"), "yes", True),
+        ((r"^(?P<value>no)$", r"^(?P<value>yes)$"), "never", None),
+    ],
+)
+def test_to_boolean_regex_patterns_are_independent(truthy, patterns, text, expected):
+    if truthy:
+        result = _.to_boolean(text, true_values=patterns, false_values=())
+    else:
+        result = _.to_boolean(text, true_values=(), false_values=patterns)
+
+    assert result is (truthy if expected else None)
+
+
 @parametrize(
     "case,expected",
     [
