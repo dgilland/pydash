@@ -6,6 +6,9 @@ Changelog
 Unreleased
 ----------
 
+- Require literal mapping keys in partial matches instead of matching missing numeric strings
+  against integer keys, including when filtering collections with object predicates.
+
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
