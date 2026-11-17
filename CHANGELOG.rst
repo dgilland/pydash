@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Limit temporary strings in ``pad``, ``pad_start``, and ``pad_end`` to the needed padding.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
