@@ -91,3 +91,4 @@ Contributors
 - Rajatendu Dey, `Rajatendu1@github <https://github.com/Rajatendu1>`_
 - Jay Hemnani, `jayhemnani9910@github <https://github.com/jayhemnani9910>`_
 - anticipate218, `anticipate218@github <https://github.com/anticipate218>`_
+- aliassar, `aliassar@github <https://github.com/aliassar>`_
