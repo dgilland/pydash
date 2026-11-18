@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Preserve finite values in ``to_number`` when scaling for rounding would overflow.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
