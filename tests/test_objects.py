@@ -1651,6 +1651,21 @@ def test_to_number(case, expected):
     assert _.to_number(*case) == expected
 
 
+@parametrize("value", [1e308, -1e308, "1e308", "-1e308"])
+@parametrize("precision", [1, 100, 308])
+def test_to_number_finite_overflow(value, precision):
+    expected = float(value)
+    assert _.to_number(value, precision) == expected
+    assert _.chain(value).to_number(precision).value() == expected
+
+
+@parametrize("value", [float("inf"), float("-inf"), float("nan")])
+@parametrize("precision", [-1, 0, 1])
+def test_to_number_nonfinite(value, precision):
+    assert _.to_number(value, precision) is None
+    assert _.chain(value).to_number(precision).value() is None
+
+
 @parametrize(
     "case,expected",
     [
