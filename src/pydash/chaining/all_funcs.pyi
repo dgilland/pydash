@@ -548,11 +548,11 @@ class AllFuncs:
         self: "Chain[t.Sequence[T]]",
         *others: t.Iterable[T2],
         comparator: t.Callable[[T, T2], t.Any],
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.List[t.Union[T, T2]]]": ...
     @t.overload
     def union_with(
         self: "Chain[t.Sequence[T]]", *others: t.Union[t.Iterable[T2], t.Callable[[T, T2], t.Any]]
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.List[t.Union[T, T2]]]": ...
     def union_with(self, *others, **kwargs):
         return self._wrap(pyd.union_with)(*others, **kwargs)
 

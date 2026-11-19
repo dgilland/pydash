@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Include every input array's element type in the result annotations of ``union_with``.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.

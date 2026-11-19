@@ -2247,13 +2247,13 @@ def union_by(array, *others, **kwargs):
 @t.overload
 def union_with(
     array: t.Sequence[T], *others: t.Iterable[T2], comparator: t.Callable[[T, T2], t.Any]
-) -> t.List[T]: ...
+) -> t.List[t.Union[T, T2]]: ...
 
 
 @t.overload
 def union_with(
     array: t.Sequence[T], *others: t.Union[t.Iterable[T2], t.Callable[[T, T2], t.Any]]
-) -> t.List[T]: ...
+) -> t.List[t.Union[T, T2]]: ...
 
 
 def union_with(array, *others, **kwargs):
