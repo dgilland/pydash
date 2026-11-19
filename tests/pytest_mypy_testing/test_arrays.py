@@ -380,8 +380,8 @@ def test_mypy_union_by() -> None:
 @pytest.mark.mypy_testing
 def test_mypy_union_with() -> None:
     comparator = lambda a, b: (a % 2) == (b % 2)
-    reveal_type(_.union_with([1, 2, 3], [2, 3, 4], comparator=comparator))  # R: builtins.list[builtins.int]
-    reveal_type(_.union_with([1, 2, 3], [2, 3, 4]))  # R: builtins.list[builtins.int]
+    assert_type(_.union_with([1, 2, 3], [2, 3, 4], comparator=comparator), t.List[int])
+    assert_type(_.union_with([1, 2, 3], [2, 3, 4]), t.List[int])
 
 
 @pytest.mark.mypy_testing
@@ -546,3 +546,23 @@ def test_mypy_sorted_uniq_criterion_types() -> None:
     assert_type(_.chain(words).sorted_uniq_by(len).value(), list[str])
     assert_type(_.sorted_uniq_by(words, lambda word: [len(word)]), list[str])
     assert_type(_.sorted_uniq_by(words, lambda word: None), list[str])
+@pytest.mark.mypy_testing
+def test_mypy_union_with_mixed_results() -> None:
+    def same_text(left: object, right: object) -> bool:
+        return str(left) == str(right)
+
+    keyword = _.union_with([1], ["1", "two"], comparator=same_text)
+    positional = _.union_with([1], ["1", "two"], same_text)
+    chained = _.chain([1]).union_with(["1", "two"], comparator=same_text).value()
+    chained_positional = _.chain([1]).union_with(["1", "two"], same_text).value()
+    default = _.union_with([1], ["two"])
+    chained_default = _.chain([1]).union_with(["two"]).value()
+
+    assert_type(keyword, t.List[t.Union[int, str]])
+    assert_type(positional, t.List[t.Union[int, str]])
+    assert_type(chained, t.List[t.Union[int, str]])
+    assert_type(chained_positional, t.List[t.Union[int, str]])
+    assert_type(default, t.List[t.Union[int, str]])
+    assert_type(chained_default, t.List[t.Union[int, str]])
+    assert keyword == positional == chained == chained_positional == [1, "two"]
+    assert default == chained_default == [1, "two"]
