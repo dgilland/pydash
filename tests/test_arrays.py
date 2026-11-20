@@ -671,6 +671,39 @@ def test_last_index_of(case, value, from_index, expected):
 
 
 @parametrize(
+    "array,value,from_index,expected",
+    [
+        (range(10**30), 0, None, 0),
+        (range(10**30), 10**30 - 1, None, 10**30 - 1),
+        (range(10**30), 10**30 - 1, 10**30 - 2, -1),
+        (range(10**30), 10**30 - 1, -1, 10**30 - 1),
+        (range(10**30), 10**30 - 1, -2, -1),
+        (range(10**30), 0, -(10**30) - 1, 0),
+        (range(10**30, 0, -1), 1, None, 10**30 - 1),
+        (range(0, 10**30, 2), 3, None, -1),
+        (range(0, 10**30, 2), 4, -1, 2),
+    ],
+)
+def test_last_index_of_large_ranges(array, value, from_index, expected):
+    assert _.last_index_of(array, value, from_index) == expected
+    assert _.chain(array).last_index_of(value, from_index).value() == expected
+
+
+def test_last_index_of_range_equality_controls():
+    class MatchesEven:
+        __hash__ = None
+
+        def __eq__(self, other):
+            return other % 2 == 0
+
+    assert _.last_index_of(range(5), MatchesEven()) == 4
+    assert _.last_index_of(range(5), MatchesEven(), 2) == 2
+    assert _.last_index_of(range(5), 4.0) == 4
+    assert _.last_index_of(range(5), True) == 1
+    assert _.last_index_of(range(0), 0) == -1
+
+
+@parametrize(
     "case,expected",
     [(([1, 2, None, 4, None, 6], lambda x, i: [str(i)] if x is None else []), ["2", "4"])],
 )
