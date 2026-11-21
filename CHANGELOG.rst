@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Forward keyword arguments named ``self`` through function wrappers instead of colliding with
+  the wrapper's receiver.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
