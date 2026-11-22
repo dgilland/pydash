@@ -81,7 +81,7 @@ class After(_WithArgCount, t.Generic[P, T]):
         self.n = n
         self.func = func
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> t.Union[T, None]:
+    def __call__(self, /, *args: P.args, **kwargs: P.kwargs) -> t.Union[T, None]:
         """Return results of :attr:`func` after :attr:`n` calls."""
         self.n -= 1
 
@@ -106,7 +106,7 @@ class Ary(_WithArgCount, t.Generic[T]):
         self.n = n
         self.func = func
 
-    def __call__(self, *args: t.Any, **kwargs: t.Any) -> T:
+    def __call__(self, /, *args: t.Any, **kwargs: t.Any) -> T:
         """
         Return results of :attr:`func` with arguments capped to :attr:`n`.
 
@@ -120,7 +120,7 @@ class Ary(_WithArgCount, t.Generic[T]):
 class Before(After[P, T], t.Generic[P, T]):
     """Wrap a function in a before context."""
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> t.Union[T, None]:
+    def __call__(self, /, *args: P.args, **kwargs: P.kwargs) -> t.Union[T, None]:
         self.n -= 1
 
         if self.n > 0:
@@ -177,7 +177,7 @@ class Flow(t.Generic[P, T]):
         self.funcs = funcs
         self._from_index = -1 if from_right else 0
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
+    def __call__(self, /, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results of composing :attr:`funcs`."""
         funcs = list(self.funcs)
 
@@ -227,7 +227,7 @@ class Curry(t.Generic[T1, T]):
         self.args = () if args is None else args
         self.kwargs = {} if kwargs is None else kwargs
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         """Store `args` and `kwargs` and call :attr:`func` if we've reached or exceeded the function
         arity."""
         args = self.compose_args(args)
@@ -266,7 +266,7 @@ class CurryTwo(Curry[T1, CurryOne[T2, T]]):
     @t.overload
     def __call__(self, arg_one: T1, arg_two: T2) -> T: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
@@ -280,7 +280,7 @@ class CurryThree(Curry[T1, CurryTwo[T2, T3, T]]):
     @t.overload
     def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3) -> T: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
@@ -297,7 +297,7 @@ class CurryFour(Curry[T1, CurryThree[T2, T3, T4, T]]):
     @t.overload
     def __call__(self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4) -> T: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
@@ -321,7 +321,7 @@ class CurryFive(Curry[T1, CurryFour[T2, T3, T4, T5, T]]):
         self, arg_one: T1, arg_two: T2, arg_three: T3, arg_four: T4, arg_five: T5
     ) -> T: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
@@ -344,7 +344,7 @@ class CurryRightTwo(CurryRight[T5, CurryRightOne[T4, T]]):
     @t.overload
     def __call__(self, arg_one: T5, arg_two: T4) -> T: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
@@ -358,7 +358,7 @@ class CurryRightThree(CurryRight[T5, CurryRightTwo[T4, T3, T]]):
     @t.overload
     def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3) -> T: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
@@ -375,7 +375,7 @@ class CurryRightFour(CurryRight[T5, CurryRightThree[T4, T3, T2, T]]):
     @t.overload
     def __call__(self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2) -> T: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
@@ -399,7 +399,7 @@ class CurryRightFive(CurryRight[T5, CurryRightFour[T4, T3, T2, T1, T]]):
         self, arg_one: T5, arg_two: T4, arg_three: T3, arg_four: T2, arg_five: T1
     ) -> T: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return super().__call__(*args, **kwargs)  # pragma: no cover
 
 
@@ -422,7 +422,7 @@ class Debounce(_WithArgCount, t.Generic[P, T]):
         self._first_call: t.Optional[int] = None
         self._generation = 0
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
+    def __call__(self, /, *args: P.args, **kwargs: P.kwargs) -> T:
         """
         Schedule :attr:`func` to run after :attr:`wait` milliseconds have elapsed since the last
         call. If :attr:`max_wait` is set, execute once that many milliseconds have elapsed since the
@@ -498,7 +498,7 @@ class Flip(_WithArgCount):
     def __init__(self, func: t.Callable[..., t.Any]) -> None:
         self.func = func
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, /, *args, **kwargs):
         return self.func(*reversed(args), **kwargs)
 
 
@@ -532,7 +532,7 @@ class Juxtapose(t.Generic[P, T]):
     def __init__(self, *funcs: t.Callable[P, T]) -> None:
         self.funcs = funcs
 
-    def __call__(self, *objs: P.args, **kwargs: P.kwargs) -> t.List[T]:
+    def __call__(self, /, *objs: P.args, **kwargs: P.kwargs) -> t.List[T]:
         return [func(*objs, **kwargs) for func in self.funcs]
 
     @cached_property
@@ -560,7 +560,7 @@ class Negate(_WithArgCount, t.Generic[P]):
     def __init__(self, func: t.Callable[P, t.Any]) -> None:
         self.func = func
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> bool:
+    def __call__(self, /, *args: P.args, **kwargs: P.kwargs) -> bool:
         """Return negated results of calling :attr:`func`."""
         return not self.func(*args, **kwargs)
 
@@ -574,7 +574,7 @@ class Once(_WithArgCount, t.Generic[P, T]):
         self.called = False
         self._lock = threading.RLock()
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
+    def __call__(self, /, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results from the first call of :attr:`func`."""
         with self._lock:
             if not self.called:
@@ -608,7 +608,7 @@ class Partial(_WithArgCount, t.Generic[T]):
         self.kwargs = kwargs or {}
         self.from_right = from_right
 
-    def __call__(self, *args: t.Any, **kwargs: t.Any) -> T:
+    def __call__(self, /, *args: t.Any, **kwargs: t.Any) -> T:
         """
         Return results from :attr:`func` with :attr:`args` + `args`.
 
@@ -673,7 +673,7 @@ class Rearg(_WithArgCount, t.Generic[P, T]):
         for dest_index, src_index in enumerate(pyd.flatten(indexes)):
             self.indexes.setdefault(src_index, []).append(dest_index)
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
+    def __call__(self, /, *args: P.args, **kwargs: P.kwargs) -> T:
         """Return results from :attr:`func` using rearranged arguments."""
         reargs = {}
         rest = []
@@ -723,7 +723,7 @@ class Throttle(_WithArgCount, t.Generic[P, T]):
         self._kwargs: t.Dict[str, t.Any] = {}
         self._generation = 0
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
+    def __call__(self, /, *args: P.args, **kwargs: P.kwargs) -> T:
         """
         Execute immediately if the wait has elapsed, otherwise schedule the latest call for the
         end of the current wait period.
