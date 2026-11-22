@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Avoid intermediate floating-point overflow in ``slope`` for finite coordinates.
 - Include iterables and mapping values in the ``std_deviation`` type signature.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
