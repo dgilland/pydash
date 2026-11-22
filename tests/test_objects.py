@@ -801,6 +801,7 @@ def test_for_in_right(case, expected):
             ({"lev.el1": {"lev\\el2": {"level3": ["value"]}}}, "lev\\.el1.lev\\\\el2.level3.[0]"),
             "value",
         ),
+        (({"lev\\": {"el": "value"}}, r"lev\\.el"), "value"),
         (({"one": ["hello", "there"]}, "one.bad.hello", []), []),
         (({"one": ["hello", None]}, "one.1.hello"), None),
         ((SomeNamedTuple(1, 2), "a"), 1),
@@ -1414,6 +1415,7 @@ def test_rename_keys(case, expected):
         (({}, "a..b", 1), {"a": {"": {"b": 1}}}),
         (({}, "a", tuple), {"a": tuple}),
         (({}, r"a.b\.c.d", 1), {"a": {"b.c": {"d": 1}}}),
+        (({}, r"a.b\\.c", 1), {"a": {"b\\": {"c": 1}}}),
     ],
 )
 def test_set_(case, expected):
