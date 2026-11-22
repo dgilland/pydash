@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Limit temporary strings in ``pad``, ``pad_start``, and ``pad_end`` to the needed padding.
 - Avoid intermediate floating-point overflow in ``slope`` for finite coordinates.
 - Include iterables and mapping values in the ``std_deviation`` type signature.
 - Infer the positional arity of callable instances and class constructors correctly in
