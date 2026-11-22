@@ -6,6 +6,9 @@ Changelog
 Unreleased
 ----------
 
+- Keep an escaped backslash (``\\``) that comes right before a ``.`` path delimiter as part of
+  the key in ``to_path`` and deep path functions such as ``get`` and ``set_``, instead of
+  dropping it.
 - Require literal mapping keys in partial matches instead of matching missing numeric strings
   against integer keys, including when filtering collections with object predicates.
 - Limit temporary strings in ``pad``, ``pad_start``, and ``pad_end`` to the needed padding.
