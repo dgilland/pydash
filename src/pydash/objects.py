@@ -2194,16 +2194,13 @@ def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
     .. versionadded:: 3.0.0
     """
     try:
-        factor = pow(10, precision)
-
         if precision < 0:
             # Round down since negative `precision` means we are going to the nearest positive
             # integer place.
-            rounder: t.Callable[..., t.Any] = math.floor
+            factor = pow(10, precision)
+            num = math.floor(float(obj) * factor) / factor
         else:
-            rounder = round
-
-        num = rounder(float(obj) * factor) / factor
+            num = pyd.round_(float(obj), precision)
     except Exception:
         num = None
 
