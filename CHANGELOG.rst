@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Include every input array's element type in the result annotations of ``union_with``.
 - Preserve finite values in ``to_number`` when scaling for rounding would overflow.
 - Keep an escaped backslash (``\\``) that comes right before a ``.`` path delimiter as part of
   the key in ``to_path`` and deep path functions such as ``get`` and ``set_``, instead of
