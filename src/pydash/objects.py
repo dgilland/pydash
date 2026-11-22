@@ -1678,9 +1678,10 @@ def omit_by(obj, iteratee=None):
 
 def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, None]:
     """
-    Converts the given `value` into an integer of the specified `radix`. If `radix` is falsey, a
-    radix of ``10`` is used unless the `value` is a hexadecimal, in which case a radix of 16 is
-    used.
+    Converts the given `value` into an integer of the specified `radix`. If `radix` is falsey,
+    string values are first tested as base 16. Any string accepted by ``int(value, 16)`` uses that
+    base, including digit-only strings such as ``"10"``. Other values use base 10. Pass
+    ``radix=10`` explicitly when parsing decimal strings.
 
     Args:
         value: Value to parse.
@@ -1693,6 +1694,12 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
 
         >>> parse_int("5")
         5
+        >>> parse_int("10")
+        16
+        >>> parse_int("10", radix=10)
+        10
+        >>> parse_int("0A")
+        10
         >>> parse_int("12", 8)
         10
         >>> parse_int("x") is None
