@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Search integer values in ``last_index_of`` ranges arithmetically and support lengths larger
+  than ``sys.maxsize``.
 - Include every input array's element type in the result annotations of ``union_with``.
 - Preserve finite values in ``to_number`` when scaling for rounding would overflow.
 - Keep an escaped backslash (``\\``) that comes right before a ``.`` path delimiter as part of

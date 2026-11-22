@@ -1111,7 +1111,12 @@ def last_index_of(
 
     .. versionadded:: 1.0.0
     """
-    index = array_len = len(array)
+    if isinstance(array, range):
+        # Range indexing supports lengths larger than sys.maxsize.
+        array_len = array.index(array[-1]) + 1 if array else 0
+    else:
+        array_len = len(array)
+    index = array_len
 
     try:
         # safe as we are catching any type errors
@@ -1121,6 +1126,12 @@ def last_index_of(
     else:
         # Set starting index base on from_index offset.
         index = max(0, index + from_index) if from_index < 0 else min(from_index, index - 1)
+
+    if isinstance(array, range) and type(value) in (int, bool):
+        # Other objects may compare equal to several integers, so retain
+        # reverse traversal for their equality semantics.
+        found = index_of(array, value)
+        return found if found <= index else -1
 
     while index >= 0:
         if index < array_len and array[index] == value:
