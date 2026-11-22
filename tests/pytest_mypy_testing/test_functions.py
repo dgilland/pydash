@@ -7,6 +7,20 @@ import pydash as _
 
 
 @pytest.mark.mypy_testing
+def test_mypy_wrappers_forward_self_keyword() -> None:
+    def func(*, self: int) -> str:
+        return str(self)
+
+    assert_type(_.after(func, 1)(self=3), t.Union[str, None])
+    assert_type(_.before(func, 2)(self=3), t.Union[str, None])
+    assert_type(_.once(func)(self=3), str)
+    assert_type(_.negate(func)(self=3), bool)
+    assert_type(_.flow(func)(self=3), str)
+    assert_type(_.flow_right(func)(self=3), str)
+    assert_type(_.juxtapose(func)(self=3), t.List[str])
+
+
+@pytest.mark.mypy_testing
 def test_mypy_after() -> None:
     def func(a: int, b: t.Dict[str, int], c: bytes) -> str:
         return f"{a} {b} {c!r}"

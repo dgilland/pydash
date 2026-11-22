@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Forward keyword arguments named ``self`` through function wrappers instead of colliding with
+  the wrapper's receiver.
 - Search integer values in ``last_index_of`` ranges arithmetically and support lengths larger
   than ``sys.maxsize``.
 - Include every input array's element type in the result annotations of ``union_with``.

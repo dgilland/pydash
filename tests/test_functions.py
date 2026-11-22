@@ -20,6 +20,63 @@ import pydash as _
 parametrize = pytest.mark.parametrize
 
 
+@parametrize(
+    "wrapper",
+    [
+        pytest.param(lambda f: _.after(f, 1), id="after"),
+        pytest.param(lambda f: _.ary(f, 1), id="ary"),
+        pytest.param(lambda f: _.before(f, 2), id="before"),
+        pytest.param(lambda f: _.curry(f, 1), id="curry"),
+        pytest.param(lambda f: _.curry_right(f, 1), id="curry_right"),
+        pytest.param(_.flip, id="flip"),
+        pytest.param(lambda f: _.flow(f, lambda x: x), id="flow"),
+        pytest.param(lambda f: _.flow_right(lambda x: x, f), id="flow_right"),
+        pytest.param(_.once, id="once"),
+        pytest.param(_.partial, id="partial"),
+        pytest.param(_.partial_right, id="partial_right"),
+        pytest.param(lambda f: _.rearg(f, 0), id="rearg"),
+        pytest.param(lambda f: _.throttle(f, 10), id="throttle"),
+        pytest.param(_.unary, id="unary"),
+        pytest.param(_.over_args, id="over_args"),
+    ],
+)
+def test_wrappers_forward_self_keyword(wrapper):
+    def func(**kwargs):
+        return kwargs
+
+    assert wrapper(func)(self=3) == {"self": 3}
+
+
+def test_composing_wrappers_forward_self_keyword():
+    def func(*args, **kwargs):
+        return args, kwargs
+
+    assert _.juxtapose(func, func)(self=3) == [((), {"self": 3}), ((), {"self": 3})]
+    assert _.wrap("bound", func)(self=3) == (("bound",), {"self": 3})
+    assert _.partial(func, "left")(self=3) == (("left",), {"self": 3})
+    assert _.partial_right(func, "right")(self=3) == (("right",), {"self": 3})
+    assert _.negate(lambda **kwargs: kwargs["self"])(self=False) is True
+
+
+@parametrize("curry", [_.curry, _.curry_right])
+def test_curried_wrappers_forward_self_keyword(curry):
+    def func(value, self):
+        return value, self
+
+    assert curry(func)("value")(self=3) == ("value", 3)
+
+
+def test_debounce_forwards_self_keyword():
+    func = mock.Mock(return_value="result")
+    with mock.patch("pydash.functions.threading.Timer") as timer:
+        debounced = _.debounce(func, 10)
+        assert debounced(self=3) is None
+        timer_args = timer.call_args.args
+        timer_args[1](*timer_args[2])
+    func.assert_called_once_with(self=3)
+    assert debounced.last_result == "result"
+
+
 class Methods:
     label = "base"
 
