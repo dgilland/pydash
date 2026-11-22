@@ -1098,12 +1098,12 @@ def slope(point1, point2):
     return result
 
 
-def std_deviation(array: t.List[NumberT]) -> float:
+def std_deviation(array: t.Union[t.Iterable[NumberT], t.Mapping[t.Any, NumberT]]) -> float:
     """
-    Calculate standard deviation of list of numbers.
+    Calculate standard deviation of a collection of numbers.
 
     Args:
-        array: List to process.
+        array: Iterable of numbers or mapping whose values are numbers.
 
     Returns:
         Calculated standard deviation.
