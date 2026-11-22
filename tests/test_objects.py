@@ -1,5 +1,6 @@
 from argparse import Namespace
 from collections import ChainMap, UserDict, defaultdict, namedtuple
+from collections.abc import Mapping
 from copy import deepcopy
 from dataclasses import dataclass
 import datetime as dt
@@ -103,6 +104,80 @@ def test_assign(case, expected):
 )
 def test_assign_with(case, expected):
     assert _.assign_with(*case) == expected
+
+
+class MappingSource(Mapping[str, object]):
+    def __init__(self, data):
+        self.data = data
+
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def __iter__(self):
+        return iter(self.data)
+
+    def __len__(self):
+        return len(self.data)
+
+
+class NonCallableCopyMapping(MappingSource):
+    copy = None
+
+
+@parametrize("factory", [MappingSource, NonCallableCopyMapping])
+@parametrize("method", ["assign", "assign_with"])
+@parametrize("chained", [False, True])
+@parametrize("empty", [False, True])
+def test_assign_mapping_sources(factory, method, chained, empty):
+    shared = []
+    data = {} if empty else {"existing": 2, "added": shared}
+    source = factory(data)
+    target = {"existing": 1}
+    if chained:
+        result = getattr(_.chain(target), method)(source).value()
+    else:
+        result = getattr(_, method)(target, source)
+    assert result is target
+    assert result == {"existing": 1, **data}
+    if not empty:
+        assert result["added"] is shared
+    assert dict(source) == data
+
+
+@parametrize("positional", [False, True])
+def test_assign_mapping_source_snapshot(positional):
+    source = MappingSource({"first": 2, "second": 3})
+    target = {"first": 10}
+    snapshots = []
+
+    def customizer(old, new, key, obj, snapshot):
+        assert obj is target
+        assert snapshot is not source
+        snapshots.append(dict(snapshot))
+        source.data["later"] = 4
+        return (old or 0) + new
+
+    if positional:
+        result = _.assign_with(target, source, customizer)
+    else:
+        result = _.assign_with(target, source, customizer=customizer)
+    assert result is target
+    assert target == {"first": 12, "second": 3}
+    assert snapshots == [{"first": 2, "second": 3}] * 2
+
+
+@parametrize("factory", [dict, UserDict, ChainMap])
+def test_assign_preserves_source_copy_hook(factory):
+    source = factory({"value": []})
+    snapshots = []
+
+    def customizer(old, new, key, obj, snapshot):
+        snapshots.append(snapshot)
+
+    result = _.assign_with({}, source, customizer=customizer)
+    assert type(snapshots[0]) is type(source)
+    assert snapshots[0] is not source
+    assert result["value"] is source["value"]
 
 
 class Customizer:

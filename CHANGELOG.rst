@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Accept source mappings without a ``copy`` method in ``assign`` and ``assign_with``.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.

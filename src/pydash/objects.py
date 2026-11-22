@@ -231,7 +231,8 @@ def assign_with(obj, *sources, customizer=None):
         argcount = None
 
     for source in sources:
-        source = source.copy()
+        source_copy = getattr(source, "copy", None)
+        source = source_copy() if callable(source_copy) else dict(source)
 
         for key, value in source.items():
             if customizer is not None:
