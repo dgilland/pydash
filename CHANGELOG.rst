@@ -8,7 +8,9 @@ Unreleased
 
 - Require literal mapping keys in partial matches instead of matching missing numeric strings
   against integer keys, including when filtering collections with object predicates.
-
+- Limit temporary strings in ``pad``, ``pad_start``, and ``pad_end`` to the needed padding.
+- Avoid intermediate floating-point overflow in ``slope`` for finite coordinates.
+- Include iterables and mapping values in the ``std_deviation`` type signature.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
