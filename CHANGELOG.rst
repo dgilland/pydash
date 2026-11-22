@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Accept source mappings without a ``copy`` method in ``assign`` and ``assign_with``.
 - Forward keyword arguments named ``self`` through function wrappers instead of colliding with
   the wrapper's receiver.
 - Search integer values in ``last_index_of`` ranges arithmetically and support lengths larger
