@@ -1,3 +1,4 @@
+from collections import UserDict
 from decimal import Decimal
 from fractions import Fraction
 import math
@@ -225,6 +226,14 @@ def test_mypy_slope() -> None:
 @pytest.mark.mypy_testing
 def test_mypy_std_deviation() -> None:
     reveal_type(_.std_deviation([1, 18, 20, 4]))  # R: builtins.float
+
+
+@pytest.mark.mypy_testing
+def test_mypy_std_deviation_accepts_existing_inputs() -> None:
+    assert_type(_.std_deviation(iter([1, 2, 3])), float)
+    assert_type(_.std_deviation(UserDict({"a": 1, "b": 2})), float)
+    assert_type(_.std_deviation([Decimal("1.5"), Decimal("2.5")]), float)
+    assert_type(_.chain((1, 2, 3)).std_deviation().value(), float)
 
 
 @pytest.mark.mypy_testing
