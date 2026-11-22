@@ -1123,7 +1123,8 @@ def is_list(value: t.Any) -> bool:
 def is_match(obj: t.Any, source: t.Any) -> bool:
     """
     Performs a partial deep comparison between `obj` and `source` to determine if `obj` contains
-    equivalent property values.
+    equivalent property values. Mapping keys are compared literally, so string and integer keys
+    remain distinct.
 
     Args:
         obj: Object to compare.
@@ -1234,6 +1235,10 @@ def is_match_with(
         # Walk a/b to determine equality.
         for key, value in iterator(source):
             try:
+                if isinstance(obj, Mapping) and key not in obj:
+                    equal = False
+                    break
+
                 obj_value = base_get(obj, key)
             except Exception:
                 equal = False

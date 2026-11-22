@@ -8,6 +8,18 @@ Unreleased
 
 - Forward keyword arguments named ``self`` through function wrappers instead of colliding with
   the wrapper's receiver.
+- Search integer values in ``last_index_of`` ranges arithmetically and support lengths larger
+  than ``sys.maxsize``.
+- Include every input array's element type in the result annotations of ``union_with``.
+- Preserve finite values in ``to_number`` when scaling for rounding would overflow.
+- Keep an escaped backslash (``\\``) that comes right before a ``.`` path delimiter as part of
+  the key in ``to_path`` and deep path functions such as ``get`` and ``set_``, instead of
+  dropping it.
+- Require literal mapping keys in partial matches instead of matching missing numeric strings
+  against integer keys, including when filtering collections with object predicates.
+- Limit temporary strings in ``pad``, ``pad_start``, and ``pad_end`` to the needed padding.
+- Avoid intermediate floating-point overflow in ``slope`` for finite coordinates.
+- Include iterables and mapping values in the ``std_deviation`` type signature.
 - Infer the positional arity of callable instances and class constructors correctly in
   ``curry`` and ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.

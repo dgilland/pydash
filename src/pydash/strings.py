@@ -1125,8 +1125,7 @@ def pad_end(text: t.Any, length: int, chars: t.Any = " ") -> str:
     """
     # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
-    length = max((length, len(text)))
-    return (text + repeat(chars, length))[:length]
+    return text + _make_padding(chars, length - len(text))
 
 
 def pad_start(text: t.Any, length: int, chars: t.Any = " ") -> str:
@@ -1157,8 +1156,22 @@ def pad_start(text: t.Any, length: int, chars: t.Any = " ") -> str:
     """
     # pylint: disable=redefined-outer-name
     text = pyd.to_string(text)
-    length = max(length, len(text))
-    return (repeat(chars, length) + text)[-length:]
+    return _make_padding(chars, length - len(text), from_end=True) + text
+
+
+def _make_padding(value: t.Any, width: int, *, from_end: bool = False) -> str:
+    if width <= 0:
+        return ""
+
+    pattern = pyd.to_string(value)
+    if not pattern:
+        return ""
+
+    repeats, remainder = divmod(width, len(pattern))
+    padding = pattern * repeats
+    if from_end and remainder:
+        return pattern[-remainder:] + padding
+    return padding + pattern[:remainder]
 
 
 def pascal_case(text: t.Any, strict: bool = True) -> str:
