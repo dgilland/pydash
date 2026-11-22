@@ -1,3 +1,4 @@
+from collections import ChainMap, UserDict, defaultdict
 import datetime
 import decimal
 import operator
@@ -489,6 +490,73 @@ def test_is_list(case, expected):
 def test_is_match(case, expected):
     assert _.is_match(*case) == expected
     assert _.is_match_cmp(case[1])(case[0]) == expected
+
+
+@parametrize("factory", [dict, UserDict, ChainMap])
+@parametrize("key", ["1", "01", "+1", "-1"])
+def test_is_match_requires_literal_mapping_keys(factory, key):
+    obj = factory({int(key): "admin"})
+    source = {key: "admin"}
+
+    assert _.is_match(obj, source) is False
+    assert _.is_match_cmp(source)(obj) is False
+
+    def customizer(*_args):
+        pytest.fail("a missing literal key must not reach the customizer")
+
+    assert _.is_match_with(obj, source, customizer) is False
+    assert _.is_match_with_cmp(source, customizer)(obj) is False
+    assert dict(obj) == {int(key): "admin"}
+
+
+@parametrize("factory", [dict, UserDict, ChainMap])
+@parametrize("nested_in_list", [False, True])
+def test_is_match_requires_literal_keys_in_nested_mappings(factory, nested_in_list):
+    def wrap(value):
+        return {"records": [value] if nested_in_list else value}
+
+    source = wrap(factory({"1": None}))
+    assert _.is_match(wrap(factory({1: None})), source) is False
+    assert _.is_match(wrap(factory({"1": None, 1: "other"})), source) is True
+    assert _.is_match(wrap(factory({"1": "other", 1: None})), source) is False
+
+
+@parametrize("factory", [dict, UserDict, ChainMap])
+def test_mapping_match_predicates_filter_records_by_literal_keys(factory):
+    records = [
+        factory({1: "admin"}),
+        factory({"1": "admin"}),
+        factory({1: "admin", "1": "guest"}),
+        factory({1: "guest", "1": "admin"}),
+    ]
+    source = {"1": "admin"}
+    expected = [records[1], records[3]]
+
+    assert _.filter_(records, source) == expected
+    assert _.chain(records).filter_(source).value() == expected
+    assert _.filter_(records, _.matches(source)) == expected
+    assert _.find(records, source) is records[1]
+    assert _.reject(records, source) == [records[0], records[2]]
+    assert _.partition(records, source) == [expected, [records[0], records[2]]]
+    assert _.matches_property("record", source)({"record": records[0]}) is False
+    assert _.matches_property("record", source)({"record": records[1]}) is True
+
+
+def test_is_match_does_not_create_missing_defaultdict_entries():
+    obj = defaultdict(lambda: "admin", {1: "admin"})
+    assert _.is_match(obj, {"1": "admin"}) is False
+    assert dict(obj) == {1: "admin"}
+
+
+def test_is_match_keeps_sequence_attribute_and_path_lookup_behavior():
+    class Record:
+        role = "admin"
+
+    assert _.is_match(["admin"], {"0": "admin"}) is True
+    assert _.is_match(Record(), {"role": "admin"}) is True
+    assert _.is_match({1: "admin"}, {1: "admin"}) is True
+    assert _.is_match({"a.b": 1}, {"a.b": 1}) is True
+    assert _.get({1: "admin"}, "1") == "admin"
 
 
 @parametrize(

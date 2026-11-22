@@ -1510,9 +1510,26 @@ def _to_path_token(key) -> PathToken:
     )
 
 
+def _split_path(value):
+    # Same as RE_PATH_KEY_DELIM.split(value) except that escaped backslashes matched before a "."
+    # delimiter are kept as part of the preceding key instead of being dropped with the delimiter.
+    if "\\." not in value:
+        return RE_PATH_KEY_DELIM.split(value)
+
+    parts = []
+    pos = 0
+    for match in RE_PATH_KEY_DELIM.finditer(value):
+        list_index = match.group(1)
+        parts.append(value[pos : match.start() if list_index else match.end() - 1])
+        parts.append(list_index)
+        pos = match.end()
+    parts.append(value[pos:])
+    return parts
+
+
 def _to_path_keys(value):
     keys = []
-    parts = RE_PATH_KEY_DELIM.split(value)
+    parts = _split_path(value)
 
     for idx, key in enumerate(parts):
         if key is None:

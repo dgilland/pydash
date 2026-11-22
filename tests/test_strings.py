@@ -573,6 +573,22 @@ def test_pad_end(case, expected):
     assert _.pad_end(*case) == expected
 
 
+@parametrize("pad_func", [_.pad_start, _.pad_end])
+@parametrize("length", [2, 3])
+def test_padding_characters_are_unused_when_text_is_wide_enough(pad_func, length):
+    class UnusedPadding:
+        def __str__(self) -> str:
+            raise AssertionError("padding characters were converted without any padding")
+
+    assert pad_func("abc", length, UnusedPadding()) == "abc"
+
+
+@parametrize("pad_func", [_.pad_start, _.pad_end])
+@parametrize("padding", ["", None])
+def test_padding_with_an_empty_pattern(pad_func, padding):
+    assert pad_func("abc", 8, padding) == "abc"
+
+
 @parametrize(
     "case,expected",
     [

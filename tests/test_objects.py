@@ -801,6 +801,7 @@ def test_for_in_right(case, expected):
             ({"lev.el1": {"lev\\el2": {"level3": ["value"]}}}, "lev\\.el1.lev\\\\el2.level3.[0]"),
             "value",
         ),
+        (({"lev\\": {"el": "value"}}, r"lev\\.el"), "value"),
         (({"one": ["hello", "there"]}, "one.bad.hello", []), []),
         (({"one": ["hello", None]}, "one.1.hello"), None),
         ((SomeNamedTuple(1, 2), "a"), 1),
@@ -1414,6 +1415,7 @@ def test_rename_keys(case, expected):
         (({}, "a..b", 1), {"a": {"": {"b": 1}}}),
         (({}, "a", tuple), {"a": tuple}),
         (({}, r"a.b\.c.d", 1), {"a": {"b.c": {"d": 1}}}),
+        (({}, r"a.b\\.c", 1), {"a": {"b\\": {"c": 1}}}),
     ],
 )
 def test_set_(case, expected):
@@ -1560,6 +1562,28 @@ def test_to_boolean(case, expected):
     assert _.to_boolean(*case) is expected
 
 
+@parametrize("truthy", [True, False])
+@parametrize(
+    "patterns,text,expected",
+    [
+        ((r"^other$", r"(?i)^yes$"), "YeS", True),
+        ((r"^other$", r"(?i)^yes$"), "never", None),
+        ((r"^(no)$", r"^(y)\1$"), "yy", True),
+        ((r"^(no)$", r"^(y)\1$"), "yno", None),
+        ((r"^(no)$", r"^(y)\1$"), "no", True),
+        ((r"^(?P<value>no)$", r"^(?P<value>yes)$"), "yes", True),
+        ((r"^(?P<value>no)$", r"^(?P<value>yes)$"), "never", None),
+    ],
+)
+def test_to_boolean_regex_patterns_are_independent(truthy, patterns, text, expected):
+    if truthy:
+        result = _.to_boolean(text, true_values=patterns, false_values=())
+    else:
+        result = _.to_boolean(text, true_values=(), false_values=patterns)
+
+    assert result is (truthy if expected else None)
+
+
 @parametrize(
     "case,expected",
     [
@@ -1649,6 +1673,21 @@ def test_to_integer_preserves_float_conversion_protocol():
 )
 def test_to_number(case, expected):
     assert _.to_number(*case) == expected
+
+
+@parametrize("value", [1e308, -1e308, "1e308", "-1e308"])
+@parametrize("precision", [1, 100, 308])
+def test_to_number_finite_overflow(value, precision):
+    expected = float(value)
+    assert _.to_number(value, precision) == expected
+    assert _.chain(value).to_number(precision).value() == expected
+
+
+@parametrize("value", [float("inf"), float("-inf"), float("nan")])
+@parametrize("precision", [-1, 0, 1])
+def test_to_number_nonfinite(value, precision):
+    assert _.to_number(value, precision) is None
+    assert _.chain(value).to_number(precision).value() is None
 
 
 @parametrize(
