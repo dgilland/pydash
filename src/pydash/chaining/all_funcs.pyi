@@ -548,11 +548,11 @@ class AllFuncs:
         self: "Chain[t.Sequence[T]]",
         *others: t.Iterable[T2],
         comparator: t.Callable[[T, T2], t.Any],
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.List[t.Union[T, T2]]]": ...
     @t.overload
     def union_with(
         self: "Chain[t.Sequence[T]]", *others: t.Union[t.Iterable[T2], t.Callable[[T, T2], t.Any]]
-    ) -> "Chain[t.List[T]]": ...
+    ) -> "Chain[t.List[t.Union[T, T2]]]": ...
     def union_with(self, *others, **kwargs):
         return self._wrap(pyd.union_with)(*others, **kwargs)
 
@@ -2213,7 +2213,9 @@ class AllFuncs:
     def slope(self, point2):
         return self._wrap(pyd.slope)(point2)
 
-    def std_deviation(self: "Chain[t.List[NumberT]]") -> "Chain[float]":
+    def std_deviation(
+        self: "Chain[t.Union[t.Iterable[NumberT], t.Mapping[t.Any, NumberT]]]",
+    ) -> "Chain[float]":
         return self._wrap(pyd.std_deviation)()
 
     @t.overload

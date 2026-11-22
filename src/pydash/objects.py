@@ -1956,6 +1956,8 @@ def to_boolean(
     If a string value is provided that isn't recognized as having a common boolean conversion, then
     the returned value is ``None``. Non-string values of `obj` are converted using ``bool``.
     Optionally, `true_values` and `false_values` can be overridden but each value must be a string.
+    Values can also be regular expression patterns. Each pattern is matched independently, so its
+    flags and capture groups do not affect other patterns.
 
     Args:
         obj: Object to convert.
@@ -1978,6 +1980,8 @@ def to_boolean(
         >>> to_boolean("0")
         False
         >>> assert to_boolean("a") is None
+        >>> to_boolean("YES", true_values=("^other$", "(?i)^yes$"))
+        True
 
     .. versionadded:: 3.0.0
     """
@@ -1988,7 +1992,7 @@ def to_boolean(
             if text.lower() in [val.lower() for val in vals]:
                 return True
             else:
-                return re.match("|".join(vals), text, re.IGNORECASE)
+                return any(re.match(val, text, re.IGNORECASE) for val in vals)
 
         if true_values and boolean_match(obj, true_values):
             value = True
@@ -2190,16 +2194,13 @@ def to_number(obj: t.Any, precision: int = 0) -> t.Union[float, None]:
     .. versionadded:: 3.0.0
     """
     try:
-        factor = pow(10, precision)
-
         if precision < 0:
             # Round down since negative `precision` means we are going to the nearest positive
             # integer place.
-            rounder: t.Callable[..., t.Any] = math.floor
+            factor = pow(10, precision)
+            num = math.floor(float(obj) * factor) / factor
         else:
-            rounder = round
-
-        num = rounder(float(obj) * factor) / factor
+            num = pyd.round_(float(obj), precision)
     except Exception:
         num = None
 
