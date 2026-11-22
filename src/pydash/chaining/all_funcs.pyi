@@ -2213,7 +2213,9 @@ class AllFuncs:
     def slope(self, point2):
         return self._wrap(pyd.slope)(point2)
 
-    def std_deviation(self: "Chain[t.List[NumberT]]") -> "Chain[float]":
+    def std_deviation(
+        self: "Chain[t.Union[t.Iterable[NumberT], t.Mapping[t.Any, NumberT]]]",
+    ) -> "Chain[float]":
         return self._wrap(pyd.std_deviation)()
 
     @t.overload
