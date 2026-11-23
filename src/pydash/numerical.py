@@ -1342,17 +1342,25 @@ def rounder(func, x, precision, shift_exactly=False):
     factor = pow(10, precision)
 
     def rounder_func(item):
-        if (
+        if isinstance(item, decimal.Decimal) and isinstance(precision, int) and precision < 0:
+            if not item.is_finite():
+                return func(item)
+            exact = item
+        elif (
             shift_exactly
             and isinstance(item, float)
             and isinstance(precision, int)
             and math.isfinite(item)
         ):
-            # Shift the decimal point on the number's shortest decimal representation instead of
-            # multiplying by a power of 10. Otherwise float representation error gets floored or
-            # ceiled into the result (e.g. 0.29 * 100 == 28.999999999999996 so floor(0.29, 2)
-            # would be 0.28).
-            original = decimal.Decimal(repr(float(item))).as_tuple()
+            # Use the shortest decimal representation so errors such as
+            # 0.29 * 100 == 28.999999999999996 do not change floor or ceil results.
+            exact = decimal.Decimal(repr(float(item)))
+        else:
+            exact = None
+
+        if exact is not None:
+            # Move the decimal point without a scale factor or context-dependent arithmetic.
+            original = exact.as_tuple()
             shifted = decimal.Decimal(
                 (original.sign, original.digits, int(original.exponent) + precision)
             )
