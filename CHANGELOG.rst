@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Support negative rounding precision for ``Decimal`` values in ``ceil``, ``floor``, and ``round_``.
 - Recover representable ``std_deviation`` results when intermediate squared deviations overflow
   for finite built-in numbers.
 - Accept source mappings without a ``copy`` method in ``assign`` and ``assign_with``.

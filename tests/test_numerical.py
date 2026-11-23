@@ -90,6 +90,35 @@ def test_ceil_floor_non_finite(func, value, exception):
 
 
 @parametrize(
+    "function,expected",
+    [
+        (_.ceil, [10100.0, -10000.0]),
+        (_.floor, [10000.0, -10100.0]),
+        (_.round_, [10000.0, -10000.0]),
+    ],
+)
+def test_rounding_decimal_at_negative_precision(function, expected):
+    values = [Decimal("10001"), Decimal("-10001")]
+    with localcontext() as context:
+        context.prec = 3
+        context.traps[Inexact] = True
+        for value, rounded in zip(values, expected, strict=True):
+            result = function(value, -2)
+            assert isinstance(result, float)
+            assert result == rounded
+        assert function([*values, 20000], -2) == [*expected, 20000.0]
+
+
+@parametrize("function", [_.ceil, _.floor, _.round_])
+@parametrize(
+    "value,exception", [(Decimal("Infinity"), OverflowError), (Decimal("NaN"), ValueError)]
+)
+def test_rounding_non_finite_decimal_at_negative_precision(function, value, exception):
+    with pytest.raises(exception):
+        function(value, -2)
+
+
+@parametrize(
     "case,expected",
     [
         (([1, 2, 3],), 3),
