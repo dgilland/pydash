@@ -680,3 +680,40 @@ def test_float_rounding_is_independent_of_decimal_context(function, value, expec
         context.traps[Inexact] = True
         assert function(value, 2) == expected
         assert function([value], 2) == [expected]
+
+
+@parametrize("factory", [list, tuple, iter, SizedIterator, lambda data: dict(enumerate(data))])
+@parametrize(
+    "values,expected",
+    [
+        ([-1e200, 1e200], 1e200),
+        ([0.0, 2e200], 1e200),
+        ([-1e308, 1e308], 1e308),
+        ([-(10**200), 10**200], 1e200),
+        ([10**500, 10**500 + 10**200], 5e199),
+        ([-1.7976931348623157e308, 1.7976931348623157e308], 1.7976931348623157e308),
+    ],
+)
+def test_std_deviation_intermediate_overflow(factory, values, expected):
+    assert _.std_deviation(factory(values)) == pytest.approx(expected)
+    assert _.chain(factory(values)).std_deviation().value() == pytest.approx(expected)
+
+
+class OverflowingInt(int):
+    def __sub__(self, other):
+        raise OverflowError("custom subtraction")
+
+
+def test_std_deviation_preserves_custom_arithmetic_errors():
+    with pytest.raises(OverflowError, match="custom subtraction"):
+        _.std_deviation([OverflowingInt(1), OverflowingInt(2)])
+
+
+@parametrize("value", [float("inf"), float("-inf"), float("nan")])
+def test_std_deviation_preserves_nonfinite_behavior(value):
+    assert math.isnan(_.std_deviation([value, 1]))
+
+
+@parametrize("factory", [list, iter, SizedIterator, lambda data: dict(enumerate(data))])
+def test_std_deviation_preserves_empty_behavior(factory):
+    assert math.isnan(_.std_deviation(factory([])))
