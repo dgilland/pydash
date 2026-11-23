@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Recover representable ``std_deviation`` results when intermediate squared deviations overflow
+  for finite built-in numbers.
 - Accept source mappings without a ``copy`` method in ``assign`` and ``assign_with``.
 - Forward keyword arguments named ``self`` through function wrappers instead of colliding with
   the wrapper's receiver.

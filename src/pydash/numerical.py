@@ -11,6 +11,7 @@ import decimal
 from fractions import Fraction
 import math
 import operator
+import statistics
 import typing as t
 
 import pydash as pyd
@@ -1118,7 +1119,25 @@ def std_deviation(array: t.Union[t.Iterable[NumberT], t.Mapping[t.Any, NumberT]]
     .. versionchanged:: 4.0.0
         Remove alias ``sigma``.
     """
-    return math.sqrt(variance(array))
+    if isinstance(array, Mapping):
+        array = list(array.values())
+    elif isinstance(array, Iterator) or not isinstance(array, Sized):
+        array = list(array)
+
+    try:
+        return math.sqrt(variance(array))
+    except OverflowError:
+        if all(
+            type(value) is int or (type(value) is float and math.isfinite(value)) for value in array
+        ):
+            # Shift exactly before scaling so nearby large integers remain distinct. Scaling also
+            # keeps Python 3.10's pstdev from overflowing while computing the variance.
+            offset = Fraction(next(iter(array)))
+            differences = [Fraction(value) - offset for value in array]
+            scale = max(abs(value) for value in differences)
+            deviation = statistics.pstdev(float(value / scale) for value in differences)
+            return float(scale * Fraction(deviation))
+        raise
 
 
 @t.overload
