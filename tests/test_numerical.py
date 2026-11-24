@@ -746,3 +746,40 @@ def test_std_deviation_preserves_nonfinite_behavior(value):
 @parametrize("factory", [list, iter, SizedIterator, lambda data: dict(enumerate(data))])
 def test_std_deviation_preserves_empty_behavior(factory):
     assert math.isnan(_.std_deviation(factory([])))
+
+
+@parametrize("factory", [list, tuple, iter, SizedIterator, lambda data: dict(enumerate(data))])
+@parametrize("function", [_.mean, _.mean_by])
+@parametrize(
+    "values,expected",
+    [
+        ([1e308, 1e308], 1e308),
+        ([-1e308, -1e308], -1e308),
+        ([1e308, 1e308, -1e308, -1e308], 0.0),
+        ([1.7e308, 1.7e308, -1.7e308], 1.7e308 / 3),
+        ([1.7976931348623157e308] * 2, 1.7976931348623157e308),
+    ],
+)
+def test_default_mean_finite_overflow(factory, function, values, expected):
+    assert function(factory(values)) == pytest.approx(expected)
+    assert getattr(_.chain(factory(values)), function.__name__)().value() == pytest.approx(expected)
+
+
+@parametrize("function", [_.mean, _.mean_by])
+@parametrize("value", [float("inf"), float("-inf"), float("nan")])
+def test_default_mean_preserves_nonfinite_values(function, value):
+    result = function([value, 1])
+    assert math.isnan(result) if math.isnan(value) else result == value
+
+
+def test_mean_by_calls_custom_iteratee_once_per_value():
+    calls = []
+    values = SizedIterator([1, 2])
+
+    def callback(value, index, collection):
+        assert collection is values
+        calls.append(value)
+        return float("inf")
+
+    assert _.mean_by(values, callback) == float("inf")
+    assert calls == [1, 2]
