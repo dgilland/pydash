@@ -301,12 +301,20 @@ def mean_by(collection, iteratee=None):
 
     .. versionadded:: 4.0.0
     """
-    if not isinstance(collection, Sized):
+    if not isinstance(collection, Sized) or (iteratee is None and isinstance(collection, Iterator)):
         collection = list(collection)
     length = len(collection)
     if not length:
         return float("nan")
-    return sum_by(collection, iteratee) / length
+    result = sum_by(collection, iteratee) / length
+    if iteratee is None and isinstance(result, float) and not math.isfinite(result):
+        values = [value for _, value in iterator(collection)]
+        if all(
+            type(value) is int or (type(value) is float and math.isfinite(value))
+            for value in values
+        ):
+            return statistics.mean(values)
+    return result
 
 
 def ceil(x: NumberT, precision: int = 0) -> float:
