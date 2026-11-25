@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Recover finite ``scale`` results when the intermediate ratio overflows or underflows.
 - Preserve tiny standard deviations when squared deviations underflow.
 - Accept sized collections without a boolean truth value in ``variance`` and ``std_deviation``.
 - Preserve finite ``mean`` and default ``mean_by`` results when summing finite floats overflows.

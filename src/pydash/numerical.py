@@ -1050,7 +1050,28 @@ def scale(array, maximum: NumberT = 1):
     """
     array = list(array)
     array_max = max(array)
-    return [(item / array_max) * maximum for item in array]
+    scaled_values = []
+    for item in array:
+        ratio = item / array_max
+        scaled = ratio * maximum
+        if (
+            type(ratio) is float
+            and (math.isinf(ratio) or abs(ratio) < sys.float_info.min)
+            and all(
+                type(value) is int or (type(value) is float and math.isfinite(value))
+                for value in (item, array_max, maximum)
+            )
+            and item != 0
+            and maximum != 0
+        ):
+            # Keep the ratio exact until the final conversion to float.
+            exact = Fraction(item) * Fraction(maximum) / Fraction(array_max)
+            try:
+                scaled = float(exact)
+            except OverflowError:
+                pass
+        scaled_values.append(scaled)
+    return scaled_values
 
 
 @t.overload
