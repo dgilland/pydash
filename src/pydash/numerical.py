@@ -1251,7 +1251,7 @@ def variance(array):
     elif isinstance(array, Iterator) or not isinstance(array, Sized):
         array = list(array)
 
-    if array and all(isinstance(value, int) for value in array):
+    if len(array) > 0 and all(isinstance(value, int) for value in array):
         offset = next(iter(array))
         array = [value - offset for value in array]
 
