@@ -1326,7 +1326,23 @@ def zscore(collection, iteratee=None):
     avg = mean(array)
     sig = std_deviation(array)
 
-    return [(item - avg) / sig for item in array]
+    result = []
+    for item in array:
+        difference = item - avg
+        if (
+            (type(item) is int or type(item) is float)
+            and type(avg) is float
+            and math.isinf(difference)
+            and (type(item) is int or math.isfinite(item))
+            and math.isfinite(avg)
+            and math.isfinite(sig)
+            and sig != 0
+        ):
+            # Divide first only when subtracting finite values overflows.
+            result.append(item / sig - avg / sig)
+        else:
+            result.append(difference / sig)
+    return result
 
 
 #

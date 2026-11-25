@@ -858,3 +858,51 @@ def test_round_extreme_float_precision(value, precision):
     assert _.round_(value, precision) == expected
     assert _.chain(value).round_(precision).value() == expected
     assert _.round_([value, -value], precision) == [expected, round(-value, precision)]
+
+
+@parametrize("factory", [list, iter])
+@parametrize("sign", [1, -1])
+def test_zscore_intermediate_subtraction_overflow(factory, sign):
+    values = [-1.7e308 * sign, 1.7e308 * sign, 1.7e308 * sign]
+    expected = [-math.sqrt(2) * sign, sign / math.sqrt(2), sign / math.sqrt(2)]
+    assert _.zscore(factory(values)) == pytest.approx(expected)
+
+
+@parametrize("sign", [1, -1])
+def test_zscore_mixed_integer_subtraction_overflow(sign):
+    values = [int(-1.7e308) * sign, 1.7e308 * sign, 1.7e308 * sign]
+    expected = [-math.sqrt(2) * sign, sign / math.sqrt(2), sign / math.sqrt(2)]
+    assert _.zscore(values) == pytest.approx(expected)
+
+
+@parametrize("chained", [False, True])
+def test_zscore_subtraction_overflow_with_property_iteratee(chained):
+    values = {"a": {"value": -1.7e308}, "b": {"value": 1.7e308}, "c": {"value": 1.7e308}}
+    result = _.chain(values).zscore("value").value() if chained else _.zscore(values, "value")
+    assert result == pytest.approx([-math.sqrt(2), 1 / math.sqrt(2), 1 / math.sqrt(2)])
+
+
+def test_zscore_preserves_ordinary_subtraction():
+    values = [float(10**16 + offset) for offset in (0, 4, 8)]
+    assert _.zscore(values) == [-1.224744871391589, 0.0, 1.224744871391589]
+
+
+@parametrize("value", [float("inf"), float("-inf"), float("nan")])
+def test_zscore_preserves_nonfinite_behavior(value):
+    assert all(math.isnan(result) for result in _.zscore([value, 1.0]))
+
+
+def test_zscore_preserves_constant_sample_error():
+    with pytest.raises(ZeroDivisionError):
+        _.zscore([1.0, 1.0])
+
+
+class OverflowingFloat(float):
+    def __sub__(self, other):
+        raise OverflowError("custom subtraction")
+
+
+@parametrize("number_type", [OverflowingFloat, OverflowingInt])
+def test_zscore_preserves_custom_subtraction_errors(number_type):
+    with pytest.raises(OverflowError, match="custom subtraction"):
+        _.zscore([number_type(1), number_type(2)])
