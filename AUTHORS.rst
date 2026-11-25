@@ -96,3 +96,4 @@ Contributors
 - aliassar, `aliassar@github <https://github.com/aliassar>`_
 - Vansh Jenikumar Barfiwala, `vanshbarfiwala-lgtm@github <https://github.com/vanshbarfiwala-lgtm>`_
 - Sharad Singh, `13Sharad@github <https://github.com/13Sharad>`_
+- Nash Aschenbath, `Aschenbath@github <https://github.com/Aschenbath>`_
