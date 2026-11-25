@@ -368,6 +368,31 @@ def test_curry_bound_method_keyword_parameter_controls(curry):
     assert curry(Methods().extras)(1, tag=2) == ("base", 1, {"tag": 2})
 
 
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_infers_keyword_only_parameters(curry):
+    def mixed(left, *, right):
+        return left, right
+
+    def keywords(*, left, right):
+        return left, right
+
+    assert curry(mixed)(1)(right=2) == (1, 2)
+    assert curry(mixed)(right=2)(1) == (1, 2)
+    assert curry(keywords)(left=1)(right=2) == (1, 2)
+    assert curry(keywords)(right=2)(left=1) == (1, 2)
+
+
+@pytest.mark.parametrize("curry", [_.curry, _.curry_right])
+def test_curry_infers_multiple_keyword_only_parameters_on_methods(curry):
+    class Formatter:
+        def format(self, value, *, prefix, suffix):
+            return prefix + value + suffix
+
+    format_value = curry(Formatter().format)("value")
+    assert format_value(prefix="[")(suffix="]") == "[value]"
+    assert format_value(prefix="(")(suffix=")") == "(value)"
+
+
 @parametrize(
     "case,arglist,expected",
     [

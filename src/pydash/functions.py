@@ -221,7 +221,7 @@ class Curry(t.Generic[T1, T]):
         if arity is None:
             argspec = getfullargspec(func)
             arity = len(argspec.args)
-            if arity and not (argspec.varargs or argspec.varkw or argspec.kwonlyargs):
+            if (arity or argspec.kwonlyargs) and not (argspec.varargs or argspec.varkw):
                 arity = len(signature(func, follow_wrapped=False).parameters)
         self.arity = arity
         self.args = () if args is None else args
