@@ -14,6 +14,7 @@ Unreleased
   ``zip_object_deep``, including their chaining signatures.
 - Preserve finite ``zscore`` results when subtracting the mean overflows.
 - Round finite floats at extreme precision without scale overflow or division by zero.
+- Recover finite ``scale`` results when the intermediate ratio overflows or underflows.
 - Preserve tiny standard deviations when squared deviations underflow.
 - Accept sized collections without a boolean truth value in ``variance`` and ``std_deviation``.
 - Preserve finite ``mean`` and default ``mean_by`` results when summing finite floats overflows.

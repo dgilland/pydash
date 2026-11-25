@@ -429,6 +429,19 @@ def test_scale_preserves_finite_results_for_extreme_values(values, maximum, expe
     assert _.scale(iter(values), maximum) == expected
 
 
+@parametrize(
+    "values,maximum,expected",
+    [
+        ([1e-200, 1e200], 1e200, [1e-200, 1e200]),
+        ([-1e300, 1e-100], 1e-200, [-1e200, 1e-200]),
+        ([1.5e-323, 2.0], 2.0, [1.5e-323, 2.0]),
+        ([-1e308, 0.5], 2.0, [-math.inf, 2.0]),
+    ],
+)
+def test_scale_recovers_from_extreme_intermediate_ratios(values, maximum, expected):
+    assert _.scale(iter(values), maximum) == expected
+
+
 @parametrize("iterable", [iter, lambda values: (value for value in values)])
 @parametrize(
     "values,maximum,expected",
