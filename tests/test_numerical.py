@@ -783,3 +783,38 @@ def test_mean_by_calls_custom_iteratee_once_per_value():
 
     assert _.mean_by(values, callback) == float("inf")
     assert calls == [1, 2]
+
+
+@parametrize("factory", [list, tuple, iter, SizedIterator, lambda data: dict(enumerate(data))])
+@parametrize(
+    "values,expected",
+    [
+        ([1e-200, -1e-200], 1e-200),
+        ([1e-160, -1e-160], 1e-160),
+        ([1e-170, 2e-170, 3e-170], math.sqrt(2 / 3) * 1e-170),
+        ([0.0, 1e-300], 5e-301),
+        ([0.0, 1e-323], 5e-324),
+    ],
+)
+def test_std_deviation_intermediate_underflow(factory, values, expected):
+    assert _.std_deviation(factory(values)) == pytest.approx(expected, rel=1e-14, abs=0)
+    assert _.chain(factory(values)).std_deviation().value() == pytest.approx(
+        expected, rel=1e-14, abs=0
+    )
+
+
+@parametrize("values", [[0.0, 0.0], [1e-200, 1e-200], [1, 1], [0.0, 5e-324]])
+def test_std_deviation_zero_result(values):
+    assert _.std_deviation(values) == 0.0
+
+
+def test_zscore_tiny_nonconstant_sample():
+    assert _.zscore([-1e-200, 1e-200]) == pytest.approx([-1, 1])
+
+
+def test_std_deviation_preserves_custom_tiny_arithmetic():
+    class CustomFloat(float):
+        pass
+
+    values = [CustomFloat(1e-200), CustomFloat(-1e-200)]
+    assert _.std_deviation(values) == 0.0
