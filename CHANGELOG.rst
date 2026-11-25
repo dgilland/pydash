@@ -6,6 +6,7 @@ Changelog
 Unreleased
 ----------
 
+- Preserve finite ``zscore`` results when subtracting the mean overflows.
 - Round finite floats at extreme precision without scale overflow or division by zero.
 - Preserve tiny standard deviations when squared deviations underflow.
 - Accept sized collections without a boolean truth value in ``variance`` and ``std_deviation``.
