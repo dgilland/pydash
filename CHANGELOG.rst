@@ -7,6 +7,7 @@ Unreleased
 ----------
 
 - Preserve tiny standard deviations when squared deviations underflow.
+- Accept sized collections without a boolean truth value in ``variance`` and ``std_deviation``.
 - Preserve finite ``mean`` and default ``mean_by`` results when summing finite floats overflows.
 - Support negative rounding precision for ``Decimal`` values in ``ceil``, ``floor``, and ``round_``.
 - Recover representable ``std_deviation`` results when intermediate squared deviations overflow

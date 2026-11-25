@@ -602,6 +602,37 @@ def test_variance_empty_iterators():
     assert math.isnan(_.variance(value for value in []))
 
 
+class AmbiguousTruthValues:
+    def __init__(self, values):
+        self.values = values
+
+    def __iter__(self):
+        return iter(self.values)
+
+    def __len__(self):
+        return len(self.values)
+
+    def __bool__(self):
+        raise ValueError("the collection has no truth value")
+
+
+class FalseTruthValues(AmbiguousTruthValues):
+    def __bool__(self):
+        return False
+
+
+@parametrize("collection_type", [AmbiguousTruthValues, FalseTruthValues])
+@parametrize("function", [_.variance, _.std_deviation])
+@parametrize("values", [[1, 2, 3], [1.0, 2.0, 3.0], [10**18, 10**18 + 1], [0, 1], [7], []])
+def test_variance_collection_truth_value(collection_type, function, values):
+    expected = function(values)
+    actual = function(collection_type(values))
+    if values:
+        assert actual == expected
+    else:
+        assert math.isnan(actual)
+
+
 class SizedIterator:
     def __init__(self, values):
         self.values = list(values)
