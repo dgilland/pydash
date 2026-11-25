@@ -1429,6 +1429,23 @@ def test_url_blank_query_values(case, expected):
 
 
 @parametrize(
+    "paths,expected",
+    [
+        (("//cdn.example.com", "js", "app.js"), "//cdn.example.com/js/app.js"),
+        (("//cdn.example.com/assets/", "main.css"), "//cdn.example.com/assets/main.css"),
+        (("", "//cdn.example.com", "", "app.js"), "//cdn.example.com/app.js"),
+        ((["//cdn.example.com/assets"], "theme.css"), "//cdn.example.com/assets/theme.css"),
+        (("//[2001:db8::1]:8443", "image.png"), "//[2001:db8::1]:8443/image.png"),
+        (("//cdn.example.com",), "//cdn.example.com"),
+    ],
+)
+def test_url_preserves_scheme_relative_authorities(paths, expected):
+    result = _.url(*paths, version="1")
+    assert result == expected + "?version=1"
+    assert urlsplit(result).netloc == urlsplit(expected).netloc
+
+
+@parametrize(
     "case,expected",
     [  # noqa
         ("hello world!", ["hello", "world"]),  # noqa

@@ -2416,6 +2416,10 @@ def url(*paths: t.Any, **params: t.Any) -> str:
         paths_list.append(urlunsplit((scheme, netloc, path, "", fragment)))
 
     path = delimitedpathjoin("/", *paths_list)
+    first_path = next((part for part in paths_list if part), "")
+    if first_path.startswith("//") and not path.startswith("//"):
+        # A scheme-relative authority needs both leading slashes after joining.
+        path = "/" + path
     scheme, netloc, path, query, fragment = urlsplit(path)
     query = urlencode(params_list)
 
