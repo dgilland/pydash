@@ -849,3 +849,12 @@ def test_std_deviation_preserves_custom_tiny_arithmetic():
 
     values = [CustomFloat(1e-200), CustomFloat(-1e-200)]
     assert _.std_deviation(values) == 0.0
+
+
+@parametrize("precision", [-1000, -400, -324, 309, 400, 1000])
+@parametrize("value", [1.25, -1.25, 0.0, 1e308, -1e308, 5e-324])
+def test_round_extreme_float_precision(value, precision):
+    expected = round(value, precision)
+    assert _.round_(value, precision) == expected
+    assert _.chain(value).round_(precision).value() == expected
+    assert _.round_([value, -value], precision) == [expected, round(-value, precision)]
