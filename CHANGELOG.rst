@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Round finite floats at extreme precision without scale overflow or division by zero.
+
 - Preserve tiny standard deviations when squared deviations underflow.
 - Accept sized collections without a boolean truth value in ``variance`` and ``std_deviation``.
 - Preserve finite ``mean`` and default ``mean_by`` results when summing finite floats overflows.

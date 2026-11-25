@@ -1387,6 +1387,14 @@ def rounder(func, x, precision, shift_exactly=False):
             return float(
                 decimal.Decimal((rounded.sign, rounded.digits, int(rounded.exponent) - precision))
             )
+        if (
+            func is round
+            and isinstance(item, float)
+            and math.isfinite(item)
+            and isinstance(precision, int)
+            and (factor == 0 or precision > sys.float_info.max_10_exp)
+        ):
+            return round(item, precision)
         scaled = item * factor
         if (
             func is round
