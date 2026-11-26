@@ -2774,18 +2774,18 @@ def zip_object(
 
 
 @t.overload
-def zip_object(keys: t.Iterable[T], values: t.List[T2]) -> t.Dict[T, T2]: ...
+def zip_object(keys: t.Iterable[T], values: t.Iterable[T2]) -> t.Dict[T, T2]: ...
 
 
 def zip_object(keys, values=None):
     """
-    Creates a dict composed of lists of keys and values. Pass either a single two-dimensional list,
-    i.e. ``[[key1, value1], [key2, value2]]``, or two lists, one of keys and one of corresponding
+    Creates a dict composed of keys and values. Pass either an iterable of key/value pairs,
+    i.e. ``[[key1, value1], [key2, value2]]``, or two iterables containing keys and corresponding
     values.
 
     Args:
-        keys: Either a list of keys or a list of ``[key, value]`` pairs.
-        values: List of values to zip.
+        keys: Either an iterable of keys or an iterable of ``[key, value]`` pairs.
+        values: Iterable of values to zip.
 
     Returns:
         Zipped dict.
@@ -2811,14 +2811,14 @@ def zip_object(keys, values=None):
 
 
 def zip_object_deep(
-    keys: t.Iterable[t.Any], values: t.Union[t.List[t.Any], None] = None
+    keys: t.Iterable[t.Any], values: t.Union[t.Sequence[t.Any], None] = None
 ) -> t.Dict[t.Any, t.Any]:
     """
     This method is like :func:`zip_object` except that it supports property paths.
 
     Args:
-        keys: Either a list of keys or a list of ``[key, value]`` pairs.
-        values: List of values to zip.
+        keys: Either an iterable of keys or an iterable of ``[key, value]`` pairs.
+        values: Sequence of values to zip.
 
     Returns:
         Zipped dict.
