@@ -471,6 +471,30 @@ def test_slope_avoids_intermediate_float_overflow(point1, point2):
     assert _.chain(point1).slope(point2).value() == expected
 
 
+@parametrize(
+    "point1,point2,expected",
+    [
+        ((10**400, 10**400), (0.0, 0.0), 1.0),
+        ((-(10**400), -(10**400)), (0.0, 0.0), 1.0),
+        ((10**400, -(10**400)), (0.0, 0.0), -1.0),
+        ((10**400, 10**400), (0.0, 0), 1.0),
+        ((10**400, 10**400), (0, 0.0), 1.0),
+        ((10**400, 10**400), (1.0, 1.0), 1.0),
+        ((10**400, 1), (0.0, 0), 0.0),
+        ((1, 10**400), (0, 0.0), float("inf")),
+    ],
+)
+def test_slope_handles_mixed_integer_conversion_overflow(point1, point2, expected):
+    assert _.slope(point1, point2) == expected
+    assert _.slope(point2, point1) == expected
+    assert _.chain(point1).slope(point2).value() == expected
+
+
+def test_slope_preserves_custom_subtraction_overflow():
+    with pytest.raises(OverflowError, match="custom subtraction"):
+        _.slope((0, OverflowingInt(1)), (1, OverflowingInt(2)))
+
+
 @parametrize("sign", [-1, 1])
 def test_slope_preserves_true_float_overflow(sign):
     assert _.slope((0.0, -1e308), (sign * 1e-308, 1e308)) == sign * float("inf")

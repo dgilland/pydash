@@ -98,3 +98,4 @@ Contributors
 - Sharad Singh, `13Sharad@github <https://github.com/13Sharad>`_
 - Nash Aschenbath, `Aschenbath@github <https://github.com/Aschenbath>`_
 - fbirds5230, `fbirds5230@github <https://github.com/fbirds5230>`_
+- Muneer Alam, `Muneer320@github <https://github.com/Muneer320>`_
