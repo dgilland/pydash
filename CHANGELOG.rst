@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Accept iterable values in the ``zip_object`` type signature and sequence values in
+  ``zip_object_deep``, including their chaining signatures.
 - Preserve finite ``zscore`` results when subtracting the mean overflows.
 - Round finite floats at extreme precision without scale overflow or division by zero.
 - Preserve tiny standard deviations when squared deviations underflow.

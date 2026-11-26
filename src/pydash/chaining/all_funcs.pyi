@@ -668,12 +668,14 @@ class AllFuncs:
         self: "Chain[t.Iterable[t.List[t.Union[T, T2]]]]", values: None = None
     ) -> "Chain[t.Dict[t.Union[T, T2], t.Union[T, T2]]]": ...
     @t.overload
-    def zip_object(self: "Chain[t.Iterable[T]]", values: t.List[T2]) -> "Chain[t.Dict[T, T2]]": ...
+    def zip_object(
+        self: "Chain[t.Iterable[T]]", values: t.Iterable[T2]
+    ) -> "Chain[t.Dict[T, T2]]": ...
     def zip_object(self, values=None):
         return self._wrap(pyd.zip_object)(values)
 
     def zip_object_deep(
-        self: "Chain[t.Iterable[t.Any]]", values: t.Union[t.List[t.Any], None] = None
+        self: "Chain[t.Iterable[t.Any]]", values: t.Union[t.Sequence[t.Any], None] = None
     ) -> "Chain[t.Dict[t.Any, t.Any]]":
         return self._wrap(pyd.zip_object_deep)(values)
 

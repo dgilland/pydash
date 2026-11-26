@@ -1603,6 +1603,41 @@ def test_zip_object(case, expected):
     assert _.zip_object(*case) == expected
 
 
+@parametrize("keys_type", [list, tuple, iter])
+@parametrize(
+    "values_type",
+    [
+        list,
+        tuple,
+        iter,
+        lambda values: (value for value in values),
+        lambda values: dict(enumerate(values)).values(),
+    ],
+)
+def test_zip_object_iterable_values(keys_type, values_type):
+    assert _.zip_object(keys_type(["a", "b"]), values_type([1, 2])) == {"a": 1, "b": 2}
+    assert _.chain(keys_type(["a", "b"])).zip_object(values_type([1, 2])).value() == {
+        "a": 1,
+        "b": 2,
+    }
+
+
+@parametrize(
+    "values,first,second",
+    [
+        ((1, 2), 1, 2),
+        (range(1, 3), 1, 2),
+        ((1,), 1, None),
+        (range(0), None, None),
+        ("xy", "x", "y"),
+    ],
+)
+def test_zip_object_deep_sequence_values(values, first, second):
+    expected = {"a": {"b": first, "c": second}}
+    assert _.zip_object_deep(["a.b", "a.c"], values) == expected
+    assert _.chain(["a.b", "a.c"]).zip_object_deep(values).value() == expected
+
+
 @parametrize(
     "case,expected",
     [
