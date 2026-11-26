@@ -1377,10 +1377,10 @@ def rounder(func, x, precision, shift_exactly=False):
     factor = pow(10, precision)
 
     def rounder_func(item):
-        if isinstance(item, decimal.Decimal) and isinstance(precision, int) and precision < 0:
-            if not item.is_finite():
+        if isinstance(item, decimal.Decimal) and isinstance(precision, int):
+            exact = item if item.is_finite() else None
+            if exact is None and precision < 0:
                 return func(item)
-            exact = item
         elif (
             shift_exactly
             and isinstance(item, float)
