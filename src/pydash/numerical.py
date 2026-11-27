@@ -1091,11 +1091,23 @@ def slope(point1, point2):
     if x1 == x2:
         result = INFINITY
     else:
-        rise, run = y2 - y1, x2 - x1
-        if any(isinstance(delta, float) and math.isinf(delta) for delta in (rise, run)) and all(
-            isinstance(value, int) or (isinstance(value, float) and math.isfinite(value))
-            for value in (x1, y1, x2, y2)
-        ):
+        try:
+            rise, run = y2 - y1, x2 - x1
+        except OverflowError:
+            if not all(
+                type(value) is int or (type(value) is float and math.isfinite(value))
+                for value in (x1, y1, x2, y2)
+            ):
+                raise
+            use_exact = True
+        else:
+            use_exact = any(
+                isinstance(delta, float) and math.isinf(delta) for delta in (rise, run)
+            ) and all(
+                isinstance(value, int) or (isinstance(value, float) and math.isfinite(value))
+                for value in (x1, y1, x2, y2)
+            )
+        if use_exact:
             # Finite coordinates can overflow during subtraction before division.
             exact = (Fraction(y2) - Fraction(y1)) / (Fraction(x2) - Fraction(x1))
             try:
