@@ -6,9 +6,11 @@ Functions that operate on lists and dicts.
 
 from __future__ import annotations
 
+from collections import deque
 from collections.abc import Mapping
 from functools import cmp_to_key
 import inspect
+from itertools import islice
 import random
 from types import BuiltinFunctionType
 import typing as t
@@ -917,6 +919,10 @@ def includes(
         Renamed from ``contains`` to ``includes`` and removed alias
         ``include``.
     """
+    if isinstance(collection, deque):
+        start = slice(from_index, None).indices(len(collection))[0]
+        return target in islice(collection, start, None)
+
     collection_values: t.Container[t.Any]
     if isinstance(collection, Mapping):
         collection_values = list(collection.values())[from_index:]
