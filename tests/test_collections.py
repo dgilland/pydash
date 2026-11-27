@@ -1,4 +1,4 @@
-from collections import UserDict, namedtuple
+from collections import UserDict, deque, namedtuple
 import math
 from operator import add, attrgetter, itemgetter, methodcaller, mul
 from types import MappingProxyType
@@ -307,6 +307,22 @@ def test_group_by(case, expected):
 )
 def test_includes(case, expected):
     assert _.includes(*case) == expected
+
+
+@parametrize(
+    "values,target,offset,expected",
+    [
+        ([1, 2, 3], 2, 0, True),
+        ([1, 2, 3], 1, 1, False),
+        ([1, 2, 3], 2, -2, True),
+        ([1, 2, 3], 1, -2, False),
+        ([1, 2, 3], 1, -(10**40), True),
+        ([1, 2, 3], 3, 10**40, False),
+        ([], 1, 0, False),
+    ],
+)
+def test_includes_deque_respects_offset(values, target, offset, expected):
+    assert _.includes(deque(values), target, offset) is expected
 
 
 @parametrize(
