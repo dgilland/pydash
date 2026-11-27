@@ -119,6 +119,18 @@ def test_rounding_non_finite_decimal_at_negative_precision(function, value, exce
 
 
 @parametrize(
+    "function,expected",
+    [(_.ceil, (124.0, 123.5)), (_.floor, (123.0, 123.4)), (_.round_, (123.0, 123.5))],
+)
+def test_rounding_decimal_at_nonnegative_precision_ignores_context(function, expected):
+    value = Decimal("123.46")
+    with localcontext() as context:
+        context.prec = 3
+        context.traps[Inexact] = True
+        assert (function(value, 0), function(value, 1)) == expected
+
+
+@parametrize(
     "case,expected",
     [
         (([1, 2, 3],), 3),

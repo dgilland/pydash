@@ -14,6 +14,7 @@ Unreleased
 - Accept sized collections without a boolean truth value in ``variance`` and ``std_deviation``.
 - Preserve finite ``mean`` and default ``mean_by`` results when summing finite floats overflows.
 - Support negative rounding precision for ``Decimal`` values in ``ceil``, ``floor``, and ``round_``.
+- Avoid context-dependent scaling of ``Decimal`` values at zero and positive rounding precision.
 - Recover representable ``std_deviation`` results when intermediate squared deviations overflow
   for finite built-in numbers.
 - Accept source mappings without a ``copy`` method in ``assign`` and ``assign_with``.
