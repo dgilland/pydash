@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import datetime as dt
 from decimal import Decimal
 from enum import IntEnum
-from types import SimpleNamespace
+from types import MappingProxyType, SimpleNamespace
 
 import pytest
 
@@ -604,6 +604,19 @@ def test_to_list(case, expected):
     result = _.to_list(case)
     assert result == expected
     assert isinstance(result, list)
+
+
+@parametrize("mapping_type", [dict, UserDict, MappingProxyType, ChainMap])
+@parametrize("chained", [False, True])
+def test_to_list_mapping_values(mapping_type, chained):
+    first, second = object(), object()
+    source = mapping_type({"first": first, "second": second})
+
+    result = _.chain(source).to_list().value() if chained else _.to_list(source)
+
+    assert result == [first, second]
+    result.clear()
+    assert list(source.items()) == [("first", first), ("second", second)]
 
 
 @pytest.mark.parametrize("factory", [broken_generator, BrokenSequence])
