@@ -160,9 +160,11 @@ class ChainWrapper(t.Generic[ValueT_co]):
             New instance of :class:`Chain` with the results of :attr:`method` passed in as
                 value.
         """
-        self.args = args
-        self.kwargs = kwargs
-        return Chain(self)
+        # Reusing a saved method must not alter an already constructed chain.
+        wrapper = self._generate()
+        wrapper.args = args
+        wrapper.kwargs = kwargs
+        return Chain(wrapper)
 
 
 class _Dash(object):
