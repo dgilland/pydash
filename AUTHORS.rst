@@ -11,7 +11,6 @@ Lead
 Contributors
 ------------
 
-- Tanveer Singh, `tanveerchana@github <https://github.com/tanveerchana>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_
 - Bharadwaj Yarlagadda, `bharadwajyarlagadda@github <https://github.com/bharadwajyarlagadda>`_
@@ -99,3 +98,5 @@ Contributors
 - Nash Aschenbath, `Aschenbath@github <https://github.com/Aschenbath>`_
 - fbirds5230, `fbirds5230@github <https://github.com/fbirds5230>`_
 - Muneer Alam, `Muneer320@github <https://github.com/Muneer320>`_
+- Twiink, `Twiink@github <https://github.com/Twiink>`_
+- Tanveer Singh, `tanveerchana@github <https://github.com/tanveerchana>`_

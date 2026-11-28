@@ -1230,6 +1230,50 @@ def test_partial_variable_keyword_arguments_as_iteratee(factory):
 
 
 @parametrize("factory", [_.partial, _.partial_right])
+@parametrize("target", ["function", "method", "class_method", "callable"])
+def test_partial_positional_only_keyword_name_as_iteratee(factory, target):
+    def transform(value, /, **metadata):
+        return value, metadata
+
+    class Parser:
+        def parse(self, value, /, **metadata):
+            return value, metadata
+
+        @classmethod
+        def parse_class(cls, value, /, **metadata):
+            return value, metadata
+
+        def __call__(self, value, /, **metadata):
+            return value, metadata
+
+    parser = Parser()
+    targets = {
+        "function": transform,
+        "method": parser.parse,
+        "class_method": Parser.parse_class,
+        "callable": parser,
+    }
+    wrapped = factory(targets[target], value="tag")
+    expected = [(1, {"value": "tag"}), (2, {"value": "tag"})]
+
+    assert wrapped(1) == expected[0]
+    assert _.map_([1, 2], wrapped) == expected
+    assert _.chain([1, 2]).map_(wrapped).value() == expected
+
+
+@parametrize("factory", [_.partial, _.partial_right])
+def test_partial_positional_only_name_with_keyword_bound_slot(factory):
+    def transform(value, /, suffix="!", **metadata):
+        return value, suffix, metadata
+
+    wrapped = factory(transform, value="tag", suffix="?")
+    assert _.map_([1, 2], wrapped) == [
+        (1, "?", {"value": "tag"}),
+        (2, "?", {"value": "tag"}),
+    ]
+
+
+@parametrize("factory", [_.partial, _.partial_right])
 def test_partial_nested_and_builtin_iteratees(factory):
     def transform(value, increment=0):
         return value + increment
