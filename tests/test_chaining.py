@@ -90,6 +90,54 @@ def test_chaining_late_value_override():
     assert square_sum([5, 6, 7, 8]) == 174
 
 
+@parametrize("keyword", [False, True])
+def test_chaining_saved_method_calls_are_independent(keyword):
+    mapper = _.chain([1, 2]).map_
+    calls = []
+
+    def double(value):
+        calls.append(value)
+        return value * 2
+
+    if keyword:
+        first = mapper(iteratee=double)
+        second = mapper(iteratee=lambda value: value + 10)
+    else:
+        first = mapper(double)
+        second = mapper(lambda value: value + 10)
+
+    assert calls == []
+    assert second.value() == [11, 12]
+    assert calls == []
+    assert first.value() == [2, 4]
+    assert calls == [1, 2]
+    assert first.plant([3]).value() == [6]
+    assert first.commit().value() == [2, 4]
+    assert second.value() == [11, 12]
+
+
+def test_chaining_saved_method_preserves_existing_pipeline():
+    power = _.chain([1, 2, 3]).power
+    squares = power(2).sum()
+    cubes = power(3).sum()
+
+    assert squares.value() == 14
+    assert cubes.value() == 36
+    assert squares([4, 5]) == 41
+    assert squares.value() == 14
+
+
+def test_chaining_saved_method_with_late_values():
+    power = _.chain().map_(lambda value: value + 1).power
+    squares = power(2).sum()
+    cubes = power(3).sum()
+
+    assert squares([1, 2]) == 13
+    assert cubes([1, 2]) == 35
+    assert squares([3]) == 16
+    assert cubes([3]) == 64
+
+
 def test_chaining_plant():
     value = [1, 2, 3, 4]
     square_sum1 = _.chain(value).power(2).sum()

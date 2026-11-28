@@ -7,6 +7,7 @@ Unreleased
 ----------
 
 - Convert all mapping values to a list in ``to_list``, consistently with plain dictionaries.
+- Keep existing lazy chains independent when a saved chain method is called again.
 - Accept iterable values in the ``zip_object`` type signature and sequence values in
   ``zip_object_deep``, including their chaining signatures.
 - Preserve finite ``zscore`` results when subtracting the mean overflows.
