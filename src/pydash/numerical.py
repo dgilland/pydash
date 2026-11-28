@@ -307,7 +307,17 @@ def mean_by(collection, iteratee=None):
     length = len(collection)
     if not length:
         return float("nan")
-    result = sum_by(collection, iteratee) / length
+    try:
+        result = sum_by(collection, iteratee) / length
+    except OverflowError:
+        if iteratee is None:
+            values = [value for _, value in iterator(collection)]
+            if all(
+                type(value) is int or (type(value) is float and math.isfinite(value))
+                for value in values
+            ):
+                return statistics.mean(values)
+        raise
     if iteratee is None and isinstance(result, float) and not math.isfinite(result):
         values = [value for _, value in iterator(collection)]
         if all(
