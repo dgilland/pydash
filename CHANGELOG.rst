@@ -6,8 +6,8 @@ Changelog
 Unreleased
 ----------
 
-- Preserve positional-only callback arguments when ``partial`` or ``partial_right`` binds a
-  keyword with the same name through ``**kwargs``.
+- Preserve positional-only callback arguments when ``partial`` or ``partial_right`` binds a keyword
+  with the same name through ``**kwargs``.
 - Convert all mapping values to a list in ``to_list``, consistently with plain dictionaries.
 - Keep existing lazy chains independent when a saved chain method is called again.
 - Accept iterable values in the ``zip_object`` type signature and sequence values in
@@ -20,28 +20,27 @@ Unreleased
 - Preserve finite ``mean`` and default ``mean_by`` results when summing finite floats overflows.
 - Support negative rounding precision for ``Decimal`` values in ``ceil``, ``floor``, and ``round_``.
 - Avoid context-dependent scaling of ``Decimal`` values at zero and positive rounding precision.
-- Recover representable ``std_deviation`` results when intermediate squared deviations overflow
-  for finite built-in numbers.
+- Recover representable ``std_deviation`` results when intermediate squared deviations overflow for
+  finite built-in numbers.
 - Accept source mappings without a ``copy`` method in ``assign`` and ``assign_with``.
-- Forward keyword arguments named ``self`` through function wrappers instead of colliding with
-  the wrapper's receiver.
-- Search integer values in ``last_index_of`` ranges arithmetically and support lengths larger
-  than ``sys.maxsize``.
+- Forward keyword arguments named ``self`` through function wrappers instead of colliding with the
+  wrapper's receiver.
+- Search integer values in ``last_index_of`` ranges arithmetically and support lengths larger than
+  ``sys.maxsize``.
 - Include every input array's element type in the result annotations of ``union_with``.
 - Preserve finite values in ``to_number`` when scaling for rounding would overflow.
-- Keep an escaped backslash (``\\``) that comes right before a ``.`` path delimiter as part of
-  the key in ``to_path`` and deep path functions such as ``get`` and ``set_``, instead of
-  dropping it.
+- Keep an escaped backslash (``\\``) that comes right before a ``.`` path delimiter as part of the
+  key in ``to_path`` and deep path functions such as ``get`` and ``set_``, instead of dropping it.
 - Require literal mapping keys in partial matches instead of matching missing numeric strings
   against integer keys, including when filtering collections with object predicates.
 - Limit temporary strings in ``pad``, ``pad_start``, and ``pad_end`` to the needed padding.
 - Avoid intermediate floating-point overflow in ``slope`` for finite coordinates.
 - Include iterables and mapping values in the ``std_deviation`` type signature.
-- Infer the positional arity of callable instances and class constructors correctly in
-  ``curry`` and ``curry_right`` without counting an implicit receiver.
+- Infer the positional arity of callable instances and class constructors correctly in ``curry`` and
+  ``curry_right`` without counting an implicit receiver.
 - Stop consuming iterables in ``nth`` once a nonnegative index has been reached.
-- Transliterate letters like ``ß``, ``æ``, ``ø`` and ``Ł`` in ``slugify`` through ``deburr`` instead of
-  dropping them.
+- Transliterate letters like ``ß``, ``æ``, ``ø`` and ``Ł`` in ``slugify`` through ``deburr`` instead
+  of dropping them.
 - Search values in generic mappings with ``includes`` and respect the start offset.
 - Support ``deque`` inputs in ``includes`` with positive and negative start offsets.
 - Support ``range`` objects in ``index_of``, including when a start index is supplied.
@@ -58,10 +57,10 @@ Unreleased
   to match lodash behavior.
 - Reject nonpositive window sizes in ``moving_mean`` with a ``ValueError``.
 - Treat non-callable ``items`` and ``iteritems`` attributes as data when iterating over objects.
-- Avoid rewriting immutable parent entries in ``clone_deep_with`` when the customizer delegates
-  to default copying.
-- Preserve literal mapping keys in ``map_values_deep`` callback paths and parse the optional
-  path prefix only once.
+- Avoid rewriting immutable parent entries in ``clone_deep_with`` when the customizer delegates to
+  default copying.
+- Preserve literal mapping keys in ``map_values_deep`` callback paths and parse the optional path
+  prefix only once.
 - Return the original collection from ``nest`` when the grouping property list is empty.
 - Keep negative ``ary`` limits uncapped under Python optimization.
 - Stop evaluating the ``drop_while`` predicate after the first retained item.
@@ -73,32 +72,33 @@ Unreleased
 - Type ``unzip_with`` without an iteratee as returning variable-length column tuples.
 - Allow empty ``flow`` and ``flow_right`` pipelines to be used as iteratees without raising
   ``IndexError`` during argument inspection.
-- Keep top-level iterator criteria reusable in ``matches`` and ``matches_property`` predicates without consuming them eagerly.
+- Keep top-level iterator criteria reusable in ``matches`` and ``matches_property`` predicates
+  without consuming them eagerly.
 - Fix ``to_list`` swallowing ``TypeError`` raised while consuming an iterable rather than
   propagating the original failure.
 - Pass only the element to builtin methods such as ``str.strip``, ``str.split``, and
-  ``str.splitlines`` used as iteratees instead of filling their optional arguments with the
-  index, key, or collection.
+  ``str.splitlines`` used as iteratees instead of filling their optional arguments with the index,
+  key, or collection.
 - Serialize overlapping ``once`` calls across threads while preserving exception retries.
 - Fix ``unzip`` tuple overloads and generated chain signatures to describe variable-length columns
   rather than input row shapes.
 - Preserve character order in multi-character number_format grouping separators.
-- Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under
-  ordinary equality.
-- Use logarithmic key evaluation in ``sorted_index_by`` and ``sorted_last_index_by``
-  instead of copying and sorting all keys. Inputs must be sorted by the iteratee.
+- Honor custom ``intersection_with`` comparisons when distinct inputs compare equal under ordinary
+  equality.
+- Use logarithmic key evaluation in ``sorted_index_by`` and ``sorted_last_index_by`` instead of
+  copying and sorting all keys. Inputs must be sorted by the iteratee.
 - Preserve z-score translation invariance for large integer observations.
 - Preserve arithmetic result types in mean, mean_by, and moving_mean.
 - Accept distinct uniqueness criterion types in ``sorted_uniq_by`` and its chain wrapper.
 - Return an empty single-item ``slice_`` for negative indexes before the start of a sequence.
 - Fixed float-list ``power`` exponent types for direct and chained calls.
-- Pass both the accumulator and the value to builtin reducers such as ``operator.add``, ``max``,
-  and ``math.gcd`` in ``reduce_``, ``reduce_right``, ``reductions``, ``reductions_right``,
-  ``zip_with``, and ``unzip_with``.
+- Pass both the accumulator and the value to builtin reducers such as ``operator.add``, ``max``, and
+  ``math.gcd`` in ``reduce_``, ``reduce_right``, ``reductions``, ``reductions_right``, ``zip_with``,
+  and ``unzip_with``.
 - Compare literal dictionary keys in ``is_equal_with`` instead of interpreting them as paths.
 - Scale extreme finite values without overflowing or underflowing the scale factor.
-- Preserve original sequence indexes in ``reduce_right`` and ``reductions_right``
-  callbacks instead of numbering the reversed values again.
+- Preserve original sequence indexes in ``reduce_right`` and ``reductions_right`` callbacks instead
+  of numbering the reversed values again.
 - Preserve repeated argument indexes in ``rearg`` instead of silently dropping duplicates.
 - Avoid an infinite median when adding two finite floating-point middle values overflows.
 - Preserve numeric return types, including Decimal, in median and its chain wrapper.
@@ -108,65 +108,67 @@ Unreleased
 - Infer callable return types in ``invoke_map`` and its chain wrapper.
 - Deduplicate single-array ``xor_with`` results using positional or keyword comparators.
 - Honor multiline and dot-all flags in JavaScript-style regex matching and replacement.
-- Pass each element to ``partial`` and ``partial_right`` wrappers of ``round_``, ``floor``,
-  and ``ceil`` when they are used as iteratees.
+- Pass each element to ``partial`` and ``partial_right`` wrappers of ``round_``, ``floor``, and
+  ``ceil`` when they are used as iteratees.
 - Preserve custom removal criteria throughout ``pull_all_by`` and ``pull_all_with``.
 - Return complete global JavaScript-style regex matches when capture groups are present.
 - Use zero as the other bound when ``random`` receives a single bound, as documented.
 - Invoke false-valued ``retry`` exception callbacks instead of silently skipping them.
-- Process many arrays in ``xor``, ``xor_by``, and ``xor_with`` without exceeding the
-  Python recursion limit.
+- Process many arrays in ``xor``, ``xor_by``, and ``xor_with`` without exceeding the Python
+  recursion limit.
 - Deduplicate single-array results in ``intersection``, ``intersection_by``, and
   ``intersection_with``, honoring positional and keyword comparison rules.
 - Preserve digits and uncased letters at word boundaries in ``prune`` (#349).
 - Keep all arrays in ``zip_with`` when no optional iteratee is supplied.
 - Compute ``chunk`` counts with exact integer arithmetic for large sizes and sequences.
-- Propagate customizer exceptions from nested ``is_match_with`` comparisons instead
-  of silently reporting a nonmatch.
-- Return ``True`` when ``is_equal_with`` falls back to comparing equal empty containers,
-  including empty containers nested in other values.
+- Propagate customizer exceptions from nested ``is_match_with`` comparisons instead of silently
+  reporting a nonmatch.
+- Return ``True`` when ``is_equal_with`` falls back to comparing equal empty containers, including
+  empty containers nested in other values.
 - Deduplicate ``xor_with`` results with the supplied comparator.
 - Honor positive and negative ``from_index`` offsets in ``includes`` for dictionaries.
 - Use generic mapping values in ``sort_by``, ``max_by``, and ``min_by``.
-- Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input,
-  shared mutable children, cycles, and deep-copied mapping keys.
-- Honor false-valued callable customizers in ``assign_with``, ``set_with``, and
-  ``update_with`` instead of testing their truth value.
-- Treat empty source sequences as no-ops in ``assign`` and ``assign_with`` instead of
-  raising ``IndexError``.
+- Keep ``clone_deep_with`` customizations inside the copied graph, preserving the input, shared
+  mutable children, cycles, and deep-copied mapping keys.
+- Honor false-valued callable customizers in ``assign_with``, ``set_with``, and ``update_with``
+  instead of testing their truth value.
+- Treat empty source sequences as no-ops in ``assign`` and ``assign_with`` instead of raising
+  ``IndexError``.
 - Remove the complete delimiter in ``unquote`` so it round-trips multi-character and
   string-coercible delimiters accepted by ``quote``.
-- Allow debounced callbacks to start another burst without deadlocking or resetting that
-  burst's timer and maximum-wait deadline.
+- Allow debounced callbacks to start another burst without deadlocking or resetting that burst's
+  timer and maximum-wait deadline.
 - Return ``None`` for infinite numeric inputs to ``parse_int`` instead of leaking
   ``OverflowError``.
 - Preserve arguments without a corresponding transform in ``over_args`` instead of raising
   ``IndexError``.
-- Fix ``every`` and ``some`` ignoring predicate index/key and collection arguments,
-  iterating over mapping keys instead of values, and ignoring false-valued predicates.
+- Fix ``every`` and ``some`` ignoring predicate index/key and collection arguments, iterating over
+  mapping keys instead of values, and ignoring false-valued predicates.
 - Sort values rather than keys in ``order_by`` for generic mappings.
 - Preserve empty matched results in ``substr_left_end`` and ``substr_right``.
-- Fix ``sort`` ignoring false-valued comparators and accepting both a comparator and a key
-  when either callable is false-valued.
-- Check literal property keys in ``conforms`` and ``conforms_to`` without interpreting them as paths.
+- Fix ``sort`` ignoring false-valued comparators and accepting both a comparator and a key when
+  either callable is false-valued.
+- Check literal property keys in ``conforms`` and ``conforms_to`` without interpreting them as
+  paths.
 - Preserve literal property keys in ``pick_by`` when using a callable or the default predicate.
-- Fix ``reduce_right`` and ``reductions_right`` traversing mappings in the wrong order or reducing keys.
+- Fix ``reduce_right`` and ``reductions_right`` traversing mappings in the wrong order or reducing
+  keys.
 - Fix anchored string replacements applying anchors to only one regular-expression alternative.
 - Fix ``shuffle`` returning keys instead of values for generic mappings.
 - Fix ``matches_property`` matching absent paths against ``None`` or empty patterns.
 - Honor custom comparisons and iteratees in difference helpers when input values compare equal.
-- Fix ``xor`` returning duplicate values for one array and ``xor_by`` deduplicating without
-  its iteratee.
+- Fix ``xor`` returning duplicate values for one array and ``xor_by`` deduplicating without its
+  iteratee.
 - Preserve large integer values in ``to_integer`` and return ``0`` for infinite inputs.
 - Fix ``range_`` and ``range_right`` losing precision or overflowing for large integer bounds.
 - Honor false-valued iteratees in ``sorted_index_by`` and ``sorted_last_index_by``.
 - Fix ``reduce_`` rejecting mappings when no initial accumulator is provided.
 - Fix ``intersection_with`` returning duplicates when distinct values match under its comparator.
 - Fix ``truncate`` dropping an extra character when the string separator is not found.
-- Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with
-  the latest arguments. Trailing invocations run in a daemon timer thread.
-- Fix ``nth`` returning ``None`` for iterables that are not sequences, such as generators, sets
-  and ``zip`` objects, despite being annotated to accept any iterable.
+- Fix ``throttle`` dropping calls during the wait period: invoke once on the trailing edge with the
+  latest arguments. Trailing invocations run in a daemon timer thread.
+- Fix ``nth`` returning ``None`` for iterables that are not sequences, such as generators, sets and
+  ``zip`` objects, despite being annotated to accept any iterable.
 - Fix ``splice`` deletion and insertion positions for negative and out-of-range start indexes.
 - Fix ``xor``, ``xor_by``, and ``xor_with`` rejecting declared iterable inputs such as generators
   and tuples. Thanks MbappeWU_!
@@ -175,9 +177,10 @@ Unreleased
 - Fix ``retry`` accumulating ``jitter`` into the base delay so that it compounded and was scaled on
   later attempts. Jitter is now applied only to each individual sleep.
 - Fix ``retry`` raising a ``scale`` error message for an invalid ``max_delay``.
-- Fix ``floor`` and ``ceil`` returning off-by-one-unit results for float inputs when ``precision`` is
-  given, due to float error when scaling by a power of 10 (e.g. ``floor(0.29, 2)`` returned
+- Fix ``floor`` and ``ceil`` returning off-by-one-unit results for float inputs when ``precision``
+  is given, due to float error when scaling by a power of 10 (e.g. ``floor(0.29, 2)`` returned
   ``0.28`` and ``ceil(1.1, 2)`` returned ``1.11``).
+- Prevent access to object paths that leak module globals.
 
 
 v8.1.0 (2026-08-29)

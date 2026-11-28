@@ -30,6 +30,23 @@ BUILTINS = {value: key for key, value in builtins.__dict__.items() if isinstance
 #: Object key marker that is restricted from access via path access.
 RESTRICTED_KEY_MARKER = "__"
 
+#: Object keys that are restircted from access via path access.
+RESTRICTED_KEYS = (
+    "ag_code",
+    "ag_frame",
+    "cr_code",
+    "cr_frame",
+    "gi_code",
+    "gi_frame",
+    "tb_frame",
+    "tb_next",
+    "f_globals",
+    "f_locals",
+    "f_builtins",
+    "f_back",
+    "f_code",
+)
+
 #: Inspect signature parameter kinds that correspond to positional arguments.
 POSITIONAL_PARAMETERS = (
     inspect.Parameter.VAR_POSITIONAL,
@@ -227,10 +244,9 @@ def _base_get_object(obj, key, default=UNSET):
 def _raise_if_restricted_key(*keys):
     # Prevent access to restricted keys for security reasons.
     for key in keys:
-        if (
-            isinstance(key, str)
-            and key.startswith(RESTRICTED_KEY_MARKER)
-            and key.endswith(RESTRICTED_KEY_MARKER)
+        if isinstance(key, str) and (
+            (key.startswith(RESTRICTED_KEY_MARKER) and key.endswith(RESTRICTED_KEY_MARKER))
+            or key in RESTRICTED_KEYS
         ):
             raise KeyError(f"access to restricted key {key!r} is not allowed")
 
