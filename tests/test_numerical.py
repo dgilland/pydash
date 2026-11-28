@@ -839,6 +839,33 @@ def test_default_mean_preserves_nonfinite_values(function, value):
     assert math.isnan(result) if math.isnan(value) else result == value
 
 
+@parametrize("factory", [list, iter, SizedIterator, lambda data: dict(enumerate(data))])
+@parametrize("function", [_.mean, _.mean_by])
+def test_mean_recovers_conversion_overflow(factory, function):
+    values = [10**400, 1.0, -(10**400)]
+    assert function(factory(values)) == pytest.approx(1 / 3)
+    assert getattr(_.chain(factory(values)), function.__name__)().value() == pytest.approx(1 / 3)
+
+
+def test_mean_preserves_custom_sum_overflow():
+    class CustomInt(int):
+        def __radd__(self, other):
+            raise OverflowError("custom sum")
+
+    with pytest.raises(OverflowError, match="custom sum"):
+        _.mean([CustomInt(1), 2])
+
+
+def test_mean_preserves_iteratee_conversion_overflow():
+    with pytest.raises(OverflowError):
+        _.mean_by([10**400, 1.0, -(10**400)], lambda value: value)
+
+
+def test_mean_preserves_nonfinite_conversion_overflow():
+    with pytest.raises(OverflowError):
+        _.mean([10**400, float("inf")])
+
+
 def test_mean_by_calls_custom_iteratee_once_per_value():
     calls = []
     values = SizedIterator([1, 2])
