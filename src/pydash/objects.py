@@ -1679,8 +1679,8 @@ def omit_by(obj, iteratee=None):
 def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, None]:
     """
     Converts the given `value` into an integer of the specified `radix`. If `radix` is falsey, a
-    radix of ``10`` is used unless the `value` is a hexadecimal, in which case a radix of 16 is
-    used.
+    radix of ``10`` is used unless the `value` is a string that isn't valid base-10 but is valid
+    base-16 (e.g. ``"0x1f"`` or ``"ff"``), in which case a radix of 16 is used.
 
     Args:
         value: Value to parse.
@@ -1693,6 +1693,12 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
 
         >>> parse_int("5")
         5
+        >>> parse_int("10")
+        10
+        >>> parse_int("0x1f")
+        31
+        >>> parse_int("ff")
+        255
         >>> parse_int("12", 8)
         10
         >>> parse_int("x") is None
@@ -1701,13 +1707,8 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
     .. versionadded:: 1.0.0
     """
     if not radix and pyd.is_string(value):
-        try:
-            # Check if value is hexadecimal and if so use base-16 conversion.
-            int(value, 16)
-        except ValueError:
-            pass
-        else:
-            radix = 16
+        # Default to base 10; infer base 16 only when the string isn't decimal but is hex.
+        radix = 10 if _is_int(value, 10) or not _is_int(value, 16) else 16
 
     if not radix:
         radix = 10
@@ -1721,6 +1722,14 @@ def parse_int(value: t.Any, radix: t.Union[int, None] = None) -> t.Union[int, No
         parsed = None
 
     return parsed
+
+
+def _is_int(value: str, radix: int) -> bool:
+    try:
+        int(value, radix)
+    except ValueError:
+        return False
+    return True
 
 
 @t.overload

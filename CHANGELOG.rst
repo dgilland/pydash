@@ -181,6 +181,9 @@ Unreleased
   is given, due to float error when scaling by a power of 10 (e.g. ``floor(0.29, 2)`` returned
   ``0.28`` and ``ceil(1.1, 2)`` returned ``1.11``).
 - Prevent access to object paths that leak module globals.
+- ``parse_int`` now defaults to base 10 instead of inferring base 16 for any hex-parseable string
+  (e.g. ``parse_int("10")`` now returns ``10``, not ``16``). Base 16 is inferred only for strings
+  that aren't valid decimal, such as ``"0x1f"`` or ``"ff"``. (**breaking change**)
 
 
 v8.1.0 (2026-08-29)

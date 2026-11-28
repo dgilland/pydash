@@ -1468,14 +1468,37 @@ def test_omit_by(case, expected):
     [
         ((1,), 1),
         ((1.0,), 1),
+        ((1.5,), 1),
         (("1",), 1),
         (("00001",), 1),
         ((13, 8), 11),
         (("0A",), 10),
         (("08",), 8),
-        (("10",), 16),
+        (("10",), 10),
         (("10", 10), 10),
         (("xyz",), None),
+        # Base 10 default
+        (("-10",), -10),
+        ((" 10 ",), 10),
+        (("1_0",), 10),
+        # Base 16 inferred (not valid decimal, valid hex)
+        (("0x1f",), 31),
+        (("0X1F",), 31),
+        (("-0x1f",), -31),
+        (("ff",), 255),
+        (("1e5",), 485),
+        (("0b11",), 2833),
+        # Explicit radix overrides inference
+        (("12", 8), 10),
+        (("0x1f", 16), 31),
+        (("ff", 16), 255),
+        (("0x1f", 10), None),
+        (("ff", 10), None),
+        # Unparsable
+        (("0x",), None),
+        (("1.5",), None),
+        (("",), None),
+        ((None,), None),
     ],
 )
 def test_parse_int(case, expected):
