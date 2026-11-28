@@ -132,24 +132,32 @@ class ChainWrapper(t.Generic[ValueT_co]):
         If :attr:`_value` is an instance of :class:`ChainWrapper`, then unwrap it before calling
         :attr:`method`.
         """
-        # Generate a copy of ourself so that we don't modify the chain wrapper
-        # _value directly. This way if we are late passing a value, we don't
-        # "freeze" the chain wrapper value when a value is first passed.
-        # Otherwise, we'd locked the chain wrapper value permanently and not be
-        # able to reuse it.
-        wrapper = self._generate()
+        wrappers = []
+        seen = set()
+        wrapper = self
+        while True:
+            if id(wrapper) in seen:
+                raise RecursionError("Cycle in chain wrappers")
+            seen.add(id(wrapper))
+            # Keep evaluation independent of the saved wrappers and late-bound values.
+            wrapper = wrapper._generate()
+            wrappers.append(wrapper)
+            parent = wrapper._value
+            if not isinstance(parent, ChainWrapper):
+                result = parent
+                if not isinstance(value, ChainWrapper) and value is not UNSET:
+                    result = value
+                break
+            if type(parent).unwrap is not ChainWrapper.unwrap:
+                # A subclass can customize evaluation of its part of the chain.
+                result = parent.unwrap(value)
+                break
+            wrapper = parent
 
-        if isinstance(wrapper._value, ChainWrapper):
-            # pylint: disable=no-member,maybe-no-member
-            wrapper._value = wrapper._value.unwrap(value)
-        elif not isinstance(value, ChainWrapper) and value is not UNSET:
-            # Override wrapper's initial value.
-            wrapper._value = value
-
-        if wrapper._value is not UNSET:
-            value = wrapper._value
-
-        return wrapper.method(value, *wrapper.args, **wrapper.kwargs)
+        for wrapper in reversed(wrappers):
+            argument = value if result is UNSET else result
+            result = wrapper.method(argument, *wrapper.args, **wrapper.kwargs)
+        return result
 
     def __call__(self, *args, **kwargs):
         """
