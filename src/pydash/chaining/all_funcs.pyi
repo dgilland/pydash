@@ -2828,7 +2828,7 @@ class AllFuncs:
 
     @t.overload
     def to_list(
-        self: "Chain[t.Dict[t.Any, T]]", split_strings: bool = True
+        self: "Chain[t.Mapping[t.Any, T]]", split_strings: bool = True
     ) -> "Chain[t.List[T]]": ...
     @t.overload
     def to_list(self: "Chain[t.Iterable[T]]", split_strings: bool = True) -> "Chain[t.List[T]]": ...

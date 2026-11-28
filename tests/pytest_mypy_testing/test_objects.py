@@ -1,3 +1,4 @@
+from collections import UserDict
 import typing as t
 
 import pytest
@@ -307,6 +308,14 @@ def test_mypy_to_list() -> None:
     reveal_type(_.to_list(a for a in [1, 2, 3]))  # R: builtins.list[builtins.int]
     reveal_type(_.to_list("cat"))  # R: builtins.list[builtins.str]
     reveal_type(_.to_list("cat", split_strings=False))  # R: builtins.list[builtins.str]
+
+
+@pytest.mark.mypy_testing
+def test_mypy_to_list_mapping_values() -> None:
+    mapping: t.Mapping[str, int] = UserDict({"a": 1, "b": 2})
+
+    assert_type(_.to_list(mapping), t.List[int])
+    assert_type(_.chain(mapping).to_list().value(), t.List[int])
 
 
 @pytest.mark.mypy_testing

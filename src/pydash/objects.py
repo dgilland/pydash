@@ -2097,7 +2097,7 @@ def to_integer(obj: t.Any) -> int:
 
 
 @t.overload
-def to_list(obj: t.Dict[t.Any, T], split_strings: bool = True) -> t.List[T]: ...
+def to_list(obj: t.Mapping[t.Any, T], split_strings: bool = True) -> t.List[T]: ...
 
 
 @t.overload
@@ -2112,6 +2112,7 @@ def to_list(obj, split_strings=True):
     """
     Converts an obj, an iterable or a single item to a list.
 
+    Mappings contribute their values, in iteration order.
     Exceptions raised while consuming an iterable are propagated.
 
     Args:
@@ -2155,7 +2156,7 @@ def to_list(obj, split_strings=True):
     """
     if isinstance(obj, list):
         return obj[:]
-    elif isinstance(obj, dict):
+    elif isinstance(obj, Mapping):
         return list(obj.values())
     elif not split_strings and isinstance(obj, (str, bytes)):
         return [obj]
