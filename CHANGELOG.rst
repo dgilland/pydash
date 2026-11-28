@@ -6,6 +6,8 @@ Changelog
 Unreleased
 ----------
 
+- Preserve positional-only callback arguments when ``partial`` or ``partial_right`` binds a
+  keyword with the same name through ``**kwargs``.
 - Accept iterable values in the ``zip_object`` type signature and sequence values in
   ``zip_object_deep``, including their chaining signatures.
 - Preserve finite ``zscore`` results when subtracting the mean overflows.

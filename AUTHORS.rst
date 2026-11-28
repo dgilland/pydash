@@ -11,6 +11,7 @@ Lead
 Contributors
 ------------
 
+- Twiink, `Twiink@github <https://github.com/Twiink>`_
 - Tanveer Singh, `tanveerchana@github <https://github.com/tanveerchana>`_
 - Nathan Cahill, `nathancahill@github <https://github.com/nathancahill>`_
 - Klaus Sevensleeper, `k7sleeper@github <https://github.com/k7sleeper>`_

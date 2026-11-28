@@ -7,7 +7,7 @@ Functions that wrap other functions.
 from __future__ import annotations
 
 from functools import cached_property
-from inspect import getfullargspec, isfunction, signature
+from inspect import Parameter, getfullargspec, isfunction, signature
 import itertools
 import threading
 import time
@@ -635,22 +635,24 @@ class Partial(_WithArgCount, t.Generic[T]):
             return None
         argcount = func_argcount - len(self.args)
         try:
-            argspec = getfullargspec(self.func)
-        except TypeError:
+            parameters = list(signature(self.func).parameters.values())
+        except (TypeError, ValueError):
             argcount -= len(self.kwargs)
         else:
-            if argspec.varargs:
+            if any(param.kind == Parameter.VAR_POSITIONAL for param in parameters):
                 argcount -= len(self.kwargs)
             else:
-                # Keyword-only parameters and **kwargs do not consume positional slots.
-                # `argspec.args` may start with an implicit `self`/`cls` slot that
-                # `func_argcount` already excludes, so align both before indexing slots.
-                implicit_slots = len(argspec.args) - func_argcount
+                positional = [
+                    param
+                    for param in parameters
+                    if param.kind in (Parameter.POSITIONAL_ONLY, Parameter.POSITIONAL_OR_KEYWORD)
+                ]
                 first_bound_slot = next(
                     (
                         index
-                        for index, name in enumerate(argspec.args[implicit_slots:])
-                        if name in self.kwargs
+                        for index, param in enumerate(positional)
+                        if param.kind == Parameter.POSITIONAL_OR_KEYWORD
+                        and param.name in self.kwargs
                     ),
                     None,
                 )
