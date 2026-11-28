@@ -4,6 +4,7 @@ Method chaining interface.
 .. versionadded:: 1.0.0
 """
 
+from types import MethodType
 import typing as t
 
 import pydash as pyd
@@ -141,23 +142,34 @@ class ChainWrapper(t.Generic[ValueT_co]):
             seen.add(id(wrapper))
             # Keep evaluation independent of the saved wrappers and late-bound values.
             wrapper = wrapper._generate()
-            wrappers.append(wrapper)
             parent = wrapper._value
-            if not isinstance(parent, ChainWrapper):
+            nested = isinstance(parent, ChainWrapper)
+            wrappers.append((wrapper, nested))
+            if not nested:
                 result = parent
                 if not isinstance(value, ChainWrapper) and value is not UNSET:
-                    result = value
+                    wrapper._value = value
                 break
-            if type(parent).unwrap is not ChainWrapper.unwrap:
-                # A subclass can customize evaluation of its part of the chain.
-                result = parent.unwrap(value)
+            unwrap = parent.unwrap
+            if (
+                not isinstance(unwrap, MethodType)
+                or unwrap.__func__ is not ChainWrapper._unwrap
+                or unwrap.__self__ is not parent
+            ):
+                # Honor subclass, instance and descriptor overrides without rebinding them.
+                result = unwrap(value)
                 break
             wrapper = parent
 
-        for wrapper in reversed(wrappers):
-            argument = value if result is UNSET else result
+        for wrapper, nested in reversed(wrappers):
+            if nested:
+                wrapper._value = result
+            argument = value if wrapper._value is UNSET else wrapper._value
             result = wrapper.method(argument, *wrapper.args, **wrapper.kwargs)
         return result
+
+    # Keep the original implementation identifiable if the public method is replaced.
+    _unwrap = unwrap
 
     def __call__(self, *args, **kwargs):
         """

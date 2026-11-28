@@ -229,6 +229,72 @@ def test_chain_preserves_wrapper_unwrap_overrides():
     assert calls == ["override", "override"]
 
 
+def test_chain_preserves_instance_unwrap_overrides():
+    inner = ChainWrapper(3, lambda value: value + 1)
+    inner.unwrap = lambda value=UNSET: 42
+    outer = ChainWrapper(inner, lambda value: value + 1)
+    assert outer.unwrap() == 43
+
+
+def test_chain_preserves_unwrap_bound_to_another_wrapper():
+    other = ChainWrapper(10, lambda value: value + 2)
+    inner = ChainWrapper(3, lambda value: value + 1)
+    inner.unwrap = other.unwrap
+    outer = ChainWrapper(inner, lambda value: value + 1)
+    assert outer.unwrap() == 13
+    assert outer.unwrap(5) == 8
+
+
+def test_chain_looks_up_unwrap_descriptors_once():
+    lookups = []
+
+    class CustomWrapper(ChainWrapper):
+        @property
+        def unwrap(self):
+            lookups.append(self)
+            return lambda value=UNSET: 42
+
+    inner = CustomWrapper(3, lambda value: value + 1)
+    outer = ChainWrapper(inner, lambda value: value + 1)
+    assert outer.unwrap() == 43
+    assert lookups == [inner]
+
+
+@parametrize("nested", [False, True])
+@parametrize("value", [UNSET, 5])
+def test_chain_method_properties_observe_resolved_clone_values(nested, value):
+    class PropertyWrapper(ChainWrapper):
+        def __init__(self, initial):
+            self._value = initial
+            self.args = ()
+            self.kwargs = {}
+
+        @property
+        def method(self):
+            return lambda argument: (argument, self._value)
+
+    initial = ChainWrapper(2, lambda argument: argument + 1) if nested else 2
+    wrapper = PropertyWrapper(initial)
+    expected = (2 if value is UNSET else value) + int(nested)
+    assert wrapper.unwrap(value) == (expected, expected)
+    assert wrapper._value is initial
+
+
+def test_chain_preserves_replaced_base_unwrap(monkeypatch):
+    original = ChainWrapper.unwrap
+    calls = []
+
+    def recording_unwrap(wrapper, value=UNSET):
+        calls.append(wrapper)
+        return original(wrapper, value)
+
+    monkeypatch.setattr(ChainWrapper, "unwrap", recording_unwrap)
+    inner = ChainWrapper(2, lambda value: value + 1)
+    outer = ChainWrapper(inner, lambda value: value + 1)
+    assert outer.unwrap() == 4
+    assert calls == [outer, inner]
+
+
 @parametrize("value", [UNSET, 7])
 def test_chain_preserves_unset_result_fallback(value):
     inner = ChainWrapper(3, lambda _value: UNSET)
