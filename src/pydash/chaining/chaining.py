@@ -4,6 +4,7 @@ Method chaining interface.
 .. versionadded:: 1.0.0
 """
 
+from types import MethodType
 import typing as t
 
 import pydash as pyd
@@ -132,24 +133,43 @@ class ChainWrapper(t.Generic[ValueT_co]):
         If :attr:`_value` is an instance of :class:`ChainWrapper`, then unwrap it before calling
         :attr:`method`.
         """
-        # Generate a copy of ourself so that we don't modify the chain wrapper
-        # _value directly. This way if we are late passing a value, we don't
-        # "freeze" the chain wrapper value when a value is first passed.
-        # Otherwise, we'd locked the chain wrapper value permanently and not be
-        # able to reuse it.
-        wrapper = self._generate()
+        wrappers = []
+        seen = set()
+        wrapper = self
+        while True:
+            if id(wrapper) in seen:
+                raise RecursionError("Cycle in chain wrappers")
+            seen.add(id(wrapper))
+            # Keep evaluation independent of the saved wrappers and late-bound values.
+            wrapper = wrapper._generate()
+            parent = wrapper._value
+            nested = isinstance(parent, ChainWrapper)
+            wrappers.append((wrapper, nested))
+            if not nested:
+                result = parent
+                if not isinstance(value, ChainWrapper) and value is not UNSET:
+                    wrapper._value = value
+                break
+            unwrap = parent.unwrap
+            if (
+                not isinstance(unwrap, MethodType)
+                or unwrap.__func__ is not ChainWrapper._unwrap
+                or unwrap.__self__ is not parent
+            ):
+                # Honor subclass, instance and descriptor overrides without rebinding them.
+                result = unwrap(value)
+                break
+            wrapper = parent
 
-        if isinstance(wrapper._value, ChainWrapper):
-            # pylint: disable=no-member,maybe-no-member
-            wrapper._value = wrapper._value.unwrap(value)
-        elif not isinstance(value, ChainWrapper) and value is not UNSET:
-            # Override wrapper's initial value.
-            wrapper._value = value
+        for wrapper, nested in reversed(wrappers):
+            if nested:
+                wrapper._value = result
+            argument = value if wrapper._value is UNSET else wrapper._value
+            result = wrapper.method(argument, *wrapper.args, **wrapper.kwargs)
+        return result
 
-        if wrapper._value is not UNSET:
-            value = wrapper._value
-
-        return wrapper.method(value, *wrapper.args, **wrapper.kwargs)
+    # Keep the original implementation identifiable if the public method is replaced.
+    _unwrap = unwrap
 
     def __call__(self, *args, **kwargs):
         """

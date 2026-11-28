@@ -1,8 +1,12 @@
 from copy import deepcopy
+from functools import partial
+import sys
 
 import pytest
 
 import pydash as _
+from pydash.chaining.chaining import ChainWrapper
+from pydash.helpers import UNSET
 
 
 parametrize = pytest.mark.parametrize
@@ -165,6 +169,168 @@ def test_chaining_commit():
 
     assert chain is not committed
     assert chain.value() == committed.value()
+
+
+@parametrize("evaluation", ["value", "late", "override", "plant", "commit"])
+def test_long_chains(evaluation):
+    length = sys.getrecursionlimit() + 100
+    chain = _.chain() if evaluation == "late" else _.chain(1)
+    for _index in range(length):
+        chain = chain.add(1)
+
+    if evaluation == "value":
+        assert chain.value() == length + 1
+    elif evaluation == "late":
+        assert chain(2) == length + 2
+        assert chain(3) == length + 3
+    elif evaluation == "override":
+        assert chain(2) == length + 2
+        assert chain.value() == length + 1
+    elif evaluation == "plant":
+        assert chain.plant(2).value() == length + 2
+        assert chain.value() == length + 1
+    else:
+        committed = chain.commit()
+        assert committed.value() == length + 1
+        assert committed.value() == chain.value()
+
+
+@parametrize("length", [3, sys.getrecursionlimit() + 100])
+def test_long_chain_callback_order_and_reuse(length):
+    calls = []
+
+    def step(value, index):
+        calls.append(index)
+        return value + 1
+
+    chain = _.chain(0)
+    for index in range(length):
+        chain = chain.apply(partial(step, index=index))
+
+    assert calls == []
+    for _attempt in range(2):
+        calls.clear()
+        assert chain.value() == length
+        assert calls == list(range(length))
+
+
+def test_chain_preserves_wrapper_unwrap_overrides():
+    calls = []
+
+    class CustomWrapper(ChainWrapper):
+        def unwrap(self, value=UNSET):
+            calls.append("override")
+            return super().unwrap(value) * 2
+
+    inner = CustomWrapper(3, lambda value: value + 1)
+    outer = ChainWrapper(inner, lambda value: value - 1)
+    assert outer.unwrap() == 7
+    assert outer.unwrap(5) == 11
+    assert calls == ["override", "override"]
+
+
+def test_chain_preserves_instance_unwrap_overrides():
+    inner = ChainWrapper(3, lambda value: value + 1)
+    inner.unwrap = lambda value=UNSET: 42
+    outer = ChainWrapper(inner, lambda value: value + 1)
+    assert outer.unwrap() == 43
+
+
+def test_chain_preserves_unwrap_bound_to_another_wrapper():
+    other = ChainWrapper(10, lambda value: value + 2)
+    inner = ChainWrapper(3, lambda value: value + 1)
+    inner.unwrap = other.unwrap
+    outer = ChainWrapper(inner, lambda value: value + 1)
+    assert outer.unwrap() == 13
+    assert outer.unwrap(5) == 8
+
+
+def test_chain_looks_up_unwrap_descriptors_once():
+    lookups = []
+
+    class CustomWrapper(ChainWrapper):
+        @property
+        def unwrap(self):
+            lookups.append(self)
+            return lambda value=UNSET: 42
+
+    inner = CustomWrapper(3, lambda value: value + 1)
+    outer = ChainWrapper(inner, lambda value: value + 1)
+    assert outer.unwrap() == 43
+    assert lookups == [inner]
+
+
+@parametrize("nested", [False, True])
+@parametrize("value", [UNSET, 5])
+def test_chain_method_properties_observe_resolved_clone_values(nested, value):
+    class PropertyWrapper(ChainWrapper):
+        def __init__(self, initial):
+            self._value = initial
+            self.args = ()
+            self.kwargs = {}
+
+        @property
+        def method(self):
+            return lambda argument: (argument, self._value)
+
+    initial = ChainWrapper(2, lambda argument: argument + 1) if nested else 2
+    wrapper = PropertyWrapper(initial)
+    expected = (2 if value is UNSET else value) + int(nested)
+    assert wrapper.unwrap(value) == (expected, expected)
+    assert wrapper._value is initial
+
+
+def test_chain_preserves_replaced_base_unwrap(monkeypatch):
+    original = ChainWrapper.unwrap
+    calls = []
+
+    def recording_unwrap(wrapper, value=UNSET):
+        calls.append(wrapper)
+        return original(wrapper, value)
+
+    monkeypatch.setattr(ChainWrapper, "unwrap", recording_unwrap)
+    inner = ChainWrapper(2, lambda value: value + 1)
+    outer = ChainWrapper(inner, lambda value: value + 1)
+    assert outer.unwrap() == 4
+    assert calls == [outer, inner]
+
+
+@parametrize("value", [UNSET, 7])
+def test_chain_preserves_unset_result_fallback(value):
+    inner = ChainWrapper(3, lambda _value: UNSET)
+    outer = ChainWrapper(inner, lambda result: result)
+    assert outer.unwrap(value) is value
+
+
+def test_chain_stops_at_callback_errors_and_can_be_retried():
+    calls = []
+    failure = RuntimeError("callback failed")
+
+    def step(value):
+        calls.append(value)
+        if len(calls) == 1:
+            raise failure
+        return value + 1
+
+    chain = _.chain(1).apply(step).add(2)
+    with pytest.raises(RuntimeError) as exc:
+        chain.value()
+    assert exc.value is failure
+    assert calls == [1]
+    assert chain.value() == 4
+    assert calls == [1, 1]
+
+
+@parametrize("length", [1, 3])
+def test_chain_preserves_errors_for_cyclic_wrappers(length):
+    first = ChainWrapper(0, _.identity)
+    outer = first
+    for _index in range(length - 1):
+        outer = ChainWrapper(outer, _.identity)
+    first._value = outer
+
+    with pytest.raises(RecursionError):
+        outer.unwrap()
 
 
 def test_dash_instance_chaining():
